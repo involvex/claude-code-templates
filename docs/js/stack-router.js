@@ -30,15 +30,19 @@ class StackRouter {
         const path = window.location.pathname;
         const hash = window.location.hash;
         
+        // For GitHub Pages subdirectory deployment, remove the base path
+        const basePath = '/claude-code-templates';
+        const relativePath = path.startsWith(basePath) ? path.substring(basePath.length) : path;
+        
         // Check for company routes (/company/epic-games)
-        const companyMatch = path.match(/\/company\/([^\/]+)/);
+        const companyMatch = relativePath.match(/^\/company\/([^\/]+)/);
         if (companyMatch) {
             this.loadCompanyStack(companyMatch[1]);
             return;
         }
 
         // Check for technology routes (/technology/unity)
-        const technologyMatch = path.match(/\/technology\/([^\/]+)/);
+        const technologyMatch = relativePath.match(/^\/technology\/([^\/]+)/);
         if (technologyMatch) {
             this.loadTechnologyStack(technologyMatch[1]);
             return;

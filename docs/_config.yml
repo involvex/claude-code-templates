@@ -1,8 +1,8 @@
 # Jekyll configuration for GitHub Pages
 title: Claude Code Templates
 description: Browse and install Claude Code configuration templates for different languages and frameworks
-baseurl: ""
-url: "https://aitmpl.com"
+baseurl: "/claude-code-templates"
+url: "https://involvex.github.io"
 
 # Build settings
 markdown: kramdown
