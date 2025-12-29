@@ -322,6 +322,15 @@ function createComponentURL(type, name, path) {
                    window.location.hostname === '127.0.0.1' ||
                    window.location.hostname.includes('5500');
     
+    // Get the base path for GitHub Pages deployment
+    const getBasePath = () => {
+        const path = window.location.pathname;
+        if (path.startsWith('/claude-code-templates')) {
+            return '/claude-code-templates';
+        }
+        return '';
+    };
+    
     if (!isLocal && type && name) {
         // Use SEO-friendly URL structure for production: /component/type/name
         let cleanName = name;
@@ -332,7 +341,8 @@ function createComponentURL(type, name, path) {
             cleanName = cleanName.slice(0, -5);
         }
         
-        return `component/${encodeURIComponent(type)}/${encodeURIComponent(cleanName)}`;
+        const basePath = getBasePath();
+        return `${basePath}/component/${encodeURIComponent(type)}/${encodeURIComponent(cleanName)}`;
     }
     
     // Use query parameters for local development or fallback
@@ -341,5 +351,6 @@ function createComponentURL(type, name, path) {
     if (name) params.set('name', name);
     if (path) params.set('path', path);
     
-    return `component.html?${params.toString()}`;
+    const basePath = getBasePath();
+    return `${basePath}/component.html?${params.toString()}`;
 }

@@ -249,7 +249,18 @@ function getSearchQueryFromURL() {
  */
 function updateURLWithFilter(filter) {
     const currentSearch = window.location.search; // Preserve search parameters
-    const newPath = `/${filter}${currentSearch}`;
+    
+    // Get the base path for GitHub Pages deployment
+    const getBasePath = () => {
+        const path = window.location.pathname;
+        if (path.startsWith('/claude-code-templates')) {
+            return '/claude-code-templates';
+        }
+        return '';
+    };
+    
+    const basePath = getBasePath();
+    const newPath = `${basePath}/${filter}${currentSearch}`;
     
     window.history.pushState({}, '', newPath);
 }
@@ -261,16 +272,24 @@ function getFilterFromURL() {
     const path = window.location.pathname;
     const segments = path.split('/').filter(segment => segment);
 
+    // Check if we're on GitHub Pages with subdirectory
+    // Handle both '/claude-code-templates/agents' and '/agents' cases
+    let filterSegment;
+    if (segments[0] === 'claude-code-templates' && segments.length > 1) {
+        filterSegment = segments[1];
+    } else if (segments.length > 0) {
+        filterSegment = segments[0];
+    }
+
     // Check if first segment is a valid filter
     const validFilters = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills', 'templates', 'plugins'];
-    const firstSegment = segments[0];
 
-    if (firstSegment && validFilters.includes(firstSegment)) {
-        return firstSegment;
+    if (filterSegment && validFilters.includes(filterSegment)) {
+        return filterSegment;
     }
 
     // If no valid filter found and we're on root, default to agents
-    if (path === '/' || path === '') {
+    if (path === '/' || path === '' || path === '/claude-code-templates' || path === '/claude-code-templates/') {
         return 'agents';
     }
 

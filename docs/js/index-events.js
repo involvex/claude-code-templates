@@ -113,16 +113,28 @@ class IndexPageManager {
         const path = window.location.pathname;
         const segments = path.split('/').filter(segment => segment);
 
-        // Check if first segment is a valid filter
-        const validFilters = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills', 'templates', 'plugins'];
-        const firstSegment = segments[0];
-
-        if (firstSegment && validFilters.includes(firstSegment)) {
-            return firstSegment;
+        // Check if we're on GitHub Pages with subdirectory
+        // Handle both '/claude-code-templates/agents' and '/agents' cases
+        let filterSegment;
+        if (segments[0] === 'claude-code-templates' && segments.length > 1) {
+            filterSegment = segments[1];
+        } else if (segments.length > 0) {
+            filterSegment = segments[0];
         }
 
-        // Default to agents
-        return 'agents';
+        // Check if first segment is a valid filter
+        const validFilters = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills', 'templates', 'plugins'];
+
+        if (filterSegment && validFilters.includes(filterSegment)) {
+            return filterSegment;
+        }
+
+        // If no valid filter found and we're on root, default to agents
+        if (path === '/' || path === '' || path === '/claude-code-templates' || path === '/claude-code-templates/') {
+            return 'agents';
+        }
+
+        return 'agents'; // Default fallback
     }
 
     async loadTemplatesData() {
@@ -615,7 +627,7 @@ class IndexPageManager {
                             ${plugin.mcpServers > 0 ? `<span class="plugin-stat"><span class="stat-icon">🔌</span>${plugin.mcpServers}</span>` : ''}
                         </div>
                     </div>
-                    <button class="plugin-view-details-btn" onclick="window.location.href='/plugin/${plugin.name}'; event.stopPropagation();">
+                    <button class="plugin-view-details-btn" onclick="window.location.href='./plugin/' + encodeURIComponent('${plugin.name}'); event.stopPropagation();">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"/>
                         </svg>

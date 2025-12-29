@@ -3500,10 +3500,10 @@ body {
     color: var(--text-accent);
 }
 
-        flex-direction: column;
+        /* flex-direction: column;
         align-items: center;
         gap: 0.5rem;
-    }
+     */
     
     .unified-filter-bar .filter-btn {
         width: 100%;
@@ -3552,7 +3552,7 @@ body {
     .component-preview pre {
         font-size: 0.75rem;
     }
-}
+
 
 /* Focus and Accessibility */
 .filter-btn:focus,
