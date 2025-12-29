@@ -38,7 +38,7 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['created_at', 'updated_at']
-    
+
     def post_count(self, obj):
         """Display number of posts in this category."""
         count = obj.posts.count()
@@ -57,25 +57,25 @@ class CommentInline(admin.TabularInline):
 class PostAdmin(admin.ModelAdmin):
     """Advanced admin configuration for Post model."""
     list_display = [
-        'title', 
-        'author', 
-        'category', 
-        'status', 
+        'title',
+        'author',
+        'category',
+        'status',
         'view_count',
         'created_at',
         'post_preview'
     ]
     list_filter = [
-        'status', 
-        'category', 
-        'created_at', 
+        'status',
+        'category',
+        'created_at',
         'updated_at',
         ('author', admin.RelatedOnlyFieldListFilter)
     ]
     search_fields = ['title', 'content', 'author__username']
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ['created_at', 'updated_at', 'view_count', 'post_preview']
-    
+
     # Custom form layout
     fieldsets = (
         ('Content', {
@@ -94,13 +94,13 @@ class PostAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
-    
+
     # Many-to-many field display
     filter_horizontal = ['tags']
-    
+
     # Inline models
     inlines = [CommentInline]
-    
+
     # Custom list display methods
     def post_preview(self, obj):
         """Show thumbnail preview of post."""
@@ -111,28 +111,28 @@ class PostAdmin(admin.ModelAdmin):
             )
         return "No image"
     post_preview.short_description = 'Preview'
-    
+
     # Custom admin actions
     actions = ['make_published', 'make_draft', 'duplicate_posts']
-    
+
     def make_published(self, request, queryset):
         """Bulk action to publish selected posts."""
         updated = queryset.update(status='published')
         self.message_user(
-            request, 
+            request,
             f'{updated} posts were successfully marked as published.'
         )
     make_published.short_description = "Mark selected posts as published"
-    
+
     def make_draft(self, request, queryset):
         """Bulk action to set selected posts as draft."""
         updated = queryset.update(status='draft')
         self.message_user(
-            request, 
+            request,
             f'{updated} posts were successfully marked as draft.'
         )
     make_draft.short_description = "Mark selected posts as draft"
-    
+
     def duplicate_posts(self, request, queryset):
         """Bulk action to duplicate selected posts."""
         count = 0
@@ -143,7 +143,7 @@ class PostAdmin(admin.ModelAdmin):
             post.status = 'draft'
             post.save()
             count += 1
-        
+
         self.message_user(
             request,
             f'{count} posts were successfully duplicated.'
@@ -156,12 +156,12 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'post_count', 'color_preview']
     search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
-    
+
     def post_count(self, obj):
         """Display number of posts with this tag."""
         return obj.posts.count()
     post_count.short_description = 'Posts'
-    
+
     def color_preview(self, obj):
         """Show color preview if tag has color field."""
         if hasattr(obj, 'color') and obj.color:
@@ -181,18 +181,18 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ['content', 'author__username', 'post__title']
     readonly_fields = ['created_at', 'updated_at']
     actions = ['approve_comments', 'disapprove_comments']
-    
+
     def content_preview(self, obj):
         """Show truncated content preview."""
         return obj.content[:50] + "..." if len(obj.content) > 50 else obj.content
     content_preview.short_description = 'Content'
-    
+
     def approve_comments(self, request, queryset):
         """Bulk approve comments."""
         updated = queryset.update(is_approved=True)
         self.message_user(request, f'{updated} comments were approved.')
     approve_comments.short_description = "Approve selected comments"
-    
+
     def disapprove_comments(self, request, queryset):
         """Bulk disapprove comments."""
         updated = queryset.update(is_approved=False)
@@ -208,30 +208,35 @@ admin.site.index_title = "Welcome to Blog Administration"
 ## Advanced Features
 
 ### Custom List Display
+
 - **Thumbnail previews** for images
 - **Related object counts** with links
 - **Status indicators** with colors
 - **Custom formatting** for data display
 
 ### Filtering and Search
+
 - **Advanced filters** including date ranges
 - **Related field filtering** for foreign keys
 - **Search across multiple fields** including relations
 - **Custom filter classes** for complex queries
 
 ### Inline Editing
+
 - **TabularInline** for compact editing
 - **StackedInline** for detailed forms
 - **Custom inline forms** with additional functionality
 - **Readonly fields** in inlines
 
 ### Bulk Actions
+
 - **Status changes** for multiple objects
 - **Data export** functionality
 - **Batch operations** for efficiency
 - **Custom business logic** in actions
 
 ### Form Customization
+
 - **Fieldsets** for organized layouts
 - **Collapsed sections** for advanced options
 - **Custom widgets** for better UX

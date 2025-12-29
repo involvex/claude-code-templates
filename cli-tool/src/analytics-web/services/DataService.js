@@ -6,11 +6,11 @@ class DataService {
   constructor(webSocketService = null) {
     this.cache = new Map();
     this.eventListeners = new Set();
-    this.baseURL = '';
+    this.baseURL = "";
     this.lastFetch = {};
     this.webSocketService = webSocketService;
     this.realTimeEnabled = false;
-    
+
     // Setup WebSocket integration if available
     if (this.webSocketService) {
       this.setupWebSocketIntegration();
@@ -39,11 +39,11 @@ class DataService {
    * @param {*} data - New data
    */
   notifyListeners(type, data) {
-    this.eventListeners.forEach(callback => {
+    this.eventListeners.forEach((callback) => {
       try {
         callback(type, data);
       } catch (error) {
-        console.error('Error in DataService listener:', error);
+        console.error("Error in DataService listener:", error);
       }
     });
   }
@@ -69,12 +69,12 @@ class DataService {
 
     try {
       const response = await fetch(this.baseURL + endpoint, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          ...options.headers
+          "Content-Type": "application/json",
+          ...options.headers,
         },
-        ...options
+        ...options,
       });
 
       if (!response.ok) {
@@ -82,22 +82,22 @@ class DataService {
       }
 
       const data = await response.json();
-      
+
       // Cache the response
       this.cache.set(cacheKey, {
         data,
-        timestamp: now
+        timestamp: now,
       });
 
       return data;
     } catch (error) {
       console.warn(`Server not available for ${endpoint}:`, error.message);
-      
+
       // Return cached data if available, even if stale
       if (this.cache.has(cacheKey)) {
         return this.cache.get(cacheKey).data;
       }
-      
+
       // No fallback data - throw error if server unavailable
       throw error;
     }
@@ -108,7 +108,7 @@ class DataService {
    */
   clearCache() {
     this.cache.clear();
-    console.log('🔥 Frontend cache cleared');
+    console.log("🔥 Frontend cache cleared");
   }
 
   /**
@@ -116,7 +116,7 @@ class DataService {
    * @returns {Promise<Object>} Conversations data
    */
   async getConversations() {
-    return await this.cachedFetch('/api/data');
+    return await this.cachedFetch("/api/data");
   }
 
   /**
@@ -127,9 +127,12 @@ class DataService {
    */
   async getConversationsPaginated(page = 0, limit = 10) {
     const cacheDuration = this.realTimeEnabled ? 30000 : 5000;
-    return await this.cachedFetch(`/api/conversations?page=${page}&limit=${limit}`, {
-      cacheDuration
-    });
+    return await this.cachedFetch(
+      `/api/conversations?page=${page}&limit=${limit}`,
+      {
+        cacheDuration,
+      },
+    );
   }
 
   /**
@@ -138,8 +141,8 @@ class DataService {
    */
   async getConversationStates() {
     const cacheDuration = this.realTimeEnabled ? 30000 : 5000; // Longer cache with real-time
-    return await this.cachedFetch('/api/conversation-state', {
-      cacheDuration
+    return await this.cachedFetch("/api/conversation-state", {
+      cacheDuration,
     });
   }
 
@@ -148,7 +151,7 @@ class DataService {
    * @returns {Promise<Object>} Chart data
    */
   async getChartData() {
-    return await this.cachedFetch('/api/charts');
+    return await this.cachedFetch("/api/charts");
   }
 
   /**
@@ -157,7 +160,7 @@ class DataService {
    */
   async getSessionData() {
     const cacheDuration = this.realTimeEnabled ? 30000 : 5000; // 30s with real-time, 5s without
-    return await this.cachedFetch('/api/session/data', { cacheDuration });
+    return await this.cachedFetch("/api/session/data", { cacheDuration });
   }
 
   /**
@@ -165,7 +168,7 @@ class DataService {
    * @returns {Promise<Object>} Project statistics
    */
   async getProjectStats() {
-    return await this.cachedFetch('/api/session/projects');
+    return await this.cachedFetch("/api/session/projects");
   }
 
   /**
@@ -173,7 +176,7 @@ class DataService {
    * @returns {Promise<Object>} System health data
    */
   async getSystemHealth() {
-    return await this.cachedFetch('/api/system/health');
+    return await this.cachedFetch("/api/system/health");
   }
 
   /**
@@ -194,7 +197,7 @@ class DataService {
         keysToDelete.push(key);
       }
     }
-    keysToDelete.forEach(key => this.cache.delete(key));
+    keysToDelete.forEach((key) => this.cache.delete(key));
   }
 
   /**
@@ -205,35 +208,34 @@ class DataService {
       this.startFallbackPolling();
       return;
     }
-    
-    
+
     // Listen for data refresh events
-    this.webSocketService.on('data_refresh', (data) => {
+    this.webSocketService.on("data_refresh", (data) => {
       this.handleRealTimeDataRefresh(data);
     });
-    
+
     // Listen for conversation state changes
-    this.webSocketService.on('conversation_state_change', (data) => {
+    this.webSocketService.on("conversation_state_change", (data) => {
       this.handleRealTimeStateChange(data);
     });
-    
+
     // Listen for new messages
-    this.webSocketService.on('new_message', (data) => {
+    this.webSocketService.on("new_message", (data) => {
       this.handleNewMessage(data);
     });
-    
+
     // Listen for connection status
-    this.webSocketService.on('connected', () => {
+    this.webSocketService.on("connected", () => {
       this.realTimeEnabled = true;
       this.subscribeToChannels();
       this.stopFallbackPolling(); // Stop polling when WebSocket connects
     });
-    
-    this.webSocketService.on('disconnected', () => {
+
+    this.webSocketService.on("disconnected", () => {
       this.realTimeEnabled = false;
       this.startFallbackPolling();
     });
-    
+
     // Start polling immediately as fallback, stop if WebSocket connects successfully
     setTimeout(() => {
       if (!this.realTimeEnabled) {
@@ -241,64 +243,63 @@ class DataService {
       }
     }, 1000); // Give WebSocket 1 second to connect
   }
-  
+
   /**
    * Subscribe to WebSocket channels
    */
   async subscribeToChannels() {
     if (!this.webSocketService || !this.realTimeEnabled) return;
-    
+
     try {
-      await this.webSocketService.subscribe('data_updates');
-      await this.webSocketService.subscribe('conversation_updates');
-      await this.webSocketService.subscribe('system_updates');
+      await this.webSocketService.subscribe("data_updates");
+      await this.webSocketService.subscribe("conversation_updates");
+      await this.webSocketService.subscribe("system_updates");
     } catch (error) {
-      console.error('Error subscribing to channels:', error);
+      console.error("Error subscribing to channels:", error);
     }
   }
-  
+
   /**
    * Handle real-time data refresh
    * @param {Object} data - Fresh data from server
    */
   handleRealTimeDataRefresh(data) {
     // Clear relevant cache entries
-    this.clearCacheEntry('/api/data');
-    this.clearCacheEntry('/api/conversation-state');
-    
+    this.clearCacheEntry("/api/data");
+    this.clearCacheEntry("/api/conversation-state");
+
     // Notify listeners
-    this.notifyListeners('data_refresh', data);
+    this.notifyListeners("data_refresh", data);
   }
-  
+
   /**
    * Handle real-time conversation state change
    * @param {Object} data - State change data
    */
   handleRealTimeStateChange(data) {
     // Clear conversation state cache
-    this.clearCacheEntry('/api/conversation-state');
-    
+    this.clearCacheEntry("/api/conversation-state");
+
     // Notify listeners
-    this.notifyListeners('conversation_state_change', data);
+    this.notifyListeners("conversation_state_change", data);
   }
-  
+
   /**
    * Handle real-time new message
    * @param {Object} data - New message data
    */
   handleNewMessage(data) {
-    
     // Clear relevant cache entries for the affected conversation
     this.clearCacheEntry(`/api/conversations/${data.conversationId}/messages`);
-    
+
     // Notify listeners about the new message
-    this.notifyListeners('new_message', {
+    this.notifyListeners("new_message", {
       conversationId: data.conversationId,
       message: data.message,
-      metadata: data.metadata
+      metadata: data.metadata,
     });
   }
-  
+
   /**
    * Start periodic data refresh (fallback when WebSocket unavailable)
    * @param {number} interval - Refresh interval in milliseconds
@@ -308,7 +309,7 @@ class DataService {
     if (this.realTimeEnabled) {
       return;
     }
-    
+
     if (this.refreshInterval) {
       clearInterval(this.refreshInterval);
     }
@@ -319,19 +320,19 @@ class DataService {
         if (!this.realTimeEnabled) {
           const [conversations, states] = await Promise.all([
             this.getConversations(),
-            this.getConversationStates()
+            this.getConversationStates(),
           ]);
 
           // Notify listeners of fresh data
-          this.notifyListeners('conversations', conversations);
-          this.notifyListeners('states', states);
+          this.notifyListeners("conversations", conversations);
+          this.notifyListeners("states", states);
         }
       } catch (error) {
-        console.error('Error during periodic refresh:', error);
+        console.error("Error during periodic refresh:", error);
       }
     }, interval);
   }
-  
+
   /**
    * Start fallback polling when WebSocket disconnects
    */
@@ -340,7 +341,7 @@ class DataService {
       this.startPeriodicRefresh(5000); // Very frequent polling as fallback (5 seconds)
     }
   }
-  
+
   /**
    * Stop fallback polling when WebSocket reconnects
    */
@@ -369,33 +370,33 @@ class DataService {
         await this.webSocketService.requestRefresh();
         return true;
       } catch (error) {
-        console.error('Error requesting WebSocket refresh:', error);
+        console.error("Error requesting WebSocket refresh:", error);
       }
     }
-    
+
     // Fallback to cache clearing
     this.clearCache();
     return false;
   }
-  
+
   /**
    * Clear server-side cache via API
    * @param {string} type - Cache type to clear ('all', 'conversations', or undefined for all)
    * @returns {Promise<boolean>} Success status
    */
-  async clearServerCache(type = 'all') {
+  async clearServerCache(type = "all") {
     try {
-      const response = await fetch('/api/cache/clear', {
-        method: 'POST',
+      const response = await fetch("/api/cache/clear", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ type })
+        body: JSON.stringify({ type }),
       });
-      
+
       if (response.ok) {
         const result = await response.json();
-        
+
         // Also clear local cache
         this.clearCache();
         return true;
@@ -415,17 +416,17 @@ class DataService {
     this.webSocketService = webSocketService;
     this.setupWebSocketIntegration();
   }
-  
+
   /**
    * Get application version from backend
    * @returns {Promise<Object>} Version information
    */
   async getVersion() {
     try {
-      return await this.cachedFetch('/api/version', 300000); // Cache for 5 minutes
+      return await this.cachedFetch("/api/version", 300000); // Cache for 5 minutes
     } catch (error) {
-      console.error('Error fetching version:', error);
-      return { version: '1.13.2', name: 'claude-code-templates' }; // Fallback
+      console.error("Error fetching version:", error);
+      return { version: "1.13.2", name: "claude-code-templates" }; // Fallback
     }
   }
 
@@ -439,12 +440,14 @@ class DataService {
       keys: Array.from(this.cache.keys()),
       listeners: this.eventListeners.size,
       realTimeEnabled: this.realTimeEnabled,
-      webSocketConnected: this.webSocketService ? this.webSocketService.getStatus().isConnected : false
+      webSocketConnected: this.webSocketService
+        ? this.webSocketService.getStatus().isConnected
+        : false,
     };
   }
 }
 
 // Export for module use
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = DataService;
 }

@@ -23,6 +23,7 @@ Create and manage complex automation workflows with dependency management, sched
 ## Workflow Definition Structure
 
 ### Basic Workflow Schema
+
 ```json
 {
   "name": "deployment-workflow",
@@ -90,6 +91,7 @@ Create and manage complex automation workflows with dependency management, sched
 ## Advanced Workflow Features
 
 ### 1. **Conditional Execution**
+
 ```json
 {
   "id": "conditional-deploy",
@@ -108,6 +110,7 @@ Create and manage complex automation workflows with dependency management, sched
 ```
 
 ### 2. **Parallel Task Execution**
+
 ```json
 {
   "id": "parallel-tests",
@@ -119,7 +122,7 @@ Create and manage complex automation workflows with dependency management, sched
       "command": "npm run test:unit"
     },
     {
-      "id": "integration-tests", 
+      "id": "integration-tests",
       "command": "npm run test:integration"
     },
     {
@@ -133,6 +136,7 @@ Create and manage complex automation workflows with dependency management, sched
 ```
 
 ### 3. **Loop and Iteration**
+
 ```json
 {
   "id": "deploy-multiple-envs",
@@ -150,6 +154,7 @@ Create and manage complex automation workflows with dependency management, sched
 ```
 
 ### 4. **File and Data Processing**
+
 ```json
 {
   "id": "process-data",
@@ -173,6 +178,7 @@ Create and manage complex automation workflows with dependency management, sched
 ## Workflow Orchestration Engine
 
 ### Core Engine Implementation
+
 ```javascript
 class WorkflowOrchestrator {
   constructor(config) {
@@ -186,14 +192,14 @@ class WorkflowOrchestrator {
 
   async execute(workflowPath) {
     const workflow = await this.loadWorkflow(workflowPath);
-    
+
     try {
       await this.validateWorkflow(workflow);
       await this.setupEnvironment(workflow.environment);
-      
+
       const result = await this.executeWorkflow(workflow);
       await this.cleanup();
-      
+
       return result;
     } catch (error) {
       await this.handleError(error, workflow);
@@ -207,12 +213,12 @@ class WorkflowOrchestrator {
       id: this.generateExecutionId(),
       workflow: workflow.name,
       startTime: Date.now(),
-      tasks: {}
+      tasks: {},
     };
 
     while (this.hasRunnableTasks(taskGraph)) {
       const runnableTasks = this.getRunnableTasks(taskGraph);
-      
+
       if (runnableTasks.length === 0) {
         break; // Circular dependency or all failed
       }
@@ -228,7 +234,7 @@ class WorkflowOrchestrator {
       id: task.id,
       name: task.name,
       startTime: Date.now(),
-      status: 'running'
+      status: "running",
     };
 
     execution.tasks[task.id] = taskExecution;
@@ -237,16 +243,16 @@ class WorkflowOrchestrator {
     try {
       // Pre-execution hooks
       await this.runPreHooks(task);
-      
+
       // Task execution
       const result = await this.runTaskByType(task);
-      
+
       // Post-execution hooks
       await this.runPostHooks(task, result);
 
       taskExecution.endTime = Date.now();
       taskExecution.duration = taskExecution.endTime - taskExecution.startTime;
-      taskExecution.status = 'completed';
+      taskExecution.status = "completed";
       taskExecution.result = result;
 
       this.completed.add(task.id);
@@ -261,7 +267,7 @@ class WorkflowOrchestrator {
     } catch (error) {
       taskExecution.endTime = Date.now();
       taskExecution.duration = taskExecution.endTime - taskExecution.startTime;
-      taskExecution.status = 'failed';
+      taskExecution.status = "failed";
       taskExecution.error = error.message;
 
       this.failed.add(task.id);
@@ -278,15 +284,15 @@ class WorkflowOrchestrator {
 
   async runTaskByType(task) {
     switch (task.type) {
-      case 'shell':
+      case "shell":
         return await this.executeShellTask(task);
-      case 'http':
+      case "http":
         return await this.executeHttpTask(task);
-      case 'docker':
+      case "docker":
         return await this.executeDockerTask(task);
-      case 'javascript':
+      case "javascript":
         return await this.executeJavaScriptTask(task);
-      case 'python':
+      case "python":
         return await this.executePythonTask(task);
       default:
         throw new Error(`Unknown task type: ${task.type}`);
@@ -298,10 +304,11 @@ class WorkflowOrchestrator {
 ### Task Types Implementation
 
 #### Shell Task
+
 ```javascript
 async executeShellTask(task) {
   const { spawn } = require('child_process');
-  
+
   return new Promise((resolve, reject) => {
     const process = spawn('sh', ['-c', task.command], {
       cwd: task.cwd || process.cwd(),
@@ -341,10 +348,11 @@ async executeShellTask(task) {
 ```
 
 #### HTTP Task
+
 ```javascript
 async executeHttpTask(task) {
   const axios = require('axios');
-  
+
   const config = {
     method: task.method || 'GET',
     url: task.url,
@@ -376,6 +384,7 @@ async executeHttpTask(task) {
 ## Workflow Scheduling
 
 ### Cron Integration
+
 ```bash
 #!/bin/bash
 # setup-workflow-cron.sh
@@ -391,6 +400,7 @@ async executeHttpTask(task) {
 ```
 
 ### Systemd Timer (Linux)
+
 ```ini
 # /etc/systemd/system/workflow-orchestrator.timer
 [Unit]
@@ -408,6 +418,7 @@ WantedBy=timers.target
 ## Monitoring and Alerting
 
 ### Workflow Metrics Dashboard
+
 ```javascript
 class WorkflowMonitor {
   constructor() {
@@ -416,21 +427,23 @@ class WorkflowMonitor {
       successfulRuns: 0,
       failedRuns: 0,
       averageDuration: 0,
-      taskMetrics: new Map()
+      taskMetrics: new Map(),
     };
   }
 
   recordExecution(execution) {
     this.metrics.totalRuns++;
-    
-    if (execution.status === 'completed') {
+
+    if (execution.status === "completed") {
       this.metrics.successfulRuns++;
     } else {
       this.metrics.failedRuns++;
     }
 
     // Update average duration
-    const totalDuration = this.metrics.averageDuration * (this.metrics.totalRuns - 1) + execution.duration;
+    const totalDuration =
+      this.metrics.averageDuration * (this.metrics.totalRuns - 1) +
+      execution.duration;
     this.metrics.averageDuration = totalDuration / this.metrics.totalRuns;
 
     // Record task metrics
@@ -439,38 +452,41 @@ class WorkflowMonitor {
         this.metrics.taskMetrics.set(taskId, {
           runs: 0,
           failures: 0,
-          averageDuration: 0
+          averageDuration: 0,
         });
       }
 
       const taskMetrics = this.metrics.taskMetrics.get(taskId);
       taskMetrics.runs++;
-      
-      if (task.status === 'failed') {
+
+      if (task.status === "failed") {
         taskMetrics.failures++;
       }
 
-      const taskTotalDuration = taskMetrics.averageDuration * (taskMetrics.runs - 1) + task.duration;
+      const taskTotalDuration =
+        taskMetrics.averageDuration * (taskMetrics.runs - 1) + task.duration;
       taskMetrics.averageDuration = taskTotalDuration / taskMetrics.runs;
     }
   }
 
   getHealthReport() {
-    const successRate = (this.metrics.successfulRuns / this.metrics.totalRuns) * 100;
-    
+    const successRate =
+      (this.metrics.successfulRuns / this.metrics.totalRuns) * 100;
+
     return {
       overall: {
-        successRate: successRate.toFixed(2) + '%',
+        successRate: successRate.toFixed(2) + "%",
         totalRuns: this.metrics.totalRuns,
-        averageDuration: (this.metrics.averageDuration / 1000).toFixed(2) + 's'
+        averageDuration: (this.metrics.averageDuration / 1000).toFixed(2) + "s",
       },
-      tasks: this.getTaskHealthReport()
+      tasks: this.getTaskHealthReport(),
     };
   }
 }
 ```
 
 ### Alert Configuration
+
 ```json
 {
   "alerts": [
@@ -499,6 +515,7 @@ class WorkflowMonitor {
 ## CLI Interface
 
 ### Command-line Usage
+
 ```bash
 # Create new workflow
 workflow create --name "deployment" --template "web-app"
@@ -528,20 +545,22 @@ workflow generate --type "ci-cd" --output ci-workflow.json
 ## Integration Examples
 
 ### Slack Integration
+
 ```javascript
-async function sendSlackNotification(message, channel = '#deployments') {
+async function sendSlackNotification(message, channel = "#deployments") {
   const webhook = process.env.SLACK_WEBHOOK_URL;
-  
+
   await axios.post(webhook, {
     channel: channel,
     text: message,
-    username: 'Workflow Orchestrator',
-    icon_emoji: ':gear:'
+    username: "Workflow Orchestrator",
+    icon_emoji: ":gear:",
   });
 }
 ```
 
 ### Docker Integration
+
 ```json
 {
   "id": "docker-build",
@@ -559,6 +578,7 @@ async function sendSlackNotification(message, channel = '#deployments') {
 ```
 
 ### Database Integration
+
 ```json
 {
   "id": "db-migration",

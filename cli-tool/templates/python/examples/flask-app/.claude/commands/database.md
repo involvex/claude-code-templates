@@ -30,20 +30,20 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
-    
+
 class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///app.db'
-        
+
 class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         f"postgresql://{os.environ.get('DB_USER')}:{quote_plus(os.environ.get('DB_PASSWORD'))}@" \
         f"{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT', '5432')}/{os.environ.get('DB_NAME')}"
-    
+
 class TestingConfig(Config):
     """Testing configuration."""
     TESTING = True
@@ -86,7 +86,7 @@ def init_extensions(app):
     csrf.init_app(app)
     cache.init_app(app)
     limiter.init_app(app)
-    
+
     # Configure login manager
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Please log in to access this page.'
@@ -109,33 +109,33 @@ class TimestampMixin:
 class BaseModel(db.Model, TimestampMixin):
     """Base model with common functionality."""
     __abstract__ = True
-    
+
     id = db.Column(db.Integer, primary_key=True)
-    
+
     @declared_attr
     def __tablename__(cls):
         return cls.__name__.lower()
-    
+
     def save(self, commit=True):
         """Save model to database."""
         db.session.add(self)
         if commit:
             db.session.commit()
         return self
-    
+
     def delete(self, commit=True):
         """Delete model from database."""
         db.session.delete(self)
         if commit:
             db.session.commit()
-    
+
     def update(self, **kwargs):
         """Update model attributes."""
         for key, value in kwargs.items():
             if hasattr(self, key):
                 setattr(self, key, value)
         return self.save()
-    
+
     def to_dict(self, exclude=None):
         """Convert model to dictionary."""
         exclude = exclude or []
@@ -144,12 +144,12 @@ class BaseModel(db.Model, TimestampMixin):
             for column in self.__table__.columns
             if column.name not in exclude
         }
-    
+
     @classmethod
     def get_or_404(cls, id):
         """Get model by ID or raise 404."""
         return cls.query.get_or_404(id)
-    
+
     @classmethod
     def create(cls, **kwargs):
         """Create new model instance."""
@@ -169,7 +169,7 @@ from flask_login import UserMixin
 class User(UserMixin, BaseModel):
     """User model."""
     __tablename__ = 'users'
-    
+
     username = db.Column(db.String(80), unique=True, nullable=False, index=True)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
@@ -178,26 +178,26 @@ class User(UserMixin, BaseModel):
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
     last_login = db.Column(db.DateTime)
-    
+
     # Relationships
     posts = db.relationship('Post', backref='author', lazy='dynamic', cascade='all, delete-orphan')
-    
+
     def __repr__(self):
         return f'<User {self.username}>'
-    
+
     def set_password(self, password):
         """Set password hash."""
         self.password_hash = generate_password_hash(password)
-    
+
     def check_password(self, password):
         """Check password hash."""
         return check_password_hash(self.password_hash, password)
-    
+
     @property
     def full_name(self):
         """Get user's full name."""
         return f"{self.first_name} {self.last_name}"
-    
+
     def to_dict(self, exclude=None):
         """Convert to dictionary excluding sensitive data."""
         exclude = exclude or ['password_hash']
@@ -207,24 +207,24 @@ class User(UserMixin, BaseModel):
 class Post(BaseModel):
     """Blog post model."""
     __tablename__ = 'posts'
-    
+
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
     slug = db.Column(db.String(200), unique=True, nullable=False, index=True)
     status = db.Column(db.String(20), default='draft', nullable=False)
     published_at = db.Column(db.DateTime)
-    
+
     # Foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    
+
     # Relationships
     category = db.relationship('Category', backref='posts')
     tags = db.relationship('Tag', secondary='post_tags', backref='posts')
-    
+
     def __repr__(self):
         return f'<Post {self.title}>'
-    
+
     @property
     def is_published(self):
         """Check if post is published."""
@@ -262,14 +262,14 @@ def seed_db():
     )
     admin.set_password('admin123')
     admin.save()
-    
+
     # Create sample category
     category = Category(
         name='Technology',
         description='Tech-related posts'
     )
     category.save()
-    
+
     # Create sample post
     post = Post(
         title='Welcome to Flask',
@@ -280,7 +280,7 @@ def seed_db():
         category_id=category.id
     )
     post.save()
-    
+
     click.echo('Database seeded with sample data.')
 
 @click.command()

@@ -16,6 +16,7 @@ ESM provides state-of-the-art protein language models for understanding, generat
 Generate novel protein sequences with desired properties using multimodal generative modeling.
 
 **When to use:**
+
 - Designing proteins with specific functional properties
 - Completing partial protein sequences
 - Generating variants of existing proteins
@@ -93,6 +94,7 @@ designed_protein = model.generate(
 Generate high-quality embeddings for downstream tasks like function prediction, classification, or similarity analysis.
 
 **When to use:**
+
 - Extracting protein representations for machine learning
 - Computing sequence similarities
 - Feature extraction for protein classification
@@ -205,16 +207,19 @@ See `references/forge-api.md` for detailed Forge API documentation, authenticati
 ## Model Selection Guide
 
 **ESM3 Models (Generative):**
+
 - `esm3-sm-open-v1` (1.4B) - Open weights, local usage, good for experimentation
 - `esm3-medium-2024-08` (7B) - Best balance of quality and speed (Forge only)
 - `esm3-large-2024-03` (98B) - Highest quality, slower (Forge only)
 
 **ESM C Models (Embeddings):**
+
 - `esmc-300m` (30 layers) - Lightweight, fast inference
 - `esmc-600m` (36 layers) - Balanced performance
 - `esmc-6b` (80 layers) - Maximum representation quality
 
 **Selection criteria:**
+
 - **Local development/testing:** Use `esm3-sm-open-v1` or `esmc-300m`
 - **Production quality:** Use `esm3-medium-2024-08` via Forge
 - **Maximum accuracy:** Use `esm3-large-2024-03` or `esmc-6b`
@@ -247,6 +252,7 @@ No additional dependencies needed. Obtain Forge API token at https://forge.evolu
 ## Common Workflows
 
 For detailed examples and complete workflows, see `references/workflows.md` which includes:
+
 - Novel GFP design with chain-of-thought
 - Protein variant generation and screening
 - Structure-based sequence optimization
@@ -267,18 +273,21 @@ These references contain detailed API specifications, parameter descriptions, an
 ## Best Practices
 
 **For generation tasks:**
+
 - Start with smaller models for prototyping (`esm3-sm-open-v1`)
 - Use temperature parameter to control diversity (0.0 = deterministic, 1.0 = diverse)
 - Implement iterative refinement with chain-of-thought for complex designs
 - Validate generated sequences with structure prediction or wet-lab experiments
 
 **For embedding tasks:**
+
 - Batch process sequences when possible for efficiency
 - Cache embeddings for repeated analyses
 - Normalize embeddings when computing similarities
 - Use appropriate model size based on downstream task requirements
 
 **For production deployment:**
+
 - Use Forge API for scalability and latest models
 - Implement error handling and retry logic for API calls
 - Monitor token usage and implement rate limiting

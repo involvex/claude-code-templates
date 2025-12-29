@@ -70,6 +70,154 @@ The analytics dashboard follows a modular architecture with:
 - **Performance Monitoring**: Comprehensive metrics and health monitoring
 - **Testing Framework**: Unit, integration, and performance tests
 
+## Dashboard System (NEW v1.22.0)
+
+### Unified Dashboard
+The unified dashboard provides a single interface to access all Claude Code dashboards with seamless navigation.
+
+```bash
+# Launch unified dashboard (default: analytics view)
+cct --dashboard
+
+# Opens at http://localhost:3339
+# Navigate between all dashboards without restarting
+```
+
+**Features:**
+- **Single Entry Point**: Access all dashboards from one interface
+- **Live Dashboard Selector**: Switch between dashboards instantly
+- **Status Monitoring**: Real-time online/offline indicators
+- **Scope Preservation**: Maintains scope across dashboard switches
+- **Iframe Integration**: Loads dashboards without page reloads
+
+### Individual Dashboards
+
+All dashboards now support:
+- **Universal Navigation**: Persistent navigation bar across all dashboards
+- **Scope Switching**: Dynamic scope selector (User/Project/Local/All)
+- **Offline Detection**: Visual indicators for unavailable dashboards
+- **Configurable Ports**: Use `--host` and `--port` options
+
+#### Dashboard Ports
+```
+Analytics:  3333  (--analytics)
+Chats:      3335  (--chats)
+Plugins:    3336  (--plugins)
+Skills:     3337  (--skills-manager)
+Hooks:      3338  (--hooks)
+Unified:    3339  (--dashboard)
+```
+
+### Hooks Dashboard (NEW)
+Manage and monitor Claude Code automation hooks.
+
+```bash
+# Launch hooks dashboard
+cct --hooks
+
+# With scope filter
+cct --hooks --scope user
+
+# Custom host/port
+cct --hooks --host 0.0.0.0 --port 8080
+```
+
+**Features:**
+- **Hook Inventory**: View all installed hooks across scopes
+- **Available Hooks**: Browse hooks from components library
+- **Scope Filtering**: Filter by user/project/local scope
+- **Event Analysis**: Group by event types (PreToolUse, PostToolUse, etc.)
+- **Installation Commands**: Copy commands to install available hooks
+- **Search & Filter**: Real-time search and multi-dimensional filtering
+
+**Hook Format Support**:
+- ✅ **New Format**: Array-based matchers with nested hooks
+- ✅ **Old Format**: Direct hook objects (backward compatible)
+
+### Scope System (NEW)
+
+All component installations now support `--scope` for flexible deployment:
+
+```bash
+# Install to user scope (global, available in all projects)
+cct --agent security-auditor --scope user
+
+# Install to project scope (default, shared in git)
+cct --command lint --scope project
+
+# Install to local scope (git-ignored, machine-specific)
+cct --setting read-only-mode --scope local
+
+# Batch installation with scope
+cct --agent frontend-dev --command lint --scope user
+```
+
+**Scope Hierarchy**:
+1. **User** (`~/.claude/`) - Global, available in all projects (alias: `global`)
+2. **Project** (`./.claude/`) - Shared with team, committed to git (default)
+3. **Local** (`./.claude/settings.local.json`) - Machine-specific, git-ignored
+4. **Enterprise** (System-wide) - Settings/hooks only, requires admin
+
+**Dashboard Scope Switching**:
+- All dashboards include scope dropdown in navigation
+- Scope changes reload data dynamically without page refresh
+- Scope preserved when navigating between dashboards
+- URL parameter: `?scope=user`
+
+### Universal Navigation (NEW)
+
+All dashboards now include a universal navigation bar:
+
+**Features:**
+- **Dashboard Links**: Quick navigation to all dashboards
+- **Active State**: Highlights current dashboard
+- **Offline Detection**: Shows red dot (●) on unavailable dashboards
+- **Scope Selector**: Unified scope switching across dashboards
+- **Click Prevention**: Alerts when clicking offline dashboards
+- **Mobile Responsive**: Hamburger menu for small screens
+
+**Visual Indicators**:
+```
+Online:  🔌 Plugins (Full color, clickable)
+Offline: 🔌 Plugins ● (Grayscale, dimmed, disabled)
+Active:  🔌 Plugins (Orange underline, highlighted)
+```
+
+### Bun Integration (NEW)
+
+Automatic package manager detection with fallback:
+
+```bash
+# Check detected package manager
+npm run pm:detect
+
+# Check Bun availability
+npm run bun:check
+
+# Install with Bun (if available)
+npm run bun:install
+```
+
+**How It Works**:
+1. Detects Bun availability at runtime
+2. Uses Bun for ~3x faster installs if available
+3. Automatically falls back to npm if Bun not installed
+4. No configuration required
+5. No breaking changes for npm users
+
+**Usage**:
+```javascript
+// Automatic in CLI internals
+const { detectPackageManager } = require('./utils/package-manager');
+const pm = await detectPackageManager({ verbose: true });
+// Returns: { name: 'bun', installCmd: 'bun', execCmd: 'bunx', version: '1.x.x' }
+```
+
+**Performance**:
+- Bun: ~2-3x faster than npm for cold installs
+- npm: Fallback maintains compatibility
+- Build commands: `bun run build || npm run build`
+
 ## Technology Stack
 
 ### Core Technologies

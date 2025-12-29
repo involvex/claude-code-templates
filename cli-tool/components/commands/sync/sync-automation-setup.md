@@ -22,6 +22,7 @@ Configure production-ready automated synchronization with comprehensive infrastr
 **Setup Mode**: Use $ARGUMENTS to specify full automation, webhooks-only, monitoring setup, or deployment target
 
 **Automation Framework**:
+
 1. **Prerequisites Setup** - Validate GitHub/Linear access, check infrastructure requirements, configure authentication, test connectivity
 2. **Webhook Configuration** - Setup GitHub/Linear webhooks, configure endpoints, implement security, test delivery
 3. **CI/CD Integration** - Create GitHub Actions workflows, setup scheduled syncs, implement event handling, configure deployments

@@ -2,7 +2,7 @@
 
 Show detailed git repository status
 
-*Command originally created by IndyDevDan (YouTube: https://www.youtube.com/@indydevdan) / DislerH (GitHub: https://github.com/disler)*
+_Command originally created by IndyDevDan (YouTube: https://www.youtube.com/@indydevdan) / DislerH (GitHub: https://github.com/disler)_
 
 ## Instructions
 
@@ -32,6 +32,7 @@ Analyze the current state of the git repository by performing the following step
    - Any action items (commits needed, pulls required, etc.)
 
 This command helps developers quickly understand:
+
 - What changes are pending
 - The repository's sync status
 - Whether any actions are needed before continuing work

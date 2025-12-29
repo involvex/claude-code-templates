@@ -22,6 +22,7 @@ Execute comprehensive knowledge mapping with skill gap analysis and learning opt
 **Mapping Type**: Use $ARGUMENTS to focus on skill matrix creation, knowledge gap identification, expertise area analysis, or learning path recommendations
 
 **Knowledge Mapping Framework**:
+
 1. **Skill Matrix Creation** - Map individual expertise levels, identify core competencies, assess technology proficiencies, evaluate domain knowledge
 2. **Knowledge Gap Analysis** - Identify critical skill gaps, assess team vulnerabilities, evaluate learning priorities, recommend skill development
 3. **Expertise Distribution** - Analyze knowledge concentration, identify single points of failure, assess bus factor risks, recommend knowledge sharing

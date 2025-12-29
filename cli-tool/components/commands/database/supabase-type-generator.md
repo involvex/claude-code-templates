@@ -22,6 +22,7 @@ Execute comprehensive type generation with schema synchronization and applicatio
 **Generation Scope**: Use $ARGUMENTS to generate all table types, specific table types, function signatures, enum definitions, or view types
 
 **Type Generation Framework**:
+
 1. **Schema Analysis** - Extract database schema via MCP, analyze table structures, identify relationships, map data types to TypeScript
 2. **Type Generation** - Generate table interfaces, create utility types, implement type guards, optimize type definitions
 3. **Integration Setup** - Configure import paths, setup type exports, implement auto-completion, integrate with build process

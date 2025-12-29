@@ -12,7 +12,7 @@
         ]
       },
       {
-        "matcher": "Write", 
+        "matcher": "Write",
         "hooks": [
           {
             "type": "command",

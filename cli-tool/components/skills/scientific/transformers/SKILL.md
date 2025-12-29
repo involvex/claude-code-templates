@@ -18,11 +18,13 @@ uv pip install torch transformers datasets evaluate accelerate
 ```
 
 For vision tasks, add:
+
 ```bash
 uv pip install timm pillow
 ```
 
 For audio tasks, add:
+
 ```bash
 uv pip install librosa soundfile
 ```
@@ -37,6 +39,7 @@ login()  # Follow prompts to enter token
 ```
 
 Or set environment variable:
+
 ```bash
 export HUGGINGFACE_TOKEN="your_token_here"
 ```
@@ -108,14 +111,18 @@ See `references/tokenizers.md` for tokenization details.
 ## Common Patterns
 
 ### Pattern 1: Simple Inference
+
 For straightforward tasks, use pipelines:
+
 ```python
 pipe = pipeline("task-name", model="model-id")
 output = pipe(input_data)
 ```
 
 ### Pattern 2: Custom Model Usage
+
 For advanced control, load model and tokenizer separately:
+
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -128,7 +135,9 @@ result = tokenizer.decode(outputs[0])
 ```
 
 ### Pattern 3: Fine-Tuning
+
 For task adaptation, use Trainer:
+
 ```python
 from transformers import Trainer, TrainingArguments
 
@@ -150,6 +159,7 @@ trainer.train()
 ## Reference Documentation
 
 For detailed information on specific components:
+
 - **Pipelines**: `references/pipelines.md` - All supported tasks and optimization
 - **Models**: `references/models.md` - Loading, saving, and configuration
 - **Generation**: `references/generation.md` - Text generation strategies and parameters

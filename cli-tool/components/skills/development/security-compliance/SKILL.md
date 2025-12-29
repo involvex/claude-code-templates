@@ -8,27 +8,35 @@ description: Guides security professionals in implementing defense-in-depth secu
 ## Core Principles
 
 ### 1. Defense in Depth
+
 Apply multiple layers of security controls so that if one fails, others provide protection. Never rely on a single security mechanism.
 
 ### 2. Zero Trust Architecture
+
 Never trust, always verify. Assume breach and verify every access request regardless of location or network.
 
 ### 3. Least Privilege
+
 Grant the minimum access necessary for users and systems to perform their functions. Regularly review and revoke unused permissions.
 
 ### 4. Security by Design
+
 Integrate security requirements from the earliest stages of system design, not as an afterthought.
 
 ### 5. Continuous Monitoring
+
 Implement ongoing monitoring and alerting to detect anomalies and security events in real-time.
 
 ### 6. Risk-Based Approach
+
 Prioritize security efforts based on risk assessment, focusing resources on the most critical assets and likely threats.
 
 ### 7. Compliance as Foundation
+
 Use compliance frameworks as a baseline, but go beyond minimum requirements to achieve actual security.
 
 ### 8. Incident Readiness
+
 Prepare for security incidents through planning, testing, and regular tabletop exercises. Assume compromise will occur.
 
 ---
@@ -36,9 +44,11 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 ## Security & Compliance Lifecycle
 
 ### Phase 1: Assess & Plan
+
 **Objective**: Understand current security posture and compliance requirements
 
 **Activities**:
+
 - Conduct security assessments and gap analysis
 - Identify compliance requirements (SOC2, ISO27001, GDPR, HIPAA, PCI-DSS)
 - Perform risk assessments and threat modeling
@@ -47,6 +57,7 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Create security roadmap with prioritized initiatives
 
 **Deliverables**:
+
 - Risk register with prioritized risks
 - Compliance gap analysis report
 - Security architecture documentation
@@ -54,9 +65,11 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Security roadmap and budget
 
 ### Phase 2: Design & Architect
+
 **Objective**: Design secure systems and architectures
 
 **Activities**:
+
 - Design defense-in-depth architectures
 - Implement Zero Trust network architecture
 - Design identity and access management (IAM) systems
@@ -66,6 +79,7 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Define security controls and compensating controls
 
 **Deliverables**:
+
 - Security architecture diagrams
 - Threat models (STRIDE, PASTA, or attack trees)
 - Data flow diagrams with security boundaries
@@ -74,9 +88,11 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Security control matrix
 
 ### Phase 3: Implement & Harden
+
 **Objective**: Deploy security controls and harden systems
 
 **Activities**:
+
 - Implement security controls (preventive, detective, corrective)
 - Configure security tools (SIEM, EDR, CASB, WAF, IDS/IPS)
 - Harden operating systems and applications
@@ -87,6 +103,7 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Set up vulnerability management program
 
 **Deliverables**:
+
 - Hardening baselines and configuration standards
 - Deployed security tools and controls
 - Encryption implementation
@@ -95,9 +112,11 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Vulnerability management procedures
 
 ### Phase 4: Monitor & Detect
+
 **Objective**: Continuously monitor for threats and anomalies
 
 **Activities**:
+
 - Monitor security logs and events (SIEM)
 - Analyze security alerts and anomalies
 - Conduct threat hunting
@@ -108,6 +127,7 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Analyze threat intelligence feeds
 
 **Deliverables**:
+
 - Security operations center (SOC) runbooks
 - Alert triage and escalation procedures
 - Threat hunting playbooks
@@ -117,9 +137,11 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Compliance monitoring reports
 
 ### Phase 5: Respond & Recover
+
 **Objective**: Respond to security incidents and recover operations
 
 **Activities**:
+
 - Execute incident response plan
 - Contain and eradicate threats
 - Perform forensic analysis
@@ -130,6 +152,7 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Improve detection rules and response procedures
 
 **Deliverables**:
+
 - Incident response reports
 - Forensic analysis findings
 - Root cause analysis
@@ -139,9 +162,11 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Post-incident review and recommendations
 
 ### Phase 6: Audit & Improve
+
 **Objective**: Validate compliance and continuously improve security
 
 **Activities**:
+
 - Conduct internal audits
 - Prepare for external audits (SOC2, ISO27001)
 - Perform compliance assessments
@@ -152,6 +177,7 @@ Prepare for security incidents through planning, testing, and regular tabletop e
 - Implement security improvements
 
 **Deliverables**:
+
 - Audit reports (internal and external)
 - SOC2 Type II report
 - ISO27001 certification
@@ -466,48 +492,56 @@ Action based on score:
 ## Key Security Frameworks & Standards
 
 ### NIST Cybersecurity Framework (CSF)
+
 - **Purpose**: Risk-based framework for improving cybersecurity
 - **Structure**: 5 Functions, 23 Categories, 108 Subcategories
 - **Best for**: General organizations, government contractors
 - **Maturity model**: Tier 1 (Partial) to Tier 4 (Adaptive)
 
 ### CIS Critical Security Controls
+
 - **Purpose**: Prioritized set of actions for cyber defense
 - **Structure**: 18 Controls with Implementation Groups (IG1, IG2, IG3)
 - **Best for**: Practical implementation guidance
 - **Focus**: Defense against common attack patterns
 
 ### ISO/IEC 27001
+
 - **Purpose**: International standard for information security management
 - **Structure**: 14 domains, 114 controls (Annex A)
 - **Best for**: International recognition, formal certification
 - **Requirements**: ISMS (Information Security Management System)
 
 ### SOC 2 Type II
+
 - **Purpose**: Service organization controls for security and availability
 - **Structure**: Trust Service Criteria (Security, Availability, Confidentiality, Processing Integrity, Privacy)
 - **Best for**: SaaS companies, cloud service providers
 - **Audit**: 3-12 month observation period
 
 ### NIST 800-53
+
 - **Purpose**: Security controls for federal systems
 - **Structure**: 20 families, 1000+ controls
 - **Best for**: Government contractors, FedRAMP
 - **Baselines**: Low, Moderate, High impact systems
 
 ### GDPR (General Data Protection Regulation)
+
 - **Purpose**: EU data privacy regulation
 - **Scope**: Any organization processing EU residents' data
 - **Requirements**: Lawful basis, consent, data subject rights, breach notification
 - **Penalties**: Up to 4% of global revenue or €20M
 
 ### HIPAA (Health Insurance Portability and Accountability Act)
+
 - **Purpose**: Protect health information (PHI)
 - **Scope**: Healthcare providers, payers, business associates
 - **Requirements**: Administrative, Physical, Technical safeguards
 - **Penalties**: $100-$50,000 per violation, criminal charges possible
 
 ### PCI-DSS (Payment Card Industry Data Security Standard)
+
 - **Purpose**: Protect cardholder data
 - **Structure**: 12 requirements, 6 control objectives
 - **Scope**: Any organization storing, processing, or transmitting card data
@@ -518,6 +552,7 @@ Action based on score:
 ## Core Security Domains
 
 ### 1. Identity & Access Management (IAM)
+
 - Authentication mechanisms (MFA, SSO, passwordless)
 - Authorization models (RBAC, ABAC, ReBAC)
 - Privileged access management (PAM)
@@ -525,6 +560,7 @@ Action based on score:
 - Directory services (Active Directory, LDAP, Okta, Auth0)
 
 ### 2. Network Security
+
 - Network segmentation and micro-segmentation
 - Firewalls (next-gen, WAF, application-layer)
 - Intrusion detection/prevention (IDS/IPS)
@@ -533,6 +569,7 @@ Action based on score:
 - DDoS protection
 
 ### 3. Data Security
+
 - Encryption at rest and in transit (AES-256, TLS 1.3)
 - Key management (KMS, HSM)
 - Data classification and labeling
@@ -541,6 +578,7 @@ Action based on score:
 - Secrets management (Vault, AWS Secrets Manager)
 
 ### 4. Application Security
+
 - Secure SDLC and DevSecOps
 - SAST (Static Application Security Testing)
 - DAST (Dynamic Application Security Testing)
@@ -549,6 +587,7 @@ Action based on score:
 - OWASP Top 10 mitigation
 
 ### 5. Cloud Security
+
 - Cloud security posture management (CSPM)
 - Cloud access security broker (CASB)
 - Container security (image scanning, runtime protection)
@@ -557,6 +596,7 @@ Action based on score:
 - Multi-cloud security architecture
 
 ### 6. Endpoint Security
+
 - Endpoint detection and response (EDR)
 - Antivirus and anti-malware
 - Host-based firewalls
@@ -565,6 +605,7 @@ Action based on score:
 - Patch management
 
 ### 7. Security Operations
+
 - Security Information and Event Management (SIEM)
 - Security Orchestration, Automation, and Response (SOAR)
 - Threat intelligence platforms (TIP)
@@ -573,6 +614,7 @@ Action based on score:
 - Penetration testing and red teaming
 
 ### 8. Incident Response
+
 - Incident response plan and playbooks
 - Computer forensics and investigation
 - Malware analysis
@@ -581,6 +623,7 @@ Action based on score:
 - Regulatory breach notification
 
 ### 9. Governance, Risk & Compliance (GRC)
+
 - Security policies and procedures
 - Risk assessment and management
 - Compliance management and auditing
@@ -593,6 +636,7 @@ Action based on score:
 ## Security Metrics & KPIs
 
 ### Risk & Compliance Metrics
+
 - Number of critical/high risks open
 - Risk remediation time (mean time to remediate)
 - Compliance audit findings (open/closed)
@@ -601,6 +645,7 @@ Action based on score:
 - Training completion rate
 
 ### Vulnerability Management Metrics
+
 - Mean time to detect (MTTD) vulnerabilities
 - Mean time to patch (MTTP)
 - Vulnerability backlog (total open, by severity)
@@ -608,6 +653,7 @@ Action based on score:
 - Vulnerability recurrence rate
 
 ### Incident Response Metrics
+
 - Mean time to detect (MTTD) incidents
 - Mean time to respond (MTTR)
 - Mean time to contain (MTTC)
@@ -617,6 +663,7 @@ Action based on score:
 - False positive rate
 
 ### Security Operations Metrics
+
 - SIEM alert volume (total, by severity)
 - Alert triage time
 - Alert false positive rate
@@ -625,6 +672,7 @@ Action based on score:
 - Penetration test findings
 
 ### Access Management Metrics
+
 - MFA adoption rate
 - Privileged account review completion rate
 - Access certification completion rate
@@ -633,6 +681,7 @@ Action based on score:
 - Failed login attempt rate
 
 ### Awareness & Culture Metrics
+
 - Phishing simulation click rate
 - Security training completion rate
 - Security awareness quiz scores
@@ -644,6 +693,7 @@ Action based on score:
 ## Security Tools Ecosystem
 
 ### SIEM (Security Information & Event Management)
+
 - Splunk Enterprise Security
 - IBM QRadar
 - Microsoft Sentinel
@@ -651,6 +701,7 @@ Action based on score:
 - Sumo Logic
 
 ### EDR/XDR (Endpoint/Extended Detection & Response)
+
 - CrowdStrike Falcon
 - SentinelOne
 - Microsoft Defender for Endpoint
@@ -658,12 +709,14 @@ Action based on score:
 - Carbon Black
 
 ### Vulnerability Management
+
 - Tenable Nessus/Tenable.io
 - Qualys VMDR
 - Rapid7 InsightVM
 - Greenbone OpenVAS (open source)
 
 ### Cloud Security
+
 - Wiz
 - Prisma Cloud (Palo Alto)
 - Lacework
@@ -671,6 +724,7 @@ Action based on score:
 - AWS Security Hub / Azure Security Center / GCP Security Command Center
 
 ### SAST/DAST
+
 - Snyk
 - Veracode
 - Checkmarx
@@ -678,18 +732,21 @@ Action based on score:
 - OWASP ZAP (open source)
 
 ### Container Security
+
 - Aqua Security
 - Sysdig Secure
 - Prisma Cloud Compute
 - Trivy (open source)
 
 ### Secrets Management
+
 - HashiCorp Vault
 - AWS Secrets Manager
 - Azure Key Vault
 - CyberArk
 
 ### Identity & Access
+
 - Okta
 - Auth0
 - Azure AD / Entra ID
@@ -857,6 +914,7 @@ Action based on score:
 ## Best Practices
 
 ### Security Architecture
+
 - Design with security in mind from the start (shift-left)
 - Apply defense in depth with multiple security layers
 - Implement Zero Trust: verify explicitly, use least privilege, assume breach
@@ -865,6 +923,7 @@ Action based on score:
 - Use secure defaults and fail securely
 
 ### Access Control
+
 - Enforce multi-factor authentication (MFA) everywhere
 - Implement least privilege access
 - Use just-in-time (JIT) privileged access
@@ -873,6 +932,7 @@ Action based on score:
 - Avoid shared accounts and service account abuse
 
 ### Security Operations
+
 - Centralize logging with SIEM
 - Automate detection and response where possible
 - Maintain an incident response plan and test it
@@ -881,6 +941,7 @@ Action based on score:
 - Practice incident response through tabletop exercises
 
 ### Application Security
+
 - Integrate security into CI/CD (DevSecOps)
 - Scan code for vulnerabilities (SAST, DAST, SCA)
 - Follow OWASP Top 10 guidelines
@@ -889,6 +950,7 @@ Action based on score:
 - Use security headers (CSP, HSTS, X-Frame-Options)
 
 ### Cloud Security
+
 - Use infrastructure as code (IaC) with security scanning
 - Enable cloud-native security services (GuardDuty, Security Hub)
 - Implement CSPM to monitor misconfigurations
@@ -897,6 +959,7 @@ Action based on score:
 - Monitor for shadow IT and unauthorized resources
 
 ### Compliance
+
 - Treat compliance as a continuous process, not one-time
 - Map controls to multiple frameworks for efficiency
 - Automate evidence collection where possible
@@ -905,6 +968,7 @@ Action based on score:
 - Conduct internal audits before external audits
 
 ### Security Culture
+
 - Make security everyone's responsibility
 - Conduct regular security awareness training
 - Run phishing simulations to test awareness
@@ -917,6 +981,7 @@ Action based on score:
 ## Integration with Other Disciplines
 
 ### With DevOps/Platform Engineering
+
 - Integrate security scanning into CI/CD pipelines
 - Automate security testing and compliance checks
 - Implement Infrastructure as Code (IaC) security
@@ -924,6 +989,7 @@ Action based on score:
 - Coordinate on incident response for production issues
 
 ### With Enterprise Architecture
+
 - Align security architecture with enterprise architecture
 - Participate in architecture review boards
 - Ensure security requirements in architecture standards
@@ -931,6 +997,7 @@ Action based on score:
 - Define security reference architectures
 
 ### With IT Operations
+
 - Coordinate on patch management and change control
 - Collaborate on monitoring and alerting
 - Joint incident response for security and operational incidents
@@ -938,6 +1005,7 @@ Action based on score:
 - Coordinate access management and privileged access
 
 ### With Product Management
+
 - Provide security requirements for new features
 - Participate in threat modeling for new products
 - Balance security with user experience
@@ -945,6 +1013,7 @@ Action based on score:
 - Support security as a product differentiator
 
 ### With Legal/Privacy
+
 - Coordinate on data privacy regulations (GDPR, CCPA)
 - Collaborate on breach notification requirements
 - Review vendor contracts for security terms
@@ -956,6 +1025,7 @@ Action based on score:
 ## When to Engage Security & Compliance
 
 ### Required Engagement
+
 - New system or application design
 - Architecture changes affecting security boundaries
 - Regulatory compliance initiatives
@@ -966,6 +1036,7 @@ Action based on score:
 - Data breach or suspected breach
 
 ### Recommended Engagement
+
 - Major feature releases
 - Cloud migrations
 - M&A due diligence
@@ -976,6 +1047,7 @@ Action based on score:
 - Policy updates
 
 ### Continuous Collaboration
+
 - Security review of pull requests (for critical systems)
 - Vulnerability remediation prioritization
 - Security awareness and training

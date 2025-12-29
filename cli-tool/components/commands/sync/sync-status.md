@@ -20,10 +20,11 @@ Monitor GitHub-Linear sync health: $ARGUMENTS
 Analyze synchronization status between GitHub and Linear. When checking synchronization status:
 
 1. **Sync State Overview**
+
    ```javascript
    async function getSyncOverview() {
      const state = await loadSyncState();
-     
+
      return {
        lastFullSync: state.lastFullSync,
        lastIncrementalSync: state.lastIncremental,
@@ -32,106 +33,110 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
        failedSync: state.failures.length,
        syncEnabled: state.config.enabled,
        syncDirection: state.config.direction,
-       webhooksActive: await checkWebhooks()
+       webhooksActive: await checkWebhooks(),
      };
    }
    ```
 
 2. **Health Metrics**
+
    ```javascript
    const healthMetrics = {
      // Performance metrics
      avgSyncTime: calculateAverage(syncTimes),
      maxSyncTime: Math.max(...syncTimes),
      syncSuccessRate: (successful / total) * 100,
-     
+
      // Data quality metrics
      conflictRate: (conflicts / syncs) * 100,
      duplicateRate: (duplicates / total) * 100,
      orphanedItems: countOrphaned(),
-     
+
      // API health
      githubRateLimit: await getGitHubRateLimit(),
      linearRateLimit: await getLinearRateLimit(),
      apiErrors: recentErrors.length,
-     
+
      // Sync lag
      avgSyncLag: calculateSyncLag(),
      maxSyncLag: findMaxLag(),
-     itemsOutOfSync: findOutOfSync().length
+     itemsOutOfSync: findOutOfSync().length,
    };
    ```
 
 3. **Consistency Checks**
+
    ```javascript
    async function checkConsistency() {
      const issues = [];
-     
+
      // Check GitHub → Linear
      const githubIssues = await fetchAllGitHubIssues();
      for (const issue of githubIssues) {
        const linearTask = await findLinearTask(issue);
        if (!linearTask) {
          issues.push({
-           type: 'MISSING_IN_LINEAR',
+           type: "MISSING_IN_LINEAR",
            github: issue.number,
-           severity: 'high'
+           severity: "high",
          });
        } else {
          const diffs = compareFields(issue, linearTask);
          if (diffs.length > 0) {
            issues.push({
-             type: 'FIELD_MISMATCH',
+             type: "FIELD_MISMATCH",
              github: issue.number,
              linear: linearTask.identifier,
              differences: diffs,
-             severity: 'medium'
+             severity: "medium",
            });
          }
        }
      }
-     
+
      return issues;
    }
    ```
 
 4. **Sync History Analysis**
+
    ```javascript
    function analyzeSyncHistory(days = 7) {
      const history = loadSyncHistory(days);
-     
+
      return {
        totalSyncs: history.length,
-       byType: groupBy(history, 'type'),
-       byDirection: groupBy(history, 'direction'),
-       successRate: calculateRate(history, 'success'),
-       
+       byType: groupBy(history, "type"),
+       byDirection: groupBy(history, "direction"),
+       successRate: calculateRate(history, "success"),
+
        patterns: {
          peakHours: findPeakSyncHours(history),
          commonErrors: findCommonErrors(history),
-         slowestOperations: findSlowestOps(history)
+         slowestOperations: findSlowestOps(history),
        },
-       
+
        trends: {
-         syncVolume: calculateTrend(history, 'volume'),
-         errorRate: calculateTrend(history, 'errors'),
-         performance: calculateTrend(history, 'duration')
-       }
+         syncVolume: calculateTrend(history, "volume"),
+         errorRate: calculateTrend(history, "errors"),
+         performance: calculateTrend(history, "duration"),
+       },
      };
    }
    ```
 
 5. **Real-time Monitoring**
+
    ```javascript
    class SyncMonitor {
      constructor() {
        this.metrics = new Map();
        this.alerts = [];
      }
-     
+
      track(operation) {
        const start = Date.now();
-       
+
        return {
          complete: (success, details) => {
            const duration = Date.now() - start;
@@ -140,50 +145,53 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
              duration,
              success,
              details,
-             timestamp: new Date()
+             timestamp: new Date(),
            });
-           
+
            // Check for alerts
            if (duration > SLOW_SYNC_THRESHOLD) {
-             this.alert('SLOW_SYNC', operation);
+             this.alert("SLOW_SYNC", operation);
            }
            if (!success) {
-             this.alert('SYNC_FAILURE', operation);
+             this.alert("SYNC_FAILURE", operation);
            }
-         }
+         },
        };
      }
    }
    ```
 
 6. **Webhook Status**
+
    ```bash
    # Check GitHub webhooks
    gh api repos/:owner/:repo/hooks --jq '.[] | select(.config.url | contains("linear"))'
-   
+
    # Validate webhook health
    gh api repos/:owner/:repo/hooks/:id/deliveries --jq '.[0:10] | .[] | {id, status_code, delivered_at}'
    ```
 
 7. **Queue Management**
+
    ```javascript
    async function getQueueStatus() {
      const queue = await loadSyncQueue();
-     
+
      return {
        size: queue.length,
        oldest: queue[0]?.createdAt,
-       byPriority: groupBy(queue, 'priority'),
+       byPriority: groupBy(queue, "priority"),
        estimatedTime: estimateProcessingTime(queue),
-       
-       blocked: queue.filter(item => item.retries >= MAX_RETRIES),
-       processing: queue.filter(item => item.status === 'processing'),
-       pending: queue.filter(item => item.status === 'pending')
+
+       blocked: queue.filter((item) => item.retries >= MAX_RETRIES),
+       processing: queue.filter((item) => item.status === "processing"),
+       pending: queue.filter((item) => item.status === "pending"),
      };
    }
    ```
 
 8. **Diagnostic Reports**
+
    ```javascript
    function generateDiagnostics() {
      return {
@@ -191,40 +199,41 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
          version: SYNC_VERSION,
          githubCLI: checkGitHubCLI(),
          linearMCP: checkLinearMCP(),
-         config: loadSyncConfig()
+         config: loadSyncConfig(),
        },
-       
+
        connectivity: {
          github: testGitHubAPI(),
          linear: testLinearAPI(),
-         webhooks: testWebhooks()
+         webhooks: testWebhooks(),
        },
-       
+
        dataIntegrity: {
          orphanedGitHub: findOrphanedGitHubIssues(),
          orphanedLinear: findOrphanedLinearTasks(),
          duplicates: findDuplicates(),
-         conflicts: findConflicts()
+         conflicts: findConflicts(),
        },
-       
-       recommendations: generateRecommendations()
+
+       recommendations: generateRecommendations(),
      };
    }
    ```
 
 9. **Alert Configuration**
+
    ```yaml
    alerts:
      - name: high_conflict_rate
        condition: conflict_rate > 10%
        severity: warning
        action: notify
-     
+
      - name: sync_failure
        condition: success_rate < 95%
        severity: critical
        action: pause_sync
-     
+
      - name: api_rate_limit
        condition: rate_limit_remaining < 100
        severity: warning
@@ -232,16 +241,17 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
    ```
 
 10. **Performance Visualization**
+
     ```
     Sync Performance (Last 24h)
     ━━━━━━━━━━━━━━━━━━━━━━━━━━
-    
+
     Sync Volume:
     00:00 ▁▁▂▁▁▁▂▃▄▅▆▇█▇▆▅▄▃▂▁▁▁▂▁ 23:59
-    
+
     Success Rate: 98.5%
-    ████████████████████░ 
-    
+    ████████████████████░
+
     Avg Duration: 2.3s
     ████████░░░░░░░░░░░░ (Target: 5s)
     ```
@@ -249,6 +259,7 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
 ## Examples
 
 ### Basic Status Check
+
 ```bash
 # Get current sync status
 claude sync-status
@@ -261,6 +272,7 @@ claude sync-status --type="issue-to-linear"
 ```
 
 ### Health Monitoring
+
 ```bash
 # Run health check
 claude sync-status --health-check
@@ -273,6 +285,7 @@ claude sync-status --diagnostics
 ```
 
 ### Troubleshooting
+
 ```bash
 # Check for sync issues
 claude sync-status --check-issues
@@ -331,6 +344,7 @@ Recommendations:
 ## Advanced Features
 
 ### Sync Analytics Dashboard
+
 ```
 ═══════════════════════════════════════════════════════
                  SYNC ANALYTICS DASHBOARD
@@ -355,10 +369,11 @@ Other        █    10%     │
 ```
 
 ### Predictive Analysis
+
 ```javascript
 function predictSyncIssues() {
   const patterns = analyzeHistoricalData();
-  
+
   return {
     likelyConflicts: predictConflicts(patterns),
     peakLoadTimes: predictPeakLoad(patterns),
@@ -366,8 +381,8 @@ function predictSyncIssues() {
     recommendations: {
       optimalSyncInterval: calculateOptimalInterval(),
       suggestedBatchSize: calculateOptimalBatch(),
-      conflictPrevention: suggestConflictStrategies()
-    }
+      conflictPrevention: suggestConflictStrategies(),
+    },
   };
 }
 ```

@@ -70,6 +70,7 @@ development/
 ## Workflow
 
 1. Generate tag analysis report:
+
    ```bash
    python3 /Users/cam/VAULT01/System_Files/Scripts/tag_standardizer.py --report
    ```
@@ -77,6 +78,7 @@ development/
 2. Review the report at `/System_Files/Tag_Analysis_Report.md`
 
 3. Apply standardization:
+
    ```bash
    python3 /Users/cam/VAULT01/System_Files/Scripts/tag_standardizer.py
    ```

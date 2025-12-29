@@ -1,9 +1,9 @@
-const StructuralValidator = require('./validators/StructuralValidator');
-const IntegrityValidator = require('./validators/IntegrityValidator');
-const SemanticValidator = require('./validators/SemanticValidator');
-const ReferenceValidator = require('./validators/ReferenceValidator');
-const ProvenanceValidator = require('./validators/ProvenanceValidator');
-const chalk = require('chalk');
+const StructuralValidator = require("./validators/StructuralValidator");
+const IntegrityValidator = require("./validators/IntegrityValidator");
+const SemanticValidator = require("./validators/SemanticValidator");
+const ReferenceValidator = require("./validators/ReferenceValidator");
+const ProvenanceValidator = require("./validators/ProvenanceValidator");
+const chalk = require("chalk");
 
 /**
  * ValidationOrchestrator - Coordinates all validators and generates comprehensive reports
@@ -17,7 +17,7 @@ class ValidationOrchestrator {
       integrity: new IntegrityValidator(),
       semantic: new SemanticValidator(),
       reference: new ReferenceValidator(),
-      provenance: new ProvenanceValidator()
+      provenance: new ProvenanceValidator(),
     };
   }
 
@@ -32,24 +32,30 @@ class ValidationOrchestrator {
    */
   async validateComponent(component, options = {}) {
     const {
-      validators = ['structural', 'integrity', 'semantic', 'reference', 'provenance'],
+      validators = [
+        "structural",
+        "integrity",
+        "semantic",
+        "reference",
+        "provenance",
+      ],
       strict = false,
-      updateRegistry = false
+      updateRegistry = false,
     } = options;
 
     const results = {
       component: {
         path: component.path,
-        type: component.type
+        type: component.type,
       },
       timestamp: new Date().toISOString(),
       overall: {
         valid: true,
         score: 0,
         errorCount: 0,
-        warningCount: 0
+        warningCount: 0,
       },
-      validators: {}
+      validators: {},
     };
 
     // Run each validator
@@ -64,9 +70,9 @@ class ValidationOrchestrator {
         let validatorOptions = {};
 
         // Validator-specific options
-        if (validatorName === 'semantic') {
+        if (validatorName === "semantic") {
           validatorOptions.strict = strict;
-        } else if (validatorName === 'integrity') {
+        } else if (validatorName === "integrity") {
           validatorOptions.updateRegistry = updateRegistry;
         }
 
@@ -79,7 +85,7 @@ class ValidationOrchestrator {
           warningCount: result.warningCount,
           errors: result.errors,
           warnings: result.warnings,
-          info: result.info
+          info: result.info,
         };
 
         // Add validator-specific metadata
@@ -96,13 +102,12 @@ class ValidationOrchestrator {
         }
         results.overall.errorCount += result.errorCount;
         results.overall.warningCount += result.warningCount;
-
       } catch (error) {
         results.validators[validatorName] = {
           valid: false,
           error: error.message,
           errorCount: 1,
-          warningCount: 0
+          warningCount: 0,
         };
         results.overall.valid = false;
         results.overall.errorCount++;
@@ -111,12 +116,12 @@ class ValidationOrchestrator {
 
     // Calculate overall score (average of all validator scores)
     const scores = Object.values(results.validators)
-      .map(v => v.score || 0)
-      .filter(s => s > 0);
+      .map((v) => v.score || 0)
+      .filter((s) => s > 0);
 
     if (scores.length > 0) {
       results.overall.score = Math.round(
-        scores.reduce((sum, score) => sum + score, 0) / scores.length
+        scores.reduce((sum, score) => sum + score, 0) / scores.length,
       );
     }
 
@@ -135,10 +140,10 @@ class ValidationOrchestrator {
         total: components.length,
         passed: 0,
         failed: 0,
-        warnings: 0
+        warnings: 0,
       },
       components: [],
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     for (const component of components) {
@@ -171,42 +176,64 @@ class ValidationOrchestrator {
     const lines = [];
 
     // Helper functions for colored output
-    const success = (text) => colors ? chalk.green(text) : text;
-    const error = (text) => colors ? chalk.red(text) : text;
-    const warning = (text) => colors ? chalk.yellow(text) : text;
-    const info = (text) => colors ? chalk.blue(text) : text;
-    const dim = (text) => colors ? chalk.gray(text) : text;
+    const success = (text) => (colors ? chalk.green(text) : text);
+    const error = (text) => (colors ? chalk.red(text) : text);
+    const warning = (text) => (colors ? chalk.yellow(text) : text);
+    const info = (text) => (colors ? chalk.blue(text) : text);
+    const dim = (text) => (colors ? chalk.gray(text) : text);
 
     // Check if this is a batch result or single component result
     const isBatch = validationResults.summary && validationResults.components;
 
     if (isBatch) {
       // Batch report
-      lines.push('');
-      lines.push(info('🔒 Security Audit Report'));
-      lines.push(dim('━'.repeat(60)));
-      lines.push('');
+      lines.push("");
+      lines.push(info("🔒 Security Audit Report"));
+      lines.push(dim("━".repeat(60)));
+      lines.push("");
 
       lines.push(`📊 Summary:`);
       lines.push(`   Total components: ${validationResults.summary.total}`);
-      lines.push(`   ${success('✅ Passed')}: ${validationResults.summary.passed}`);
-      lines.push(`   ${error('❌ Failed')}: ${validationResults.summary.failed}`);
-      lines.push(`   ${warning('⚠️  Warnings')}: ${validationResults.summary.warnings}`);
-      lines.push('');
+      lines.push(
+        `   ${success("✅ Passed")}: ${validationResults.summary.passed}`,
+      );
+      lines.push(
+        `   ${error("❌ Failed")}: ${validationResults.summary.failed}`,
+      );
+      lines.push(
+        `   ${warning("⚠️  Warnings")}: ${validationResults.summary.warnings}`,
+      );
+      lines.push("");
 
       // Component details
       for (const component of validationResults.components) {
-        lines.push(this._formatComponentResult(component, verbose, { success, error, warning, info, dim }));
+        lines.push(
+          this._formatComponentResult(component, verbose, {
+            success,
+            error,
+            warning,
+            info,
+            dim,
+          }),
+        );
       }
     } else {
       // Single component report
-      lines.push(this._formatComponentResult(validationResults, verbose, { success, error, warning, info, dim }));
+      lines.push(
+        this._formatComponentResult(validationResults, verbose, {
+          success,
+          error,
+          warning,
+          info,
+          dim,
+        }),
+      );
     }
 
-    lines.push(dim('━'.repeat(60)));
-    lines.push('');
+    lines.push(dim("━".repeat(60)));
+    lines.push("");
 
-    return lines.join('\n');
+    return lines.join("\n");
   }
 
   /**
@@ -217,41 +244,58 @@ class ValidationOrchestrator {
     const { success, error, warning, info, dim } = colors;
     const lines = [];
 
-    const status = componentResult.overall.valid ? success('✅ PASS') : error('❌ FAIL');
-    const scoreBadge = this._getScoreBadge(componentResult.overall.score, colors);
+    const status = componentResult.overall.valid
+      ? success("✅ PASS")
+      : error("❌ FAIL");
+    const scoreBadge = this._getScoreBadge(
+      componentResult.overall.score,
+      colors,
+    );
 
     lines.push(`${status} ${componentResult.component.path} ${scoreBadge}`);
 
     // Validator breakdown
-    for (const [validatorName, result] of Object.entries(componentResult.validators)) {
-      const validatorStatus = result.valid ? success('✅') : error('❌');
-      const validatorScore = result.score ? dim(`(${result.score}/100)`) : '';
+    for (const [validatorName, result] of Object.entries(
+      componentResult.validators,
+    )) {
+      const validatorStatus = result.valid ? success("✅") : error("❌");
+      const validatorScore = result.score ? dim(`(${result.score}/100)`) : "";
 
-      lines.push(`   ├─ ${validatorStatus} ${validatorName}: ${result.errorCount === 0 ? 'PASS' : `${result.errorCount} errors`} ${validatorScore}`);
+      lines.push(
+        `   ├─ ${validatorStatus} ${validatorName}: ${result.errorCount === 0 ? "PASS" : `${result.errorCount} errors`} ${validatorScore}`,
+      );
 
       // Show errors
       if (result.errors && result.errors.length > 0 && verbose) {
         for (const err of result.errors.slice(0, 3)) {
-          lines.push(`   │  ${error('ERROR')}: ${err.message} ${dim(`[${err.code}]`)}`);
+          lines.push(
+            `   │  ${error("ERROR")}: ${err.message} ${dim(`[${err.code}]`)}`,
+          );
         }
         if (result.errors.length > 3) {
-          lines.push(`   │  ${dim(`... and ${result.errors.length - 3} more errors`)}`);
+          lines.push(
+            `   │  ${dim(`... and ${result.errors.length - 3} more errors`)}`,
+          );
         }
       }
 
       // Show warnings
       if (result.warnings && result.warnings.length > 0 && verbose) {
         for (const warn of result.warnings.slice(0, 2)) {
-          lines.push(`   │  ${warning('WARNING')}: ${warn.message} ${dim(`[${warn.code}]`)}`);
+          lines.push(
+            `   │  ${warning("WARNING")}: ${warn.message} ${dim(`[${warn.code}]`)}`,
+          );
         }
         if (result.warnings.length > 2) {
-          lines.push(`   │  ${dim(`... and ${result.warnings.length - 2} more warnings`)}`);
+          lines.push(
+            `   │  ${dim(`... and ${result.warnings.length - 2} more warnings`)}`,
+          );
         }
       }
     }
 
-    lines.push('');
-    return lines.join('\n');
+    lines.push("");
+    return lines.join("\n");
   }
 
   /**
@@ -287,7 +331,7 @@ class ValidationOrchestrator {
     const processResult = (result) => {
       for (const validator of Object.values(result.validators)) {
         if (validator.errors) {
-          validator.errors.forEach(err => codes.add(err.code));
+          validator.errors.forEach((err) => codes.add(err.code));
         }
       }
     };

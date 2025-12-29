@@ -22,6 +22,7 @@ Design complete RESTful API with industry best practices and comprehensive funct
 **API Version**: Use $ARGUMENTS to specify API version, GraphQL hybrid approach, or OpenAPI specification
 
 **API Architecture**:
+
 1. **Resource Design** - RESTful endpoints, HTTP methods, URL structure, resource relationships
 2. **Request/Response Models** - Data validation, serialization, error handling, status codes
 3. **Authentication & Authorization** - JWT, OAuth, RBAC, API keys, rate limiting

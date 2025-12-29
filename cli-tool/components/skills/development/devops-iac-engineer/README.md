@@ -5,6 +5,7 @@ A comprehensive Claude skill designed to help DevOps teams implement infrastruct
 ## Overview
 
 This skill provides frameworks, templates, and best practices for:
+
 - **Terraform & IaC** - Infrastructure as Code implementation patterns
 - **Kubernetes & Containers** - Container orchestration and deployment
 - **Cloud Platforms** - AWS, Azure, GCP architecture and services
@@ -38,42 +39,54 @@ DevOps IaC Engineer/
 ## Quick Start
 
 ### 1. For Infrastructure as Code
+
 Start with [SKILL.md](SKILL.md) → [reference/terraform.md](reference/terraform.md)
+
 - Use Terraform module templates for reusable infrastructure
 - Implement remote state management with S3 + DynamoDB
 - Follow security best practices for secrets and credentials
 - Apply cost optimization patterns
 
 ### 2. For Kubernetes Deployments
+
 [reference/kubernetes.md](reference/kubernetes.md) → [reference/templates.md](reference/templates.md)
+
 - Deploy production-ready workloads with health checks
 - Implement autoscaling (HPA/VPA)
 - Configure RBAC and network policies
 - Use Helm charts for application packaging
 
 ### 3. For Cloud Architecture
+
 [reference/cloud_platforms.md](reference/cloud_platforms.md)
+
 - Design multi-tier architectures on AWS/Azure/GCP
 - Implement high availability and disaster recovery
 - Optimize costs with right-sizing and spot instances
 - Follow Well-Architected Framework principles
 
 ### 4. For CI/CD Pipelines
+
 [reference/cicd.md](reference/cicd.md)
+
 - Implement GitOps workflows with ArgoCD or Flux
 - Create automated testing pipelines
 - Configure deployment strategies (blue/green, canary)
 - Set up infrastructure validation and security scanning
 
 ### 5. For Observability
+
 [reference/observability.md](reference/observability.md)
+
 - Define SLIs, SLOs, and SLAs
 - Implement structured logging with correlation IDs
 - Set up distributed tracing
 - Create actionable alerts and runbooks
 
 ### 6. For Security
+
 [reference/security.md](reference/security.md)
+
 - Implement least privilege access
 - Automate security scanning and compliance checks
 - Manage secrets with cloud-native solutions
@@ -82,6 +95,7 @@ Start with [SKILL.md](SKILL.md) → [reference/terraform.md](reference/terraform
 ## Using the Utility Scripts
 
 ### Generate Terraform Boilerplate
+
 ```bash
 python scripts/devops_utils.py terraform init-project \
   --name myproject \
@@ -90,6 +104,7 @@ python scripts/devops_utils.py terraform init-project \
 ```
 
 ### Validate Kubernetes Manifests
+
 ```bash
 python scripts/devops_utils.py k8s validate \
   --file deployment.yaml \
@@ -97,6 +112,7 @@ python scripts/devops_utils.py k8s validate \
 ```
 
 ### Generate GitOps Structure
+
 ```bash
 python scripts/devops_utils.py gitops init \
   --tool argocd \
@@ -106,7 +122,9 @@ python scripts/devops_utils.py gitops init \
 ## Key Concepts
 
 ### Infrastructure as Code Principles
+
 All infrastructure should be:
+
 - **Version Controlled**: Track all changes in Git
 - **Declarative**: Define desired state, not imperative steps
 - **Idempotent**: Multiple runs produce same result
@@ -115,6 +133,7 @@ All infrastructure should be:
 - **Documented**: Clear README and inline comments
 
 ### DevOps Best Practices
+
 This skill follows the DevOps best practices:
 
 ✓ **Security First** - Never hardcode credentials, use least privilege
@@ -155,6 +174,7 @@ Before using this skill, customize:
 ## Common DevOps Workflows
 
 ### Workflow: Deploy New Application
+
 1. Design architecture using [reference/cloud_platforms.md](reference/cloud_platforms.md)
 2. Create infrastructure with [reference/terraform.md](reference/terraform.md)
 3. Containerize application and deploy with [reference/kubernetes.md](reference/kubernetes.md)
@@ -163,6 +183,7 @@ Before using this skill, customize:
 6. Apply security controls from [reference/security.md](reference/security.md)
 
 ### Workflow: Cloud Migration
+
 1. Assess current architecture and dependencies
 2. Design target cloud architecture
 3. Create infrastructure as code modules
@@ -171,6 +192,7 @@ Before using this skill, customize:
 6. Validate and optimize
 
 ### Workflow: Implement GitOps
+
 1. Set up Git repository structure
 2. Install ArgoCD or Flux in cluster
 3. Create application manifests and Helm charts
@@ -195,12 +217,14 @@ Before using this skill, customize:
 ## Support & Questions
 
 Each reference file includes:
+
 - Best practices and proven patterns
 - Common mistakes to avoid
 - Production-ready examples
 - Implementation guidance
 
 For questions about specific topics:
+
 - **Terraform & IaC**: See [reference/terraform.md](reference/terraform.md)
 - **Kubernetes**: See [reference/kubernetes.md](reference/kubernetes.md)
 - **Cloud platforms**: See [reference/cloud_platforms.md](reference/cloud_platforms.md)

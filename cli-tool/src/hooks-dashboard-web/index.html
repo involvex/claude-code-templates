@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claude Code Hooks Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Universal Navigation will be injected here -->
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <h1>🪝 Claude Code Hooks Dashboard</h1>
+        <div class="header-actions">
+          <button id="refreshBtn" class="btn btn-primary">
+            <span class="icon">🔄</span> Refresh
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <section class="stats-container">
+      <div class="stat-card">
+        <div class="stat-label">Total Installed</div>
+        <div class="stat-value" id="statTotalInstalled">-</div>
+        <div class="stat-change">Across all scopes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Available</div>
+        <div class="stat-value" id="statTotalAvailable">-</div>
+        <div class="stat-change">From components</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Event Types</div>
+        <div class="stat-value" id="statEventTypes">-</div>
+        <div class="stat-change">Unique events</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sources</div>
+        <div class="stat-value" id="statSources">-</div>
+        <div class="stat-change">User, Project, Local</div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Filters</h3>
+
+          <div class="filter-group">
+            <label>Hook Type</label>
+            <select id="filterType" class="filter-select">
+              <option value="">All Types</option>
+              <option value="installed">Installed</option>
+              <option value="available">Available</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Source</label>
+            <select id="filterSource" class="filter-select">
+              <option value="">All Sources</option>
+              <option value="user">User</option>
+              <option value="project">Project</option>
+              <option value="local">Local</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Event Type</label>
+            <select id="filterEvent" class="filter-select">
+              <option value="">All Events</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Category</label>
+            <select id="filterCategory" class="filter-select">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>View Mode</label>
+            <div class="view-toggle">
+              <button id="viewGrid" class="view-btn active" title="Grid View">
+                <span>⊞</span>
+              </button>
+              <button id="viewList" class="view-btn" title="List View">
+                <span>☰</span>
+              </button>
+            </div>
+          </div>
+
+          <button id="clearFilters" class="btn btn-secondary">
+            Clear Filters
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="content">
+        <div class="search-container">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search hooks by name, description, or event type..."
+          />
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="installed">
+            Installed Hooks <span class="badge" id="installedCount">0</span>
+          </button>
+          <button class="tab-btn" data-tab="available">
+            Available Hooks <span class="badge" id="availableCount">0</span>
+          </button>
+        </div>
+
+        <div class="hooks-container" id="hooksContainer">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading hooks...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Hook Details Modal -->
+    <div id="hookModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Hook Details</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Hook details will be inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="/shared/navigation.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

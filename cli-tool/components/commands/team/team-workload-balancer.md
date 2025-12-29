@@ -22,6 +22,7 @@ Execute comprehensive workload analysis with intelligent assignment optimization
 **Analysis Type**: Use $ARGUMENTS to focus on current workload assessment, skill matching, capacity planning, or assignment optimization
 
 **Workload Balancing Framework**:
+
 1. **Current Workload Assessment** - Analyze task distribution, evaluate individual capacity, assess deadline pressure, identify overloaded team members
 2. **Skill Matching Analysis** - Map team member expertise, identify skill gaps, assess learning opportunities, optimize skill utilization
 3. **Capacity Planning** - Calculate available capacity, project future workload, plan skill development, optimize resource allocation

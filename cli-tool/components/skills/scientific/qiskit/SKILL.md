@@ -10,6 +10,7 @@ description: Comprehensive quantum computing toolkit for building, optimizing, a
 Qiskit is the world's most popular open-source quantum computing framework with 13M+ downloads. Build quantum circuits, optimize for hardware, execute on simulators or real quantum computers, and analyze results. Supports IBM Quantum (100+ qubit systems), IonQ, Amazon Braket, and other providers.
 
 **Key Features:**
+
 - 83x faster transpilation than competitors
 - 29% fewer two-qubit gates in optimized circuits
 - Backend-agnostic execution (local simulators or cloud hardware)
@@ -55,20 +56,26 @@ plot_histogram(counts)   # Results histogram
 ## Core Capabilities
 
 ### 1. Setup and Installation
+
 For detailed installation, authentication, and IBM Quantum account setup:
+
 - **See `references/setup.md`**
 
 Topics covered:
+
 - Installation with uv
 - Python environment setup
 - IBM Quantum account and API token configuration
 - Local vs. cloud execution
 
 ### 2. Building Quantum Circuits
+
 For constructing quantum circuits with gates, measurements, and composition:
+
 - **See `references/circuits.md`**
 
 Topics covered:
+
 - Creating circuits with QuantumCircuit
 - Single-qubit gates (H, X, Y, Z, rotations, phase gates)
 - Multi-qubit gates (CNOT, SWAP, Toffoli)
@@ -77,10 +84,13 @@ Topics covered:
 - Parameterized circuits for variational algorithms
 
 ### 3. Primitives (Sampler and Estimator)
+
 For executing quantum circuits and computing results:
+
 - **See `references/primitives.md`**
 
 Topics covered:
+
 - **Sampler**: Get bitstring measurements and probability distributions
 - **Estimator**: Compute expectation values of observables
 - V2 interface (StatevectorSampler, StatevectorEstimator)
@@ -89,10 +99,13 @@ Topics covered:
 - Parameter binding
 
 ### 4. Transpilation and Optimization
+
 For optimizing circuits and preparing for hardware execution:
+
 - **See `references/transpilation.md`**
 
 Topics covered:
+
 - Why transpilation is necessary
 - Optimization levels (0-3)
 - Six transpilation stages (init, layout, routing, translation, optimization, scheduling)
@@ -101,10 +114,13 @@ Topics covered:
 - Best practices for efficient circuits
 
 ### 5. Visualization
+
 For displaying circuits, results, and quantum states:
+
 - **See `references/visualization.md`**
 
 Topics covered:
+
 - Circuit drawings (text, matplotlib, LaTeX)
 - Result histograms
 - Quantum state visualization (Bloch sphere, state city, QSphere)
@@ -113,10 +129,13 @@ Topics covered:
 - Saving publication-quality figures
 
 ### 6. Hardware Backends
+
 For running on simulators and real quantum computers:
+
 - **See `references/backends.md`**
 
 Topics covered:
+
 - IBM Quantum backends and authentication
 - Backend properties and status
 - Running on real hardware with Runtime primitives
@@ -128,10 +147,13 @@ Topics covered:
 - Error mitigation strategies
 
 ### 7. Qiskit Patterns Workflow
+
 For implementing the four-step quantum computing workflow:
+
 - **See `references/patterns.md`**
 
 Topics covered:
+
 - **Map**: Translate problems to quantum circuits
 - **Optimize**: Transpile for hardware
 - **Execute**: Run with primitives
@@ -141,10 +163,13 @@ Topics covered:
 - Common workflow patterns
 
 ### 8. Quantum Algorithms and Applications
+
 For implementing specific quantum algorithms:
+
 - **See `references/algorithms.md`**
 
 Topics covered:
+
 - **Optimization**: VQE, QAOA, Grover's algorithm
 - **Chemistry**: Molecular ground states, excited states, Hamiltonians
 - **Machine Learning**: Quantum kernels, VQC, QNN
@@ -173,12 +198,14 @@ Topics covered:
 ### Development Workflow
 
 1. **Start with simulators**: Test locally before using hardware
+
    ```python
    from qiskit.primitives import StatevectorSampler
    sampler = StatevectorSampler()
    ```
 
 2. **Always transpile**: Optimize circuits before execution
+
    ```python
    from qiskit import transpile
    qc_optimized = transpile(qc, backend=backend, optimization_level=3)

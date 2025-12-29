@@ -22,6 +22,7 @@ This command helps you maintain code quality using Python's best linting and for
 ## Example Commands
 
 ### Black (code formatting)
+
 ```bash
 # Format all Python files
 black .
@@ -34,6 +35,7 @@ black src/main.py
 ```
 
 ### flake8 (style guide enforcement)
+
 ```bash
 # Check all Python files
 flake8 .
@@ -46,6 +48,7 @@ flake8 --max-line-length=88 .
 ```
 
 ### isort (import sorting)
+
 ```bash
 # Sort imports in all files
 isort .
@@ -58,6 +61,7 @@ isort src/main.py
 ```
 
 ### pylint (comprehensive linting)
+
 ```bash
 # Run pylint on all files
 pylint src/
@@ -70,6 +74,7 @@ pylint --output-format=html src/ > pylint_report.html
 ```
 
 ### mypy (type checking)
+
 ```bash
 # Check types in all files
 mypy .
@@ -86,6 +91,7 @@ mypy --strict src/
 Most projects benefit from configuration files:
 
 ### .flake8
+
 ```ini
 [flake8]
 max-line-length = 88
@@ -94,6 +100,7 @@ ignore = E203,W503
 ```
 
 ### pyproject.toml
+
 ```toml
 [tool.black]
 line-length = 88

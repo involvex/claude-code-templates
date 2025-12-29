@@ -75,11 +75,12 @@ npm run security-audit:json
 Validates component structure, format, and metadata.
 
 **Checks:**
+
 - ✅ Valid YAML frontmatter
 - ✅ Required fields present (name, description, tools)
 - ✅ File size limits (< 100KB)
 - ✅ UTF-8 encoding
-- ✅ Valid tool names (Read, Write, Edit, Bash, Glob, Grep, *)
+- ✅ Valid tool names (Read, Write, Edit, Bash, Glob, Grep, \*)
 - ✅ Valid model names (sonnet, opus, haiku)
 - ✅ Section count (< 20 sections)
 
@@ -91,6 +92,7 @@ Validates component structure, format, and metadata.
 Ensures components haven't been tampered with.
 
 **Checks:**
+
 - ✅ Generate SHA256 hash
 - ✅ Track hash in registry (`.claude/security/component-hashes.json`)
 - ✅ Detect content changes
@@ -141,6 +143,7 @@ Detects malicious content and prompt injection attempts.
 Validates external URLs and prevents SSRF attacks.
 
 **Checks:**
+
 - ✅ Extract all URLs from markdown
 - ✅ Block dangerous protocols (file://, javascript:, data:)
 - ✅ Detect private IP addresses (127.0.0.1, 10.x.x.x, 192.168.x.x)
@@ -155,6 +158,7 @@ Validates external URLs and prevents SSRF attacks.
 Validates component authorship and origin.
 
 **Checks:**
+
 - ✅ Author metadata in frontmatter
 - ✅ Repository information
 - ✅ Version tracking
@@ -213,6 +217,7 @@ npm run security-audit:ci
 ### GitHub Actions Workflow
 
 The repository includes a GitHub Actions workflow that automatically validates components on:
+
 - ✅ Pull requests modifying components
 - ✅ Pushes to main branch
 
@@ -224,12 +229,12 @@ name: Component Security Validation
 on:
   pull_request:
     paths:
-      - 'cli-tool/components/**'
+      - "cli-tool/components/**"
   push:
     branches:
       - main
     paths:
-      - 'cli-tool/components/**'
+      - "cli-tool/components/**"
 
 jobs:
   validate:
@@ -238,7 +243,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         working-directory: cli-tool
@@ -267,12 +272,14 @@ The workflow automatically posts validation results as PR comments:
 **Status:** ❌ Failed
 
 ### Summary
+
 - Total Components: 15
 - Passed: 12
 - Failed: 3
 - Warnings: 8
 
 ### Failed Components
+
 1. agents/security/penetration-tester.md
    - Error: Dangerous command detected: `rm -rf /tmp`
    - Score: 50/100
@@ -320,75 +327,75 @@ cli-tool/src/validation/
 ### Scoring Algorithm
 
 ```javascript
-componentScore = (
+componentScore =
   structuralScore * 0.25 +
-  integrityScore * 0.20 +
-  semanticScore * 0.30 +
+  integrityScore * 0.2 +
+  semanticScore * 0.3 +
   referencesScore * 0.15 +
-  provenanceScore * 0.10
-)
+  provenanceScore * 0.1;
 
-validatorScore = max(0, 100 - (errors * 25) - (warnings * 5))
+validatorScore = max(0, 100 - errors * 25 - warnings * 5);
 ```
 
 ## Error Codes
 
-### Structural (STRUCT_*)
+### Structural (STRUCT\_\*)
 
-| Code | Type | Message |
-|------|------|---------|
-| `STRUCT_E001` | Error | No YAML frontmatter found |
-| `STRUCT_E002` | Error | Invalid YAML syntax |
-| `STRUCT_E003` | Error | Missing required field: {field} |
-| `STRUCT_E004` | Error | File too large (> 100KB) |
-| `STRUCT_E010` | Error | Invalid UTF-8 encoding |
-| `STRUCT_W006` | Warning | Unknown tools specified |
-| `STRUCT_W011` | Warning | Too many sections (>20) |
+| Code          | Type    | Message                         |
+| ------------- | ------- | ------------------------------- |
+| `STRUCT_E001` | Error   | No YAML frontmatter found       |
+| `STRUCT_E002` | Error   | Invalid YAML syntax             |
+| `STRUCT_E003` | Error   | Missing required field: {field} |
+| `STRUCT_E004` | Error   | File too large (> 100KB)        |
+| `STRUCT_E010` | Error   | Invalid UTF-8 encoding          |
+| `STRUCT_W006` | Warning | Unknown tools specified         |
+| `STRUCT_W011` | Warning | Too many sections (>20)         |
 
-### Integrity (INT_*)
+### Integrity (INT\_\*)
 
-| Code | Type | Message |
-|------|------|---------|
+| Code       | Type  | Message                               |
+| ---------- | ----- | ------------------------------------- |
 | `INT_E001` | Error | Content changed since last validation |
-| `INT_E002` | Error | Invalid semantic version format |
-| `INT_I001` | Info | Generated SHA256 hash |
-| `INT_I005` | Info | Component not in registry (new) |
+| `INT_E002` | Error | Invalid semantic version format       |
+| `INT_I001` | Info  | Generated SHA256 hash                 |
+| `INT_I005` | Info  | Component not in registry (new)       |
 
-### Semantic (SEM_*)
+### Semantic (SEM\_\*)
 
-| Code | Type | Message |
-|------|------|---------|
-| `SEM_E001` | Error | Prompt injection detected: {pattern} |
+| Code       | Type  | Message                               |
+| ---------- | ----- | ------------------------------------- |
+| `SEM_E001` | Error | Prompt injection detected: {pattern}  |
 | `SEM_E002` | Error | Jailbreak attempt detected: {pattern} |
-| `SEM_E003` | Error | Code execution pattern detected |
-| `SEM_E004` | Error | Credential harvesting detected |
-| `SEM_E005` | Error | HTML injection detected: {tag} |
-| `SEM_E006` | Error | Hardcoded credentials detected |
+| `SEM_E003` | Error | Code execution pattern detected       |
+| `SEM_E004` | Error | Credential harvesting detected        |
+| `SEM_E005` | Error | HTML injection detected: {tag}        |
+| `SEM_E006` | Error | Hardcoded credentials detected        |
 | `SEM_E007` | Error | Dangerous command detected: {command} |
 
-### References (REF_*)
+### References (REF\_\*)
 
-| Code | Type | Message |
-|------|------|---------|
-| `REF_E001` | Error | Dangerous protocol: {protocol} |
-| `REF_E002` | Error | Private IP address detected |
-| `REF_E003` | Error | SSRF attempt via private network |
-| `REF_W001` | Warning | Suspicious TLD: {tld} |
-| `REF_W002` | Warning | HTTP URL (should use HTTPS) |
+| Code       | Type    | Message                          |
+| ---------- | ------- | -------------------------------- |
+| `REF_E001` | Error   | Dangerous protocol: {protocol}   |
+| `REF_E002` | Error   | Private IP address detected      |
+| `REF_E003` | Error   | SSRF attempt via private network |
+| `REF_W001` | Warning | Suspicious TLD: {tld}            |
+| `REF_W002` | Warning | HTTP URL (should use HTTPS)      |
 
-### Provenance (PROV_*)
+### Provenance (PROV\_\*)
 
-| Code | Type | Message |
-|------|------|---------|
-| `PROV_E001` | Error | Missing author information |
-| `PROV_W001` | Warning | No repository information |
-| `PROV_W002` | Warning | No version specified |
+| Code        | Type    | Message                    |
+| ----------- | ------- | -------------------------- |
+| `PROV_E001` | Error   | Missing author information |
+| `PROV_W001` | Warning | No repository information  |
+| `PROV_W002` | Warning | No version specified       |
 
 ## Best Practices
 
 ### For Component Authors
 
 1. **Include Complete Frontmatter:**
+
    ```yaml
    ---
    name: my-agent
@@ -450,6 +457,7 @@ The security validation system integrates with `scripts/generate_components_json
 3. **Download Statistics** - Combined with Supabase analytics
 
 **Generated metadata:**
+
 ```json
 {
   "name": "frontend-developer",
@@ -477,6 +485,7 @@ The security validation system integrates with `scripts/generate_components_json
 ### Common Issues
 
 **Issue:** Components directory not found
+
 ```bash
 # Solution: Run from correct directory
 cd cli-tool
@@ -484,6 +493,7 @@ npm run security-audit
 ```
 
 **Issue:** Hash registry conflicts
+
 ```bash
 # Solution: Clear and regenerate
 rm -rf .claude/security/component-hashes.json
@@ -491,6 +501,7 @@ npm run security-audit
 ```
 
 **Issue:** False positives in semantic validation
+
 ```bash
 # Solution: Review SemanticValidator.js patterns
 # Adjust regex patterns if needed
@@ -517,7 +528,7 @@ class CustomValidator extends BaseValidator {
   async validate(component) {
     // Your validation logic
     if (issue) {
-      this.addError('CUSTOM_E001', 'Description', metadata);
+      this.addError("CUSTOM_E001", "Description", metadata);
     }
     return this.getResults();
   }

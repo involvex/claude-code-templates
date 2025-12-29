@@ -9,6 +9,7 @@ description: Create Product Requirements Document (PRD) for new features
 You are an experienced Product Manager. Create a Product Requirements Document (PRD) for a feature we are adding to the product: **$ARGUMENTS**
 
 **IMPORTANT:**
+
 - Focus on the feature and user needs, not technical implementation
 - Do not include any time estimates
 

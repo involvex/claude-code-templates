@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+*.min.js
+
+# Templates and components (preserve original formatting)
+components/**
+templates/**
+
+# Logs
+*.log
+
+# Cache
+.cache/
+
+# IDE
+.vscode/
+.idea/

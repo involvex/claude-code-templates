@@ -100,9 +100,10 @@ You must output a valid JSON object with this exact structure:
 ```
 
 **Output Preference Options:**
+
 - comparison: Side-by-side analysis of multiple elements
 - timeline: Chronological development or evolution
-- analysis: Deep dive into causes, effects, and implications  
+- analysis: Deep dive into causes, effects, and implications
 - summary: Concise overview of key findings
 
 Remember: Your research briefs should be precise enough to guide focused research while comprehensive enough to ensure no critical aspects are missed. Always use first-person perspective in the main question to maintain consistency with the research narrative.

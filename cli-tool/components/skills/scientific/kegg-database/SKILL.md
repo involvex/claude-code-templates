@@ -18,6 +18,7 @@ This skill should be used when querying pathways, genes, compounds, enzymes, dis
 ## Quick Start
 
 The skill provides:
+
 1. Python helper functions (`scripts/kegg_api.py`) for all KEGG REST API operations
 2. Comprehensive reference documentation (`references/kegg_reference.md`) with detailed API specifications
 
@@ -32,6 +33,7 @@ Retrieve metadata and statistics about KEGG databases.
 **When to use**: Understanding database structure, checking available data, getting release information.
 
 **Usage**:
+
 ```python
 from scripts.kegg_api import kegg_info
 
@@ -51,6 +53,7 @@ List entry identifiers and names from KEGG databases.
 **When to use**: Getting all pathways for an organism, listing genes, retrieving compound catalogs.
 
 **Usage**:
+
 ```python
 from scripts.kegg_api import kegg_list
 
@@ -73,6 +76,7 @@ Search KEGG databases by keywords or molecular properties.
 **When to use**: Finding genes by name/description, searching compounds by formula or mass, discovering entries by keywords.
 
 **Usage**:
+
 ```python
 from scripts.kegg_api import kegg_find
 
@@ -96,6 +100,7 @@ Get complete database entries or specific data formats.
 **When to use**: Retrieving pathway details, getting gene/protein sequences, downloading pathway maps, accessing compound structures.
 
 **Usage**:
+
 ```python
 from scripts.kegg_api import kegg_get
 
@@ -132,6 +137,7 @@ Convert identifiers between KEGG and external databases.
 **When to use**: Integrating KEGG data with other databases, mapping gene IDs, converting compound identifiers.
 
 **Usage**:
+
 ```python
 from scripts.kegg_api import kegg_conv
 
@@ -160,6 +166,7 @@ Find related entries within and between KEGG databases.
 **When to use**: Finding pathways containing genes, getting genes in a pathway, mapping genes to KO groups, finding compounds in pathways.
 
 **Usage**:
+
 ```python
 from scripts.kegg_api import kegg_link
 
@@ -188,6 +195,7 @@ Check for drug-drug interactions.
 **When to use**: Analyzing drug combinations, checking for contraindications, pharmacological research.
 
 **Usage**:
+
 ```python
 from scripts.kegg_api import kegg_ddi
 
@@ -317,23 +325,29 @@ Reference `references/kegg_reference.md` for detailed pathway lists and classifi
 ## Important Identifiers and Formats
 
 ### Pathway IDs
+
 - `map#####` - Reference pathway (generic, not organism-specific)
 - `hsa#####` - Human pathway
 - `mmu#####` - Mouse pathway
 
 ### Gene IDs
+
 - Format: `organism:gene_number` (e.g., `hsa:10458`)
 
 ### Compound IDs
+
 - Format: `cpd:C#####` (e.g., `cpd:C00002` for ATP)
 
 ### Drug IDs
+
 - Format: `dr:D#####` (e.g., `dr:D00001`)
 
 ### Enzyme IDs
+
 - Format: `ec:EC_number` (e.g., `ec:1.1.1.1`)
 
 ### KO (KEGG Orthology) IDs
+
 - Format: `ko:K#####` (e.g., `ko:K00001`)
 
 ## API Limitations
@@ -366,6 +380,7 @@ For comprehensive API documentation, database specifications, organism codes, an
 ## Additional Tools
 
 For interactive pathway visualization and annotation:
+
 - **KEGG Mapper**: https://www.kegg.jp/kegg/mapper/
 - **BlastKOALA**: Automated genome annotation
 - **GhostKOALA**: Metagenome/metatranscriptome annotation

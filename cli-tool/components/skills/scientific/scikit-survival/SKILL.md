@@ -14,6 +14,7 @@ Survival analysis aims to establish connections between covariates and the time 
 ## When to Use This Skill
 
 Use this skill when:
+
 - Performing survival analysis or time-to-event modeling
 - Working with censored data (right-censored, left-censored, or interval-censored)
 - Fitting Cox proportional hazards models (standard or penalized)
@@ -32,7 +33,9 @@ Use this skill when:
 scikit-survival provides multiple model families, each suited for different scenarios:
 
 #### Cox Proportional Hazards Models
+
 **Use for**: Standard survival analysis with interpretable coefficients
+
 - `CoxPHSurvivalAnalysis`: Basic Cox model
 - `CoxnetSurvivalAnalysis`: Penalized Cox with elastic net for high-dimensional data
 - `IPCRidge`: Ridge regression for accelerated failure time models
@@ -40,7 +43,9 @@ scikit-survival provides multiple model families, each suited for different scen
 **See**: `references/cox-models.md` for detailed guidance on Cox models, regularization, and interpretation
 
 #### Ensemble Methods
+
 **Use for**: High predictive performance with complex non-linear relationships
+
 - `RandomSurvivalForest`: Robust, non-parametric ensemble method
 - `GradientBoostingSurvivalAnalysis`: Tree-based boosting for maximum performance
 - `ComponentwiseGradientBoostingSurvivalAnalysis`: Linear boosting with feature selection
@@ -49,7 +54,9 @@ scikit-survival provides multiple model families, each suited for different scen
 **See**: `references/ensemble-models.md` for comprehensive guidance on ensemble methods, hyperparameter tuning, and when to use each model
 
 #### Survival Support Vector Machines
+
 **Use for**: Medium-sized datasets with margin-based learning
+
 - `FastSurvivalSVM`: Linear SVM optimized for speed
 - `FastKernelSurvivalSVM`: Kernel SVM for non-linear relationships
 - `HingeLossSurvivalSVM`: SVM with hinge loss
@@ -84,6 +91,7 @@ Start
 Before modeling, properly prepare survival data:
 
 #### Creating Survival Outcomes
+
 ```python
 from sksurv.util import Surv
 
@@ -95,6 +103,7 @@ y = Surv.from_dataframe('event', 'time', df)
 ```
 
 #### Essential Preprocessing Steps
+
 1. **Handle missing values**: Imputation strategies for features
 2. **Encode categorical variables**: One-hot encoding or label encoding
 3. **Standardize features**: Critical for SVMs and regularized Cox models
@@ -108,7 +117,9 @@ y = Surv.from_dataframe('event', 'time', df)
 Proper evaluation is critical for survival models. Use appropriate metrics that account for censoring:
 
 #### Concordance Index (C-index)
+
 Primary metric for ranking/discrimination:
+
 - **Harrell's C-index**: Use for low censoring (<40%)
 - **Uno's C-index**: Use for moderate to high censoring (>40%) - more robust
 
@@ -123,6 +134,7 @@ c_uno = concordance_index_ipcw(y_train, y_test, risk_scores)[0]
 ```
 
 #### Time-Dependent AUC
+
 Evaluate discrimination at specific time points:
 
 ```python
@@ -133,6 +145,7 @@ auc, mean_auc = cumulative_dynamic_auc(y_train, y_test, risk_scores, times)
 ```
 
 #### Brier Score
+
 Assess both discrimination and calibration:
 
 ```python
@@ -155,6 +168,7 @@ time_points, cif_event1, cif_event2 = cumulative_incidence_competing_risks(y)
 ```
 
 **Use competing risks when**:
+
 - Multiple mutually exclusive event types exist (e.g., death from different causes)
 - Occurrence of one event prevents others
 - Need probability estimates for specific event types
@@ -166,6 +180,7 @@ time_points, cif_event1, cif_event2 = cumulative_incidence_competing_risks(y)
 Estimate survival functions without parametric assumptions:
 
 #### Kaplan-Meier Estimator
+
 ```python
 from sksurv.nonparametric import kaplan_meier_estimator
 
@@ -173,6 +188,7 @@ time, survival_prob = kaplan_meier_estimator(y['event'], y['time'])
 ```
 
 #### Nelson-Aalen Estimator
+
 ```python
 from sksurv.nonparametric import nelson_aalen_estimator
 

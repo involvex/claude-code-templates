@@ -22,6 +22,7 @@ Execute precise conversion of Linear tasks to GitHub issues:
 **Task Target**: Use $ARGUMENTS to specify task identifier, target repository, milestone mapping, or processing preferences
 
 **Conversion Framework**:
+
 1. **Task Analysis** - Fetch complete Linear task data, extract relationships, analyze content structure, identify priorities
 2. **Content Transformation** - Build GitHub issue body, map Linear fields, preserve formatting, handle rich content
 3. **GitHub Integration** - Create issue with proper structure, apply labels, assign users, set milestones, manage relationships

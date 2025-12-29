@@ -11,11 +11,13 @@ failed to solve: dockerfile parse error
 ```
 
 **Causes**:
+
 1. Syntax error in Dockerfile
 2. Invalid instruction
 3. Missing required argument
 
 **Common Issues**:
+
 ```dockerfile
 # Wrong - missing argument
 FROM
@@ -41,11 +43,13 @@ COPY failed: file not found in build context
 ```
 
 **Causes**:
+
 1. File doesn't exist
 2. File is in .dockerignore
 3. Wrong path (relative to build context)
 
 **Diagnosis**:
+
 ```bash
 # Check build context
 ls -la
@@ -58,6 +62,7 @@ docker build --progress=plain .
 ```
 
 **Solutions**:
+
 ```dockerfile
 # Path is relative to build context, not Dockerfile
 # If Dockerfile is in root, and file is in root:
@@ -80,12 +85,14 @@ ERROR: failed to solve: process "/bin/sh -c npm install" did not complete succes
 ```
 
 **Diagnosis**:
+
 ```bash
 # Build with no cache to see full output
 docker build --no-cache --progress=plain .
 ```
 
 **Common Fixes**:
+
 ```dockerfile
 # Add build dependencies
 FROM node:18-alpine
@@ -110,11 +117,13 @@ Cannot connect to the Docker daemon at unix:///var/run/docker.sock
 ```
 
 **Causes**:
+
 1. Docker not running
 2. Permission denied
 3. Wrong socket path
 
 **Solutions**:
+
 ```bash
 # Start Docker
 # macOS - start Docker Desktop
@@ -139,6 +148,7 @@ no space left on device
 ```
 
 **Solutions**:
+
 ```bash
 # Remove unused resources
 docker system prune -a
@@ -167,6 +177,7 @@ Container exited with code 0/1
 ```
 
 **Diagnosis**:
+
 ```bash
 # Check logs
 docker logs container_name
@@ -181,6 +192,7 @@ docker inspect image_name | grep -A5 Entrypoint
 **Common Causes**:
 
 1. **No foreground process**
+
 ```dockerfile
 # Wrong - runs in background
 CMD ["node", "server.js", "&"]
@@ -190,12 +202,14 @@ CMD ["node", "server.js"]
 ```
 
 2. **Script exits**
+
 ```dockerfile
 # Keep container running
 CMD ["tail", "-f", "/dev/null"]
 ```
 
 3. **Error on startup**
+
 ```bash
 # Check exit code
 docker inspect container_name --format='{{.State.ExitCode}}'
@@ -211,6 +225,7 @@ Bind for 0.0.0.0:3000 failed: port is already allocated
 ```
 
 **Diagnosis**:
+
 ```bash
 # Find what's using the port
 lsof -i :3000
@@ -221,6 +236,7 @@ docker ps --format "table {{.Names}}\t{{.Ports}}"
 ```
 
 **Solutions**:
+
 ```bash
 # Use different port
 docker run -p 3001:3000 image_name
@@ -241,6 +257,7 @@ permission denied while trying to connect to the Docker daemon socket
 ```
 
 **Solutions**:
+
 ```bash
 # Run with sudo (not recommended for regular use)
 sudo docker ps
@@ -262,11 +279,13 @@ Container killed due to OOM (Out of Memory)
 ```
 
 **Diagnosis**:
+
 ```bash
 docker inspect container_name | grep -i oom
 ```
 
 **Solutions**:
+
 ```bash
 # Increase memory limit
 docker run -m 2g image_name
@@ -291,11 +310,13 @@ Could not resolve host: api.example.com
 ```
 
 **Causes**:
+
 1. No network access
 2. DNS not configured
 3. Network mode issue
 
 **Solutions**:
+
 ```bash
 # Check container network
 docker inspect container_name | grep -A20 NetworkSettings
@@ -316,11 +337,13 @@ Error: connect ECONNREFUSED 172.17.0.2:5432
 ```
 
 **Causes**:
+
 1. Containers not on same network
 2. Using wrong hostname
 3. Target service not ready
 
 **Solutions**:
+
 ```yaml
 # docker-compose.yml - use service names as hostnames
 services:
@@ -328,7 +351,7 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://db:5432/mydb  # 'db' is the service name
+      DATABASE_URL: postgresql://db:5432/mydb # 'db' is the service name
 
   db:
     image: postgres
@@ -352,6 +375,7 @@ network mynetwork not found
 ```
 
 **Solutions**:
+
 ```bash
 # Create network
 docker network create mynetwork
@@ -385,11 +409,13 @@ permission denied: '/app/data'
 ```
 
 **Causes**:
+
 1. Container user can't write to mounted directory
 2. SELinux/AppArmor blocking
 3. Host directory permissions
 
 **Solutions**:
+
 ```bash
 # Check host directory permissions
 ls -la /host/path
@@ -421,6 +447,7 @@ Error: No such volume: myvolume
 ```
 
 **Solutions**:
+
 ```bash
 # Create volume
 docker volume create myvolume
@@ -450,11 +477,13 @@ Error response from daemon: pull access denied
 ```
 
 **Causes**:
+
 1. Image doesn't exist
 2. Not logged into registry
 3. Private image without auth
 
 **Solutions**:
+
 ```bash
 # Check if image exists
 docker images | grep myimage
@@ -479,10 +508,12 @@ manifest for image:tag not found
 ```
 
 **Causes**:
+
 1. Tag doesn't exist
 2. Architecture mismatch (arm64 vs amd64)
 
 **Solutions**:
+
 ```bash
 # Check available tags
 docker manifest inspect image_name
@@ -505,6 +536,7 @@ ERROR: Service 'app' failed to build
 ```
 
 **Diagnosis**:
+
 ```bash
 # Build with verbose output
 docker-compose build --no-cache --progress=plain app
@@ -521,6 +553,7 @@ Connection refused to database
 **Problem**: `depends_on` only waits for container start, not service ready.
 
 **Solutions**:
+
 ```yaml
 # Use healthcheck
 services:
@@ -552,15 +585,15 @@ exec "$@"
 
 ## Quick Reference Table
 
-| Error | Category | Quick Fix |
-|-------|----------|-----------|
-| Cannot connect to daemon | Setup | Start Docker, check permissions |
-| No space left | Disk | `docker system prune -a` |
-| COPY failed | Build | Check path relative to build context |
-| Container exits immediately | Runtime | Add foreground process |
-| Port already in use | Network | Use different port or stop other container |
-| OOMKilled | Memory | Increase memory limit with `-m` |
-| Connection refused between containers | Network | Use same network, service names |
-| Volume permission denied | Volume | Fix host permissions, use :z |
-| Image not found | Image | `docker login`, check registry |
-| Depends_on not waiting | Compose | Use healthcheck with condition |
+| Error                                 | Category | Quick Fix                                  |
+| ------------------------------------- | -------- | ------------------------------------------ |
+| Cannot connect to daemon              | Setup    | Start Docker, check permissions            |
+| No space left                         | Disk     | `docker system prune -a`                   |
+| COPY failed                           | Build    | Check path relative to build context       |
+| Container exits immediately           | Runtime  | Add foreground process                     |
+| Port already in use                   | Network  | Use different port or stop other container |
+| OOMKilled                             | Memory   | Increase memory limit with `-m`            |
+| Connection refused between containers | Network  | Use same network, service names            |
+| Volume permission denied              | Volume   | Fix host permissions, use :z               |
+| Image not found                       | Image    | `docker login`, check registry             |
+| Depends_on not waiting                | Compose  | Use healthcheck with condition             |

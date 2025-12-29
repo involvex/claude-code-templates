@@ -22,6 +22,7 @@ Execute comprehensive decision quality analysis with bias mitigation and process
 **Analysis Type**: Use $ARGUMENTS for bias detection, scenario testing, process optimization, or outcome tracking analysis
 
 **Decision Quality Framework**:
+
 1. **Process Quality Assessment** - Evaluate information gathering, stakeholder involvement, alternative generation, analysis rigor
 2. **Bias Detection Analysis** - Identify confirmation bias, anchoring bias, groupthink, authority bias, planning fallacy patterns
 3. **Outcome Evaluation** - Assess goal achievement, unintended consequences, stakeholder satisfaction, sustainability measures

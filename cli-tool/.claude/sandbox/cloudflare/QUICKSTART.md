@@ -14,23 +14,27 @@ Get your Cloudflare Claude Code Sandbox running in under 5 minutes.
 Perfect if you want to skip local testing and deploy directly.
 
 ### Step 1: Install Dependencies
+
 ```bash
 cd .claude/sandbox/cloudflare
 npm install
 ```
 
 ### Step 2: Set API Key
+
 ```bash
 npx wrangler secret put ANTHROPIC_API_KEY
 # Paste your Anthropic API key when prompted
 ```
 
 ### Step 3: Deploy
+
 ```bash
 npx wrangler deploy
 ```
 
 ### Step 4: Wait for Container Provisioning
+
 ```bash
 # Wait 2-3 minutes, then check:
 npx wrangler containers list
@@ -38,6 +42,7 @@ npx wrangler containers list
 ```
 
 ### Step 5: Test Your Deployment
+
 ```bash
 # Get your worker URL from the deploy output, then:
 curl -X POST https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/execute \
@@ -46,6 +51,7 @@ curl -X POST https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/execute \
 ```
 
 Expected response:
+
 ```json
 {
   "success": true,
@@ -66,18 +72,21 @@ Expected response:
 Perfect if you want to test locally before deploying.
 
 ### Step 1: Install Dependencies
+
 ```bash
 cd .claude/sandbox/cloudflare
 npm install
 ```
 
 ### Step 2: Create Local Environment File
+
 ```bash
 cp .dev.vars.example .dev.vars
 # Edit .dev.vars and add your Anthropic API key
 ```
 
 ### Step 3: Start Docker
+
 ```bash
 # macOS: Open Docker Desktop
 # Linux: sudo systemctl start docker
@@ -88,11 +97,13 @@ docker ps
 ```
 
 ### Step 4: Start Development Server
+
 ```bash
 npm run dev
 ```
 
 Wait for:
+
 ```
 ⛅️ wrangler 3.78.12
 -------------------
@@ -101,6 +112,7 @@ Wait for:
 ```
 
 ### Step 5: Test Locally
+
 ```bash
 # In a new terminal:
 curl -X POST http://localhost:8787/execute \
@@ -109,6 +121,7 @@ curl -X POST http://localhost:8787/execute \
 ```
 
 ### Step 6: Deploy When Ready
+
 ```bash
 # Stop the dev server (Ctrl+C)
 npx wrangler secret put ANTHROPIC_API_KEY
@@ -124,6 +137,7 @@ npx wrangler deploy
 Perfect if you prefer command-line interaction.
 
 ### Step 1: Setup (same as above)
+
 ```bash
 cd .claude/sandbox/cloudflare
 npm install
@@ -132,6 +146,7 @@ npx wrangler deploy
 ```
 
 ### Step 2: Use the Launcher
+
 ```bash
 # Execute a prompt
 node launcher.ts "What is 2 to the power of 10?" \
@@ -141,6 +156,7 @@ node launcher.ts "What is 2 to the power of 10?" \
 ```
 
 ### Step 3: Use the Monitor (for debugging)
+
 ```bash
 # Get detailed execution metrics
 node monitor.ts "Calculate factorial of 5" \
@@ -155,19 +171,25 @@ node monitor.ts "Calculate factorial of 5" \
 ## Common Issues & Quick Fixes
 
 ### "Container not ready"
+
 **Solution**: Wait 2-3 minutes after first deployment
+
 ```bash
 npx wrangler containers list
 ```
 
 ### "Docker daemon is not running"
+
 **Solution**: Start Docker Desktop or Docker service
+
 ```bash
 docker ps  # Should list containers
 ```
 
 ### "ANTHROPIC_API_KEY not configured"
+
 **Solution**: Set the secret
+
 ```bash
 # Production:
 npx wrangler secret put ANTHROPIC_API_KEY
@@ -177,13 +199,17 @@ echo "ANTHROPIC_API_KEY=sk-ant-your-key" > .dev.vars
 ```
 
 ### "Worker not found"
+
 **Solution**: Deploy the worker
+
 ```bash
 npx wrangler deploy
 ```
 
 ### "Execution timeout"
+
 **Solution**: Increase timeout in request
+
 ```json
 {
   "question": "Your question",
@@ -196,13 +222,16 @@ npx wrangler deploy
 ## Next Steps
 
 ### 1. Customize Your Worker
+
 Edit `src/index.ts` to add custom logic:
+
 - Add authentication
 - Implement rate limiting
 - Add custom error handling
 - Create specialized endpoints
 
 ### 2. Add Monitoring
+
 ```bash
 # Watch logs in real-time
 npx wrangler tail
@@ -212,6 +241,7 @@ node monitor.ts "your prompt" your_api_key
 ```
 
 ### 3. Test Different Languages
+
 ```bash
 # Python (default)
 curl -X POST https://your-worker.workers.dev/execute \
@@ -223,12 +253,13 @@ curl -X POST https://your-worker.workers.dev/execute \
 ```
 
 ### 4. Integrate with Your App
+
 ```javascript
 // Frontend integration
-const response = await fetch('https://your-worker.workers.dev/execute', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ question: 'Calculate factorial of 5' })
+const response = await fetch("https://your-worker.workers.dev/execute", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ question: "Calculate factorial of 5" }),
 });
 
 const result = await response.json();
@@ -236,7 +267,9 @@ console.log(result.output);
 ```
 
 ### 5. Enable Advanced Features
+
 See the main [README.md](./README.md) for:
+
 - Streaming output
 - Code Interpreter API
 - Caching strategies

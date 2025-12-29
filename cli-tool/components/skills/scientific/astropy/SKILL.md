@@ -12,6 +12,7 @@ Astropy is the core Python package for astronomy, providing essential functional
 ## When to Use This Skill
 
 Use astropy when tasks involve:
+
 - Converting between celestial coordinate systems (ICRS, Galactic, FK5, AltAz, etc.)
 - Working with physical units and quantities (converting Jy to mJy, parsecs to km, etc.)
 - Reading, writing, or manipulating FITS files (images or tables)
@@ -61,6 +62,7 @@ d_L = Planck18.luminosity_distance(z=1.0)
 Handle physical quantities with units, perform unit conversions, and ensure dimensional consistency in calculations.
 
 **Key operations:**
+
 - Create quantities by multiplying values with units
 - Convert between units using `.to()` method
 - Perform arithmetic with automatic unit handling
@@ -74,6 +76,7 @@ Handle physical quantities with units, perform unit conversions, and ensure dime
 Represent celestial positions and transform between different coordinate frames.
 
 **Key operations:**
+
 - Create coordinates with `SkyCoord` in any frame (ICRS, Galactic, FK5, AltAz, etc.)
 - Transform between coordinate systems
 - Calculate angular separations and position angles
@@ -89,6 +92,7 @@ Represent celestial positions and transform between different coordinate frames.
 Perform cosmological calculations using standard cosmological models.
 
 **Key operations:**
+
 - Use built-in cosmologies (Planck18, WMAP9, etc.)
 - Create custom cosmological models
 - Calculate distances (luminosity, comoving, angular diameter)
@@ -104,6 +108,7 @@ Perform cosmological calculations using standard cosmological models.
 Read, write, and manipulate FITS (Flexible Image Transport System) files.
 
 **Key operations:**
+
 - Open FITS files with context managers
 - Access HDUs (Header Data Units) by index or name
 - Read and modify headers (keywords, comments, history)
@@ -120,6 +125,7 @@ Read, write, and manipulate FITS (Flexible Image Transport System) files.
 Work with tabular data with support for units, metadata, and various file formats.
 
 **Key operations:**
+
 - Create tables from arrays, lists, or dictionaries
 - Read/write tables in multiple formats (FITS, CSV, HDF5, VOTable)
 - Access and modify columns and rows
@@ -136,6 +142,7 @@ Work with tabular data with support for units, metadata, and various file format
 Precise time representation and conversion between time scales and formats.
 
 **Key operations:**
+
 - Create Time objects in various formats (ISO, JD, MJD, Unix, etc.)
 - Convert between time scales (UTC, TAI, TT, TDB, etc.)
 - Perform time arithmetic with TimeDelta
@@ -151,6 +158,7 @@ Precise time representation and conversion between time scales and formats.
 Transform between pixel coordinates in images and world coordinates.
 
 **Key operations:**
+
 - Read WCS from FITS headers
 - Convert pixel coordinates to world coordinates (and vice versa)
 - Calculate image footprints
@@ -164,21 +172,27 @@ Transform between pixel coordinates in images and world coordinates.
 The `references/wcs_and_other_modules.md` file also covers:
 
 ### NDData and CCDData
+
 Containers for n-dimensional datasets with metadata, uncertainty, masking, and WCS information.
 
 ### Modeling
+
 Framework for creating and fitting mathematical models to astronomical data.
 
 ### Visualization
+
 Tools for astronomical image display with appropriate stretching and scaling.
 
 ### Constants
+
 Physical and astronomical constants with proper units (speed of light, solar mass, Planck constant, etc.).
 
 ### Convolution
+
 Image processing kernels for smoothing and filtering.
 
 ### Statistics
+
 Robust statistical functions including sigma clipping and outlier rejection.
 
 ## Installation
@@ -316,6 +330,7 @@ print(f"Found {len(cat1_matched)} matches")
 ## Reference Files
 
 For detailed information on specific modules:
+
 - `references/units.md` - Units, quantities, conversions, and equivalencies
 - `references/coordinates.md` - Coordinate systems, transformations, and catalog matching
 - `references/cosmology.md` - Cosmological models and calculations

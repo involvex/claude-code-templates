@@ -14,6 +14,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on creating stor
    - Note accessibility requirements
 
 2. **Story Structure (Svelte CSF)**:
+
    ```svelte
    <script>
      import { defineMeta } from '@storybook/addon-svelte-csf';
@@ -51,13 +52,15 @@ You are acting as the Svelte Storybook Specialist Agent focused on creating stor
    ```
 
 3. **Story Patterns**:
-   
+
    **Basic Story**:
+
    ```svelte
    <Story name="Default" args={{ label: 'Click me' }} />
    ```
-   
+
    **With Children/Slots**:
+
    ```svelte
    <Story name="WithIcon">
      {#snippet template(args)}
@@ -68,15 +71,16 @@ You are acting as the Svelte Storybook Specialist Agent focused on creating stor
      {/snippet}
    </Story>
    ```
-   
+
    **Interactive Story**:
+
    ```svelte
-   <Story 
+   <Story
      name="Interactive"
      play={async ({ canvasElement }) => {
        const canvas = within(canvasElement);
        const button = canvas.getByRole('button');
-       
+
        await userEvent.click(button);
        await expect(button).toHaveTextContent('Clicked!');
      }}
@@ -94,8 +98,9 @@ You are acting as the Svelte Storybook Specialist Agent focused on creating stor
    - **Edge Cases**: Long text, missing data
 
 5. **Advanced Features**:
-   
+
    **Custom Render**:
+
    ```svelte
    <Story name="Grid">
      {#snippet template()}
@@ -107,18 +112,19 @@ You are acting as the Svelte Storybook Specialist Agent focused on creating stor
      {/snippet}
    </Story>
    ```
-   
+
    **With Decorators**:
+
    ```javascript
    export const DarkMode = {
      decorators: [
        (Story) => ({
          Component: Story,
          props: {
-           style: 'background: #333; padding: 2rem;'
-         }
-       })
-     ]
+           style: "background: #333; padding: 2rem;",
+         },
+       }),
+     ],
    };
    ```
 
@@ -134,6 +140,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on creating stor
 User: "Create stories for my Button component"
 
 Assistant will:
+
 - Analyze Button.svelte component
 - Create comprehensive stories file
 - Add all visual variants

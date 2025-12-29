@@ -12,6 +12,7 @@ UniProt is the world's leading comprehensive protein sequence and functional inf
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Searching for protein entries by name, gene symbol, accession, or organism
 - Retrieving protein sequences in FASTA or other formats
 - Mapping identifiers between UniProt and external databases (Ensembl, RefSeq, PDB, etc.)
@@ -28,6 +29,7 @@ This skill should be used when:
 Search UniProt using natural language queries or structured search syntax.
 
 **Common search patterns:**
+
 ```python
 # Search by protein name
 query = "insulin AND organism_name:\"Homo sapiens\""
@@ -57,6 +59,7 @@ Use the API search endpoint: `https://rest.uniprot.org/uniprotkb/search?query={q
 Retrieve specific protein entries by accession number.
 
 **Accession number formats:**
+
 - Classic: P12345, Q1AAA9, O15530 (6 characters: letter + 5 alphanumeric)
 - Extended: A0A022YWF9 (10 characters for newer entries)
 
@@ -69,11 +72,13 @@ Example: `https://rest.uniprot.org/uniprotkb/P12345.fasta`
 Map protein identifiers between different database systems and retrieve multiple entries efficiently.
 
 **ID Mapping workflow:**
+
 1. Submit mapping job to: `https://rest.uniprot.org/idmapping/run`
 2. Check job status: `https://rest.uniprot.org/idmapping/status/{jobId}`
 3. Retrieve results: `https://rest.uniprot.org/idmapping/results/{jobId}`
 
 **Supported databases for mapping:**
+
 - UniProtKB AC/ID
 - Gene names
 - Ensembl, RefSeq, EMBL
@@ -82,6 +87,7 @@ Map protein identifiers between different database systems and retrieve multiple
 - And many more (see `/references/id_mapping_databases.md`)
 
 **Limitations:**
+
 - Maximum 100,000 IDs per job
 - Results stored for 7 days
 
@@ -98,6 +104,7 @@ The stream endpoint returns all results without pagination, suitable for downloa
 Specify exactly which fields to retrieve for efficient data transfer.
 
 **Common fields:**
+
 - `accession` - UniProt accession number
 - `id` - Entry name
 - `gene_names` - Gene name(s)
@@ -124,12 +131,14 @@ For programmatic access, use the provided helper script `scripts/uniprot_client.
 - `stream_results(query, format)` - Stream large result sets
 
 **Alternative Python packages:**
+
 - **Unipressed**: Modern, typed Python client for UniProt REST API
 - **bioservices**: Comprehensive bioinformatics web services client
 
 ## Query Syntax Examples
 
 **Boolean operators:**
+
 ```
 kinase AND organism_name:human
 (diabetes OR insulin) AND reviewed:true
@@ -137,6 +146,7 @@ cancer NOT lung
 ```
 
 **Field-specific searches:**
+
 ```
 gene:BRCA1
 accession:P12345
@@ -146,12 +156,14 @@ annotation:(type:signal)
 ```
 
 **Range queries:**
+
 ```
 length:[100 TO 500]
 mass:[50000 TO 100000]
 ```
 
 **Wildcards:**
+
 ```
 gene:BRCA*
 protein_name:kinase*
@@ -172,9 +184,11 @@ See `/references/query_syntax.md` for comprehensive syntax documentation.
 ## Resources
 
 ### scripts/
+
 `uniprot_client.py` - Python client with helper functions for common UniProt operations including search, retrieval, ID mapping, and streaming.
 
 ### references/
+
 - `api_fields.md` - Complete list of available fields for customizing queries
 - `id_mapping_databases.md` - Supported databases for ID mapping operations
 - `query_syntax.md` - Comprehensive query syntax with advanced examples

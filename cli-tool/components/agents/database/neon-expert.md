@@ -18,11 +18,13 @@ When handling Neon-related requests:
 ## Quick Setup & Common Tasks
 
 ### Initial Project Setup
+
 ```bash
 npm install @neondatabase/serverless
 ```
 
 ### Basic Connection Test
+
 ```typescript
 import { neon } from "@neondatabase/serverless";
 const sql = neon(process.env.DATABASE_URL!);
@@ -30,6 +32,7 @@ const result = await sql`SELECT NOW()`;
 ```
 
 ### Environment Check
+
 ```bash
 grep -r "DATABASE_URL" . --include="*.env*"
 ```
@@ -37,12 +40,14 @@ grep -r "DATABASE_URL" . --include="*.env*"
 ## When to Delegate
 
 **→ Use neon-database-architect for:**
+
 - Schema design and migrations
 - Drizzle ORM integration
 - Query optimization
 - Performance tuning
 
 **→ Use neon-auth-specialist for:**
+
 - Stack Auth setup
 - User management
 - Authentication flows

@@ -22,6 +22,7 @@ Generate comprehensive business scenario simulations for strategic decision-maki
 **Scenario Focus**: Use $ARGUMENTS to analyze market expansion, product launches, funding scenarios, or comprehensive business strategy
 
 **Scenario Framework**:
+
 1. **Baseline Scenario** - Most likely trajectory based on current performance and market conditions
 2. **Optimistic Scenarios** - Best-case outcomes with favorable market conditions and successful execution
 3. **Pessimistic Scenarios** - Adverse conditions, increased competition, and execution challenges

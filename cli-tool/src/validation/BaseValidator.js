@@ -19,11 +19,11 @@ class BaseValidator {
    */
   addError(code, message, metadata = {}) {
     this.errors.push({
-      level: 'error',
+      level: "error",
       code,
       message,
       metadata,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -35,11 +35,11 @@ class BaseValidator {
    */
   addWarning(code, message, metadata = {}) {
     this.warnings.push({
-      level: 'warning',
+      level: "warning",
       code,
       message,
       metadata,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -51,11 +51,11 @@ class BaseValidator {
    */
   addInfo(code, message, metadata = {}) {
     this.info.push({
-      level: 'info',
+      level: "info",
       code,
       message,
       metadata,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -91,7 +91,7 @@ class BaseValidator {
       infoCount: this.info.length,
       errors: this.errors,
       warnings: this.warnings,
-      info: this.info
+      info: this.info,
     };
   }
 
@@ -116,11 +116,11 @@ class BaseValidator {
     const lineNumber = (beforeIndex.match(/\n/g) || []).length + 1;
 
     // Find the start of the current line
-    const lineStart = beforeIndex.lastIndexOf('\n') + 1;
+    const lineStart = beforeIndex.lastIndexOf("\n") + 1;
 
     // Find the end of the current line
     const afterIndex = content.substring(index);
-    const nextNewline = afterIndex.indexOf('\n');
+    const nextNewline = afterIndex.indexOf("\n");
     const lineEnd = nextNewline === -1 ? content.length : index + nextNewline;
 
     // Extract the full line text
@@ -133,7 +133,7 @@ class BaseValidator {
       line: lineNumber,
       column: column,
       lineText: lineText.trim(),
-      position: `${lineNumber}:${column}`
+      position: `${lineNumber}:${column}`,
     };
   }
 
@@ -145,7 +145,7 @@ class BaseValidator {
    * @throws {Error} If not implemented
    */
   async validate(component, options = {}) {
-    throw new Error('validate() must be implemented by subclass');
+    throw new Error("validate() must be implemented by subclass");
   }
 }
 

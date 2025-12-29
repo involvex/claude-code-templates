@@ -22,6 +22,7 @@ Execute comprehensive performance optimization with intelligent analysis and aut
 **Optimization Focus**: Use $ARGUMENTS to focus on query optimization, index management, storage optimization, RLS policies, or database functions
 
 **Performance Optimization Framework**:
+
 1. **Performance Analysis** - Analyze query execution times, identify slow operations, assess resource utilization, evaluate bottlenecks
 2. **Index Optimization** - Analyze index usage, recommend new indexes, identify redundant indexes, optimize index strategies
 3. **Query Optimization** - Review application queries, suggest query improvements, implement query caching, optimize join operations

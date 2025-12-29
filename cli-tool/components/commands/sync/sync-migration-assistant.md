@@ -22,6 +22,7 @@ Implement large-scale data migration with comprehensive validation and enterpris
 **Migration Type**: Use $ARGUMENTS to specify GitHub-to-Linear, Linear-to-GitHub, bidirectional setup, or validation mode
 
 **Migration Framework**:
+
 1. **Pre-Migration Assessment** - Data volume analysis, dependency mapping, risk assessment, resource planning
 2. **Migration Planning** - Phased approach design, rollback strategy, validation checkpoints, timeline estimation
 3. **Data Extraction** - Comprehensive data harvesting, relationship preservation, metadata capture, error handling

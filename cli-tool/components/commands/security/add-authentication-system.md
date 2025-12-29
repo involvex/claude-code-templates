@@ -12,7 +12,7 @@ Implement secure user authentication system: **$ARGUMENTS**
 
 - Framework detection: @package.json or @requirements.txt or @Cargo.toml
 - Existing auth: !`grep -r "auth\|login\|jwt\|session" src/ --include="*.js" --include="*.py" --include="*.rs" | wc -l`
-- Security config: @.env* (check for auth-related variables)
+- Security config: @.env\* (check for auth-related variables)
 - Database setup: Check for user models or auth tables
 
 ## Task
@@ -22,6 +22,7 @@ Implement comprehensive authentication system with security best practices:
 **Authentication Methods**: Choose from username/password, OAuth 2.0, JWT, SAML, MFA, or passwordless based on $ARGUMENTS
 
 **Implementation Areas**:
+
 1. **User Management** - Registration, profiles, password policies, account verification
 2. **Authentication Flow** - Login/logout, session management, token handling, middleware
 3. **Authorization System** - RBAC, permissions, route protection, API security

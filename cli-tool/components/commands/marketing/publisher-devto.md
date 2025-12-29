@@ -11,6 +11,7 @@ Generate a complete RSS feed from all your blog posts for automatic import to De
 **Usage:** `/publisher:devto` (no arguments needed)
 
 **What it does:**
+
 - Scans all blog posts in your codebase
 - Converts markdown to HTML
 - Generates RSS 2.0 feed with proper encoding
@@ -50,6 +51,7 @@ Generate a complete RSS feed from all your blog posts for automatic import to De
    - Guide user through configuration
 
 **One-time Setup:**
+
 1. Run this command to generate RSS feed
 2. Deploy your site (make RSS publicly accessible)
 3. Go to https://dev.to/settings/extensions
@@ -57,6 +59,7 @@ Generate a complete RSS feed from all your blog posts for automatic import to De
 5. Dev.to will auto-import all future posts
 
 **Benefits:**
+
 - Automatic syndication to Dev.to
 - All future posts sync automatically
 - No manual copying required

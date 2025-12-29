@@ -6,17 +6,18 @@
 
 Effort controls how eagerly Claude spends tokens. It affects all tokens: thinking, text responses, and function calls.
 
-| Effort | Use Case |
-|--------|----------|
-| `high` | Best performance, deep reasoning (default) |
-| `medium` | Balance of cost/latency vs. performance |
-| `low` | Simple, high-volume queries; significant token savings |
+| Effort   | Use Case                                               |
+| -------- | ------------------------------------------------------ |
+| `high`   | Best performance, deep reasoning (default)             |
+| `medium` | Balance of cost/latency vs. performance                |
+| `low`    | Simple, high-volume queries; significant token savings |
 
 ## Implementation
 
 Requires beta flag `effort-2025-11-24` in API calls.
 
 **Python SDK:**
+
 ```python
 response = client.messages.create(
     model="claude-opus-4-5-20251101",
@@ -30,6 +31,7 @@ response = client.messages.create(
 ```
 
 **TypeScript SDK:**
+
 ```typescript
 const response = await client.messages.create({
   model: "claude-opus-4-5-20251101",
@@ -43,6 +45,7 @@ const response = await client.messages.create({
 ```
 
 **Raw API:**
+
 ```json
 {
   "model": "claude-opus-4-5-20251101",

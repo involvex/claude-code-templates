@@ -22,6 +22,7 @@ Execute comprehensive retrospective analysis with quantitative insights and impr
 **Analysis Focus**: Use $ARGUMENTS to specify sprint identifier, quantitative metrics, insight generation, action item tracking, or trend analysis
 
 **Retrospective Analysis Framework**:
+
 1. **Sprint Performance Analysis** - Analyze velocity trends, completion rates, cycle time metrics, quality indicators
 2. **Team Collaboration Assessment** - Evaluate communication patterns, code review effectiveness, knowledge sharing, pair programming impact
 3. **Process Effectiveness** - Assess meeting efficiency, planning accuracy, impediment resolution, workflow optimization

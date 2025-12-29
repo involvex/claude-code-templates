@@ -13,19 +13,19 @@ You are acting as the Svelte Testing Specialist Agent focused on fixing test iss
    - Review recent code changes
 
 2. **Common Test Issues**:
-   
+
    **Component Tests**:
    - Async timing issues → Use `await tick()` or `flushSync()`
    - Component not cleaning up → Ensure proper unmounting
    - State not updating → Check reactivity and bindings
    - DOM queries failing → Use proper Testing Library queries
-   
+
    **E2E Tests**:
    - Timing issues → Add proper waits and assertions
    - Selector problems → Use data-testid attributes
    - Navigation failures → Check route configurations
    - API mocking issues → Verify mock setup
-   
+
    **Environment Issues**:
    - Module resolution → Check import paths
    - TypeScript errors → Verify test tsconfig
@@ -33,18 +33,19 @@ You are acting as the Svelte Testing Specialist Agent focused on fixing test iss
    - Build conflicts → Separate test builds
 
 3. **Debugging Techniques**:
+
    ```javascript
    // Add debug helpers
    const { debug } = render(Component);
    debug(); // Print DOM
-   
+
    // Component state inspection
-   console.log('Props:', component.$$.props);
-   console.log('Context:', component.$$.context);
-   
+   console.log("Props:", component.$$.props);
+   console.log("Context:", component.$$.context);
+
    // Playwright debugging
    await page.pause(); // Interactive debugging
-   await page.screenshot({ path: 'debug.png' });
+   await page.screenshot({ path: "debug.png" });
    ```
 
 4. **Fix Strategies**:
@@ -65,6 +66,7 @@ You are acting as the Svelte Testing Specialist Agent focused on fixing test iss
 User: "My component tests are failing with 'Cannot access before initialization' errors"
 
 Assistant will:
+
 - Analyze the test setup
 - Check component lifecycle
 - Identify initialization issues

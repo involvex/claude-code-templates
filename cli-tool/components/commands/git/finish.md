@@ -55,6 +55,7 @@ fi
 Before merging, validate these conditions:
 
 **Critical Checks:**
+
 - ✅ All changes are committed (no uncommitted files)
 - ✅ All commits are pushed to remote
 - ✅ Tests are passing (run test suite)
@@ -112,6 +113,7 @@ git push origin --delete feature/$NAME
 ```
 
 **Success Response:**
+
 ```
 ✓ Pushed all commits to remote
 ✓ Switched to develop
@@ -183,6 +185,7 @@ git push origin --delete release/$VERSION
 ```
 
 **Success Response:**
+
 ```
 ✓ Pushed all commits to remote
 ✓ Merged release/$VERSION into main
@@ -262,6 +265,7 @@ git push origin --delete hotfix/$NAME
 ```
 
 **Success Response:**
+
 ```
 ✓ Pushed all commits to remote
 ✓ Merged hotfix/$NAME into main
@@ -300,6 +304,7 @@ Monitor:
 ### 6. Error Handling
 
 **Not on Git Flow Branch:**
+
 ```
 ❌ Not on a Git Flow branch
 
@@ -317,6 +322,7 @@ To finish this branch manually:
 ```
 
 **Uncommitted Changes:**
+
 ```
 ❌ Cannot finish: Uncommitted changes detected
 
@@ -331,6 +337,7 @@ Please commit or stash your changes first:
 ```
 
 **Unpushed Commits:**
+
 ```
 ⚠️  Warning: 3 unpushed commits detected
 
@@ -345,6 +352,7 @@ Would you like to push now? [Y/n]
 ```
 
 **Test Failures:**
+
 ```
 ❌ Cannot finish: Tests are failing
 
@@ -364,6 +372,7 @@ Skip tests? (NOT RECOMMENDED) [y/N]
 ```
 
 **Merge Conflicts:**
+
 ```
 ❌ Merge conflict detected with develop
 
@@ -382,6 +391,7 @@ Would you like to see conflict details? [Y/n]
 ```
 
 **Missing Tag for Release:**
+
 ```
 ⚠️  Release branch missing version in CHANGELOG
 
@@ -398,6 +408,7 @@ Continue anyway? [y/N]
 ### 7. Arguments
 
 **--no-delete**: Keep branch after merging
+
 ```bash
 /finish --no-delete
 
@@ -405,6 +416,7 @@ Continue anyway? [y/N]
 ```
 
 **--no-tag**: Skip tag creation (release/hotfix only)
+
 ```bash
 /finish --no-tag
 
@@ -439,6 +451,7 @@ Proceed with finish? [Y/n]
 ### 9. Post-Finish Checklist
 
 **For Features:**
+
 ```
 ✅ Feature Finished Checklist
 
@@ -457,6 +470,7 @@ Start new feature:
 ```
 
 **For Releases:**
+
 ```
 ✅ Release Finished Checklist
 
@@ -477,6 +491,7 @@ Deploy command:
 ```
 
 **For Hotfixes:**
+
 ```
 ✅ Hotfix Finished Checklist
 
@@ -510,6 +525,7 @@ This was an emergency hotfix - production deployment is CRITICAL!
 ## Best Practices
 
 **DO:**
+
 - ✅ Run tests before finishing
 - ✅ Ensure all commits are pushed
 - ✅ Review changes one last time
@@ -519,6 +535,7 @@ This was an emergency hotfix - production deployment is CRITICAL!
 - ✅ Clean up branches after merge
 
 **DON'T:**
+
 - ❌ Finish with failing tests
 - ❌ Skip pushing commits
 - ❌ Forget to merge to develop

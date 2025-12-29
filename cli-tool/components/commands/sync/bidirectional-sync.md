@@ -22,6 +22,7 @@ Implement robust bidirectional synchronization between GitHub Issues and Linear 
 **Sync Mode**: Use $ARGUMENTS to specify full sync, incremental sync, dry-run preview, or conflict resolution strategy
 
 **Synchronization Framework**:
+
 1. **Sync State Management** - Initialize sync database, track entity relationships, maintain sync history
 2. **Conflict Detection** - Identify simultaneous changes, field-level conflicts, timing issues
 3. **Resolution Strategies** - NEWER_WINS, GITHUB_WINS, LINEAR_WINS, or intelligent field-level merge

@@ -207,10 +207,10 @@ SECTION 6: SPECIFIC RESULTS
 SECTION 7: FAQ
 - Q: How is this different from [competitor/current approach]?
   A: [Specific differentiation]
-  
+
 - Q: How long does it take to [get value]?
   A: [Timeframe with specificity]
-  
+
 - Q: What if [common concern]?
   A: [How you address it]
 
@@ -234,10 +234,10 @@ FOOTER
 
 ## Social Media Content Calendar Template
 
-| Date | Platform | Content Type | Topic | Copy | Visual | CTA | Owner |
-|------|----------|--------------|-------|------|--------|-----|-------|
-| [Date] | LinkedIn | Article | [Topic] | [Copy] | [Image] | [Link] | [Owner] |
-| [Date] | Twitter | Tip/Insight | [Topic] | [Copy] | [Image] | [Link] | [Owner] |
+| Date   | Platform  | Content Type  | Topic   | Copy   | Visual  | CTA    | Owner   |
+| ------ | --------- | ------------- | ------- | ------ | ------- | ------ | ------- |
+| [Date] | LinkedIn  | Article       | [Topic] | [Copy] | [Image] | [Link] | [Owner] |
+| [Date] | Twitter   | Tip/Insight   | [Topic] | [Copy] | [Image] | [Link] | [Owner] |
 | [Date] | Instagram | Behind-scenes | [Topic] | [Copy] | [Image] | [Link] | [Owner] |
 
 ### Monthly Content Themes
@@ -368,20 +368,23 @@ DUE DATE: [Date]
 **"Too many fields" is the #1 reason forms aren't submitted**
 
 **Short form (high conversion, basic info)**:
+
 - Email
 - Company name
 - [One domain-specific field]
-[Submit button]
+  [Submit button]
 
 **Medium form (lead qualification)**:
+
 - Email
 - Company name
 - Job title
 - Company size
 - Current challenge [dropdown]
-[Submit button]
+  [Submit button]
 
 **Long form (detailed qualification)**:
+
 - Email
 - Company name
 - Job title
@@ -390,7 +393,7 @@ DUE DATE: [Date]
 - Annual budget
 - Timeline
 - Specific need
-[Submit button]
+  [Submit button]
 
 ### Form Field Best Practices
 
@@ -500,6 +503,7 @@ PROOF POINTS:
 Before launching any campaign:
 
 **Content**
+
 - [ ] Copy proofread (no typos)
 - [ ] All links tested and working
 - [ ] All images optimized for web
@@ -507,6 +511,7 @@ Before launching any campaign:
 - [ ] CTA is clear and specific
 
 **Technical**
+
 - [ ] UTM parameters added to all links
 - [ ] Conversion tracking set up
 - [ ] Email tested in 3+ email clients
@@ -514,12 +519,14 @@ Before launching any campaign:
 - [ ] Form submissions configured
 
 **Compliance**
+
 - [ ] Privacy policy link present
 - [ ] Unsubscribe link functional (if email)
 - [ ] CAN-SPAM compliant
 - [ ] No false claims or unsubstantiated features
 
 **Planning**
+
 - [ ] Budget approved
 - [ ] Timeline confirmed
 - [ ] Responsible team members assigned
@@ -527,6 +534,7 @@ Before launching any campaign:
 - [ ] Stakeholders notified
 
 **Promotion**
+
 - [ ] Internal team informed
 - [ ] Sales team briefed
 - [ ] Social media calendared

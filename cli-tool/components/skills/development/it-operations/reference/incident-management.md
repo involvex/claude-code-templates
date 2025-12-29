@@ -3,6 +3,7 @@
 Comprehensive guide to incident response, root cause analysis, post-mortems, and building resilient incident management processes.
 
 ## Table of Contents
+
 - [Incident Lifecycle](#incident-lifecycle)
 - [Severity Classification](#severity-classification)
 - [Incident Response Roles](#incident-response-roles)
@@ -457,16 +458,19 @@ STARTED: 2025-01-15 14:32 UTC
 INCIDENT COMMANDER: Jane Doe
 
 CURRENT SITUATION:
+
 - API gateway returning 503 errors
 - All downstream services appear healthy
 - Investigating gateway configuration
 
 ACTIONS TAKEN:
+
 - Incident declared at 14:35 UTC
 - War room established: #incident-2025-01-15-api-outage
 - Team paged and responding
 
 NEXT STEPS:
+
 - Reviewing recent deployments
 - Checking gateway logs
 - Preparing rollback plan
@@ -486,16 +490,19 @@ DURATION: 25 minutes
 INCIDENT COMMANDER: Jane Doe
 
 ROOT CAUSE:
+
 - Deployment at 14:28 UTC introduced configuration error
 - API gateway max connections set to 10 (should be 10000)
 
 ACTIONS TAKEN:
+
 - Root cause identified via gateway logs
 - Rollback initiated at 14:52 UTC
 - Rollback completed at 14:55 UTC
 - Service returning to normal
 
 CURRENT STATUS:
+
 - Error rate dropping from 100% to 5%
 - Monitoring for full recovery
 - ETA to full resolution: 15:05 UTC
@@ -515,17 +522,20 @@ DURATION: 28 minutes (14:32 - 15:00 UTC)
 INCIDENT COMMANDER: Jane Doe
 
 RESOLUTION:
+
 - Service fully restored at 15:00 UTC
 - Root cause: Configuration error in deployment
 - Fix: Rolled back to previous version
 
 IMPACT SUMMARY:
+
 - Duration: 28 minutes
 - Users Affected: ~50,000 (100% of active users)
 - Failed Requests: ~2.1 million
 - Revenue Impact: ~$4,700 (estimated)
 
 FOLLOW-UP ACTIONS:
+
 - Post-incident review scheduled: 2025-01-16 10:00 UTC
 - Ticket created to add validation to deployment pipeline
 - Runbook updated with troubleshooting steps
@@ -698,29 +708,29 @@ Contributing Factors:
 ```yaml
 Core Values:
   1. No Blame or Punishment:
-     - Focus on systems and processes, not individuals
-     - Assume everyone acted with best intentions
-     - Create psychological safety for honest discussion
+    - Focus on systems and processes, not individuals
+    - Assume everyone acted with best intentions
+    - Create psychological safety for honest discussion
 
   2. Learning Over Judgment:
-     - Goal is to improve, not to find fault
-     - Celebrate what went well
-     - Identify opportunities for improvement
+    - Goal is to improve, not to find fault
+    - Celebrate what went well
+    - Identify opportunities for improvement
 
   3. Systems Thinking:
-     - Complex systems have complex failures
-     - Multiple contributing factors, not single root cause
-     - Focus on increasing system resilience
+    - Complex systems have complex failures
+    - Multiple contributing factors, not single root cause
+    - Focus on increasing system resilience
 
   4. Actionable Outcomes:
-     - Every insight must lead to action item
-     - Action items must have owners and due dates
-     - Track action items to completion
+    - Every insight must lead to action item
+    - Action items must have owners and due dates
+    - Track action items to completion
 
   5. Shared Learning:
-     - Share findings with entire organization
-     - Build institutional knowledge
-     - Prevent similar incidents elsewhere
+    - Share findings with entire organization
+    - Build institutional knowledge
+    - Prevent similar incidents elsewhere
 ```
 
 ### Post-Incident Review Template
@@ -729,6 +739,7 @@ Core Values:
 # Post-Incident Review: API Outage - 2025-01-15
 
 ## Metadata
+
 - **Date**: 2025-01-15
 - **Duration**: 28 minutes (14:32 - 15:00 UTC)
 - **Severity**: P1 (Critical)
@@ -737,26 +748,31 @@ Core Values:
 - **Users Impacted**: ~50,000 (100% of active users)
 
 ## Executive Summary
+
 On January 15, 2025, our API service experienced a complete outage lasting 28 minutes. A configuration error in a routine deployment caused the database connection pool to exhaust, leading to health check failures and all backend servers being marked unhealthy by the load balancer. The issue was resolved by rolling back the deployment. No data was lost, but approximately $4,700 in revenue was impacted.
 
 ## What Happened (Timeline)
+
 [Detailed timeline from Timeline Analysis section above]
 
 ## Impact Assessment
 
 ### User Impact
+
 - **Affected Users**: 50,000 active users (100%)
 - **User Experience**: Complete inability to access any API functionality
 - **Customer Complaints**: 127 support tickets filed
 - **Duration**: 28 minutes
 
 ### Business Impact
+
 - **Revenue Loss**: ~$4,700 (estimated from transaction volume)
 - **SLA Breach**: Monthly SLO of 99.9% consumed 67% of error budget
 - **Reputation**: High-profile users tweeted about outage
 - **Support Cost**: ~40 hours of support time responding to tickets
 
 ### Technical Impact
+
 - **Failed Requests**: ~2.1 million
 - **Data Loss**: None
 - **Services Affected**: All API endpoints
@@ -765,9 +781,11 @@ On January 15, 2025, our API service experienced a complete outage lasting 28 mi
 ## Root Cause Analysis
 
 ### Immediate Cause
+
 Load balancer marked all backend servers as unhealthy because health check requests exceeded the 2-second timeout.
 
 ### Contributing Factors
+
 1. **Configuration Change**: Deployment v2.3.1 changed database connection timeout from 5s to 60s
 2. **Connection Pool Exhaustion**: Longer timeouts caused connections to be held longer, exhausting the pool (max 10 connections)
 3. **Slow Health Checks**: With no available connections, health check endpoint took 5+ seconds to respond
@@ -775,16 +793,19 @@ Load balancer marked all backend servers as unhealthy because health check reque
 5. **Lack of Validation**: Configuration change not flagged in code review or tested in staging
 
 ### Root Cause
+
 A configuration change increasing database timeout was not properly reviewed or tested, leading to connection pool exhaustion and cascading failure when deployed to production.
 
 ## What Went Well
 
 ### Detection
+
 ✓ Automated monitoring detected issue within 3 minutes of complete outage
 ✓ Alert fired appropriately with correct severity
 ✓ On-call engineer acknowledged within 2 minutes
 
 ### Response
+
 ✓ Incident Commander immediately declared P1 and activated full response
 ✓ War room established quickly with all necessary responders
 ✓ Clear role assignments (IC, TL, Scribe, Comms)
@@ -792,6 +813,7 @@ A configuration change increasing database timeout was not properly reviewed or 
 ✓ Rollback decision made decisively once root cause identified
 
 ### Recovery
+
 ✓ Rollback executed cleanly without issues
 ✓ Service recovered fully within 5 minutes of rollback
 ✓ No data loss or corruption
@@ -800,22 +822,26 @@ A configuration change increasing database timeout was not properly reviewed or 
 ## What Could Be Improved
 
 ### Prevention
+
 ✗ Configuration changes should be validated automatically
 ✗ Code review didn't catch the impact of timeout change
 ✗ No staging environment to test configuration changes
 ✗ Connection pool size (10) too small for production load
 
 ### Detection
+
 ✗ 3-minute delay between first errors and alert (gradual degradation not caught)
 ✗ No alerting on connection pool saturation
 ✗ Health check failures not alerted separately
 
 ### Response
+
 ✗ Took 15 minutes to identify root cause (need better debugging tools)
 ✗ No runbook for "all servers unhealthy" scenario
 ✗ Rollback procedure not documented (relied on tribal knowledge)
 
 ### Systemic Issues
+
 ✗ No automated rollback on deployment failures
 ✗ Configuration changes deployed same as code changes (should have different process)
 ✗ No capacity planning for connection pools
@@ -824,6 +850,7 @@ A configuration change increasing database timeout was not properly reviewed or 
 ## Action Items
 
 ### Immediate (1 week)
+
 - [ ] **Add connection pool monitoring** [Owner: John Smith] [Due: 2025-01-22]
   - Alert at 70% utilization (warning)
   - Alert at 85% utilization (critical)
@@ -838,6 +865,7 @@ A configuration change increasing database timeout was not properly reviewed or 
   - Add to on-call documentation
 
 ### Short-term (1 month)
+
 - [ ] **Implement configuration validation** [Owner: Platform Team] [Due: 2025-02-15]
   - Add pre-deployment checks for timeout values
   - Validate connection pool size vs timeout settings
@@ -859,6 +887,7 @@ A configuration change increasing database timeout was not properly reviewed or 
   - Deployment gates based on metrics
 
 ### Long-term (3 months)
+
 - [ ] **Separate config deployment pipeline** [Owner: Architecture Team] [Due: 2025-04-15]
   - Configuration changes reviewed by ops team
   - Gradual rollout for config changes
@@ -889,21 +918,25 @@ A configuration change increasing database timeout was not properly reviewed or 
 ## Appendix
 
 ### Supporting Data
+
 - [Link to Grafana Dashboard during incident]
 - [Link to error logs]
 - [Link to deployment change log]
 - [Link to war room Slack thread]
 
 ### Glossary
+
 - **MTTA**: Mean Time to Acknowledge
 - **MTTR**: Mean Time to Recovery
 - **SLO**: Service Level Objective
 
 ### Related Incidents
+
 - 2024-11-03: Database connection pool exhaustion (different cause)
 - 2024-09-12: Health check timeout issues on Redis
 
 ### Review Attendees
+
 - Jane Doe (Incident Commander)
 - John Smith (Technical Lead)
 - Alice Johnson (Engineering Manager)
@@ -1005,12 +1038,14 @@ Escalation Policy:
 ## Before Your Shift
 
 ### 48 Hours Before
+
 - [ ] Review the on-call schedule
 - [ ] Identify your backup (secondary on-call)
 - [ ] Block calendar for any potential incident response
 - [ ] Review recent incidents and ongoing issues
 
 ### 24 Hours Before
+
 - [ ] Test laptop and VPN access
 - [ ] Test PagerDuty app notifications
 - [ ] Ensure mobile phone is charged
@@ -1018,6 +1053,7 @@ Escalation Policy:
 - [ ] Check for scheduled deployments or maintenance
 
 ### Start of Shift
+
 - [ ] Post in #on-call channel: "Starting on-call shift"
 - [ ] Review open incidents and alerts
 - [ ] Check upcoming changes in deployment calendar
@@ -1027,6 +1063,7 @@ Escalation Policy:
 ## During Your Shift
 
 ### When Alert Fires
+
 1. **Acknowledge** (within 5 minutes for P1/P2)
    - Open PagerDuty alert
    - Click "Acknowledge"
@@ -1044,26 +1081,33 @@ Escalation Policy:
    - If **unclear**: Declare incident and get help
 
 ### When to Declare Incident
+
 Declare incident (create war room) if:
+
 - You're unsure how to fix (need help)
 - User impact is significant
 - Will take > 30 minutes to resolve
 - Multiple systems affected
 
 ### When to Escalate
+
 Escalate to secondary on-call if:
+
 - You're overwhelmed (multiple alerts)
 - You need specific expertise
 - You're stuck (30+ min no progress)
 
 Escalate to manager if:
+
 - P1 incident lasting > 1 hour
 - User data at risk
 - Security incident
 - Need executive decision
 
 ### Alert Hygiene
+
 After each alert:
+
 - [ ] Update incident ticket with resolution
 - [ ] Mark alert as "resolved" in PagerDuty
 - [ ] If false positive: Create ticket to tune alert
@@ -1073,6 +1117,7 @@ After each alert:
 ## End of Shift
 
 ### Handoff Checklist
+
 - [ ] Post in #on-call: "Ending on-call shift"
 - [ ] List open incidents and their status
 - [ ] Note any ongoing issues or concerns
@@ -1080,6 +1125,7 @@ After each alert:
 - [ ] Thank the outgoing on-call
 
 ### Feedback and Improvement
+
 - [ ] Log toil reduction opportunities
 - [ ] Update runbooks based on what you learned
 - [ ] File tickets for alert improvements
@@ -1088,6 +1134,7 @@ After each alert:
 ## Common Scenarios
 
 ### Scenario: High Error Rate Alert
+
 1. Check dashboard: Which service? Which endpoint?
 2. Check recent deployments: Anything in last hour?
 3. Check logs: What errors are users seeing?
@@ -1095,6 +1142,7 @@ After each alert:
 5. If not recent: Investigate dependencies
 
 ### Scenario: High Latency Alert
+
 1. Check dashboard: Which percentile? How high?
 2. Check database: Slow queries? Connection pool full?
 3. Check dependencies: External APIs slow?
@@ -1102,6 +1150,7 @@ After each alert:
 5. Consider scaling if capacity issue
 
 ### Scenario: Service Down Alert
+
 1. Check monitoring: Complete outage or partial?
 2. Check infrastructure: Servers running? Network okay?
 3. Check recent changes: Deployment? Config change?
@@ -1111,33 +1160,39 @@ After each alert:
 ## Emergency Contacts
 
 Primary Escalation:
+
 - Secondary On-Call: [PagerDuty escalation]
 - Team Lead: [Phone number]
 - Engineering Manager: [Phone number]
 
 SMEs (Subject Matter Experts):
+
 - Database: [Name, phone]
 - Networking: [Name, phone]
 - Security: [Name, phone]
 - Cloud Infrastructure: [Name, phone]
 
 External:
+
 - Cloud Provider Support: [Phone, ticket system]
 - Third-party Vendor Support: [Phone, ticket system]
 
 ## Useful Links
 
 Dashboards:
+
 - [Overall System Health Dashboard]
 - [Service-Specific Dashboards]
 - [Infrastructure Dashboard]
 
 Runbooks:
+
 - [Runbook Index]
 - [Common Incident Scenarios]
 - [Rollback Procedures]
 
 Tools:
+
 - [PagerDuty Incidents]
 - [Grafana Dashboards]
 - [Log Aggregation (ELK/Splunk)]
@@ -1149,16 +1204,16 @@ Tools:
 
 ### Tool Comparison
 
-| Feature | PagerDuty | Opsgenie | Splunk On-Call | Incident.io | FireHydrant |
-|---------|-----------|----------|----------------|-------------|-------------|
-| **Alerting** | ✓✓✓ | ✓✓✓ | ✓✓✓ | ✓✓ | ✓✓ |
-| **On-Call Scheduling** | ✓✓✓ | ✓✓✓ | ✓✓✓ | ✓✓ | ✓✓ |
-| **Incident Timeline** | ✓✓ | ✓✓ | ✓ | ✓✓✓ | ✓✓✓ |
-| **Status Page Integration** | ✓✓✓ | ✓✓ | ✓✓ | ✓✓✓ | ✓✓✓ |
-| **Post-Mortem Templates** | ✓ | ✓ | ✓ | ✓✓✓ | ✓✓✓ |
-| **Slack Integration** | ✓✓✓ | ✓✓✓ | ✓✓✓ | ✓✓✓ | ✓✓✓ |
-| **Pricing** | $$$$ | $$$ | $$$ | $$$$ | $$$ |
-| **Best For** | Mature teams | Mid-size teams | Splunk users | Modern incident mgmt | Modern incident mgmt |
+| Feature                     | PagerDuty    | Opsgenie       | Splunk On-Call | Incident.io          | FireHydrant          |
+| --------------------------- | ------------ | -------------- | -------------- | -------------------- | -------------------- |
+| **Alerting**                | ✓✓✓          | ✓✓✓            | ✓✓✓            | ✓✓                   | ✓✓                   |
+| **On-Call Scheduling**      | ✓✓✓          | ✓✓✓            | ✓✓✓            | ✓✓                   | ✓✓                   |
+| **Incident Timeline**       | ✓✓           | ✓✓             | ✓              | ✓✓✓                  | ✓✓✓                  |
+| **Status Page Integration** | ✓✓✓          | ✓✓             | ✓✓             | ✓✓✓                  | ✓✓✓                  |
+| **Post-Mortem Templates**   | ✓            | ✓              | ✓              | ✓✓✓                  | ✓✓✓                  |
+| **Slack Integration**       | ✓✓✓          | ✓✓✓            | ✓✓✓            | ✓✓✓                  | ✓✓✓                  |
+| **Pricing**                 | $$$$         | $$$            | $$$            | $$$$                 | $$$                  |
+| **Best For**                | Mature teams | Mid-size teams | Splunk users   | Modern incident mgmt | Modern incident mgmt |
 
 ### PagerDuty Configuration Example
 
@@ -1224,23 +1279,27 @@ if __name__ == "__main__":
 # Runbook: [Service Name] - [Scenario]
 
 ## Service Overview
+
 - **Service**: API Gateway
 - **Team**: Backend Team
 - **On-Call**: #backend-oncall
 - **SME**: John Smith (john@company.com)
 
 ## Purpose
+
 This runbook covers troubleshooting and recovery procedures for the API Gateway service.
 
 ## Architecture
 ```
+
 [Include architecture diagram or ASCII art]
 
 External Clients → API Gateway → Backend Services → Database
-                         ↓
-                   Rate Limiter
-                   Auth Service
-```
+↓
+Rate Limiter
+Auth Service
+
+````
 
 ## SLIs/SLOs
 - **Availability**: 99.9% (43 minutes downtime/month)
@@ -1282,11 +1341,12 @@ netstat -an | grep 5432 | grep ESTABLISHED | wc -l
 # 5. Check upstream dependencies
 curl https://auth-service/health
 curl https://payment-service/health
-```
+````
 
 **Resolution Steps**:
 
 If recent deployment (last 30 minutes):
+
 ```bash
 # Rollback deployment
 kubectl rollout undo deployment/api-gateway -n gateway
@@ -1297,6 +1357,7 @@ kubectl rollout status deployment/api-gateway -n gateway
 ```
 
 If database connection issue:
+
 ```bash
 # Restart API Gateway pods (will reset connection pools)
 kubectl rollout restart deployment/api-gateway -n gateway
@@ -1306,6 +1367,7 @@ watch kubectl get pods -n gateway
 ```
 
 If upstream dependency down:
+
 ```bash
 # Check status pages of dependencies
 # Escalate to owning team
@@ -1313,6 +1375,7 @@ If upstream dependency down:
 ```
 
 **Escalation**:
+
 - If not resolved in 15 minutes: Page secondary on-call
 - If backend services issue: Page backend team
 - If database issue: Page database team
@@ -1320,17 +1383,20 @@ If upstream dependency down:
 ### Issue 2: High Latency
 
 **Symptoms**:
+
 - Alert: "HighLatency" firing
 - Dashboard shows p95 latency > 1000ms
 - Users reporting slow responses
 
 **Possible Causes**:
+
 1. Database slow queries
 2. High traffic / insufficient capacity
 3. Downstream service latency
 4. Memory/CPU saturation
 
 **Diagnostic Steps**:
+
 ```bash
 # 1. Check pod resources
 kubectl top pods -n gateway
@@ -1354,6 +1420,7 @@ curl -w "@curl-format.txt" https://service-b/health
 **Resolution Steps**:
 
 If capacity issue (CPU/memory high):
+
 ```bash
 # Scale up deployment
 kubectl scale deployment/api-gateway -n gateway --replicas=10
@@ -1363,6 +1430,7 @@ kubectl get hpa -n gateway -w
 ```
 
 If slow database queries:
+
 ```sql
 -- Kill long-running query (use with caution)
 SELECT pg_terminate_backend(pid)
@@ -1373,16 +1441,19 @@ WHERE pid = <problematic_pid>;
 ### Issue 3: Complete Service Outage
 
 **Symptoms**:
+
 - Alert: "ServiceDown" firing
 - Dashboard shows 0 requests/sec
 - All health checks failing
 
 **Immediate Actions**:
+
 1. Declare P1 incident
 2. Create war room: #incident-YYYY-MM-DD-api-outage
 3. Page backup on-call and team lead
 
 **Diagnostic Steps**:
+
 ```bash
 # 1. Check if pods are running
 kubectl get pods -n gateway
@@ -1402,11 +1473,13 @@ kubectl describe node <node-name>
 [Detailed recovery steps based on cause]
 
 ## Related Runbooks
+
 - [Database Troubleshooting Runbook](link)
 - [Kubernetes Troubleshooting Runbook](link)
 - [Rollback Procedures](link)
 
 ## Useful Dashboards
+
 - [API Gateway Dashboard](https://grafana.example.com/d/api-gateway)
 - [Backend Services Dashboard](https://grafana.example.com/d/backend)
 - [Infrastructure Dashboard](https://grafana.example.com/d/infrastructure)
@@ -1431,15 +1504,18 @@ kubectl get events -n gateway --sort-by='.lastTimestamp'
 ```
 
 ## Recent Changes
+
 - 2025-01-10: Added HPA configuration (autoscaling)
 - 2024-12-15: Increased connection pool size to 50
 - 2024-11-20: Updated rollback procedure
 
 ## Document Info
+
 - **Last Updated**: 2025-01-15
 - **Owner**: Backend Team
 - **Review Cycle**: Monthly
-```
+
+````
 
 ## Metrics and Improvement
 
@@ -1498,7 +1574,7 @@ On-Call Metrics:
     Definition: Pages outside business hours
     Target: < 5 per week
     Measurement: Count by time of day
-```
+````
 
 ### Continuous Improvement Process
 

@@ -15,40 +15,51 @@ Provides comprehensive visibility into task progress, status distribution, and e
 ## Command Variants
 
 ### Basic Status Overview
+
 ```
 /task-status
 ```
+
 Shows summary of all tasks across all active orchestrations.
 
 ### Today's Tasks
+
 ```
 /task-status --today
 ```
+
 Shows only tasks from today's orchestrations.
 
 ### Specific Orchestration
+
 ```
 /task-status --date 03_15_2024 --project payment_integration
 ```
+
 Shows tasks from a specific orchestration.
 
 ### Status Filter
+
 ```
 /task-status --status in_progress
 /task-status --status qa
 /task-status --status on_hold
 ```
+
 Shows only tasks with specified status.
 
 ### Detailed View
+
 ```
 /task-status --detailed
 ```
+
 Shows comprehensive information for each task.
 
 ## Output Formats
 
 ### Summary View (Default)
+
 ```
 Task Orchestration Status Summary
 =================================
@@ -78,6 +89,7 @@ Blocked Tasks (on_hold):
 ```
 
 ### Detailed View
+
 ```
 Task Details for: 03_15_2024/authentication_system
 ==================================================
@@ -97,36 +109,44 @@ Status History:
 ```
 
 ### Timeline View
+
 ```
 /task-status --timeline
 ```
+
 Shows Gantt-style timeline of task execution.
 
 ### Velocity Report
+
 ```
 /task-status --velocity
 ```
+
 Shows completion rates and performance metrics.
 
 ## Filtering Options
 
 ### By Agent
+
 ```
 /task-status --agent dev-frontend
 ```
 
 ### By Priority
+
 ```
 /task-status --priority high
 ```
 
 ### By Type
+
 ```
 /task-status --type feature
 /task-status --type bugfix
 ```
 
 ### Multiple Filters
+
 ```
 /task-status --status todos --priority high --type security
 ```
@@ -134,55 +154,68 @@ Shows completion rates and performance metrics.
 ## Quick Actions
 
 ### Show Critical Path
+
 ```
 /task-status --critical-path
 ```
+
 Highlights tasks that are blocking others.
 
 ### Show Overdue
+
 ```
 /task-status --overdue
 ```
+
 Shows tasks exceeding estimated time.
 
 ### Show Available
+
 ```
 /task-status --available
 ```
+
 Shows todos tasks ready to be picked up.
 
 ## Integration Commands
 
 ### Export Status
+
 ```
 /task-status --export markdown
 /task-status --export csv
 ```
 
 ### Watch Mode
+
 ```
 /task-status --watch
 ```
+
 Updates status in real-time (refreshes every 30 seconds).
 
 ## Examples
 
 ### Example 1: Morning Standup View
+
 ```
 /task-status --today --detailed
 ```
 
 ### Example 2: Find Blocked Work
+
 ```
 /task-status --status on_hold --show-blockers
 ```
 
 ### Example 3: Agent Workload
+
 ```
 /task-status --by-agent --status in_progress
 ```
 
 ### Example 4: Sprint Progress
+
 ```
 /task-status --date 03_15_2024 --metrics
 ```
@@ -190,16 +223,19 @@ Updates status in real-time (refreshes every 30 seconds).
 ## Metrics and Analytics
 
 ### Completion Metrics
+
 - Average time per task
 - Tasks completed per day
 - Status transition times
 
 ### Bottleneck Analysis
+
 - Most blocking tasks
 - Longest on_hold duration
 - Critical path duration
 
 ### Agent Performance
+
 - Tasks per agent
 - Average completion time
 - Current workload

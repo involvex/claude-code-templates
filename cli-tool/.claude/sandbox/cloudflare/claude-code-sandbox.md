@@ -90,6 +90,7 @@ npx wrangler deploy
 ## Environment Setup
 
 The component creates:
+
 - `.claude/sandbox/cloudflare/src/index.ts` - Worker with sandbox logic
 - `.claude/sandbox/cloudflare/wrangler.toml` - Cloudflare configuration
 - `.claude/sandbox/cloudflare/package.json` - Node.js dependencies
@@ -99,6 +100,7 @@ The component creates:
 ## API Key Configuration
 
 ### Option 1: CLI Parameters (Recommended)
+
 ```bash
 npx claude-code-templates@latest --sandbox cloudflare \
   --anthropic-api-key your_anthropic_api_key \
@@ -106,6 +108,7 @@ npx claude-code-templates@latest --sandbox cloudflare \
 ```
 
 ### Option 2: Wrangler Secrets
+
 ```bash
 cd .claude/sandbox/cloudflare
 npx wrangler secret put ANTHROPIC_API_KEY
@@ -113,6 +116,7 @@ npx wrangler secret put ANTHROPIC_API_KEY
 ```
 
 ### Option 3: Environment Variables
+
 ```bash
 export ANTHROPIC_API_KEY=your_anthropic_api_key_here
 
@@ -135,6 +139,7 @@ ANTHROPIC_API_KEY=your_anthropic_api_key_here
 ## Deployment
 
 ### Local Development
+
 ```bash
 cd .claude/sandbox/cloudflare
 npm install
@@ -147,6 +152,7 @@ curl -X POST http://localhost:8787/execute \
 ```
 
 ### Production Deployment
+
 ```bash
 # Set API key secret
 npx wrangler secret put ANTHROPIC_API_KEY
@@ -174,37 +180,40 @@ curl -X POST https://your-worker.your-subdomain.workers.dev/execute \
 ## Advanced Features
 
 ### Code Interpreter API
+
 ```typescript
 // Use built-in code interpreter instead of exec
-import { getCodeInterpreter } from '@cloudflare/sandbox';
+import { getCodeInterpreter } from "@cloudflare/sandbox";
 
-const interpreter = getCodeInterpreter(env.Sandbox, 'user-id');
-const result = await interpreter.notebook.execCell('print(2**10)');
+const interpreter = getCodeInterpreter(env.Sandbox, "user-id");
+const result = await interpreter.notebook.execCell("print(2**10)");
 ```
 
 ### Streaming Output
+
 ```typescript
 // Stream execution results in real-time
 return new Response(
   new ReadableStream({
     async start(controller) {
-      const result = await sandbox.exec('python script.py', {
+      const result = await sandbox.exec("python script.py", {
         onStdout: (data) => controller.enqueue(data),
-        onStderr: (data) => controller.enqueue(data)
+        onStderr: (data) => controller.enqueue(data),
       });
       controller.close();
-    }
-  })
+    },
+  }),
 );
 ```
 
 ### Persistent Sessions
+
 ```typescript
 // Maintain sandbox state across requests
 const sandbox = getSandbox(env.Sandbox, userId);
-await sandbox.writeFile('/data/state.json', JSON.stringify(state));
+await sandbox.writeFile("/data/state.json", JSON.stringify(state));
 // Later...
-const state = await sandbox.readFile('/data/state.json');
+const state = await sandbox.readFile("/data/state.json");
 ```
 
 ## Examples
@@ -230,20 +239,21 @@ npx claude-code-templates@latest --sandbox cloudflare \
 
 ## Comparison with E2B
 
-| Feature | Cloudflare Sandbox | E2B Sandbox |
-|---------|-------------------|-------------|
-| **Provider** | Cloudflare Workers | E2B.dev |
-| **Infrastructure** | Cloudflare Edge Network | Cloud VMs |
-| **Pricing** | $5/month (Workers Paid) | Usage-based |
-| **Cold Start** | ~100ms | ~2-3 seconds |
-| **Max Duration** | 30 seconds (Workers) | Up to hours |
-| **Languages** | Python, Node.js | Full Linux environment |
-| **Global** | Yes (edge network) | Single region |
-| **Best For** | Fast, lightweight tasks | Long-running operations |
+| Feature            | Cloudflare Sandbox      | E2B Sandbox             |
+| ------------------ | ----------------------- | ----------------------- |
+| **Provider**       | Cloudflare Workers      | E2B.dev                 |
+| **Infrastructure** | Cloudflare Edge Network | Cloud VMs               |
+| **Pricing**        | $5/month (Workers Paid) | Usage-based             |
+| **Cold Start**     | ~100ms                  | ~2-3 seconds            |
+| **Max Duration**   | 30 seconds (Workers)    | Up to hours             |
+| **Languages**      | Python, Node.js         | Full Linux environment  |
+| **Global**         | Yes (edge network)      | Single region           |
+| **Best For**       | Fast, lightweight tasks | Long-running operations |
 
 ## Troubleshooting
 
 ### Container Not Ready
+
 ```bash
 # After first deployment, wait 2-3 minutes
 npx wrangler containers list
@@ -253,6 +263,7 @@ npx wrangler tail
 ```
 
 ### API Key Issues
+
 ```bash
 # Verify secret is set
 npx wrangler secret list
@@ -262,6 +273,7 @@ npx wrangler secret put ANTHROPIC_API_KEY
 ```
 
 ### Local Development Issues
+
 ```bash
 # Ensure Docker is running
 docker ps
@@ -302,6 +314,7 @@ npm install
 ## Next Steps
 
 After installation:
+
 1. Set up Cloudflare account and get API credentials
 2. Install Wrangler CLI: `npm install -g wrangler`
 3. Configure secrets: `npx wrangler secret put ANTHROPIC_API_KEY`

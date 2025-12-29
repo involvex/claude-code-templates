@@ -84,11 +84,13 @@ See `reference/experiments.md` for detailed information on each experiment type 
 Before submitting sequences, optimize them for better expression and stability:
 
 **Common issues to address:**
+
 - Unpaired cysteines that create unwanted disulfides
 - Excessive hydrophobic regions causing aggregation
 - Poor solubility predictions
 
 **Recommended tools:**
+
 - NetSolP / SoluProt - Initial solubility filtering
 - SolubleMPNN - Sequence redesign for improved solubility
 - ESM - Sequence likelihood scoring

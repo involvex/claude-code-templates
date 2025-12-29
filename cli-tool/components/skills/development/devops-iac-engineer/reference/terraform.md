@@ -3,6 +3,7 @@
 ## Terraform Project Structure
 
 ### Standard Module Structure
+
 ```
 terraform/
 ├── environments/
@@ -27,6 +28,7 @@ terraform/
 ```
 
 **Why this structure?**
+
 - Separates environment configurations for isolation
 - Promotes module reusability across environments
 - Makes state management cleaner (one state per environment)
@@ -35,6 +37,7 @@ terraform/
 ### Module Development Template
 
 **modules/vpc/main.tf:**
+
 ```hcl
 # VPC
 resource "aws_vpc" "main" {
@@ -126,6 +129,7 @@ resource "aws_nat_gateway" "main" {
 ```
 
 **modules/vpc/variables.tf:**
+
 ```hcl
 variable "name_prefix" {
   description = "Prefix for resource names"
@@ -190,6 +194,7 @@ variable "tags" {
 ```
 
 **modules/vpc/outputs.tf:**
+
 ```hcl
 output "vpc_id" {
   description = "ID of the VPC"
@@ -222,6 +227,7 @@ output "nat_gateway_ids" {
 ### Remote State Configuration (S3 + DynamoDB)
 
 **environments/prod/backend.tf:**
+
 ```hcl
 terraform {
   backend "s3" {
@@ -239,6 +245,7 @@ terraform {
 ```
 
 ### State Locking Setup
+
 ```bash
 # Create S3 bucket for state
 aws s3api create-bucket \
@@ -273,6 +280,7 @@ aws dynamodb create-table \
 ## Advanced Terraform Patterns
 
 ### Data Sources for Dynamic Configuration
+
 ```hcl
 # Get latest Amazon Linux 2 AMI
 data "aws_ami" "amazon_linux_2" {
@@ -303,6 +311,7 @@ data "aws_availability_zones" "available" {
 ```
 
 ### Dynamic Blocks
+
 ```hcl
 resource "aws_security_group" "app" {
   name        = "app-sg"
@@ -342,6 +351,7 @@ variable "ingress_rules" {
 ```
 
 ### Conditional Resource Creation
+
 ```hcl
 # Create resource only in production
 resource "aws_db_instance" "replica" {
@@ -356,6 +366,7 @@ resource "aws_db_instance" "replica" {
 ```
 
 ### Lifecycle Management
+
 ```hcl
 resource "aws_instance" "web" {
   ami           = data.aws_ami.amazon_linux_2.id
@@ -380,6 +391,7 @@ resource "aws_instance" "web" {
 ## Security Best Practices
 
 ### Never Hardcode Credentials
+
 ```hcl
 # ❌ BAD - Hardcoded credentials
 resource "aws_db_instance" "bad" {
@@ -419,6 +431,7 @@ resource "aws_db_instance" "best" {
 ```
 
 ### Encryption Best Practices
+
 ```hcl
 # S3 Bucket with encryption
 resource "aws_s3_bucket" "data" {
@@ -455,6 +468,7 @@ resource "aws_db_instance" "main" {
 ## Cost Optimization Patterns
 
 ### Spot Instances with Auto Scaling
+
 ```hcl
 resource "aws_launch_template" "app" {
   name_prefix   = "${var.name_prefix}-"
@@ -503,6 +517,7 @@ resource "aws_autoscaling_group" "app" {
 ```
 
 ### Resource Tagging for Cost Allocation
+
 ```hcl
 locals {
   common_tags = {
@@ -532,6 +547,7 @@ resource "aws_instance" "web" {
 ## Testing and Validation
 
 ### Input Validation
+
 ```hcl
 variable "environment" {
   description = "Environment name"
@@ -553,6 +569,7 @@ variable "instance_type" {
 ```
 
 ### Pre-commit Hooks
+
 ```yaml
 # .pre-commit-config.yaml
 repos:
@@ -567,6 +584,7 @@ repos:
 ```
 
 ### CI/CD Pipeline Validation
+
 ```yaml
 # .github/workflows/terraform.yml
 name: Terraform CI
@@ -574,7 +592,7 @@ name: Terraform CI
 on:
   pull_request:
     paths:
-      - 'terraform/**'
+      - "terraform/**"
 
 jobs:
   validate:
@@ -608,11 +626,13 @@ jobs:
 ## Common Anti-Patterns to Avoid
 
 ### ❌ Don't: Manage state manually
+
 - Never edit `.tfstate` files directly
 - Never commit state files to Git
 - Always use remote state with locking
 
 ### ❌ Don't: Use count for stateful resources
+
 ```hcl
 # Bad - Changes in list order cause resource recreation
 resource "aws_instance" "web" {
@@ -628,11 +648,13 @@ resource "aws_instance" "web" {
 ```
 
 ### ❌ Don't: Create monolithic configurations
+
 - Split large configurations into modules
 - Separate concerns (networking, compute, data)
 - Use module composition
 
 ### ❌ Don't: Ignore drift detection
+
 ```bash
 # Run regularly to detect drift
 terraform plan -out=tfplan
@@ -690,6 +712,7 @@ terraform workspace list
 ## Advanced Topics
 
 ### Terraform Cloud/Enterprise
+
 - Remote execution
 - Policy as code with Sentinel
 - Private module registry
@@ -697,6 +720,7 @@ terraform workspace list
 - VCS integration
 
 ### Multi-Environment Strategy
+
 1. **Workspaces**: Simple, same code, different state
 2. **Directories**: More isolation, easier to understand
 3. **Branches**: Git-based separation (not recommended)
@@ -704,6 +728,7 @@ terraform workspace list
 **Recommended: Directory-based with shared modules**
 
 ### Dependency Management
+
 ```hcl
 # Implicit dependency (Terraform detects automatically)
 resource "aws_instance" "web" {
@@ -720,6 +745,7 @@ resource "aws_instance" "web" {
 ---
 
 ## Resources
+
 - [Terraform Registry](https://registry.terraform.io/)
 - [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [Terraform Best Practices](https://www.terraform-best-practices.com/)

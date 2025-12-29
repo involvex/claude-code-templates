@@ -3,6 +3,7 @@
 ## Control: CC6.1 - Logical Access Controls
 
 ### Control Objective
+
 The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives.
 
 ---
@@ -10,24 +11,30 @@ The entity implements logical access security software, infrastructure, and arch
 ## Sub-Control: Multi-Factor Authentication (MFA) for Production Access
 
 ### Control ID
+
 CC6.1-MFA-01
 
 ### Control Description
+
 Multi-factor authentication (MFA) is required for all user access to production systems, including applications, databases, cloud infrastructure, and administrative consoles. MFA must be configured to require at least two of the following factors:
+
 - Something you know (password)
 - Something you have (hardware token, authenticator app)
 - Something you are (biometric)
 
 ### Control Owner
+
 **Primary**: IT Security Manager
 **Secondary**: Cloud Infrastructure Lead
 
 ### Control Type
+
 - [x] Preventive
 - [ ] Detective
 - [ ] Corrective
 
 ### Control Frequency
+
 - [x] Continuous (system-enforced)
 - [ ] Daily
 - [ ] Weekly
@@ -41,7 +48,9 @@ Multi-factor authentication (MFA) is required for all user access to production 
 ## Implementation Details
 
 ### Scope
+
 **In-Scope Systems**:
+
 - AWS production accounts (all regions)
 - Azure production subscriptions
 - Kubernetes production clusters
@@ -52,10 +61,12 @@ Multi-factor authentication (MFA) is required for all user access to production 
 - SIEM and security tooling
 
 **Out-of-Scope**:
+
 - Development and test environments (MFA recommended but not required)
 - Internal corporate applications (covered under separate control)
 
 ### MFA Solutions Implemented
+
 1. **Okta** - Primary identity provider for SSO
    - Enforces MFA for all production application access
    - Supported factors: Okta Verify (push), Google Authenticator (TOTP), YubiKey (hardware token)
@@ -76,6 +87,7 @@ Multi-factor authentication (MFA) is required for all user access to production 
 ### Technical Implementation
 
 #### AWS MFA Policy (Example)
+
 ```json
 {
   "Version": "2012-10-17",
@@ -104,6 +116,7 @@ Multi-factor authentication (MFA) is required for all user access to production 
 ```
 
 #### Okta Policy Configuration
+
 - **Policy Name**: Production Access MFA
 - **Users**: All employees with production access
 - **Applications**: All production applications
@@ -112,6 +125,7 @@ Multi-factor authentication (MFA) is required for all user access to production 
 - **Factor Enrollment**: Required within 24 hours of production access grant
 
 #### Azure Conditional Access Policy
+
 - **Policy Name**: Require MFA for Production Resources
 - **Users**: All users
 - **Cloud apps**: All production Azure resources (tagged: Environment=Production)
@@ -126,15 +140,18 @@ Multi-factor authentication (MFA) is required for all user access to production 
 ### Test Procedures
 
 #### Test 1: MFA Enrollment Verification
+
 **Objective**: Verify all users with production access have MFA enrolled
 
 **Test Steps**:
+
 1. Export list of all users with production access from Okta
 2. Query MFA enrollment status for each user
 3. Verify 100% enrollment rate
 4. For any users without MFA, verify access has been revoked
 
 **Expected Evidence**:
+
 - Okta user report showing MFA enrollment status
 - Screenshot of enrollment rate: 100%
 
@@ -143,9 +160,11 @@ Multi-factor authentication (MFA) is required for all user access to production 
 ---
 
 #### Test 2: MFA Enforcement Testing
+
 **Objective**: Verify MFA cannot be bypassed
 
 **Test Steps**:
+
 1. Attempt to access production AWS console without MFA
    - Expected: Access denied
 2. Attempt to access production application without MFA
@@ -154,6 +173,7 @@ Multi-factor authentication (MFA) is required for all user access to production 
    - Expected: Certificate issuance fails without MFA
 
 **Expected Evidence**:
+
 - Screenshots of access denial without MFA
 - Log entries showing MFA enforcement
 
@@ -162,9 +182,11 @@ Multi-factor authentication (MFA) is required for all user access to production 
 ---
 
 #### Test 3: Sample User Access Verification
+
 **Objective**: Verify sample of users have appropriate MFA configured
 
 **Test Steps**:
+
 1. Auditor selects random sample of 25 users with production access
 2. For each user, verify:
    - MFA is enrolled
@@ -173,6 +195,7 @@ Multi-factor authentication (MFA) is required for all user access to production 
 3. Document any exceptions
 
 **Expected Evidence**:
+
 - Okta user detail report for each sampled user
 - MFA authentication logs
 
@@ -183,16 +206,18 @@ Multi-factor authentication (MFA) is required for all user access to production 
 ## Evidence Collection
 
 ### Automated Evidence
+
 Evidence is collected automatically on the following schedule:
 
-| Evidence Type | Frequency | Location | Retention |
-|--------------|-----------|----------|-----------|
-| Okta MFA Enrollment Report | Weekly | GRC Tool / Evidence Repository | 7 years |
-| AWS MFA Usage Report | Weekly | S3 Bucket (compliance-evidence) | 7 years |
-| Azure MFA Sign-in Logs | Daily | Azure Monitor / Log Analytics | 2 years |
-| MFA Authentication Logs | Real-time | SIEM (Splunk) | 1 year |
+| Evidence Type              | Frequency | Location                        | Retention |
+| -------------------------- | --------- | ------------------------------- | --------- |
+| Okta MFA Enrollment Report | Weekly    | GRC Tool / Evidence Repository  | 7 years   |
+| AWS MFA Usage Report       | Weekly    | S3 Bucket (compliance-evidence) | 7 years   |
+| Azure MFA Sign-in Logs     | Daily     | Azure Monitor / Log Analytics   | 2 years   |
+| MFA Authentication Logs    | Real-time | SIEM (Splunk)                   | 1 year    |
 
 ### Evidence Collection Script
+
 ```python
 #!/usr/bin/env python3
 """
@@ -266,11 +291,13 @@ if __name__ == "__main__":
 ## Exception Management
 
 ### Current Exceptions
-| User | Reason | Approval | Expiration | Compensating Control |
-|------|--------|----------|------------|---------------------|
-| service-account@company.com | API-only account, no interactive login | CISO | 2025-12-31 | API key rotation every 90 days, IP allowlist |
+
+| User                        | Reason                                 | Approval | Expiration | Compensating Control                         |
+| --------------------------- | -------------------------------------- | -------- | ---------- | -------------------------------------------- |
+| service-account@company.com | API-only account, no interactive login | CISO     | 2025-12-31 | API key rotation every 90 days, IP allowlist |
 
 ### Exception Approval Process
+
 1. User submits exception request via Jira Service Desk
 2. Control owner reviews and recommends approval/denial
 3. CISO approves exceptions >30 days
@@ -281,18 +308,19 @@ if __name__ == "__main__":
 
 ## Related Controls
 
-| Control ID | Control Name | Relationship |
-|-----------|--------------|--------------|
-| CC6.1-PWD-01 | Password Complexity Requirements | Prerequisite (MFA requires strong password) |
-| CC6.2-ACC-01 | Quarterly Access Reviews | Complementary (verify MFA users still need access) |
-| CC7.2-LOG-01 | Authentication Logging | Detective control (logs MFA authentications) |
-| CC8.1-JIT-01 | Just-in-Time Access | Related (JIT access also requires MFA) |
+| Control ID   | Control Name                     | Relationship                                       |
+| ------------ | -------------------------------- | -------------------------------------------------- |
+| CC6.1-PWD-01 | Password Complexity Requirements | Prerequisite (MFA requires strong password)        |
+| CC6.2-ACC-01 | Quarterly Access Reviews         | Complementary (verify MFA users still need access) |
+| CC7.2-LOG-01 | Authentication Logging           | Detective control (logs MFA authentications)       |
+| CC8.1-JIT-01 | Just-in-Time Access              | Related (JIT access also requires MFA)             |
 
 ---
 
 ## Control Effectiveness Metrics
 
 ### KPIs
+
 1. **MFA Enrollment Rate**: Target 100%
    - Current: 100% (500/500 users)
    - Trend: ✓ Maintained 100% for past 12 months
@@ -313,18 +341,19 @@ if __name__ == "__main__":
 
 ## Change History
 
-| Date | Version | Change Description | Changed By |
-|------|---------|-------------------|------------|
-| 2024-01-15 | 1.0 | Initial control implementation | IT Security Manager |
-| 2024-06-01 | 1.1 | Added Azure AD MFA for Microsoft services | Cloud Architect |
-| 2024-09-15 | 1.2 | Implemented SSH certificate-based authentication | Security Engineer |
-| 2025-01-10 | 1.3 | Updated to require hardware tokens for privileged users | CISO |
+| Date       | Version | Change Description                                      | Changed By          |
+| ---------- | ------- | ------------------------------------------------------- | ------------------- |
+| 2024-01-15 | 1.0     | Initial control implementation                          | IT Security Manager |
+| 2024-06-01 | 1.1     | Added Azure AD MFA for Microsoft services               | Cloud Architect     |
+| 2024-09-15 | 1.2     | Implemented SSH certificate-based authentication        | Security Engineer   |
+| 2025-01-10 | 1.3     | Updated to require hardware tokens for privileged users | CISO                |
 
 ---
 
 ## Audit Trail
 
 ### 2024 SOC 2 Type II Audit
+
 - **Audit Firm**: Deloitte & Touche LLP
 - **Audit Period**: January 1, 2024 - December 31, 2024
 - **Test Results**: No exceptions noted
@@ -332,16 +361,18 @@ if __name__ == "__main__":
 - **Report Date**: February 15, 2025
 
 ### Previous Audits
-| Audit Period | Audit Firm | Result | Exceptions |
-|-------------|------------|--------|------------|
-| 2023 (Full Year) | Deloitte | Passed | 0 |
-| 2023 (Initial, 3 months) | Deloitte | Passed | 0 |
+
+| Audit Period             | Audit Firm | Result | Exceptions |
+| ------------------------ | ---------- | ------ | ---------- |
+| 2023 (Full Year)         | Deloitte   | Passed | 0          |
+| 2023 (Initial, 3 months) | Deloitte   | Passed | 0          |
 
 ---
 
 ## Continuous Improvement
 
 ### Planned Enhancements
+
 1. **Phishing-Resistant MFA** (Q2 2025)
    - Migrate to FIDO2/WebAuthn hardware keys for all privileged users
    - Phase out SMS/phone call factors (vulnerable to SIM swapping)

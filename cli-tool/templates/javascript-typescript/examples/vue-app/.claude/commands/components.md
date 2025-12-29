@@ -29,6 +29,7 @@ Create or optimize Vue components based on the requirements:
 ## Vue Patterns to Consider
 
 Based on the component type:
+
 - **Composition API**: For Vue 3 projects with `<script setup>`
 - **Options API**: For Vue 2 or legacy Vue 3 projects
 - **Composables**: Extract reusable logic into composables

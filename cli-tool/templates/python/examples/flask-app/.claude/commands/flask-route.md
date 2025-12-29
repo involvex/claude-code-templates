@@ -36,20 +36,20 @@ def get_users():
     try:
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
-        
+
         users = User.query.paginate(
-            page=page, 
-            per_page=per_page, 
+            page=page,
+            per_page=per_page,
             error_out=False
         )
-        
+
         return jsonify({
             'users': [user.to_dict() for user in users.items],
             'total': users.total,
             'pages': users.pages,
             'current_page': page
         }), 200
-        
+
     except Exception as e:
         return jsonify({'error': 'Failed to fetch users'}), 500
 
@@ -59,7 +59,7 @@ def get_user(user_id):
     try:
         user = User.query.get_or_404(user_id)
         return jsonify(user.to_dict()), 200
-        
+
     except Exception as e:
         return jsonify({'error': 'User not found'}), 404
 
@@ -68,20 +68,20 @@ def create_user():
     """Create a new user."""
     try:
         data = request.get_json()
-        
+
         if not data:
             return jsonify({'error': 'No data provided'}), 400
-        
+
         # Validate required fields
         required_fields = ['name', 'email']
         for field in required_fields:
             if field not in data:
                 return jsonify({'error': f'{field} is required'}), 400
-        
+
         # Check if email already exists
         if User.query.filter_by(email=data['email']).first():
             return jsonify({'error': 'Email already exists'}), 409
-        
+
         # Create new user
         user = User(
             name=data['name'],
@@ -89,12 +89,12 @@ def create_user():
             phone=data.get('phone'),
             address=data.get('address')
         )
-        
+
         db.session.add(user)
         db.session.commit()
-        
+
         return jsonify(user.to_dict()), 201
-        
+
     except BadRequest:
         return jsonify({'error': 'Invalid JSON data'}), 400
     except Exception as e:
@@ -107,10 +107,10 @@ def update_user(user_id):
     try:
         user = User.query.get_or_404(user_id)
         data = request.get_json()
-        
+
         if not data:
             return jsonify({'error': 'No data provided'}), 400
-        
+
         # Update fields
         if 'name' in data:
             user.name = data['name']
@@ -124,11 +124,11 @@ def update_user(user_id):
             user.phone = data['phone']
         if 'address' in data:
             user.address = data['address']
-        
+
         db.session.commit()
-        
+
         return jsonify(user.to_dict()), 200
-        
+
     except BadRequest:
         return jsonify({'error': 'Invalid JSON data'}), 400
     except Exception as e:
@@ -140,12 +140,12 @@ def delete_user(user_id):
     """Delete a user."""
     try:
         user = User.query.get_or_404(user_id)
-        
+
         db.session.delete(user)
         db.session.commit()
-        
+
         return jsonify({'message': 'User deleted successfully'}), 200
-        
+
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Failed to delete user'}), 500
@@ -167,6 +167,7 @@ def internal_error(error):
 ## Route Patterns Supported
 
 ### Basic Routes
+
 ```python
 @app.route('/')
 @app.route('/users')
@@ -174,12 +175,14 @@ def internal_error(error):
 ```
 
 ### HTTP Methods
+
 ```python
 @app.route('/users', methods=['GET', 'POST'])
 @app.route('/users/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 ```
 
 ### URL Parameters
+
 ```python
 @app.route('/users/<int:user_id>')
 @app.route('/posts/<string:slug>')

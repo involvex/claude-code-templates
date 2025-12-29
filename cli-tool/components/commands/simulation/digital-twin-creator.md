@@ -22,6 +22,7 @@ Build production-ready digital twin with comprehensive modeling and calibration:
 **Twin Subject**: Use $ARGUMENTS to model manufacturing systems, business processes, customer journeys, or system performance
 
 **Digital Twin Architecture**:
+
 1. **System Mapping** - Component identification, relationship modeling, and boundary definition
 2. **Data Foundation** - Quality assessment, gap analysis, and validation framework
 3. **Model Construction** - Behavior modeling, interaction dynamics, and environmental factors

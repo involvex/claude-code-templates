@@ -22,6 +22,7 @@ Execute comprehensive memory cleanup with implementation synchronization:
 **Cleanup Scope**: Use $ARGUMENTS to focus on CLAUDE.md files, general documentation, outdated pattern identification, or implementation synchronization
 
 **Memory Cleaning Framework**:
+
 1. **Memory File Discovery** - Locate all CLAUDE.md and documentation files, assess hierarchy and organization, identify redundant content
 2. **Implementation Analysis** - Compare documented patterns with actual code, identify implementation drift, assess accuracy gaps
 3. **Pattern Validation** - Verify documented conventions, validate code examples, check dependency accuracy, assess technology stack alignment

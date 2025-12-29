@@ -2,8 +2,8 @@
  * WebSocketServer - Handles real-time communication between server and clients
  * Part of the modular backend architecture for Phase 3
  */
-const WebSocket = require('ws');
-const chalk = require('chalk');
+const WebSocket = require("ws");
+const chalk = require("chalk");
 
 class WebSocketServer {
   constructor(httpServer, options = {}, performanceMonitor = null) {
@@ -11,11 +11,11 @@ class WebSocketServer {
     this.performanceMonitor = performanceMonitor;
     this.options = {
       port: options.port || 3334,
-      path: options.path || '/ws',
+      path: options.path || "/ws",
       heartbeatInterval: options.heartbeatInterval || 30000,
-      ...options
+      ...options,
     };
-    
+
     this.wss = null;
     this.clients = new Map();
     this.heartbeatInterval = null;
@@ -29,22 +29,27 @@ class WebSocketServer {
    */
   async initialize() {
     try {
-      console.log(chalk.blue('🔌 Initializing WebSocket server...'));
-      
+      console.log(chalk.blue("🔌 Initializing WebSocket server..."));
+
       // Create WebSocket server
       this.wss = new WebSocket.Server({
         server: this.httpServer,
         path: this.options.path,
-        clientTracking: true
+        clientTracking: true,
       });
 
       this.setupEventHandlers();
       this.startHeartbeat();
       this.isRunning = true;
 
-      console.log(chalk.green(`✅ WebSocket server initialized on ${this.options.path}`));
+      console.log(
+        chalk.green(`✅ WebSocket server initialized on ${this.options.path}`),
+      );
     } catch (error) {
-      console.error(chalk.red('❌ Failed to initialize WebSocket server:'), error);
+      console.error(
+        chalk.red("❌ Failed to initialize WebSocket server:"),
+        error,
+      );
       throw error;
     }
   }
@@ -53,16 +58,16 @@ class WebSocketServer {
    * Setup WebSocket event handlers
    */
   setupEventHandlers() {
-    this.wss.on('connection', (ws, request) => {
+    this.wss.on("connection", (ws, request) => {
       this.handleConnection(ws, request);
     });
 
-    this.wss.on('error', (error) => {
-      console.error(chalk.red('WebSocket server error:'), error);
+    this.wss.on("error", (error) => {
+      console.error(chalk.red("WebSocket server error:"), error);
     });
 
-    this.wss.on('close', () => {
-      console.log(chalk.yellow('🔌 WebSocket server closed'));
+    this.wss.on("close", () => {
+      console.log(chalk.yellow("🔌 WebSocket server closed"));
       this.isRunning = false;
     });
   }
@@ -78,51 +83,55 @@ class WebSocketServer {
       id: clientId,
       ws: ws,
       ip: request.socket.remoteAddress,
-      userAgent: request.headers['user-agent'],
+      userAgent: request.headers["user-agent"],
       connectedAt: new Date(),
       isAlive: true,
-      subscriptions: new Set()
+      subscriptions: new Set(),
     };
 
     this.clients.set(clientId, clientInfo);
-    console.log(chalk.green(`🔗 WebSocket client connected: ${clientId} (${this.clients.size} total)`));
+    console.log(
+      chalk.green(
+        `🔗 WebSocket client connected: ${clientId} (${this.clients.size} total)`,
+      ),
+    );
 
     // Track WebSocket connection in performance monitor
     if (this.performanceMonitor) {
-      this.performanceMonitor.recordWebSocket('connection', {
+      this.performanceMonitor.recordWebSocket("connection", {
         clientId,
         totalClients: this.clients.size,
-        ip: request.socket.remoteAddress
+        ip: request.socket.remoteAddress,
       });
     }
 
     // Send welcome message
     this.sendToClient(clientId, {
-      type: 'connection',
+      type: "connection",
       data: {
         clientId: clientId,
         serverTime: new Date().toISOString(),
-        message: 'Connected to Claude Code Analytics WebSocket'
-      }
+        message: "Connected to Claude Code Analytics WebSocket",
+      },
     });
 
     // Send any queued messages
     this.sendQueuedMessages(clientId);
 
     // Setup client event handlers
-    ws.on('message', (message) => {
+    ws.on("message", (message) => {
       this.handleClientMessage(clientId, message);
     });
 
-    ws.on('close', (code, reason) => {
+    ws.on("close", (code, reason) => {
       this.handleClientDisconnect(clientId, code, reason);
     });
 
-    ws.on('error', (error) => {
+    ws.on("error", (error) => {
       console.error(chalk.red(`WebSocket client error (${clientId}):`), error);
     });
 
-    ws.on('pong', () => {
+    ws.on("pong", () => {
       this.handleClientPong(clientId);
     });
   }
@@ -136,38 +145,43 @@ class WebSocketServer {
     try {
       const data = JSON.parse(message.toString());
       const client = this.clients.get(clientId);
-      
+
       if (!client) return;
 
       console.log(chalk.cyan(`📨 Message from ${clientId}:`), data.type);
 
       // Track message in performance monitor
       if (this.performanceMonitor) {
-        this.performanceMonitor.recordWebSocket('message_received', {
+        this.performanceMonitor.recordWebSocket("message_received", {
           clientId,
           messageType: data.type,
-          messageSize: message.length
+          messageSize: message.length,
         });
       }
 
       switch (data.type) {
-        case 'subscribe':
+        case "subscribe":
           this.handleSubscription(clientId, data.channel);
           break;
-        case 'unsubscribe':
+        case "unsubscribe":
           this.handleUnsubscription(clientId, data.channel);
           break;
-        case 'ping':
-          this.sendToClient(clientId, { type: 'pong', timestamp: Date.now() });
+        case "ping":
+          this.sendToClient(clientId, { type: "pong", timestamp: Date.now() });
           break;
-        case 'refresh_request':
+        case "refresh_request":
           this.handleRefreshRequest(clientId);
           break;
         default:
-          console.warn(chalk.yellow(`Unknown message type from ${clientId}: ${data.type}`));
+          console.warn(
+            chalk.yellow(`Unknown message type from ${clientId}: ${data.type}`),
+          );
       }
     } catch (error) {
-      console.error(chalk.red(`Error parsing message from ${clientId}:`), error);
+      console.error(
+        chalk.red(`Error parsing message from ${clientId}:`),
+        error,
+      );
     }
   }
 
@@ -184,8 +198,8 @@ class WebSocketServer {
     console.log(chalk.green(`📡 Client ${clientId} subscribed to ${channel}`));
 
     this.sendToClient(clientId, {
-      type: 'subscription_confirmed',
-      data: { channel, subscriptions: Array.from(client.subscriptions) }
+      type: "subscription_confirmed",
+      data: { channel, subscriptions: Array.from(client.subscriptions) },
     });
   }
 
@@ -199,11 +213,13 @@ class WebSocketServer {
     if (!client) return;
 
     client.subscriptions.delete(channel);
-    console.log(chalk.yellow(`📡 Client ${clientId} unsubscribed from ${channel}`));
+    console.log(
+      chalk.yellow(`📡 Client ${clientId} unsubscribed from ${channel}`),
+    );
 
     this.sendToClient(clientId, {
-      type: 'unsubscription_confirmed',
-      data: { channel, subscriptions: Array.from(client.subscriptions) }
+      type: "unsubscription_confirmed",
+      data: { channel, subscriptions: Array.from(client.subscriptions) },
     });
   }
 
@@ -214,7 +230,7 @@ class WebSocketServer {
   handleRefreshRequest(clientId) {
     console.log(chalk.blue(`🔄 Refresh requested by ${clientId}`));
     // Emit refresh event that the main analytics server can listen to
-    this.emit('refresh_requested', { clientId });
+    this.emit("refresh_requested", { clientId });
   }
 
   /**
@@ -225,16 +241,24 @@ class WebSocketServer {
    */
   handleClientDisconnect(clientId, code, reason) {
     this.clients.delete(clientId);
-    console.log(chalk.yellow(`🔗 WebSocket client disconnected: ${clientId} (${this.clients.size} remaining)`));
-    console.log(chalk.gray(`   Close code: ${code}, Reason: ${reason || 'No reason provided'}`));
+    console.log(
+      chalk.yellow(
+        `🔗 WebSocket client disconnected: ${clientId} (${this.clients.size} remaining)`,
+      ),
+    );
+    console.log(
+      chalk.gray(
+        `   Close code: ${code}, Reason: ${reason || "No reason provided"}`,
+      ),
+    );
 
     // Track disconnection in performance monitor
     if (this.performanceMonitor) {
-      this.performanceMonitor.recordWebSocket('disconnection', {
+      this.performanceMonitor.recordWebSocket("disconnection", {
         clientId,
         closeCode: code,
         totalClients: this.clients.size,
-        reason: reason?.toString() || 'No reason provided'
+        reason: reason?.toString() || "No reason provided",
       });
     }
   }
@@ -259,7 +283,7 @@ class WebSocketServer {
     const messageStr = JSON.stringify({
       ...message,
       timestamp: Date.now(),
-      server: 'Claude Code Analytics'
+      server: "Claude Code Analytics",
     });
 
     let sentCount = 0;
@@ -274,7 +298,10 @@ class WebSocketServer {
           client.ws.send(messageStr);
           sentCount++;
         } catch (error) {
-          console.error(chalk.red(`Error sending to client ${clientId}:`), error);
+          console.error(
+            chalk.red(`Error sending to client ${clientId}:`),
+            error,
+          );
           this.clients.delete(clientId);
         }
       }
@@ -305,7 +332,7 @@ class WebSocketServer {
       const messageStr = JSON.stringify({
         ...message,
         timestamp: Date.now(),
-        server: 'Claude Code Analytics'
+        server: "Claude Code Analytics",
       });
       client.ws.send(messageStr);
       return true;
@@ -323,7 +350,7 @@ class WebSocketServer {
   queueMessage(message) {
     this.messageQueue.push({
       ...message,
-      queuedAt: Date.now()
+      queuedAt: Date.now(),
     });
 
     // Keep queue size manageable
@@ -339,13 +366,17 @@ class WebSocketServer {
   sendQueuedMessages(clientId) {
     if (this.messageQueue.length === 0) return;
 
-    console.log(chalk.blue(`📦 Sending ${this.messageQueue.length} queued messages to ${clientId}`));
-    
-    this.messageQueue.forEach(message => {
+    console.log(
+      chalk.blue(
+        `📦 Sending ${this.messageQueue.length} queued messages to ${clientId}`,
+      ),
+    );
+
+    this.messageQueue.forEach((message) => {
       this.sendToClient(clientId, {
         ...message,
-        type: 'queued_' + message.type,
-        wasQueued: true
+        type: "queued_" + message.type,
+        wasQueued: true,
       });
     });
   }
@@ -357,14 +388,17 @@ class WebSocketServer {
    * @param {Object} metadata - Additional metadata
    */
   notifyConversationStateChange(conversationId, newState, metadata = {}) {
-    this.broadcast({
-      type: 'conversation_state_change',
-      data: {
-        conversationId,
-        newState,
-        ...metadata
-      }
-    }, 'conversation_updates');
+    this.broadcast(
+      {
+        type: "conversation_state_change",
+        data: {
+          conversationId,
+          newState,
+          ...metadata,
+        },
+      },
+      "conversation_updates",
+    );
   }
 
   /**
@@ -372,10 +406,13 @@ class WebSocketServer {
    * @param {Object} data - Updated data
    */
   notifyDataRefresh(data) {
-    this.broadcast({
-      type: 'data_refresh',
-      data
-    }, 'data_updates');
+    this.broadcast(
+      {
+        type: "data_refresh",
+        data,
+      },
+      "data_updates",
+    );
   }
 
   /**
@@ -383,10 +420,13 @@ class WebSocketServer {
    * @param {Object} status - System status
    */
   notifySystemStatus(status) {
-    this.broadcast({
-      type: 'system_status',
-      data: status
-    }, 'system_updates');
+    this.broadcast(
+      {
+        type: "system_status",
+        data: status,
+      },
+      "system_updates",
+    );
   }
 
   /**
@@ -396,7 +436,9 @@ class WebSocketServer {
     this.heartbeatInterval = setInterval(() => {
       this.clients.forEach((client, clientId) => {
         if (!client.isAlive) {
-          console.log(chalk.yellow(`💔 Terminating unresponsive client: ${clientId}`));
+          console.log(
+            chalk.yellow(`💔 Terminating unresponsive client: ${clientId}`),
+          );
           client.ws.terminate();
           this.clients.delete(clientId);
           return;
@@ -433,12 +475,12 @@ class WebSocketServer {
    * @returns {Object} Server statistics
    */
   getStats() {
-    const clientStats = Array.from(this.clients.values()).map(client => ({
+    const clientStats = Array.from(this.clients.values()).map((client) => ({
       id: client.id,
       ip: client.ip,
       connectedAt: client.connectedAt,
       subscriptions: Array.from(client.subscriptions),
-      isAlive: client.isAlive
+      isAlive: client.isAlive,
     }));
 
     return {
@@ -446,7 +488,7 @@ class WebSocketServer {
       clientCount: this.clients.size,
       queuedMessages: this.messageQueue.length,
       clients: clientStats,
-      uptime: this.isRunning ? Date.now() - this.startTime : 0
+      uptime: this.isRunning ? Date.now() - this.startTime : 0,
     };
   }
 
@@ -454,27 +496,27 @@ class WebSocketServer {
    * Gracefully close all connections and stop server
    */
   async close() {
-    console.log(chalk.yellow('🔌 Closing WebSocket server...'));
-    
+    console.log(chalk.yellow("🔌 Closing WebSocket server..."));
+
     this.stopHeartbeat();
-    
+
     // Close all client connections
     this.clients.forEach((client, clientId) => {
       if (client.ws.readyState === WebSocket.OPEN) {
-        client.ws.close(1000, 'Server shutting down');
+        client.ws.close(1000, "Server shutting down");
       }
     });
-    
+
     this.clients.clear();
-    
+
     if (this.wss) {
       await new Promise((resolve) => {
         this.wss.close(resolve);
       });
     }
-    
+
     this.isRunning = false;
-    console.log(chalk.green('✅ WebSocket server closed'));
+    console.log(chalk.green("✅ WebSocket server closed"));
   }
 
   /**
@@ -483,11 +525,14 @@ class WebSocketServer {
   emit(event, data) {
     // Simple event emitter implementation
     if (this.listeners && this.listeners[event]) {
-      this.listeners[event].forEach(callback => {
+      this.listeners[event].forEach((callback) => {
         try {
           callback(data);
         } catch (error) {
-          console.error(`Error in WebSocket event listener for ${event}:`, error);
+          console.error(
+            `Error in WebSocket event listener for ${event}:`,
+            error,
+          );
         }
       });
     }

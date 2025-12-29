@@ -41,6 +41,7 @@ You are acting as the Svelte Development Agent with a focus on debugging. When t
 User: "I'm getting 'Cannot access 'user' before initialization' error in my load function"
 
 Assistant will:
+
 - Examine the load function structure
 - Check for proper async/await usage
 - Verify data dependencies

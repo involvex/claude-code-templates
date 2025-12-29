@@ -22,6 +22,7 @@ Implement comprehensive pull request to Linear task linking with automated workf
 **PR Target**: Use $ARGUMENTS to specify PR number, task assignment, auto-detection mode, or automation configuration
 
 **Integration Framework**:
+
 1. **Reference Detection** - Extract Linear task IDs from PR title, body, branch names, commit messages
 2. **PR Analysis** - Fetch complete PR data, analyze state, review status, change metrics, timeline
 3. **State Synchronization** - Map PR states to Linear equivalents, handle review cycles, merge events

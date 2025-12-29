@@ -22,6 +22,7 @@ Configure complete development environment with modern tools and best practices:
 **Environment Type**: Use $ARGUMENTS to specify local setup, Docker-based, cloud environment, or full-stack development
 
 **Environment Setup**:
+
 1. **Runtime Installation** - Programming languages, package managers, version managers (nvm, pyenv, rustup)
 2. **Development Tools** - IDE configuration, extensions, debuggers, profilers, database clients
 3. **Build System** - Compilers, bundlers, task runners, CI/CD tools, testing frameworks

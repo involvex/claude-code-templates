@@ -3,7 +3,9 @@
 ## 🔍 Available Monitoring Tools
 
 ### 1. Launcher with Enhanced Logging
+
 **File**: `launcher.ts`
+
 - Detailed logging of each execution step
 - Worker availability checks
 - Code generation monitoring
@@ -11,7 +13,9 @@
 - Colored terminal output for better readability
 
 ### 2. Real-time Monitor
+
 **File**: `monitor.ts`
+
 - Real-time performance metrics tracking
 - Worker health monitoring
 - Code generation time analysis
@@ -20,7 +24,9 @@
 - Comprehensive error reporting
 
 ### 3. Wrangler CLI Tools
+
 **Built-in Cloudflare debugging tools**:
+
 - `npx wrangler tail` - Real-time log streaming
 - `npx wrangler containers list` - Container status
 - `npx wrangler deployments list` - Deployment history
@@ -29,13 +35,17 @@
 ## 🚨 Common Troubleshooting
 
 ### Problem: "Container not ready"
+
 **Symptoms**:
+
 ```
 Error: Container not ready. Please wait 2-3 minutes after deployment.
 ```
 
 **Solutions**:
+
 1. **Wait for provisioning**:
+
    ```bash
    # Check container status
    npx wrangler containers list
@@ -45,6 +55,7 @@ Error: Container not ready. Please wait 2-3 minutes after deployment.
    ```
 
 2. **Verify deployment**:
+
    ```bash
    npx wrangler deployments list
    # Check deployment status and timestamp
@@ -57,25 +68,31 @@ Error: Container not ready. Please wait 2-3 minutes after deployment.
    ```
 
 ### Problem: "Worker not responding"
+
 **Symptoms**:
+
 ```
 ❌ Worker health check failed: fetch failed
 ```
 
 **Debugging Steps**:
+
 1. **Verify worker is deployed**:
+
    ```bash
    npx wrangler deploy
    # Should return worker URL
    ```
 
 2. **Test worker endpoint**:
+
    ```bash
    curl https://your-worker.your-subdomain.workers.dev
    # Should return usage instructions
    ```
 
 3. **Check local development**:
+
    ```bash
    # For local testing
    npm run dev
@@ -85,19 +102,24 @@ Error: Container not ready. Please wait 2-3 minutes after deployment.
    ```
 
 ### Problem: "Anthropic API key not set"
+
 **Symptoms**:
+
 ```
 Error: ANTHROPIC_API_KEY is required
 ```
 
 **Solutions**:
+
 1. **Set as Wrangler secret (Production)**:
+
    ```bash
    npx wrangler secret put ANTHROPIC_API_KEY
    # Paste your key when prompted
    ```
 
 2. **Set in .dev.vars (Local Development)**:
+
    ```bash
    # Create .dev.vars file:
    echo "ANTHROPIC_API_KEY=sk-ant-your-key-here" > .dev.vars
@@ -110,21 +132,26 @@ Error: ANTHROPIC_API_KEY is required
    ```
 
 ### Problem: "Sandbox execution timeout"
+
 **Symptoms**:
+
 ```
 Error: Sandbox execution exceeded 30 second timeout
 ```
 
 **Solutions**:
+
 1. **Use Durable Objects for longer operations**:
+
    ```typescript
    // In wrangler.toml, ensure Durable Objects are configured
-   [[durable_objects.bindings]]
-   name = "Sandbox"
-   class_name = "Sandbox"
+   [[durable_objects.bindings]];
+   name = "Sandbox";
+   class_name = "Sandbox";
    ```
 
 2. **Optimize code generation**:
+
    ```typescript
    // Request more concise code
    const prompt = `Generate SIMPLE Python code...`;
@@ -138,18 +165,22 @@ Error: Sandbox execution exceeded 30 second timeout
    ```
 
 ### Problem: "Docker not running" (Local Development)
+
 **Symptoms**:
+
 ```
 Error: Docker daemon is not running
 ```
 
 **Solutions**:
+
 1. **Start Docker Desktop**:
    - macOS: Open Docker Desktop application
    - Linux: `sudo systemctl start docker`
    - Windows: Start Docker Desktop
 
 2. **Verify Docker is running**:
+
    ```bash
    docker ps
    # Should list running containers
@@ -164,6 +195,7 @@ Error: Docker daemon is not running
 ## 📊 Using the Monitor for Debugging
 
 ### Basic Monitoring Command:
+
 ```bash
 # Monitor a simple operation
 node monitor.ts "Calculate factorial of 5" your_api_key
@@ -173,6 +205,7 @@ node monitor.ts "Fibonacci 10" your_api_key https://your-worker.workers.dev
 ```
 
 ### Monitor Output Example:
+
 ```
 [14:32:15] ℹ 🚀 Starting enhanced Cloudflare sandbox monitoring
 ============================================================
@@ -217,6 +250,7 @@ Status: Success ✓
 ## 🎯 Debugging Specific Scenarios
 
 ### 1. Code Generation Issues
+
 ```bash
 # Use monitor to see exact Claude API interaction
 node monitor.ts "Complex prompt that might fail"
@@ -228,6 +262,7 @@ node monitor.ts "Complex prompt that might fail"
 ```
 
 ### 2. Sandbox Execution Problems
+
 ```bash
 # Check worker logs while testing
 npx wrangler tail &
@@ -240,6 +275,7 @@ node launcher.ts "Test prompt"
 ```
 
 ### 3. Performance Issues
+
 ```bash
 # Use monitor to identify bottlenecks
 node monitor.ts "Your prompt"
@@ -251,6 +287,7 @@ node monitor.ts "Your prompt"
 ```
 
 ### 4. Network/Deployment Issues
+
 ```bash
 # Check deployments
 npx wrangler deployments list
@@ -265,6 +302,7 @@ curl -v https://your-worker.workers.dev
 ## 🛠 Advanced Configuration
 
 ### Enable Debug Mode:
+
 ```bash
 # In wrangler.toml
 [env.development]
@@ -276,14 +314,16 @@ ANTHROPIC_API_KEY=your_key
 ```
 
 ### Custom Timeouts:
+
 ```typescript
 // In src/index.ts
-const result = await sandbox.exec('python /tmp/code.py', {
+const result = await sandbox.exec("python /tmp/code.py", {
   timeout: 60000, // 60 seconds
 });
 ```
 
 ### Verbose Logging:
+
 ```bash
 # Set log level
 export WRANGLER_LOG=debug
@@ -295,6 +335,7 @@ npx wrangler deploy --verbose
 ## 📋 Debugging Checklist
 
 ### Before Reporting an Issue:
+
 - [ ] Cloudflare Workers account active (Paid plan if using Durable Objects)
 - [ ] Anthropic API key valid and has credits
 - [ ] Worker deployed successfully (`npx wrangler deploy`)
@@ -307,6 +348,7 @@ npx wrangler deploy --verbose
 - [ ] Tested with simple prompt first
 
 ### Information to Include in Bug Reports:
+
 - Full monitor output showing timestamps and metrics
 - Worker URL or local development environment
 - Exact prompt that caused the issue
@@ -319,6 +361,7 @@ npx wrangler deploy --verbose
 ## 🚀 Performance Optimization Tips
 
 ### 1. Minimize Code Generation Time
+
 ```typescript
 // Be specific to reduce Claude's thinking time
 const prompt = `Generate a single Python function to calculate factorial.
@@ -326,14 +369,16 @@ Use recursion. Include only the function, no tests.`;
 ```
 
 ### 2. Use Code Interpreter API
+
 ```typescript
 // Faster than exec for Python
-import { getCodeInterpreter } from '@cloudflare/sandbox';
+import { getCodeInterpreter } from "@cloudflare/sandbox";
 const interpreter = getCodeInterpreter(env.Sandbox, userId);
 const result = await interpreter.notebook.execCell(pythonCode);
 ```
 
 ### 3. Implement Caching
+
 ```typescript
 // Cache generated code for common prompts
 const cacheKey = `code:${hashPrompt(prompt)}`;
@@ -345,6 +390,7 @@ if (!code) {
 ```
 
 ### 4. Stream Responses
+
 ```typescript
 // Stream output for better perceived performance
 return new Response(
@@ -355,13 +401,14 @@ return new Response(
       });
       controller.close();
     },
-  })
+  }),
 );
 ```
 
 ## 🔗 Useful Commands Reference
 
 ### Deployment & Management
+
 ```bash
 # Deploy worker
 npx wrangler deploy
@@ -377,6 +424,7 @@ npx wrangler delete
 ```
 
 ### Secrets Management
+
 ```bash
 # Add secret
 npx wrangler secret put SECRET_NAME
@@ -389,6 +437,7 @@ npx wrangler secret delete SECRET_NAME
 ```
 
 ### Local Development
+
 ```bash
 # Start dev server
 npm run dev
@@ -401,6 +450,7 @@ npx wrangler dev --remote
 ```
 
 ### Monitoring & Logs
+
 ```bash
 # Tail logs in real-time
 npx wrangler tail
@@ -416,6 +466,7 @@ npx wrangler tail --status error
 ```
 
 ### Container Management
+
 ```bash
 # List containers
 npx wrangler containers list

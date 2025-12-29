@@ -20,11 +20,7 @@
       "Bash(kamal:*)",
       "Bash(git:*)"
     ],
-    "deny": [
-      "Bash(curl:*)",
-      "Bash(wget:*)",
-      "Bash(rm -rf:*)"
-    ],
+    "deny": ["Bash(curl:*)", "Bash(wget:*)", "Bash(rm -rf:*)"],
     "defaultMode": "allowEdits"
   },
   "env": {

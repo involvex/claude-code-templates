@@ -3,6 +3,7 @@
 Comprehensive guide to server management, network operations, capacity planning, and infrastructure operations for IT teams.
 
 ## Table of Contents
+
 - [Server Management](#server-management)
 - [Network Operations](#network-operations)
 - [Capacity Planning](#capacity-planning)
@@ -70,6 +71,7 @@ Phase 5: Decommissioning
 ### Operating System Management
 
 **Linux Server Setup (Ubuntu/RHEL)**:
+
 ```bash
 #!/bin/bash
 # Server baseline configuration script
@@ -176,6 +178,7 @@ echo "=== Baseline configuration complete ==="
 ```
 
 **Windows Server Setup (PowerShell)**:
+
 ```powershell
 # Windows Server Baseline Configuration
 
@@ -220,6 +223,7 @@ Write-Host "Baseline configuration complete. Please reboot."
 ### Server Inventory Management
 
 **CMDB (Configuration Management Database) Schema**:
+
 ```sql
 -- Servers table
 CREATE TABLE servers (
@@ -336,6 +340,7 @@ Management Zone (VLAN 99) - 10.0.99.0/24
 ### Network Configuration Examples
 
 **Switch VLAN Configuration (Cisco)**:
+
 ```cisco
 ! Create VLANs
 vlan 10
@@ -376,6 +381,7 @@ interface GigabitEthernet0/48
 ```
 
 **Firewall Rules (iptables)**:
+
 ```bash
 #!/bin/bash
 # Firewall configuration script
@@ -424,6 +430,7 @@ echo "Firewall rules configured."
 ```
 
 **Load Balancer Configuration (HAProxy)**:
+
 ```haproxy
 # /etc/haproxy/haproxy.cfg
 
@@ -494,6 +501,7 @@ listen stats
 ### Network Troubleshooting
 
 **Network Diagnostic Commands**:
+
 ```bash
 # Test connectivity
 ping -c 4 8.8.8.8                    # Basic connectivity
@@ -617,6 +625,7 @@ Step 5: Plan and Execute (As Needed)
 ### Capacity Planning Calculations
 
 **CPU Capacity**:
+
 ```python
 # CPU capacity planning calculator
 
@@ -685,6 +694,7 @@ print(f"Recommendation: {result['recommendation']}")
 ```
 
 **Storage Capacity**:
+
 ```python
 # Storage capacity planning
 
@@ -983,21 +993,21 @@ cp /backups/web-server.qcow2 /var/lib/libvirt/images/
 
 ### Cloud Provider Comparison
 
-| Feature | AWS | Azure | GCP |
-|---------|-----|-------|-----|
-| **Market Share** | ~32% | ~23% | ~10% |
-| **Compute** | EC2 | Virtual Machines | Compute Engine |
-| **Containers** | ECS, EKS | AKS | GKE |
-| **Serverless** | Lambda | Functions | Cloud Functions |
-| **Storage (Object)** | S3 | Blob Storage | Cloud Storage |
-| **Storage (Block)** | EBS | Managed Disks | Persistent Disks |
-| **Database (SQL)** | RDS | SQL Database | Cloud SQL |
-| **Database (NoSQL)** | DynamoDB | Cosmos DB | Firestore/Bigtable |
-| **Networking** | VPC | Virtual Network | VPC |
-| **Load Balancer** | ELB/ALB | Load Balancer | Cloud Load Balancing |
-| **DNS** | Route 53 | DNS | Cloud DNS |
-| **CDN** | CloudFront | CDN | Cloud CDN |
-| **Pricing** | $$$ | $$$ | $$$ |
+| Feature              | AWS        | Azure            | GCP                  |
+| -------------------- | ---------- | ---------------- | -------------------- |
+| **Market Share**     | ~32%       | ~23%             | ~10%                 |
+| **Compute**          | EC2        | Virtual Machines | Compute Engine       |
+| **Containers**       | ECS, EKS   | AKS              | GKE                  |
+| **Serverless**       | Lambda     | Functions        | Cloud Functions      |
+| **Storage (Object)** | S3         | Blob Storage     | Cloud Storage        |
+| **Storage (Block)**  | EBS        | Managed Disks    | Persistent Disks     |
+| **Database (SQL)**   | RDS        | SQL Database     | Cloud SQL            |
+| **Database (NoSQL)** | DynamoDB   | Cosmos DB        | Firestore/Bigtable   |
+| **Networking**       | VPC        | Virtual Network  | VPC                  |
+| **Load Balancer**    | ELB/ALB    | Load Balancer    | Cloud Load Balancing |
+| **DNS**              | Route 53   | DNS              | Cloud DNS            |
+| **CDN**              | CloudFront | CDN              | Cloud CDN            |
+| **Pricing**          | $$$        | $$$              | $$$                  |
 
 ### AWS EC2 Management
 
@@ -1266,6 +1276,7 @@ Phase 4: Validation (Post-deployment)
 ### Automated Patching Scripts
 
 **Linux (Ubuntu/Debian)**:
+
 ```bash
 #!/bin/bash
 # Automated patch management script
@@ -1333,6 +1344,7 @@ log "Patching complete"
 ```
 
 **Windows (PowerShell)**:
+
 ```powershell
 # Automated Windows patching script
 
@@ -1403,6 +1415,7 @@ Write-Log "Patching complete"
 ### System Performance Tuning
 
 **Linux Kernel Tuning**:
+
 ```bash
 # /etc/sysctl.conf - Kernel parameter tuning
 
@@ -1429,6 +1442,7 @@ sysctl -p
 ```
 
 **Application Tuning (Nginx Example)**:
+
 ```nginx
 # /etc/nginx/nginx.conf - Performance tuning
 

@@ -2,7 +2,7 @@
 
 Enhanced AI mode for complex tasks
 
-*Command originally created by IndyDevDan (YouTube: https://www.youtube.com/@indydevdan) / DislerH (GitHub: https://github.com/disler)*
+_Command originally created by IndyDevDan (YouTube: https://www.youtube.com/@indydevdan) / DislerH (GitHub: https://github.com/disler)_
 
 ## Instructions
 
@@ -33,6 +33,7 @@ Initialize a new Claude Code session with comprehensive project context:
    - Note key areas of the codebase
 
 This command helps establish context quickly when:
+
 - Starting work on a new project
 - Returning to a project after time away
 - Onboarding new team members

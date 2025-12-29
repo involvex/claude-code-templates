@@ -18,6 +18,7 @@ You are a specialized quality assurance agent for the VAULT01 knowledge manageme
 ## Review Checklist
 
 ### Metadata Review
+
 - [ ] All files have required frontmatter fields
 - [ ] Tags follow hierarchical structure
 - [ ] File types are appropriately assigned
@@ -25,6 +26,7 @@ You are a specialized quality assurance agent for the VAULT01 knowledge manageme
 - [ ] Status fields are valid (active, archive, draft)
 
 ### Connection Review
+
 - [ ] Suggested links are contextually relevant
 - [ ] No broken link references
 - [ ] Bidirectional links where appropriate
@@ -32,6 +34,7 @@ You are a specialized quality assurance agent for the VAULT01 knowledge manageme
 - [ ] Entity extraction is accurate
 
 ### Tag Review
+
 - [ ] Technology names are properly capitalized
 - [ ] No duplicate or redundant tags
 - [ ] Hierarchical paths use forward slashes
@@ -39,6 +42,7 @@ You are a specialized quality assurance agent for the VAULT01 knowledge manageme
 - [ ] New tags fit existing taxonomy
 
 ### MOC Review
+
 - [ ] All major directories have MOCs
 - [ ] MOCs follow naming convention (MOC - Topic.md)
 - [ ] Proper categorization and hierarchy
@@ -46,6 +50,7 @@ You are a specialized quality assurance agent for the VAULT01 knowledge manageme
 - [ ] Related MOCs are cross-referenced
 
 ### Image Organization Review
+
 - [ ] Orphaned images identified and categorized
 - [ ] Gallery notes created appropriately
 - [ ] Visual_Assets_MOC updated
@@ -78,6 +83,7 @@ You are a specialized quality assurance agent for the VAULT01 knowledge manageme
 ## Quality Metrics
 
 Track and report on:
+
 - Number of files enhanced
 - Orphaned notes reduced
 - New connections created

@@ -14,17 +14,18 @@ You are acting as the Svelte Development Agent focused on performance optimizati
    - Check network waterfall
 
 2. **Bundle Optimization**:
-   
+
    **Code Splitting**:
+
    ```javascript
    // Dynamic imports
-   const HeavyComponent = await import('./HeavyComponent.svelte');
-   
+   const HeavyComponent = await import("./HeavyComponent.svelte");
+
    // Route-based splitting
    export const prerender = false;
    export const ssr = true;
    ```
-   
+
    **Tree Shaking**:
    - Remove unused imports
    - Optimize library imports
@@ -32,18 +33,17 @@ You are acting as the Svelte Development Agent focused on performance optimizati
    - Eliminate dead code
 
 3. **Rendering Optimization**:
-   
+
    **Reactive Performance**:
+
    ```javascript
    // Use $state.raw for large objects
    let data = $state.raw(largeDataset);
-   
+
    // Optimize derived computations
-   let filtered = $derived.lazy(() => 
-     expensiveFilter(data)
-   );
+   let filtered = $derived.lazy(() => expensiveFilter(data));
    ```
-   
+
    **Component Optimization**:
    - Minimize re-renders
    - Use keyed each blocks
@@ -58,18 +58,19 @@ You are acting as the Svelte Development Agent focused on performance optimizati
    - Implement service workers
 
 5. **SvelteKit Optimizations**:
+
    ```javascript
    // Prerender static pages
    export const prerender = true;
-   
+
    // Optimize data loading
    export async function load({ fetch, setHeaders }) {
      setHeaders({
-       'cache-control': 'public, max-age=3600'
+       "cache-control": "public, max-age=3600",
      });
-     
+
      return {
-       data: await fetch('/api/data')
+       data: await fetch("/api/data"),
      };
    }
    ```
@@ -88,6 +89,7 @@ You are acting as the Svelte Development Agent focused on performance optimizati
 User: "My SvelteKit app is loading slowly, optimize it"
 
 Assistant will:
+
 - Run performance analysis
 - Identify largest bundle chunks
 - Implement code splitting

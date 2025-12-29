@@ -12,6 +12,7 @@ PyDESeq2 is a Python implementation of DESeq2 for differential expression analys
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Analyzing bulk RNA-seq count data for differential expression
 - Comparing gene expression between experimental conditions (e.g., treated vs control)
 - Performing multi-factor designs accounting for batch effects or covariates
@@ -60,6 +61,7 @@ print(f"Found {len(significant)} significant genes")
 ### Step 1: Data Preparation
 
 **Input requirements:**
+
 - **Count matrix:** Samples × genes DataFrame with non-negative integer read counts
 - **Metadata:** Samples × variables DataFrame with experimental factors
 
@@ -98,11 +100,13 @@ metadata = metadata.loc[samples_to_keep]
 The design formula specifies how gene expression is modeled.
 
 **Single-factor designs:**
+
 ```python
 design = "~condition"  # Simple two-group comparison
 ```
 
 **Multi-factor designs:**
+
 ```python
 design = "~batch + condition"  # Control for batch effects
 design = "~age + condition"     # Include continuous covariate
@@ -110,6 +114,7 @@ design = "~group + condition + group:condition"  # Interaction effects
 ```
 
 **Design formula guidelines:**
+
 - Use Wilkinson formula notation (R-style)
 - Put adjustment variables (e.g., batch) before the main variable of interest
 - Ensure variables exist as columns in the metadata DataFrame
@@ -135,6 +140,7 @@ dds.deseq2()
 ```
 
 **What `deseq2()` does:**
+
 1. Computes size factors (normalization)
 2. Fits genewise dispersions
 3. Fits dispersion trend curve
@@ -163,11 +169,13 @@ ds.summary()
 ```
 
 **Contrast specification:**
+
 - Format: `[variable, test_level, reference_level]`
 - Example: `["condition", "treated", "control"]` tests treated vs control
 - If `None`, uses the last coefficient in the design
 
 **Result DataFrame columns:**
+
 - `baseMean`: Mean normalized count across samples
 - `log2FoldChange`: Log2 fold change between conditions
 - `lfcSE`: Standard error of LFC
@@ -184,6 +192,7 @@ ds.lfc_shrink()  # Applies apeGLM shrinkage
 ```
 
 **When to use LFC shrinkage:**
+
 - For visualization (volcano plots, heatmaps)
 - For ranking genes by effect size
 - When prioritizing genes for follow-up experiments
@@ -302,6 +311,7 @@ python scripts/run_deseq2_analysis.py \
 ```
 
 **Script features:**
+
 - Automatic data loading and validation
 - Gene and sample filtering
 - Complete DESeq2 pipeline execution
@@ -438,6 +448,7 @@ plt.savefig("ma_plot.png", dpi=300)
 **Issue:** "Index mismatch between counts and metadata"
 
 **Solution:** Ensure sample names match exactly
+
 ```python
 print("Counts samples:", counts_df.index.tolist())
 print("Metadata samples:", metadata.index.tolist())
@@ -451,6 +462,7 @@ metadata = metadata.loc[common]
 **Issue:** "All genes have zero counts"
 
 **Solution:** Check if data needs transposition
+
 ```python
 print(f"Counts shape: {counts_df.shape}")
 # If genes > samples, transpose is needed
@@ -465,6 +477,7 @@ if counts_df.shape[1] < counts_df.shape[0]:
 **Cause:** Confounded variables (e.g., all treated samples in one batch)
 
 **Solution:** Remove confounded variable or add interaction term
+
 ```python
 # Check confounding
 print(pd.crosstab(metadata.condition, metadata.batch))
@@ -478,6 +491,7 @@ design = "~condition + batch + condition:batch"  # Model interaction
 ### No Significant Genes
 
 **Diagnostics:**
+
 ```python
 # Check dispersion distribution
 plt.hist(dds.varm["dispersions"], bins=50)
@@ -491,6 +505,7 @@ print(ds.results_df.nsmallest(20, "pvalue"))
 ```
 
 **Possible causes:**
+
 - Small effect sizes
 - High biological variability
 - Insufficient sample size
@@ -505,6 +520,7 @@ For comprehensive details beyond this workflow-oriented guide:
 - **Workflow Guide** (`references/workflow_guide.md`): In-depth guide covering complete analysis workflows, data loading patterns, multi-factor designs, troubleshooting, and best practices. Use when handling complex experimental designs or encountering issues.
 
 Load these references into context when users need:
+
 - Detailed API documentation: `Read references/api_reference.md`
 - Comprehensive workflow examples: `Read references/workflow_guide.md`
 - Troubleshooting guidance: `Read references/workflow_guide.md` (see Troubleshooting section)
@@ -534,6 +550,7 @@ uv pip install pydeseq2
 ```
 
 **System requirements:**
+
 - Python 3.10-3.11
 - pandas 1.4.3+
 - numpy 1.23.0+
@@ -542,6 +559,7 @@ uv pip install pydeseq2
 - anndata 0.8.0+
 
 **Optional for visualization:**
+
 - matplotlib
 - seaborn
 

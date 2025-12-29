@@ -10,6 +10,7 @@ description: "Query CZ CELLxGENE Census (61M+ cells). Filter by cell type/tissue
 The CZ CELLxGENE Census provides programmatic access to a comprehensive, versioned collection of standardized single-cell genomics data from CZ CELLxGENE Discover. This skill enables efficient querying and analysis of millions of cells across thousands of datasets.
 
 The Census includes:
+
 - **61+ million cells** from human and mouse
 - **Standardized metadata** (cell types, tissues, diseases, donors)
 - **Raw gene expression** matrices
@@ -19,6 +20,7 @@ The Census includes:
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Querying single-cell expression data by cell type, tissue, or disease
 - Exploring available single-cell datasets and metadata
 - Training machine learning models on single-cell data
@@ -30,11 +32,13 @@ This skill should be used when:
 ## Installation and Setup
 
 Install the Census API:
+
 ```bash
 uv pip install cellxgene-census
 ```
 
 For machine learning workflows, install additional dependencies:
+
 ```bash
 uv pip install cellxgene-census[experimental]
 ```
@@ -58,6 +62,7 @@ with cellxgene_census.open_soma(census_version="2023-07-25") as census:
 ```
 
 **Key points:**
+
 - Use context manager (`with` statement) for automatic cleanup
 - Specify `census_version` for reproducible analyses
 - Default opens latest "stable" release
@@ -67,6 +72,7 @@ with cellxgene_census.open_soma(census_version="2023-07-25") as census:
 Before querying expression data, explore available datasets and metadata.
 
 **Access summary information:**
+
 ```python
 # Get summary statistics
 summary = census["census_info"]["summary"].read().concat().to_pandas()
@@ -80,6 +86,7 @@ covid_datasets = datasets[datasets["disease"].str.contains("COVID", na=False)]
 ```
 
 **Query cell metadata to understand available data:**
+
 ```python
 # Get unique cell types in a tissue
 cell_metadata = cellxgene_census.get_obs(
@@ -121,6 +128,7 @@ adata = cellxgene_census.get_anndata(
 ```
 
 **Filter syntax:**
+
 - Use `obs_value_filter` for cell filtering
 - Use `var_value_filter` for gene filtering
 - Combine conditions with `and`, `or`
@@ -128,6 +136,7 @@ adata = cellxgene_census.get_anndata(
 - Select only needed columns with `obs_column_names`
 
 **Getting metadata separately:**
+
 ```python
 # Query cell metadata
 cell_metadata = cellxgene_census.get_obs(
@@ -173,6 +182,7 @@ for batch in iterator:
 ```
 
 **Computing incremental statistics:**
+
 ```python
 # Example: Calculate mean expression
 n_observations = 0
@@ -223,6 +233,7 @@ with cellxgene_census.open_soma() as census:
 ```
 
 **Train/test splitting:**
+
 ```python
 from cellxgene_census.experimental.ml import ExperimentDataset
 
@@ -301,19 +312,25 @@ adata = cellxgene_census.get_anndata(
 ## Key Concepts and Best Practices
 
 ### Always Filter for Primary Data
+
 Unless analyzing duplicates, always include `is_primary_data == True` in queries to avoid counting cells multiple times:
+
 ```python
 obs_value_filter="cell_type == 'B cell' and is_primary_data == True"
 ```
 
 ### Specify Census Version for Reproducibility
+
 Always specify the Census version in production analyses:
+
 ```python
 census = cellxgene_census.open_soma(census_version="2023-07-25")
 ```
 
 ### Estimate Query Size Before Loading
+
 For large queries, first check the number of cells to avoid memory issues:
+
 ```python
 # Get cell count
 metadata = cellxgene_census.get_obs(
@@ -328,7 +345,9 @@ print(f"Query will return {n_cells:,} cells")
 ```
 
 ### Use tissue_general for Broader Groupings
+
 The `tissue_general` field provides coarser categories than `tissue`, useful for cross-tissue analyses:
+
 ```python
 # Broader grouping
 obs_value_filter="tissue_general == 'immune system'"
@@ -338,13 +357,17 @@ obs_value_filter="tissue == 'peripheral blood mononuclear cell'"
 ```
 
 ### Select Only Needed Columns
+
 Minimize data transfer by specifying only required metadata columns:
+
 ```python
 obs_column_names=["cell_type", "tissue_general", "disease"]  # Not all columns
 ```
 
 ### Check Dataset Presence for Gene-Specific Queries
+
 When analyzing specific genes, verify which datasets measured them:
+
 ```python
 presence = cellxgene_census.get_presence_matrix(
     census,
@@ -354,7 +377,9 @@ presence = cellxgene_census.get_presence_matrix(
 ```
 
 ### Two-Step Workflow: Explore Then Query
+
 First explore metadata to understand available data, then query expression:
+
 ```python
 # Step 1: Explore what's available
 metadata = cellxgene_census.get_obs(
@@ -375,7 +400,9 @@ adata = cellxgene_census.get_anndata(
 ## Available Metadata Fields
 
 ### Cell Metadata (obs)
+
 Key fields for filtering:
+
 - `cell_type`, `cell_type_ontology_term_id`
 - `tissue`, `tissue_general`, `tissue_ontology_term_id`
 - `disease`, `disease_ontology_term_id`
@@ -386,6 +413,7 @@ Key fields for filtering:
 - `is_primary_data` (Boolean: True = unique cell)
 
 ### Gene Metadata (var)
+
 - `feature_id` (Ensembl gene ID, e.g., "ENSG00000161798")
 - `feature_name` (Gene symbol, e.g., "FOXP2")
 - `feature_length` (Gene length in base pairs)
@@ -395,7 +423,9 @@ Key fields for filtering:
 This skill includes detailed reference documentation:
 
 ### references/census_schema.md
+
 Comprehensive documentation of:
+
 - Census data structure and organization
 - All available metadata fields
 - Value filter syntax and operators
@@ -405,7 +435,9 @@ Comprehensive documentation of:
 **When to read:** When you need detailed schema information, full list of metadata fields, or complex filter syntax.
 
 ### references/common_patterns.md
+
 Examples and patterns for:
+
 - Exploratory queries (metadata only)
 - Small-to-medium queries (AnnData)
 - Large queries (out-of-core processing)
@@ -419,6 +451,7 @@ Examples and patterns for:
 ## Common Use Cases
 
 ### Use Case 1: Explore Cell Types in a Tissue
+
 ```python
 with cellxgene_census.open_soma() as census:
     cells = cellxgene_census.get_obs(
@@ -430,6 +463,7 @@ with cellxgene_census.open_soma() as census:
 ```
 
 ### Use Case 2: Query Marker Gene Expression
+
 ```python
 with cellxgene_census.open_soma() as census:
     adata = cellxgene_census.get_anndata(
@@ -441,6 +475,7 @@ with cellxgene_census.open_soma() as census:
 ```
 
 ### Use Case 3: Train Cell Type Classifier
+
 ```python
 from cellxgene_census.experimental.ml import experiment_dataloader
 
@@ -463,6 +498,7 @@ with cellxgene_census.open_soma() as census:
 ```
 
 ### Use Case 4: Cross-Tissue Analysis
+
 ```python
 with cellxgene_census.open_soma() as census:
     adata = cellxgene_census.get_anndata(
@@ -478,28 +514,33 @@ with cellxgene_census.open_soma() as census:
 ## Troubleshooting
 
 ### Query Returns Too Many Cells
+
 - Add more specific filters to reduce scope
 - Use `tissue` instead of `tissue_general` for finer granularity
 - Filter by specific `dataset_id` if known
 - Switch to out-of-core processing for large queries
 
 ### Memory Errors
+
 - Reduce query scope with more restrictive filters
 - Select fewer genes with `var_value_filter`
 - Use out-of-core processing with `axis_query()`
 - Process data in batches
 
 ### Duplicate Cells in Results
+
 - Always include `is_primary_data == True` in filters
 - Check if intentionally querying across multiple datasets
 
 ### Gene Not Found
+
 - Verify gene name spelling (case-sensitive)
 - Try Ensembl ID with `feature_id` instead of `feature_name`
 - Check dataset presence matrix to see if gene was measured
 - Some genes may have been filtered during Census construction
 
 ### Version Inconsistencies
+
 - Always specify `census_version` explicitly
 - Use same version across all analyses
 - Check release notes for version-specific changes

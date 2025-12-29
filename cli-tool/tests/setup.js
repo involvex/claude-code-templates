@@ -22,26 +22,26 @@ global.WebSocket = class MockWebSocket {
     this.OPEN = 1;
     this.CLOSING = 2;
     this.CLOSED = 3;
-    
+
     // Simulate async connection
     setTimeout(() => {
       if (this.onopen) this.onopen({});
     }, 0);
   }
-  
+
   send(data) {
     // Mock send
   }
-  
+
   close(code, reason) {
     this.readyState = 3; // CLOSED
     if (this.onclose) this.onclose({ code, reason });
   }
-  
+
   addEventListener(type, callback) {
     this[`on${type}`] = callback;
   }
-  
+
   removeEventListener(type, callback) {
     this[`on${type}`] = null;
   }
@@ -53,13 +53,13 @@ global.Notification = class MockNotification {
     this.title = title;
     this.options = options;
   }
-  
+
   static requestPermission() {
-    return Promise.resolve('granted');
+    return Promise.resolve("granted");
   }
-  
+
   static get permission() {
-    return 'granted';
+    return "granted";
   }
 };
 
@@ -89,8 +89,8 @@ global.document = {
     removeEventListener: jest.fn(),
     setAttribute: jest.fn(),
     style: {},
-    href: '',
-    download: ''
+    href: "",
+    download: "",
   })),
   getElementById: jest.fn(),
   querySelector: jest.fn(),
@@ -102,13 +102,13 @@ global.document = {
     removeChild: jest.fn(),
   },
   location: {
-    protocol: 'http:',
-    host: 'localhost:3333',
-    hostname: 'localhost',
-    port: '3333'
+    protocol: "http:",
+    host: "localhost:3333",
+    hostname: "localhost",
+    port: "3333",
   },
   hidden: false,
-  visibilityState: 'visible'
+  visibilityState: "visible",
 };
 
 // Mock window for frontend tests
@@ -119,7 +119,7 @@ global.window = {
   localStorage: localStorageMock,
   sessionStorage: sessionStorageMock,
   WebSocket: global.WebSocket,
-  Notification: global.Notification
+  Notification: global.Notification,
 };
 
 // Test utilities
@@ -128,29 +128,31 @@ global.testUtils = {
    * Create a mock conversation object
    */
   createMockConversation: (overrides = {}) => ({
-    id: 'conv_123',
-    filename: 'conversation.jsonl',
-    project: 'test-project',
-    status: 'active',
+    id: "conv_123",
+    filename: "conversation.jsonl",
+    project: "test-project",
+    status: "active",
     tokens: 1500,
     messages: 5,
     lastModified: new Date().toISOString(),
-    filePath: '/path/to/conversation.jsonl',
+    filePath: "/path/to/conversation.jsonl",
     fileSize: 2048,
-    ...overrides
+    ...overrides,
   }),
-  
+
   /**
    * Create mock conversation data
    */
   createMockConversationData: (count = 3) => {
     const conversations = [];
     for (let i = 0; i < count; i++) {
-      conversations.push(global.testUtils.createMockConversation({
-        id: `conv_${i + 1}`,
-        filename: `conversation_${i + 1}.jsonl`,
-        status: i === 0 ? 'active' : 'idle'
-      }));
+      conversations.push(
+        global.testUtils.createMockConversation({
+          id: `conv_${i + 1}`,
+          filename: `conversation_${i + 1}.jsonl`,
+          status: i === 0 ? "active" : "idle",
+        }),
+      );
     }
     return {
       conversations,
@@ -158,11 +160,11 @@ global.testUtils = {
         totalConversations: count,
         activeConversations: 1,
         totalTokens: count * 1500,
-        avgTokensPerConversation: 1500
-      }
+        avgTokensPerConversation: 1500,
+      },
     };
   },
-  
+
   /**
    * Create a mock WebSocket message
    */
@@ -170,14 +172,14 @@ global.testUtils = {
     type,
     data,
     timestamp: Date.now(),
-    server: 'Claude Code Analytics'
+    server: "Claude Code Analytics",
   }),
-  
+
   /**
    * Wait for async operations
    */
-  waitFor: (ms = 0) => new Promise(resolve => setTimeout(resolve, ms)),
-  
+  waitFor: (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms)),
+
   /**
    * Mock file system operations
    */
@@ -188,7 +190,7 @@ global.testUtils = {
     stat: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
-  }
+  },
 };
 
 // Increase timeout for integration tests

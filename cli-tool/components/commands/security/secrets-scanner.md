@@ -22,6 +22,7 @@ Perform comprehensive secrets detection and remediation across codebase:
 **Scan Scope**: Use $ARGUMENTS to focus on API keys, passwords, certificates, or complete scan
 
 **Detection Categories**:
+
 1. **API Keys & Tokens** - GitHub, AWS, Google Cloud, Stripe, third-party services
 2. **Database Credentials** - Connection strings, usernames, passwords
 3. **Certificates & Keys** - Private keys, SSH keys, SSL certificates
@@ -29,6 +30,7 @@ Perform comprehensive secrets detection and remediation across codebase:
 5. **Configuration Leaks** - Hardcoded URLs, internal endpoints, debug settings
 
 **Remediation Actions**:
+
 - Identify exposed secrets with file locations and line numbers
 - Provide secure alternatives (environment variables, secret management)
 - Generate .gitignore entries for sensitive files

@@ -15,6 +15,7 @@ Comprehensive literature search is essential for grounding hypotheses in existin
 ### Before You Search
 
 **Clarify search goals:**
+
 - What aspects of the phenomenon need evidence?
 - What types of studies are most relevant (reviews, primary research, methods)?
 - What time frame is relevant (recent only, or historical context)?
@@ -25,6 +26,7 @@ Comprehensive literature search is essential for grounding hypotheses in existin
 ### When to Use PubMed
 
 Use WebFetch with PubMed URLs for:
+
 - Biomedical and life sciences research
 - Clinical studies and medical literature
 - Molecular, cellular, and physiological mechanisms
@@ -38,11 +40,13 @@ Use WebFetch with PubMed URLs for:
 **Why:** Reviews synthesize literature, identify key concepts, and provide comprehensive reference lists.
 
 **Search strategy:**
+
 - Add "review" to search terms
 - Use PubMed filters: Article Type → Review, Systematic Review, Meta-Analysis
 - Look for recent reviews (last 2-5 years)
 
 **Example searches:**
+
 - `https://pubmed.ncbi.nlm.nih.gov/?term=wound+healing+diabetes+review`
 - `https://pubmed.ncbi.nlm.nih.gov/?term=gut+microbiome+cognition+systematic+review`
 
@@ -51,34 +55,42 @@ Use WebFetch with PubMed URLs for:
 **Why:** MeSH terms are standardized vocabulary that captures concept variations.
 
 **Strategy:**
+
 - PubMed auto-suggests MeSH terms
 - Helps find papers using different terminology for same concept
 - More comprehensive than keyword-only searches
 
 **Example:**
+
 - Instead of just "heart attack," use MeSH term "Myocardial Infarction"
 - Captures papers using "MI," "heart attack," "cardiac infarction," etc.
 
 #### 3. Boolean Operators and Advanced Syntax
 
 **AND:** Narrow search (all terms must be present)
+
 - `diabetes AND wound healing AND inflammation`
 
 **OR:** Broaden search (any term can be present)
+
 - `(Alzheimer OR dementia) AND gut microbiome`
 
 **NOT:** Exclude terms
+
 - `cancer treatment NOT surgery`
 
 **Quotes:** Exact phrases
+
 - `"oxidative stress"`
 
 **Wildcards:** Variations
+
 - `gene*` finds gene, genes, genetic, genetics
 
 #### 4. Filter by Publication Type and Date
 
 **Publication types:**
+
 - Clinical Trial
 - Meta-Analysis
 - Systematic Review
@@ -86,6 +98,7 @@ Use WebFetch with PubMed URLs for:
 - Randomized Controlled Trial
 
 **Date filters:**
+
 - Recent work (last 2-5 years): Cutting-edge findings
 - Historical work: Foundational studies
 - Specific time periods: Track development of understanding
@@ -93,6 +106,7 @@ Use WebFetch with PubMed URLs for:
 #### 5. Use "Similar Articles" and "Cited By"
 
 **Strategy:**
+
 - Find one highly relevant paper
 - Click "Similar articles" for related work
 - Use cited by tools to find newer work building on it
@@ -100,21 +114,25 @@ Use WebFetch with PubMed URLs for:
 ### PubMed Search Examples by Hypothesis Goal
 
 **Mechanistic understanding:**
+
 ```
 https://pubmed.ncbi.nlm.nih.gov/?term=(mechanism+OR+pathway)+AND+[phenomenon]+AND+(molecular+OR+cellular)
 ```
 
 **Causal relationships:**
+
 ```
 https://pubmed.ncbi.nlm.nih.gov/?term=[exposure]+AND+[outcome]+AND+(randomized+controlled+trial+OR+cohort+study)
 ```
 
 **Biomarkers and associations:**
+
 ```
 https://pubmed.ncbi.nlm.nih.gov/?term=[biomarker]+AND+[disease]+AND+(association+OR+correlation+OR+prediction)
 ```
 
 **Treatment effectiveness:**
+
 ```
 https://pubmed.ncbi.nlm.nih.gov/?term=[intervention]+AND+[condition]+AND+(efficacy+OR+effectiveness+OR+clinical+trial)
 ```
@@ -124,6 +142,7 @@ https://pubmed.ncbi.nlm.nih.gov/?term=[intervention]+AND+[condition]+AND+(effica
 ### When to Use Web Search
 
 Use WebSearch for:
+
 - Non-biomedical sciences (physics, chemistry, materials, earth sciences)
 - Interdisciplinary topics
 - Recent preprints and unpublished work
@@ -135,6 +154,7 @@ Use WebSearch for:
 #### 1. Use Domain-Specific Search Terms
 
 **Include field-specific terminology:**
+
 - Chemistry: "mechanism," "reaction pathway," "synthesis"
 - Physics: "model," "theory," "experimental validation"
 - Materials science: "properties," "characterization," "synthesis"
@@ -143,18 +163,21 @@ Use WebSearch for:
 #### 2. Target Academic Sources
 
 **Search operators:**
+
 - `site:arxiv.org` - Preprints (physics, CS, math, quantitative biology)
 - `site:biorxiv.org` - Biology preprints
 - `site:edu` - Academic institutions
 - `filetype:pdf` - Academic papers (often)
 
 **Example searches:**
+
 - `superconductivity high temperature mechanism site:arxiv.org`
 - `CRISPR off-target effects site:biorxiv.org`
 
 #### 3. Search for Authors and Labs
 
 **When you find a relevant paper:**
+
 - Search for the authors' other work
 - Find their lab website for unpublished work
 - Identify key research groups in the field
@@ -162,6 +185,7 @@ Use WebSearch for:
 #### 4. Use Google Scholar Approaches
 
 **Strategies:**
+
 - Use "Cited by" to find newer related work
 - Use "Related articles" to expand search
 - Set date ranges to focus on recent work
@@ -170,11 +194,13 @@ Use WebSearch for:
 #### 5. Combine General and Specific Terms
 
 **Structure:**
+
 - Specific phenomenon + general concept
 - "tomato plant growth" + "bacterial promotion"
 - "cognitive decline" + "gut microbiome"
 
 **Boolean logic:**
+
 - Use quotes for exact phrases: `"spike protein mutation"`
 - Use OR for alternatives: `(transmissibility OR transmission rate)`
 - Combine: `"spike protein" AND (transmissibility OR virulence) AND mutation`
@@ -215,11 +241,13 @@ Use WebSearch for:
 **Goal:** Understand how something works
 
 **Search components:**
+
 - Phenomenon + "mechanism"
 - Phenomenon + "pathway"
 - Phenomenon + specific molecules/pathways suspected
 
 **Examples:**
+
 - `diabetic wound healing mechanism inflammation`
 - `autophagy pathway cancer`
 
@@ -228,11 +256,13 @@ Use WebSearch for:
 **Goal:** Find what factors are related
 
 **Search components:**
+
 - Variable A + Variable B + "association"
 - Variable A + Variable B + "correlation"
 - Variable A + "predicts" + Variable B
 
 **Examples:**
+
 - `vitamin D cardiovascular disease association`
 - `gut microbiome diversity predicts cognitive function`
 
@@ -241,11 +271,13 @@ Use WebSearch for:
 **Goal:** Evidence for what works
 
 **Search components:**
+
 - Intervention + condition + "efficacy"
 - Intervention + condition + "randomized controlled trial"
 - Intervention + condition + "treatment outcome"
 
 **Examples:**
+
 - `probiotic intervention depression randomized controlled trial`
 - `exercise intervention cognitive decline efficacy`
 
@@ -254,11 +286,13 @@ Use WebSearch for:
 **Goal:** How to test hypothesis
 
 **Search components:**
+
 - Method name + application area
 - "How to measure" + phenomenon
 - Technique + validation
 
 **Examples:**
+
 - `CRISPR screen cancer drug resistance`
 - `measure protein-protein interaction methods`
 
@@ -267,10 +301,12 @@ Use WebSearch for:
 **Goal:** Find insights from related phenomena
 
 **Search components:**
+
 - Mechanism + different system
 - Similar phenomenon + different organism/condition
 
 **Examples:**
+
 - If studying plant-microbe symbiosis: search `nitrogen fixation rhizobia legumes`
 - If studying drug resistance: search `antibiotic resistance evolution mechanisms`
 
@@ -279,6 +315,7 @@ Use WebSearch for:
 ### Primary Research Quality Indicators
 
 **Strong quality signals:**
+
 - Published in reputable journals
 - Large sample sizes (for statistical power)
 - Pre-registered studies (reduces bias)
@@ -287,6 +324,7 @@ Use WebSearch for:
 - Transparent data and methods
 
 **Red flags:**
+
 - No peer review (use cautiously)
 - Conflicts of interest not disclosed
 - Methods not clearly described
@@ -296,12 +334,14 @@ Use WebSearch for:
 ### Review Quality Indicators
 
 **Systematic reviews (highest quality):**
+
 - Pre-defined search strategy
 - Explicit inclusion/exclusion criteria
 - Quality assessment of included studies
 - Quantitative synthesis (meta-analysis)
 
 **Narrative reviews (variable quality):**
+
 - Expert synthesis of field
 - May have selection bias
 - Useful for context and framing
@@ -312,17 +352,20 @@ Use WebSearch for:
 ### Allocate Search Time Appropriately
 
 **For straightforward hypotheses (30-60 min):**
+
 - 1-2 broad review articles
 - 3-5 targeted primary research papers
 - Quick web search for recent developments
 
 **For complex hypotheses (1-3 hours):**
+
 - Multiple reviews for different aspects
 - 10-15 primary research papers
 - Systematic search across databases
 - Citation mining from key papers
 
 **For contentious topics (3+ hours):**
+
 - Systematic review approach
 - Identify competing perspectives
 - Track historical development
@@ -331,12 +374,14 @@ Use WebSearch for:
 ### Diminishing Returns
 
 **Signs you've searched enough:**
+
 - Finding the same papers repeatedly
 - New searches yield mostly irrelevant papers
 - Sufficient evidence to support/contextualize hypotheses
 - Multiple independent lines of evidence converge
 
 **When to search more:**
+
 - Major gaps in understanding remain
 - Conflicting evidence needs resolution
 - Hypothesis seems inconsistent with literature
@@ -347,6 +392,7 @@ Use WebSearch for:
 ### Information to Capture
 
 **For each relevant paper:**
+
 - Full citation (authors, year, journal, title)
 - Key findings relevant to hypothesis
 - Study design and methods
@@ -356,12 +402,14 @@ Use WebSearch for:
 ### Organizing Findings
 
 **Group by:**
+
 - Supporting evidence for hypothesis A, B, C
 - Methodological approaches
 - Conflicting findings requiring explanation
 - Gaps in current knowledge
 
 **Synthesis notes:**
+
 - What is well-established?
 - What is controversial or uncertain?
 - What analogies exist in other systems?
@@ -372,12 +420,14 @@ Use WebSearch for:
 **For report structure:** Organize citations for two audiences:
 
 **Main Text (15-20 key citations):**
+
 - Most influential papers (highly cited, seminal studies)
 - Recent definitive evidence (last 2-3 years)
 - Key papers directly supporting each hypothesis (3-5 per hypothesis)
 - Major reviews synthesizing the field
 
 **Appendix A: Comprehensive Literature Review (40-60+ citations):**
+
 - **Historical context:** Foundational papers establishing field
 - **Current understanding:** Recent reviews and meta-analyses
 - **Hypothesis-specific evidence:** 8-15 papers per hypothesis covering:
@@ -391,6 +441,7 @@ Use WebSearch for:
 **Target citation density:** Aim for 50+ total references to provide comprehensive support for all claims and demonstrate thorough literature grounding.
 
 **Grouping strategy for Appendix A:**
+
 1. Background and context papers
 2. Current understanding and established mechanisms
 3. Evidence supporting each hypothesis (separate subsections)
@@ -433,6 +484,7 @@ Use WebSearch for:
 ### Iteration and Refinement
 
 **When initial search is insufficient:**
+
 - Broaden terms if too few results
 - Add specific mechanisms/pathways if too many results
 - Try alternative terminology
@@ -440,6 +492,7 @@ Use WebSearch for:
 - Consult review articles for better search terms
 
 **Red flags requiring more search:**
+
 - Only finding weak or indirect evidence
 - All evidence comes from single lab or source
 - Evidence seems inconsistent with basic principles
@@ -475,6 +528,7 @@ Use WebSearch for:
 ### Emerging Topics (Limited Literature)
 
 **When little published work exists:**
+
 - Search for analogous phenomena in related systems
 - Look for preprints (arXiv, bioRxiv)
 - Find conference abstracts and posters
@@ -484,6 +538,7 @@ Use WebSearch for:
 ### Controversial Topics (Conflicting Literature)
 
 **When evidence is contradictory:**
+
 - Systematically document both sides
 - Look for methodological differences explaining conflict
 - Check for temporal trends (has understanding shifted?)
@@ -493,6 +548,7 @@ Use WebSearch for:
 ### Interdisciplinary Topics
 
 **When spanning multiple fields:**
+
 - Search each field's primary databases
 - Use field-specific terminology for each domain
 - Look for bridging papers that cite across fields
@@ -504,12 +560,14 @@ Use WebSearch for:
 ### Using Literature to Inform Hypotheses
 
 **Direct applications:**
+
 - Established mechanisms to apply to new contexts
 - Known pathways relevant to phenomenon
 - Similar phenomena in related systems
 - Validated methods for testing
 
 **Indirect applications:**
+
 - Analogies from different systems
 - Theoretical frameworks to apply
 - Gaps suggesting novel mechanisms
@@ -518,17 +576,20 @@ Use WebSearch for:
 ### Balancing Literature Dependence
 
 **Too literature-dependent:**
+
 - Hypotheses merely restate known mechanisms
 - No novel insights or predictions
 - "Hypotheses" are actually established facts
 
 **Too literature-independent:**
+
 - Hypotheses ignore relevant evidence
 - Propose implausible mechanisms
 - Reinvent already-tested ideas
 - Inconsistent with established principles
 
 **Optimal balance:**
+
 - Grounded in existing evidence
 - Extend understanding in novel ways
 - Acknowledge both supporting and challenging evidence

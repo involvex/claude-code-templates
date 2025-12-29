@@ -30,18 +30,18 @@ When you encounter an error:
 
 ### Primary Categories
 
-| Category | Indicators | Common Causes |
-|----------|------------|---------------|
-| **Syntax** | Parse error, Unexpected token | Typos, missing brackets, invalid syntax |
-| **Type** | TypeError, type mismatch | Wrong data type, null/undefined access |
-| **Reference** | ReferenceError, NameError | Undefined variable, scope issues |
-| **Runtime** | RuntimeError, Exception | Logic errors, invalid operations |
-| **Network** | ECONNREFUSED, timeout, 4xx/5xx | Connection issues, wrong URL, server down |
-| **Permission** | EACCES, PermissionError | File/directory access, sudo needed |
-| **Dependency** | ModuleNotFound, Cannot find module | Missing package, version mismatch |
-| **Configuration** | Config error, env missing | Wrong settings, missing env vars |
-| **Database** | Connection refused, query error | DB down, wrong credentials, bad query |
-| **Memory** | OOM, heap out of memory | Memory leak, large data processing |
+| Category          | Indicators                         | Common Causes                             |
+| ----------------- | ---------------------------------- | ----------------------------------------- |
+| **Syntax**        | Parse error, Unexpected token      | Typos, missing brackets, invalid syntax   |
+| **Type**          | TypeError, type mismatch           | Wrong data type, null/undefined access    |
+| **Reference**     | ReferenceError, NameError          | Undefined variable, scope issues          |
+| **Runtime**       | RuntimeError, Exception            | Logic errors, invalid operations          |
+| **Network**       | ECONNREFUSED, timeout, 4xx/5xx     | Connection issues, wrong URL, server down |
+| **Permission**    | EACCES, PermissionError            | File/directory access, sudo needed        |
+| **Dependency**    | ModuleNotFound, Cannot find module | Missing package, version mismatch         |
+| **Configuration** | Config error, env missing          | Wrong settings, missing env vars          |
+| **Database**      | Connection refused, query error    | DB down, wrong credentials, bad query     |
+| **Memory**        | OOM, heap out of memory            | Memory leak, large data processing        |
 
 ### Secondary Attributes
 
@@ -54,6 +54,7 @@ When you encounter an error:
 ### Step 1: Classify
 
 Identify the error category by examining:
+
 - Error name/code (e.g., `ENOENT`, `TypeError`)
 - Error message keywords
 - Where it occurred (compile, runtime, test)
@@ -61,6 +62,7 @@ Identify the error category by examining:
 ### Step 2: Parse
 
 Extract key information:
+
 ```
 - Error code: [specific code if any]
 - File path: [where the error originated]
@@ -73,6 +75,7 @@ Extract key information:
 ### Step 3: Match Patterns
 
 Check against known error patterns:
+
 - See `patterns/` directory for language-specific patterns
 - Match error signatures to known solutions
 - Check replay history for previous solutions
@@ -80,6 +83,7 @@ Check against known error patterns:
 ### Step 4: Root Cause Analysis
 
 Apply the **5 Whys** technique:
+
 ```
 Error: Cannot read property 'name' of undefined
   Why 1? -> user object is undefined
@@ -94,6 +98,7 @@ Root Cause: Missing cache invalidation logic
 ### Step 5: Resolve
 
 Generate actionable solution:
+
 1. **Immediate fix** - Get it working now
 2. **Proper fix** - The right way to solve it
 3. **Prevention** - How to avoid in the future
@@ -203,6 +208,7 @@ metadata:
 ### Replay Lookup
 
 When encountering an error:
+
 1. Generate error signature from the error message
 2. Search `.claude/error-solutions/` for matching patterns
 3. If found, apply the recorded solution
@@ -221,6 +227,7 @@ signature = hash(
 ```
 
 Example transformations:
+
 - `Cannot find module 'express'` -> `Cannot find module '{module}'`
 - `TypeError: Cannot read property 'name' of undefined` -> `TypeError: Cannot read property '{prop}' of undefined`
 
@@ -229,6 +236,7 @@ Example transformations:
 Useful commands during debugging:
 
 ### Node.js
+
 ```bash
 # Verbose error output
 NODE_DEBUG=* node app.js
@@ -244,6 +252,7 @@ npm ls --depth=0
 ```
 
 ### Python
+
 ```bash
 # Debug mode
 python -m pdb script.py
@@ -254,6 +263,7 @@ pip list
 ```
 
 ### General
+
 ```bash
 # Check file permissions
 ls -la [file]
@@ -277,27 +287,35 @@ vm_stat  # macOS
 ## Common Debugging Patterns
 
 ### Pattern 1: Binary Search
+
 When the error location is unclear:
+
 1. Comment out half the code
 2. If error persists, it's in the remaining half
 3. Repeat until you find the exact line
 
 ### Pattern 2: Minimal Reproduction
+
 Create the smallest code that reproduces the error:
+
 1. Start with empty file
 2. Add code piece by piece
 3. Stop when error appears
 4. That's your minimal repro case
 
 ### Pattern 3: Rubber Duck Debugging
+
 Explain the problem out loud (or to Claude):
+
 1. What should happen?
 2. What actually happens?
 3. What changed recently?
 4. What assumptions am I making?
 
 ### Pattern 4: Git Bisect
+
 Find which commit introduced the bug:
+
 ```bash
 git bisect start
 git bisect bad  # current commit is bad

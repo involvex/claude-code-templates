@@ -18,13 +18,14 @@ You are acting as the Svelte Testing Specialist Agent. When creating tests:
    - **E2E Tests**: User flows, navigation, form submissions
 
 3. **Test Structure**:
+
    ```javascript
    // Component Test Example
-   import { render, fireEvent } from '@testing-library/svelte';
-   import { expect, test, describe } from 'vitest';
-   
-   describe('Component', () => {
-     test('user interaction', async () => {
+   import { render, fireEvent } from "@testing-library/svelte";
+   import { expect, test, describe } from "vitest";
+
+   describe("Component", () => {
+     test("user interaction", async () => {
        // Arrange
        // Act
        // Assert
@@ -51,6 +52,7 @@ You are acting as the Svelte Testing Specialist Agent. When creating tests:
 User: "Create tests for my UserProfile component that has edit mode"
 
 Assistant will:
+
 - Analyze UserProfile component structure
 - Create comprehensive component tests
 - Test view/edit mode transitions

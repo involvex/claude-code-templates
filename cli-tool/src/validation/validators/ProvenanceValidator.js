@@ -1,7 +1,7 @@
-const BaseValidator = require('../BaseValidator');
-const { execSync } = require('child_process');
-const fs = require('fs-extra');
-const path = require('path');
+const BaseValidator = require("../BaseValidator");
+const { execSync } = require("child_process");
+const fs = require("fs-extra");
+const path = require("path");
 
 /**
  * ProvenanceValidator - Validates component provenance and metadata
@@ -36,7 +36,9 @@ class ProvenanceValidator extends BaseValidator {
     const { requireGit = false, requireAuthor = false } = options;
 
     if (!content) {
-      this.addError('PROV_E001', 'Component content is empty or missing', { path: filePath });
+      this.addError("PROV_E001", "Component content is empty or missing", {
+        path: filePath,
+      });
       return this.getResults();
     }
 
@@ -52,10 +54,16 @@ class ProvenanceValidator extends BaseValidator {
       if (gitMetadata) {
         this.validateGitMetadata(gitMetadata, filePath);
       } else if (requireGit) {
-        this.addWarning('PROV_W001', 'No Git metadata found', { path: filePath });
+        this.addWarning("PROV_W001", "No Git metadata found", {
+          path: filePath,
+        });
       }
     } else {
-      this.addInfo('PROV_I001', 'File path does not exist (in-memory component)', { path: filePath });
+      this.addInfo(
+        "PROV_I001",
+        "File path does not exist (in-memory component)",
+        { path: filePath },
+      );
     }
 
     // 4. Validate repository URL if provided
@@ -71,10 +79,10 @@ class ProvenanceValidator extends BaseValidator {
     // Add metadata to results
     const results = this.getResults();
     results.metadata = {
-      author: metadata.author || 'unknown',
-      repository: metadata.repository || 'unknown',
-      version: metadata.version || 'unversioned',
-      extractedAt: new Date().toISOString()
+      author: metadata.author || "unknown",
+      repository: metadata.repository || "unknown",
+      version: metadata.version || "unversioned",
+      extractedAt: new Date().toISOString(),
     };
 
     return results;
@@ -100,19 +108,19 @@ class ProvenanceValidator extends BaseValidator {
     // Extract author
     const authorMatch = frontmatter.match(/^author:\s*(.+)$/m);
     if (authorMatch) {
-      metadata.author = authorMatch[1].trim().replace(/['"]/g, '');
+      metadata.author = authorMatch[1].trim().replace(/['"]/g, "");
     }
 
     // Extract repository
     const repoMatch = frontmatter.match(/^repository:\s*(.+)$/m);
     if (repoMatch) {
-      metadata.repository = repoMatch[1].trim().replace(/['"]/g, '');
+      metadata.repository = repoMatch[1].trim().replace(/['"]/g, "");
     }
 
     // Extract version
     const versionMatch = frontmatter.match(/^version:\s*(.+)$/m);
     if (versionMatch) {
-      metadata.version = versionMatch[1].trim().replace(/['"]/g, '');
+      metadata.version = versionMatch[1].trim().replace(/['"]/g, "");
     }
 
     return metadata;
@@ -124,21 +132,31 @@ class ProvenanceValidator extends BaseValidator {
   validateAuthor(metadata, filePath, required) {
     if (!metadata.author) {
       if (required) {
-        this.addError('PROV_E002', 'Author information is required but missing', { path: filePath });
+        this.addError(
+          "PROV_E002",
+          "Author information is required but missing",
+          { path: filePath },
+        );
       } else {
         // Author is optional for components - metadata is stored in marketplace.json
-        this.addInfo('PROV_I007', 'No author in component (metadata in marketplace.json)', {
-          path: filePath
-        });
+        this.addInfo(
+          "PROV_I007",
+          "No author in component (metadata in marketplace.json)",
+          {
+            path: filePath,
+          },
+        );
       }
     } else {
-      this.addInfo('PROV_I002', `Author: ${metadata.author}`, { path: filePath });
+      this.addInfo("PROV_I002", `Author: ${metadata.author}`, {
+        path: filePath,
+      });
 
       // Validate author format (basic check)
       if (metadata.author.length < 2) {
-        this.addWarning('PROV_W003', 'Author name seems too short', {
+        this.addWarning("PROV_W003", "Author name seems too short", {
           path: filePath,
-          author: metadata.author
+          author: metadata.author,
         });
       }
     }
@@ -152,34 +170,34 @@ class ProvenanceValidator extends BaseValidator {
   async extractGitMetadata(filePath) {
     try {
       // Get last commit SHA for this file
-      const commitSha = execSync(
-        `git log -1 --format=%H -- "${filePath}"`,
-        { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
-      ).trim();
+      const commitSha = execSync(`git log -1 --format=%H -- "${filePath}"`, {
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "ignore"],
+      }).trim();
 
       if (!commitSha) {
         return null;
       }
 
       // Get commit author
-      const author = execSync(
-        `git log -1 --format=%an -- "${filePath}"`,
-        { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
-      ).trim();
+      const author = execSync(`git log -1 --format=%an -- "${filePath}"`, {
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "ignore"],
+      }).trim();
 
       // Get commit date
-      const date = execSync(
-        `git log -1 --format=%ai -- "${filePath}"`,
-        { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
-      ).trim();
+      const date = execSync(`git log -1 --format=%ai -- "${filePath}"`, {
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "ignore"],
+      }).trim();
 
       // Get remote URL
-      let remoteUrl = '';
+      let remoteUrl = "";
       try {
-        remoteUrl = execSync(
-          'git config --get remote.origin.url',
-          { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
-        ).trim();
+        remoteUrl = execSync("git config --get remote.origin.url", {
+          encoding: "utf8",
+          stdio: ["pipe", "pipe", "ignore"],
+        }).trim();
       } catch (e) {
         // No remote configured
       }
@@ -188,7 +206,7 @@ class ProvenanceValidator extends BaseValidator {
         commitSha,
         author,
         date,
-        remoteUrl
+        remoteUrl,
       };
     } catch (error) {
       // Not a git repository or file not tracked
@@ -202,26 +220,30 @@ class ProvenanceValidator extends BaseValidator {
   validateGitMetadata(gitMetadata, filePath) {
     const { commitSha, author, date, remoteUrl } = gitMetadata;
 
-    this.addInfo('PROV_I003', `Git commit: ${commitSha.substring(0, 7)}`, {
+    this.addInfo("PROV_I003", `Git commit: ${commitSha.substring(0, 7)}`, {
       path: filePath,
       fullSha: commitSha,
       author,
-      date
+      date,
     });
 
     if (remoteUrl) {
-      this.addInfo('PROV_I004', `Repository: ${remoteUrl}`, {
+      this.addInfo("PROV_I004", `Repository: ${remoteUrl}`, {
         path: filePath,
-        remoteUrl
+        remoteUrl,
       });
 
       // Validate that remote URL is a recognized platform
       if (!this.isRecognizedGitPlatform(remoteUrl)) {
-        this.addWarning('PROV_W004', 'Git remote is not a recognized platform', {
-          path: filePath,
-          remoteUrl,
-          recognized: ['github.com', 'gitlab.com', 'bitbucket.org']
-        });
+        this.addWarning(
+          "PROV_W004",
+          "Git remote is not a recognized platform",
+          {
+            path: filePath,
+            remoteUrl,
+            recognized: ["github.com", "gitlab.com", "bitbucket.org"],
+          },
+        );
       }
     }
   }
@@ -232,30 +254,42 @@ class ProvenanceValidator extends BaseValidator {
   validateRepository(repository, filePath) {
     // Check if it's a valid GitHub/GitLab/Bitbucket URL
     const gitPlatforms = [
-      'github.com',
-      'gitlab.com',
-      'bitbucket.org',
-      'codeberg.org'
+      "github.com",
+      "gitlab.com",
+      "bitbucket.org",
+      "codeberg.org",
     ];
 
-    const isValid = gitPlatforms.some(platform => repository.includes(platform));
+    const isValid = gitPlatforms.some((platform) =>
+      repository.includes(platform),
+    );
 
     if (!isValid) {
-      this.addWarning('PROV_W005', 'Repository URL is not from a recognized platform', {
-        path: filePath,
-        repository,
-        recognized: gitPlatforms
-      });
+      this.addWarning(
+        "PROV_W005",
+        "Repository URL is not from a recognized platform",
+        {
+          path: filePath,
+          repository,
+          recognized: gitPlatforms,
+        },
+      );
     } else {
-      this.addInfo('PROV_I005', `Repository: ${repository}`, { path: filePath });
+      this.addInfo("PROV_I005", `Repository: ${repository}`, {
+        path: filePath,
+      });
     }
 
     // Check for HTTPS
-    if (repository.startsWith('http://')) {
-      this.addWarning('PROV_W006', 'Repository URL uses HTTP (HTTPS recommended)', {
-        path: filePath,
-        repository
-      });
+    if (repository.startsWith("http://")) {
+      this.addWarning(
+        "PROV_W006",
+        "Repository URL uses HTTP (HTTPS recommended)",
+        {
+          path: filePath,
+          repository,
+        },
+      );
     }
   }
 
@@ -267,13 +301,17 @@ class ProvenanceValidator extends BaseValidator {
     const semverPattern = /^\d+\.\d+\.\d+(-[\w.]+)?$/;
 
     if (!semverPattern.test(version)) {
-      this.addWarning('PROV_W007', 'Version does not follow semantic versioning', {
-        path: filePath,
-        version,
-        expected: 'X.Y.Z or X.Y.Z-tag'
-      });
+      this.addWarning(
+        "PROV_W007",
+        "Version does not follow semantic versioning",
+        {
+          path: filePath,
+          version,
+          expected: "X.Y.Z or X.Y.Z-tag",
+        },
+      );
     } else {
-      this.addInfo('PROV_I006', `Version: ${version}`, { path: filePath });
+      this.addInfo("PROV_I006", `Version: ${version}`, { path: filePath });
     }
   }
 
@@ -282,13 +320,13 @@ class ProvenanceValidator extends BaseValidator {
    */
   isRecognizedGitPlatform(remoteUrl) {
     const platforms = [
-      'github.com',
-      'gitlab.com',
-      'bitbucket.org',
-      'codeberg.org'
+      "github.com",
+      "gitlab.com",
+      "bitbucket.org",
+      "codeberg.org",
     ];
 
-    return platforms.some(platform => remoteUrl.includes(platform));
+    return platforms.some((platform) => remoteUrl.includes(platform));
   }
 
   /**
@@ -306,15 +344,15 @@ class ProvenanceValidator extends BaseValidator {
     }
 
     return {
-      traceable: result.valid && result.metadata.author !== 'unknown',
+      traceable: result.valid && result.metadata.author !== "unknown",
       metadata: result.metadata,
       git: gitMetadata,
       issues: {
         errors: result.errors,
-        warnings: result.warnings
+        warnings: result.warnings,
       },
       trustScore: this.calculateTrustScore(result, gitMetadata),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -328,17 +366,17 @@ class ProvenanceValidator extends BaseValidator {
     let score = 50; // Base score
 
     // Has author: +15
-    if (result.metadata.author !== 'unknown') {
+    if (result.metadata.author !== "unknown") {
       score += 15;
     }
 
     // Has repository: +15
-    if (result.metadata.repository !== 'unknown') {
+    if (result.metadata.repository !== "unknown") {
       score += 15;
     }
 
     // Has version: +10
-    if (result.metadata.version !== 'unversioned') {
+    if (result.metadata.version !== "unversioned") {
       score += 10;
     }
 
@@ -365,7 +403,7 @@ class ProvenanceValidator extends BaseValidator {
       traceable: 0,
       untraceable: 0,
       averageTrustScore: 0,
-      components: []
+      components: [],
     };
 
     let totalTrustScore = 0;
@@ -378,7 +416,7 @@ class ProvenanceValidator extends BaseValidator {
         traceable: report.traceable,
         trustScore: report.trustScore,
         author: report.metadata.author,
-        repository: report.metadata.repository
+        repository: report.metadata.repository,
       });
 
       if (report.traceable) {

@@ -10,12 +10,12 @@ Only apply these snippets if the user explicitly requests them or reports a spec
 
 **Solution**: Replace aggressive language with normal phrasing.
 
-| Before | After |
-|--------|-------|
-| `CRITICAL: You MUST use this tool when...` | `Use this tool when...` |
+| Before                                      | After                                |
+| ------------------------------------------- | ------------------------------------ |
+| `CRITICAL: You MUST use this tool when...`  | `Use this tool when...`              |
 | `ALWAYS call the search function before...` | `Call the search function before...` |
-| `You are REQUIRED to...` | `You should...` |
-| `NEVER skip this step` | `Don't skip this step` |
+| `You are REQUIRED to...`                    | `You should...`                      |
+| `NEVER skip this step`                      | `Don't skip this step`               |
 
 ## 2. Over-Engineering Prevention
 
@@ -77,6 +77,7 @@ Interpret creatively and make unexpected choices that feel genuinely designed fo
 **Problem**: When extended thinking is not enabled (the default), Opus 4.5 is particularly sensitive to the word "think" and its variants.
 
 Extended thinking is not enabled by default. It is only enabled if the API request contains a `thinking` parameter:
+
 ```json
 "thinking": {
     "type": "enabled",
@@ -88,13 +89,13 @@ Extended thinking is not enabled by default. It is only enabled if the API reque
 
 **Solution**: Replace "think" with alternative words.
 
-| Before | After |
-|--------|-------|
-| `think about` | `consider` |
-| `think through` | `evaluate` |
-| `I think` | `I believe` |
-| `think carefully` | `consider carefully` |
-| `thinking` | `reasoning` / `considering` |
+| Before            | After                       |
+| ----------------- | --------------------------- |
+| `think about`     | `consider`                  |
+| `think through`   | `evaluate`                  |
+| `I think`         | `I believe`                 |
+| `think carefully` | `consider carefully`        |
+| `thinking`        | `reasoning` / `considering` |
 
 ## Usage Guidelines
 

@@ -10,6 +10,7 @@ This skill provides real-time research information lookup using Perplexity's Son
    - Add credits to your account
 
 2. **Configure Environment:**
+
    ```bash
    export OPENROUTER_API_KEY="your_api_key_here"
    ```
@@ -55,16 +56,19 @@ The research lookup tool is automatically available in Claude Code when you:
 ## Query Examples
 
 ### Academic Research
+
 - "Recent systematic reviews on AI in medical diagnosis 2024"
 - "Meta-analysis of randomized controlled trials for depression treatment"
 - "Current state of quantum computing error correction research"
 
 ### Technical Methods
+
 - "Standard protocols for immunohistochemistry in tissue samples"
 - "Best practices for machine learning model validation"
 - "Statistical methods for analyzing longitudinal data"
 
 ### Statistical Data
+
 - "Global renewable energy adoption statistics 2024"
 - "Prevalence of diabetes in different populations"
 - "Market size for autonomous vehicles industry"
@@ -72,6 +76,7 @@ The research lookup tool is automatically available in Claude Code when you:
 ## Response Format
 
 Each research result includes:
+
 - **Summary:** Brief overview of key findings
 - **Key Studies:** 3-5 most relevant recent papers
 - **Citations:** Complete bibliographic information
@@ -91,18 +96,22 @@ This skill enhances the scientific writing process by providing:
 ## Troubleshooting
 
 **"API key not found"**
+
 - Ensure `OPENROUTER_API_KEY` environment variable is set
 - Check that you have credits in your OpenRouter account
 
 **"Model not available"**
+
 - Verify your API key has access to Perplexity models
 - Check OpenRouter status page for service issues
 
 **"Rate limit exceeded"**
+
 - Add delays between requests using `--delay` option
 - Check your OpenRouter account limits
 
 **"No relevant results"**
+
 - Try more specific or broader queries
 - Include time frames (e.g., "2023-2024")
 - Use academic keywords and technical terms

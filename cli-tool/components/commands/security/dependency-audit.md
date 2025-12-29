@@ -22,6 +22,7 @@ Perform comprehensive dependency security and compliance audit:
 **Audit Scope**: Use $ARGUMENTS to focus on security, licenses, updates, or complete audit
 
 **Analysis Areas**:
+
 1. **Vulnerability Scanning** - Known CVEs, security advisories, exploit availability
 2. **Version Analysis** - Outdated packages, breaking changes, update recommendations
 3. **License Compliance** - License compatibility, restrictions, legal obligations

@@ -14,12 +14,14 @@
 ## GitOps Principles
 
 ### Core Concepts
+
 1. **Git as Single Source of Truth**: All configuration in Git
 2. **Declarative**: Desired state defined, not imperative steps
 3. **Automated**: Continuous reconciliation of desired vs actual state
 4. **Auditable**: All changes tracked in Git history
 
 ### GitOps Workflow
+
 ```
 Developer ──▶ Git Push ──▶ GitOps Controller ──▶ Kubernetes Cluster
                              (ArgoCD/Flux)
@@ -31,6 +33,7 @@ Developer ──▶ Git Push ──▶ GitOps Controller ──▶ Kubernetes Cl
 ## ArgoCD Setup
 
 ### Installation
+
 ```bash
 # Install ArgoCD
 kubectl create namespace argocd
@@ -44,6 +47,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ```
 
 ### ArgoCD Application
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -66,8 +70,8 @@ spec:
 
   syncPolicy:
     automated:
-      prune: true      # Delete resources not in Git
-      selfHeal: true   # Sync if cluster state drifts
+      prune: true # Delete resources not in Git
+      selfHeal: true # Sync if cluster state drifts
       allowEmpty: false
 
     syncOptions:
@@ -83,13 +87,14 @@ spec:
         maxDuration: 3m
 
   ignoreDifferences:
-  - group: apps
-    kind: Deployment
-    jsonPointers:
-    - /spec/replicas  # Ignore HPA-managed replicas
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas # Ignore HPA-managed replicas
 ```
 
 ### ArgoCD ApplicationSet (Multi-Environment)
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -98,27 +103,27 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - list:
-      elements:
-      - env: dev
-        cluster: https://kubernetes.default.svc
-      - env: staging
-        cluster: https://kubernetes.default.svc
-      - env: production
-        cluster: https://prod-cluster-api.example.com
+    - list:
+        elements:
+          - env: dev
+            cluster: https://kubernetes.default.svc
+          - env: staging
+            cluster: https://kubernetes.default.svc
+          - env: production
+            cluster: https://prod-cluster-api.example.com
 
   template:
     metadata:
-      name: 'myapp-{{env}}'
+      name: "myapp-{{env}}"
     spec:
       project: default
       source:
         repoURL: https://github.com/myorg/myapp-gitops.git
         targetRevision: main
-        path: 'kubernetes/overlays/{{env}}'
+        path: "kubernetes/overlays/{{env}}"
       destination:
-        server: '{{cluster}}'
-        namespace: '{{env}}'
+        server: "{{cluster}}"
+        namespace: "{{env}}"
       syncPolicy:
         automated:
           prune: true
@@ -128,6 +133,7 @@ spec:
 ## Flux CD Setup
 
 ### Installation
+
 ```bash
 # Install Flux CLI
 brew install fluxcd/tap/flux
@@ -145,6 +151,7 @@ flux bootstrap github \
 ```
 
 ### Flux GitRepository
+
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
@@ -161,6 +168,7 @@ spec:
 ```
 
 ### Flux Kustomization
+
 ```yaml
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -185,6 +193,7 @@ spec:
 ## Progressive Delivery
 
 ### Canary Deployment with Flagger
+
 ```yaml
 apiVersion: flagger.app/v1beta1
 kind: Canary
@@ -208,32 +217,33 @@ spec:
     stepWeight: 10
 
     metrics:
-    - name: request-success-rate
-      thresholdRange:
-        min: 99
-      interval: 1m
+      - name: request-success-rate
+        thresholdRange:
+          min: 99
+        interval: 1m
 
-    - name: request-duration
-      thresholdRange:
-        max: 500
-      interval: 1m
+      - name: request-duration
+        thresholdRange:
+          max: 500
+        interval: 1m
 
     webhooks:
-    - name: load-test
-      url: http://flagger-loadtester/
-      timeout: 5s
-      metadata:
-        cmd: "hey -z 1m -q 10 -c 2 http://myapp-canary.production/"
+      - name: load-test
+        url: http://flagger-loadtester/
+        timeout: 5s
+        metadata:
+          cmd: "hey -z 1m -q 10 -c 2 http://myapp-canary.production/"
 
-    - name: smoke-test
-      url: http://flagger-loadtester/
-      timeout: 5s
-      metadata:
-        type: smoke
-        cmd: "curl -s http://myapp-canary.production/healthz | grep ok"
+      - name: smoke-test
+        url: http://flagger-loadtester/
+        timeout: 5s
+        metadata:
+          type: smoke
+          cmd: "curl -s http://myapp-canary.production/healthz | grep ok"
 ```
 
 ### Blue/Green Deployment
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -243,10 +253,10 @@ metadata:
 spec:
   selector:
     app: myapp
-    version: blue  # Switch to 'green' for deployment
+    version: blue # Switch to 'green' for deployment
   ports:
-  - port: 80
-    targetPort: 8080
+    - port: 80
+      targetPort: 8080
 
 ---
 # Blue Deployment
@@ -268,8 +278,8 @@ spec:
         version: blue
     spec:
       containers:
-      - name: myapp
-        image: myapp:v1.0.0
+        - name: myapp
+          image: myapp:v1.0.0
 
 ---
 # Green Deployment
@@ -291,16 +301,18 @@ spec:
         version: green
     spec:
       containers:
-      - name: myapp
-        image: myapp:v2.0.0
+        - name: myapp
+          image: myapp:v2.0.0
 ```
 
 ## CI/CD Pipeline Examples
 
 ### GitHub Actions - Complete Pipeline
+
 See [templates.md](templates.md) for full GitHub Actions pipeline
 
 ### GitLab CI Pipeline
+
 ```yaml
 variables:
   DOCKER_DRIVER: overlay2
@@ -429,6 +441,7 @@ deploy:production:
 ```
 
 ### Jenkins Pipeline (Jenkinsfile)
+
 ```groovy
 pipeline {
     agent any
@@ -541,6 +554,7 @@ pipeline {
 ## Infrastructure Testing
 
 ### Terratest (Go)
+
 ```go
 package test
 
@@ -571,6 +585,7 @@ func TestTerraformVPCModule(t *testing.T) {
 ```
 
 ### Checkov (Infrastructure Security)
+
 ```bash
 # Scan Terraform
 checkov -d terraform/ --framework terraform
@@ -586,6 +601,7 @@ checkov -d terraform/ --skip-check CKV_AWS_23
 ```
 
 ### Kitchen-Terraform
+
 ```ruby
 # kitchen.yml
 driver:
@@ -615,23 +631,26 @@ suites:
 ## Deployment Strategies
 
 ### Rolling Update (Default in Kubernetes)
+
 ```yaml
 spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1        # Max pods above desired during update
-      maxUnavailable: 0  # Zero-downtime deployment
+      maxSurge: 1 # Max pods above desired during update
+      maxUnavailable: 0 # Zero-downtime deployment
 ```
 
 ### Recreate (Downtime Acceptable)
+
 ```yaml
 spec:
   strategy:
-    type: Recreate  # Kill all pods, then create new ones
+    type: Recreate # Kill all pods, then create new ones
 ```
 
 ### Canary (Gradual Rollout)
+
 - Deploy new version alongside old
 - Route small % of traffic to new version
 - Monitor metrics
@@ -639,6 +658,7 @@ spec:
 - Rollback if issues detected
 
 ### Blue/Green (Instant Switch)
+
 - Deploy new version (green) alongside old (blue)
 - Test green environment
 - Switch traffic from blue to green
@@ -647,6 +667,7 @@ spec:
 ## Rollback Procedures
 
 ### Kubernetes Rollback
+
 ```bash
 # View rollout history
 kubectl rollout history deployment/myapp -n production
@@ -662,6 +683,7 @@ kubectl rollout status deployment/myapp -n production
 ```
 
 ### ArgoCD Rollback
+
 ```bash
 # Rollback application
 argocd app rollback myapp-production

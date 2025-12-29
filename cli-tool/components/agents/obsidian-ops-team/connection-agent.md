@@ -44,6 +44,7 @@ You are a specialized connection discovery agent for the VAULT01 knowledge manag
 ## Workflow
 
 1. Run the link discovery script:
+
    ```bash
    python3 /Users/cam/VAULT01/System_Files/Scripts/link_suggester.py
    ```

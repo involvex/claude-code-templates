@@ -22,6 +22,7 @@ Execute intelligent issue analysis with automated triage and priority assignment
 **Triage Scope**: Use $ARGUMENTS to focus on GitHub issues, Linear tasks, priority analysis, or team assignment optimization
 
 **Triage Framework**:
+
 1. **Issue Analysis** - Extract issue metadata, analyze content patterns, assess severity indicators, evaluate impact scope
 2. **Category Classification** - Identify issue type (bug, feature, documentation), assess complexity level, determine urgency factors
 3. **Priority Assessment** - Calculate priority score using severity, impact, effort, and business value metrics

@@ -14,6 +14,7 @@ This skill provides access to all Perplexity models through OpenRouter, requirin
 ## When to Use This Skill
 
 Use this skill when:
+
 - Searching for current information or recent developments (2024 and beyond)
 - Finding latest scientific publications and research
 - Getting real-time answers grounded in web sources
@@ -24,6 +25,7 @@ Use this skill when:
 - Comparing current approaches or technologies
 
 **Do not use** for:
+
 - Simple calculations or logic problems (use directly)
 - Tasks requiring code execution (use standard tools)
 - Questions well within the model's training data (unless verification needed)
@@ -38,6 +40,7 @@ Use this skill when:
    - Add credits to account (minimum $5 recommended)
 
 2. **Configure environment**:
+
    ```bash
    # Set API key
    export OPENROUTER_API_KEY='sk-or-v1-your-key-here'
@@ -47,6 +50,7 @@ Use this skill when:
    ```
 
 3. **Install dependencies**:
+
    ```bash
    uv pip install litellm
    ```
@@ -61,21 +65,25 @@ See `references/openrouter_setup.md` for detailed setup instructions, troublesho
 ### Basic Usage
 
 **Simple search:**
+
 ```bash
 python scripts/perplexity_search.py "What are the latest developments in CRISPR gene editing?"
 ```
 
 **Save results:**
+
 ```bash
 python scripts/perplexity_search.py "Recent CAR-T therapy clinical trials" --output results.json
 ```
 
 **Use specific model:**
+
 ```bash
 python scripts/perplexity_search.py "Compare mRNA and viral vector vaccines" --model sonar-pro-search
 ```
 
 **Verbose output:**
+
 ```bash
 python scripts/perplexity_search.py "Quantum computing for drug discovery" --verbose
 ```
@@ -91,6 +99,7 @@ Access models via `--model` parameter:
 - **sonar-reasoning**: Basic reasoning capabilities
 
 **Model selection guide:**
+
 - Default queries → `sonar-pro`
 - Complex multi-step analysis → `sonar-pro-search`
 - Explicit reasoning needed → `sonar-reasoning-pro`
@@ -104,11 +113,13 @@ See `references/model_comparison.md` for detailed comparison, use cases, pricing
 ### Be Specific and Detailed
 
 **Good examples:**
+
 - "What are the latest clinical trial results for CAR-T cell therapy in treating B-cell lymphoma published in 2024?"
 - "Compare the efficacy and safety profiles of mRNA vaccines versus viral vector vaccines for COVID-19"
 - "Explain AlphaFold3 improvements over AlphaFold2 with specific accuracy metrics from 2023-2024 research"
 
 **Bad examples:**
+
 - "Tell me about cancer treatment" (too broad)
 - "CRISPR" (too vague)
 - "vaccines" (lacks specificity)
@@ -116,6 +127,7 @@ See `references/model_comparison.md` for detailed comparison, use cases, pricing
 ### Include Time Constraints
 
 Perplexity searches real-time web data:
+
 - "What papers were published in Nature Medicine in 2024 about long COVID?"
 - "What are the latest developments (past 6 months) in large language model efficiency?"
 - "What was announced at NeurIPS 2023 regarding AI safety?"
@@ -123,6 +135,7 @@ Perplexity searches real-time web data:
 ### Specify Domain and Sources
 
 For high-quality results, mention source preferences:
+
 - "According to peer-reviewed publications in high-impact journals..."
 - "Based on FDA-approved treatments..."
 - "From clinical trial registries like clinicaltrials.gov..."
@@ -130,6 +143,7 @@ For high-quality results, mention source preferences:
 ### Structure Complex Queries
 
 Break complex questions into clear components:
+
 1. **Topic**: Main subject
 2. **Scope**: Specific aspect of interest
 3. **Context**: Time frame, domain, constraints
@@ -241,12 +255,14 @@ done
 Perplexity models have different pricing tiers:
 
 **Approximate costs per query:**
+
 - Sonar: $0.001-0.002 (most cost-effective)
 - Sonar Pro: $0.002-0.005 (recommended default)
 - Sonar Reasoning Pro: $0.005-0.010
 - Sonar Pro Search: $0.020-0.050+ (most comprehensive)
 
 **Cost optimization strategies:**
+
 1. Use `sonar` for simple fact lookups
 2. Default to `sonar-pro` for most queries
 3. Reserve `sonar-pro-search` for complex analysis
@@ -261,6 +277,7 @@ Perplexity models have different pricing tiers:
 **Error**: "OpenRouter API key not configured"
 
 **Solution**:
+
 ```bash
 export OPENROUTER_API_KEY='sk-or-v1-your-key-here'
 # Or run setup script
@@ -272,6 +289,7 @@ python scripts/setup_env.py --api-key sk-or-v1-your-key-here
 **Error**: "LiteLLM not installed"
 
 **Solution**:
+
 ```bash
 uv pip install litellm
 ```
@@ -281,6 +299,7 @@ uv pip install litellm
 **Error**: "Rate limit exceeded"
 
 **Solutions**:
+
 - Wait a few seconds before retrying
 - Increase rate limit at https://openrouter.ai/keys
 - Add delays between requests in batch processing
@@ -290,6 +309,7 @@ uv pip install litellm
 **Error**: "Insufficient credits"
 
 **Solution**:
+
 - Add credits at https://openrouter.ai/account
 - Enable auto-recharge to prevent interruptions
 
@@ -302,6 +322,7 @@ This skill complements other scientific skills:
 ### Literature Review
 
 Use with `literature-review` skill:
+
 1. Use Perplexity to find recent papers and preprints
 2. Supplement PubMed searches with real-time web results
 3. Verify citations and find related work
@@ -310,6 +331,7 @@ Use with `literature-review` skill:
 ### Scientific Writing
 
 Use with `scientific-writing` skill:
+
 1. Find recent references for introduction/discussion
 2. Verify current state of the art
 3. Check latest terminology and conventions
@@ -318,6 +340,7 @@ Use with `scientific-writing` skill:
 ### Hypothesis Generation
 
 Use with `hypothesis-generation` skill:
+
 1. Search for latest research findings
 2. Identify current gaps in knowledge
 3. Find recent methodological advances
@@ -326,6 +349,7 @@ Use with `hypothesis-generation` skill:
 ### Critical Thinking
 
 Use with `scientific-critical-thinking` skill:
+
 1. Find evidence for and against hypotheses
 2. Locate methodological critiques
 3. Identify controversies in the field
@@ -369,20 +393,24 @@ Use with `scientific-critical-thinking` skill:
 ### Bundled Resources
 
 **Scripts:**
+
 - `scripts/perplexity_search.py`: Main search script with CLI interface
 - `scripts/setup_env.py`: Environment setup and validation helper
 
 **References:**
+
 - `references/search_strategies.md`: Comprehensive query design guide
 - `references/model_comparison.md`: Detailed model comparison and selection guide
 - `references/openrouter_setup.md`: Complete setup, troubleshooting, and security guide
 
 **Assets:**
+
 - `assets/.env.example`: Example environment file template
 
 ### External Resources
 
 **OpenRouter:**
+
 - Dashboard: https://openrouter.ai/account
 - API Keys: https://openrouter.ai/keys
 - Perplexity Models: https://openrouter.ai/perplexity
@@ -390,11 +418,13 @@ Use with `scientific-critical-thinking` skill:
 - Documentation: https://openrouter.ai/docs
 
 **LiteLLM:**
+
 - Documentation: https://docs.litellm.ai/
 - OpenRouter Provider: https://docs.litellm.ai/docs/providers/openrouter
 - GitHub: https://github.com/BerriAI/litellm
 
 **Perplexity:**
+
 - Official Docs: https://docs.perplexity.ai/
 
 ## Dependencies
@@ -419,9 +449,11 @@ uv pip install jq
 ### Environment Variables
 
 Required:
+
 - `OPENROUTER_API_KEY`: Your OpenRouter API key
 
 Optional:
+
 - `DEFAULT_MODEL`: Default model to use (default: sonar-pro)
 - `DEFAULT_MAX_TOKENS`: Default max tokens (default: 4000)
 - `DEFAULT_TEMPERATURE`: Default temperature (default: 0.2)

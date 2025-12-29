@@ -18,14 +18,16 @@ Create a new epic following the Product as Code specification with guided workfl
 
 Create a new Product as Code epic:
 
-**Arguments**: 
+**Arguments**:
+
 - Epic name (required if not using --name flag)
 - --name <name>: Epic name
-- --description <desc>: Epic description  
+- --description <desc>: Epic description
 - --owner <owner>: Epic owner
 - --scope <scope>: Scope definition
 
 **Epic Creation Process**:
+
 1. Validate PAC configuration exists (suggest `/project:pac-configure` if missing)
 2. Generate epic ID from name (format: epic-[kebab-case-name])
 3. Create epic YAML file following PAC v0.1.0 specification in `.pac/epics/[epic-id].yaml`

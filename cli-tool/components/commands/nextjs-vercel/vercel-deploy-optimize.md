@@ -19,6 +19,7 @@ description: Optimize and deploy Next.js application to Vercel with performance 
 ## Configuration Analysis
 
 ### Project Configuration
+
 - Next.js config: @next.config.js
 - Vercel config: @vercel.json (if exists)
 - Package.json: @package.json
@@ -26,7 +27,9 @@ description: Optimize and deploy Next.js application to Vercel with performance 
 - Environment example: @.env.example (if exists)
 
 ### Vercel Configuration
+
 Analyze and optimize `vercel.json` configuration:
+
 ```json
 {
   "framework": "nextjs",
@@ -78,7 +81,9 @@ Analyze and optimize `vercel.json` configuration:
 ## Pre-Deployment Optimization
 
 ### 1. Build Optimization
+
 Run comprehensive build analysis:
+
 - **Bundle Analysis**: Generate bundle analyzer report
 - **Performance Check**: Analyze build output for optimization opportunities
 - **Type Checking**: Ensure TypeScript compilation is error-free
@@ -94,11 +99,12 @@ npm run type-check  # If TypeScript project
 ### 2. Performance Optimization
 
 #### Image Optimization Check
+
 ```javascript
 // Verify Next.js image configuration
 const nextConfig = {
   images: {
-    formats: ['image/webp', 'image/avif'],
+    formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000,
@@ -109,7 +115,9 @@ const nextConfig = {
 ```
 
 #### Bundle Analysis
+
 Generate and analyze webpack bundle:
+
 ```bash
 ANALYZE=true npm run build
 # or
@@ -119,49 +127,53 @@ npm run build -- --analyze
 ### 3. Environment Configuration
 
 #### Environment Variables Setup
+
 Ensure proper environment variable configuration:
+
 - **Production**: Verify all required environment variables are set in Vercel dashboard
 - **Preview**: Configure preview environment variables
 - **Development**: Local development environment setup
 
 ### 4. Security Headers Optimization
+
 ```javascript
 // Enhanced security headers in next.config.js
 const securityHeaders = [
   {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on'
+    key: "X-DNS-Prefetch-Control",
+    value: "on",
   },
   {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=63072000; includeSubDomains; preload'
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
   },
   {
-    key: 'X-XSS-Protection',
-    value: '1; mode=block'
+    key: "X-XSS-Protection",
+    value: "1; mode=block",
   },
   {
-    key: 'X-Frame-Options',
-    value: 'SAMEORIGIN'
+    key: "X-Frame-Options",
+    value: "SAMEORIGIN",
   },
   {
-    key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=()'
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=()",
   },
   {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff'
+    key: "X-Content-Type-Options",
+    value: "nosniff",
   },
   {
-    key: 'Referrer-Policy',
-    value: 'origin-when-cross-origin'
-  }
+    key: "Referrer-Policy",
+    value: "origin-when-cross-origin",
+  },
 ];
 ```
 
 ## Deployment Process
 
 ### 1. Pre-deployment Checklist
+
 - [ ] Build passes without errors
 - [ ] All tests pass (if available)
 - [ ] Environment variables configured
@@ -172,6 +184,7 @@ const securityHeaders = [
 ### 2. Deployment Commands
 
 #### Production Deployment
+
 ```bash
 # Deploy to production
 vercel --prod
@@ -184,6 +197,7 @@ vercel --prod --cwd ./path/to/project
 ```
 
 #### Preview Deployment
+
 ```bash
 # Deploy preview from current branch
 vercel
@@ -193,6 +207,7 @@ vercel --alias preview-branch-name.vercel.app
 ```
 
 #### Deployment with Analytics
+
 ```bash
 # Deploy with build analytics
 ANALYZE=true vercel --prod
@@ -206,6 +221,7 @@ vercel --prod --meta performance=true
 ### 1. Performance Monitoring Setup
 
 #### Core Web Vitals Tracking
+
 ```typescript
 // Add to _app.tsx or layout.tsx
 import { Analytics } from '@vercel/analytics/react';
@@ -223,18 +239,19 @@ export default function App({ Component, pageProps }) {
 ```
 
 #### Custom Performance Tracking
+
 ```typescript
 // lib/analytics.ts
 export function reportWebVitals({ id, name, label, value }) {
-  fetch('/api/analytics', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  fetch("/api/analytics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       metric: name,
       value: value,
       label: label,
-      timestamp: Date.now()
-    })
+      timestamp: Date.now(),
+    }),
   });
 }
 ```
@@ -242,18 +259,21 @@ export function reportWebVitals({ id, name, label, value }) {
 ### 2. Deployment Validation
 
 #### Health Checks
+
 - **Application Health**: Verify application loads correctly
 - **API Endpoints**: Test critical API routes
 - **Database Connectivity**: Verify database connections (if applicable)
 - **External Services**: Test third-party integrations
 
 #### Performance Validation
+
 - **Core Web Vitals**: Check LCP, FID, CLS scores
 - **Lighthouse Score**: Run Lighthouse audit
 - **Load Testing**: Verify application performance under load
 - **Error Monitoring**: Confirm error tracking is working
 
 ### 3. Rollback Strategy
+
 ```bash
 # List recent deployments
 vercel list
@@ -268,18 +288,21 @@ vercel alias set <previous-deployment-url> <production-domain>
 ## Environment-Specific Optimizations
 
 ### Production Environment
+
 - **Caching Strategy**: Implement aggressive caching with ISR
 - **CDN Configuration**: Optimize asset delivery
 - **Database Optimization**: Connection pooling and query optimization
 - **Monitoring**: Comprehensive error tracking and performance monitoring
 
 ### Preview Environment
+
 - **Feature Testing**: Safe environment for feature validation
 - **Stakeholder Review**: Shareable preview URLs
 - **Integration Testing**: End-to-end testing environment
 - **Performance Benchmarking**: Compare against production metrics
 
 ### Development Environment
+
 - **Hot Reloading**: Fast development feedback loop
 - **Debug Tools**: Enhanced debugging capabilities
 - **Test Data**: Isolated test database and services
@@ -288,19 +311,23 @@ vercel alias set <previous-deployment-url> <production-domain>
 ## Monitoring and Maintenance
 
 ### 1. Deployment Metrics
+
 Track key deployment metrics:
+
 - **Build Time**: Monitor build performance
 - **Deploy Time**: Track deployment duration
 - **Success Rate**: Monitor deployment success/failure rates
 - **Rollback Frequency**: Track rollback events
 
 ### 2. Performance Monitoring
+
 - **Real User Monitoring**: Track actual user performance
 - **Synthetic Monitoring**: Automated performance testing
 - **Error Tracking**: Monitor and alert on errors
 - **Uptime Monitoring**: Track application availability
 
 ### 3. Cost Optimization
+
 - **Function Duration**: Optimize serverless function execution time
 - **Bandwidth Usage**: Monitor and optimize data transfer
 - **Build Minutes**: Optimize build processes
@@ -309,18 +336,21 @@ Track key deployment metrics:
 ## Troubleshooting Common Issues
 
 ### Build Failures
+
 - Check build logs in Vercel dashboard
 - Verify all dependencies are in package.json
 - Ensure environment variables are properly set
 - Check for TypeScript errors (if applicable)
 
 ### Performance Issues
+
 - Analyze bundle size and optimize imports
 - Implement proper code splitting
 - Optimize images and static assets
 - Use Next.js performance optimization features
 
 ### Deployment Issues
+
 - Verify Git repository connection
 - Check branch protection rules
 - Ensure proper access permissions
@@ -329,6 +359,7 @@ Track key deployment metrics:
 ## Success Criteria
 
 Deployment is successful when:
+
 - [ ] Application builds without errors
 - [ ] All tests pass (if available)
 - [ ] Core Web Vitals scores are optimal (LCP < 2.5s, FID < 100ms, CLS < 0.1)

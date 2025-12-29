@@ -12,6 +12,7 @@ Medchem is a Python library for molecular filtering and prioritization in drug d
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Applying drug-likeness rules (Lipinski, Veber, etc.) to compound libraries
 - Filtering molecules by structural alerts or PAINS patterns
 - Prioritizing compounds for lead optimization
@@ -32,6 +33,7 @@ uv pip install medchem
 Apply established drug-likeness rules to molecules using the `medchem.rules` module.
 
 **Available Rules:**
+
 - Rule of Five (Lipinski)
 - Rule of Oprea
 - Rule of CNS
@@ -167,6 +169,7 @@ alert_results = mc.functional.common_alerts_filter(
 Identify specific chemical groups and functional groups using `medchem.groups`.
 
 **Available Groups:**
+
 - Hinge binders
 - Phosphate binders
 - Michael acceptors
@@ -193,6 +196,7 @@ matches = group.get_matches(mol)
 Access curated collections of chemical structures through `medchem.catalogs`.
 
 **Available Catalogs:**
+
 - Functional groups
 - Protecting groups
 - Common reagents
@@ -216,6 +220,7 @@ matches = catalog.get_matches(mol)
 Calculate complexity metrics that approximate synthetic accessibility using `medchem.complexity`.
 
 **Common Metrics:**
+
 - Bertz complexity
 - Whitlock complexity
 - Barone complexity
@@ -238,6 +243,7 @@ results = complex_filter(mols=mol_list)
 Apply custom property-based constraints using `medchem.constraints`.
 
 **Example Constraints:**
+
 - Molecular weight ranges
 - LogP bounds
 - TPSA limits
@@ -265,6 +271,7 @@ results = constraints(mols=mol_list, n_jobs=-1)
 Use a specialized query language for complex filtering criteria.
 
 **Query Examples:**
+
 ```
 # Molecules passing Ro5 AND not having common alerts
 "rule_of_five AND NOT common_alerts"
@@ -381,15 +388,19 @@ mol_with_groups = [mol for mol, match in zip(mol_list, matches) if match]
 ## Resources
 
 ### references/api_guide.md
+
 Comprehensive API reference covering all medchem modules with detailed function signatures, parameters, and return types.
 
 ### references/rules_catalog.md
+
 Complete catalog of available rules, filters, and alerts with descriptions, thresholds, and literature references.
 
 ### scripts/filter_molecules.py
+
 Production-ready script for batch filtering workflows. Supports multiple input formats (CSV, SDF, SMILES), configurable filter combinations, and detailed reporting.
 
 **Usage:**
+
 ```bash
 python scripts/filter_molecules.py input.csv --rules rule_of_five,rule_of_cns --alerts nibr --output filtered.csv
 ```

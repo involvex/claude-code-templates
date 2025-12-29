@@ -40,6 +40,7 @@ Train unsupervised embeddings of genomic regions using word2vec-style learning.
 **Use for:** Dimensionality reduction of BED files, region similarity analysis, feature vectors for downstream ML.
 
 **Workflow:**
+
 1. Tokenize BED files using a universe reference
 2. Train Region2Vec model on tokens
 3. Generate embeddings for regions
@@ -53,6 +54,7 @@ Train shared embeddings for region sets and metadata labels using StarSpace.
 **Use for:** Metadata-aware searches, cross-modal queries (region→label or label→region), joint analysis of genomic content and experimental conditions.
 
 **Workflow:**
+
 1. Preprocess regions and metadata
 2. Train BEDspace model
 3. Compute distances
@@ -67,6 +69,7 @@ Train Region2Vec models on single-cell ATAC-seq data for cell-level embeddings.
 **Use for:** scATAC-seq clustering, cell-type annotation, dimensionality reduction of single cells, integration with scanpy workflows.
 
 **Workflow:**
+
 1. Prepare AnnData with peak coordinates
 2. Pre-tokenize cells
 3. Train scEmbed model
@@ -82,11 +85,13 @@ Build reference peak sets (universes) from BED file collections using multiple s
 **Use for:** Creating tokenization references, standardizing regions across datasets, defining consensus features with statistical rigor.
 
 **Workflow:**
+
 1. Combine BED files
 2. Generate coverage tracks
 3. Build universe using CC, CCF, ML, or HMM method
 
 **Methods:**
+
 - **CC (Coverage Cutoff)**: Simple threshold-based
 - **CCF (Coverage Cutoff Flexible)**: Confidence intervals for boundaries
 - **ML (Maximum Likelihood)**: Probabilistic modeling of positions
@@ -99,6 +104,7 @@ Build reference peak sets (universes) from BED file collections using multiple s
 Additional tools for caching, randomization, evaluation, and search.
 
 **Available utilities:**
+
 - **BBClient**: BED file caching for repeated access
 - **BEDshift**: Randomization preserving genomic context
 - **Evaluation**: Metrics for embedding quality (silhouette, Davies-Bouldin, etc.)
@@ -219,30 +225,35 @@ geniml bedshift --input peaks.bed --genome hg38 --preserve-chrom --iterations 10
 ## When to Use Which Tool
 
 **Use Region2Vec when:**
+
 - Working with bulk genomic data (ChIP-seq, ATAC-seq, etc.)
 - Need unsupervised embeddings without metadata
 - Comparing region sets across experiments
 - Building features for downstream supervised learning
 
 **Use BEDspace when:**
+
 - Metadata labels available (cell types, tissues, conditions)
 - Need to query regions by metadata or vice versa
 - Want joint embedding space for regions and labels
 - Building searchable genomic databases
 
 **Use scEmbed when:**
+
 - Analyzing single-cell ATAC-seq data
 - Clustering cells by chromatin accessibility
 - Annotating cell types from scATAC-seq
 - Integration with scanpy is desired
 
 **Use Universe Building when:**
+
 - Need reference peak sets for tokenization
 - Combining multiple experiments into consensus
 - Want statistically rigorous region definitions
 - Building standard references for a project
 
 **Use Utilities when:**
+
 - Need to cache remote BED files (BBClient)
 - Generating null models for statistics (BEDshift)
 - Evaluating embedding quality (Evaluation)
@@ -291,21 +302,25 @@ Geniml is part of the BEDbase ecosystem:
 ## Troubleshooting
 
 **"Tokenization coverage too low":**
+
 - Check universe quality and completeness
 - Adjust p-value threshold (try 1e-6 instead of 1e-9)
 - Ensure universe matches genome assembly
 
 **"Training not converging":**
+
 - Adjust learning rate (try 0.01-0.05 range)
 - Increase training epochs
 - Check data quality and preprocessing
 
 **"Out of memory errors":**
+
 - Reduce batch size for scEmbed
 - Process data in chunks
 - Use pre-tokenization for single-cell data
 
 **"StarSpace not found" (BEDspace):**
+
 - Install StarSpace separately: https://github.com/facebookresearch/StarSpace
 - Set `--path-to-starspace` parameter correctly
 

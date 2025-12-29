@@ -26,6 +26,7 @@ Create a Git Flow release branch following these steps:
 Validate the version format and ensure it's newer than current:
 
 **Version Format Requirements:**
+
 - Must follow semantic versioning: `vMAJOR.MINOR.PATCH`
 - Examples: `v1.0.0`, `v2.1.3`, `v0.5.0-beta.1`
 - Pattern: `v` + `NUMBER.NUMBER.NUMBER` + optional `-prerelease.NUMBER`
@@ -33,11 +34,13 @@ Validate the version format and ensure it's newer than current:
 **Version Increment Logic:**
 
 Analyze commits since last tag to suggest version:
+
 - **MAJOR** (v2.0.0): Breaking changes (contains "BREAKING CHANGE:" in commits)
 - **MINOR** (v1.3.0): New features (contains "feat:" commits)
 - **PATCH** (v1.2.1): Bug fixes only (only "fix:" and "chore:" commits)
 
 **Current Version Analysis:**
+
 ```
 Latest tag: [from git describe]
 Suggested version: [based on commit analysis]
@@ -45,6 +48,7 @@ Provided version: $ARGUMENTS
 ```
 
 If version is invalid or not newer, show:
+
 ```
 ❌ Invalid version format: "$ARGUMENTS"
 
@@ -100,30 +104,39 @@ Generate changelog from commits since last tag, grouped by type:
 ## [$ARGUMENTS] - [Current Date]
 
 ### ✨ Features
+
 - [List all feat: commits with PR links]
 
 ### 🐛 Bug Fixes
+
 - [List all fix: commits with PR links]
 
 ### 📝 Documentation
+
 - [List all docs: commits]
 
 ### ♻️ Refactoring
+
 - [List all refactor: commits]
 
 ### ⚡️ Performance
+
 - [List all perf: commits]
 
 ### 🔒️ Security
+
 - [List all security-related commits]
 
 ### 💥 Breaking Changes
+
 - [List all commits with BREAKING CHANGE]
 
 ### 🧪 Tests
+
 - [List all test: commits]
 
 ### 🔧 Chore
+
 - [List all chore: commits]
 ```
 
@@ -217,6 +230,7 @@ Target: main (after review)
 ### 6. Error Handling
 
 **No Version Provided:**
+
 ```
 ❌ Version is required
 
@@ -231,6 +245,7 @@ Suggested version: v1.2.0 (based on commits)
 ```
 
 **Invalid Version Format:**
+
 ```
 ❌ Invalid version format: "1.0"
 
@@ -246,6 +261,7 @@ Examples:
 ```
 
 **Version Not Incremented:**
+
 ```
 ❌ Version $ARGUMENTS is not newer than current v1.2.0
 
@@ -263,6 +279,7 @@ Recommended: v1.3.0
 ```
 
 **Uncommitted Changes:**
+
 ```
 ⚠️  Uncommitted changes detected:
 M  src/feature.js
@@ -277,6 +294,7 @@ Please clean your working directory first.
 ```
 
 **Develop Behind Remote:**
+
 ```
 ⚠️  Local develop is behind origin/develop by 3 commits
 
@@ -334,16 +352,19 @@ EOF
 ## Semantic Versioning Guide
 
 **MAJOR version (X.0.0)**: Breaking changes
+
 - API changes that break backward compatibility
 - Removal of deprecated features
 - Major architectural changes
 
 **MINOR version (1.X.0)**: New features
+
 - New functionality added
 - Backward compatible changes
 - New APIs or methods
 
 **PATCH version (1.0.X)**: Bug fixes
+
 - Bug fixes only
 - No new features
 - No breaking changes
@@ -364,6 +385,7 @@ EOF
 ## Best Practices
 
 **DO:**
+
 - ✅ Analyze commits to determine correct version bump
 - ✅ Generate comprehensive CHANGELOG
 - ✅ Test thoroughly on release branch
@@ -372,6 +394,7 @@ EOF
 - ✅ Create PR for team review
 
 **DON'T:**
+
 - ❌ Add new features to release branch
 - ❌ Skip testing phase
 - ❌ Let release branch live for days

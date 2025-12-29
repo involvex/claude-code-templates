@@ -5,6 +5,7 @@ A comprehensive Claude skill designed to help marketing teams plan, execute, and
 ## Overview
 
 This skill provides frameworks, templates, and best practices for:
+
 - **Campaign Planning & Strategy** - Structured approaches to campaign development
 - **Content Creation** - Copywriting guidelines and templates for all channels
 - **Social Media Management** - Platform-specific strategies and content calendars
@@ -34,38 +35,50 @@ marketing-skill/
 ## Quick Start
 
 ### 1. For Campaign Planning
+
 Start with [SKILL.md](SKILL.md) → [reference/campaigns.md](reference/campaigns.md)
+
 - Use the campaign development template for structured planning
 - Choose a campaign type (product launch, lead generation, retention, awareness)
 - Define objectives, audience, strategy, and success metrics
 
 ### 2. For Content Creation
+
 [reference/content.md](reference/content.md) → [reference/templates.md](reference/templates.md)
+
 - Review copywriting fundamentals and templates
 - Select the right template for your channel/format
 - Customize with your specific messaging and offers
 
 ### 3. For Social Media
+
 [reference/social_media.md](reference/social_media.md)
+
 - Find platform-specific best practices (LinkedIn, Twitter, Facebook, Instagram, YouTube)
 - Use the campaign framework for social planning
 - Reference metrics and targets by platform
 
 ### 4. For Email Marketing
+
 [reference/email.md](reference/email.md) → [reference/templates.md](reference/templates.md)
+
 - Choose email type (welcome, newsletter, promotional, nurture, re-engagement)
 - Use ready-to-use email templates
 - Apply segmentation and A/B testing best practices
 
 ### 5. For Analytics & Measurement
+
 [reference/analytics.md](reference/analytics.md)
+
 - Map your campaign to the marketing funnel
 - Define KPIs and success metrics
 - Set up proper tracking with UTM parameters
 - Create measurement dashboards
 
 ### 6. For Brand Consistency
+
 [reference/brand.md](reference/brand.md)
+
 - Review voice and tone guidelines
 - Check visual branding standards
 - Ensure consistency across campaigns
@@ -73,6 +86,7 @@ Start with [SKILL.md](SKILL.md) → [reference/campaigns.md](reference/campaigns
 ## Using the Utility Script
 
 ### Generate UTM Parameters
+
 ```bash
 python scripts/marketing_utils.py generate_utm \
   --source "email" \
@@ -81,6 +95,7 @@ python scripts/marketing_utils.py generate_utm \
 ```
 
 ### Build Tracking URLs
+
 ```bash
 python scripts/marketing_utils.py build_url \
   --url "https://example.com/pricing" \
@@ -90,12 +105,14 @@ python scripts/marketing_utils.py build_url \
 ```
 
 ### Validate Tracking URLs
+
 ```bash
 python scripts/marketing_utils.py validate \
   --url "https://example.com/pricing?utm_source=email&utm_medium=newsletter&utm_campaign=Q3_product_launch"
 ```
 
 ### Batch Generate Campaign URLs from CSV
+
 ```bash
 python scripts/marketing_utils.py batch \
   --file campaigns.csv \
@@ -104,6 +121,7 @@ python scripts/marketing_utils.py batch \
 ```
 
 **CSV format for batch:**
+
 ```
 name,channel,content_type,variant
 Q3_Product_Launch,email,newsletter,hero_image
@@ -114,7 +132,9 @@ Q3_Product_Launch,linkedin,sponsored_content,
 ## Key Concepts
 
 ### Marketing Funnel
+
 All content and campaigns map to one of these stages:
+
 - **Awareness**: Build reach and brand recognition
 - **Consideration**: Educate and build credibility
 - **Decision**: Drive conversions
@@ -122,7 +142,9 @@ All content and campaigns map to one of these stages:
 - **Advocacy**: Turn customers into promoters
 
 ### Consistent Terminology
+
 This skill uses consistent terminology throughout:
+
 - "Campaign" - coordinated marketing activities with unified messaging
 - "Channels" - distribution platforms (email, social, ads, blog, etc.)
 - "Target audience" - specific segments the campaign reaches
@@ -147,6 +169,7 @@ This skill follows the Claude skills best practices:
 ## Customization Guide
 
 ### For Your Company
+
 Before using this skill, customize:
 
 1. **Brand Guidelines** ([reference/brand.md](reference/brand.md))
@@ -172,6 +195,7 @@ Before using this skill, customize:
 ## Measurement & KPIs
 
 See [reference/analytics.md](reference/analytics.md) for:
+
 - Marketing funnel stages and metrics
 - Essential KPIs for leadership reporting
 - Channel-specific KPIs (paid ads, email, social, content)
@@ -181,6 +205,7 @@ See [reference/analytics.md](reference/analytics.md) for:
 ## Common Marketing Workflows
 
 ### Workflow: Launch a Product
+
 1. Define campaign using [reference/campaigns.md](reference/campaigns.md) template
 2. Plan content across channels using [reference/social_media.md](reference/social_media.md) and [reference/email.md](reference/email.md)
 3. Create assets using [reference/content.md](reference/content.md) and [reference/templates.md](reference/templates.md)
@@ -189,6 +214,7 @@ See [reference/analytics.md](reference/analytics.md) for:
 6. Execute and measure
 
 ### Workflow: Generate Leads
+
 1. Identify target audience in [reference/campaigns.md](reference/campaigns.md)
 2. Choose lead magnet using [reference/templates.md](reference/templates.md)
 3. Create landing page and forms
@@ -197,6 +223,7 @@ See [reference/analytics.md](reference/analytics.md) for:
 6. Monitor performance using KPIs in [reference/analytics.md](reference/analytics.md)
 
 ### Workflow: Build Brand Awareness
+
 1. Define campaign strategy in [reference/campaigns.md](reference/campaigns.md)
 2. Plan content themes using [reference/content.md](reference/content.md)
 3. Create social media calendar in [reference/social_media.md](reference/social_media.md)
@@ -220,12 +247,14 @@ See [reference/analytics.md](reference/analytics.md) for:
 ## Support & Questions
 
 Each reference file includes:
+
 - Best practices and proven frameworks
 - Common mistakes to avoid
 - Specific examples and templates
 - Implementation guidance
 
 For questions about specific topics:
+
 - **Campaign strategy**: See [reference/campaigns.md](reference/campaigns.md)
 - **Writing and messaging**: See [reference/content.md](reference/content.md)
 - **Platform-specific tactics**: See [reference/social_media.md](reference/social_media.md)

@@ -9,14 +9,16 @@
 **C** - Consider alternatives  
 **I** - Identify best alternatives  
 **D** - Develop and implement action plan  
-**E** - Evaluate and monitor solution  
+**E** - Evaluate and monitor solution
 
 ## Strategic Decision Categories
 
 ### 1. Growth Decisions
 
 #### Market Expansion
+
 **Evaluation Criteria**:
+
 - Market size and growth rate
 - Competitive landscape
 - Regulatory environment
@@ -35,7 +37,9 @@
 | Timeline to Profit | 10% | | |
 
 #### Product Development
+
 **Go/No-Go Criteria**:
+
 - Customer demand validation (>70% interest)
 - Technical feasibility confirmed
 - Positive unit economics
@@ -43,22 +47,21 @@
 - Available resources
 
 #### Mergers & Acquisitions
+
 **Due Diligence Framework**:
+
 1. **Strategic Fit**
    - Synergies identification
    - Cultural alignment
    - Market position enhancement
-   
 2. **Financial Analysis**
    - Valuation models (DCF, Multiples, Precedent)
    - ROI projections
    - Integration costs
-   
 3. **Risk Assessment**
    - Legal/regulatory issues
    - Technology compatibility
    - Talent retention
-   
 4. **Integration Planning**
    - 100-day plan
    - Communication strategy
@@ -69,18 +72,21 @@
 #### Capital Allocation Framework
 
 **Priority Levels**:
+
 1. **Essential** - Core operations, compliance, security
 2. **Strategic** - Growth initiatives, competitive advantage
 3. **Efficiency** - Cost reduction, productivity
 4. **Experimental** - Innovation, R&D
 
 **Allocation Guidelines**:
+
 - Essential: 40-50%
 - Strategic: 30-40%
 - Efficiency: 10-15%
 - Experimental: 5-10%
 
 #### Budget Decision Tree
+
 ```
 Is it required for operations?
 ├─ Yes → Essential (Auto-approve if <$X)
@@ -100,6 +106,7 @@ Is it required for operations?
 #### Restructuring Framework
 
 **Triggers for Restructuring**:
+
 - Performance below targets for 2+ quarters
 - Major strategic shift
 - M&A integration
@@ -107,6 +114,7 @@ Is it required for operations?
 - Efficiency opportunity >20%
 
 **Evaluation Process**:
+
 1. Current state assessment
 2. Future state design
 3. Gap analysis
@@ -125,6 +133,7 @@ Is it required for operations?
 | Culture Fit | 15% | Values alignment, collaboration |
 
 **Succession Planning**:
+
 - Identify 2-3 potential successors for each key role
 - Development plans for high-potentials
 - Emergency succession protocols
@@ -135,18 +144,21 @@ Is it required for operations?
 #### Crisis Response Protocol
 
 **Immediate (0-2 hours)**:
+
 1. Activate crisis team
 2. Assess severity and impact
 3. Implement containment measures
 4. Initial stakeholder notification
 
 **Short-term (2-24 hours)**:
+
 1. Develop response strategy
 2. Prepare public statements
 3. Engage legal/regulatory as needed
 4. Employee communication
 
 **Recovery (24+ hours)**:
+
 1. Implement solution
 2. Monitor progress
 3. Stakeholder updates
@@ -154,12 +166,12 @@ Is it required for operations?
 
 #### Crisis Decision Authority
 
-| Crisis Level | Decision Authority | Response Team |
-|--------------|-------------------|---------------|
-| Level 1 (Minor) | Department Head | Local team |
-| Level 2 (Moderate) | C-Suite Member | Cross-functional |
-| Level 3 (Major) | CEO | Executive team |
-| Level 4 (Critical) | CEO + Board | All hands |
+| Crisis Level       | Decision Authority | Response Team    |
+| ------------------ | ------------------ | ---------------- |
+| Level 1 (Minor)    | Department Head    | Local team       |
+| Level 2 (Moderate) | C-Suite Member     | Cross-functional |
+| Level 3 (Major)    | CEO                | Executive team   |
+| Level 4 (Critical) | CEO + Board        | All hands        |
 
 ## Decision Support Tools
 
@@ -169,7 +181,7 @@ Is it required for operations?
          Internal →
     ↓    Strengths (S)    Weaknesses (W)
 External
-         
+
 O        SO Strategies    WO Strategies
 p        (Leverage)       (Improve)
 p
@@ -256,6 +268,7 @@ Low  │ Delegate│ Eliminate│
 ### Blue Ocean Strategy
 
 **Four Actions Framework**:
+
 - **Eliminate**: Which factors can be eliminated?
 - **Reduce**: Which factors should be reduced below industry standard?
 - **Raise**: Which factors should be raised above industry standard?
@@ -280,19 +293,20 @@ Low  │ Monitor  │  Keep    │
 
 ### Communication Strategy
 
-| Stakeholder | Frequency | Format | Key Messages |
-|------------|-----------|--------|--------------|
-| Board | Monthly | Report + Meeting | Strategy, Risk, Performance |
-| Investors | Quarterly | Earnings Call | Financial, Growth, Outlook |
-| Employees | Weekly | All-hands | Vision, Updates, Recognition |
-| Customers | Continuous | Multi-channel | Value, Innovation, Support |
-| Media | As needed | Press Release | Milestones, Position, Vision |
+| Stakeholder | Frequency  | Format           | Key Messages                 |
+| ----------- | ---------- | ---------------- | ---------------------------- |
+| Board       | Monthly    | Report + Meeting | Strategy, Risk, Performance  |
+| Investors   | Quarterly  | Earnings Call    | Financial, Growth, Outlook   |
+| Employees   | Weekly     | All-hands        | Vision, Updates, Recognition |
+| Customers   | Continuous | Multi-channel    | Value, Innovation, Support   |
+| Media       | As needed  | Press Release    | Milestones, Position, Vision |
 
 ## Performance Metrics
 
 ### Balanced Scorecard
 
 #### Financial Perspective
+
 - Revenue growth rate
 - EBITDA margin
 - ROE/ROA
@@ -300,6 +314,7 @@ Low  │ Monitor  │  Keep    │
 - Market capitalization
 
 #### Customer Perspective
+
 - Customer satisfaction (NPS)
 - Market share
 - Customer retention rate
@@ -307,6 +322,7 @@ Low  │ Monitor  │  Keep    │
 - Customer lifetime value
 
 #### Internal Process
+
 - Operational efficiency
 - Time to market
 - Quality metrics
@@ -314,6 +330,7 @@ Low  │ Monitor  │  Keep    │
 - Process cycle time
 
 #### Learning & Growth
+
 - Employee engagement
 - Talent retention
 - Training hours per employee
@@ -390,12 +407,14 @@ Low  │ Monitor  │  Keep    │
 ### Investor Relations Framework
 
 **Earnings Call Structure**:
+
 1. Opening remarks (CEO) - 5 min
 2. Financial review (CFO) - 10 min
 3. Strategic update (CEO) - 10 min
 4. Q&A - 30 min
 
 **Key Messages**:
+
 - Performance vs guidance
 - Market position
 - Growth strategy
@@ -407,24 +426,28 @@ Low  │ Monitor  │  Keep    │
 ### Annual Planning Process
 
 **Q3 - Strategic Review**
+
 - Environmental scan
 - Competitive analysis
 - Capability assessment
 - Strategy refinement
 
 **Q4 - Planning**
+
 - Goal setting
 - Budget allocation
 - Resource planning
 - OKR development
 
 **Q1 - Launch**
+
 - Communication cascade
 - Initiative kickoff
 - Quick wins
 - Baseline metrics
 
 **Q2 - Review**
+
 - Progress assessment
 - Course correction
 - Mid-year planning

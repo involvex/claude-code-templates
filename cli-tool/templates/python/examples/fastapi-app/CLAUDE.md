@@ -9,17 +9,20 @@ This is a FastAPI application project optimized for modern API development with 
 ## FastAPI-Specific Development Commands
 
 ### Project Management
+
 - `uvicorn app.main:app --reload` - Start development server with auto-reload
 - `uvicorn app.main:app --host 0.0.0.0 --port 8000` - Start server on all interfaces
 - `uvicorn app.main:app --workers 4` - Start with multiple workers
 
 ### Database Management
+
 - `alembic init alembic` - Initialize Alembic migrations
 - `alembic revision --autogenerate -m "message"` - Create migration
 - `alembic upgrade head` - Apply migrations
 - `alembic downgrade -1` - Rollback one migration
 
 ### Development Tools
+
 - `python -m pytest` - Run tests
 - `python -m pytest --cov=app` - Run tests with coverage
 - `mypy app/` - Type checking
@@ -98,7 +101,7 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     SECRET_KEY: str
     DATABASE_URL: str
-    
+
     class Config:
         env_file = ".env"
 
@@ -108,6 +111,7 @@ settings = Settings()
 ## FastAPI Best Practices
 
 ### API Design
+
 - Use Pydantic models for request/response validation
 - Implement proper HTTP status codes
 - Add comprehensive API documentation
@@ -115,6 +119,7 @@ settings = Settings()
 - Implement proper error handling
 
 ### Database Integration
+
 - Use SQLAlchemy with async support
 - Implement repository pattern for data access
 - Use Alembic for database migrations
@@ -122,6 +127,7 @@ settings = Settings()
 - Implement database health checks
 
 ### Authentication & Security
+
 - Use JWT tokens for authentication
 - Implement OAuth2 with scopes
 - Add rate limiting for API endpoints
@@ -129,6 +135,7 @@ settings = Settings()
 - Implement proper CORS configuration
 
 ### Performance Optimization
+
 - Use async/await for I/O operations
 - Implement response caching
 - Add database query optimization
@@ -138,6 +145,7 @@ settings = Settings()
 ## Testing Strategy
 
 ### Test Organization
+
 ```python
 # tests/conftest.py
 import pytest
@@ -150,6 +158,7 @@ def client():
 ```
 
 ### Test Types
+
 - **Unit tests** for business logic
 - **Integration tests** for API endpoints
 - **Database tests** with test fixtures
@@ -158,6 +167,7 @@ def client():
 ## Deployment Considerations
 
 ### Production Setup
+
 - Use Uvicorn with multiple workers
 - Implement proper logging and monitoring
 - Set up reverse proxy (Nginx)
@@ -165,6 +175,7 @@ def client():
 - Implement health checks
 
 ### Docker Configuration
+
 ```dockerfile
 FROM python:3.11-slim
 WORKDIR /app
@@ -175,6 +186,7 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0"]
 ```
 
 ### Environment Variables
+
 ```bash
 SECRET_KEY=your-secret-key
 DATABASE_URL=postgresql://user:pass@host/db
@@ -184,6 +196,7 @@ REDIS_URL=redis://localhost:6379
 ## Common FastAPI Patterns
 
 ### Dependency Injection
+
 ```python
 from fastapi import Depends
 from app.db.database import get_db
@@ -194,6 +207,7 @@ async def get_users(db: Session = Depends(get_db)):
 ```
 
 ### Background Tasks
+
 ```python
 from fastapi import BackgroundTasks
 
@@ -204,6 +218,7 @@ async def send_email(background_tasks: BackgroundTasks):
 ```
 
 ### Middleware
+
 ```python
 @app.middleware("http")
 async def add_process_time_header(request, call_next):
@@ -214,6 +229,7 @@ async def add_process_time_header(request, call_next):
 ## Development Workflow
 
 ### Getting Started
+
 1. Clone repository
 2. Create virtual environment: `python -m venv venv`
 3. Install dependencies: `pip install -r requirements.txt`
@@ -222,8 +238,9 @@ async def add_process_time_header(request, call_next):
 6. Start server: `uvicorn app.main:app --reload`
 
 ### Code Quality
+
 - **Black** - Code formatting
-- **isort** - Import sorting  
+- **isort** - Import sorting
 - **mypy** - Type checking
 - **pytest** - Testing framework
 - **flake8** - Linting

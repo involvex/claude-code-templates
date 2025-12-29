@@ -11,9 +11,11 @@ This file documents all webhook-triggered Zapier workflows. Each Zap is pre-buil
 **THIS IS A TEMPLATE, NOT A REAL WORKFLOW**
 
 ### Overview
+
 [Brief description of what this Zap does]
 
 ### Trigger Phrases
+
 - "[Trigger phrase 1]"
 - "[Trigger phrase 2]"
 - "[Trigger phrase 3]"
@@ -25,6 +27,7 @@ This file documents all webhook-triggered Zapier workflows. Each Zap is pre-buil
 **Method:** POST
 
 **Payload:**
+
 ```json
 {
   "field1": "value",
@@ -33,6 +36,7 @@ This file documents all webhook-triggered Zapier workflows. Each Zap is pre-buil
 ```
 
 **Trigger Command:**
+
 ```bash
 curl -X POST [your-webhook-url] \
   -H "Content-Type: application/json" \
@@ -59,6 +63,7 @@ curl -X POST [your-webhook-url] \
 ### When to Run This
 
 **When to use:**
+
 - [Scenario 1]
 - [Scenario 2]
 - [Scenario 3]
@@ -77,4 +82,4 @@ curl -X POST [your-webhook-url] \
 
 ---
 
-*This file is editable by Claude during conversations. When the user documents a new Zap or updates an existing one, Claude should update this file using the Edit tool.*
+_This file is editable by Claude during conversations. When the user documents a new Zap or updates an existing one, Claude should update this file using the Edit tool._

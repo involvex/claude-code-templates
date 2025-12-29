@@ -33,11 +33,11 @@ class Category(models.Model):
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         verbose_name_plural = "categories"
         ordering = ['name']
-    
+
     def __str__(self):
         return self.name
 
@@ -47,7 +47,7 @@ class Post(models.Model):
         ('published', 'Published'),
         ('archived', 'Archived'),
     ]
-    
+
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     content = models.TextField()
@@ -57,22 +57,22 @@ class Post(models.Model):
     tags = models.ManyToManyField('Tag', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         ordering = ['-created_at']
         verbose_name = 'blog post'
         verbose_name_plural = 'blog posts'
-    
+
     def __str__(self):
         return self.title
-    
+
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'slug': self.slug})
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(unique=True)
-    
+
     def __str__(self):
         return self.name
 ```
@@ -102,7 +102,7 @@ class Tag(models.Model):
 
 - Proper field choices and defaults
 - Appropriate related_name attributes
-- __str__ methods for admin interface
+- **str** methods for admin interface
 - Meta class with ordering and verbose names
 - get_absolute_url methods where appropriate
 - Proper use of null and blank parameters

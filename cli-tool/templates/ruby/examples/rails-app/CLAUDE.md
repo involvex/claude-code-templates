@@ -9,6 +9,7 @@ This is a Ruby on Rails 8 web application project optimized for modern web devel
 ## Rails 8 Specific Development Commands
 
 ### Project Creation & Setup
+
 - `rails new myapp` - Create new Rails 8 application
 - `rails new myapp --skip-kamal` - Create app without Kamal deployment
 - `rails new myapp --database=postgresql` - Create app with PostgreSQL
@@ -16,12 +17,14 @@ This is a Ruby on Rails 8 web application project optimized for modern web devel
 - `rails new myapp --javascript=esbuild` - Create app with esbuild
 
 ### Server Management
+
 - `bin/rails server` or `bin/rails s` - Start development server
 - `bin/rails server -p 4000` - Start server on port 4000
 - `bin/rails server -e production` - Start in production mode
 - `bin/dev` - Start development server with asset compilation (if available)
 
 ### Database Management
+
 - `bin/rails db:create` - Create database
 - `bin/rails db:migrate` - Run pending migrations
 - `bin/rails db:rollback` - Rollback last migration
@@ -30,6 +33,7 @@ This is a Ruby on Rails 8 web application project optimized for modern web devel
 - `bin/rails db:setup` - Create, migrate, and seed database
 
 ### Generation Commands
+
 - `bin/rails generate model User name:string email:string` - Generate model
 - `bin/rails generate controller Users index show` - Generate controller
 - `bin/rails generate migration AddIndexToUsers email:index` - Generate migration
@@ -38,27 +42,32 @@ This is a Ruby on Rails 8 web application project optimized for modern web devel
 - `bin/rails generate solid_cache:install` - Install Solid Cache (NEW)
 
 ### Rails 8 Native Authentication
+
 - `bin/rails generate authentication User` - Generate authentication for User model
 - `bin/rails generate authentication:views` - Generate authentication views
 - `bin/rails generate authentication:controllers` - Generate authentication controllers
 
 ### Background Jobs (Solid Queue)
+
 - `bin/rails solid_queue:start` - Start Solid Queue worker
 - `bin/rails solid_queue:install` - Install Solid Queue configuration
 - `SampleJob.perform_later(user)` - Enqueue background job
 
 ### Caching (Solid Cache)
+
 - `Rails.cache.write("key", "value")` - Write to cache
 - `Rails.cache.read("key")` - Read from cache
 - `Rails.cache.delete("key")` - Delete from cache
 - `bin/rails solid_cache:clear` - Clear all cached data
 
 ### Asset Management (Propshaft)
+
 - `bin/rails assets:precompile` - Precompile assets for production
 - `bin/rails assets:clobber` - Remove compiled assets
 - Assets are automatically served in development
 
 ### Testing Commands
+
 - `bin/rails test` - Run all tests
 - `bin/rails test:models` - Run model tests
 - `bin/rails test:controllers` - Run controller tests
@@ -66,11 +75,13 @@ This is a Ruby on Rails 8 web application project optimized for modern web devel
 - `bin/rails test test/models/user_test.rb` - Run specific test file
 
 ### Console & Debugging
+
 - `bin/rails console` or `bin/rails c` - Start Rails console
 - `bin/rails console --sandbox` - Start console in sandbox mode
 - `bin/rails dbconsole` or `bin/rails db` - Start database console
 
 ### Code Quality & Security (Rails 8 Defaults)
+
 - `bin/rails rubocop` - Run RuboCop with Rails 8 Omakase config
 - `bin/rails brakeman` - Run security scan (included by default)
 - `bundle audit` - Check for vulnerable gems
@@ -78,6 +89,7 @@ This is a Ruby on Rails 8 web application project optimized for modern web devel
 ## Deployment with Kamal 2 (Rails 8 Default)
 
 ### Kamal 2 Commands
+
 - `kamal setup` - Initial server setup
 - `kamal deploy` - Deploy application
 - `kamal redeploy` - Redeploy without setup
@@ -88,6 +100,7 @@ This is a Ruby on Rails 8 web application project optimized for modern web devel
 - `kamal details` - Show deployment details
 
 ### Kamal 2 Configuration
+
 Configuration is automatically generated in `config/deploy.yml`:
 
 ```yaml
@@ -99,13 +112,13 @@ servers:
 registry:
   server: registry.digitalocean.com
   username: myusername
-  
+
 env:
   clear:
     RAILS_ENV: production
   secret:
     - RAILS_MASTER_KEY
-    
+
 builder:
   multiarch: false
 ```
@@ -147,6 +160,7 @@ myapp/
 ## Rails 8 New Features Integration
 
 ### 1. SQLite Production Enhancements
+
 Rails 8 makes SQLite production-ready:
 
 ```ruby
@@ -167,6 +181,7 @@ production:
 ### 2. Solid Trifecta Configuration
 
 #### Solid Queue (Background Jobs)
+
 ```ruby
 # config/application.rb
 config.active_job.queue_adapter = :solid_queue
@@ -174,7 +189,7 @@ config.active_job.queue_adapter = :solid_queue
 # app/jobs/sample_job.rb
 class SampleJob < ApplicationJob
   queue_as :default
-  
+
   def perform(user)
     # Background job logic
   end
@@ -182,6 +197,7 @@ end
 ```
 
 #### Solid Cache (Caching)
+
 ```ruby
 # config/application.rb
 config.cache_store = :solid_cache_store
@@ -193,6 +209,7 @@ end
 ```
 
 #### Solid Cable (WebSockets)
+
 ```ruby
 # config/application.rb
 config.action_cable.adapter = :solid_cable
@@ -206,6 +223,7 @@ end
 ```
 
 ### 3. Native Authentication (Rails 8)
+
 ```ruby
 # Generate authentication
 bin/rails generate authentication User
@@ -213,7 +231,7 @@ bin/rails generate authentication User
 # app/models/user.rb (generated)
 class User < ApplicationRecord
   has_secure_password
-  
+
   validates :email, presence: true, uniqueness: true
   normalizes :email, with: ->(email) { email.strip.downcase }
 end
@@ -221,13 +239,13 @@ end
 # app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
-  
+
   private
-  
+
   def authenticate_user!
     redirect_to login_path unless current_user
   end
-  
+
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
@@ -235,6 +253,7 @@ end
 ```
 
 ### 4. Propshaft Asset Pipeline
+
 ```ruby
 # config/application.rb
 # Propshaft is now the default - no configuration needed
@@ -248,6 +267,7 @@ end
 ## Testing in Rails 8
 
 ### Default Test Suite Setup
+
 Rails 8 includes comprehensive testing setup by default:
 
 ```ruby
@@ -260,26 +280,27 @@ module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
-    
+
     # Setup all fixtures in test/fixtures/*.yml
     fixtures :all
-    
+
     # Add more helper methods to be used by all tests here...
   end
 end
 ```
 
 ### System Testing with Capybara
+
 ```ruby
 # test/system/users_test.rb
 class UsersTest < ApplicationSystemTestCase
   test "creating a user" do
     visit new_user_path
-    
+
     fill_in "Name", with: "John Doe"
     fill_in "Email", with: "john@example.com"
     click_button "Create User"
-    
+
     assert_text "User was successfully created"
   end
 end
@@ -288,6 +309,7 @@ end
 ## Security Best Practices (Rails 8)
 
 ### Built-in Security Features
+
 - **Brakeman** - Included by default for security scanning
 - **Credential Management** - Use `rails credentials:edit`
 - **Content Security Policy** - Configure in `application_controller.rb`
@@ -309,6 +331,7 @@ end
 ## Performance Optimization
 
 ### Database Optimization
+
 ```ruby
 # Use includes to avoid N+1 queries
 @users = User.includes(:posts).all
@@ -320,6 +343,7 @@ end
 ```
 
 ### Caching Strategies
+
 ```ruby
 # Fragment caching in views
 <% cache @user do %>
@@ -335,6 +359,7 @@ end
 ## Production Deployment Checklist
 
 ### Environment Configuration
+
 - [ ] Set `RAILS_ENV=production`
 - [ ] Configure `RAILS_MASTER_KEY` or `config/credentials.yml.enc`
 - [ ] Set up database (PostgreSQL/MySQL for production)
@@ -343,6 +368,7 @@ end
 - [ ] Configure logging and log rotation
 
 ### Kamal 2 Deployment
+
 - [ ] Update `config/deploy.yml` with production servers
 - [ ] Set up Docker registry access
 - [ ] Configure environment variables and secrets
@@ -350,6 +376,7 @@ end
 - [ ] Deploy with `kamal deploy`
 
 ### Performance & Monitoring
+
 - [ ] Enable asset precompilation
 - [ ] Configure CDN for static assets
 - [ ] Set up application performance monitoring (APM)
@@ -359,6 +386,7 @@ end
 ## Upgrading to Rails 8
 
 ### Migration Steps
+
 1. Update Gemfile: `gem 'rails', '~> 8.0.0'`
 2. Run `bundle update rails`
 3. Run `bin/rails app:update` to update configuration files
@@ -368,6 +396,7 @@ end
 7. Optionally migrate authentication to native Rails 8 system
 
 ### Breaking Changes to Consider
+
 - Ruby 3.2+ requirement
 - Propshaft replaces Sprockets by default
 - Some deprecated ActiveRecord methods removed

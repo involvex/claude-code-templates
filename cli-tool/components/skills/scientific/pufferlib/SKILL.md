@@ -12,6 +12,7 @@ PufferLib is a high-performance reinforcement learning library designed for fast
 ## When to Use This Skill
 
 Use this skill when:
+
 - **Training RL agents** with PPO on any environment (single or multi-agent)
 - **Creating custom environments** using the PufferEnv API
 - **Optimizing performance** for parallel environment simulation (vectorization)
@@ -27,6 +28,7 @@ Use this skill when:
 PuffeRL is PufferLib's optimized PPO+LSTM training algorithm achieving 1M-4M steps/second.
 
 **Quick start training:**
+
 ```bash
 # CLI training
 puffer train procgen-coinrun --train.device cuda --train.learning-rate 3e-4
@@ -36,6 +38,7 @@ torchrun --nproc_per_node=4 train.py
 ```
 
 **Python training loop:**
+
 ```python
 import pufferlib
 from pufferlib import PuffeRL
@@ -60,6 +63,7 @@ for iteration in range(num_iterations):
 ```
 
 **For comprehensive training guidance**, read `references/training.md` for:
+
 - Complete training workflow and CLI options
 - Hyperparameter tuning with Protein
 - Distributed multi-GPU/multi-node training
@@ -73,6 +77,7 @@ for iteration in range(num_iterations):
 Create custom high-performance environments with the PufferEnv API.
 
 **Basic environment structure:**
+
 ```python
 import numpy as np
 from pufferlib import PufferEnv
@@ -102,12 +107,14 @@ class MyEnvironment(PufferEnv):
 ```
 
 **Use the template script:** `scripts/env_template.py` provides complete single-agent and multi-agent environment templates with examples of:
+
 - Different observation space types (vector, image, dict)
 - Action space variations (discrete, continuous, multi-discrete)
 - Multi-agent environment structure
 - Testing utilities
 
 **For complete environment development**, read `references/environments.md` for:
+
 - PufferEnv API details and in-place operation patterns
 - Observation and action space definitions
 - Multi-agent environment creation
@@ -121,6 +128,7 @@ class MyEnvironment(PufferEnv):
 Achieve maximum throughput with optimized parallel simulation.
 
 **Vectorization setup:**
+
 ```python
 import pufferlib
 
@@ -134,12 +142,14 @@ env = pufferlib.make('environment_name', num_envs=256, num_workers=8)
 ```
 
 **Key optimizations:**
+
 - Shared memory buffers for zero-copy observation passing
 - Busy-wait flags instead of pipes/queues
 - Surplus environments for async returns
 - Multiple environments per worker
 
 **For vectorization optimization**, read `references/vectorization.md` for:
+
 - Architecture and performance characteristics
 - Worker and batch size configuration
 - Serial vs multiprocessing vs async modes
@@ -153,6 +163,7 @@ env = pufferlib.make('environment_name', num_envs=256, num_workers=8)
 Build policies as standard PyTorch modules with optional utilities.
 
 **Basic policy structure:**
+
 ```python
 import torch.nn as nn
 from pufferlib.pytorch import layer_init
@@ -179,6 +190,7 @@ class Policy(nn.Module):
 ```
 
 **For complete policy development**, read `references/policies.md` for:
+
 - CNN policies for image observations
 - Recurrent policies with optimized LSTM (3x faster inference)
 - Multi-input policies for complex observations
@@ -193,6 +205,7 @@ class Policy(nn.Module):
 Seamlessly integrate environments from popular RL frameworks.
 
 **Gymnasium integration:**
+
 ```python
 import gymnasium as gym
 import pufferlib
@@ -206,12 +219,14 @@ env = pufferlib.make('gym-CartPole-v1', num_envs=256)
 ```
 
 **PettingZoo multi-agent:**
+
 ```python
 # Multi-agent environment
 env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 ```
 
 **Supported frameworks:**
+
 - Gymnasium / OpenAI Gym
 - PettingZoo (parallel and AEC)
 - Atari (ALE)
@@ -226,6 +241,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 - And more...
 
 **For integration details**, read `references/integration.md` for:
+
 - Complete integration examples for each framework
 - Custom wrappers (observation, reward, frame stacking, action repeat)
 - Space flattening and unflattening
@@ -279,6 +295,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 ### scripts/
 
 **train_template.py** - Complete training script template with:
+
 - Environment creation and configuration
 - Policy initialization
 - Logger integration (WandB, Neptune)
@@ -287,6 +304,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 - Multi-GPU distributed training setup
 
 **env_template.py** - Environment implementation templates:
+
 - Single-agent PufferEnv example (grid world)
 - Multi-agent PufferEnv example (cooperative navigation)
 - Multiple observation/action space patterns
@@ -295,6 +313,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 ### references/
 
 **training.md** - Comprehensive training guide:
+
 - Training workflow and CLI options
 - Hyperparameter configuration
 - Distributed training (multi-GPU, multi-node)
@@ -306,6 +325,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 - Troubleshooting
 
 **environments.md** - Environment development guide:
+
 - PufferEnv API and characteristics
 - Observation and action spaces
 - Multi-agent environments
@@ -317,6 +337,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 - Debugging
 
 **vectorization.md** - Vectorization optimization:
+
 - Architecture and key optimizations
 - Vectorization modes (serial, multiprocessing, async)
 - Worker and batch configuration
@@ -327,6 +348,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 - Troubleshooting and best practices
 
 **policies.md** - Policy architecture guide:
+
 - Basic policy structure
 - CNN policies for images
 - LSTM policies with optimization
@@ -339,6 +361,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 - Debugging and testing
 
 **integration.md** - Framework integration guide:
+
 - Gymnasium integration
 - PettingZoo integration (parallel and AEC)
 - Third-party environments (Procgen, NetHack, Minigrid, etc.)
@@ -374,6 +397,7 @@ env = pufferlib.make('pettingzoo-knights-archers-zombies', num_envs=128)
 ## Common Use Cases
 
 ### Training on Standard Benchmarks
+
 ```python
 # Atari
 env = pufferlib.make('atari-pong', num_envs=256)
@@ -386,6 +410,7 @@ env = pufferlib.make('minigrid-empty-8x8', num_envs=256)
 ```
 
 ### Multi-Agent Learning
+
 ```python
 # PettingZoo
 env = pufferlib.make('pettingzoo-pistonball', num_envs=128)
@@ -396,6 +421,7 @@ trainer = PuffeRL(env=env, policy=policy)
 ```
 
 ### Custom Task Development
+
 ```python
 # Create custom environment
 class MyTask(PufferEnv):
@@ -407,6 +433,7 @@ trainer = PuffeRL(env=env, policy=my_policy)
 ```
 
 ### High-Performance Optimization
+
 ```python
 # Maximize throughput
 env = pufferlib.make(

@@ -3,9 +3,11 @@
 ## Terraform Templates
 
 ### AWS VPC with Multi-AZ
+
 See [terraform.md](terraform.md) for the complete VPC module implementation.
 
 ### AWS EKS Cluster
+
 ```hcl
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
@@ -82,6 +84,7 @@ module "eks" {
 ```
 
 ### AWS RDS PostgreSQL
+
 ```hcl
 resource "aws_db_subnet_group" "main" {
   name       = "${var.name_prefix}-db-subnet-group"
@@ -168,6 +171,7 @@ resource "aws_db_instance" "main" {
 ## Kubernetes Templates
 
 ### Complete Application Stack
+
 ```yaml
 ---
 # Namespace
@@ -254,62 +258,62 @@ spec:
         fsGroup: 2000
 
       containers:
-      - name: myapp
-        image: myapp:1.0.0
-        imagePullPolicy: IfNotPresent
+        - name: myapp
+          image: myapp:1.0.0
+          imagePullPolicy: IfNotPresent
 
-        ports:
-        - name: http
-          containerPort: 8080
+          ports:
+            - name: http
+              containerPort: 8080
 
-        envFrom:
-        - configMapRef:
-            name: myapp-config
-        - secretRef:
-            name: myapp-secrets
+          envFrom:
+            - configMapRef:
+                name: myapp-config
+            - secretRef:
+                name: myapp-secrets
 
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
 
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
 
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 1000
-          capabilities:
-            drop:
-            - ALL
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
 
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: cache
-          mountPath: /var/cache
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: cache
+              mountPath: /var/cache
 
       volumes:
-      - name: tmp
-        emptyDir: {}
-      - name: cache
-        emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
 
 ---
 # Service
@@ -325,10 +329,10 @@ spec:
   selector:
     app: myapp
   ports:
-  - name: http
-    port: 80
-    targetPort: 8080
-    protocol: TCP
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
 
 ---
 # Ingress
@@ -343,20 +347,20 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   tls:
-  - hosts:
-    - myapp.example.com
-    secretName: myapp-tls
+    - hosts:
+        - myapp.example.com
+      secretName: myapp-tls
   rules:
-  - host: myapp.example.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: myapp
-            port:
-              number: 80
+    - host: myapp.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp
+                port:
+                  number: 80
 
 ---
 # HorizontalPodAutoscaler
@@ -373,18 +377,18 @@ spec:
   minReplicas: 3
   maxReplicas: 20
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
 
 ---
 # PodDisruptionBudget
@@ -403,6 +407,7 @@ spec:
 ## CI/CD Pipeline Templates
 
 ### GitHub Actions - Docker Build and Push
+
 ```yaml
 name: Build and Push Docker Image
 
@@ -461,6 +466,7 @@ jobs:
 ```
 
 ### GitHub Actions - Terraform Workflow
+
 ```yaml
 name: Terraform
 
@@ -468,11 +474,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'terraform/**'
+      - "terraform/**"
   pull_request:
     branches: [main]
     paths:
-      - 'terraform/**'
+      - "terraform/**"
 
 env:
   TF_VERSION: 1.6.0
@@ -551,6 +557,7 @@ jobs:
 ```
 
 ### GitLab CI - Complete Pipeline
+
 ```yaml
 stages:
   - lint
@@ -682,15 +689,16 @@ spec:
         maxDuration: 3m
 
   ignoreDifferences:
-  - group: apps
-    kind: Deployment
-    jsonPointers:
-    - /spec/replicas
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
 ```
 
 ## Monitoring & Alerting Templates
 
 ### Prometheus ServiceMonitor
+
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -704,13 +712,14 @@ spec:
     matchLabels:
       app: myapp
   endpoints:
-  - port: http
-    path: /metrics
-    interval: 30s
-    scrapeTimeout: 10s
+    - port: http
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
 ```
 
 ### Prometheus Alert Rules
+
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
@@ -719,44 +728,45 @@ metadata:
   namespace: production
 spec:
   groups:
-  - name: myapp
-    interval: 30s
-    rules:
-    - alert: HighErrorRate
-      expr: |
-        rate(http_requests_total{status=~"5.."}[5m]) > 0.05
-      for: 5m
-      labels:
-        severity: critical
-      annotations:
-        summary: "High error rate detected"
-        description: "Error rate is {{ $value | humanizePercentage }}"
+    - name: myapp
+      interval: 30s
+      rules:
+        - alert: HighErrorRate
+          expr: |
+            rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High error rate detected"
+            description: "Error rate is {{ $value | humanizePercentage }}"
 
-    - alert: PodCrashLooping
-      expr: |
-        rate(kube_pod_container_status_restarts_total[15m]) > 0
-      for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Pod {{ $labels.pod }} is crash looping"
-        description: "Pod has restarted {{ $value }} times in 15 minutes"
+        - alert: PodCrashLooping
+          expr: |
+            rate(kube_pod_container_status_restarts_total[15m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod {{ $labels.pod }} is crash looping"
+            description: "Pod has restarted {{ $value }} times in 15 minutes"
 
-    - alert: HighMemoryUsage
-      expr: |
-        container_memory_usage_bytes{pod=~"myapp-.*"} /
-        container_spec_memory_limit_bytes{pod=~"myapp-.*"} > 0.9
-      for: 10m
-      labels:
-        severity: warning
-      annotations:
-        summary: "High memory usage"
-        description: "Memory usage is {{ $value | humanizePercentage }}"
+        - alert: HighMemoryUsage
+          expr: |
+            container_memory_usage_bytes{pod=~"myapp-.*"} /
+            container_spec_memory_limit_bytes{pod=~"myapp-.*"} > 0.9
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High memory usage"
+            description: "Memory usage is {{ $value | humanizePercentage }}"
 ```
 
 ## Docker Templates
 
 ### Multi-stage Dockerfile (Node.js)
+
 ```dockerfile
 # Build stage
 FROM node:20-alpine AS builder
@@ -811,6 +821,7 @@ CMD ["node", "dist/index.js"]
 ```
 
 ### .dockerignore
+
 ```
 # Git
 .git

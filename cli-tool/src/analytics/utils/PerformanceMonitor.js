@@ -2,9 +2,9 @@
  * PerformanceMonitor - Monitors and tracks system performance
  * Phase 4: Performance monitoring and optimization
  */
-const fs = require('fs-extra');
-const path = require('path');
-const chalk = require('chalk');
+const fs = require("fs-extra");
+const path = require("path");
+const chalk = require("chalk");
 
 class PerformanceMonitor {
   constructor(options = {}) {
@@ -13,23 +13,23 @@ class PerformanceMonitor {
       logInterval: options.logInterval || 60000, // 1 minute
       metricsRetention: options.metricsRetention || 3600000, // 1 hour
       memoryThreshold: options.memoryThreshold || 100 * 1024 * 1024, // 100MB
-      ...options
+      ...options,
     };
-    
+
     this.metrics = {
       memory: [],
       cpu: [],
       requests: [],
       cache: [],
       errors: [],
-      websocket: []
+      websocket: [],
     };
-    
+
     this.timers = {};
     this.counters = {};
     this.startTime = Date.now();
     this.logInterval = null;
-    
+
     if (this.options.enabled) {
       this.startMonitoring();
     }
@@ -39,15 +39,15 @@ class PerformanceMonitor {
    * Start performance monitoring
    */
   startMonitoring() {
-    console.log(chalk.blue('📊 Starting performance monitoring...'));
-    
+    console.log(chalk.blue("📊 Starting performance monitoring..."));
+
     // Start periodic logging
     this.logInterval = setInterval(() => {
       this.collectSystemMetrics();
       this.logPerformanceReport();
       this.cleanupOldMetrics();
     }, this.options.logInterval);
-    
+
     // Monitor process events
     this.setupProcessMonitoring();
   }
@@ -60,8 +60,8 @@ class PerformanceMonitor {
       clearInterval(this.logInterval);
       this.logInterval = null;
     }
-    
-    console.log(chalk.yellow('📊 Performance monitoring stopped'));
+
+    console.log(chalk.yellow("📊 Performance monitoring stopped"));
   }
 
   /**
@@ -69,24 +69,24 @@ class PerformanceMonitor {
    */
   setupProcessMonitoring() {
     // Monitor memory usage
-    process.on('warning', (warning) => {
-      this.recordError('process_warning', warning.message, {
+    process.on("warning", (warning) => {
+      this.recordError("process_warning", warning.message, {
         name: warning.name,
-        code: warning.code
+        code: warning.code,
       });
     });
-    
+
     // Monitor uncaught exceptions
-    process.on('uncaughtException', (error) => {
-      this.recordError('uncaught_exception', error.message, {
-        stack: error.stack
+    process.on("uncaughtException", (error) => {
+      this.recordError("uncaught_exception", error.message, {
+        stack: error.stack,
       });
     });
-    
+
     // Monitor unhandled rejections
-    process.on('unhandledRejection', (reason, promise) => {
-      this.recordError('unhandled_rejection', reason.toString(), {
-        promise: promise.toString()
+    process.on("unhandledRejection", (reason, promise) => {
+      this.recordError("unhandled_rejection", reason.toString(), {
+        promise: promise.toString(),
       });
     });
   }
@@ -98,7 +98,7 @@ class PerformanceMonitor {
   startTimer(name) {
     this.timers[name] = {
       start: process.hrtime.bigint(),
-      startTime: Date.now()
+      startTime: Date.now(),
     };
   }
 
@@ -112,18 +112,18 @@ class PerformanceMonitor {
       console.warn(`Timer ${name} was not started`);
       return 0;
     }
-    
+
     const timer = this.timers[name];
     const endTime = process.hrtime.bigint();
     const duration = Number(endTime - timer.start) / 1000000; // Convert to milliseconds
-    
-    this.recordMetric('performance', {
+
+    this.recordMetric("performance", {
       operation: name,
       duration,
       timestamp: Date.now(),
-      ...metadata
+      ...metadata,
     });
-    
+
     delete this.timers[name];
     return duration;
   }
@@ -144,16 +144,16 @@ class PerformanceMonitor {
    */
   recordMetric(category, data) {
     if (!this.options.enabled) return;
-    
+
     if (!this.metrics[category]) {
       this.metrics[category] = [];
     }
-    
+
     this.metrics[category].push({
       ...data,
-      timestamp: data.timestamp || Date.now()
+      timestamp: data.timestamp || Date.now(),
     });
-    
+
     // Keep array size manageable
     if (this.metrics[category].length > 1000) {
       this.metrics[category].shift();
@@ -167,12 +167,12 @@ class PerformanceMonitor {
    * @param {Object} metadata - Additional metadata
    */
   recordError(type, message, metadata = {}) {
-    this.recordMetric('errors', {
+    this.recordMetric("errors", {
       type,
       message,
-      ...metadata
+      ...metadata,
     });
-    
+
     console.error(chalk.red(`❌ Error recorded: ${type} - ${message}`));
   }
 
@@ -184,17 +184,17 @@ class PerformanceMonitor {
    * @param {Object} metadata - Additional metadata
    */
   recordRequest(endpoint, duration, statusCode, metadata = {}) {
-    this.recordMetric('requests', {
+    this.recordMetric("requests", {
       endpoint,
       duration,
       statusCode,
       success: statusCode >= 200 && statusCode < 400,
-      ...metadata
+      ...metadata,
     });
-    
-    this.incrementCounter('total_requests');
+
+    this.incrementCounter("total_requests");
     if (statusCode >= 400) {
-      this.incrementCounter('error_requests');
+      this.incrementCounter("error_requests");
     }
   }
 
@@ -205,12 +205,12 @@ class PerformanceMonitor {
    * @param {number} duration - Operation duration
    */
   recordCache(operation, key, duration = 0) {
-    this.recordMetric('cache', {
+    this.recordMetric("cache", {
       operation,
       key,
-      duration
+      duration,
     });
-    
+
     this.incrementCounter(`cache_${operation}`);
   }
 
@@ -220,11 +220,11 @@ class PerformanceMonitor {
    * @param {Object} data - Event data
    */
   recordWebSocket(event, data = {}) {
-    this.recordMetric('websocket', {
+    this.recordMetric("websocket", {
       event,
-      ...data
+      ...data,
     });
-    
+
     this.incrementCounter(`websocket_${event}`);
   }
 
@@ -234,24 +234,25 @@ class PerformanceMonitor {
   collectSystemMetrics() {
     const memUsage = process.memoryUsage();
     const cpuUsage = process.cpuUsage();
-    
-    this.recordMetric('memory', {
+
+    this.recordMetric("memory", {
       rss: memUsage.rss,
       heapUsed: memUsage.heapUsed,
       heapTotal: memUsage.heapTotal,
       external: memUsage.external,
-      arrayBuffers: memUsage.arrayBuffers
+      arrayBuffers: memUsage.arrayBuffers,
     });
-    
-    this.recordMetric('cpu', {
+
+    this.recordMetric("cpu", {
       user: cpuUsage.user,
-      system: cpuUsage.system
+      system: cpuUsage.system,
     });
-    
+
     // Check memory threshold
     if (memUsage.heapUsed > this.options.memoryThreshold) {
-      this.recordError('memory_threshold', 
-        `Memory usage exceeded threshold: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`
+      this.recordError(
+        "memory_threshold",
+        `Memory usage exceeded threshold: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`,
       );
     }
   }
@@ -261,42 +262,46 @@ class PerformanceMonitor {
    * @param {number} timeframe - Timeframe in milliseconds
    * @returns {Object} Performance statistics
    */
-  getStats(timeframe = 300000) { // Default 5 minutes
+  getStats(timeframe = 300000) {
+    // Default 5 minutes
     const cutoff = Date.now() - timeframe;
-    
-    const filterRecent = (metrics) => 
-      metrics.filter(metric => metric.timestamp > cutoff);
-    
+
+    const filterRecent = (metrics) =>
+      metrics.filter((metric) => metric.timestamp > cutoff);
+
     const recentRequests = filterRecent(this.metrics.requests || []);
     const recentErrors = filterRecent(this.metrics.errors || []);
     const recentMemory = filterRecent(this.metrics.memory || []);
     const recentCache = filterRecent(this.metrics.cache || []);
-    
+
     return {
       uptime: Date.now() - this.startTime,
       requests: {
         total: recentRequests.length,
-        successful: recentRequests.filter(r => r.success).length,
-        errors: recentRequests.filter(r => !r.success).length,
-        averageResponseTime: this.calculateAverage(recentRequests, 'duration'),
-        endpointStats: this.groupBy(recentRequests, 'endpoint')
+        successful: recentRequests.filter((r) => r.success).length,
+        errors: recentRequests.filter((r) => !r.success).length,
+        averageResponseTime: this.calculateAverage(recentRequests, "duration"),
+        endpointStats: this.groupBy(recentRequests, "endpoint"),
       },
       errors: {
         total: recentErrors.length,
-        byType: this.groupBy(recentErrors, 'type')
+        byType: this.groupBy(recentErrors, "type"),
       },
       memory: {
-        current: recentMemory.length > 0 ? recentMemory[recentMemory.length - 1] : null,
+        current:
+          recentMemory.length > 0
+            ? recentMemory[recentMemory.length - 1]
+            : null,
         average: this.calculateAverageMemory(recentMemory),
-        peak: this.calculatePeakMemory(recentMemory)
+        peak: this.calculatePeakMemory(recentMemory),
       },
       cache: {
         operations: recentCache.length,
         hitRate: this.calculateCacheHitRate(recentCache),
-        operationStats: this.groupBy(recentCache, 'operation')
+        operationStats: this.groupBy(recentCache, "operation"),
       },
       counters: { ...this.counters },
-      activeTimers: Object.keys(this.timers).length
+      activeTimers: Object.keys(this.timers).length,
     };
   }
 
@@ -309,7 +314,7 @@ class PerformanceMonitor {
   calculateAverage(items, field) {
     if (items.length === 0) return 0;
     const sum = items.reduce((acc, item) => acc + (item[field] || 0), 0);
-    return Math.round(sum / items.length * 100) / 100;
+    return Math.round((sum / items.length) * 100) / 100;
   }
 
   /**
@@ -319,11 +324,11 @@ class PerformanceMonitor {
    */
   calculateAverageMemory(memoryMetrics) {
     if (memoryMetrics.length === 0) return null;
-    
-    const avgRss = this.calculateAverage(memoryMetrics, 'rss');
-    const avgHeapUsed = this.calculateAverage(memoryMetrics, 'heapUsed');
-    const avgHeapTotal = this.calculateAverage(memoryMetrics, 'heapTotal');
-    
+
+    const avgRss = this.calculateAverage(memoryMetrics, "rss");
+    const avgHeapUsed = this.calculateAverage(memoryMetrics, "heapUsed");
+    const avgHeapTotal = this.calculateAverage(memoryMetrics, "heapTotal");
+
     return { rss: avgRss, heapUsed: avgHeapUsed, heapTotal: avgHeapTotal };
   }
 
@@ -334,10 +339,10 @@ class PerformanceMonitor {
    */
   calculatePeakMemory(memoryMetrics) {
     if (memoryMetrics.length === 0) return null;
-    
-    const maxRss = Math.max(...memoryMetrics.map(m => m.rss));
-    const maxHeapUsed = Math.max(...memoryMetrics.map(m => m.heapUsed));
-    
+
+    const maxRss = Math.max(...memoryMetrics.map((m) => m.rss));
+    const maxHeapUsed = Math.max(...memoryMetrics.map((m) => m.heapUsed));
+
     return { rss: maxRss, heapUsed: maxHeapUsed };
   }
 
@@ -347,10 +352,10 @@ class PerformanceMonitor {
    * @returns {number} Cache hit rate percentage
    */
   calculateCacheHitRate(cacheMetrics) {
-    const hits = cacheMetrics.filter(m => m.operation === 'hit').length;
-    const misses = cacheMetrics.filter(m => m.operation === 'miss').length;
+    const hits = cacheMetrics.filter((m) => m.operation === "hit").length;
+    const misses = cacheMetrics.filter((m) => m.operation === "miss").length;
     const total = hits + misses;
-    
+
     return total > 0 ? Math.round((hits / total) * 100 * 100) / 100 : 0;
   }
 
@@ -362,7 +367,7 @@ class PerformanceMonitor {
    */
   groupBy(items, field) {
     return items.reduce((acc, item) => {
-      const key = item[field] || 'unknown';
+      const key = item[field] || "unknown";
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
@@ -373,10 +378,10 @@ class PerformanceMonitor {
    */
   cleanupOldMetrics() {
     const cutoff = Date.now() - this.options.metricsRetention;
-    
-    Object.keys(this.metrics).forEach(category => {
+
+    Object.keys(this.metrics).forEach((category) => {
       this.metrics[category] = this.metrics[category].filter(
-        metric => metric.timestamp > cutoff
+        (metric) => metric.timestamp > cutoff,
       );
     });
   }
@@ -386,24 +391,36 @@ class PerformanceMonitor {
    */
   logPerformanceReport() {
     const stats = this.getStats();
-    
-    console.log(chalk.cyan('\n📊 Performance Report:'));
+
+    console.log(chalk.cyan("\n📊 Performance Report:"));
     console.log(chalk.gray(`Uptime: ${Math.round(stats.uptime / 1000)}s`));
-    
+
     if (stats.requests.total > 0) {
-      console.log(chalk.green(`Requests: ${stats.requests.total} (${stats.requests.successful} success, ${stats.requests.errors} errors)`));
-      console.log(chalk.blue(`Avg Response Time: ${stats.requests.averageResponseTime}ms`));
+      console.log(
+        chalk.green(
+          `Requests: ${stats.requests.total} (${stats.requests.successful} success, ${stats.requests.errors} errors)`,
+        ),
+      );
+      console.log(
+        chalk.blue(
+          `Avg Response Time: ${stats.requests.averageResponseTime}ms`,
+        ),
+      );
     }
-    
+
     if (stats.memory.current) {
       const memMB = Math.round(stats.memory.current.heapUsed / 1024 / 1024);
       console.log(chalk.yellow(`Memory: ${memMB}MB heap used`));
     }
-    
+
     if (stats.cache.operations > 0) {
-      console.log(chalk.magenta(`Cache: ${stats.cache.hitRate}% hit rate (${stats.cache.operations} ops)`));
+      console.log(
+        chalk.magenta(
+          `Cache: ${stats.cache.hitRate}% hit rate (${stats.cache.operations} ops)`,
+        ),
+      );
     }
-    
+
     if (stats.errors.total > 0) {
       console.log(chalk.red(`Errors: ${stats.errors.total} in last 5 minutes`));
     }
@@ -418,9 +435,9 @@ class PerformanceMonitor {
     const exportData = {
       timestamp: new Date().toISOString(),
       stats,
-      rawMetrics: this.metrics
+      rawMetrics: this.metrics,
     };
-    
+
     await fs.writeJson(filePath, exportData, { spaces: 2 });
     console.log(chalk.green(`📊 Metrics exported to ${filePath}`));
   }
@@ -432,8 +449,8 @@ class PerformanceMonitor {
   createExpressMiddleware() {
     return (req, res, next) => {
       const start = Date.now();
-      
-      res.on('finish', () => {
+
+      res.on("finish", () => {
         const duration = Date.now() - start;
         this.recordRequest(
           `${req.method} ${req.route?.path || req.url}`,
@@ -441,12 +458,12 @@ class PerformanceMonitor {
           res.statusCode,
           {
             method: req.method,
-            userAgent: req.get('User-Agent'),
-            ip: req.ip
-          }
+            userAgent: req.get("User-Agent"),
+            ip: req.ip,
+          },
         );
       });
-      
+
       next();
     };
   }

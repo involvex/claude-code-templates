@@ -21,6 +21,7 @@ Analyze the request and create appropriate React hooks:
 ## Common Hook Patterns
 
 When creating hooks, consider these patterns based on the request:
+
 - **Data fetching**: API calls, loading states, error handling
 - **State management**: Local state, derived state, state persistence
 - **Side effects**: Event listeners, timers, subscriptions

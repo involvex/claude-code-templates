@@ -78,6 +78,7 @@ UMAP has four primary parameters that control the embedding behavior. Understand
 **How it works:** Controls the size of the local neighborhood UMAP examines when learning manifold structure.
 
 **Effects by value:**
+
 - **Low values (2-5):** Emphasizes fine local detail but may fragment data into disconnected components
 - **Medium values (15-20):** Balanced view of both local structure and global relationships (recommended starting point)
 - **High values (50-200):** Prioritizes broad topological structure at the expense of fine-grained details
@@ -91,6 +92,7 @@ UMAP has four primary parameters that control the embedding behavior. Understand
 **How it works:** Sets the minimum distance apart that points are allowed to be in the output representation.
 
 **Effects by value:**
+
 - **Low values (0.0-0.1):** Creates clumped embeddings useful for clustering; reveals fine topological details
 - **High values (0.5-0.99):** Prevents tight packing; emphasizes broad topological preservation over local structure
 
@@ -103,6 +105,7 @@ UMAP has four primary parameters that control the embedding behavior. Understand
 **Key feature:** Unlike t-SNE, UMAP scales well in the embedding dimension, enabling use beyond visualization.
 
 **Common uses:**
+
 - **2-3 dimensions:** Visualization
 - **5-10 dimensions:** Clustering preprocessing (better preserves density than 2D)
 - **10-50 dimensions:** Feature engineering for downstream ML models
@@ -114,6 +117,7 @@ UMAP has four primary parameters that control the embedding behavior. Understand
 **Purpose:** Specifies how distance is calculated between input data points.
 
 **Supported metrics:**
+
 - **Minkowski variants:** euclidean, manhattan, chebyshev
 - **Spatial metrics:** canberra, braycurtis, haversine
 - **Correlation metrics:** cosine, correlation (good for text/document embeddings)
@@ -152,6 +156,7 @@ embedding = umap.UMAP().fit_transform(data, y=labels)
 ```
 
 **Key benefits:**
+
 - Achieves cleanly separated classes
 - Preserves internal structure within each class
 - Maintains global relationships between classes
@@ -201,6 +206,7 @@ UMAP serves as effective preprocessing for density-based clustering algorithms l
 **Key principle:** Configure UMAP differently for clustering than for visualization.
 
 **Recommended parameters:**
+
 - **n_neighbors:** Increase to ~30 (default 15 is too local and can create artificial fine-grained clusters)
 - **min_dist:** Set to 0.0 (pack points densely within clusters for clearer boundaries)
 - **n_components:** Use 5-10 dimensions (maintains performance while improving density preservation vs. 2D)
@@ -328,18 +334,21 @@ predictions = pipeline.predict(X_test)
 Parametric UMAP replaces direct embedding optimization with a learned neural network mapping function.
 
 **Key differences from standard UMAP:**
+
 - Uses TensorFlow/Keras to train encoder networks
 - Enables efficient transformation of new data
 - Supports reconstruction via decoder networks (inverse transform)
 - Allows custom architectures (CNNs for images, RNNs for sequences)
 
 **Installation:**
+
 ```bash
 uv pip install umap-learn[parametric_umap]
 # Requires TensorFlow 2.x
 ```
 
 **Basic usage:**
+
 ```python
 from umap.parametric_umap import ParametricUMAP
 
@@ -352,6 +361,7 @@ new_embedding = embedder.transform(new_data)
 ```
 
 **Custom architecture:**
+
 ```python
 import tensorflow as tf
 
@@ -368,12 +378,14 @@ embedding = embedder.fit_transform(data)
 ```
 
 **When to use Parametric UMAP:**
+
 - Need efficient transformation of new data after training
 - Require reconstruction capabilities (inverse transforms)
 - Want to combine UMAP with autoencoders
 - Working with complex data types (images, sequences) benefiting from specialized architectures
 
 **When to use standard UMAP:**
+
 - Need simplicity and quick prototyping
 - Dataset is small and computational efficiency isn't critical
 - Don't require learned transformations for future data
@@ -383,6 +395,7 @@ embedding = embedder.fit_transform(data)
 Inverse transforms enable reconstruction of high-dimensional data from low-dimensional embeddings.
 
 **Basic usage:**
+
 ```python
 reducer = umap.UMAP()
 embedding = reducer.fit_transform(data)
@@ -392,17 +405,20 @@ reconstructed = reducer.inverse_transform(embedding)
 ```
 
 **Important limitations:**
+
 - Computationally expensive operation
 - Works poorly outside the convex hull of the embedding
 - Accuracy decreases in regions with gaps between clusters
 
 **Use cases:**
+
 - Understanding structure of embedded data
 - Visualizing smooth transitions between clusters
 - Exploring interpolations between data points
 - Generating synthetic samples in embedding space
 
 **Example: Exploring embedding space:**
+
 ```python
 import numpy as np
 
@@ -446,21 +462,27 @@ UMAP uses stochastic optimization, so results will vary slightly between runs wi
 ## Common Issues and Solutions
 
 **Issue:** Disconnected components or fragmented clusters
+
 - **Solution:** Increase `n_neighbors` to emphasize more global structure
 
 **Issue:** Clusters too spread out or not well separated
+
 - **Solution:** Decrease `min_dist` to allow tighter packing
 
 **Issue:** Poor clustering results
+
 - **Solution:** Use clustering-specific parameters (n_neighbors=30, min_dist=0.0, n_components=5-10)
 
 **Issue:** Transform results differ significantly from training
+
 - **Solution:** Ensure test data distribution matches training, or use Parametric UMAP
 
 **Issue:** Slow performance on large datasets
+
 - **Solution:** Set `low_memory=True` (default), or consider dimensionality reduction with PCA first
 
 **Issue:** All points collapsed to single cluster
+
 - **Solution:** Check data preprocessing (ensure proper scaling), increase `min_dist`
 
 ## Resources
@@ -468,6 +490,7 @@ UMAP uses stochastic optimization, so results will vary slightly between runs wi
 ### references/
 
 Contains detailed API documentation:
+
 - `api_reference.md`: Complete UMAP class parameters and methods
 
 Load these references when detailed parameter information or advanced method usage is needed.

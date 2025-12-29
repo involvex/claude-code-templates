@@ -1,0 +1,70 @@
+# Bun Configuration for claude-code-templates
+# https://bun.sh/docs/runtime/bunfig
+
+[install]
+# Workspace configuration - manage multiple packages
+workspaces = [".", "cli-tool", "api", "docu"]
+
+# Install exact versions from lockfile
+exact = true
+
+# Auto-install dependencies
+auto = true
+
+# Cache directory
+cache = "node_modules/.cache/bun"
+
+# Registry configuration
+registry = "https://registry.npmjs.org/"
+
+# Ignore scripts for faster install
+ignoreScripts = false
+
+[install.lockfile]
+# Save lockfile after install
+save = true
+
+# Print format (yarn-style for better readability)
+print = "yarn"
+
+[install.scopes]
+# Scope-specific registry configurations can be added here
+# Example: "@anthropic" = "https://npm.pkg.github.com"
+
+[run]
+# Shell to use for running scripts
+# shell = "sh"
+
+# Automatically install missing dependencies
+autoInstall = false
+
+[test]
+# Test runner configuration
+# Bun test is compatible with Jest
+preload = []
+coverage = false
+bail = false
+
+[build]
+# Build configuration
+target = "node"
+minify = false
+sourcemap = "external"
+
+# Platform-specific optimizations
+[build.platform]
+# Target platform (browser, node, bun)
+target = "node"
+
+# Environment variables
+[env]
+# Environment-specific configs can be set here
+# These will be available during bun install/run
+
+# Performance optimizations
+[performance]
+# Enable faster package resolution
+cache = true
+
+# Faster module resolution
+moduleResolution = "node_modules"

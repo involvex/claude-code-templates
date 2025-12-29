@@ -23,6 +23,7 @@ Generate a comprehensive project health report analyzing:
 **Evaluation Period**: Use $ARGUMENTS or default to last 30 days
 
 **Health Dimensions**:
+
 1. **Code Quality Metrics**
    - Test coverage and trends
    - Code complexity analysis
@@ -48,6 +49,7 @@ Generate a comprehensive project health report analyzing:
    - External service dependencies
 
 **Health Report Format**:
+
 - Overall health score (0-100) with color-coded status
 - Executive summary with key findings
 - Detailed metrics tables with current vs target values

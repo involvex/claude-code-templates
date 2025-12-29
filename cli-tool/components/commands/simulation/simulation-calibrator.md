@@ -22,6 +22,7 @@ Implement systematic simulation calibration with comprehensive accuracy improvem
 **Simulation Type**: Use $ARGUMENTS to calibrate business simulations, technical models, behavioral predictions, or strategic scenarios
 
 **Calibration Framework**:
+
 1. **Baseline Assessment** - Historical validation, accuracy metrics, and error pattern analysis
 2. **Bias Detection** - Systematic identification of cognitive, data, and model biases with mitigation strategies
 3. **Validation Loops** - Multi-level validation with internal consistency, expert review, and empirical testing

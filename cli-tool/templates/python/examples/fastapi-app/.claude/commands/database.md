@@ -28,7 +28,7 @@ import os
 
 class Settings(BaseSettings):
     """Application settings."""
-    
+
     # Database
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_USER: str = "postgres"
@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     POSTGRES_DB: str = "fastapi_app"
     POSTGRES_PORT: str = "5432"
     DATABASE_URL: Optional[PostgresDsn] = None
-    
+
     @validator("DATABASE_URL", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
         if isinstance(v, str):
@@ -49,15 +49,15 @@ class Settings(BaseSettings):
             port=values.get("POSTGRES_PORT"),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
-    
+
     # Redis
     REDIS_URL: str = "redis://localhost:6379/0"
-    
+
     # Database settings
     DATABASE_POOL_SIZE: int = 10
     DATABASE_MAX_OVERFLOW: int = 20
     DATABASE_POOL_RECYCLE: int = 3600
-    
+
     class Config:
         env_file = ".env"
         case_sensitive = True
@@ -134,13 +134,13 @@ class TimestampMixin:
 class BaseModel(Base, TimestampMixin):
     """Base model with common functionality."""
     __abstract__ = True
-    
+
     id = Column(Integer, primary_key=True, index=True)
-    
+
     @declared_attr
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
-    
+
     def dict(self, exclude: set = None) -> dict[str, Any]:
         """Convert model to dictionary."""
         exclude = exclude or set()
@@ -149,7 +149,7 @@ class BaseModel(Base, TimestampMixin):
             for column in self.__table__.columns
             if column.name not in exclude
         }
-    
+
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}(id={self.id})>"
 ```
@@ -168,7 +168,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class User(BaseModel):
     """User model."""
     __tablename__ = "users"
-    
+
     username = Column(String(50), unique=True, index=True, nullable=False)
     email = Column(String(100), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
@@ -177,34 +177,34 @@ class User(BaseModel):
     is_active = Column(Boolean, default=True, nullable=False)
     is_superuser = Column(Boolean, default=False, nullable=False)
     bio = Column(Text)
-    
+
     # Relationships
     posts = relationship("Post", back_populates="author", cascade="all, delete-orphan")
-    
+
     # Indexes
     __table_args__ = (
         Index('idx_user_email_active', email, is_active),
         Index('idx_user_username_active', username, is_active),
     )
-    
+
     def verify_password(self, password: str) -> bool:
         """Verify password against hash."""
         return pwd_context.verify(password, self.hashed_password)
-    
+
     @staticmethod
     def get_password_hash(password: str) -> str:
         """Generate password hash."""
         return pwd_context.hash(password)
-    
+
     def set_password(self, password: str) -> None:
         """Set user password."""
         self.hashed_password = self.get_password_hash(password)
-    
+
     @property
     def full_name(self) -> str:
         """Get user's full name."""
         return f"{self.first_name} {self.last_name}"
-    
+
     def dict(self, exclude: set = None) -> dict:
         """Convert to dict excluding sensitive data."""
         exclude = exclude or set()
@@ -219,18 +219,18 @@ from app.models.base import BaseModel
 class Post(BaseModel):
     """Blog post model."""
     __tablename__ = "posts"
-    
+
     title = Column(String(200), nullable=False, index=True)
     content = Column(Text, nullable=False)
     slug = Column(String(200), unique=True, nullable=False, index=True)
     is_published = Column(Boolean, default=False, nullable=False)
-    
+
     # Foreign keys
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    
+
     # Relationships
     author = relationship("User", back_populates="posts")
-    
+
     # Indexes
     __table_args__ = (
         Index('idx_post_published_created', is_published, 'created_at'),
@@ -252,36 +252,36 @@ ModelType = TypeVar("ModelType", bound=BaseModel)
 
 class BaseRepository(Generic[ModelType]):
     """Base repository with common CRUD operations."""
-    
+
     def __init__(self, model: Type[ModelType], db: AsyncSession):
         self.model = model
         self.db = db
-    
+
     async def get(self, id: int) -> Optional[ModelType]:
         """Get model by ID."""
         result = await self.db.execute(
             select(self.model).where(self.model.id == id)
         )
         return result.scalar_one_or_none()
-    
+
     async def get_multi(
-        self, 
-        skip: int = 0, 
+        self,
+        skip: int = 0,
         limit: int = 100,
         filters: Dict[str, Any] = None
     ) -> List[ModelType]:
         """Get multiple models with pagination."""
         query = select(self.model)
-        
+
         if filters:
             for field, value in filters.items():
                 if hasattr(self.model, field):
                     query = query.where(getattr(self.model, field) == value)
-        
+
         query = query.offset(skip).limit(limit)
         result = await self.db.execute(query)
         return result.scalars().all()
-    
+
     async def create(self, obj_in: Dict[str, Any]) -> ModelType:
         """Create new model."""
         db_obj = self.model(**obj_in)
@@ -289,10 +289,10 @@ class BaseRepository(Generic[ModelType]):
         await self.db.commit()
         await self.db.refresh(db_obj)
         return db_obj
-    
+
     async def update(
-        self, 
-        id: int, 
+        self,
+        id: int,
         obj_in: Dict[str, Any]
     ) -> Optional[ModelType]:
         """Update model by ID."""
@@ -303,7 +303,7 @@ class BaseRepository(Generic[ModelType]):
         )
         await self.db.commit()
         return await self.get(id)
-    
+
     async def delete(self, id: int) -> bool:
         """Delete model by ID."""
         result = await self.db.execute(
@@ -311,16 +311,16 @@ class BaseRepository(Generic[ModelType]):
         )
         await self.db.commit()
         return result.rowcount > 0
-    
+
     async def count(self, filters: Dict[str, Any] = None) -> int:
         """Count models with optional filters."""
         query = select(func.count(self.model.id))
-        
+
         if filters:
             for field, value in filters.items():
                 if hasattr(self.model, field):
                     query = query.where(getattr(self.model, field) == value)
-        
+
         result = await self.db.execute(query)
         return result.scalar()
 
@@ -332,26 +332,26 @@ from app.repositories.base import BaseRepository
 
 class UserRepository(BaseRepository[User]):
     """User repository with custom methods."""
-    
+
     async def get_by_email(self, email: str) -> Optional[User]:
         """Get user by email."""
         result = await self.db.execute(
             select(User).where(User.email == email)
         )
         return result.scalar_one_or_none()
-    
+
     async def get_by_username(self, username: str) -> Optional[User]:
         """Get user by username."""
         result = await self.db.execute(
             select(User).where(User.username == username)
         )
         return result.scalar_one_or_none()
-    
+
     async def get_active_users(self, skip: int = 0, limit: int = 100):
         """Get active users."""
         return await self.get_multi(
-            skip=skip, 
-            limit=limit, 
+            skip=skip,
+            limit=limit,
             filters={'is_active': True}
         )
 ```
@@ -392,7 +392,7 @@ def do_run_migrations(connection):
         compare_type=True,
         compare_server_default=True,
     )
-    
+
     with context.begin_transaction():
         context.run_migrations()
 
@@ -400,7 +400,7 @@ async def run_migrations_online():
     """Run migrations in 'online' mode."""
     configuration = config.get_section(config.config_ini_section)
     configuration["sqlalchemy.url"] = str(settings.DATABASE_URL)
-    
+
     connectable = AsyncEngine(
         engine_from_config(
             configuration,
@@ -408,10 +408,10 @@ async def run_migrations_online():
             poolclass=pool.NullPool,
         )
     )
-    
+
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
-    
+
     await connectable.dispose()
 
 if context.is_offline_mode():
@@ -444,9 +444,9 @@ async def create_database_if_not_exists():
     # This is PostgreSQL specific
     import asyncpg
     from urllib.parse import urlparse
-    
+
     url = urlparse(str(settings.DATABASE_URL))
-    
+
     try:
         # Connect to postgres database to create our database
         conn = await asyncpg.connect(
@@ -456,19 +456,19 @@ async def create_database_if_not_exists():
             password=url.password,
             database='postgres'
         )
-        
+
         # Check if database exists
         exists = await conn.fetchval(
             "SELECT 1 FROM pg_database WHERE datname = $1",
             url.path[1:]  # Remove leading slash
         )
-        
+
         if not exists:
             await conn.execute(f'CREATE DATABASE "{url.path[1:]}"')
             print(f"Database {url.path[1:]} created.")
-        
+
         await conn.close()
-        
+
     except Exception as e:
         print(f"Error creating database: {e}")
 
@@ -481,16 +481,16 @@ async def execute_raw_sql(sql: str, params: dict = None) -> list:
 async def get_table_info(table_name: str) -> dict:
     """Get information about a table."""
     sql = """
-    SELECT 
+    SELECT
         column_name,
         data_type,
         is_nullable,
         column_default
-    FROM information_schema.columns 
+    FROM information_schema.columns
     WHERE table_name = :table_name
     ORDER BY ordinal_position;
     """
-    
+
     result = await execute_raw_sql(sql, {'table_name': table_name})
     return [
         {
@@ -519,14 +519,14 @@ async def init_db() -> None:
     # Create tables
     await create_tables()
     print("Database tables created.")
-    
+
     # Create default superuser
     async with AsyncSessionLocal() as session:
         user_repo = UserRepository(User, session)
-        
+
         # Check if superuser exists
         existing_user = await user_repo.get_by_email("admin@example.com")
-        
+
         if not existing_user:
             superuser_data = {
                 "username": "admin",
@@ -536,10 +536,10 @@ async def init_db() -> None:
                 "is_superuser": True,
                 "is_active": True
             }
-            
+
             superuser = User(**superuser_data)
             superuser.set_password("admin123")
-            
+
             session.add(superuser)
             await session.commit()
             print("Superuser created.")
@@ -576,17 +576,17 @@ def event_loop():
 async def test_engine():
     """Create test database engine."""
     engine = create_async_engine(TEST_DATABASE_URL, echo=False)
-    
+
     # Create tables
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     yield engine
-    
+
     # Drop tables
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
-    
+
     await engine.dispose()
 
 @pytest_asyncio.fixture
@@ -595,7 +595,7 @@ async def test_session(test_engine):
     TestSessionLocal = sessionmaker(
         test_engine, class_=AsyncSession, expire_on_commit=False
     )
-    
+
     async with TestSessionLocal() as session:
         yield session
 
@@ -604,7 +604,7 @@ def override_get_db(test_session):
     """Override database dependency."""
     async def _override_get_db():
         yield test_session
-    
+
     app.dependency_overrides[get_db] = _override_get_db
     yield
     app.dependency_overrides = {}
@@ -630,12 +630,12 @@ async def health_check(db: AsyncSession = Depends(get_db)):
         "timestamp": time.time(),
         "database": await check_database_health(db),
     }
-    
+
     # Determine overall status
     if checks["database"]["status"] != "ok":
         checks["status"] = "unhealthy"
         raise HTTPException(status_code=503, detail=checks)
-    
+
     return checks
 
 async def check_database_health(db: AsyncSession) -> dict:
@@ -644,7 +644,7 @@ async def check_database_health(db: AsyncSession) -> dict:
         start_time = time.time()
         await db.execute(text("SELECT 1"))
         response_time = (time.time() - start_time) * 1000  # milliseconds
-        
+
         return {
             "status": "ok",
             "response_time_ms": round(response_time, 2)

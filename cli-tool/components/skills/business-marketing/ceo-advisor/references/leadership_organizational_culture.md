@@ -41,24 +41,28 @@
 #### Cultural Dimensions Model
 
 **Innovation ← → Stability**
+
 - Risk tolerance level
 - Change readiness
 - Experimentation mindset
 - Learning from failure
 
 **Competition ← → Collaboration**
+
 - Internal dynamics
 - Knowledge sharing
 - Team vs individual rewards
 - Cross-functional cooperation
 
 **Customer ← → Operations**
+
 - External vs internal focus
 - Customer centricity
 - Process emphasis
 - Quality standards
 
 **Short-term ← → Long-term**
+
 - Planning horizons
 - Investment philosophy
 - Performance metrics
@@ -69,6 +73,7 @@
 #### Phase 1: Assessment (Months 1-2)
 
 **Current State Analysis**:
+
 - Employee survey (engagement, values alignment)
 - Culture assessment (competing values framework)
 - Leadership 360 feedback
@@ -76,6 +81,7 @@
 - Customer feedback integration
 
 **Gap Analysis**:
+
 - Current vs desired culture
 - Behavioral gaps
 - System misalignments
@@ -85,6 +91,7 @@
 #### Phase 2: Design (Months 2-3)
 
 **Target Culture Definition**:
+
 - Core values articulation
 - Behavioral standards
 - Leadership principles
@@ -92,6 +99,7 @@
 - Performance expectations
 
 **Change Strategy**:
+
 - Stakeholder mapping
 - Communication plan
 - Training requirements
@@ -101,6 +109,7 @@
 #### Phase 3: Implementation (Months 4-12)
 
 **Launch Activities**:
+
 - Leadership alignment sessions
 - All-hands kickoff
 - Values workshops
@@ -108,6 +117,7 @@
 - System updates
 
 **Reinforcement Mechanisms**:
+
 - Recognition programs
 - Performance integration
 - Hiring/promotion criteria
@@ -117,6 +127,7 @@
 #### Phase 4: Embedding (Months 12+)
 
 **Sustainability Actions**:
+
 - Regular pulse surveys
 - Culture champions network
 - Continuous reinforcement
@@ -130,6 +141,7 @@
 #### Team Effectiveness Model
 
 **Foundation Elements**:
+
 1. **Trust** - Vulnerability-based trust
 2. **Conflict** - Healthy debate
 3. **Commitment** - Buy-in to decisions
@@ -184,24 +196,28 @@ Success Metrics:
 **CEO Succession Timeline**:
 
 **Ongoing**:
+
 - Identify potential successors
 - Development plan execution
 - Board exposure
 - External benchmarking
 
 **T-3 Years**:
+
 - Formal succession planning
 - Candidate assessment
 - Development acceleration
 - Emergency plan update
 
 **T-1 Year**:
+
 - Final candidate selection
 - Transition planning
 - Communication strategy
 - Onboarding preparation
 
 **Transition**:
+
 - Announcement
 - Knowledge transfer
 - Stakeholder introductions
@@ -228,6 +244,7 @@ Low │Performer│  -ent   │ Learning
 ```
 
 **Development Strategies by Box**:
+
 - **Stars**: Accelerated development, stretch assignments
 - **High Performers**: Retention focus, leadership opportunities
 - **High Potentials**: Intensive coaching, skill building
@@ -239,6 +256,7 @@ Low │Performer│  -ent   │ Learning
 #### Core Leadership Competencies
 
 **Strategic Thinking**
+
 - Vision development
 - Systems thinking
 - Innovation mindset
@@ -246,6 +264,7 @@ Low │Performer│  -ent   │ Learning
 - Long-term planning
 
 **Execution Excellence**
+
 - Results orientation
 - Decision quality
 - Problem solving
@@ -253,6 +272,7 @@ Low │Performer│  -ent   │ Learning
 - Risk management
 
 **People Leadership**
+
 - Team building
 - Talent development
 - Communication
@@ -260,6 +280,7 @@ Low │Performer│  -ent   │ Learning
 - Emotional intelligence
 
 **Personal Excellence**
+
 - Integrity
 - Resilience
 - Continuous learning
@@ -272,34 +293,38 @@ Low │Performer│  -ent   │ Learning
 
 #### Communication Channels
 
-| Channel | Frequency | Purpose | Audience |
-|---------|-----------|---------|----------|
-| All-hands meeting | Monthly | Updates, Q&A | All employees |
-| Leadership cascade | Weekly | Alignment | Managers |
-| CEO email | Bi-weekly | Vision, recognition | All employees |
-| Town halls | Quarterly | Deep dives | All employees |
-| Skip-levels | Monthly | Direct feedback | Various levels |
-| Intranet | Daily | News, resources | All employees |
-| Slack/Teams | Real-time | Collaboration | All employees |
+| Channel            | Frequency | Purpose             | Audience       |
+| ------------------ | --------- | ------------------- | -------------- |
+| All-hands meeting  | Monthly   | Updates, Q&A        | All employees  |
+| Leadership cascade | Weekly    | Alignment           | Managers       |
+| CEO email          | Bi-weekly | Vision, recognition | All employees  |
+| Town halls         | Quarterly | Deep dives          | All employees  |
+| Skip-levels        | Monthly   | Direct feedback     | Various levels |
+| Intranet           | Daily     | News, resources     | All employees  |
+| Slack/Teams        | Real-time | Collaboration       | All employees  |
 
 #### CEO Communication Calendar
 
 **Weekly**:
+
 - Executive team meeting
 - Leadership message cascade
 - Customer/partner touchpoint
 
 **Bi-weekly**:
+
 - Company-wide email
 - Skip-level meetings
 - Media/analyst interaction
 
 **Monthly**:
+
 - All-hands meeting
 - Board member touchpoint
 - Employee roundtable
 
 **Quarterly**:
+
 - Earnings communication
 - Town hall deep-dive
 - Strategy review
@@ -310,6 +335,7 @@ Low │Performer│  -ent   │ Learning
 #### Engagement Survey Framework
 
 **Dimensions Measured**:
+
 1. Purpose & Vision (alignment, inspiration)
 2. Leadership (trust, communication)
 3. Management (support, development)
@@ -320,6 +346,7 @@ Low │Performer│  -ent   │ Learning
 8. Belonging (inclusion, connection)
 
 **Action Planning Process**:
+
 1. Share results transparently
 2. Identify 2-3 focus areas
 3. Create action teams
@@ -331,6 +358,7 @@ Low │Performer│  -ent   │ Learning
 #### Engagement Initiatives
 
 **Recognition Programs**:
+
 - Spot awards (peer-nominated)
 - Quarterly achievements
 - Annual excellence awards
@@ -339,6 +367,7 @@ Low │Performer│  -ent   │ Learning
 - Customer hero awards
 
 **Development Programs**:
+
 - Leadership academy
 - Mentorship program
 - Rotation opportunities
@@ -347,6 +376,7 @@ Low │Performer│  -ent   │ Learning
 - Skill workshops
 
 **Wellbeing Initiatives**:
+
 - Flexible work arrangements
 - Mental health support
 - Wellness programs
@@ -373,11 +403,13 @@ Low │Performer│  -ent   │ Learning
 **Objective**: [Qualitative, inspirational goal]
 
 **Key Results**:
+
 1. [Quantitative outcome] from [X] to [Y]
 2. [Quantitative outcome] from [X] to [Y]
 3. [Quantitative outcome] from [X] to [Y]
 
 **Example**:
+
 ```
 Objective: Become the market leader in customer satisfaction
 
@@ -392,24 +424,28 @@ Key Results:
 #### Continuous Performance Management
 
 **Weekly**: 1-on-1 check-ins (30 min)
+
 - Progress on priorities
 - Obstacles/support needed
 - Feedback exchange
 - Next week focus
 
 **Monthly**: Development discussion (60 min)
+
 - Skill development
 - Career aspirations
 - Stretch opportunities
 - Learning plan
 
 **Quarterly**: Performance review (90 min)
+
 - OKR assessment
 - Competency evaluation
 - 360 feedback review
 - Development planning
 
 **Annual**: Compensation review
+
 - Performance rating
 - Compensation adjustment
 - Promotion decisions
@@ -466,24 +502,28 @@ Key Results:
 #### Design Principles
 
 **Customer-Centric**
+
 - Organize around customer needs
 - Minimize handoffs
 - Clear ownership
 - Fast decision-making
 
 **Scalable**
+
 - Consistent structures
 - Clear roles/responsibilities
 - Repeatable processes
 - Growth-ready
 
 **Agile**
+
 - Cross-functional teams
 - Rapid iteration
 - Continuous learning
 - Adaptive planning
 
 **Efficient**
+
 - Appropriate spans of control (5-7)
 - Minimal layers (max 5-6)
 - Clear decision rights
@@ -492,24 +532,28 @@ Key Results:
 #### Reorganization Playbook
 
 **Pre-announcement** (4-6 weeks)
+
 - Design new structure
 - Identify leadership
 - Plan communication
 - Prepare materials
 
 **Announcement** (Day 0)
+
 - All-hands meeting
 - Written communication
 - Q&A sessions
 - Manager toolkit
 
 **Transition** (30 days)
+
 - Role clarifications
 - Team formations
 - Process updates
 - System changes
 
 **Stabilization** (60-90 days)
+
 - Monitor progress
 - Address issues
 - Refine as needed
@@ -522,6 +566,7 @@ Key Results:
 #### Leadership During Crisis
 
 **Immediate Response** (0-24 hours)
+
 - Establish command center
 - Assess situation
 - Communicate frequently
@@ -529,6 +574,7 @@ Key Results:
 - Show visible leadership
 
 **Stabilization** (1-7 days)
+
 - Implement solutions
 - Maintain communication
 - Support teams
@@ -536,6 +582,7 @@ Key Results:
 - Adjust approach
 
 **Recovery** (1-4 weeks)
+
 - Execute recovery plan
 - Address long-term impacts
 - Learn from crisis
@@ -545,12 +592,14 @@ Key Results:
 #### Crisis Communication
 
 **Internal Communication**:
+
 - Frequency: 2x daily minimum
 - Channels: Email, video, town halls
 - Content: Facts, actions, support
 - Tone: Calm, confident, caring
 
 **External Communication**:
+
 - Stakeholders: Customers, partners, investors, media
 - Frequency: As needed
 - Channels: Website, press, social
@@ -564,18 +613,21 @@ Key Results:
 #### Innovation Portfolio
 
 **Horizon 1** (70% resources)
+
 - Core business innovation
 - Incremental improvements
 - 6-18 month timeline
 - Lower risk
 
 **Horizon 2** (20% resources)
+
 - Emerging opportunities
 - Adjacent markets
 - 18-36 month timeline
 - Moderate risk
 
 **Horizon 3** (10% resources)
+
 - Transformational bets
 - New business models
 - 3-5 year timeline
@@ -584,6 +636,7 @@ Key Results:
 #### Innovation Programs
 
 **Innovation Time**
+
 - 20% time for projects
 - Hackathons quarterly
 - Innovation challenges
@@ -591,6 +644,7 @@ Key Results:
 - Patent incentives
 
 **Innovation Metrics**
+
 - % revenue from new products
 - Ideas generated/implemented
 - Time to market
@@ -629,13 +683,13 @@ Key Results:
 
 #### DEI Metrics Dashboard
 
-| Metric | Current | Target | Timeline |
-|--------|---------|--------|----------|
-| Women in leadership | X% | Y% | Z years |
-| Ethnic diversity | X% | Y% | Z years |
-| Pay equity gap | X% | 0% | Z years |
-| Inclusion index | X/100 | Y/100 | Z years |
-| Retention equality | X% diff | 0% diff | Z years |
+| Metric              | Current | Target  | Timeline |
+| ------------------- | ------- | ------- | -------- |
+| Women in leadership | X%      | Y%      | Z years  |
+| Ethnic diversity    | X%      | Y%      | Z years  |
+| Pay equity gap      | X%      | 0%      | Z years  |
+| Inclusion index     | X/100   | Y/100   | Z years  |
+| Retention equality  | X% diff | 0% diff | Z years  |
 
 ## Executive Presence
 
@@ -654,12 +708,14 @@ Key Results:
 **Speaking Frameworks**:
 
 **PREP Method**:
+
 - **P**oint: Main message
 - **R**eason: Why it matters
 - **E**xample: Concrete illustration
 - **P**oint: Restate message
 
 **STAR Method** (for stories):
+
 - **S**ituation: Context
 - **T**ask: Challenge
 - **A**ction: What was done
@@ -668,6 +724,7 @@ Key Results:
 #### Media Training Essentials
 
 **Key Message Discipline**:
+
 - 3 key messages maximum
 - Bridge to messages
 - Sound bites ready
@@ -675,6 +732,7 @@ Key Results:
 - Stay on record
 
 **Interview Techniques**:
+
 - Pause before answering
 - Bridge to key messages
 - Use examples/stories

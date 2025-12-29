@@ -6,11 +6,11 @@ class App {
   constructor(container, services) {
     this.container = container;
     this.services = services;
-    
+
     this.components = {};
     this.currentPage = null; // Don't set default page yet
     this.isInitialized = false;
-    
+
     this.init();
   }
 
@@ -19,7 +19,7 @@ class App {
    */
   async init() {
     if (this.isInitialized) return;
-    
+
     try {
       await this.render();
       await this.initializeComponents();
@@ -27,8 +27,8 @@ class App {
       this.bindEvents();
       this.isInitialized = true;
     } catch (error) {
-      console.error('Error initializing app:', error);
-      this.showError('Failed to initialize application');
+      console.error("Error initializing app:", error);
+      this.showError("Failed to initialize application");
     }
   }
 
@@ -83,16 +83,21 @@ class App {
    */
   async initializeComponents() {
     // Initialize Sidebar
-    const sidebarContainer = this.container.querySelector('#app-sidebar');
-    if (typeof Sidebar !== 'undefined') {
-      this.components.sidebar = new Sidebar(sidebarContainer, this.handleNavigation.bind(this));
+    const sidebarContainer = this.container.querySelector("#app-sidebar");
+    if (typeof Sidebar !== "undefined") {
+      this.components.sidebar = new Sidebar(
+        sidebarContainer,
+        this.handleNavigation.bind(this),
+      );
     } else {
-      throw new Error('Sidebar component not available. Check if components/Sidebar.js is loaded.');
+      throw new Error(
+        "Sidebar component not available. Check if components/Sidebar.js is loaded.",
+      );
     }
-    
+
     // Initialize pages
     this.components.pages = {};
-    
+
     // Don't load any page yet - wait for routing to determine the correct page
   }
 
@@ -101,13 +106,13 @@ class App {
    */
   setupRouting() {
     // Handle browser navigation
-    window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.slice(1) || 'dashboard';
+    window.addEventListener("hashchange", () => {
+      const hash = window.location.hash.slice(1) || "dashboard";
       this.navigateToPage(hash);
     });
-    
+
     // Set initial route
-    const initialHash = window.location.hash.slice(1) || 'dashboard';
+    const initialHash = window.location.hash.slice(1) || "dashboard";
     this.navigateToPage(initialHash);
   }
 
@@ -116,21 +121,25 @@ class App {
    */
   bindEvents() {
     // Sidebar toggle handler
-    window.addEventListener('sidebar-toggle', (event) => {
+    window.addEventListener("sidebar-toggle", (event) => {
       this.handleSidebarToggle(event.detail.collapsed);
     });
-    
+
     // Error modal events
-    const errorModalClose = this.container.querySelector('#error-modal-close');
-    const errorModalDismiss = this.container.querySelector('#error-modal-dismiss');
-    const errorModalRetry = this.container.querySelector('#error-modal-retry');
-    
-    errorModalClose.addEventListener('click', () => this.hideError());
-    errorModalDismiss.addEventListener('click', () => this.hideError());
-    errorModalRetry.addEventListener('click', () => this.retryLastAction());
-    
+    const errorModalClose = this.container.querySelector("#error-modal-close");
+    const errorModalDismiss = this.container.querySelector(
+      "#error-modal-dismiss",
+    );
+    const errorModalRetry = this.container.querySelector("#error-modal-retry");
+
+    errorModalClose.addEventListener("click", () => this.hideError());
+    errorModalDismiss.addEventListener("click", () => this.hideError());
+    errorModalRetry.addEventListener("click", () => this.retryLastAction());
+
     // Global keyboard shortcuts
-    document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
+    document.addEventListener("keydown", (e) =>
+      this.handleKeyboardShortcuts(e),
+    );
   }
 
   /**
@@ -147,29 +156,28 @@ class App {
    */
   async navigateToPage(page) {
     if (page === this.currentPage && this.currentPage !== null) return;
-    
+
     try {
       this.showGlobalLoading();
-      
+
       // Cleanup current page
       await this.cleanupCurrentPage();
-      
+
       // Load new page
       await this.loadPage(page);
-      
+
       // Update state
       this.currentPage = page;
-      
+
       // Update URL hash
       window.location.hash = page;
-      
+
       // Update sidebar active state
       if (this.components.sidebar) {
         this.components.sidebar.setActivePage(page);
       }
-      
     } catch (error) {
-      console.error('Error navigating to page:', page, error);
+      console.error("Error navigating to page:", page, error);
       this.showError(`Failed to load ${page} page`);
     } finally {
       this.hideGlobalLoading();
@@ -181,30 +189,30 @@ class App {
    * @param {string} page - Page to load
    */
   async loadPage(page) {
-    const contentContainer = this.container.querySelector('#app-content');
-    
+    const contentContainer = this.container.querySelector("#app-content");
+
     if (!contentContainer) {
-      throw new Error('App content container not found');
+      throw new Error("App content container not found");
     }
-    
+
     console.log(`🚀 Loading page: ${page} (optimized - single page load)`);
-    
+
     // First, destroy any existing page component for this page
     if (this.components.pages[page] && this.components.pages[page].destroy) {
       console.log(`🧹 Destroying existing ${page} page component`);
       this.components.pages[page].destroy();
       this.components.pages[page] = null;
     }
-    
+
     // Clear content container
-    contentContainer.innerHTML = '';
-    
+    contentContainer.innerHTML = "";
+
     // Create new page component
     await this.createPageComponent(page, contentContainer);
-    
+
     // Call showPage for any additional setup
     await this.showPage(page);
-    
+
     console.log(`✅ Page '${page}' loaded successfully`);
   }
 
@@ -218,31 +226,41 @@ class App {
     if (this.components.pages[page] && this.components.pages[page].destroy) {
       this.components.pages[page].destroy();
     }
-    
+
     switch (page) {
-      case 'dashboard':
-        if (typeof DashboardPage !== 'undefined') {
-          this.components.pages.dashboard = new DashboardPage(container, this.services);
+      case "dashboard":
+        if (typeof DashboardPage !== "undefined") {
+          this.components.pages.dashboard = new DashboardPage(
+            container,
+            this.services,
+          );
           await this.components.pages.dashboard.initialize();
         } else {
-          throw new Error('DashboardPage component not available. Check if components/DashboardPage.js is loaded.');
+          throw new Error(
+            "DashboardPage component not available. Check if components/DashboardPage.js is loaded.",
+          );
         }
         break;
-        
-      case 'agents':
-        if (typeof AgentsPage !== 'undefined') {
-          this.components.pages.agents = new AgentsPage(container, this.services);
+
+      case "agents":
+        if (typeof AgentsPage !== "undefined") {
+          this.components.pages.agents = new AgentsPage(
+            container,
+            this.services,
+          );
           await this.components.pages.agents.initialize();
           // Expose agentsPage globally for modal access
-          if (typeof window !== 'undefined' && window.claudeAnalyticsApp) {
+          if (typeof window !== "undefined" && window.claudeAnalyticsApp) {
             window.claudeAnalyticsApp.agentsPage = this.components.pages.agents;
-            console.log('✅ Exposed agentsPage globally for modal access');
+            console.log("✅ Exposed agentsPage globally for modal access");
           }
         } else {
-          throw new Error('AgentsPage component not available. Check if components/AgentsPage.js is loaded.');
+          throw new Error(
+            "AgentsPage component not available. Check if components/AgentsPage.js is loaded.",
+          );
         }
         break;
-        
+
       default:
         throw new Error(`Unknown page: ${page}`);
     }
@@ -270,13 +288,17 @@ class App {
   async cleanupCurrentPage() {
     // Skip cleanup if no current page
     if (!this.currentPage) return;
-    
+
     // Clean up global references
-    if (this.currentPage === 'agents' && typeof window !== 'undefined' && window.claudeAnalyticsApp) {
+    if (
+      this.currentPage === "agents" &&
+      typeof window !== "undefined" &&
+      window.claudeAnalyticsApp
+    ) {
       window.claudeAnalyticsApp.agentsPage = undefined;
-      console.log('🧹 Cleaned up global agentsPage reference');
+      console.log("🧹 Cleaned up global agentsPage reference");
     }
-    
+
     const currentPageComponent = this.components.pages[this.currentPage];
     if (currentPageComponent && currentPageComponent.onDeactivate) {
       await currentPageComponent.onDeactivate();
@@ -288,8 +310,8 @@ class App {
    * @param {boolean} collapsed - Whether sidebar is collapsed
    */
   handleSidebarToggle(collapsed) {
-    const appMain = this.container.querySelector('#app-main');
-    appMain.classList.toggle('sidebar-collapsed', collapsed);
+    const appMain = this.container.querySelector("#app-main");
+    appMain.classList.toggle("sidebar-collapsed", collapsed);
   }
 
   /**
@@ -300,23 +322,23 @@ class App {
     // Ctrl/Cmd + number keys for quick navigation
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) {
       switch (e.key) {
-        case '1':
+        case "1":
           e.preventDefault();
-          this.navigateToPage('dashboard');
+          this.navigateToPage("dashboard");
           break;
-        case '2':
+        case "2":
           e.preventDefault();
-          this.navigateToPage('agents');
+          this.navigateToPage("agents");
           break;
-        case 'r':
+        case "r":
           e.preventDefault();
           this.refreshCurrentPage();
           break;
       }
     }
-    
+
     // Escape key to close modals
-    if (e.key === 'Escape') {
+    if (e.key === "Escape") {
       this.hideError();
     }
   }
@@ -335,16 +357,16 @@ class App {
    * Show global loading
    */
   showGlobalLoading() {
-    const loadingOverlay = this.container.querySelector('#global-loading');
-    loadingOverlay.style.display = 'flex';
+    const loadingOverlay = this.container.querySelector("#global-loading");
+    loadingOverlay.style.display = "flex";
   }
 
   /**
    * Hide global loading
    */
   hideGlobalLoading() {
-    const loadingOverlay = this.container.querySelector('#global-loading');
-    loadingOverlay.style.display = 'none';
+    const loadingOverlay = this.container.querySelector("#global-loading");
+    loadingOverlay.style.display = "none";
   }
 
   /**
@@ -352,12 +374,12 @@ class App {
    * @param {string} message - Error message
    */
   showError(message) {
-    const errorModal = this.container.querySelector('#error-modal');
-    const errorMessage = this.container.querySelector('#error-modal-message');
-    
+    const errorModal = this.container.querySelector("#error-modal");
+    const errorMessage = this.container.querySelector("#error-modal-message");
+
     errorMessage.textContent = message;
-    errorModal.style.display = 'flex';
-    
+    errorModal.style.display = "flex";
+
     this.lastError = message;
   }
 
@@ -365,8 +387,8 @@ class App {
    * Hide error modal
    */
   hideError() {
-    const errorModal = this.container.querySelector('#error-modal');
-    errorModal.style.display = 'none';
+    const errorModal = this.container.querySelector("#error-modal");
+    errorModal.style.display = "none";
   }
 
   /**
@@ -374,13 +396,13 @@ class App {
    */
   async retryLastAction() {
     this.hideError();
-    
+
     try {
       // Retry loading current page
       await this.loadPage(this.currentPage);
     } catch (error) {
-      console.error('Retry failed:', error);
-      this.showError('Retry failed. Please refresh the page.');
+      console.error("Retry failed:", error);
+      this.showError("Retry failed. Please refresh the page.");
     }
   }
 
@@ -415,27 +437,27 @@ class App {
    */
   destroy() {
     // Cleanup pages
-    Object.values(this.components.pages).forEach(page => {
+    Object.values(this.components.pages).forEach((page) => {
       if (page.destroy) {
         page.destroy();
       }
     });
-    
+
     // Cleanup sidebar
     if (this.components.sidebar && this.components.sidebar.destroy) {
       this.components.sidebar.destroy();
     }
-    
+
     // Remove event listeners
-    window.removeEventListener('hashchange', this.handleNavigation);
-    window.removeEventListener('sidebar-toggle', this.handleSidebarToggle);
-    document.removeEventListener('keydown', this.handleKeyboardShortcuts);
-    
+    window.removeEventListener("hashchange", this.handleNavigation);
+    window.removeEventListener("sidebar-toggle", this.handleSidebarToggle);
+    document.removeEventListener("keydown", this.handleKeyboardShortcuts);
+
     this.isInitialized = false;
   }
 }
 
 // Export for module use
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = App;
 }

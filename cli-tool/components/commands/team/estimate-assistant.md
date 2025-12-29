@@ -22,6 +22,7 @@ Execute comprehensive task estimation with historical analysis and confidence mo
 **Estimation Focus**: Use $ARGUMENTS for task description analysis, historical pattern matching, complexity assessment, or team velocity calculation
 
 **Estimation Framework**:
+
 1. **Historical Pattern Analysis** - Analyze similar past tasks, extract completion time patterns, identify velocity trends, calculate accuracy metrics
 2. **Complexity Assessment** - Evaluate technical complexity, assess scope uncertainty, identify risk factors, estimate effort distribution
 3. **Team Velocity Integration** - Calculate sprint velocity, analyze individual capacity, assess team expertise, factor in availability constraints

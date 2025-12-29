@@ -9,6 +9,7 @@
 Your brand voice should be consistent across all channels. Use this framework to maintain consistency:
 
 **Example Brand Voice** (modify for your company):
+
 - **Approachable**: Friendly and helpful, not corporate or robotic
 - **Clear**: Explain complex ideas in simple terms; no unnecessary jargon
 - **Action-oriented**: Focus on what customers can DO, not what you can do
@@ -18,28 +19,34 @@ Your brand voice should be consistent across all channels. Use this framework to
 ### Tone Adjustments by Context
 
 **Tone When**: Happy/Celebratory
+
 - Used for: New features, customer wins, company milestones
 - Example: "We're thrilled to announce..."
 
 **Tone When**: Helpful/Educational
+
 - Used for: How-to content, tips, guides
 - Example: "Here's what we learned..."
 
 **Tone When**: Empathetic/Understanding
+
 - Used for: Addressing customer problems, crisis communication
 - Example: "We understand how frustrating this can be..."
 
 **Tone When**: Professional/Formal
+
 - Used for: Legal communications, official announcements
 - Example: "In accordance with our policy..."
 
 **Tone When**: Casual/Conversational
+
 - Used for: Social media, internal communications, blog posts
 - Example: "Here's the thing about..."
 
 ### Writing Guidelines
 
 **DO:**
+
 - Use "you" and "we" (creates connection)
 - Use contractions (you're, we've, it's) - sounds more human
 - Use active voice (we help you) vs. passive (you are helped)
@@ -50,6 +57,7 @@ Your brand voice should be consistent across all channels. Use this framework to
 - Show real customer examples
 
 **DON'T:**
+
 - Use jargon without explanation
 - Use "we believe" or "we think" (show, don't tell)
 - Use unnecessary complex words
@@ -61,6 +69,7 @@ Your brand voice should be consistent across all channels. Use this framework to
 ### Terminology (Use Consistently)
 
 **Always use these terms:**
+
 - [Term 1]: Used consistently across all marketing
 - [Term 2]: Never say [Alternative term 1]
 - [Term 3]: Never say [Alternative term 2]
@@ -68,6 +77,7 @@ Your brand voice should be consistent across all channels. Use this framework to
 - [Feature name]: Not [Generic alternative]
 
 **Examples for any company:**
+
 - Always: "customers" (not "clients", "users", "accounts")
 - Always: "dashboard" (not "control panel", "platform", "interface")
 - Always: "API" (not "integration", "connector", "bridge")
@@ -80,17 +90,20 @@ Your brand voice should be consistent across all channels. Use this framework to
 ### Color Palette
 
 **Primary Colors** (main brand colors):
+
 - Primary: [Color] - Hex: [#000000] - Usage: Headlines, CTAs, main elements
 - Accent 1: [Color] - Hex: [#000000] - Usage: Secondary elements, highlights
 - Accent 2: [Color] - Hex: [#000000] - Usage: Supporting elements
 
 **Neutral Colors** (backgrounds, text):
+
 - Text: [Color] - Hex: [#000000] - For body copy
 - Light background: [Color] - Hex: [#000000]
 - Medium background: [Color] - Hex: [#000000]
 - Dark background: [Color] - Hex: [#000000]
 
 **Status Colors** (error, success, warning):
+
 - Success: [Color] - Hex: [#000000]
 - Warning: [Color] - Hex: [#000000]
 - Error: [Color] - Hex: [#000000]
@@ -99,11 +112,13 @@ Your brand voice should be consistent across all channels. Use this framework to
 ### Typography
 
 **Fonts**:
+
 - Headlines: [Font name] (if licensed, include license details)
 - Body text: [Font name]
 - Code/Technical: [Font name]
 
 **Usage**:
+
 - H1 (Headlines): [Font name], [Size] px, Bold
 - H2 (Subheadings): [Font name], [Size] px, Bold
 - H3 (Tertiary): [Font name], [Size] px, Semi-bold
@@ -123,6 +138,7 @@ Your brand voice should be consistent across all channels. Use this framework to
 **Backgrounds**: Logo should have [X% contrast with background]
 
 **DON'Ts**:
+
 - Never stretch or distort logo
 - Never change colors without approval
 - Never add effects (drop shadow, 3D, etc.)
@@ -132,17 +148,20 @@ Your brand voice should be consistent across all channels. Use this framework to
 ### Image Style
 
 **Photography Style**: [Describe your brand's visual aesthetic]
+
 - Real photos (not stock photos of random people)
 - Authentic customer/team moments
 - Professional quality but not overly staged
 - Diverse representation in people photos
 
 **Illustration Style**: [Describe illustration approach if applicable]
+
 - Minimalist vs. detailed
 - Color palette consistency
 - Use cases (icons, decorative elements, educational)
 
 **Graphic Style**: [Describe approach to charts, graphs, data visualization]
+
 - Color palette used
 - Font consistency
 - Icon style
@@ -161,17 +180,20 @@ Your brand voice should be consistent across all channels. Use this framework to
 ### Email Template
 
 **Email Header**:
+
 - Use brand colors strategically
 - Include company logo (left or center aligned)
 - Header height: [X] pixels
 
 **Email Body**:
+
 - Use brand fonts for headers
 - Use neutral text color (not pure black: [color])
 - Use ample white space between sections
 - Image-to-text ratio: [%] text, [%] images
 
 **CTA Button**:
+
 - Use primary brand color
 - Text: "Button Text" (use brand voice)
 - Padding: [X] px
@@ -179,6 +201,7 @@ Your brand voice should be consistent across all channels. Use this framework to
 - Border radius: [X] px
 
 **Email Footer**:
+
 - Use light background color
 - Include company address for CAN-SPAM compliance
 - Include unsubscribe link
@@ -188,18 +211,21 @@ Your brand voice should be consistent across all channels. Use this framework to
 ### Landing Page
 
 **Header Section**:
+
 - Hero image or video that shows [description]
 - Headline using [Font name], [Size] px, [Color]
 - Subheading supporting main message
 - Primary CTA button
 
 **Content Sections**:
+
 - Use alternating background colors for visual break
 - Max width: [X] pixels
 - Padding: [X] pixels
 - Imagery every [X] sections to break up text
 
 **Form Fields**:
+
 - Label color: [Color]
 - Input border: [Color], [Size] px
 - Focus state: [Color]
@@ -209,6 +235,7 @@ Your brand voice should be consistent across all channels. Use this framework to
 ### Social Media Posts
 
 **Image Specifications**:
+
 - LinkedIn post: [dimensions]
 - Twitter image: [dimensions]
 - Facebook image: [dimensions]
@@ -216,12 +243,14 @@ Your brand voice should be consistent across all channels. Use this framework to
 - Instagram story: [dimensions]
 
 **Design Standards**:
+
 - Use brand colors consistently
 - Include brand logo on images (if not violating platform rules)
 - Use brand typography
 - Maintain minimum text size [X] px for readability on small screens
 
 **Video Requirements**:
+
 - Aspect ratio: [16:9, 1:1, 9:16]
 - Include captions/subtitles
 - Use brand colors in intro/outro (if applicable)
@@ -257,16 +286,19 @@ Your brand voice should be consistent across all channels. Use this framework to
 ## Website & Digital Standards
 
 ### Navigation Structure
+
 - Primary navigation items: [List items - max 5-7]
 - Footer navigation: [List items]
 - Mobile menu: Hamburger icon on screens under [X] px width
 
 ### Typography on Web
+
 - Headlines: [Font], sizes [X] to [X] px
 - Body text: [X] px, line height [X]px
 - Links: [Color], underlined, [hover state]
 
 ### Accessibility Standards
+
 - All images must have alt text
 - Color contrast ratio must be [WCAG level - AA or AAA]
 - Forms must have associated labels
@@ -274,6 +306,7 @@ Your brand voice should be consistent across all channels. Use this framework to
 - Page must be navigable by keyboard only
 
 ### Search Engine Optimization
+
 - Title tags: [X] to [X] characters
 - Meta descriptions: [X] to [X] characters
 - H1 per page: Only one H1 with target keyword

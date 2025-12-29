@@ -22,6 +22,7 @@ Execute sophisticated Monte Carlo simulations with comprehensive uncertainty qua
 **Simulation Target**: Use $ARGUMENTS to simulate financial projections, project timelines, market scenarios, or risk assessments
 
 **Monte Carlo Framework**:
+
 1. **Variable Definition** - Uncertain parameter identification, probability distribution selection, and correlation modeling
 2. **Simulation Engine** - Random sampling, scenario generation, and statistical convergence analysis
 3. **Output Analysis** - Probability distributions, confidence intervals, and sensitivity analysis

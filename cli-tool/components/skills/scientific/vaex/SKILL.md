@@ -12,6 +12,7 @@ Vaex is a high-performance Python library designed for lazy, out-of-core DataFra
 ## When to Use This Skill
 
 Use Vaex when:
+
 - Processing tabular datasets larger than available RAM (gigabytes to terabytes)
 - Performing fast statistical aggregations on massive datasets
 - Creating visualizations and heatmaps of large datasets
@@ -27,6 +28,7 @@ Vaex provides six primary capability areas, each documented in detail in the ref
 ### 1. DataFrames and Data Loading
 
 Load and create Vaex DataFrames from various sources including files (HDF5, CSV, Arrow, Parquet), pandas DataFrames, NumPy arrays, and dictionaries. Reference `references/core_dataframes.md` for:
+
 - Opening large files efficiently
 - Converting from pandas/NumPy/Arrow
 - Working with example datasets
@@ -35,6 +37,7 @@ Load and create Vaex DataFrames from various sources including files (HDF5, CSV,
 ### 2. Data Processing and Manipulation
 
 Perform filtering, create virtual columns, use expressions, and aggregate data without loading everything into memory. Reference `references/data_processing.md` for:
+
 - Filtering and selections
 - Virtual columns and expressions
 - Groupby operations and aggregations
@@ -44,6 +47,7 @@ Perform filtering, create virtual columns, use expressions, and aggregate data w
 ### 3. Performance and Optimization
 
 Leverage Vaex's lazy evaluation, caching strategies, and memory-efficient operations. Reference `references/performance.md` for:
+
 - Understanding lazy evaluation
 - Using `delay=True` for batching operations
 - Materializing columns when needed
@@ -53,6 +57,7 @@ Leverage Vaex's lazy evaluation, caching strategies, and memory-efficient operat
 ### 4. Data Visualization
 
 Create interactive visualizations of large datasets including heatmaps, histograms, and scatter plots. Reference `references/visualization.md` for:
+
 - Creating 1D and 2D plots
 - Heatmap visualizations
 - Working with selections
@@ -61,6 +66,7 @@ Create interactive visualizations of large datasets including heatmaps, histogra
 ### 5. Machine Learning Integration
 
 Build ML pipelines with transformers, encoders, and integration with scikit-learn, XGBoost, and other frameworks. Reference `references/machine_learning.md` for:
+
 - Feature scaling and encoding
 - PCA and dimensionality reduction
 - K-means clustering
@@ -70,6 +76,7 @@ Build ML pipelines with transformers, encoders, and integration with scikit-lear
 ### 6. I/O Operations
 
 Efficiently read and write data in various formats with optimal performance. Reference `references/io_operations.md` for:
+
 - File format recommendations
 - Export strategies
 - Working with Apache Arrow
@@ -132,6 +139,7 @@ The reference files contain detailed information about each capability area. Loa
 ## Common Patterns
 
 ### Pattern: Converting Large CSV to HDF5
+
 ```python
 import vaex
 
@@ -146,6 +154,7 @@ df = vaex.open('large_file.hdf5')
 ```
 
 ### Pattern: Efficient Aggregations
+
 ```python
 # Use delay=True to batch multiple operations
 mean_x = df.x.mean(delay=True)
@@ -157,6 +166,7 @@ results = vaex.execute([mean_x, std_y, sum_z])
 ```
 
 ### Pattern: Virtual Columns for Feature Engineering
+
 ```python
 # No memory overhead - computed on the fly
 df['age_squared'] = df.age ** 2

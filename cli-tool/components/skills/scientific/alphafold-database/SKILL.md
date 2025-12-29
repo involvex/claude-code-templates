@@ -391,24 +391,28 @@ af_structures = [s for s in data['structures'] if s['provider'] == 'AlphaFold DB
 ## Common Use Cases
 
 ### Structural Proteomics
+
 - Download complete proteome predictions for analysis
 - Identify high-confidence structural regions across proteins
 - Compare predicted structures with experimental data
 - Build structural models for protein families
 
 ### Drug Discovery
+
 - Retrieve target protein structures for docking studies
 - Analyze binding site conformations
 - Identify druggable pockets in predicted structures
 - Compare structures across homologs
 
 ### Protein Engineering
+
 - Identify stable/unstable regions using pLDDT
 - Design mutations in high-confidence regions
 - Analyze domain architectures using PAE
 - Model protein variants and mutations
 
 ### Evolutionary Studies
+
 - Compare ortholog structures across species
 - Analyze conservation of structural features
 - Study domain evolution patterns
@@ -431,12 +435,14 @@ af_structures = [s for s in data['structures'] if s['provider'] == 'AlphaFold DB
 ## Confidence Interpretation Guidelines
 
 **pLDDT Thresholds:**
+
 - **>90**: Very high confidence - suitable for detailed analysis
 - **70-90**: High confidence - generally reliable backbone structure
 - **50-70**: Low confidence - use with caution, flexible regions
 - **<50**: Very low confidence - likely disordered or unreliable
 
 **PAE Guidelines:**
+
 - **<5 Å**: Confident relative positioning of domains
 - **5-10 Å**: Moderate confidence in arrangement
 - **>15 Å**: Uncertain relative positions, domains may be mobile
@@ -446,6 +452,7 @@ af_structures = [s for s in data['structures'] if s['provider'] == 'AlphaFold DB
 ### references/api_reference.md
 
 Comprehensive API documentation covering:
+
 - Complete REST API endpoint specifications
 - File format details and data schemas
 - Google Cloud dataset structure and access patterns

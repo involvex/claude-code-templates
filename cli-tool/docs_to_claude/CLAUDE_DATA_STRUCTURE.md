@@ -1,6 +1,7 @@
 # Claude Code Data Structure Documentation
 
 ## Overview
+
 This document provides comprehensive information about the data structures and formats found in the `.claude` directory, used by Claude Code and the Analytics Dashboard.
 
 ## Directory Structure
@@ -23,11 +24,13 @@ This document provides comprehensive information about the data structures and f
 ## JSONL Conversation Format
 
 ### File Structure
+
 Each conversation is stored in a JSONL (JSON Lines) file where each line represents a single message or event.
 
 ### Message Types
 
 #### 1. User Messages
+
 ```json
 {
   "parentUuid": "previous-message-uuid",
@@ -47,6 +50,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ```
 
 #### 2. Assistant Messages
+
 ```json
 {
   "parentUuid": "6a8f4604-6fdd-406f-87d6-436e6cf26bd1",
@@ -84,6 +88,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ```
 
 #### 3. Tool Use Messages
+
 ```json
 {
   "message": {
@@ -107,6 +112,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ```
 
 #### 4. Tool Result Messages
+
 ```json
 {
   "message": {
@@ -125,39 +131,43 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ## Field Definitions
 
 ### Root Level Fields
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `uuid` | String | Unique identifier for this message | `"6a8f4604-6fdd-406f-87d6-436e6cf26bd1"` |
-| `parentUuid` | String/null | UUID of the previous message in conversation | `"previous-uuid"` or `null` |
-| `timestamp` | ISO String | When the message was created | `"2025-07-01T19:06:05.237Z"` |
-| `type` | String | Message type: `"user"` or `"assistant"` | `"user"` |
-| `sessionId` | String | Session identifier for the conversation | `"ae93d7b5-1c54-4578-b208-603b48a88c5e"` |
-| `version` | String | Claude Code version that created this message | `"1.0.35"` |
-| `cwd` | String | Current working directory when message was sent | `"/Users/user/project"` |
-| `userType` | String | Type of user: `"external"` (CLI) or other | `"external"` |
-| `isSidechain` | Boolean | Whether this is a sidechain conversation | `false` |
-| `requestId` | String | API request ID (assistant messages only) | `"req_011CQgpcgetL2WTXxNz8FxVs"` |
+
+| Field         | Type        | Description                                     | Example                                  |
+| ------------- | ----------- | ----------------------------------------------- | ---------------------------------------- |
+| `uuid`        | String      | Unique identifier for this message              | `"6a8f4604-6fdd-406f-87d6-436e6cf26bd1"` |
+| `parentUuid`  | String/null | UUID of the previous message in conversation    | `"previous-uuid"` or `null`              |
+| `timestamp`   | ISO String  | When the message was created                    | `"2025-07-01T19:06:05.237Z"`             |
+| `type`        | String      | Message type: `"user"` or `"assistant"`         | `"user"`                                 |
+| `sessionId`   | String      | Session identifier for the conversation         | `"ae93d7b5-1c54-4578-b208-603b48a88c5e"` |
+| `version`     | String      | Claude Code version that created this message   | `"1.0.35"`                               |
+| `cwd`         | String      | Current working directory when message was sent | `"/Users/user/project"`                  |
+| `userType`    | String      | Type of user: `"external"` (CLI) or other       | `"external"`                             |
+| `isSidechain` | Boolean     | Whether this is a sidechain conversation        | `false`                                  |
+| `requestId`   | String      | API request ID (assistant messages only)        | `"req_011CQgpcgetL2WTXxNz8FxVs"`         |
 
 ### Message Object Fields
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `role` | String | `"user"` or `"assistant"` | `"assistant"` |
-| `id` | String | Message ID (assistant messages only) | `"msg_016xDLMzLsNRmD5PsdEjPu3N"` |
-| `type` | String | Always `"message"` for assistant messages | `"message"` |
-| `model` | String | AI model used (assistant messages only) | `"claude-sonnet-4-20250514"` |
-| `content` | String/Array | Message content (string for user, array for assistant) | See content formats below |
-| `stop_reason` | String/null | Why the assistant stopped generating | `null`, `"end_turn"`, `"max_tokens"` |
-| `stop_sequence` | String/null | Stop sequence that triggered end | `null` |
-| `usage` | Object | Token usage information | See usage object below |
+
+| Field           | Type         | Description                                            | Example                              |
+| --------------- | ------------ | ------------------------------------------------------ | ------------------------------------ |
+| `role`          | String       | `"user"` or `"assistant"`                              | `"assistant"`                        |
+| `id`            | String       | Message ID (assistant messages only)                   | `"msg_016xDLMzLsNRmD5PsdEjPu3N"`     |
+| `type`          | String       | Always `"message"` for assistant messages              | `"message"`                          |
+| `model`         | String       | AI model used (assistant messages only)                | `"claude-sonnet-4-20250514"`         |
+| `content`       | String/Array | Message content (string for user, array for assistant) | See content formats below            |
+| `stop_reason`   | String/null  | Why the assistant stopped generating                   | `null`, `"end_turn"`, `"max_tokens"` |
+| `stop_sequence` | String/null  | Stop sequence that triggered end                       | `null`                               |
+| `usage`         | Object       | Token usage information                                | See usage object below               |
 
 ### Content Formats
 
 #### User Content (String)
+
 ```json
 "content": "Simple text message from user"
 ```
 
 #### Assistant Content (Array of Blocks)
+
 ```json
 "content": [
   {
@@ -177,6 +187,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ```
 
 #### Tool Result Content (Array)
+
 ```json
 "content": [
   {
@@ -189,6 +200,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ```
 
 ### Usage Object (Token Information)
+
 ```json
 "usage": {
   "input_tokens": 156,                    // Tokens in the input
@@ -202,6 +214,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ## Tool Types and Input Formats
 
 ### Available Tools
+
 1. **bash** - Execute shell commands
 2. **read** - Read file contents
 3. **write** - Write/create files
@@ -213,6 +226,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ### Tool Input Examples
 
 #### Bash Tool
+
 ```json
 {
   "type": "tool_use",
@@ -225,6 +239,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ```
 
 #### Read Tool
+
 ```json
 {
   "type": "tool_use",
@@ -238,6 +253,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ```
 
 #### Write Tool
+
 ```json
 {
   "type": "tool_use",
@@ -250,6 +266,7 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ```
 
 #### Edit Tool
+
 ```json
 {
   "type": "tool_use",
@@ -268,7 +285,9 @@ Each conversation is stored in a JSONL (JSON Lines) file where each line represe
 ## Message Flow and Relationships
 
 ### Conversation Threading
+
 Messages are linked through `parentUuid` fields:
+
 ```
 Message 1 (uuid: A, parentUuid: null)          # First message
 ├── Message 2 (uuid: B, parentUuid: A)         # Response to Message 1
@@ -277,6 +296,7 @@ Message 1 (uuid: A, parentUuid: null)          # First message
 ```
 
 ### Tool Use Flow
+
 ```
 User Message → Assistant with Tool Use → Tool Result → Assistant Response
      ↓                    ↓                    ↓               ↓
@@ -287,6 +307,7 @@ parentUuid: null    parentUuid: A        parentUuid: B   parentUuid: C
 ## Analytics Data Extraction
 
 ### Extractable Metrics
+
 1. **Conversation Metrics**
    - Total messages per conversation
    - Message frequency over time
@@ -314,18 +335,22 @@ parentUuid: null    parentUuid: A        parentUuid: B   parentUuid: C
 ## Common Patterns and Edge Cases
 
 ### User Confirmation Messages
+
 User responses to Claude's prompts often appear as simple strings:
+
 ```json
 {
   "message": {
     "role": "user",
-    "content": "[ok]"  // or "yes", "1", "y", etc.
+    "content": "[ok]" // or "yes", "1", "y", etc.
   }
 }
 ```
 
 ### Large Tool Results
+
 Long command outputs are stored as complete strings:
+
 ```json
 {
   "type": "tool_result",
@@ -334,7 +359,9 @@ Long command outputs are stored as complete strings:
 ```
 
 ### Error Messages
+
 Tool errors are marked with `is_error: true`:
+
 ```json
 {
   "type": "tool_result",
@@ -347,12 +374,14 @@ Tool errors are marked with `is_error: true`:
 ## Data Processing Notes
 
 ### Performance Considerations
+
 1. **File Sizes**: JSONL files can become large (100MB+) for long conversations
 2. **Parsing**: Each line must be parsed individually as valid JSON
 3. **Memory**: Large conversations should be streamed or paginated
 4. **Caching**: Parsed conversations should be cached to avoid re-parsing
 
 ### Data Validation
+
 1. **Required Fields**: Always check for required fields before processing
 2. **Timestamps**: Parse ISO strings carefully, handle timezone differences
 3. **Content Arrays**: Assistant messages may have mixed content types
@@ -361,7 +390,9 @@ Tool errors are marked with `is_error: true`:
 ## Usage in Analytics Dashboard
 
 ### Current Implementation
+
 The analytics dashboard extracts the following data:
+
 ```javascript
 // Simplified message object after parsing
 {
@@ -375,7 +406,9 @@ The analytics dashboard extracts the following data:
 ```
 
 ### Available Extensions
+
 With this data structure, the dashboard could be extended to show:
+
 - Conversation threading/branching
 - Tool usage analytics
 - Project-specific insights
@@ -386,12 +419,15 @@ With this data structure, the dashboard could be extended to show:
 ## File System Integration
 
 ### Directory Monitoring
+
 Watch for changes in:
+
 - `~/.claude/projects/*/conversation.jsonl` - New messages
 - `~/.claude/projects/` - New projects
 - `~/.claude/settings.json` - Setting changes
 
 ### File Reading Strategies
+
 1. **Tail Reading**: Read only new lines from JSONL files
 2. **Full Parse**: Parse entire file for complete analysis
 3. **Chunk Processing**: Process large files in smaller chunks

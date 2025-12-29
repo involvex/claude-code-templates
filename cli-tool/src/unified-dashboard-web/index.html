@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claude Code Unified Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #0f0f0f;
+        color: #ffffff;
+        overflow: hidden;
+      }
+
+      .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .dashboard-header {
+        background: #1a1a1a;
+        border-bottom: 2px solid #ff6b35;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+
+      .header-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .header-controls {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .dashboard-selector {
+        padding: 0.5rem 1rem;
+        background: #252525;
+        color: #ffffff;
+        border: 1px solid #333333;
+        border-radius: 0.5rem;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 150ms ease;
+      }
+
+      .dashboard-selector:hover {
+        border-color: #ff6b35;
+        background: #2a2a2a;
+      }
+
+      .dashboard-selector:focus {
+        outline: none;
+        border-color: #ff6b35;
+        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+      }
+
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #b0b0b0;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #56d364;
+        animation: pulse 2s infinite;
+      }
+
+      .status-dot.offline {
+        background: #ef4444;
+        animation: none;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .dashboard-content {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .dashboard-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: #0f0f0f;
+      }
+
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #0f0f0f;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        z-index: 1000;
+      }
+
+      .loading-overlay.hidden {
+        display: none;
+      }
+
+      .spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid #252525;
+        border-top-color: #ff6b35;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid #ef4444;
+        border-radius: 0.5rem;
+        padding: 1rem 1.5rem;
+        max-width: 500px;
+        text-align: center;
+      }
+
+      .error-message h3 {
+        color: #ef4444;
+        margin-bottom: 0.5rem;
+      }
+
+      .error-message p {
+        color: #b0b0b0;
+        font-size: 0.875rem;
+      }
+
+      .retry-button {
+        margin-top: 1rem;
+        padding: 0.5rem 1.5rem;
+        background: #ff6b35;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 150ms ease;
+      }
+
+      .retry-button:hover {
+        background: #ff8c61;
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <div class="header-title">
+          <span>🎛️</span>
+          <span>Claude Code Dashboard</span>
+        </div>
+        <div class="header-controls">
+          <select id="dashboardSelector" class="dashboard-selector">
+            <option value="analytics">📊 Analytics</option>
+            <option value="chats">💬 Chats</option>
+            <option value="plugins">🔌 Plugins</option>
+            <option value="skills">🎯 Skills</option>
+            <option value="hooks">🪝 Hooks</option>
+          </select>
+          <div class="status-indicator">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Connecting...</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="loading-overlay" id="loadingOverlay">
+          <div class="spinner"></div>
+          <p style="color: #b0b0b0">Loading dashboard...</p>
+        </div>
+
+        <div class="loading-overlay hidden" id="errorOverlay">
+          <div class="error-message">
+            <h3>Dashboard Unavailable</h3>
+            <p id="errorText">
+              The selected dashboard is not currently running.
+            </p>
+            <button class="retry-button" onclick="window.location.reload()">
+              Retry
+            </button>
+          </div>
+        </div>
+
+        <iframe id="dashboardIframe" class="dashboard-iframe"></iframe>
+      </div>
+    </div>
+
+    <script>
+      const dashboards = {
+        analytics: { port: 3333, name: "Analytics" },
+        chats: { port: 3335, name: "Chats" },
+        plugins: { port: 3336, name: "Plugins" },
+        skills: { port: 3337, name: "Skills" },
+        hooks: { port: 3338, name: "Hooks" },
+      };
+
+      let currentDashboard = "analytics";
+      const iframe = document.getElementById("dashboardIframe");
+      const selector = document.getElementById("dashboardSelector");
+      const loadingOverlay = document.getElementById("loadingOverlay");
+      const errorOverlay = document.getElementById("errorOverlay");
+      const statusDot = document.getElementById("statusDot");
+      const statusText = document.getElementById("statusText");
+
+      // Load dashboard
+      async function loadDashboard(dashboard) {
+        currentDashboard = dashboard;
+        const config = dashboards[dashboard];
+
+        loadingOverlay.classList.remove("hidden");
+        errorOverlay.classList.add("hidden");
+        statusDot.classList.add("offline");
+        statusText.textContent = "Connecting...";
+
+        try {
+          // Check if dashboard is available
+          const response = await fetch(`http://localhost:${config.port}/`, {
+            method: "HEAD",
+            mode: "no-cors",
+          });
+
+          // Load dashboard in iframe
+          const scope = new URLSearchParams(window.location.search).get(
+            "scope",
+          );
+          iframe.src = `http://localhost:${config.port}${scope ? "?scope=" + scope : ""}`;
+
+          // Wait for iframe to load
+          iframe.onload = () => {
+            loadingOverlay.classList.add("hidden");
+            statusDot.classList.remove("offline");
+            statusText.textContent = `${config.name} (Online)`;
+          };
+
+          iframe.onerror = () => {
+            showError(`Failed to load ${config.name} dashboard`);
+          };
+        } catch (error) {
+          showError(
+            `${config.name} dashboard is not running. Start it with: cct --${dashboard}`,
+          );
+        }
+      }
+
+      function showError(message) {
+        loadingOverlay.classList.add("hidden");
+        errorOverlay.classList.remove("hidden");
+        document.getElementById("errorText").textContent = message;
+        statusDot.classList.add("offline");
+        statusText.textContent = "Offline";
+      }
+
+      // Dashboard selector change
+      selector.addEventListener("change", (e) => {
+        loadDashboard(e.target.value);
+      });
+
+      // Initial load
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialDashboard = urlParams.get("dashboard") || "analytics";
+      selector.value = initialDashboard;
+      loadDashboard(initialDashboard);
+
+      // Periodic status check
+      setInterval(async () => {
+        try {
+          await fetch(
+            `http://localhost:${dashboards[currentDashboard].port}/`,
+            {
+              method: "HEAD",
+              mode: "no-cors",
+            },
+          );
+          if (statusDot.classList.contains("offline")) {
+            location.reload();
+          }
+        } catch (error) {
+          if (!statusDot.classList.contains("offline")) {
+            showError(
+              `Lost connection to ${dashboards[currentDashboard].name}`,
+            );
+          }
+        }
+      }, 10000);
+    </script>
+  </body>
+</html>

@@ -10,9 +10,11 @@ Expert-level quality documentation management with comprehensive document contro
 ## Core Documentation Management Competencies
 
 ### 1. Document Control System Design (ISO 13485 Clause 4.2.3)
+
 Design and implement comprehensive document control systems ensuring systematic document management and regulatory compliance.
 
 **Document Control System Framework:**
+
 ```
 DOCUMENT CONTROL SYSTEM ARCHITECTURE
 ├── Document Classification and Structure
@@ -43,9 +45,11 @@ DOCUMENT CONTROL SYSTEM ARCHITECTURE
 ```
 
 ### 2. Regulatory Documentation Oversight
+
 Provide comprehensive oversight of regulatory documentation ensuring compliance with multiple jurisdictional requirements.
 
 **Regulatory Documentation Framework:**
+
 1. **Multi-jurisdictional Documentation Management**
    - **EU MDR Technical Documentation**: Annex II and III compliance verification
    - **FDA Submission Documentation**: 510(k), PMA, and De Novo documentation oversight
@@ -65,9 +69,11 @@ Provide comprehensive oversight of regulatory documentation ensuring compliance 
    - **Market Access Documentation**: Product registration and certification support
 
 ### 3. Change Control and Configuration Management
+
 Implement robust change control processes ensuring systematic document change management and configuration control.
 
 **Change Control Process Framework:**
+
 ```
 DOCUMENT CHANGE CONTROL WORKFLOW
 ├── Change Request Initiation
@@ -99,9 +105,11 @@ DOCUMENT CHANGE CONTROL WORKFLOW
 ```
 
 ### 4. Document Management System (DMS) Implementation
+
 Design and implement comprehensive electronic document management systems ensuring efficient document operations and compliance.
 
 **DMS Implementation Strategy:**
+
 1. **System Requirements and Selection**
    - Functional requirement definition and validation
    - Regulatory compliance requirement integration
@@ -123,9 +131,11 @@ Design and implement comprehensive electronic document management systems ensuri
 ## Advanced Documentation Applications
 
 ### Technical Documentation Management
+
 Manage complex technical documentation ensuring accuracy, consistency, and regulatory compliance.
 
 **Technical Documentation Categories:**
+
 - **Design and Development Documentation**: Design inputs, outputs, reviews, verification, validation
 - **Risk Management Documentation**: ISO 14971 risk management file and reports
 - **Clinical Documentation**: Clinical evaluation reports, clinical investigation protocols
@@ -133,9 +143,11 @@ Manage complex technical documentation ensuring accuracy, consistency, and regul
 - **Post-Market Documentation**: Surveillance reports, vigilance documentation, CAPA records
 
 ### Electronic Signature and 21 CFR Part 11 Compliance
+
 Implement electronic signature systems ensuring FDA 21 CFR Part 11 compliance and regulatory acceptance.
 
 **Electronic Signature Framework:**
+
 1. **21 CFR Part 11 Compliance Implementation**
    - Electronic signature system validation and qualification
    - User authentication and authorization management
@@ -149,9 +161,11 @@ Implement electronic signature systems ensuring FDA 21 CFR Part 11 compliance an
    - Regulatory inspection readiness and support
 
 ### Multi-language Documentation Management
+
 Manage multi-language documentation ensuring consistency, accuracy, and regulatory compliance across global markets.
 
 **Multi-language Documentation Strategy:**
+
 - **Translation Management**: Professional translation coordination and quality assurance
 - **Linguistic Validation**: Medical and technical terminology accuracy verification
 - **Cultural Adaptation**: Local market requirement integration and customization
@@ -160,9 +174,11 @@ Manage multi-language documentation ensuring consistency, accuracy, and regulato
 ## Document Control Performance and Quality
 
 ### Documentation Quality Metrics
+
 Monitor comprehensive documentation quality metrics ensuring continuous improvement and regulatory compliance.
 
 **Documentation Quality KPIs:**
+
 - **Document Accuracy**: Error rates, correction frequency, review effectiveness
 - **Compliance Rate**: Regulatory requirement adherence and audit findings
 - **Process Efficiency**: Document cycle times, approval durations, update frequencies
@@ -170,9 +186,11 @@ Monitor comprehensive documentation quality metrics ensuring continuous improvem
 - **System Performance**: DMS uptime, access speed, search effectiveness
 
 ### Document Control Audit and Assessment
+
 Conduct systematic document control audits ensuring compliance and continuous improvement.
 
 **Document Control Audit Framework:**
+
 1. **Document Control System Assessment**
    - Document control procedure compliance verification
    - System functionality and performance evaluation
@@ -186,9 +204,11 @@ Conduct systematic document control audits ensuring compliance and continuous im
    - Version control and change management effectiveness
 
 ### Continuous Improvement and Optimization
+
 Implement continuous improvement processes ensuring document control system optimization and stakeholder satisfaction.
 
 **Improvement Framework:**
+
 - **Process Optimization**: Workflow streamlining and automation opportunities
 - **Technology Enhancement**: System upgrade and functionality improvement
 - **User Experience Improvement**: Interface optimization and training effectiveness
@@ -197,27 +217,33 @@ Implement continuous improvement processes ensuring document control system opti
 ## Cross-functional Documentation Coordination
 
 ### Quality System Integration
+
 Ensure seamless integration of documentation management with quality management system processes.
 
 **QMS Integration Points:**
+
 - **Management Review**: Documentation performance reporting and metrics
 - **Internal Audit**: Document control compliance verification and improvement
 - **CAPA Integration**: Documentation-related corrective and preventive actions
 - **Training Management**: Document-based training and competency verification
 
 ### Regulatory Affairs Coordination
+
 Coordinate closely with regulatory affairs team ensuring regulatory documentation accuracy and compliance.
 
 **Regulatory Coordination Framework:**
+
 - **Submission Support**: Regulatory documentation preparation and quality assurance
 - **Regulatory Intelligence**: Guidance document monitoring and implementation
 - **Authority Communication**: Documentation-related query response and clarification
 - **Compliance Monitoring**: Multi-jurisdictional documentation requirement tracking
 
 ### Cross-functional Training and Support
+
 Provide comprehensive training and support ensuring organizational document management competency.
 
 **Training and Support Program:**
+
 - **Document Author Training**: Document creation, review, and approval procedures
 - **System User Training**: DMS functionality and best practice utilization
 - **Regulatory Documentation Training**: Specific regulatory requirement and guideline training
@@ -226,18 +252,22 @@ Provide comprehensive training and support ensuring organizational document mana
 ## Regulatory Documentation Standards
 
 ### International Documentation Standards
+
 Ensure compliance with international documentation standards and regulatory expectations.
 
 **Standards Compliance Framework:**
+
 - **ISO 13485 Documentation**: Quality management system documentation requirements
 - **IEC 62304 Documentation**: Medical device software lifecycle documentation
 - **ISO 14971 Documentation**: Risk management documentation and reporting
 - **ICH Guidelines**: Clinical documentation standards and harmonization
 
 ### Documentation Best Practices
+
 Implement industry best practices ensuring documentation excellence and regulatory acceptance.
 
 **Best Practice Implementation:**
+
 - **Plain Language**: Clear, concise, and understandable documentation
 - **Visual Communication**: Diagrams, flowcharts, and graphical representations
 - **Modular Design**: Reusable documentation components and templates
@@ -246,12 +276,14 @@ Implement industry best practices ensuring documentation excellence and regulato
 ## Resources
 
 ### scripts/
+
 - `document-control-dashboard.py`: Comprehensive document management performance monitoring
 - `change-control-automation.py`: Document change workflow automation and tracking
 - `regulatory-doc-validator.py`: Regulatory documentation compliance verification
 - `dms-performance-monitor.py`: Document management system performance optimization
 
 ### references/
+
 - `document-control-procedures.md`: Comprehensive document control implementation guide
 - `regulatory-documentation-standards.md`: Multi-jurisdictional documentation requirements
 - `dms-storage-design.md`: Document management system architecture and design
@@ -259,6 +291,7 @@ Implement industry best practices ensuring documentation excellence and regulato
 - `21cfr11-compliance-guide.md`: Electronic signature and record compliance framework
 
 ### assets/
+
 - `document-templates/`: Standardized document templates and formats
 - `change-control-forms/`: Change request and approval documentation templates
 - `training-materials/`: Document management training and competency programs

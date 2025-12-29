@@ -1,5 +1,5 @@
-const fs = require('fs-extra');
-const chalk = require('chalk');
+const fs = require("fs-extra");
+const chalk = require("chalk");
 
 /**
  * DataCache - Multi-level caching system for analytics performance optimization
@@ -11,28 +11,28 @@ class DataCache {
     this.caches = {
       // File content cache (highest impact)
       fileContent: new Map(), // filepath -> { content, timestamp, stats }
-      
+
       // Parsed data cache
       parsedConversations: new Map(), // filepath -> { messages, timestamp }
-      
-      // Computed results cache  
+
+      // Computed results cache
       tokenUsage: new Map(), // filepath -> { usage, timestamp }
       modelInfo: new Map(), // filepath -> { info, timestamp }
       statusSquares: new Map(), // filepath -> { squares, timestamp }
       toolUsage: new Map(), // filepath -> { usage, timestamp }
-      
+
       // Expensive computations cache
       sessions: { data: null, timestamp: 0, dependencies: new Set() },
       summary: { data: null, timestamp: 0, dependencies: new Set() },
-      
+
       // Process cache enhancement
       processes: { data: null, timestamp: 0, ttl: 500 },
-      
+
       // Metadata cache
       fileStats: new Map(), // filepath -> { stats, timestamp }
       projectStats: new Map(), // projectPath -> { data, timestamp }
     };
-    
+
     // Cache configuration - balanced for performance vs memory
     this.config = {
       fileContentTTL: 60000, // 1 minute for file content
@@ -42,10 +42,10 @@ class DataCache {
       processTTL: 1000, // 1 second for process data
       maxCacheSize: 50, // Increased to reduce evictions
     };
-    
+
     // Dependency tracking for smart invalidation
     this.dependencies = new Map(); // computation -> Set(filepaths)
-    
+
     // Performance metrics
     this.metrics = {
       hits: 0,
@@ -53,9 +53,9 @@ class DataCache {
       invalidations: 0,
       filesInvalidated: 0,
       computationsInvalidated: 0,
-      evictions: 0
+      evictions: 0,
     };
-    
+
     // Start automatic cleanup interval (more aggressive)
     this.cleanupInterval = setInterval(() => {
       this.evictOldEntries();
@@ -70,32 +70,32 @@ class DataCache {
    */
   async getFileContent(filepath) {
     const cached = this.caches.fileContent.get(filepath);
-    
+
     try {
       const stats = await fs.stat(filepath);
-      
+
       // Check if cached content is still valid
       if (cached && cached.timestamp >= stats.mtime.getTime()) {
         this.metrics.hits++;
         return cached.content;
       }
-      
+
       // Cache miss - read file
       this.metrics.misses++;
-      const content = await fs.readFile(filepath, 'utf8');
-      
+      const content = await fs.readFile(filepath, "utf8");
+
       this.caches.fileContent.set(filepath, {
         content,
         timestamp: stats.mtime.getTime(),
-        stats: stats
+        stats: stats,
       });
-      
+
       // Also cache the file stats
       this.caches.fileStats.set(filepath, {
         stats: stats,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
-      
+
       return content;
     } catch (error) {
       // File doesn't exist or can't be read
@@ -112,25 +112,28 @@ class DataCache {
   async getParsedConversation(filepath) {
     const cached = this.caches.parsedConversations.get(filepath);
     const fileStats = await this.getFileStats(filepath);
-    
+
     // Check if cached parsed data is still valid
     if (cached && cached.timestamp >= fileStats.mtime.getTime()) {
       this.metrics.hits++;
       return cached.messages;
     }
-    
+
     // Cache miss - parse conversation with tool correlation
     this.metrics.misses++;
     const content = await this.getFileContent(filepath);
-    const lines = content.trim().split('\n').filter(line => line.trim());
-    
+    const lines = content
+      .trim()
+      .split("\n")
+      .filter((line) => line.trim());
+
     const messages = this.parseAndCorrelateToolMessages(lines);
-    
+
     this.caches.parsedConversations.set(filepath, {
       messages,
-      timestamp: fileStats.mtime.getTime()
+      timestamp: fileStats.mtime.getTime(),
     });
-    
+
     return messages;
   }
 
@@ -142,23 +145,28 @@ class DataCache {
   parseAndCorrelateToolMessages(lines) {
     const entries = [];
     const toolUseMap = new Map();
-    
+
     // First pass: parse all entries and map tool_use entries
     for (const line of lines) {
       try {
         const item = JSON.parse(line);
-        if (item.message && (item.type === 'assistant' || item.type === 'user')) {
+        if (
+          item.message &&
+          (item.type === "assistant" || item.type === "user")
+        ) {
           entries.push(item);
-          
+
           // Track tool_use entries by their ID
-          if (item.type === 'assistant' && item.message.content) {
-            const toolUseBlock = Array.isArray(item.message.content) 
-              ? item.message.content.find(c => c.type === 'tool_use')
-              : (item.message.content.type === 'tool_use' ? item.message.content : null);
-            
+          if (item.type === "assistant" && item.message.content) {
+            const toolUseBlock = Array.isArray(item.message.content)
+              ? item.message.content.find((c) => c.type === "tool_use")
+              : item.message.content.type === "tool_use"
+                ? item.message.content
+                : null;
+
             if (toolUseBlock && toolUseBlock.id) {
               toolUseMap.set(toolUseBlock.id, item);
-              if (toolUseBlock.id === 'toolu_01D8RMQYDySWAscQCC6pfDWf') {
+              if (toolUseBlock.id === "toolu_01D8RMQYDySWAscQCC6pfDWf") {
                 // Debug: Specific tool_use mapped for debugging
               }
             }
@@ -168,15 +176,17 @@ class DataCache {
         // Skip invalid JSONL lines
       }
     }
-    
+
     // Second pass: correlate tool_result with tool_use (first process ALL tool_results)
     for (const item of entries) {
-      if (item.type === 'user' && item.message.content) {
+      if (item.type === "user" && item.message.content) {
         // Check if this is a tool_result entry
         const toolResultBlock = Array.isArray(item.message.content)
-          ? item.message.content.find(c => c.type === 'tool_result')
-          : (item.message.content.type === 'tool_result' ? item.message.content : null);
-        
+          ? item.message.content.find((c) => c.type === "tool_result")
+          : item.message.content.type === "tool_result"
+            ? item.message.content
+            : null;
+
         if (toolResultBlock && toolResultBlock.tool_use_id) {
           // This is a tool_result - attach it to the corresponding tool_use
           const toolUseEntry = toolUseMap.get(toolResultBlock.tool_use_id);
@@ -190,10 +200,11 @@ class DataCache {
                 stderr: item.toolUseResult.stderr,
                 interrupted: item.toolUseResult.interrupted,
                 isImage: item.toolUseResult.isImage,
-                returnCodeInterpretation: item.toolUseResult.returnCodeInterpretation
-              })
+                returnCodeInterpretation:
+                  item.toolUseResult.returnCodeInterpretation,
+              }),
             };
-            
+
             // Attach tool result to the tool use entry
             if (!toolUseEntry.toolResults) {
               toolUseEntry.toolResults = [];
@@ -204,38 +215,49 @@ class DataCache {
         }
       }
     }
-    
+
     // Third pass: process messages and filter out standalone tool_result entries
     const processedMessages = [];
-    
+
     for (const item of entries) {
-      if (item.type === 'user' && item.message.content) {
+      if (item.type === "user" && item.message.content) {
         // Check if this is a tool_result entry (skip it as we've already processed it)
         const toolResultBlock = Array.isArray(item.message.content)
-          ? item.message.content.find(c => c.type === 'tool_result')
-          : (item.message.content.type === 'tool_result' ? item.message.content : null);
-        
+          ? item.message.content.find((c) => c.type === "tool_result")
+          : item.message.content.type === "tool_result"
+            ? item.message.content
+            : null;
+
         if (toolResultBlock && toolResultBlock.tool_use_id) {
           // Skip standalone tool_result entries - they've been attached to their tool_use
           continue;
         }
       }
-      
+
       // Convert to our standard format
       if (item.toolResults) {
         // console.log: Processing item with tool results
       }
-      
+
       // Debug specific item we're looking for
-      if (item.message && item.message.content && Array.isArray(item.message.content)) {
-        const toolUseBlock = item.message.content.find(c => c.type === 'tool_use' && c.id === 'toolu_01D8RMQYDySWAscQCC6pfDWf');
+      if (
+        item.message &&
+        item.message.content &&
+        Array.isArray(item.message.content)
+      ) {
+        const toolUseBlock = item.message.content.find(
+          (c) =>
+            c.type === "tool_use" && c.id === "toolu_01D8RMQYDySWAscQCC6pfDWf",
+        );
         if (toolUseBlock) {
           // Debug: Processing tool_use item
         }
       }
       const parsed = {
         id: item.message.id || item.uuid || null,
-        role: item.message.role || (item.type === 'assistant' ? 'assistant' : 'user'),
+        role:
+          item.message.role ||
+          (item.type === "assistant" ? "assistant" : "user"),
         timestamp: new Date(item.timestamp),
         content: item.message.content,
         model: item.message.model || null,
@@ -243,15 +265,15 @@ class DataCache {
         toolResults: item.toolResults || null, // Include attached tool results (populated during correlation)
         isCompactSummary: item.isCompactSummary || false, // Preserve compact summary flag
         uuid: item.uuid || null, // Include UUID for message identification
-        type: item.type || null // Include type field
+        type: item.type || null, // Include type field
       };
-      
+
       // Debug log for our specific tool_use
       // Debug: Final message processing completed
-      
+
       processedMessages.push(parsed);
     }
-    
+
     return processedMessages;
   }
 
@@ -262,22 +284,22 @@ class DataCache {
    */
   async getFileStats(filepath) {
     const cached = this.caches.fileStats.get(filepath);
-    
+
     // Check if metadata cache is still valid
-    if (cached && (Date.now() - cached.timestamp) < this.config.metadataTTL) {
+    if (cached && Date.now() - cached.timestamp < this.config.metadataTTL) {
       this.metrics.hits++;
       return cached.stats;
     }
-    
+
     // Cache miss - get fresh stats
     this.metrics.misses++;
     const stats = await fs.stat(filepath);
-    
+
     this.caches.fileStats.set(filepath, {
       stats: stats,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
-    
+
     return stats;
   }
 
@@ -292,7 +314,7 @@ class DataCache {
   async getCachedComputation(key, computeFn, dependencies = [], ttl = null) {
     const cached = this.caches[key];
     const effectiveTTL = ttl || this.config.computationTTL;
-    
+
     // Check if any dependencies have changed
     let dependenciesChanged = false;
     if (dependencies.length > 0) {
@@ -301,8 +323,12 @@ class DataCache {
           const depStats = await this.getFileStats(dep);
           const cachedDep = cached?.dependencies?.has(dep);
           const depTimestamp = cached?.dependencyTimestamps?.get(dep);
-          
-          if (!cachedDep || !depTimestamp || depStats.mtime.getTime() > depTimestamp) {
+
+          if (
+            !cachedDep ||
+            !depTimestamp ||
+            depStats.mtime.getTime() > depTimestamp
+          ) {
             dependenciesChanged = true;
             break;
           }
@@ -313,21 +339,22 @@ class DataCache {
         }
       }
     }
-    
+
     // Check cache validity
-    const isCacheValid = cached?.data && 
-                        !dependenciesChanged && 
-                        (Date.now() - cached.timestamp) < effectiveTTL;
-    
+    const isCacheValid =
+      cached?.data &&
+      !dependenciesChanged &&
+      Date.now() - cached.timestamp < effectiveTTL;
+
     if (isCacheValid) {
       this.metrics.hits++;
       return cached.data;
     }
-    
+
     // Cache miss - compute result
     this.metrics.misses++;
     const result = await computeFn();
-    
+
     // Store dependency timestamps
     const dependencyTimestamps = new Map();
     for (const dep of dependencies) {
@@ -336,14 +363,14 @@ class DataCache {
         dependencyTimestamps.set(dep, stats.mtime.getTime());
       } catch {}
     }
-    
+
     this.caches[key] = {
       data: result,
       timestamp: Date.now(),
       dependencies: new Set(dependencies),
-      dependencyTimestamps: dependencyTimestamps
+      dependencyTimestamps: dependencyTimestamps,
     };
-    
+
     return result;
   }
 
@@ -356,20 +383,20 @@ class DataCache {
   async getCachedTokenUsage(filepath, calculateFn) {
     const cached = this.caches.tokenUsage.get(filepath);
     const fileStats = await this.getFileStats(filepath);
-    
+
     if (cached && cached.timestamp >= fileStats.mtime.getTime()) {
       this.metrics.hits++;
       return cached.usage;
     }
-    
+
     this.metrics.misses++;
     const usage = await calculateFn();
-    
+
     this.caches.tokenUsage.set(filepath, {
       usage,
-      timestamp: fileStats.mtime.getTime()
+      timestamp: fileStats.mtime.getTime(),
     });
-    
+
     return usage;
   }
 
@@ -382,20 +409,20 @@ class DataCache {
   async getCachedModelInfo(filepath, extractFn) {
     const cached = this.caches.modelInfo.get(filepath);
     const fileStats = await this.getFileStats(filepath);
-    
+
     if (cached && cached.timestamp >= fileStats.mtime.getTime()) {
       this.metrics.hits++;
       return cached.info;
     }
-    
+
     this.metrics.misses++;
     const info = await extractFn();
-    
+
     this.caches.modelInfo.set(filepath, {
       info,
-      timestamp: fileStats.mtime.getTime()
+      timestamp: fileStats.mtime.getTime(),
     });
-    
+
     return info;
   }
 
@@ -408,20 +435,20 @@ class DataCache {
   async getCachedStatusSquares(filepath, generateFn) {
     const cached = this.caches.statusSquares.get(filepath);
     const fileStats = await this.getFileStats(filepath);
-    
+
     if (cached && cached.timestamp >= fileStats.mtime.getTime()) {
       this.metrics.hits++;
       return cached.squares;
     }
-    
+
     this.metrics.misses++;
     const squares = await generateFn();
-    
+
     this.caches.statusSquares.set(filepath, {
       squares,
-      timestamp: fileStats.mtime.getTime()
+      timestamp: fileStats.mtime.getTime(),
     });
-    
+
     return squares;
   }
 
@@ -434,20 +461,20 @@ class DataCache {
   async getCachedToolUsage(filepath, extractFn) {
     const cached = this.caches.toolUsage.get(filepath);
     const fileStats = await this.getFileStats(filepath);
-    
+
     if (cached && cached.timestamp >= fileStats.mtime.getTime()) {
       this.metrics.hits++;
       return cached.usage;
     }
-    
+
     this.metrics.misses++;
     const usage = await extractFn();
-    
+
     this.caches.toolUsage.set(filepath, {
       usage,
-      timestamp: fileStats.mtime.getTime()
+      timestamp: fileStats.mtime.getTime(),
     });
-    
+
     return usage;
   }
 
@@ -457,7 +484,7 @@ class DataCache {
    */
   invalidateFile(filepath) {
     this.metrics.filesInvalidated++;
-    
+
     // Remove direct file caches
     this.caches.fileContent.delete(filepath);
     this.caches.parsedConversations.delete(filepath);
@@ -466,21 +493,21 @@ class DataCache {
     this.caches.statusSquares.delete(filepath);
     this.caches.toolUsage.delete(filepath);
     this.caches.fileStats.delete(filepath);
-    
+
     // Invalidate computations that depend on this file
-    ['sessions', 'summary'].forEach(key => {
+    ["sessions", "summary"].forEach((key) => {
       const cached = this.caches[key];
       if (cached?.dependencies?.has(filepath)) {
-        this.caches[key] = { 
-          data: null, 
-          timestamp: 0, 
+        this.caches[key] = {
+          data: null,
+          timestamp: 0,
           dependencies: new Set(),
-          dependencyTimestamps: new Map()
+          dependencyTimestamps: new Map(),
         };
         this.metrics.computationsInvalidated++;
       }
     });
-    
+
     this.metrics.invalidations++;
   }
 
@@ -489,19 +516,19 @@ class DataCache {
    * @param {Array<string>} filepaths - Array of file paths
    */
   invalidateFiles(filepaths) {
-    filepaths.forEach(filepath => this.invalidateFile(filepath));
+    filepaths.forEach((filepath) => this.invalidateFile(filepath));
   }
 
   /**
    * Invalidate all computations (force recalculation)
    */
   invalidateComputations() {
-    ['sessions', 'summary'].forEach(key => {
-      this.caches[key] = { 
-        data: null, 
-        timestamp: 0, 
+    ["sessions", "summary"].forEach((key) => {
+      this.caches[key] = {
+        data: null,
+        timestamp: 0,
         dependencies: new Set(),
-        dependencyTimestamps: new Map()
+        dependencyTimestamps: new Map(),
       };
     });
     this.metrics.computationsInvalidated += 2;
@@ -511,7 +538,7 @@ class DataCache {
    * Clear all caches
    */
   clearAll() {
-    Object.values(this.caches).forEach(cache => {
+    Object.values(this.caches).forEach((cache) => {
       if (cache instanceof Map) {
         cache.clear();
       } else {
@@ -521,14 +548,14 @@ class DataCache {
         cache.dependencyTimestamps = new Map();
       }
     });
-    
+
     // Reset metrics
     this.metrics = {
       hits: 0,
       misses: 0,
       invalidations: 0,
       filesInvalidated: 0,
-      computationsInvalidated: 0
+      computationsInvalidated: 0,
     };
   }
 
@@ -538,7 +565,7 @@ class DataCache {
   evictOldEntries() {
     const now = Date.now();
     let evicted = 0;
-    
+
     // Evict old file content
     for (const [filepath, data] of this.caches.fileContent.entries()) {
       if (now - data.timestamp > this.config.fileContentTTL) {
@@ -546,7 +573,7 @@ class DataCache {
         evicted++;
       }
     }
-    
+
     // Evict old parsed data
     for (const [filepath, data] of this.caches.parsedConversations.entries()) {
       if (now - data.timestamp > this.config.parsedDataTTL) {
@@ -554,7 +581,7 @@ class DataCache {
         evicted++;
       }
     }
-    
+
     // Evict old metadata
     for (const [filepath, data] of this.caches.fileStats.entries()) {
       if (now - data.timestamp > this.config.metadataTTL) {
@@ -562,7 +589,7 @@ class DataCache {
         evicted++;
       }
     }
-    
+
     if (evicted > 0) {
       this.metrics.evictions += evicted;
       console.log(chalk.gray(`🗑️  Evicted ${evicted} old cache entries`));
@@ -578,14 +605,14 @@ class DataCache {
 
     // Enforce size limits on each cache
     const caches = [
-      ['fileContent', this.caches.fileContent],
-      ['parsedConversations', this.caches.parsedConversations],
-      ['tokenUsage', this.caches.tokenUsage],
-      ['modelInfo', this.caches.modelInfo],
-      ['statusSquares', this.caches.statusSquares],
-      ['toolUsage', this.caches.toolUsage],
-      ['fileStats', this.caches.fileStats],
-      ['projectStats', this.caches.projectStats]
+      ["fileContent", this.caches.fileContent],
+      ["parsedConversations", this.caches.parsedConversations],
+      ["tokenUsage", this.caches.tokenUsage],
+      ["modelInfo", this.caches.modelInfo],
+      ["statusSquares", this.caches.statusSquares],
+      ["toolUsage", this.caches.toolUsage],
+      ["fileStats", this.caches.fileStats],
+      ["projectStats", this.caches.projectStats],
     ];
 
     for (const [, cache] of caches) {
@@ -608,7 +635,9 @@ class DataCache {
 
     if (totalEvicted > 0) {
       this.metrics.evictions += totalEvicted;
-      console.log(chalk.gray(`🗑️  Enforced size limits, evicted ${totalEvicted} entries`));
+      console.log(
+        chalk.gray(`🗑️  Enforced size limits, evicted ${totalEvicted} entries`),
+      );
     }
   }
 
@@ -628,10 +657,14 @@ class DataCache {
    * @returns {Object} Cache performance metrics
    */
   getStats() {
-    const hitRate = this.metrics.hits + this.metrics.misses > 0 
-      ? (this.metrics.hits / (this.metrics.hits + this.metrics.misses) * 100).toFixed(2)
-      : 0;
-    
+    const hitRate =
+      this.metrics.hits + this.metrics.misses > 0
+        ? (
+            (this.metrics.hits / (this.metrics.hits + this.metrics.misses)) *
+            100
+          ).toFixed(2)
+        : 0;
+
     return {
       ...this.metrics,
       hitRate: `${hitRate}%`,
@@ -645,7 +678,7 @@ class DataCache {
         fileStats: this.caches.fileStats.size,
         projectStats: this.caches.projectStats.size,
       },
-      memoryUsage: process.memoryUsage()
+      memoryUsage: process.memoryUsage(),
     };
   }
 
@@ -654,11 +687,13 @@ class DataCache {
    */
   logStats() {
     const stats = this.getStats();
-    console.log(chalk.cyan('📊 Cache Statistics:'));
+    console.log(chalk.cyan("📊 Cache Statistics:"));
     console.log(chalk.gray(`   Hit Rate: ${stats.hitRate}`));
     console.log(chalk.gray(`   Hits: ${stats.hits}, Misses: ${stats.misses}`));
     console.log(chalk.gray(`   Invalidations: ${stats.invalidations}`));
-    console.log(chalk.gray(`   Cache Sizes: ${JSON.stringify(stats.cacheSize)}`));
+    console.log(
+      chalk.gray(`   Cache Sizes: ${JSON.stringify(stats.cacheSize)}`),
+    );
   }
 
   /**
@@ -668,7 +703,7 @@ class DataCache {
   needsWarming() {
     const total = this.metrics.hits + this.metrics.misses;
     if (total < 10) return true; // Not enough data
-    
+
     const hitRate = this.metrics.hits / total;
     return hitRate < 0.5; // Less than 50% hit rate
   }

@@ -10,6 +10,7 @@ Comprehensive guidance for search engine optimization across content, technical 
 ## When to Use This Skill
 
 Use this skill when:
+
 - Optimizing website content for search engines
 - Conducting keyword research and analysis
 - Implementing technical SEO improvements
@@ -24,12 +25,14 @@ Use this skill when:
 ### 1. Keyword Research & Strategy
 
 **Primary Keyword Selection:**
+
 - Focus on search intent (informational, navigational, transactional, commercial)
 - Balance search volume with competition
 - Consider keyword difficulty and ranking potential
 - Target long-tail keywords for quick wins
 
 **Keyword Research Process:**
+
 ```
 1. Identify seed keywords from business objectives
 2. Use tools to expand keyword list (Google Keyword Planner, Ahrefs, SEMrush)
@@ -40,6 +43,7 @@ Use this skill when:
 ```
 
 **Content Optimization Formula:**
+
 - Primary keyword: 1-2% density (natural placement)
 - Include in: Title tag, H1, first paragraph, URL, meta description
 - Use semantic variations and related terms
@@ -48,15 +52,19 @@ Use this skill when:
 ### 2. On-Page SEO
 
 **Title Tag Optimization:**
+
 ```html
 <!-- Good: Descriptive, includes keyword, under 60 characters -->
 <title>Ultimate Guide to React Hooks - Learn useEffect & useState</title>
 
 <!-- Bad: Too long, keyword stuffing, generic -->
-<title>React Hooks Guide React Hooks Tutorial React Hooks Examples Learn React</title>
+<title>
+  React Hooks Guide React Hooks Tutorial React Hooks Examples Learn React
+</title>
 ```
 
 **Best Practices:**
+
 - Keep under 60 characters (displayed in SERPs)
 - Place primary keyword near the beginning
 - Include brand name if space permits
@@ -64,26 +72,32 @@ Use this skill when:
 - Unique for every page
 
 **Meta Description:**
+
 ```html
 <!-- Good: Compelling, includes keywords, call-to-action, 150-160 chars -->
-<meta name="description" content="Master React Hooks with our comprehensive guide. Learn useState, useEffect, and custom hooks with practical examples. Start building better React apps today.">
+<meta
+  name="description"
+  content="Master React Hooks with our comprehensive guide. Learn useState, useEffect, and custom hooks with practical examples. Start building better React apps today."
+/>
 
 <!-- Bad: Too short, no value proposition -->
-<meta name="description" content="React Hooks guide and tutorial">
+<meta name="description" content="React Hooks guide and tutorial" />
 ```
 
 **Header Structure:**
+
 ```html
 <!-- Proper hierarchy -->
 <h1>Main Page Title (Primary Keyword)</h1>
-  <h2>Section Heading (Related Keywords)</h2>
-    <h3>Subsection</h3>
-    <h3>Subsection</h3>
-  <h2>Another Section</h2>
-    <h3>Subsection</h3>
+<h2>Section Heading (Related Keywords)</h2>
+<h3>Subsection</h3>
+<h3>Subsection</h3>
+<h2>Another Section</h2>
+<h3>Subsection</h3>
 ```
 
 **URL Structure:**
+
 ```
 ✅ Good URLs:
 - /blog/react-hooks-guide
@@ -97,6 +111,7 @@ Use this skill when:
 ```
 
 **Image Optimization:**
+
 ```html
 <!-- Optimized image -->
 <img
@@ -109,6 +124,7 @@ Use this skill when:
 ```
 
 **Best Practices:**
+
 - Use descriptive, keyword-rich alt text
 - Compress images (WebP format preferred)
 - Specify dimensions to prevent layout shift
@@ -118,6 +134,7 @@ Use this skill when:
 ### 3. Content Quality
 
 **E-E-A-T Principles (Experience, Expertise, Authoritativeness, Trust):**
+
 - Demonstrate author expertise with credentials
 - Cite authoritative sources
 - Keep content accurate and up-to-date
@@ -125,6 +142,7 @@ Use this skill when:
 - Include author bios and bylines
 
 **Content Structure for SEO:**
+
 ```markdown
 # Main Title (H1) - Primary Keyword
 
@@ -156,6 +174,7 @@ Summary and call-to-action.
 ```
 
 **Content Length Guidelines:**
+
 - Blog posts: 1,500-2,500 words (comprehensive topics)
 - Product pages: 300-500 words minimum
 - Category pages: 500-1,000 words
@@ -164,6 +183,7 @@ Summary and call-to-action.
 ### 4. Technical SEO
 
 **Schema Markup (Structured Data):**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -188,6 +208,7 @@ Summary and call-to-action.
 ```
 
 **Common Schema Types:**
+
 - Article (blog posts)
 - Product (e-commerce)
 - FAQ (question/answer pages)
@@ -198,6 +219,7 @@ Summary and call-to-action.
 - Review/AggregateRating (ratings and reviews)
 
 **Robots.txt Configuration:**
+
 ```
 User-agent: *
 Disallow: /admin/
@@ -209,6 +231,7 @@ Sitemap: https://example.com/sitemap.xml
 ```
 
 **XML Sitemap Structure:**
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -228,42 +251,52 @@ Sitemap: https://example.com/sitemap.xml
 ```
 
 **Canonical Tags:**
+
 ```html
 <!-- Prevent duplicate content issues -->
-<link rel="canonical" href="https://example.com/original-page">
+<link rel="canonical" href="https://example.com/original-page" />
 
 <!-- Handle URL parameters -->
-<link rel="canonical" href="https://example.com/products/shoes">
+<link rel="canonical" href="https://example.com/products/shoes" />
 <!-- Even if accessed via: /products/shoes?color=red&size=10 -->
 ```
 
 ### 5. Core Web Vitals
 
 **Largest Contentful Paint (LCP) - Target: < 2.5s**
+
 - Optimize images and videos
 - Use CDN for static assets
 - Minimize render-blocking resources
 - Implement lazy loading
 
 **First Input Delay (FID) - Target: < 100ms**
+
 - Minimize JavaScript execution time
 - Break up long tasks
 - Use web workers for heavy computations
 - Defer non-critical JavaScript
 
 **Cumulative Layout Shift (CLS) - Target: < 0.1**
+
 - Set size attributes on images and videos
 - Avoid inserting content above existing content
 - Use transform animations instead of layout-triggering properties
 - Reserve space for ads and embeds
 
 **Page Speed Optimization:**
+
 ```html
 <!-- Preload critical resources -->
-<link rel="preload" href="/fonts/main.woff2" as="font" crossorigin>
+<link rel="preload" href="/fonts/main.woff2" as="font" crossorigin />
 
 <!-- Defer non-critical CSS -->
-<link rel="preload" href="/styles/non-critical.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link
+  rel="preload"
+  href="/styles/non-critical.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
 
 <!-- Async/defer JavaScript -->
 <script src="/js/analytics.js" async></script>
@@ -273,6 +306,7 @@ Sitemap: https://example.com/sitemap.xml
 ### 6. Mobile SEO
 
 **Mobile-First Optimization:**
+
 - Responsive design (mobile-friendly test passed)
 - Touch-friendly buttons (minimum 48x48px)
 - Readable font sizes (16px minimum)
@@ -280,13 +314,15 @@ Sitemap: https://example.com/sitemap.xml
 - Fast mobile page speed
 
 **Viewport Configuration:**
+
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 ```
 
 ### 7. Internal Linking Strategy
 
 **Best Practices:**
+
 - Use descriptive anchor text (avoid "click here")
 - Link to relevant, contextual pages
 - Maintain logical hierarchy and flow
@@ -294,6 +330,7 @@ Sitemap: https://example.com/sitemap.xml
 - Update old content with links to new content
 
 **Example:**
+
 ```markdown
 Learn more about [advanced React patterns](/guides/react-patterns)
 or check out our [useState hook tutorial](/tutorials/usestate-guide).
@@ -302,6 +339,7 @@ or check out our [useState hook tutorial](/tutorials/usestate-guide).
 ## SEO Content Checklist
 
 **Before Publishing:**
+
 - [ ] Primary keyword in title tag (under 60 chars)
 - [ ] Meta description (150-160 chars, compelling)
 - [ ] H1 tag with primary keyword
@@ -322,6 +360,7 @@ or check out our [useState hook tutorial](/tutorials/usestate-guide).
 ### Topic Clusters & Pillar Pages
 
 **Structure:**
+
 ```
 Pillar Page: "Complete Guide to React"
   ├── Cluster: "React Hooks Tutorial"
@@ -331,6 +370,7 @@ Pillar Page: "Complete Guide to React"
 ```
 
 **Implementation:**
+
 - Create comprehensive pillar content (3,000+ words)
 - Develop 8-12 cluster articles supporting the pillar
 - Link all clusters back to pillar page
@@ -340,6 +380,7 @@ Pillar Page: "Complete Guide to React"
 ### Featured Snippet Optimization
 
 **Question-Based Content:**
+
 ```markdown
 ## What is React?
 
@@ -350,6 +391,7 @@ DOM implementation.
 ```
 
 **List-Based Content:**
+
 ```markdown
 ## Top 5 React Best Practices
 
@@ -363,13 +405,14 @@ DOM implementation.
 **Table-Based Content:**
 | Framework | Performance | Learning Curve | Ecosystem |
 |-----------|-------------|----------------|-----------|
-| React     | Excellent   | Moderate       | Extensive |
-| Vue       | Excellent   | Easy           | Growing   |
-| Angular   | Good        | Steep          | Mature    |
+| React | Excellent | Moderate | Extensive |
+| Vue | Excellent | Easy | Growing |
+| Angular | Good | Steep | Mature |
 
 ## Local SEO (for businesses with physical locations)
 
 **Google Business Profile Optimization:**
+
 - Complete all business information
 - Regular posts and updates
 - Respond to reviews
@@ -377,6 +420,7 @@ DOM implementation.
 - Verify business hours
 
 **Local Schema Markup:**
+
 ```json
 {
   "@type": "LocalBusiness",
@@ -395,6 +439,7 @@ DOM implementation.
 ## Monitoring & Analytics
 
 **Key Metrics to Track:**
+
 - Organic traffic trends
 - Keyword rankings
 - Click-through rates (CTR)
@@ -404,6 +449,7 @@ DOM implementation.
 - Conversion rates from organic traffic
 
 **Tools:**
+
 - Google Search Console (performance, indexing issues)
 - Google Analytics 4 (traffic, behavior, conversions)
 - PageSpeed Insights (Core Web Vitals)

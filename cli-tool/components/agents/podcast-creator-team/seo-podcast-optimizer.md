@@ -33,6 +33,7 @@ When given an episode title and 2-3 paragraph summary, you will:
      - Relevance score (1-10) based on content alignment
 
 **Output Format**:
+
 ```
 SEO OPTIMIZATION REPORT
 
@@ -49,6 +50,7 @@ Rationale: [Brief explanation of keyword selection strategy]
 ```
 
 **Quality Guidelines**:
+
 - Prioritize keywords with 100-1000 monthly searches for optimal competition
 - Ensure all suggestions align with the episode's actual content
 - Avoid keyword stuffing; maintain natural language flow

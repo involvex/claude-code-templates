@@ -12,6 +12,7 @@ Benchling is a cloud platform for life sciences R&D. Access registry entities (D
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Working with Benchling's Python SDK or REST API
 - Managing biological sequences (DNA, RNA, proteins) and registry entities
 - Automating inventory operations (samples, containers, locations, transfers)
@@ -26,6 +27,7 @@ This skill should be used when:
 ### 1. Authentication & Setup
 
 **Python SDK Installation:**
+
 ```python
 # Stable release
 uv pip install benchling-sdk
@@ -36,6 +38,7 @@ poetry add benchling-sdk
 **Authentication Methods:**
 
 API Key Authentication (recommended for scripts):
+
 ```python
 from benchling_sdk.benchling import Benchling
 from benchling_sdk.auth.api_key_auth import ApiKeyAuth
@@ -47,6 +50,7 @@ benchling = Benchling(
 ```
 
 OAuth Client Credentials (for apps):
+
 ```python
 from benchling_sdk.auth.client_credentials_oauth2 import ClientCredentialsOAuth2
 
@@ -61,6 +65,7 @@ benchling = Benchling(
 ```
 
 **Key Points:**
+
 - API keys are obtained from Profile Settings in Benchling
 - Store credentials securely (use environment variables or password managers)
 - All API requests require HTTPS
@@ -73,6 +78,7 @@ For detailed authentication information including OIDC and security best practic
 Registry entities include DNA sequences, RNA sequences, AA sequences, custom entities, and mixtures. The SDK provides typed classes for creating and managing these entities.
 
 **Creating DNA Sequences:**
+
 ```python
 from benchling_sdk.models import DnaSequenceCreate
 
@@ -91,6 +97,7 @@ sequence = benchling.dna_sequences.create(
 **Registry Registration:**
 
 To register an entity directly upon creation:
+
 ```python
 sequence = benchling.dna_sequences.create(
     DnaSequenceCreate(
@@ -107,6 +114,7 @@ sequence = benchling.dna_sequences.create(
 **Important:** Use either `entity_registry_id` OR `naming_strategy`, never both.
 
 **Updating Entities:**
+
 ```python
 from benchling_sdk.models import DnaSequenceUpdate
 
@@ -122,6 +130,7 @@ updated = benchling.dna_sequences.update(
 Unspecified fields remain unchanged, allowing partial updates.
 
 **Listing and Pagination:**
+
 ```python
 # List all DNA sequences (returns a generator)
 sequences = benchling.dna_sequences.list()
@@ -134,6 +143,7 @@ total = sequences.estimated_count()
 ```
 
 **Key Operations:**
+
 - Create: `benchling.<entity_type>.create()`
 - Read: `benchling.<entity_type>.get(id)` or `.list()`
 - Update: `benchling.<entity_type>.update(id, update_object)`
@@ -148,6 +158,7 @@ For comprehensive SDK reference and advanced patterns, refer to `references/sdk_
 Manage physical samples, containers, boxes, and locations within the Benchling inventory system.
 
 **Creating Containers:**
+
 ```python
 from benchling_sdk.models import ContainerCreate
 
@@ -162,6 +173,7 @@ container = benchling.containers.create(
 ```
 
 **Managing Boxes:**
+
 ```python
 from benchling_sdk.models import BoxCreate
 
@@ -175,6 +187,7 @@ box = benchling.boxes.create(
 ```
 
 **Transferring Items:**
+
 ```python
 # Transfer a container to a new location
 transfer = benchling.containers.transfer(
@@ -184,6 +197,7 @@ transfer = benchling.containers.transfer(
 ```
 
 **Key Inventory Operations:**
+
 - Create containers, boxes, locations, plates
 - Update inventory item properties
 - Transfer items between locations
@@ -195,6 +209,7 @@ transfer = benchling.containers.transfer(
 Interact with electronic lab notebook (ELN) entries, protocols, and templates.
 
 **Creating Notebook Entries:**
+
 ```python
 from benchling_sdk.models import EntryCreate
 
@@ -209,6 +224,7 @@ entry = benchling.entries.create(
 ```
 
 **Linking Entities to Entries:**
+
 ```python
 # Add references to entities in an entry
 entry_link = benchling.entry_links.create(
@@ -218,6 +234,7 @@ entry_link = benchling.entry_links.create(
 ```
 
 **Key Notebook Operations:**
+
 - Create and update lab notebook entries
 - Manage entry templates
 - Link entities and results to entries
@@ -228,6 +245,7 @@ entry_link = benchling.entry_links.create(
 Automate laboratory processes using Benchling's workflow system.
 
 **Creating Workflow Tasks:**
+
 ```python
 from benchling_sdk.models import WorkflowTaskCreate
 
@@ -242,6 +260,7 @@ task = benchling.workflow_tasks.create(
 ```
 
 **Updating Task Status:**
+
 ```python
 from benchling_sdk.models import WorkflowTaskUpdate
 
@@ -256,6 +275,7 @@ updated_task = benchling.workflow_tasks.update(
 **Asynchronous Operations:**
 
 Some operations are asynchronous and return tasks:
+
 ```python
 # Wait for task completion
 from benchling_sdk.helpers.tasks import wait_for_task
@@ -269,6 +289,7 @@ result = wait_for_task(
 ```
 
 **Key Workflow Operations:**
+
 - Create and manage workflow tasks
 - Update task statuses and assignments
 - Execute bulk operations asynchronously
@@ -279,6 +300,7 @@ result = wait_for_task(
 Subscribe to Benchling events for real-time integrations using AWS EventBridge.
 
 **Event Types:**
+
 - Entity creation, update, archive
 - Inventory transfers
 - Workflow task status changes
@@ -286,12 +308,14 @@ Subscribe to Benchling events for real-time integrations using AWS EventBridge.
 - Results registration
 
 **Integration Pattern:**
+
 1. Configure event routing to AWS EventBridge in Benchling settings
 2. Create EventBridge rules to filter events
 3. Route events to Lambda functions or other targets
 4. Process events and update external systems
 
 **Use Cases:**
+
 - Sync Benchling data to external databases
 - Trigger downstream processes on workflow completion
 - Send notifications on entity changes
@@ -307,12 +331,14 @@ Query historical Benchling data using SQL through the Data Warehouse.
 The Benchling Data Warehouse provides SQL access to Benchling data for analytics and reporting. Connect using standard SQL clients with provided credentials.
 
 **Common Queries:**
+
 - Aggregate experimental results
 - Analyze inventory trends
 - Generate compliance reports
 - Export data for external analysis
 
 **Integration with Analysis Tools:**
+
 - Jupyter notebooks for interactive analysis
 - BI tools (Tableau, Looker, PowerBI)
 - Custom dashboards
@@ -322,6 +348,7 @@ The Benchling Data Warehouse provides SQL access to Benchling data for analytics
 ### Error Handling
 
 The SDK automatically retries failed requests:
+
 ```python
 # Automatic retry for 429, 502, 503, 504 status codes
 # Up to 5 retries with exponential backoff
@@ -338,6 +365,7 @@ benchling = Benchling(
 ### Pagination Efficiency
 
 Use generators for memory-efficient pagination:
+
 ```python
 # Generator-based iteration
 for page in benchling.dna_sequences.list():
@@ -351,6 +379,7 @@ total = benchling.dna_sequences.list().estimated_count()
 ### Schema Fields Helper
 
 Use the `fields()` helper for custom schema fields:
+
 ```python
 # Convert dict to Fields object
 custom_fields = benchling.models.fields({
@@ -363,6 +392,7 @@ custom_fields = benchling.models.fields({
 ### Forward Compatibility
 
 The SDK handles unknown enum values and types gracefully:
+
 - Unknown enum values are preserved
 - Unrecognized polymorphic types return `UnknownType`
 - Allows working with newer API versions
@@ -394,6 +424,7 @@ This skill currently includes example scripts that can be removed or replaced wi
 ## Common Use Cases
 
 **1. Bulk Entity Import:**
+
 ```python
 # Import multiple sequences from FASTA file
 from Bio import SeqIO
@@ -410,6 +441,7 @@ for record in SeqIO.parse("sequences.fasta", "fasta"):
 ```
 
 **2. Inventory Audit:**
+
 ```python
 # List all containers in a specific location
 containers = benchling.containers.list(
@@ -422,6 +454,7 @@ for page in containers:
 ```
 
 **3. Workflow Automation:**
+
 ```python
 # Update all pending tasks for a workflow
 tasks = benchling.workflow_tasks.list(
@@ -442,6 +475,7 @@ for page in tasks:
 ```
 
 **4. Data Export:**
+
 ```python
 # Export all sequences with specific properties
 sequences = benchling.dna_sequences.list()

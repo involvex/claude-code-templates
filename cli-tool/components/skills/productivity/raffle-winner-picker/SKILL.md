@@ -30,7 +30,7 @@ This skill randomly selects winners from lists, spreadsheets, or Google Sheets f
 ### From Google Sheets
 
 ```
-Pick a random row from this Google Sheet to select a winner 
+Pick a random row from this Google Sheet to select a winner
 for a giveaway: [Sheet URL]
 ```
 
@@ -53,7 +53,7 @@ Pick a random winner from this list:
 ### Multiple Winners
 
 ```
-Pick 5 random winners from contest-entries.xlsx, 
+Pick 5 random winners from contest-entries.xlsx,
 make sure no duplicates
 ```
 
@@ -62,6 +62,7 @@ make sure no duplicates
 **User**: "Pick a random row from this Google Sheet to select a winner for a giveaway."
 
 **Output**:
+
 ```
 Accessing Google Sheet...
 Total entries found: 247
@@ -90,24 +91,28 @@ Would you like to:
 ## Features
 
 ### Fair Selection
+
 - Uses secure random number generation
 - No bias or patterns
 - Transparent process
 - Repeatable with seed (for verification)
 
 ### Exclusions
+
 ```
-Pick a random winner excluding previous winners: 
+Pick a random winner excluding previous winners:
 Alice, Bob, Carol
 ```
 
 ### Weighted Selection
+
 ```
-Pick a winner with weighted probability based on 
+Pick a winner with weighted probability based on
 the "entries" column (1 entry = 1 ticket)
 ```
 
 ### Runner-ups
+
 ```
 Pick 1 winner and 3 runner-ups from the list
 ```
@@ -115,18 +120,21 @@ Pick 1 winner and 3 runner-ups from the list
 ## Example Workflows
 
 ### Social Media Giveaway
+
 1. Export entries from Google Form to Sheets
 2. "Pick a random winner from [Sheet URL]"
 3. Verify winner details
 4. Announce publicly with timestamp
 
 ### Event Raffle
+
 1. Create CSV of attendee names and emails
 2. "Pick 10 random winners from attendees.csv"
 3. Export winner list
 4. Email winners directly
 
 ### Team Assignment
+
 1. Have list of participants
 2. "Randomly split this list into 4 equal teams"
 3. Review assignments
@@ -156,4 +164,3 @@ Pick 1 winner and 3 runner-ups from the list
 - Beta tester selection
 - Focus group participant selection
 - Random prize distribution at events
-

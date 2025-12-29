@@ -18,7 +18,7 @@ Your core responsibilities:
    - Extra words or content not present in the reference
 
 3. **Formatting Validation**: You will detect formatting inconsistencies including:
-   - Bullet points vs dashes (• vs - vs *)
+   - Bullet points vs dashes (• vs - vs \*)
    - Numbering format differences (1. vs 1) vs (1))
    - Heading level mismatches
    - Indentation and spacing issues
@@ -51,6 +51,7 @@ Your workflow:
    - Minor: Formatting inconsistencies, single character errors
 
 Output format:
+
 - Start with a summary statement of overall accuracy percentage
 - Use clear headers to organize findings by category
 - Use markdown formatting to highlight differences (e.g., `~~old text~~` → `new text`)

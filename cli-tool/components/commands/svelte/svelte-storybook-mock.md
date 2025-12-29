@@ -7,24 +7,25 @@ Mock SvelteKit modules and functionality in Storybook stories for isolated compo
 You are acting as the Svelte Storybook Specialist Agent focused on mocking SvelteKit modules. When setting up mocks:
 
 1. **Module Mocking Overview**:
-   
+
    **Fully Supported**:
    - `$app/environment` - Browser and version info
    - `$app/paths` - Base paths configuration
    - `$lib` - Library imports
    - `@sveltejs/kit/*` - Kit utilities
-   
+
    **Experimental (Requires Mocking)**:
    - `$app/stores` - Page, navigating, updated stores
    - `$app/navigation` - Navigation functions
    - `$app/forms` - Form enhancement
-   
+
    **Not Supported**:
    - `$env/dynamic/private` - Server-only
    - `$env/static/private` - Server-only
    - `$service-worker` - Service worker context
 
 2. **Store Mocking**:
+
    ```javascript
    export const Default = {
      parameters: {
@@ -32,46 +33,47 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
          stores: {
            // Page store
            page: {
-             url: new URL('https://example.com/products/123'),
-             params: { id: '123' },
+             url: new URL("https://example.com/products/123"),
+             params: { id: "123" },
              route: {
-               id: '/products/[id]'
+               id: "/products/[id]",
              },
              status: 200,
              error: null,
              data: {
                product: {
-                 id: '123',
-                 name: 'Sample Product',
-                 price: 99.99
-               }
+                 id: "123",
+                 name: "Sample Product",
+                 price: 99.99,
+               },
              },
-             form: null
+             form: null,
            },
            // Navigating store
            navigating: {
              from: {
-               params: { id: '122' },
-               route: { id: '/products/[id]' },
-               url: new URL('https://example.com/products/122')
+               params: { id: "122" },
+               route: { id: "/products/[id]" },
+               url: new URL("https://example.com/products/122"),
              },
              to: {
-               params: { id: '123' },
-               route: { id: '/products/[id]' },
-               url: new URL('https://example.com/products/123')
+               params: { id: "123" },
+               route: { id: "/products/[id]" },
+               url: new URL("https://example.com/products/123"),
              },
-             type: 'link',
-             delta: 1
+             type: "link",
+             delta: 1,
            },
            // Updated store
-           updated: true
-         }
-       }
-     }
+           updated: true,
+         },
+       },
+     },
    };
    ```
 
 3. **Navigation Mocking**:
+
    ```javascript
    parameters: {
      sveltekit_experimental: {
@@ -107,25 +109,27 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
    ```
 
 4. **Form Enhancement Mocking**:
+
    ```javascript
    parameters: {
      sveltekit_experimental: {
        forms: {
          enhance: (form) => {
-           console.log('Form enhanced:', form);
+           console.log("Form enhanced:", form);
            // Return cleanup function
            return {
              destroy() {
-               console.log('Form enhancement cleaned up');
-             }
+               console.log("Form enhancement cleaned up");
+             },
            };
-         }
+         };
        }
      }
    }
    ```
 
 5. **Link Handling**:
+
    ```javascript
    parameters: {
      sveltekit_experimental: {
@@ -156,8 +160,9 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
    ```
 
 6. **Complex Mocking Scenarios**:
-   
+
    **Auth State**:
+
    ```javascript
    const mockAuthenticatedUser = {
      parameters: {
@@ -166,35 +171,36 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
            page: {
              data: {
                user: {
-                 id: '123',
-                 email: 'user@example.com',
-                 role: 'admin'
+                 id: "123",
+                 email: "user@example.com",
+                 role: "admin",
                },
                session: {
-                 token: 'mock-jwt-token',
-                 expiresAt: '2024-12-31'
-               }
-             }
-           }
-         }
-       }
-     }
+                 token: "mock-jwt-token",
+                 expiresAt: "2024-12-31",
+               },
+             },
+           },
+         },
+       },
+     },
    };
    ```
-   
+
    **Loading States**:
+
    ```javascript
    const mockLoadingState = {
      parameters: {
        sveltekit_experimental: {
          stores: {
            navigating: {
-             from: { url: new URL('https://example.com') },
-             to: { url: new URL('https://example.com/products') }
-           }
-         }
-       }
-     }
+             from: { url: new URL("https://example.com") },
+             to: { url: new URL("https://example.com/products") },
+           },
+         },
+       },
+     },
    };
    ```
 
@@ -203,6 +209,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
 User: "Mock SvelteKit stores for my ProductDetail component"
 
 Assistant will:
+
 - Analyze component's store dependencies
 - Create comprehensive store mocks
 - Mock page data with product info

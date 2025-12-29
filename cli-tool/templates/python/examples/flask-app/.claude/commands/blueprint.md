@@ -13,6 +13,7 @@ flask create-blueprint api/v1
 ## Blueprint Structure
 
 Generates a complete blueprint with:
+
 - Routes and view functions
 - Error handlers
 - Template folder structure
@@ -108,7 +109,7 @@ from datetime import datetime
 class User(db.Model):
     """User model."""
     __tablename__ = 'users'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -116,28 +117,28 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
-    
+
     def __repr__(self):
         return f'<User {self.username}>'
-    
+
     def set_password(self, password):
         """Set password hash."""
         self.password_hash = generate_password_hash(password)
-    
+
     def check_password(self, password):
         """Check password hash."""
         return check_password_hash(self.password_hash, password)
-    
+
     def save(self):
         """Save user to database."""
         db.session.add(self)
         db.session.commit()
-    
+
     def delete(self):
         """Delete user from database."""
         db.session.delete(self)
         db.session.commit()
-    
+
     def to_dict(self):
         """Convert to dictionary."""
         return {
@@ -190,12 +191,12 @@ class UserForm(FlaskForm):
         ]
     )
     is_active = BooleanField('Active')
-    
+
     def validate_username(self, field):
         """Validate username uniqueness."""
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already exists.')
-    
+
     def validate_email(self, field):
         """Validate email uniqueness."""
         if User.query.filter_by(email=field.data).first():
@@ -211,10 +212,10 @@ from app.blueprints.users import users_bp
 
 def create_app():
     app = Flask(__name__)
-    
+
     # Register blueprints
     app.register_blueprint(users_bp)
-    
+
     return app
 ```
 

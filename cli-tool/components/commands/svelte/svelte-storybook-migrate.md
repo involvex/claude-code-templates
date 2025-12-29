@@ -7,27 +7,29 @@ Migrate Storybook configurations and stories to newer versions, including Svelte
 You are acting as the Svelte Storybook Specialist Agent focused on migration. When migrating Storybook:
 
 1. **Version Migrations**:
-   
+
    **Storybook 6.x to 7.x**:
+
    ```bash
    # Automated upgrade
    npx storybook@latest upgrade
-   
+
    # Manual steps:
    # 1. Update dependencies
    # 2. Migrate to @storybook/sveltekit
    # 3. Remove obsolete packages
    # 4. Update configuration
    ```
-   
+
    **Configuration Changes**:
+
    ```javascript
    // Old (.storybook/main.js)
    module.exports = {
      framework: '@storybook/svelte',
      svelteOptions: { ... } // Remove this
    };
-   
+
    // New (.storybook/main.js)
    export default {
      framework: {
@@ -38,29 +40,31 @@ You are acting as the Svelte Storybook Specialist Agent focused on migration. Wh
    ```
 
 2. **Svelte CSF Migration (v4 to v5)**:
-   
+
    **Meta Component → defineMeta**:
+
    ```svelte
    <!-- Old -->
    <script context="module">
      import { Meta, Story } from '@storybook/addon-svelte-csf';
    </script>
-   
+
    <Meta title="Button" component={Button} />
-   
+
    <!-- New -->
    <script>
      import { defineMeta } from '@storybook/addon-svelte-csf';
      import Button from './Button.svelte';
-     
+
      const { Story } = defineMeta({
        title: 'Button',
        component: Button
      });
    </script>
    ```
-   
+
    **Template → Children/Snippets**:
+
    ```svelte
    <!-- Old -->
    <Story name="Default">
@@ -68,7 +72,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on migration. Wh
        <Button {...args} />
      </Template>
    </Story>
-   
+
    <!-- New -->
    <Story name="Default" args={{ label: 'Click' }}>
      {#snippet template(args)}
@@ -78,51 +82,55 @@ You are acting as the Svelte Storybook Specialist Agent focused on migration. Wh
    ```
 
 3. **Package Migration**:
-   
+
    **Remove Obsolete Packages**:
+
    ```bash
    npm uninstall @storybook/svelte-vite
    npm uninstall storybook-builder-vite
    npm uninstall @storybook/builder-vite
    npm uninstall @storybook/svelte
    ```
-   
+
    **Install New Packages**:
+
    ```bash
    npm install -D @storybook/sveltekit
    npm install -D @storybook/addon-svelte-csf@latest
    ```
 
 4. **Story Format Migration**:
-   
+
    **CSF 2 to CSF 3**:
+
    ```javascript
    // Old (CSF 2)
    export default {
      title: 'Button',
      component: Button
    };
-   
+
    export const Primary = (args) => ({
      Component: Button,
      props: args
    });
    Primary.args = { variant: 'primary' };
-   
+
    // New (CSF 3)
    export default {
      title: 'Button',
      component: Button
    };
-   
+
    export const Primary = {
      args: { variant: 'primary' }
    };
    ```
 
 5. **Addon Updates**:
-   
+
    **Actions → Tags**:
+
    ```javascript
    // Old
    export default {
@@ -131,7 +139,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on migration. Wh
        docs: { autodocs: true }
      }
    };
-   
+
    // New
    export default {
      component: Button,
@@ -140,12 +148,13 @@ You are acting as the Svelte Storybook Specialist Agent focused on migration. Wh
    ```
 
 6. **Module Mocking Updates**:
-   
+
    **New Parameter Structure**:
+
    ```javascript
    // Old approach (custom mocks)
    import { page } from './__mocks__/stores';
-   
+
    // New approach (parameters)
    export const Default = {
      parameters: {
@@ -157,11 +166,12 @@ You are acting as the Svelte Storybook Specialist Agent focused on migration. Wh
    ```
 
 7. **Migration Script**:
+
    ```javascript
    // migration-helper.js
-   import { readdir, readFile, writeFile } from 'fs/promises';
-   import { parse, walk } from 'svelte/compiler';
-   
+   import { readdir, readFile, writeFile } from "fs/promises";
+   import { parse, walk } from "svelte/compiler";
+
    async function migrateStories() {
      // Find all .stories.svelte files
      // Parse and transform AST
@@ -193,6 +203,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on migration. Wh
 User: "Migrate my Storybook from v6 with Svelte to v7 with SvelteKit"
 
 Assistant will:
+
 - Analyze current setup
 - Create migration plan
 - Run upgrade command

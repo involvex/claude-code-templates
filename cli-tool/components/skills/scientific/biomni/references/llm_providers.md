@@ -58,11 +58,11 @@ default_config.anthropic_api_key = "sk-ant-..."  # Or use env var
 
 **Model Characteristics:**
 
-| Model | Best For | Speed | Cost | Reasoning Quality |
-|-------|----------|-------|------|-------------------|
-| Opus 4 | Complex multi-step analyses | Slower | High | Highest |
-| Sonnet 4 | General biomedical tasks | Fast | Medium | High |
-| Haiku 4 | Simple queries, bulk processing | Fastest | Low | Good |
+| Model    | Best For                        | Speed   | Cost   | Reasoning Quality |
+| -------- | ------------------------------- | ------- | ------ | ----------------- |
+| Opus 4   | Complex multi-step analyses     | Slower  | High   | Highest           |
+| Sonnet 4 | General biomedical tasks        | Fast    | Medium | High              |
+| Haiku 4  | Simple queries, bulk processing | Fastest | Low    | Good              |
 
 ## OpenAI
 
@@ -99,6 +99,7 @@ default_config.llm_temperature = 0.7
 ```
 
 **Considerations:**
+
 - GPT-4 Turbo recommended for cost-effectiveness
 - May require additional biomedical context for specialized tasks
 - Rate limits vary by account tier
@@ -135,6 +136,7 @@ agent = A1(path='./data', llm='azure-gpt-4')
 ```
 
 **Deployment Notes:**
+
 - Requires Azure OpenAI Service provisioning
 - Deployment names set during Azure resource creation
 - API versions periodically updated by Microsoft
@@ -170,6 +172,7 @@ default_config.llm_temperature = 0.7
 ```
 
 **Features:**
+
 - Native multimodal support (text, images, code)
 - Fast inference
 - Competitive pricing
@@ -204,6 +207,7 @@ default_config.groq_api_key = "gsk_..."
 ```
 
 **Characteristics:**
+
 - Extremely fast inference via custom hardware
 - Open-source model options
 - Limited context windows for some models
@@ -242,6 +246,7 @@ default_config.aws_region = "us-east-1"
 ```
 
 **Requirements:**
+
 - AWS account with Bedrock access enabled
 - Model access requested through AWS console
 - IAM permissions configured for Bedrock APIs
@@ -268,6 +273,7 @@ agent = A1(path='./data', llm='custom')
 ```
 
 **Endpoint Requirements:**
+
 - Must implement OpenAI-compatible chat completions API
 - Support for function/tool calling recommended
 - JSON response format
@@ -289,16 +295,19 @@ export CUSTOM_LLM_ENDPOINT="http://localhost:8000/v1/chat/completions"
 ### By Task Complexity
 
 **Simple queries** (gene lookup, basic calculations):
+
 - Claude Haiku 4
 - Gemini 2.0 Flash
 - Groq Llama 3.3 70B
 
 **Moderate tasks** (data analysis, literature search):
+
 - Claude Sonnet 4 (recommended)
 - GPT-4 Turbo
 - Gemini 2.0 Flash
 
 **Complex analyses** (multi-step reasoning, novel insights):
+
 - Claude Opus 4 (recommended)
 - GPT-4
 - Claude Sonnet 4
@@ -306,16 +315,19 @@ export CUSTOM_LLM_ENDPOINT="http://localhost:8000/v1/chat/completions"
 ### By Cost Sensitivity
 
 **Budget-conscious:**
+
 1. Groq (fastest, cheapest)
 2. Claude Haiku 4
 3. Gemini 2.0 Flash
 
 **Balanced:**
+
 1. Claude Sonnet 4 (recommended)
 2. GPT-4 Turbo
 3. Gemini Pro
 
 **Quality-first:**
+
 1. Claude Opus 4
 2. GPT-4
 3. Claude Sonnet 4
@@ -323,35 +335,40 @@ export CUSTOM_LLM_ENDPOINT="http://localhost:8000/v1/chat/completions"
 ### By Infrastructure
 
 **Cloud-agnostic:**
+
 - Anthropic Claude (direct API)
 - OpenAI (direct API)
 
 **AWS ecosystem:**
+
 - AWS Bedrock (Claude, Llama)
 
 **Azure ecosystem:**
+
 - Azure OpenAI Service
 
 **Google Cloud:**
+
 - Google Gemini
 
 **On-premises:**
+
 - Custom endpoints with self-hosted models
 
 ## Performance Comparison
 
 Based on Biomni-Eval1 benchmark:
 
-| Provider | Model | Avg Score | Avg Time (s) | Cost/1K tasks |
-|----------|-------|-----------|--------------|---------------|
-| Anthropic | Opus 4 | 0.89 | 45 | $120 |
-| Anthropic | Sonnet 4 | 0.85 | 28 | $45 |
-| OpenAI | GPT-4 Turbo | 0.82 | 35 | $55 |
-| Google | Gemini 2.0 Flash | 0.78 | 22 | $25 |
-| Groq | Llama 3.3 70B | 0.73 | 12 | $8 |
-| Anthropic | Haiku 4 | 0.75 | 15 | $15 |
+| Provider  | Model            | Avg Score | Avg Time (s) | Cost/1K tasks |
+| --------- | ---------------- | --------- | ------------ | ------------- |
+| Anthropic | Opus 4           | 0.89      | 45           | $120          |
+| Anthropic | Sonnet 4         | 0.85      | 28           | $45           |
+| OpenAI    | GPT-4 Turbo      | 0.82      | 35           | $55           |
+| Google    | Gemini 2.0 Flash | 0.78      | 22           | $25           |
+| Groq      | Llama 3.3 70B    | 0.73      | 12           | $8            |
+| Anthropic | Haiku 4          | 0.75      | 15           | $15           |
 
-*Note: Costs are approximate and vary by usage patterns.*
+_Note: Costs are approximate and vary by usage patterns._
 
 ## Troubleshooting
 
@@ -463,31 +480,37 @@ def execute_with_fallback(task_query):
 ## Provider-Specific Tips
 
 ### Anthropic Claude
+
 - Best for complex biomedical reasoning
 - Use Sonnet 4 for most tasks
 - Reserve Opus 4 for novel research questions
 
 ### OpenAI
+
 - Add system prompts with biomedical context for better results
 - Use JSON mode for structured outputs
 - Monitor token usage - context window limits
 
 ### Azure OpenAI
+
 - Provision deployments in regions close to data
 - Use managed identity for secure authentication
 - Monitor quota consumption in Azure portal
 
 ### Google Gemini
+
 - Leverage multimodal capabilities for image-based tasks
 - Use streaming for long-running analyses
 - Consider Gemini Pro for production workloads
 
 ### Groq
+
 - Ideal for high-throughput screening tasks
 - Limited reasoning depth vs. Claude/GPT-4
 - Best for well-defined, structured problems
 
 ### AWS Bedrock
+
 - Use IAM roles instead of access keys when possible
 - Enable CloudWatch logging for debugging
 - Monitor cross-region latency

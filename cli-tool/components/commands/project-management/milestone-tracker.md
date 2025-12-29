@@ -22,6 +22,7 @@ Generate comprehensive milestone tracking report analyzing project delivery prog
 **Time Period**: Use $ARGUMENTS or default to current sprint/quarter
 
 **Analysis Dimensions**:
+
 1. **Milestone Progress Tracking**
    - Current milestone completion rates
    - Velocity trends and burn-down analysis

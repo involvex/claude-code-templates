@@ -11,44 +11,53 @@ Hydration failed because the initial UI does not match what was rendered on the 
 ```
 
 **Causes**:
+
 1. Server and client render different content
 2. Using browser-only APIs during render
 3. Date/time formatting differences
 4. Random values in render
 
 **Common Culprits**:
+
 ```jsx
 // These cause hydration mismatch
-{new Date().toLocaleString()}     // Time differs
-{Math.random()}                    // Random differs
-{typeof window !== 'undefined'}   // Condition differs
-{localStorage.getItem('key')}     // No localStorage on server
+{
+  new Date().toLocaleString();
+} // Time differs
+{
+  Math.random();
+} // Random differs
+{
+  typeof window !== "undefined";
+} // Condition differs
+{
+  localStorage.getItem("key");
+} // No localStorage on server
 ```
 
 **Solutions**:
+
 ```jsx
 // Use useEffect for client-only code
-const [mounted, setMounted] = useState(false)
+const [mounted, setMounted] = useState(false);
 
 useEffect(() => {
-  setMounted(true)
-}, [])
+  setMounted(true);
+}, []);
 
-if (!mounted) return null  // Or return skeleton
+if (!mounted) return null; // Or return skeleton
 
-return <div>{localStorage.getItem('theme')}</div>
+return <div>{localStorage.getItem("theme")}</div>;
 ```
 
 ```jsx
 // Suppress hydration warning (last resort)
-<time suppressHydrationWarning>
-  {new Date().toLocaleString()}
-</time>
+<time suppressHydrationWarning>{new Date().toLocaleString()}</time>
 ```
 
 ```jsx
 // Use 'use client' directive in Next.js App Router
-'use client'
+"use client";
 
 export default function ClientComponent() {
   // Client-only code here
@@ -66,6 +75,7 @@ Text content does not match server-rendered HTML.
 **Same as hydration mismatch** - content differs between server and client.
 
 **Quick Check**:
+
 1. Are you using `Date`, `Math.random()`?
 2. Are you accessing `window`, `document`, `localStorage`?
 3. Are you using browser-specific formatting?
@@ -81,6 +91,7 @@ Error: Invalid hook call. Hooks can only be called inside of the body of a funct
 ```
 
 **Causes**:
+
 1. Hook called outside component
 2. Hook called in class component
 3. Hook called in regular function
@@ -88,6 +99,7 @@ Error: Invalid hook call. Hooks can only be called inside of the body of a funct
 5. Breaking rules of hooks
 
 **Diagnosis**:
+
 ```bash
 # Check for multiple React versions
 npm ls react
@@ -95,21 +107,22 @@ npm ls react-dom
 ```
 
 **Solutions**:
+
 ```jsx
 // Wrong - hook in regular function
 function getData() {
-  const [data, setData] = useState(null)  // Error!
+  const [data, setData] = useState(null); // Error!
 }
 
 // Correct - hook in component
 function MyComponent() {
-  const [data, setData] = useState(null)  // OK
+  const [data, setData] = useState(null); // OK
 }
 
 // Correct - custom hook
 function useData() {
-  const [data, setData] = useState(null)
-  return data
+  const [data, setData] = useState(null);
+  return data;
 }
 ```
 
@@ -128,39 +141,41 @@ Rendered more hooks than during the previous render.
 ```
 
 **Causes**:
+
 1. Conditional hook calls
 2. Hook inside loop
 3. Early return before all hooks
 
 **Solutions**:
+
 ```jsx
 // Wrong - conditional hook
 function MyComponent({ condition }) {
   if (condition) {
-    const [state, setState] = useState()  // Error!
+    const [state, setState] = useState(); // Error!
   }
 }
 
 // Correct - always call hooks
 function MyComponent({ condition }) {
-  const [state, setState] = useState()
+  const [state, setState] = useState();
 
   if (!condition) {
-    return null
+    return null;
   }
 
-  return <div>{state}</div>
+  return <div>{state}</div>;
 }
 ```
 
 ```jsx
 // Wrong - hook in loop
-items.forEach(item => {
-  const [value, setValue] = useState()  // Error!
-})
+items.forEach((item) => {
+  const [value, setValue] = useState(); // Error!
+});
 
 // Correct - use single state for all items
-const [values, setValues] = useState({})
+const [values, setValues] = useState({});
 ```
 
 ---
@@ -172,44 +187,46 @@ Warning: Can't perform a React state update on an unmounted component.
 ```
 
 **Causes**:
+
 1. Async operation completes after unmount
 2. Missing cleanup in useEffect
 3. Event listener not removed
 
 **Solutions**:
+
 ```jsx
 // Use cleanup with flag
 useEffect(() => {
-  let mounted = true
+  let mounted = true;
 
-  fetchData().then(data => {
+  fetchData().then((data) => {
     if (mounted) {
-      setData(data)
+      setData(data);
     }
-  })
+  });
 
   return () => {
-    mounted = false
-  }
-}, [])
+    mounted = false;
+  };
+}, []);
 ```
 
 ```jsx
 // With AbortController
 useEffect(() => {
-  const controller = new AbortController()
+  const controller = new AbortController();
 
   fetch(url, { signal: controller.signal })
-    .then(res => res.json())
+    .then((res) => res.json())
     .then(setData)
-    .catch(err => {
-      if (err.name !== 'AbortError') {
-        setError(err)
+    .catch((err) => {
+      if (err.name !== "AbortError") {
+        setError(err);
       }
-    })
+    });
 
-  return () => controller.abort()
-}, [url])
+  return () => controller.abort();
+}, [url]);
 ```
 
 ---
@@ -223,26 +240,37 @@ Warning: Each child in a list should have a unique "key" prop.
 ```
 
 **Causes**:
+
 1. Missing key prop in map()
 2. Using index as key (not always wrong but can cause issues)
 3. Duplicate keys
 
 **Solutions**:
+
 ```jsx
 // Wrong - no key
-{items.map(item => <Item {...item} />)}
+{
+  items.map((item) => <Item {...item} />);
+}
 
 // Wrong - index as key (problematic if list reorders)
-{items.map((item, index) => <Item key={index} {...item} />)}
+{
+  items.map((item, index) => <Item key={index} {...item} />);
+}
 
 // Correct - unique identifier
-{items.map(item => <Item key={item.id} {...item} />)}
+{
+  items.map((item) => <Item key={item.id} {...item} />);
+}
 
 // If no ID, create stable key
-{items.map(item => <Item key={`${item.name}-${item.date}`} {...item} />)}
+{
+  items.map((item) => <Item key={`${item.name}-${item.date}`} {...item} />);
+}
 ```
 
 **When index is OK**:
+
 - List is static (never reorders)
 - Items have no unique ID
 - List never re-renders
@@ -256,21 +284,23 @@ Warning: Encountered two children with the same key "123".
 ```
 
 **Causes**:
+
 1. Duplicate IDs in data
 2. Wrong key property used
 3. Key generation produces duplicates
 
 **Solutions**:
+
 ```jsx
 // Debug - find duplicates
-const keys = items.map(i => i.id)
-const duplicates = keys.filter((k, i) => keys.indexOf(k) !== i)
-console.log('Duplicates:', duplicates)
+const keys = items.map((i) => i.id);
+const duplicates = keys.filter((k, i) => keys.indexOf(k) !== i);
+console.log("Duplicates:", duplicates);
 
 // Fix - combine fields for uniqueness
-{items.map((item, index) => (
-  <Item key={`${item.id}-${index}`} {...item} />
-))}
+{
+  items.map((item, index) => <Item key={`${item.id}-${index}`} {...item} />);
+}
 ```
 
 ---
@@ -284,21 +314,27 @@ TypeError: Cannot read properties of undefined (reading 'map')
 ```
 
 **Causes**:
+
 1. Data not loaded yet
 2. API returned undefined
 3. Wrong prop passed
 
 **Solutions**:
+
 ```jsx
 // Guard with optional chaining
-{items?.map(item => <Item key={item.id} {...item} />)}
+{
+  items?.map((item) => <Item key={item.id} {...item} />);
+}
 
 // With default value
-{(items || []).map(item => <Item key={item.id} {...item} />)}
+{
+  (items || []).map((item) => <Item key={item.id} {...item} />);
+}
 
 // Loading state
-if (!items) return <Loading />
-return items.map(item => <Item key={item.id} {...item} />)
+if (!items) return <Loading />;
+return items.map((item) => <Item key={item.id} {...item} />);
 ```
 
 ---
@@ -310,11 +346,13 @@ Objects are not valid as a React child (found: object with keys {x, y}).
 ```
 
 **Causes**:
+
 1. Rendering object directly instead of its properties
 2. Rendering Date object
 3. Rendering JSON object
 
 **Solutions**:
+
 ```jsx
 // Wrong
 <div>{user}</div>          // user is object
@@ -337,46 +375,48 @@ Maximum update depth exceeded. This can happen when a component calls setState i
 ```
 
 **Causes**:
+
 1. Missing or wrong dependency array
 2. State update triggers re-render that triggers effect
 3. Object/array in dependency array creates infinite loop
 
 **Solutions**:
+
 ```jsx
 // Wrong - missing dependency array
 useEffect(() => {
-  setState(value)  // Runs every render = infinite loop
-})
+  setState(value); // Runs every render = infinite loop
+});
 
 // Wrong - object in deps always "changes"
 useEffect(() => {
   // ...
-}, [{ id: 1 }])  // New object every render!
+}, [{ id: 1 }]); // New object every render!
 
 // Correct - stable dependency
 useEffect(() => {
-  setState(value)
-}, [])  // Empty = only on mount
+  setState(value);
+}, []); // Empty = only on mount
 
 // Correct - primitive dependency
-const { id } = props
+const { id } = props;
 useEffect(() => {
   // ...
-}, [id])  // Primitive, stable comparison
+}, [id]); // Primitive, stable comparison
 ```
 
 ```jsx
 // For objects, use specific properties directly
-const { id, name } = config
+const { id, name } = config;
 useEffect(() => {
   // use id, name
-}, [id, name])
+}, [id, name]);
 
 // Or stringify (use sparingly, can be expensive)
-const configStr = JSON.stringify(config)
+const configStr = JSON.stringify(config);
 useEffect(() => {
   // ...
-}, [configStr])
+}, [configStr]);
 ```
 
 ---
@@ -388,28 +428,29 @@ React Hook useEffect has a missing dependency: 'value'.
 ```
 
 **Solutions**:
+
 ```jsx
 // Option 1: Add the dependency
 useEffect(() => {
-  doSomething(value)
-}, [value])
+  doSomething(value);
+}, [value]);
 
 // Option 2: Move value inside effect
 useEffect(() => {
-  const value = calculateValue()
-  doSomething(value)
-}, [])
+  const value = calculateValue();
+  doSomething(value);
+}, []);
 
 // Option 3: Use functional update (for setState)
 useEffect(() => {
-  setCount(prev => prev + 1)  // No dependency on count
-}, [])
+  setCount((prev) => prev + 1); // No dependency on count
+}, []);
 
 // Option 4: Intentionally exclude (with comment)
 useEffect(() => {
   // Only run on mount, intentionally ignoring value changes
   // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [])
+}, []);
 ```
 
 ---
@@ -423,10 +464,12 @@ Error: Invariant: headers() expects to have requestAsyncStorage
 ```
 
 **Causes**:
+
 1. Using server-only function in client component
 2. headers(), cookies() called outside request context
 
 **Solutions**:
+
 ```jsx
 // Mark as server component (default in app directory)
 // Remove 'use client' if present
@@ -434,8 +477,8 @@ Error: Invariant: headers() expects to have requestAsyncStorage
 // Or fetch data in server component, pass to client
 // Server Component
 async function Page() {
-  const data = await getData()
-  return <ClientComponent data={data} />
+  const data = await getData();
+  return <ClientComponent data={data} />;
 }
 ```
 
@@ -448,20 +491,23 @@ Error: Cannot access 'Component' before initialization
 ```
 
 **Causes**:
+
 1. Circular imports
 2. Component used before defined
 3. Import order issues
 
 **Diagnosis**:
+
 ```bash
 # Check import chain
 grep -r "import.*Component" src/
 ```
 
 **Solutions**:
+
 ```jsx
 // Lazy load to break circular dependency
-const Component = dynamic(() => import('./Component'), { ssr: false })
+const Component = dynamic(() => import("./Component"), { ssr: false });
 
 // Or restructure imports
 // Move shared code to separate file
@@ -476,11 +522,13 @@ Module not found: Can't resolve 'fs'
 ```
 
 **Causes**:
+
 1. Node.js module used in client code
 2. Missing package
 3. Wrong import path
 
 **Solutions**:
+
 ```jsx
 // For Node.js modules in Next.js
 // next.config.js
@@ -490,19 +538,19 @@ module.exports = {
       config.resolve.fallback = {
         fs: false,
         path: false,
-      }
+      };
     }
-    return config
-  }
-}
+    return config;
+  },
+};
 ```
 
 ```jsx
 // Use dynamic import with ssr: false
-const Component = dynamic(() => import('./ServerComponent'), { ssr: false })
+const Component = dynamic(() => import("./ServerComponent"), { ssr: false });
 
 // Or check environment
-if (typeof window === 'undefined') {
+if (typeof window === "undefined") {
   // Server-only code
 }
 ```
@@ -520,11 +568,13 @@ Module parse failed: Unexpected token
 ```
 
 **Common Causes**:
+
 1. Syntax error in code
 2. Missing babel/typescript config
 3. Unsupported syntax
 
 **Check**:
+
 1. Look at the line number mentioned
 2. Check for unclosed brackets/quotes
 3. Verify file extension matches content
@@ -539,19 +589,21 @@ TypeError: Cannot read property 'map' of undefined
 ```
 
 **Causes**:
+
 1. Missing data during static generation
 2. API call failed during build
 3. Environment variable not set
 
 **Solutions**:
+
 ```jsx
 // Add fallback for missing data
 export async function getStaticProps() {
   try {
-    const data = await fetchData()
-    return { props: { data: data || [] } }
+    const data = await fetchData();
+    return { props: { data: data || [] } };
   } catch (error) {
-    return { props: { data: [] } }
+    return { props: { data: [] } };
   }
 }
 ```
@@ -560,14 +612,14 @@ export async function getStaticProps() {
 
 ## Quick Reference Table
 
-| Error | Category | Quick Fix |
-|-------|----------|-----------|
-| Hydration mismatch | SSR | Use `useEffect` for client-only code |
-| Invalid hook call | Hooks | Check hook is in component body |
-| More hooks than previous render | Hooks | Don't use conditional hooks |
-| Unmounted component update | Async | Add cleanup/mounted flag |
-| Missing key prop | List | Add unique `key` to map items |
-| Objects not valid as child | Render | Render `obj.property` not `obj` |
-| Maximum update depth | useEffect | Check dependency array |
-| Cannot access before init | Import | Check for circular imports |
-| Module not found: fs | Build | Add webpack fallback |
+| Error                           | Category  | Quick Fix                            |
+| ------------------------------- | --------- | ------------------------------------ |
+| Hydration mismatch              | SSR       | Use `useEffect` for client-only code |
+| Invalid hook call               | Hooks     | Check hook is in component body      |
+| More hooks than previous render | Hooks     | Don't use conditional hooks          |
+| Unmounted component update      | Async     | Add cleanup/mounted flag             |
+| Missing key prop                | List      | Add unique `key` to map items        |
+| Objects not valid as child      | Render    | Render `obj.property` not `obj`      |
+| Maximum update depth            | useEffect | Check dependency array               |
+| Cannot access before init       | Import    | Check for circular imports           |
+| Module not found: fs            | Build     | Add webpack fallback                 |

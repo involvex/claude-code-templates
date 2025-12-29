@@ -9,6 +9,7 @@ SOC 2 is an auditing standard developed by the American Institute of CPAs (AICPA
 **Best for**: SaaS companies, cloud service providers, hosting companies
 
 **Audit Types**:
+
 - **Type I**: Point-in-time assessment of control design
 - **Type II**: 3-12 month assessment of control operating effectiveness (required for most customers)
 
@@ -45,6 +46,7 @@ SOC 2 is an auditing standard developed by the American Institute of CPAs (AICPA
 ### SOC 2 Readiness Roadmap
 
 **Months 6-4 Before Audit**:
+
 ```
 1. Scoping
    □ Define in-scope systems and services
@@ -70,6 +72,7 @@ SOC 2 is an auditing standard developed by the American Institute of CPAs (AICPA
 ```
 
 **Months 4-2 Before Audit**:
+
 ```
 4. Control Implementation
    □ Implement technical controls (MFA, encryption, logging)
@@ -88,6 +91,7 @@ SOC 2 is an auditing standard developed by the American Institute of CPAs (AICPA
 ```
 
 **Months 2-0 (Audit Period)**:
+
 ```
 6. Observation Period (3-12 months)
    □ Operate controls consistently
@@ -247,6 +251,7 @@ collect_access_review_evidence()
 ```
 
 **Evidence Retention**:
+
 - SOC 2 evidence should be retained for at least 7 years
 - Organize by control and audit period
 - Use version control for policies and procedures
@@ -262,6 +267,7 @@ ISO/IEC 27001 is an international standard for information security management s
 **Best for**: Organizations seeking international recognition, government contractors, enterprises
 
 **Certification Process**:
+
 1. **Gap Assessment** (optional but recommended)
 2. **Stage 1 Audit**: Documentation review
 3. **Stage 2 Audit**: Implementation assessment
@@ -578,6 +584,7 @@ print(f"Risk: {risk['category']} ({risk['risk_level']})")
 GDPR is a European Union regulation on data protection and privacy. It applies to any organization that processes personal data of EU residents, regardless of where the organization is located.
 
 **Applicability**:
+
 - Organizations in the EU
 - Organizations offering goods/services to EU residents
 - Organizations monitoring behavior of EU residents
@@ -690,6 +697,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ### GDPR Compliance Checklist
 
 **Data Mapping**:
+
 ```
 □ Create data inventory (what personal data you collect)
 □ Document data flows (where data comes from, where it goes)
@@ -699,6 +707,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ```
 
 **Privacy by Design**:
+
 ```
 □ Conduct Data Protection Impact Assessments (DPIA) for high-risk processing
 □ Implement data minimization (collect only what's needed)
@@ -708,6 +717,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ```
 
 **Security Measures**:
+
 ```
 □ Encryption of personal data (at rest and in transit)
 □ Access controls (least privilege, RBAC)
@@ -718,6 +728,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ```
 
 **Transparency**:
+
 ```
 □ Privacy policy/notice published and accessible
 □ Cookie consent mechanism (explicit opt-in for non-essential cookies)
@@ -726,6 +737,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ```
 
 **Data Subject Rights**:
+
 ```
 □ Process for handling subject access requests (SAR)
 □ Process for data rectification and erasure
@@ -736,6 +748,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ```
 
 **Vendor Management**:
+
 ```
 □ Data Processing Agreements (DPA) with all processors
 □ DPA includes: Purpose, duration, data types, security measures, sub-processors
@@ -745,6 +758,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ```
 
 **Breach Management**:
+
 ```
 □ Breach detection and logging
 □ Breach assessment procedure (risk to individuals?)
@@ -756,6 +770,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ### Data Protection Impact Assessment (DPIA)
 
 **When DPIA is Required**:
+
 - Large-scale processing of sensitive data
 - Systematic monitoring (e.g., tracking, profiling)
 - Automated decision-making with legal effects
@@ -768,6 +783,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 ## Data Protection Impact Assessment
 
 ### 1. Project Description
+
 - **Project Name**: Customer Behavior Analytics Platform
 - **Purpose**: Analyze customer purchasing patterns to provide personalized recommendations
 - **Legal Basis**: Legitimate interests (improving customer experience)
@@ -775,6 +791,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 - **Data Processor**: Analytics Vendor Inc.
 
 ### 2. Data Processing Description
+
 - **Data Categories**:
   - Purchase history
   - Browsing behavior
@@ -786,6 +803,7 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 - **Automated Decision Making**: Yes (product recommendations)
 
 ### 3. Necessity and Proportionality
+
 - **Why is processing necessary?**: To improve customer experience and increase sales
 - **Is data minimized?**: Yes, only collect data relevant to recommendations
 - **Alternatives considered?**:
@@ -793,14 +811,16 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
   - Option 2: Anonymous analytics only (less effective)
 
 ### 4. Risks to Data Subjects
-| Risk | Likelihood | Severity | Risk Level |
-|------|-----------|----------|-----------|
-| Unauthorized access to purchase history | Medium | High | High |
-| Re-identification from pseudonymized data | Low | High | Medium |
-| Inaccurate recommendations affecting user experience | Medium | Low | Low |
-| Data breach exposing customer data | Low | Critical | High |
+
+| Risk                                                 | Likelihood | Severity | Risk Level |
+| ---------------------------------------------------- | ---------- | -------- | ---------- |
+| Unauthorized access to purchase history              | Medium     | High     | High       |
+| Re-identification from pseudonymized data            | Low        | High     | Medium     |
+| Inaccurate recommendations affecting user experience | Medium     | Low      | Low        |
+| Data breach exposing customer data                   | Low        | Critical | High       |
 
 ### 5. Measures to Address Risks
+
 - **Encryption**: AES-256 encryption at rest, TLS 1.3 in transit
 - **Access Control**: RBAC with least privilege, MFA required
 - **Pseudonymization**: Customer IDs pseudonymized, no PII in analytics database
@@ -809,11 +829,13 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 - **User Control**: Opt-out available, data deletion on request
 
 ### 6. Consultation
+
 - **DPO Review**: Approved with recommendations implemented
 - **Data Subjects Consulted**: No (but opt-out available)
 - **Supervisory Authority**: Not required to consult
 
 ### 7. Sign-off
+
 - **Completed by**: Privacy Officer
 - **Date**: 2025-01-15
 - **Approved by**: DPO
@@ -829,15 +851,18 @@ GDPR is a European Union regulation on data protection and privacy. It applies t
 HIPAA is a US federal law that protects the privacy and security of Protected Health Information (PHI). It applies to covered entities and business associates.
 
 **Covered Entities**:
+
 - Healthcare providers (hospitals, clinics, doctors)
 - Health plans (insurance companies)
 - Healthcare clearinghouses
 
 **Business Associates**:
+
 - Vendors that handle PHI on behalf of covered entities
 - Examples: EHR vendors, billing companies, cloud hosting providers
 
 **Penalties**:
+
 - Tier 1 (Unaware): $100-$50,000 per violation
 - Tier 4 (Willful neglect): $50,000+ per violation
 - Maximum: $1.5 million per year per violation type
@@ -1118,6 +1143,7 @@ Residual Risk: Medium (after implementation of mitigations)
 PCI-DSS is a set of security standards for organizations that handle credit card information. Compliance is required by card brands (Visa, Mastercard, Amex, Discover).
 
 **Merchant Levels** (based on annual Visa transaction volume):
+
 - **Level 1**: >6 million transactions - Annual audit by QSA (Qualified Security Assessor)
 - **Level 2**: 1-6 million - Annual SAQ (Self-Assessment Questionnaire) + quarterly network scan
 - **Level 3**: 20,000-1 million e-commerce - Annual SAQ + quarterly scan
@@ -1385,6 +1411,7 @@ print(f"Masked PAN: {masked}")  # Output: 453201******0366
 **Purpose**: Security controls for federal information systems and organizations
 
 **Control Families** (20 families):
+
 - AC: Access Control
 - AT: Awareness and Training
 - AU: Audit and Accountability
@@ -1407,6 +1434,7 @@ print(f"Masked PAN: {masked}")  # Output: 453201******0366
 - SR: Supply Chain Risk Management
 
 **Baselines**:
+
 - Low Impact: 125 controls
 - Moderate Impact: 325 controls
 - High Impact: 421 controls
@@ -1416,11 +1444,13 @@ print(f"Masked PAN: {masked}")  # Output: 453201******0366
 **Purpose**: Standardized approach to security assessment, authorization, and continuous monitoring for cloud products and services used by federal agencies
 
 **Authorization Levels**:
+
 - **Low Impact**: LI-SaaS (SaaS only), FIPS 199 Low
 - **Moderate Impact**: FIPS 199 Moderate (most common)
 - **High Impact**: FIPS 199 High (highly sensitive data)
 
 **Authorization Paths**:
+
 1. **JAB P-ATO** (Joint Authorization Board Provisional Authority to Operate): Government-wide authorization
 2. **Agency ATO**: Specific agency authorization
 3. **CSP Supplied**: CSP provides package, agency reviews
@@ -1430,11 +1460,13 @@ print(f"Masked PAN: {masked}")  # Output: 453201******0366
 **Purpose**: California state law giving consumers more control over personal information collected by businesses
 
 **Applicability**:
+
 - Businesses with $25M+ annual revenue
 - OR buy/sell personal information of 50,000+ consumers
 - OR derive 50%+ revenue from selling personal information
 
 **Consumer Rights**:
+
 1. Right to know what personal information is collected
 2. Right to know if personal information is sold or disclosed
 3. Right to say no to the sale of personal information
@@ -1443,6 +1475,7 @@ print(f"Masked PAN: {masked}")  # Output: 453201******0366
 6. Right to deletion
 
 **Requirements**:
+
 - "Do Not Sell My Personal Information" link on homepage
 - Privacy policy updates
 - Process for verifiable consumer requests
@@ -1476,6 +1509,7 @@ Implementation:
 ### GRC Platform for Multi-Framework Compliance
 
 **GRC Tools**:
+
 - Vanta (automated SOC 2, ISO 27001, HIPAA)
 - Drata (similar to Vanta)
 - OneTrust (privacy and governance)
@@ -1483,6 +1517,7 @@ Implementation:
 - Archer (RSA)
 
 **Benefits**:
+
 - Automated evidence collection
 - Continuous compliance monitoring
 - Control mapping across frameworks

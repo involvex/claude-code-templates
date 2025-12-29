@@ -10,6 +10,7 @@ description: Framework for computational fluid dynamics simulations using Python
 FluidSim is an object-oriented Python framework for high-performance computational fluid dynamics (CFD) simulations. It provides solvers for periodic-domain equations using pseudospectral methods with FFT, delivering performance comparable to Fortran/C++ while maintaining Python's ease of use.
 
 **Key strengths**:
+
 - Multiple solvers: 2D/3D Navier-Stokes, shallow water, stratified flows
 - High performance: Pythran/Transonic compilation, MPI parallelization
 - Complete workflow: Parameter configuration, simulation execution, output analysis
@@ -48,11 +49,13 @@ See `references/installation.md` for complete installation instructions and envi
 Standard workflow consists of five steps:
 
 **Step 1**: Import solver
+
 ```python
 from fluidsim.solvers.ns2d.solver import Simul
 ```
 
 **Step 2**: Create and configure parameters
+
 ```python
 params = Simul.create_default_params()
 params.oper.nx = params.oper.ny = 256
@@ -63,16 +66,19 @@ params.init_fields.type = "noise"
 ```
 
 **Step 3**: Instantiate simulation
+
 ```python
 sim = Simul(params)
 ```
 
 **Step 4**: Execute
+
 ```python
 sim.time_stepping.start()
 ```
 
 **Step 5**: Analyze results
+
 ```python
 sim.output.phys_fields.plot("vorticity")
 sim.output.spatial_means.plot()
@@ -85,22 +91,26 @@ See `references/simulation_workflow.md` for complete examples, restarting simula
 Choose solver based on physical problem:
 
 **2D Navier-Stokes** (`ns2d`): 2D turbulence, vortex dynamics
+
 ```python
 from fluidsim.solvers.ns2d.solver import Simul
 ```
 
 **3D Navier-Stokes** (`ns3d`): 3D turbulence, realistic flows
+
 ```python
 from fluidsim.solvers.ns3d.solver import Simul
 ```
 
 **Stratified flows** (`ns2d.strat`, `ns3d.strat`): Oceanic/atmospheric flows
+
 ```python
 from fluidsim.solvers.ns2d.strat.solver import Simul
 params.N = 1.0  # Brunt-Väisälä frequency
 ```
 
 **Shallow water** (`sw1l`): Geophysical flows, rotating systems
+
 ```python
 from fluidsim.solvers.sw1l.solver import Simul
 params.f = 1.0  # Coriolis parameter
@@ -113,18 +123,21 @@ See `references/solvers.md` for complete solver list and selection guidance.
 Parameters are organized hierarchically and accessed via dot notation:
 
 **Domain and resolution**:
+
 ```python
 params.oper.nx = 256  # grid points
 params.oper.Lx = 2 * pi  # domain size
 ```
 
 **Physical parameters**:
+
 ```python
 params.nu_2 = 1e-3  # viscosity
 params.nu_4 = 0     # hyperviscosity (optional)
 ```
 
 **Time stepping**:
+
 ```python
 params.time_stepping.t_end = 10.0
 params.time_stepping.USE_CFL = True  # adaptive time step
@@ -132,11 +145,13 @@ params.time_stepping.CFL = 0.5
 ```
 
 **Initial conditions**:
+
 ```python
 params.init_fields.type = "noise"  # or "dipole", "vortex", "from_file", "in_script"
 ```
 
 **Output settings**:
+
 ```python
 params.output.periods_save.phys_fields = 1.0  # save every 1.0 time units
 params.output.periods_save.spectra = 0.5
@@ -152,23 +167,27 @@ See `references/parameters.md` for comprehensive parameter documentation.
 FluidSim produces multiple output types automatically saved during simulation:
 
 **Physical fields**: Velocity, vorticity in HDF5 format
+
 ```python
 sim.output.phys_fields.plot("vorticity")
 sim.output.phys_fields.plot("vx")
 ```
 
 **Spatial means**: Time series of volume-averaged quantities
+
 ```python
 sim.output.spatial_means.plot()
 ```
 
 **Spectra**: Energy and enstrophy spectra
+
 ```python
 sim.output.spectra.plot1d()
 sim.output.spectra.plot2d()
 ```
 
 **Load previous simulations**:
+
 ```python
 from fluidsim import load_sim_for_plot
 sim = load_sim_for_plot("simulation_dir")
@@ -182,6 +201,7 @@ See `references/output_analysis.md` for detailed analysis workflows, parametric 
 ### 6. Advanced Features
 
 **Custom forcing**: Maintain turbulence or drive specific dynamics
+
 ```python
 params.forcing.enable = True
 params.forcing.type = "tcrandom"  # time-correlated random forcing
@@ -189,6 +209,7 @@ params.forcing.forcing_rate = 1.0
 ```
 
 **Custom initial conditions**: Define fields in script
+
 ```python
 params.init_fields.type = "in_script"
 sim = Simul(params)
@@ -199,11 +220,13 @@ sim.time_stepping.start()
 ```
 
 **MPI parallelization**: Run on multiple processors
+
 ```bash
 mpirun -np 8 python simulation_script.py
 ```
 
 **Parametric studies**: Run multiple simulations with different parameters
+
 ```python
 for nu in [1e-3, 5e-4, 1e-4]:
     params = Simul.create_default_params()
@@ -279,6 +302,7 @@ sim.time_stepping.start()
 ```
 
 Run with:
+
 ```bash
 mpirun -np 64 python script.py
 ```
@@ -335,6 +359,7 @@ df = sim.output.spatial_means.load()
 **Documentation**: https://fluidsim.readthedocs.io/
 
 **Reference files**:
+
 - `references/installation.md`: Complete installation instructions
 - `references/solvers.md`: Available solvers and selection guide
 - `references/simulation_workflow.md`: Detailed workflow examples

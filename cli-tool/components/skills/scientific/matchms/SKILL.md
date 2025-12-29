@@ -30,6 +30,7 @@ save_as_json(spectra, "output.json")
 ```
 
 **Supported formats:**
+
 - mzML and mzXML (raw mass spectrometry formats)
 - MGF (Mascot Generic Format)
 - MSP (spectral library format)
@@ -61,6 +62,7 @@ spectrum = require_minimum_number_of_peaks(spectrum, n_required=5)
 ```
 
 **Filter categories:**
+
 - **Metadata processing**: Harmonize compound names, derive chemical structures, standardize adducts, correct charges
 - **Peak filtering**: Normalize intensities, select by m/z or intensity, remove precursor peaks
 - **Quality control**: Require minimum peaks, validate precursor m/z, ensure metadata completeness
@@ -91,6 +93,7 @@ best_matches = scores.scores_by_query(query_spectra[0], sort=True)[:10]
 ```
 
 **Available similarity functions:**
+
 - **CosineGreedy/CosineHungarian**: Peak-based cosine similarity with different matching algorithms
 - **ModifiedCosine**: Cosine similarity accounting for precursor mass differences
 - **NeutralLossesCosine**: Similarity based on neutral loss patterns
@@ -167,6 +170,7 @@ spectrum = add_fingerprint(spectrum, fingerprint_type="morgan", nbits=2048)
 ## Common Workflows
 
 For typical mass spectrometry analysis workflows, including:
+
 - Loading and preprocessing spectral libraries
 - Matching unknown spectra against reference libraries
 - Quality filtering and data cleaning
@@ -182,6 +186,7 @@ uv pip install matchms
 ```
 
 For molecular structure processing (SMILES, InChI):
+
 ```bash
 uv pip install matchms[chemistry]
 ```
@@ -189,6 +194,7 @@ uv pip install matchms[chemistry]
 ## Reference Documentation
 
 Detailed reference documentation is available in the `references/` directory:
+
 - `filtering.md` - Complete filter function reference with descriptions
 - `similarity.md` - All similarity metrics and when to use them
 - `importing_exporting.md` - File format details and I/O operations

@@ -15,6 +15,7 @@ Research grant writing is the process of developing competitive funding proposal
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Writing research proposals for NSF, NIH, DOE, or DARPA programs
 - Preparing project descriptions, specific aims, or technical narratives
 - Developing broader impacts or significance statements
@@ -31,26 +32,31 @@ This skill should be used when:
 **⚠️ MANDATORY: Every research grant proposal MUST include at least 1-2 AI-generated figures using the scientific-schematics skill.**
 
 This is not optional. Grant proposals without visual elements are incomplete and less competitive. Before finalizing any document:
+
 1. Generate at minimum ONE schematic or diagram (e.g., project timeline, methodology flowchart, or conceptual framework)
 2. Prefer 2-3 figures for comprehensive proposals (research workflow, Gantt chart, preliminary data visualization)
 
 **How to generate figures:**
+
 - Use the **scientific-schematics** skill to generate AI-powered publication-quality diagrams
 - Simply describe your desired diagram in natural language
 - Nano Banana Pro will automatically generate, review, and refine the schematic
 
 **How to generate schematics:**
+
 ```bash
 python scripts/generate_schematic.py "your diagram description" -o figures/output.png
 ```
 
 The AI will automatically:
+
 - Create publication-quality images with proper formatting
 - Review and refine through multiple iterations
 - Ensure accessibility (colorblind-friendly, high contrast)
 - Save outputs in the figures/ directory
 
 **When to add schematics:**
+
 - Research methodology and workflow diagrams
 - Project timeline Gantt charts
 - Conceptual framework illustrations
@@ -67,9 +73,11 @@ For detailed guidance on creating schematics, refer to the scientific-schematics
 ## Agency-Specific Overview
 
 ### NSF (National Science Foundation)
+
 **Mission**: Promote the progress of science and advance national health, prosperity, and welfare
 
 **Key Features**:
+
 - Intellectual Merit + Broader Impacts (equally weighted)
 - 15-page project description limit (most programs)
 - Emphasis on education, diversity, and societal benefit
@@ -78,9 +86,11 @@ For detailed guidance on creating schematics, refer to the scientific-schematics
 - Merit review process with panel + ad hoc reviewers
 
 ### NIH (National Institutes of Health)
+
 **Mission**: Enhance health, lengthen life, and reduce illness and disability
 
 **Key Features**:
+
 - Specific Aims (1 page) + Research Strategy (12 pages for R01)
 - Significance, Innovation, Approach as core review criteria
 - Preliminary data typically required for R01s
@@ -89,9 +99,11 @@ For detailed guidance on creating schematics, refer to the scientific-schematics
 - Multiple resubmission opportunities
 
 ### DOE (Department of Energy)
+
 **Mission**: Ensure America's security and prosperity through energy, environmental, and nuclear challenges
 
 **Key Features**:
+
 - Focus on energy, climate, computational science, basic energy sciences
 - Often requires cost sharing or industry partnerships
 - Emphasis on national laboratory collaboration
@@ -100,9 +112,11 @@ For detailed guidance on creating schematics, refer to the scientific-schematics
 - Varies by office (ARPA-E, Office of Science, EERE, etc.)
 
 ### DARPA (Defense Advanced Research Projects Agency)
+
 **Mission**: Make pivotal investments in breakthrough technologies for national security
 
 **Key Features**:
+
 - High-risk, high-reward transformative research
 - Focus on "DARPA-hard" problems (what if true, who cares)
 - Emphasis on prototypes, demonstrations, and transition paths
@@ -119,13 +133,15 @@ Every proposal needs a concise overview that communicates the essential elements
 
 **Purpose**: Provide a standalone summary that captures the research vision, significance, and approach
 
-**Length**: 
+**Length**:
+
 - NSF: 1 page (Project Summary with separate Overview, Intellectual Merit, Broader Impacts)
 - NIH: 30 lines (Project Summary/Abstract)
 - DOE: Varies (typically 1 page)
 - DARPA: Varies (often 1-2 pages)
 
 **Essential Elements**:
+
 - Clear statement of the problem or research question
 - Why this problem matters (significance, urgency, impact)
 - Novel approach or innovation
@@ -134,6 +150,7 @@ Every proposal needs a concise overview that communicates the essential elements
 - Broader impacts or translational pathway
 
 **Writing Strategy**:
+
 - Open with a compelling hook that establishes importance
 - Use accessible language (avoid jargon in opening sentences)
 - State specific, measurable objectives
@@ -142,6 +159,7 @@ Every proposal needs a concise overview that communicates the essential elements
 - End with transformative vision or impact statement
 
 **Common Mistakes to Avoid**:
+
 - Being too technical or detailed (save for project description)
 - Failing to articulate "why now" or "why this team"
 - Vague objectives or outcomes
@@ -155,6 +173,7 @@ The core technical narrative that presents the research plan in detail.
 **Structure Varies by Agency:**
 
 **NSF Project Description** (typically 15 pages):
+
 - Introduction and background
 - Research objectives and questions
 - Preliminary results (if applicable)
@@ -164,6 +183,7 @@ The core technical narrative that presents the research plan in detail.
 - Prior NSF support (if applicable)
 
 **NIH Research Strategy** (12 pages for R01):
+
 - Significance (why the problem matters)
 - Innovation (what's novel and transformative)
 - Approach (detailed research plan)
@@ -173,6 +193,7 @@ The core technical narrative that presents the research plan in detail.
   - Potential problems and alternative approaches
 
 **DOE Project Narrative** (varies):
+
 - Background and significance
 - Technical approach and innovation
 - Qualifications and experience
@@ -180,6 +201,7 @@ The core technical narrative that presents the research plan in detail.
 - Project management and timeline
 
 **DARPA Technical Volume** (varies):
+
 - Technical challenge and innovation
 - Approach and methodology
 - Schedule and milestones
@@ -188,6 +210,7 @@ The core technical narrative that presents the research plan in detail.
 - Risk assessment and mitigation
 
 For detailed agency-specific guidance, refer to:
+
 - `references/nsf_guidelines.md`
 - `references/nih_guidelines.md`
 - `references/doe_guidelines.md`
@@ -198,6 +221,7 @@ For detailed agency-specific guidance, refer to:
 Clear, testable goals that structure the research plan.
 
 **NIH Specific Aims Page** (1 page):
+
 - Opening paragraph: Gap in knowledge and significance
 - Long-term goal and immediate objectives
 - Central hypothesis or research question
@@ -206,6 +230,7 @@ Clear, testable goals that structure the research plan.
 - Payoff paragraph: Why this matters
 
 **Structure for Each Aim:**
+
 - Aim statement (1-2 sentences, starts with action verb)
 - Rationale (why this aim, preliminary data support)
 - Working hypothesis (testable prediction)
@@ -213,6 +238,7 @@ Clear, testable goals that structure the research plan.
 - Expected outcomes and interpretation
 
 **Writing Strategy**:
+
 - Make aims independent but complementary
 - Ensure each aim is achievable within timeline and budget
 - Provide enough detail to judge feasibility
@@ -229,6 +255,7 @@ Articulate the societal, educational, or translational value of the research.
 **NSF Broader Impacts** (critical component, equal weight with Intellectual Merit):
 
 NSF explicitly evaluates broader impacts. Address at least one of these areas:
+
 1. **Advancing discovery and understanding while promoting teaching, training, and learning**
    - Integration of research and education
    - Training of students and postdocs
@@ -260,6 +287,7 @@ NSF explicitly evaluates broader impacts. Address at least one of these areas:
    - Workforce development
 
 **Writing Strategy for NSF Broader Impacts**:
+
 - Be specific with concrete activities, not vague statements
 - Provide timeline and milestones for broader impacts activities
 - Explain how impacts will be measured and assessed
@@ -268,6 +296,7 @@ NSF explicitly evaluates broader impacts. Address at least one of these areas:
 - Integrate with research plan (not tacked on)
 
 **NIH Significance**:
+
 - Addresses important problem or critical barrier to progress
 - Improves scientific knowledge, technical capability, or clinical practice
 - Potential to lead to better outcomes, interventions, or understanding
@@ -281,6 +310,7 @@ For detailed guidance, refer to `references/broader_impacts.md`.
 Articulate what is novel, creative, and paradigm-shifting about the research.
 
 **Innovation Elements to Highlight**:
+
 - **Conceptual Innovation**: New frameworks, models, or theories
 - **Methodological Innovation**: Novel techniques, approaches, or technologies
 - **Integrative Innovation**: Combining disciplines or approaches in new ways
@@ -288,6 +318,7 @@ Articulate what is novel, creative, and paradigm-shifting about the research.
 - **Scale Innovation**: Unprecedented scope or resolution
 
 **Writing Strategy**:
+
 - Clearly state what is innovative (don't assume it's obvious)
 - Explain why current approaches are insufficient
 - Describe how your innovation overcomes limitations
@@ -296,6 +327,7 @@ Articulate what is novel, creative, and paradigm-shifting about the research.
 - Balance innovation with feasibility (not too risky)
 
 **Common Mistakes**:
+
 - Claiming novelty without demonstrating knowledge of prior work
 - Confusing "new to me" with "new to the field"
 - Over-promising without supporting evidence
@@ -307,6 +339,7 @@ Articulate what is novel, creative, and paradigm-shifting about the research.
 Detailed description of how the research will be conducted.
 
 **Essential Components**:
+
 - Overall research design and framework
 - Detailed methods for each aim/objective
 - Sample sizes, statistical power, and analysis plans
@@ -317,6 +350,7 @@ Detailed description of how the research will be conducted.
 - Rigor and reproducibility measures
 
 **Writing Strategy**:
+
 - Provide enough detail for reproducibility and feasibility assessment
 - Use subheadings and figures to improve organization
 - Justify choice of methods and approaches
@@ -326,6 +360,7 @@ Detailed description of how the research will be conducted.
 - Balance detail with readability (use supplementary materials for extensive details)
 
 **For Experimental Research**:
+
 - Describe experimental design (controls, replicates, blinding)
 - Specify materials, reagents, and equipment
 - Detail data collection protocols
@@ -333,6 +368,7 @@ Detailed description of how the research will be conducted.
 - Address rigor and reproducibility
 
 **For Computational Research**:
+
 - Describe algorithms, models, and software
 - Specify datasets and validation approaches
 - Explain computational resources required
@@ -340,6 +376,7 @@ Detailed description of how the research will be conducted.
 - Describe benchmarking and performance metrics
 
 **For Clinical or Translational Research**:
+
 - Describe study population and recruitment
 - Detail intervention or treatment protocols
 - Explain outcome measures and assessments
@@ -353,6 +390,7 @@ For detailed methodology guidance by discipline, refer to `references/research_m
 Demonstrate that the research is achievable and the team is capable.
 
 **Purpose**:
+
 - Prove that the proposed approach can work
 - Show that the team has necessary expertise
 - Demonstrate access to required resources
@@ -360,6 +398,7 @@ Demonstrate that the research is achievable and the team is capable.
 - Provide foundation for proposed work
 
 **What to Include**:
+
 - Pilot studies or proof-of-concept results
 - Method development or optimization
 - Access to unique resources (samples, data, collaborators)
@@ -368,17 +407,20 @@ Demonstrate that the research is achievable and the team is capable.
 - Feasibility assessments or power calculations
 
 **NIH Requirements**:
+
 - R01 applications typically require substantial preliminary data
 - R21 applications may have less stringent requirements
 - New investigators may have less preliminary data
 - Preliminary data should directly support proposed aims
 
 **NSF Approach**:
+
 - Preliminary data less commonly required than NIH
 - May be important for high-risk or novel approaches
 - Can strengthen proposal for competitive programs
 
 **Writing Strategy**:
+
 - Present most compelling data that supports your approach
 - Clearly connect preliminary data to proposed aims
 - Acknowledge limitations and how proposed work will address them
@@ -391,6 +433,7 @@ Demonstrate that the research is achievable and the team is capable.
 Demonstrate that the project is well-planned and achievable within the proposed timeframe.
 
 **Essential Elements**:
+
 - Phased timeline with clear milestones
 - Logical sequence and dependencies
 - Realistic timeframes for each activity
@@ -400,12 +443,14 @@ Demonstrate that the project is well-planned and achievable within the proposed 
 - Coordination plan for multi-institutional teams
 
 **Presentation Formats**:
+
 - Gantt charts showing overlapping activities
 - Year-by-year breakdown of activities
 - Quarterly milestones and deliverables
 - Table of aims/tasks with timeline and personnel
 
 **Writing Strategy**:
+
 - Be realistic about what can be accomplished
 - Build in time for unexpected delays or setbacks
 - Show that timeline aligns with budget and personnel
@@ -414,6 +459,7 @@ Demonstrate that the project is well-planned and achievable within the proposed 
 - Address how progress will be monitored and assessed
 
 **DARPA Emphasis**:
+
 - Particularly important for DARPA proposals
 - Clear technical milestones with measurable metrics
 - Quarterly deliverables and reporting
@@ -427,6 +473,7 @@ For detailed guidance, refer to `references/timeline_planning.md`.
 Demonstrate that the team has the expertise, experience, and resources to succeed.
 
 **Essential Elements**:
+
 - PI qualifications and relevant expertise
 - Co-I and collaborator roles and contributions
 - Track record in the research area
@@ -436,6 +483,7 @@ Demonstrate that the team has the expertise, experience, and resources to succee
 - Mentoring and training plan (for students/postdocs)
 
 **Writing Strategy**:
+
 - Highlight most relevant publications and accomplishments
 - Clearly define roles and responsibilities
 - Show that team composition is necessary (not just convenient)
@@ -444,6 +492,7 @@ Demonstrate that the team has the expertise, experience, and resources to succee
 - Explain institutional commitment and support
 
 **Biosketches / CVs**:
+
 - Follow agency-specific formats (NSF, NIH, DOE, DARPA differ)
 - Highlight most relevant publications and accomplishments
 - Include synergistic activities and collaborations
@@ -451,6 +500,7 @@ Demonstrate that the team has the expertise, experience, and resources to succee
 - Address any career gaps or interruptions
 
 **Letters of Collaboration**:
+
 - Specific commitments and contributions
 - Demonstrates genuine partnership
 - Includes resource sharing or access agreements
@@ -463,6 +513,7 @@ For detailed guidance, refer to `references/team_building.md`.
 Develop realistic budgets that align with the proposed work and agency guidelines.
 
 **Budget Categories** (typical):
+
 - **Personnel**: Salary and fringe for PI, co-Is, postdocs, students, staff
 - **Equipment**: Items >$5,000 (varies by agency)
 - **Travel**: Conferences, collaborations, fieldwork
@@ -474,30 +525,35 @@ Develop realistic budgets that align with the proposed work and agency guideline
 **Agency-Specific Considerations**:
 
 **NSF**:
+
 - Full budget justification required
 - Cost sharing generally not required (but may strengthen proposal)
 - Up to 2 months summer salary for faculty
 - Graduate student support encouraged
 
 **NIH**:
+
 - Modular budgets for ≤$250K direct costs per year (R01)
 - Detailed budgets for >$250K or complex awards
 - Salary cap applies (~$221,900 for 2024)
 - Limited to 1 month (8.33% FTE) for most PIs
 
 **DOE**:
+
 - Often requires cost sharing (especially ARPA-E)
 - Detailed budget with quarterly breakdown
 - Requires institutional commitment letters
 - National laboratory collaboration budgets separate
 
 **DARPA**:
+
 - Detailed budgets by phase and task
 - Requires supporting cost data for large procurements
 - Often requires cost-plus or firm-fixed-price structures
 - Travel budget for program meetings
 
 **Budget Justification Writing**:
+
 - Justify each line item in terms of the research plan
 - Explain effort percentages for personnel
 - Describe specific equipment and why necessary
@@ -514,16 +570,19 @@ Understanding how proposals are evaluated is critical for writing competitive ap
 ### NSF Review Criteria
 
 **Intellectual Merit** (primary):
+
 - What is the potential for the proposed activity to advance knowledge?
 - How well-conceived and organized is the proposed activity?
 - Is there sufficient access to resources?
 - How well-qualified is the individual, team, or institution to conduct proposed activities?
 
 **Broader Impacts** (equally important):
+
 - What is the potential for the proposed activity to benefit society?
 - To what extent does the proposal address broader impacts in meaningful ways?
 
 **Additional Considerations**:
+
 - Integration of research and education
 - Diversity and inclusion
 - Results from prior NSF support (if applicable)
@@ -558,6 +617,7 @@ Understanding how proposals are evaluated is critical for writing competitive ap
    - Scientific environment contributes to probability of success
 
 **Additional Review Considerations** (not scored but discussed):
+
 - Protections for human subjects
 - Inclusion of women, minorities, and children
 - Vertebrate animal welfare
@@ -568,6 +628,7 @@ Understanding how proposals are evaluated is critical for writing competitive ap
 ### DOE Review Criteria
 
 Varies by program office, but generally includes:
+
 - Scientific and/or technical merit
 - Appropriateness of proposed method or approach
 - Competency of personnel and adequacy of facilities
@@ -577,6 +638,7 @@ Varies by program office, but generally includes:
 ### DARPA Review Criteria
 
 **DARPA-specific considerations**:
+
 - Overall scientific and technical merit
 - Potential contribution to DARPA mission
 - Relevance to stated program goals
@@ -585,6 +647,7 @@ Varies by program office, but generally includes:
 - Realism of proposed costs and availability of funds
 
 **Key Questions DARPA Asks**:
+
 - **What if you succeed?** (Impact if the research works)
 - **What if you're right?** (Implications of your hypothesis)
 - **Who cares?** (Why it matters for national security)
@@ -596,12 +659,14 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 ### Clarity and Accessibility
 
 **Write for Multiple Audiences**:
+
 - Technical reviewers in your field (will scrutinize methods)
 - Reviewers in related but not identical fields (need context)
 - Program officers (look for alignment with agency goals)
 - Panel members reading 15+ proposals (need clear organization)
 
 **Strategies**:
+
 - Use clear section headings and subheadings
 - Start sections with overview paragraphs
 - Define technical terms and abbreviations
@@ -612,6 +677,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 ### Persuasive Argumentation
 
 **Build a Compelling Narrative**:
+
 - Establish the problem and its importance
 - Show gaps in current knowledge or approaches
 - Present your solution as innovative and feasible
@@ -619,6 +685,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 - Show that success will have significant impact
 
 **Structure of Persuasion**:
+
 1. **Hook**: Capture attention with significance
 2. **Problem**: Establish what's not known or not working
 3. **Solution**: Present your innovative approach
@@ -627,6 +694,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 6. **Team**: Demonstrate capability to deliver
 
 **Language Choices**:
+
 - Use active voice for clarity and confidence
 - Choose strong verbs (investigate, elucidate, discover vs. look at, study)
 - Be confident but not arrogant (avoid "obviously," "clearly")
@@ -636,6 +704,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 ### Visual Communication
 
 **Effective Use of Figures**:
+
 - Conceptual diagrams showing research framework
 - Preliminary data demonstrating feasibility
 - Timelines and Gantt charts
@@ -643,6 +712,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 - Expected results or predictions
 
 **Design Principles**:
+
 - Make figures self-explanatory with complete captions
 - Use consistent color schemes and fonts
 - Ensure readability (large enough fonts, clear labels)
@@ -652,6 +722,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 ### Addressing Risk and Feasibility
 
 **Balance Innovation and Risk**:
+
 - Acknowledge potential challenges
 - Provide alternative approaches
 - Show preliminary data reducing risk
@@ -659,6 +730,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 - Include contingency plans
 
 **Common Concerns**:
+
 - Too ambitious for timeline/budget
 - Technically infeasible
 - Team lacks necessary expertise
@@ -669,6 +741,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 ### Integration and Coherence
 
 **Ensure All Parts Align**:
+
 - Budget supports activities in project description
 - Timeline matches aims and milestones
 - Team composition matches required expertise
@@ -676,6 +749,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 - Letters of support confirm stated collaborations
 
 **Avoid Contradictions**:
+
 - Preliminary data vs. stated gaps
 - Claimed expertise vs. publication record
 - Stated aims vs. actual methods
@@ -703,6 +777,7 @@ For detailed review criteria by agency, refer to `references/review_criteria.md`
 - **U01**: Research Project Cooperative Agreement, NIH involvement in conduct
 
 **Fellowship Mechanisms**:
+
 - **F30**: Predoctoral MD/PhD Fellowship
 - **F31**: Predoctoral Fellowship
 - **F32**: Postdoctoral Fellowship
@@ -730,6 +805,7 @@ For detailed program guidance, refer to `references/funding_mechanisms.md`.
 ### NIH Resubmission (A1)
 
 **Introduction to Resubmission** (1 page):
+
 - Summarize major criticisms from previous review
 - Describe specific changes made in response
 - Use bullet points for clarity
@@ -737,6 +813,7 @@ For detailed program guidance, refer to `references/funding_mechanisms.md`.
 - Highlight substantial improvements
 
 **Strategies**:
+
 - Address every major criticism
 - Make changes visible (but don't use track changes in final)
 - Strengthen weak areas (preliminary data, methods, significance)
@@ -745,6 +822,7 @@ For detailed program guidance, refer to `references/funding_mechanisms.md`.
 - Use full 37-month window if needed for new data
 
 **When Not to Resubmit**:
+
 - Fundamental conceptual flaws
 - Lack of innovation or significance
 - Missing key expertise or resources
@@ -753,6 +831,7 @@ For detailed program guidance, refer to `references/funding_mechanisms.md`.
 ### NSF Resubmission
 
 **NSF allows resubmission after revision**:
+
 - Address reviewer concerns in revised proposal
 - No formal "introduction to resubmission" section
 - May be reviewed by same or different panel
@@ -808,6 +887,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 ### Phase 1: Planning and Preparation (2-6 months before deadline)
 
 **Activities**:
+
 - Identify appropriate funding opportunities
 - Review program announcements and requirements
 - Consult with program officers (if appropriate)
@@ -817,6 +897,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 - Review successful proposals (if available)
 
 **Outputs**:
+
 - Selected funding opportunity
 - Assembled team with defined roles
 - Preliminary outline of specific aims
@@ -825,6 +906,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 ### Phase 2: Drafting (2-3 months before deadline)
 
 **Activities**:
+
 - Write specific aims or objectives (start here!)
 - Develop project description/research strategy
 - Create figures and data visualizations
@@ -834,6 +916,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 - Request letters of support/collaboration
 
 **Outputs**:
+
 - Complete first draft of narrative sections
 - Preliminary budget with justification
 - Timeline and management plan
@@ -842,6 +925,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 ### Phase 3: Internal Review (1-2 months before deadline)
 
 **Activities**:
+
 - Circulate draft to co-investigators
 - Seek feedback from colleagues and mentors
 - Request institutional review (if required)
@@ -850,6 +934,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 - Refine budget and budget justification
 
 **Outputs**:
+
 - Revised draft incorporating feedback
 - Refined budget aligned with revised plan
 - Identified weaknesses and mitigation strategies
@@ -857,6 +942,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 ### Phase 4: Finalization (2-4 weeks before deadline)
 
 **Activities**:
+
 - Final revisions to narrative
 - Prepare all required forms and documents
 - Finalize budget and budget justification
@@ -867,6 +953,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 - Proofread all materials
 
 **Outputs**:
+
 - Complete, polished proposal
 - All required supplementary documents
 - Formatted according to agency requirements
@@ -874,6 +961,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 ### Phase 5: Submission (1 week before deadline)
 
 **Activities**:
+
 - Institutional review and approval
 - Upload to submission portal
 - Verify all documents and formatting
@@ -882,6 +970,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 - Receive confirmation and proposal number
 
 **Outputs**:
+
 - Submitted proposal
 - Submission confirmation
 - Archived copy of all materials
@@ -891,6 +980,7 @@ For detailed resubmission guidance, refer to `references/resubmission_strategies
 ## Integration with Other Skills
 
 This skill works effectively with:
+
 - **Scientific Writing**: For clear, compelling prose
 - **Literature Review**: For comprehensive background sections
 - **Peer Review**: For self-assessment before submission
@@ -932,4 +1022,3 @@ Load these references as needed when working on specific aspects of grant writin
 ---
 
 **Final Note**: Grant writing is both an art and a science. Success requires not only excellent research ideas but also clear communication, strategic positioning, and meticulous attention to detail. Start early, seek feedback, and remember that even the best researchers face rejection—persistence and revision are key to funding success.
-

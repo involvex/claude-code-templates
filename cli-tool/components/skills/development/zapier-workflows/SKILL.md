@@ -17,12 +17,14 @@ description: Manage and trigger pre-built Zapier workflows and MCP tool orchestr
 ### The Two Types of Zapier Automation
 
 **1. MCP Tools (One-Off Actions)**
+
 - Individual Zapier actions (Add row to sheet, Send email, etc.)
 - Available via Zapier MCP at https://mcp.zapier.com/mcp/servers
 - Great for flexible, on-the-fly automation
 - **Problem:** 8,000+ choices with no guidance on which to use or when
 
 **2. Multi-Step Zaps (Webhook-Triggered)**
+
 - Complex workflows you've built in Zapier dashboard
 - Multiple actions chained together, pre-optimized
 - Triggered via webhook URL (POST request)
@@ -41,18 +43,21 @@ description: Manage and trigger pre-built Zapier workflows and MCP tool orchestr
 ### What You Get
 
 **For Multi-Step Zaps:**
+
 - Store webhook URLs and what they do
 - Trigger complex workflows just by asking
 - Remember when/why to use each Zap
 - Document costs, timing, outputs
 
 **For MCP Tools:**
+
 - Document which tools you prefer for which tasks
 - Build reusable workflow patterns
 - Store tool-specific preferences (sheet names, formats, etc.)
 - Create multi-tool orchestration sequences
 
 **Self-Learning:**
+
 - Claude automatically updates skill files when you teach it
 - Changes persist forever (global install) or per-project (local install)
 - No manual editing required - just talk to Claude
@@ -62,11 +67,13 @@ description: Manage and trigger pre-built Zapier workflows and MCP tool orchestr
 ### Installation Location
 
 **Global (`~/.claude/skills/`) - RECOMMENDED:**
+
 - Learned patterns persist across ALL projects
 - One Zap library for everything
 - Preferences carry over to all projects
 
 **Project-level (`./.claude/skills/`):**
+
 - Learned patterns ONLY in this project
 - Isolated from other projects
 - Useful for project-specific workflows
@@ -78,6 +85,7 @@ description: Manage and trigger pre-built Zapier workflows and MCP tool orchestr
 **Webhook URLs contain authentication tokens.** If someone has your webhook URL, they can trigger your Zaps.
 
 **Best practices:**
+
 - ✅ Install globally at `~/.claude/skills/` (not in project repos)
 - ✅ Add `.claude/` to your `.gitignore` if installed in a project
 - ✅ Never commit skill files with real webhook URLs to public repos
@@ -85,6 +93,7 @@ description: Manage and trigger pre-built Zapier workflows and MCP tool orchestr
 - ✅ Use Zapier's webhook authentication features when available
 
 **If you need to share this skill:**
+
 - Remove real webhook URLs first
 - Replace with placeholder examples
 - Or use separate webhook URLs for sharing/testing
@@ -92,10 +101,12 @@ description: Manage and trigger pre-built Zapier workflows and MCP tool orchestr
 ### Prerequisites
 
 **Required:**
+
 - Claude Code
 - Zapier account (for webhooks and MCP tools)
 
 **Optional:**
+
 - Additional MCP tools based on your workflows (Perplexity Search, Google Sheets, etc.)
 
 ### Setting Up Zapier MCP
@@ -119,9 +130,11 @@ To connect Zapier's MCP tools to Claude Code:
 4. **Connect to Claude Code:**
    - Click "Connect" button
    - You'll see a command like this:
+
    ```bash
    claude mcp add zapier https://mcp.zapier.com/api/mcp/mcp -t http -H "Authorization: Bearer ZjFmZGJkN..................1NjBhYzc2MDRlYg=="
    ```
+
    - Copy and run this command in your terminal
 
 5. **Restart Claude Code:**
@@ -150,6 +163,7 @@ For pre-built, optimized workflows that you want to trigger on-demand:
    - Now you can trigger it by just asking Claude!
 
 **Webhook vs MCP Tools:**
+
 - **Webhooks:** Pre-built, multi-step Zaps you trigger with a POST request. Great for complex, optimized workflows.
 - **MCP Tools:** Individual Zapier actions called directly. Great for flexible, on-the-fly automation.
 
@@ -173,12 +187,13 @@ When the user teaches you something new or corrects your approach:
    ```markdown
    User: "Use Apollo instead of Clearbit for company data"
    Claude: [uses Read tool on references/mcp-patterns.md]
-           [uses Edit tool to update the preference]
-           "Updated! I'll use Apollo for company enrichment from now on.
-            This change is now permanent in the skill."
+   [uses Edit tool to update the preference]
+   "Updated! I'll use Apollo for company enrichment from now on.
+   This change is now permanent in the skill."
    ```
 
 **What to capture in skill updates:**
+
 - ✅ Tool preferences (which tool for which task)
 - ✅ Workflow sequences (step-by-step patterns)
 - ✅ Error handling approaches
@@ -192,6 +207,7 @@ When the user teaches you something new or corrects your approach:
 ### When to Use Webhook-Triggered Zaps
 
 Use webhooks when:
+
 - Task is complex, multi-step, and already refined
 - User mentions a specific Zap name (check `references/zaps.md`)
 - Deterministic execution is critical
@@ -201,6 +217,7 @@ Use webhooks when:
 ### When to Use MCP Tool Orchestration
 
 Use MCP tools when:
+
 - Task is simple (1-3 actions)
 - Flexibility is needed (parameters change)
 - Testing a new workflow pattern
@@ -230,6 +247,7 @@ Use MCP tools when:
 After completing a task using MCP tools, check if this is a pattern worth saving:
 
 **Look for:**
+
 - Multi-step tool sequences that worked well
 - Specific parameter combinations the user liked
 - Repeated workflows or use cases
@@ -237,6 +255,7 @@ After completing a task using MCP tools, check if this is a pattern worth saving
 - Successful solutions to user problems
 
 **Suggest saving if:**
+
 - You used 2+ MCP tools in sequence
 - User expressed satisfaction with the result
 - This seems like something user might repeat
@@ -260,6 +279,7 @@ I'll remember it and do this automatically next time!"
 ### Document the Pattern
 
 If user says yes:
+
 1. Use Read tool on `references/mcp-patterns.md`
 2. Use Edit tool to add new pattern with:
    - Pattern name
@@ -271,12 +291,14 @@ If user says yes:
 3. Confirm: "Saved! Next time you [trigger], I'll [workflow]."
 
 **Examples of patterns worth saving:**
+
 - "Research and document" (Perplexity → summarize → Google Sheets)
 - "Expense tracking" (Extract amount/description → format → add to sheet)
 - "Competitive analysis" (Search competitor → analyze → save insights)
 - "Daily briefing" (Multiple searches → synthesize → deliver)
 
 **Don't save:**
+
 - One-off requests
 - Highly specific/unique situations
 - Simple single-tool uses (unless user asks)
@@ -313,6 +335,7 @@ Once setup, I'll be able to use those Zapier actions directly!"
    - List them out for the user
 
 2. **Prompt for detailed documentation:**
+
    ```
    "I see you have these Zapier MCP tools available:
    - mcp__zapier__google_sheets_create_spreadsheet_row
@@ -355,6 +378,7 @@ Once setup, I'll be able to use those Zapier actions directly!"
    - Confirm to user what was documented
 
 **When to trigger this:**
+
 - First time user mentions Zapier or workflows after MCP setup
 - User explicitly asks "what tools do I have?" or "what can you do with Zapier?"
 - When you detect new Zapier MCP tools that aren't documented in `references/mcp-patterns.md`
@@ -388,6 +412,7 @@ I'll add it to my knowledge so you can trigger it anytime just by asking!"
 ## Usage Examples
 
 **Triggering a Zap:**
+
 ```
 User: "Run my daily digest"
 Claude: [uses Read tool on references/zaps.md for webhook details]
@@ -397,6 +422,7 @@ Claude: [uses Read tool on references/zaps.md for webhook details]
 ```
 
 **Using MCP orchestration:**
+
 ```
 User: "Research the latest on quantum computing"
 Claude: [uses Read tool on references/mcp-patterns.md]
@@ -407,6 +433,7 @@ Claude: [uses Read tool on references/mcp-patterns.md]
 ```
 
 **Learning and updating:**
+
 ```
 User: "No, when tracking expenses use my 'Personal Budget' sheet, not 'Expenses'"
 Claude: [uses Read tool on references/mcp-patterns.md]
@@ -420,10 +447,12 @@ Claude: [uses Read tool on references/mcp-patterns.md]
 ### "Claude isn't detecting my Zapier MCP tools"
 
 **Check if MCP is connected:**
+
 - Look for tools starting with `mcp__zapier__` in your available tools
 - Try asking: "What Zapier tools do I have?"
 
 **If not showing up:**
+
 1. Verify you ran the connection command from https://mcp.zapier.com/mcp/servers
 2. Restart Claude Code completely (not just reload)
 3. Check your Claude Code MCP settings
@@ -432,23 +461,27 @@ Claude: [uses Read tool on references/mcp-patterns.md]
 ### "Claude isn't suggesting to save patterns"
 
 **Pattern detection triggers when:**
+
 - You use 2+ MCP tools in sequence
 - The task completes successfully
 - It seems repeatable (not a one-off request)
 
 **Try explicitly asking:**
+
 - "Can you save this as a pattern?"
 - "Remember this workflow for next time"
 
 ### "Webhook URL not triggering my Zap"
 
 **Common issues:**
+
 1. **Wrong URL** - Make sure you copied the full URL from Test tab
 2. **Zap not turned on** - Enable the Zap in Zapier dashboard
 3. **Trigger node incorrect** - Must be "Webhooks by Zapier" → "Catch Hook"
 4. **Firewall/network** - Check if curl command works from terminal first
 
 **Test manually:**
+
 ```bash
 curl -X POST https://hooks.zapier.com/hooks/catch/[your-url]
 ```
@@ -456,11 +489,13 @@ curl -X POST https://hooks.zapier.com/hooks/catch/[your-url]
 ### "Claude keeps asking to document tools I already documented"
 
 **Likely causes:**
+
 - Tools documented but file not saved properly
 - Using different Claude Code instance/installation
 - Skill installed at project level, not global
 
 **Fix:**
+
 1. Check `references/mcp-patterns.md` has your tools
 2. Verify skill location: `~/.claude/skills/` (global) vs `./.claude/skills/` (project)
 3. If project-level, copy to global for cross-project persistence
@@ -468,12 +503,14 @@ curl -X POST https://hooks.zapier.com/hooks/catch/[your-url]
 ### "How do I know if the skill is working?"
 
 **Signs it's working:**
+
 1. When you mention Zapier/workflows, Claude mentions checking references
 2. Claude asks detailed questions (WHEN/WHY/HOW) about tools
 3. After using tools, Claude suggests saving patterns
 4. Claude successfully triggers your webhooks
 
 **Quick test:**
+
 1. Ask: "What Zapier tools do I have?"
 2. Add a fake webhook and tell Claude about it
 3. Check if it was added to `references/zaps.md`
@@ -481,12 +518,14 @@ curl -X POST https://hooks.zapier.com/hooks/catch/[your-url]
 ### "Skill files getting too large / slow to load"
 
 **If reference files grow too large:**
+
 - Review and remove outdated/unused patterns
 - Consolidate similar workflows
 - Keep only actively-used tools documented
 - Consider splitting into multiple skill instances for different domains
 
 **Performance tips:**
+
 - Keep trigger phrases concise and specific
 - Avoid documenting one-off workflows
 - Use pattern categories to organize
@@ -494,6 +533,7 @@ curl -X POST https://hooks.zapier.com/hooks/catch/[your-url]
 ### "I want to reset the skill to template state"
 
 **To start fresh:**
+
 1. Backup your current skill files (if you want to keep anything)
 2. Delete the skill directory
 3. Re-clone from GitHub: https://github.com/AlexBoudreaux/claude-zapier-skill
@@ -502,6 +542,7 @@ curl -X POST https://hooks.zapier.com/hooks/catch/[your-url]
 ### "Can I use this skill without Zapier MCP?"
 
 **Yes!** The skill works with:
+
 - **Only webhooks** - Trigger multi-step Zaps without MCP
 - **Only MCP tools** - Document tool usage without webhooks
 - **Both** - Get full functionality
@@ -511,6 +552,7 @@ Each mode is independent and valuable on its own.
 ### "Security: I accidentally committed webhook URLs"
 
 **Immediate actions:**
+
 1. Remove the commit from git history (git rebase, BFG Repo-Cleaner)
 2. Regenerate webhook URLs in Zapier dashboard:
    - Edit the Zap
@@ -520,6 +562,7 @@ Each mode is independent and valuable on its own.
 4. Add `.claude/` to `.gitignore`
 
 **Prevention:**
+
 - Install skill globally (`~/.claude/skills/`)
 - Never commit `.claude/` directory in projects
 - Use placeholder URLs in shared examples

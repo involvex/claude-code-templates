@@ -1,9 +1,6 @@
 name: Update JSON Data
 
 on:
-  schedule:
-    # Ejecutar todos los días a las 3:00 AM UTC
-    - cron: '0 3 * * *'
   workflow_dispatch: # Permite ejecutar manualmente desde GitHub UI
 
 jobs:

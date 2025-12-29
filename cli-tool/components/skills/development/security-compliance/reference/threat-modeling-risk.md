@@ -257,6 +257,7 @@ print(f"Overall likelihood of successful attack: {overall_likelihood:.2%}")
 ### Quantitative Risk Assessment
 
 **Single Loss Expectancy (SLE)**:
+
 ```
 SLE = Asset Value × Exposure Factor
 
@@ -268,6 +269,7 @@ Example:
 ```
 
 **Annualized Rate of Occurrence (ARO)**:
+
 ```
 ARO = Expected number of times threat will occur per year
 
@@ -278,6 +280,7 @@ Example:
 ```
 
 **Annualized Loss Expectancy (ALE)**:
+
 ```
 ALE = SLE × ARO
 
@@ -290,6 +293,7 @@ Interpretation: Expected to lose $800,000 per year from this risk
 ```
 
 **Cost-Benefit Analysis**:
+
 ```
 Cost-Benefit = ALE (before) - ALE (after) - Cost of Control
 
@@ -1161,6 +1165,7 @@ critical finding is an SQL injection vulnerability in the customer portal that
 allows full database access without authentication.
 
 **Recommendations (Priority)**:
+
 1. CRITICAL: Patch SQL injection vulnerability within 24 hours
 2. CRITICAL: Disable TLS 1.0/1.1 on all systems within 7 days
 3. HIGH: Implement MFA for all user accounts within 30 days
@@ -1176,6 +1181,7 @@ allows full database access without authentication.
 **CVE**: N/A (Custom application)
 
 #### Description
+
 The customer portal's search functionality is vulnerable to SQL injection due to
 insufficient input validation. An attacker can inject arbitrary SQL commands to
 extract sensitive data from the database, including customer PII and credit card
@@ -1183,13 +1189,15 @@ information.
 
 #### Proof of Concept
 ```
+
 Request:
 GET /search?query=' UNION SELECT username,password FROM users-- HTTP/1.1
 Host: portal.acme.com
 
 Response:
 [List of all usernames and hashed passwords]
-```
+
+````
 
 #### Impact
 - Complete database compromise
@@ -1239,20 +1247,23 @@ PORT    STATE SERVICE
 |   TLSv1.0:
 |     ciphers:
 |       TLS_RSA_WITH_3DES_EDE_CBC_SHA (weak)
-```
+````
 
 #### Impact
+
 - Man-in-the-middle attacks possible
 - Decryption of encrypted traffic
 - Compliance violations (PCI-DSS requires TLS 1.2+)
 
 #### Remediation
+
 1. Disable TLS 1.0 and TLS 1.1 on all web servers
 2. Enable TLS 1.2 and TLS 1.3 only
 3. Configure strong cipher suites (ECDHE, AES-GCM)
 4. Enable HSTS header (Strict-Transport-Security)
 
 Example nginx configuration:
+
 ```nginx
 ssl_protocols TLSv1.2 TLSv1.3;
 ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384';
@@ -1267,26 +1278,32 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
 ## Appendix A: Scope and Methodology
 
 ### Scope
+
 **In Scope**:
-- External web applications (*.acme.com)
+
+- External web applications (\*.acme.com)
 - Internal network (10.0.0.0/16)
 - Wireless networks (guest and corporate)
 
 **Out of Scope**:
+
 - Production database servers (testing allowed, disruption prohibited)
 - Third-party SaaS applications
 - Physical security testing
 - Social engineering attacks
 
 ### Methodology
+
 Testing followed the OWASP Testing Guide v4 and PTES (Penetration Testing Execution Standard).
 
 ### Testing Windows
+
 - External testing: 24/7
 - Internal testing: Monday-Friday, 9 AM - 5 PM EST
 - No testing on holidays
 
 ## Appendix B: Tools Used
+
 - Nmap 7.94 - Network scanning
 - Burp Suite Pro 2023.12 - Web application testing
 - Metasploit Framework 6.3 - Exploitation
@@ -1296,11 +1313,13 @@ Testing followed the OWASP Testing Guide v4 and PTES (Penetration Testing Execut
 ## Appendix C: Risk Rating Methodology
 
 Risk ratings use CVSS v3.1 base scores with environmental adjustments:
+
 - Critical: 9.0-10.0
 - High: 7.0-8.9
 - Medium: 4.0-6.9
 - Low: 0.1-3.9
-```
+
+````
 
 ---
 
@@ -1370,7 +1389,7 @@ residual_risk:
 
 next_review_date: "2025-07-01"
 last_updated: "2025-01-15"
-```
+````
 
 ### Risk Appetite Statement
 

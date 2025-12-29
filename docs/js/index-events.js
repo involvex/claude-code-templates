@@ -1504,11 +1504,11 @@ window.testCategoryFilter = function() {
 }
 
 // Global helper functions for template cards
-function showInstallationFiles(languageKey, frameworkKey, displayName) {
-    console.log('Show installation files for:', displayName);
-    // For now, just show a simple alert - could be enhanced later with full modal
-    alert(`Installation files for ${displayName} would be shown here.`);
-}
+// function showInstallationFiles(languageKey, frameworkKey, displayName) {
+//     console.log('Show installation files for:', displayName);
+//     // For now, just show a simple alert - could be enhanced later with full modal
+//     alert(`Installation files for ${displayName} would be shown here.`);
+// }
 
 // Global function for template details
 function showTemplateDetails(templateId, templateName, subtype) {

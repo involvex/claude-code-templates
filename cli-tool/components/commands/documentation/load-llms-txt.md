@@ -19,20 +19,25 @@ Load external documentation context: $ARGUMENTS
 Load and process external documentation context from specified source.
 
 ### Default Action (Xatu Data)
+
 Load the llms.txt file from Xatu data repository:
+
 ```bash
 curl -s https://raw.githubusercontent.com/ethpandaops/xatu-data/refs/heads/master/llms.txt
 ```
 
 ### Custom Source Loading
+
 For custom URLs or alternative documentation sources:
+
 - Validate URL accessibility
 - Download and cache content
 - Process and structure information
 - Integration with project context
 
 ### Processing Options
+
 - **Raw loading**: Direct content retrieval
-- **Validation**: Check content format and structure  
+- **Validation**: Check content format and structure
 - **Integration**: Merge with existing project documentation
 - **Caching**: Store locally for offline access

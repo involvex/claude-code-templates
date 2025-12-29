@@ -2,7 +2,7 @@
 
 Display all available development tools
 
-*Command originally created by IndyDevDan (YouTube: https://www.youtube.com/@indydevdan) / DislerH (GitHub: https://github.com/disler)*
+_Command originally created by IndyDevDan (YouTube: https://www.youtube.com/@indydevdan) / DislerH (GitHub: https://github.com/disler)_
 
 ## Instructions
 
@@ -14,11 +14,13 @@ Display all available tools from your system prompt in the following format:
 4. **Format as bullet points** for clear organization
 
 The output should help developers understand:
+
 - What tools are available in the current Claude Code session
 - The exact function signatures for reference
 - The primary purpose of each tool
 
 Example format:
+
 ```typescript
 • functionName(parameters: Type): ReturnType - Purpose of the tool
 
@@ -26,6 +28,7 @@ Example format:
 ```
 
 This command is useful for:
+
 - Quick reference of available capabilities
 - Understanding tool signatures
 - Planning which tools to use for specific tasks

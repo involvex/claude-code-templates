@@ -5,11 +5,13 @@ Execute Claude Code in isolated Cloudflare Workers sandboxes with AI-powered cod
 ## Quick Start
 
 ### 1. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 2. Configure API Key
+
 ```bash
 # For local development, create .dev.vars:
 echo "ANTHROPIC_API_KEY=your-api-key-here" > .dev.vars
@@ -19,6 +21,7 @@ npx wrangler secret put ANTHROPIC_API_KEY
 ```
 
 ### 3. Local Development
+
 ```bash
 # Start development server (requires Docker)
 npm run dev
@@ -30,6 +33,7 @@ curl -X POST http://localhost:8787/execute \
 ```
 
 ### 4. Deploy to Cloudflare
+
 ```bash
 # Deploy worker
 npx wrangler deploy
@@ -62,16 +66,18 @@ User Question → Cloudflare Worker → Claude AI → Generated Code → Sandbox
 Execute a natural language question as code.
 
 **Request:**
+
 ```json
 {
   "question": "What is the 100th Fibonacci number?",
-  "maxTokens": 2048,          // Optional: Max tokens for code generation
-  "timeout": 30000,            // Optional: Execution timeout in ms
-  "language": "python"         // Optional: "python" or "javascript"
+  "maxTokens": 2048, // Optional: Max tokens for code generation
+  "timeout": 30000, // Optional: Execution timeout in ms
+  "language": "python" // Optional: "python" or "javascript"
 }
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -89,6 +95,7 @@ Execute a natural language question as code.
 Check worker health status.
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -100,6 +107,7 @@ Check worker health status.
 ## Command Line Tools
 
 ### Launcher
+
 Execute prompts directly from command line:
 
 ```bash
@@ -114,6 +122,7 @@ node launcher.ts "Create a React app" "--agent frontend-developer" your_api_key
 ```
 
 ### Monitor
+
 Monitor execution with detailed metrics:
 
 ```bash
@@ -127,6 +136,7 @@ node monitor.ts "Sum array" your_api_key https://your-worker.workers.dev
 ## Examples
 
 ### Mathematical Calculations
+
 ```bash
 curl -X POST http://localhost:8787/execute \
   -H "Content-Type: application/json" \
@@ -134,6 +144,7 @@ curl -X POST http://localhost:8787/execute \
 ```
 
 ### String Manipulation
+
 ```bash
 curl -X POST http://localhost:8787/execute \
   -H "Content-Type: application/json" \
@@ -141,6 +152,7 @@ curl -X POST http://localhost:8787/execute \
 ```
 
 ### Data Analysis
+
 ```bash
 curl -X POST http://localhost:8787/execute \
   -H "Content-Type: application/json" \
@@ -148,6 +160,7 @@ curl -X POST http://localhost:8787/execute \
 ```
 
 ### JavaScript Execution
+
 ```bash
 curl -X POST http://localhost:8787/execute \
   -H "Content-Type: application/json" \
@@ -162,11 +175,13 @@ curl -X POST http://localhost:8787/execute \
 ### Environment Variables
 
 **Local Development (.dev.vars):**
+
 ```bash
 ANTHROPIC_API_KEY=sk-ant-your-key-here
 ```
 
 **Production (Wrangler Secrets):**
+
 ```bash
 npx wrangler secret put ANTHROPIC_API_KEY
 ```
@@ -191,29 +206,37 @@ vars = { ENVIRONMENT = "production" }
 ## Troubleshooting
 
 ### Container Not Ready
+
 After first deployment, wait 2-3 minutes:
+
 ```bash
 npx wrangler containers list
 ```
 
 ### Docker Issues (Local Development)
+
 Ensure Docker is running:
+
 ```bash
 docker ps
 ```
 
 ### API Key Not Set
+
 For local development:
+
 ```bash
 echo "ANTHROPIC_API_KEY=your-key" > .dev.vars
 ```
 
 For production:
+
 ```bash
 npx wrangler secret put ANTHROPIC_API_KEY
 ```
 
 ### View Logs
+
 ```bash
 # Real-time logs
 npx wrangler tail
@@ -241,14 +264,17 @@ npx wrangler tail --format=pretty
 ## Cost Estimation
 
 **Cloudflare Workers:**
+
 - Free tier: 100,000 requests/day (limited Durable Objects)
 - Paid plan ($5/month): 10M requests/month + unlimited Durable Objects
 
 **Anthropic API:**
+
 - Claude Sonnet 4.5: ~$3 per million input tokens
 - Average request: ~200 tokens = $0.0006 per request
 
 **Example costs for 10,000 requests/month:**
+
 - Cloudflare: $5/month (paid plan)
 - Anthropic: ~$6/month (avg 200 tokens/request)
 - **Total: ~$11/month**
@@ -256,6 +282,7 @@ npx wrangler tail --format=pretty
 ## Development
 
 ### Project Structure
+
 ```
 cloudflare-claude-sandbox/
 ├── src/
@@ -269,6 +296,7 @@ cloudflare-claude-sandbox/
 ```
 
 ### Scripts
+
 - `npm run dev` - Start local development server
 - `npm run deploy` - Deploy to Cloudflare
 - `npm run tail` - View real-time logs
@@ -291,6 +319,7 @@ MIT License - See LICENSE file for details
 ## Support
 
 For issues and questions:
+
 1. Check the [debugging guide](./SANDBOX_DEBUGGING.md)
 2. Run the monitor tool for detailed metrics
 3. Check Cloudflare worker logs: `npx wrangler tail`

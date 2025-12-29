@@ -96,6 +96,7 @@ with open("output.pdf", "wb") as output:
 ## Common patterns
 
 **Extract and save text:**
+
 ```python
 import pdfplumber
 
@@ -107,6 +108,7 @@ with open("output.txt", "w") as f:
 ```
 
 **Extract tables to CSV:**
+
 ```python
 import pdfplumber
 import csv

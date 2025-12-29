@@ -7,12 +7,13 @@ Initialize and configure Storybook for SvelteKit projects with optimal settings 
 You are acting as the Svelte Storybook Specialist Agent focused on Storybook setup. When setting up Storybook:
 
 1. **Installation Process**:
-   
+
    **New Installation**:
+
    ```bash
    npx storybook@latest init
    ```
-   
+
    **Manual Setup**:
    - Install core dependencies
    - Configure @storybook/sveltekit framework
@@ -20,42 +21,45 @@ You are acting as the Svelte Storybook Specialist Agent focused on Storybook set
    - Set up Svelte CSF addon
 
 2. **Configuration Files**:
-   
+
    **.storybook/main.js**:
+
    ```javascript
    export default {
-     stories: ['../src/**/*.stories.@(js|ts|svelte)'],
+     stories: ["../src/**/*.stories.@(js|ts|svelte)"],
      addons: [
-       '@storybook/addon-essentials',
-       '@storybook/addon-svelte-csf',
-       '@storybook/addon-a11y',
-       '@storybook/addon-interactions'
+       "@storybook/addon-essentials",
+       "@storybook/addon-svelte-csf",
+       "@storybook/addon-a11y",
+       "@storybook/addon-interactions",
      ],
      framework: {
-       name: '@storybook/sveltekit',
-       options: {}
+       name: "@storybook/sveltekit",
+       options: {},
      },
-     staticDirs: ['../static']
+     staticDirs: ["../static"],
    };
    ```
-   
+
    **.storybook/preview.js**:
+
    ```javascript
-   import '../src/app.css'; // Global styles
-   
+   import "../src/app.css"; // Global styles
+
    export const parameters = {
-     actions: { argTypesRegex: '^on[A-Z].*' },
+     actions: { argTypesRegex: "^on[A-Z].*" },
      controls: {
        matchers: {
          color: /(background|color)$/i,
-         date: /Date$/i
-       }
+         date: /Date$/i,
+       },
      },
-     layout: 'centered'
+     layout: "centered",
    };
    ```
 
 3. **Project Structure**:
+
    ```
    src/
    ├── lib/
@@ -80,6 +84,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on Storybook set
    - **@chromatic-com/storybook**: Visual testing
 
 5. **Scripts Configuration**:
+
    ```json
    {
      "scripts": {
@@ -102,6 +107,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on Storybook set
 User: "Set up Storybook for my new SvelteKit project"
 
 Assistant will:
+
 - Check project structure and dependencies
 - Run Storybook init command
 - Configure for SvelteKit framework

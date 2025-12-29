@@ -7,6 +7,7 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 ### Phase 1: Preparation (Before Deployment)
 
 **File Structure Validation**
+
 - [ ] All files created in correct locations with proper structure
 - [ ] SKILL.md exists in root directory with proper YAML frontmatter
 - [ ] All reference files in `/reference/` directory
@@ -15,12 +16,14 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 - [ ] README.md in root directory
 
 **File Content Verification**
+
 - [ ] SKILL.md has required frontmatter (name: 64 chars max, description: 1024 chars max)
 - [ ] All reference files use markdown format (.md)
 - [ ] Python script is executable and tested
 - [ ] Links between files use correct relative paths (forward slashes)
 
 **Quality Review**
+
 - [ ] No typos in SKILL.md or reference files
 - [ ] Terminology is consistent throughout
 - [ ] All internal links tested and working
@@ -30,6 +33,7 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 ### Phase 2: Customization (Modify for Your Organization)
 
 **Cloud Provider Standards**
+
 - [ ] Update cloud provider preferences (AWS/Azure/GCP)
 - [ ] Add your organization's cloud account structure
 - [ ] Include your naming conventions
@@ -37,6 +41,7 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 - [ ] Add your cost allocation approach
 
 **Security & Compliance**
+
 - [ ] Update [reference/security.md](reference/security.md):
   - [ ] Add your compliance requirements (HIPAA, PCI-DSS, SOC2, etc.)
   - [ ] Specify your secrets management solution
@@ -44,12 +49,14 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
   - [ ] Add your vulnerability scanning tools
 
 **Infrastructure Standards**
+
 - [ ] Define your Terraform module standards
 - [ ] Specify your Kubernetes cluster configurations
 - [ ] Add your CI/CD tool preferences
 - [ ] Include your observability stack
 
 **Naming Conventions**
+
 - [ ] Review consistent terminology throughout (search and replace if needed)
 - [ ] Update environment names (dev, staging, prod, etc.)
 - [ ] Add your resource naming patterns
@@ -60,30 +67,35 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 **Functionality Tests**
 
 **Test 1: Terraform Project Initialization**
+
 - [ ] Run: `python scripts/devops_utils.py terraform init-project --name test --cloud aws --region us-east-1`
 - [ ] Verify directory structure is created correctly
 - [ ] Check that all template files are generated
 - [ ] Validate Terraform syntax
 
 **Test 2: Kubernetes Validation**
+
 - [ ] Run: `python scripts/devops_utils.py k8s validate --file examples/kubernetes/complete-app.yaml`
 - [ ] Verify validation passes
 - [ ] Check all manifests are recognized
 - [ ] Test with invalid YAML to ensure error detection
 
 **Test 3: Security Scanning**
+
 - [ ] Run: `python scripts/devops_utils.py security scan-secrets --directory .`
 - [ ] Verify no secrets are detected in examples
 - [ ] Test with a file containing a fake secret
 - [ ] Ensure detection works correctly
 
 **Test 4: Template Usage**
+
 - [ ] Deploy example Kubernetes application
 - [ ] Verify all resources are created
 - [ ] Check health checks work
 - [ ] Validate autoscaling configuration
 
 **Test 5: CI/CD Pipeline**
+
 - [ ] Use GitHub Actions example pipeline
 - [ ] Test build and push stages
 - [ ] Verify deployment logic
@@ -92,12 +104,14 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 **Performance Tests**
 
 **Token Usage**
+
 - [ ] SKILL.md body is under 500 lines ✓
 - [ ] Reference files are at appropriate length
 - [ ] No unnecessary repetition between files
 - [ ] Files load efficiently without excessive context
 
 **Load Tests**
+
 - [ ] Test with Haiku model (fast, economical)
 - [ ] Test with Sonnet model (balanced)
 - [ ] Test with Opus model (powerful reasoning)
@@ -106,18 +120,21 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 ### Phase 4: Deployment
 
 **Make Skill Available**
+
 - [ ] Upload all files to skill repository/system
 - [ ] Verify file structure matches expected format
 - [ ] Test that Claude can access all files
 - [ ] Confirm skill appears in available skills list
 
 **Team Onboarding**
+
 - [ ] Share README.md with team
 - [ ] Provide quick start guide (specific to your organization)
 - [ ] Schedule skill training/demo session
 - [ ] Create internal documentation on how to use
 
 **Process Documentation**
+
 - [ ] Document your standard infrastructure workflow
 - [ ] Create quick reference guides for common tasks
 - [ ] Establish when to use each reference file
@@ -126,12 +143,14 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 ### Phase 5: Optimization (After Initial Use)
 
 **Monitor Usage**
+
 - [ ] Track which parts of the skill are used most
 - [ ] Note any confusion or questions from team
 - [ ] Collect feedback on missing information
 - [ ] Track time saved vs. previous approach
 
 **Iterative Improvements**
+
 - [ ] Update based on team feedback
 - [ ] Add organization-specific examples
 - [ ] Refine terminology based on actual usage
@@ -139,6 +158,7 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 - [ ] Add new templates based on common needs
 
 **Knowledge Capture**
+
 - [ ] Document successful infrastructure patterns discovered
 - [ ] Add new modules as they're created
 - [ ] Update with actual performance data
@@ -151,6 +171,7 @@ Use this checklist to ensure the DevOps IaC Engineer Skill is properly deployed 
 When customizing the skill for your organization, use this template:
 
 ### 1. Organization Information
+
 - **Company Name**: [Your Company]
 - **Industry**: [Your Industry]
 - **Cloud Provider(s)**: [AWS/Azure/GCP]
@@ -158,35 +179,41 @@ When customizing the skill for your organization, use this template:
 - **Team Size**: [Number of engineers]
 
 ### 2. Infrastructure Standards
+
 - **IaC Tool**: [Terraform/Pulumi/CloudFormation]
 - **Container Orchestration**: [Kubernetes/ECS/Other]
 - **CI/CD Platform**: [GitHub Actions/GitLab CI/Jenkins]
 - **GitOps Tool**: [ArgoCD/Flux/Other]
 
 ### 3. Cloud Architecture
+
 - **Primary Cloud**: [AWS/Azure/GCP]
 - **Multi-Cloud**: [Yes/No]
 - **Account Structure**: [Multi-account strategy]
 - **Regions**: [List primary regions]
 
 ### 4. Security & Compliance
+
 - **Compliance Requirements**: [HIPAA/PCI-DSS/SOC2/etc.]
 - **Secrets Manager**: [AWS Secrets Manager/Vault/etc.]
 - **Security Scanning**: [Trivy/Snyk/Checkov/etc.]
 - **SIEM/Logging**: [Splunk/ELK/CloudWatch/etc.]
 
 ### 5. Observability Stack
+
 - **Metrics**: [Prometheus/Datadog/New Relic/etc.]
 - **Logging**: [ELK/Splunk/CloudWatch/etc.]
 - **Tracing**: [Jaeger/Zipkin/X-Ray/etc.]
 - **Alerting**: [PagerDuty/Opsgenie/etc.]
 
 ### 6. Naming Conventions
+
 - **Resource Naming**: [Pattern: {env}-{app}-{resource}]
 - **Tags Required**: [Environment, Owner, CostCenter, etc.]
 - **Git Branching**: [GitFlow/Trunk-based/etc.]
 
 ### 7. Deployment Strategy
+
 - **Environments**: [dev, staging, prod, etc.]
 - **Deployment Method**: [Rolling/Blue-Green/Canary]
 - **Approval Process**: [Manual gates, auto-deploy rules]
@@ -197,6 +224,7 @@ When customizing the skill for your organization, use this template:
 ## Common Customization Updates
 
 ### Update 1: Cloud Provider Configuration
+
 **Files**: reference/terraform.md, reference/cloud_platforms.md
 
 Replace generic cloud provider examples with your specific configuration:
@@ -215,6 +243,7 @@ terraform {
 ```
 
 ### Update 2: Kubernetes Cluster Configuration
+
 **File**: reference/kubernetes.md
 
 Add your organization's cluster configuration:
@@ -232,6 +261,7 @@ metadata:
 ```
 
 ### Update 3: CI/CD Pipeline Standards
+
 **File**: reference/cicd.md, examples/pipelines/
 
 Update with your CI/CD platform and standards:
@@ -243,6 +273,7 @@ name: Standard Deploy Pipeline
 ```
 
 ### Update 4: Tagging Strategy
+
 **File**: reference/terraform.md
 
 Replace generic tags with your organization's required tags:
@@ -293,6 +324,7 @@ python3 --version  # Should be 3.8 or higher
 ## Maintenance Schedule
 
 ### Monthly
+
 - [ ] Review team feedback and usage patterns
 - [ ] Update templates based on recent successful deployments
 - [ ] Refresh examples with current configurations
@@ -300,6 +332,7 @@ python3 --version  # Should be 3.8 or higher
 - [ ] Update provider versions in examples
 
 ### Quarterly
+
 - [ ] Update Kubernetes version compatibility
 - [ ] Review and update security best practices
 - [ ] Add new infrastructure patterns discovered
@@ -307,6 +340,7 @@ python3 --version  # Should be 3.8 or higher
 - [ ] Refresh CI/CD pipeline templates
 
 ### Annually
+
 - [ ] Major review of all reference files
 - [ ] Update with new cloud services and features
 - [ ] Refresh all examples to reflect current state
@@ -320,23 +354,27 @@ python3 --version  # Should be 3.8 or higher
 Track these to measure skill effectiveness:
 
 **Adoption Metrics**
+
 - % of team using the skill regularly
 - Number of infrastructure projects using skill templates
 - Frequency of skill usage per engineer
 
 **Efficiency Metrics**
+
 - Time to provision new infrastructure (before vs. after)
 - Time to deploy new application (before vs. after)
 - Reduction in infrastructure errors
 - Consistency of team output
 
 **Quality Metrics**
+
 - Infrastructure security score improvement
 - Compliance audit results
 - Infrastructure drift reduction
 - Incident rate decrease
 
 **Business Impact**
+
 - Infrastructure provisioning time reduction
 - Team productivity increase
 - Cost optimization achieved
@@ -373,6 +411,7 @@ chmod +x scripts/devops_utils.py
 ## Integration with Existing Tools
 
 ### Integrate with Git
+
 ```bash
 cd "DevOps IaC Engineer"
 git init
@@ -381,11 +420,13 @@ git commit -m "Initial DevOps IaC Engineer skill"
 ```
 
 ### Integrate with VS Code
+
 - Open folder in VS Code
 - Install Terraform and YAML extensions
 - Configure workspace settings for linting
 
 ### Integrate with CI/CD
+
 - Add skill files to your infrastructure repository
 - Reference templates in your pipelines
 - Use utility scripts in automation

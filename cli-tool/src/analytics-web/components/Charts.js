@@ -8,9 +8,11 @@ class Charts {
     this.dataService = dataService;
     this.stateService = stateService;
     this.charts = {};
-    
+
     // Subscribe to state changes
-    this.unsubscribe = this.stateService.subscribe(this.handleStateChange.bind(this));
+    this.unsubscribe = this.stateService.subscribe(
+      this.handleStateChange.bind(this),
+    );
   }
 
   /**
@@ -27,7 +29,7 @@ class Charts {
    * @param {string} action - Action that caused the change
    */
   handleStateChange(state, action) {
-    if (action === 'update_chart_data') {
+    if (action === "update_chart_data") {
       this.updateCharts(state.chartData);
     }
   }
@@ -40,7 +42,7 @@ class Charts {
       const chartData = await this.dataService.getChartData();
       this.stateService.updateChartData(chartData);
     } catch (error) {
-      console.error('Error loading chart data:', error);
+      console.error("Error loading chart data:", error);
     }
   }
 
@@ -58,7 +60,7 @@ class Charts {
    */
   updateCharts(chartData) {
     // Update existing charts with new data
-    Object.keys(this.charts).forEach(chartId => {
+    Object.keys(this.charts).forEach((chartId) => {
       const chart = this.charts[chartId];
       if (chartData[chartId]) {
         chart.data = chartData[chartId];
@@ -74,8 +76,8 @@ class Charts {
    * @param {Object} config - Chart configuration
    */
   createChart(id, canvas, config) {
-    if (typeof Chart === 'undefined') {
-      console.error('Chart.js not loaded');
+    if (typeof Chart === "undefined") {
+      console.error("Chart.js not loaded");
       return null;
     }
 
@@ -98,10 +100,10 @@ class Charts {
    * Cleanup all charts
    */
   destroy() {
-    Object.keys(this.charts).forEach(id => {
+    Object.keys(this.charts).forEach((id) => {
       this.destroyChart(id);
     });
-    
+
     if (this.unsubscribe) {
       this.unsubscribe();
     }
@@ -109,6 +111,6 @@ class Charts {
 }
 
 // Export for module use
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = Charts;
 }

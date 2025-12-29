@@ -10,6 +10,7 @@ description: "Pythonic wrapper around RDKit with simplified interface and sensib
 Datamol is a Python library that provides a lightweight, Pythonic abstraction layer over RDKit for molecular cheminformatics. Simplify complex molecular operations with sensible defaults, efficient parallelization, and modern I/O capabilities. All molecular objects are native `rdkit.Chem.Mol` instances, ensuring full compatibility with the RDKit ecosystem.
 
 **Key capabilities**:
+
 - Molecular format conversion (SMILES, SELFIES, InChI)
 - Structure standardization and sanitization
 - Molecular descriptors and fingerprints
@@ -30,6 +31,7 @@ uv pip install datamol
 ```
 
 **Import convention**:
+
 ```python
 import datamol as dm
 ```
@@ -39,6 +41,7 @@ import datamol as dm
 ### 1. Basic Molecule Handling
 
 **Creating molecules from SMILES**:
+
 ```python
 import datamol as dm
 
@@ -56,6 +59,7 @@ if mol is None:
 ```
 
 **Converting molecules to SMILES**:
+
 ```python
 # Canonical SMILES
 smiles = dm.to_smiles(mol)
@@ -70,6 +74,7 @@ selfies = dm.to_selfies(mol)
 ```
 
 **Standardization and sanitization** (always recommend for user-provided molecules):
+
 ```python
 # Sanitize molecule
 mol = dm.sanitize_mol(mol)
@@ -91,6 +96,7 @@ clean_smiles = dm.standardize_smiles(smiles)
 Refer to `references/io_module.md` for comprehensive I/O documentation.
 
 **Reading files**:
+
 ```python
 # SDF files (most common in chemistry)
 df = dm.read_sdf("compounds.sdf", mol_column='mol')
@@ -109,6 +115,7 @@ df = dm.open_df("file.sdf")  # Works with .sdf, .csv, .xlsx, .parquet, .json
 ```
 
 **Writing files**:
+
 ```python
 # Save as SDF
 dm.to_sdf(mols, "output.sdf")
@@ -123,6 +130,7 @@ dm.to_xlsx(df, "output.xlsx", mol_columns=["mol"])
 ```
 
 **Remote file support** (S3, GCS, HTTP):
+
 ```python
 # Read from cloud storage
 df = dm.read_sdf("s3://bucket/compounds.sdf")
@@ -137,6 +145,7 @@ dm.to_sdf(mols, "s3://bucket/output.sdf")
 Refer to `references/descriptors_viz.md` for detailed descriptor documentation.
 
 **Computing descriptors for a single molecule**:
+
 ```python
 # Get standard descriptor set
 descriptors = dm.descriptors.compute_many_descriptors(mol)
@@ -145,6 +154,7 @@ descriptors = dm.descriptors.compute_many_descriptors(mol)
 ```
 
 **Batch descriptor computation** (recommended for datasets):
+
 ```python
 # Compute for all molecules in parallel
 desc_df = dm.descriptors.batch_compute_many_descriptors(
@@ -155,6 +165,7 @@ desc_df = dm.descriptors.batch_compute_many_descriptors(
 ```
 
 **Specific descriptors**:
+
 ```python
 # Aromaticity
 n_aromatic = dm.descriptors.n_aromatic_atoms(mol)
@@ -169,6 +180,7 @@ n_rigid = dm.descriptors.n_rigid_bonds(mol)
 ```
 
 **Drug-likeness filtering (Lipinski's Rule of Five)**:
+
 ```python
 # Filter compounds
 def is_druglike(mol):
@@ -186,6 +198,7 @@ druglike_mols = [mol for mol in mols if is_druglike(mol)]
 ### 4. Molecular Fingerprints and Similarity
 
 **Generating fingerprints**:
+
 ```python
 # ECFP (Extended Connectivity Fingerprint, default)
 fp = dm.to_fp(mol, fp_type='ecfp', radius=2, n_bits=2048)
@@ -197,6 +210,7 @@ fp_atompair = dm.to_fp(mol, fp_type='atompair')
 ```
 
 **Similarity calculations**:
+
 ```python
 # Pairwise distances within a set
 distance_matrix = dm.pdist(mols, n_jobs=-1)
@@ -215,6 +229,7 @@ dist_matrix = squareform(dm.pdist(mols))
 Refer to `references/core_api.md` for clustering details.
 
 **Butina clustering**:
+
 ```python
 # Cluster molecules by structural similarity
 clusters = dm.cluster_mols(
@@ -232,6 +247,7 @@ for i, cluster in enumerate(clusters):
 **Important**: Butina clustering builds a full distance matrix - suitable for ~1000 molecules, not for 10,000+.
 
 **Diversity selection**:
+
 ```python
 # Pick diverse subset
 diverse_mols = dm.pick_diverse(
@@ -251,6 +267,7 @@ centroids = dm.pick_centroids(
 Refer to `references/fragments_scaffolds.md` for complete scaffold documentation.
 
 **Extracting Murcko scaffolds**:
+
 ```python
 # Get Bemis-Murcko scaffold (core structure)
 scaffold = dm.to_scaffold_murcko(mol)
@@ -258,6 +275,7 @@ scaffold_smiles = dm.to_smiles(scaffold)
 ```
 
 **Scaffold-based analysis**:
+
 ```python
 # Group compounds by scaffold
 from collections import Counter
@@ -278,6 +296,7 @@ for mol, scaf_smi in zip(mols, scaffold_smiles):
 ```
 
 **Scaffold-based train/test splitting** (for ML):
+
 ```python
 # Ensure train and test sets have different scaffolds
 scaffold_to_mols = {}
@@ -304,6 +323,7 @@ test_mols = [mol for scaf in test_scaffolds for mol in scaffold_to_mols[scaf]]
 Refer to `references/fragments_scaffolds.md` for fragmentation details.
 
 **BRICS fragmentation** (16 bond types):
+
 ```python
 # Fragment molecule
 fragments = dm.fragment.brics(mol)
@@ -311,11 +331,13 @@ fragments = dm.fragment.brics(mol)
 ```
 
 **RECAP fragmentation** (11 bond types):
+
 ```python
 fragments = dm.fragment.recap(mol)
 ```
 
 **Fragment analysis**:
+
 ```python
 # Find common fragments across compound library
 from collections import Counter
@@ -340,6 +362,7 @@ def fragment_score(mol, reference_fragments):
 Refer to `references/conformers_module.md` for detailed conformer documentation.
 
 **Generating conformers**:
+
 ```python
 # Generate 3D conformers
 mol_3d = dm.conformers.generate(
@@ -357,6 +380,7 @@ positions = conf.GetPositions()  # Nx3 array of atom coordinates
 ```
 
 **Conformer clustering**:
+
 ```python
 # Cluster conformers by RMSD
 clusters = dm.conformers.cluster(
@@ -370,6 +394,7 @@ centroids = dm.conformers.return_centroids(mol_3d, clusters)
 ```
 
 **SASA calculation**:
+
 ```python
 # Calculate solvent accessible surface area
 sasa_values = dm.conformers.sasa(mol_3d, n_jobs=-1)
@@ -384,6 +409,7 @@ sasa = conf.GetDoubleProp('rdkit_free_sasa')
 Refer to `references/descriptors_viz.md` for visualization documentation.
 
 **Basic molecule grid**:
+
 ```python
 # Visualize molecules
 dm.viz.to_image(
@@ -401,6 +427,7 @@ dm.viz.to_image(mols, outfile="molecules.svg", use_svg=True)
 ```
 
 **Aligned visualization** (for SAR analysis):
+
 ```python
 # Align molecules by common substructure
 dm.viz.to_image(
@@ -412,6 +439,7 @@ dm.viz.to_image(
 ```
 
 **Highlighting substructures**:
+
 ```python
 # Highlight specific atoms and bonds
 dm.viz.to_image(
@@ -422,6 +450,7 @@ dm.viz.to_image(
 ```
 
 **Conformer visualization**:
+
 ```python
 # Display multiple conformers
 dm.viz.conformers(
@@ -437,6 +466,7 @@ dm.viz.conformers(
 Refer to `references/reactions_data.md` for reactions documentation.
 
 **Applying reactions**:
+
 ```python
 from rdkit.Chem import rdChemReactions
 
@@ -457,6 +487,7 @@ product_smiles = dm.to_smiles(product)
 ```
 
 **Batch reaction application**:
+
 ```python
 # Apply reaction to library
 products = []
@@ -472,11 +503,13 @@ for mol in reactant_mols:
 ## Parallelization
 
 Datamol includes built-in parallelization for many operations. Use `n_jobs` parameter:
+
 - `n_jobs=1`: Sequential (no parallelization)
 - `n_jobs=-1`: Use all available CPU cores
 - `n_jobs=4`: Use 4 cores
 
 **Functions supporting parallelization**:
+
 - `dm.read_sdf(..., n_jobs=-1)`
 - `dm.descriptors.batch_compute_many_descriptors(..., n_jobs=-1)`
 - `dm.cluster_mols(..., n_jobs=-1)`
@@ -604,11 +637,13 @@ For detailed API documentation, consult these reference files:
 ## Best Practices
 
 1. **Always standardize molecules** from external sources:
+
    ```python
    mol = dm.standardize_mol(mol, disconnect_metals=True, normalize=True, reionize=True)
    ```
 
 2. **Check for None values** after molecule parsing:
+
    ```python
    mol = dm.to_mol(smiles)
    if mol is None:
@@ -616,11 +651,13 @@ For detailed API documentation, consult these reference files:
    ```
 
 3. **Use parallel processing** for large datasets:
+
    ```python
    result = dm.operation(..., n_jobs=-1, progress=True)
    ```
 
 4. **Leverage fsspec** for cloud storage:
+
    ```python
    df = dm.read_sdf("s3://bucket/compounds.sdf")
    ```
@@ -682,15 +719,19 @@ predictions = model.predict(X_test)
 ## Troubleshooting
 
 **Issue**: Molecule parsing fails
+
 - **Solution**: Use `dm.standardize_smiles()` first or try `dm.fix_mol()`
 
 **Issue**: Memory errors with clustering
+
 - **Solution**: Use `dm.pick_diverse()` instead of full clustering for large sets
 
 **Issue**: Slow conformer generation
+
 - **Solution**: Reduce `n_confs` or increase `rms_cutoff` to generate fewer conformers
 
 **Issue**: Remote file access fails
+
 - **Solution**: Ensure fsspec and appropriate cloud provider libraries are installed (s3fs, gcsfs, etc.)
 
 ## Additional Resources

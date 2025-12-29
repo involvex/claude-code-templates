@@ -81,6 +81,7 @@ Follow this systematic approach to explain code: **$ARGUMENTS**
 **Explanation Format Examples:**
 
 **For Complex Algorithms:**
+
 ```
 This function implements a depth-first search algorithm:
 
@@ -95,6 +96,7 @@ Space Complexity: O(V) for the visited set and stack
 ```
 
 **For API Integration Code:**
+
 ```
 This code handles user authentication with a third-party service:
 
@@ -110,6 +112,7 @@ Security: Uses HTTPS, validates inputs, and sanitizes responses
 ```
 
 **For Database Operations:**
+
 ```
 This function performs a complex database query with joins:
 
@@ -151,42 +154,49 @@ Performance Notes: Uses indexes on filtered columns, implements connection pooli
 **Language-Specific Considerations:**
 
 **JavaScript/TypeScript:**
+
 - Explain async/await and Promise handling
 - Describe closure and scope behavior
 - Clarify this binding and arrow functions
 - Explain event handling and callbacks
 
 **Python:**
+
 - Explain list comprehensions and generators
 - Describe decorator usage and purpose
 - Clarify context managers and with statements
 - Explain class inheritance and method resolution
 
 **Java:**
+
 - Explain generics and type parameters
 - Describe annotation usage and processing
 - Clarify stream operations and lambda expressions
 - Explain exception hierarchy and handling
 
 **C#:**
+
 - Explain LINQ queries and expressions
 - Describe async/await and Task handling
 - Clarify delegate and event usage
 - Explain nullable reference types
 
 **Go:**
+
 - Explain goroutines and channel usage
 - Describe interface implementation
 - Clarify error handling patterns
 - Explain package structure and imports
 
 **Rust:**
+
 - Explain ownership and borrowing
 - Describe lifetime annotations
 - Clarify pattern matching and Option/Result types
 - Explain trait implementations
 
 Remember to:
+
 - Use clear, non-technical language when possible
 - Provide examples and analogies for complex concepts
 - Structure explanations logically from high-level to detailed

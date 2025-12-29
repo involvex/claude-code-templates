@@ -10,6 +10,7 @@ Comprehensive guidance for creating accessible web experiences that comply with 
 ## When to Use This Skill
 
 Use this skill when:
+
 - Auditing websites for accessibility compliance
 - Implementing WCAG 2.1 Level AA or AAA standards
 - Fixing accessibility violations and errors
@@ -22,15 +23,19 @@ Use this skill when:
 ## WCAG 2.1 Principles (POUR)
 
 ### 1. Perceivable
+
 Users must be able to perceive the information being presented.
 
 ### 2. Operable
+
 Users must be able to operate the interface.
 
 ### 3. Understandable
+
 Users must be able to understand the information and interface.
 
 ### 4. Robust
+
 Content must be robust enough to work with current and future technologies.
 
 ## Common Accessibility Issues & Fixes
@@ -38,25 +43,31 @@ Content must be robust enough to work with current and future technologies.
 ### 1. Missing Alt Text for Images
 
 **❌ Problem:**
+
 ```html
-<img src="/products/shoes.jpg">
+<img src="/products/shoes.jpg" />
 ```
 
 **✅ Solution:**
+
 ```html
 <!-- Informative image -->
-<img src="/products/shoes.jpg" alt="Red Nike Air Max running shoes with white swoosh">
+<img
+  src="/products/shoes.jpg"
+  alt="Red Nike Air Max running shoes with white swoosh"
+/>
 
 <!-- Decorative image -->
-<img src="/decorative-pattern.svg" alt="" role="presentation">
+<img src="/decorative-pattern.svg" alt="" role="presentation" />
 
 <!-- Logo that links -->
 <a href="/">
-  <img src="/logo.png" alt="Company Name - Home">
+  <img src="/logo.png" alt="Company Name - Home" />
 </a>
 ```
 
 **Rules:**
+
 - Informative images: Describe the content/function
 - Decorative images: Use empty alt (alt="")
 - Functional images: Describe the action
@@ -65,6 +76,7 @@ Content must be robust enough to work with current and future technologies.
 ### 2. Low Color Contrast
 
 **❌ Problem:**
+
 ```css
 /* Contrast ratio 2.5:1 - Fails WCAG */
 .text {
@@ -74,6 +86,7 @@ Content must be robust enough to work with current and future technologies.
 ```
 
 **✅ Solution:**
+
 ```css
 /* Contrast ratio 4.5:1+ - Passes AA */
 .text {
@@ -89,6 +102,7 @@ Content must be robust enough to work with current and future technologies.
 ```
 
 **Requirements:**
+
 - Normal text (< 18px): 4.5:1 minimum (AA), 7:1 enhanced (AAA)
 - Large text (≥ 18px or ≥ 14px bold): 3:1 minimum (AA), 4.5:1 enhanced (AAA)
 - UI components and graphics: 3:1 minimum
@@ -96,6 +110,7 @@ Content must be robust enough to work with current and future technologies.
 ### 3. Non-Semantic HTML
 
 **❌ Problem:**
+
 ```html
 <div class="button" onclick="submitForm()">Submit</div>
 <div class="heading">Page Title</div>
@@ -103,6 +118,7 @@ Content must be robust enough to work with current and future technologies.
 ```
 
 **✅ Solution:**
+
 ```html
 <button type="submit" onclick="submitForm()">Submit</button>
 <h1>Page Title</h1>
@@ -110,6 +126,7 @@ Content must be robust enough to work with current and future technologies.
 ```
 
 **Semantic Elements:**
+
 - `<button>` for buttons
 - `<a>` for links
 - `<h1>` - `<h6>` for headings (hierarchical)
@@ -120,28 +137,31 @@ Content must be robust enough to work with current and future technologies.
 ### 4. Missing Form Labels
 
 **❌ Problem:**
+
 ```html
-<input type="email" placeholder="Enter your email">
+<input type="email" placeholder="Enter your email" />
 ```
 
 **✅ Solution:**
+
 ```html
 <!-- Explicit label -->
 <label for="email">Email Address</label>
-<input type="email" id="email" name="email">
+<input type="email" id="email" name="email" />
 
 <!-- Implicit label -->
 <label>
   Email Address
-  <input type="email" name="email">
+  <input type="email" name="email" />
 </label>
 
 <!-- Hidden label (for tight layouts) -->
 <label for="search" class="sr-only">Search</label>
-<input type="text" id="search" placeholder="Search...">
+<input type="text" id="search" placeholder="Search..." />
 ```
 
 **Best Practices:**
+
 - Every form field must have an associated label
 - Labels should be visible (don't rely on placeholder)
 - Use aria-label only when visual label isn't possible
@@ -150,12 +170,14 @@ Content must be robust enough to work with current and future technologies.
 ### 5. Keyboard Navigation Issues
 
 **❌ Problem:**
+
 ```html
 <div onclick="handleClick()">Click me</div>
 <a href="javascript:void(0)" onclick="doSomething()">Action</a>
 ```
 
 **✅ Solution:**
+
 ```html
 <!-- Use proper button -->
 <button onclick="handleClick()">Click me</button>
@@ -171,16 +193,17 @@ Content must be robust enough to work with current and future technologies.
 </div>
 
 <script>
-function handleKeyPress(event) {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
-    handleClick();
+  function handleKeyPress(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleClick();
+    }
   }
-}
 </script>
 ```
 
 **Keyboard Requirements:**
+
 - All interactive elements must be keyboard accessible
 - Visible focus indicators (outline or custom styling)
 - Logical tab order (matches visual flow)
@@ -190,6 +213,7 @@ function handleKeyPress(event) {
 ### 6. Missing ARIA Landmarks
 
 **❌ Problem:**
+
 ```html
 <div class="header">...</div>
 <div class="main-content">...</div>
@@ -198,6 +222,7 @@ function handleKeyPress(event) {
 ```
 
 **✅ Solution:**
+
 ```html
 <header role="banner">
   <nav aria-label="Main navigation">...</nav>
@@ -208,16 +233,13 @@ function handleKeyPress(event) {
   <article>...</article>
 </main>
 
-<aside role="complementary" aria-label="Related articles">
-  ...
-</aside>
+<aside role="complementary" aria-label="Related articles">...</aside>
 
-<footer role="contentinfo">
-  ...
-</footer>
+<footer role="contentinfo">...</footer>
 ```
 
 **Common Landmarks:**
+
 - `banner` - Site header
 - `navigation` - Navigation menus
 - `main` - Primary content (one per page)
@@ -229,6 +251,7 @@ function handleKeyPress(event) {
 ### 7. Inaccessible Modals/Dialogs
 
 **❌ Problem:**
+
 ```html
 <div class="modal">
   <div class="content">
@@ -239,6 +262,7 @@ function handleKeyPress(event) {
 ```
 
 **✅ Solution:**
+
 ```html
 <div
   role="dialog"
@@ -254,50 +278,53 @@ function handleKeyPress(event) {
 </div>
 
 <script>
-// Focus management
-function openModal() {
-  const modal = document.querySelector('[role="dialog"]');
-  const focusableElements = modal.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-  );
+  // Focus management
+  function openModal() {
+    const modal = document.querySelector('[role="dialog"]');
+    const focusableElements = modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
 
-  // Store previous focus
-  previousFocus = document.activeElement;
+    // Store previous focus
+    previousFocus = document.activeElement;
 
-  // Focus first element
-  focusableElements[0].focus();
+    // Focus first element
+    focusableElements[0].focus();
 
-  // Trap focus
-  modal.addEventListener('keydown', trapFocus);
-}
-
-function closeModal() {
-  // Return focus
-  if (previousFocus) previousFocus.focus();
-}
-
-function trapFocus(event) {
-  if (event.key !== 'Tab') return;
-
-  const focusableElements = Array.from(
-    modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-  );
-
-  const firstElement = focusableElements[0];
-  const lastElement = focusableElements[focusableElements.length - 1];
-
-  if (event.shiftKey && document.activeElement === firstElement) {
-    lastElement.focus();
-    event.preventDefault();
-  } else if (!event.shiftKey && document.activeElement === lastElement) {
-    firstElement.focus();
-    event.preventDefault();
+    // Trap focus
+    modal.addEventListener("keydown", trapFocus);
   }
-}
+
+  function closeModal() {
+    // Return focus
+    if (previousFocus) previousFocus.focus();
+  }
+
+  function trapFocus(event) {
+    if (event.key !== "Tab") return;
+
+    const focusableElements = Array.from(
+      modal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      ),
+    );
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (event.shiftKey && document.activeElement === firstElement) {
+      lastElement.focus();
+      event.preventDefault();
+    } else if (!event.shiftKey && document.activeElement === lastElement) {
+      firstElement.focus();
+      event.preventDefault();
+    }
+  }
 </script>
 ```
 
 **Modal Requirements:**
+
 - `role="dialog"` or `role="alertdialog"`
 - `aria-modal="true"` to indicate modal behavior
 - `aria-labelledby` pointing to title
@@ -309,10 +336,9 @@ function trapFocus(event) {
 ### 8. Missing Skip Links
 
 **✅ Solution:**
+
 ```html
-<a href="#main-content" class="skip-link">
-  Skip to main content
-</a>
+<a href="#main-content" class="skip-link"> Skip to main content </a>
 
 <header>
   <nav>...</nav>
@@ -323,20 +349,20 @@ function trapFocus(event) {
 </main>
 
 <style>
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: #000;
-  color: #fff;
-  padding: 8px;
-  text-decoration: none;
-  z-index: 100;
-}
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #000;
+    color: #fff;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 100;
+  }
 
-.skip-link:focus {
-  top: 0;
-}
+  .skip-link:focus {
+    top: 0;
+  }
 </style>
 ```
 
@@ -345,6 +371,7 @@ function trapFocus(event) {
 ### ARIA Attributes Reference
 
 **States:**
+
 - `aria-checked` - Checkbox/radio state
 - `aria-disabled` - Disabled state
 - `aria-expanded` - Expanded/collapsed state
@@ -353,6 +380,7 @@ function trapFocus(event) {
 - `aria-selected` - Selected state
 
 **Properties:**
+
 - `aria-label` - Accessible name
 - `aria-labelledby` - ID reference for label
 - `aria-describedby` - ID reference for description
@@ -364,31 +392,22 @@ function trapFocus(event) {
 
 ```html
 <!-- Polite: Wait for pause in speech -->
-<div aria-live="polite" aria-atomic="true">
-  Item added to cart
-</div>
+<div aria-live="polite" aria-atomic="true">Item added to cart</div>
 
 <!-- Assertive: Interrupt immediately -->
-<div aria-live="assertive" role="alert">
-  Error: Payment failed
-</div>
+<div aria-live="assertive" role="alert">Error: Payment failed</div>
 
 <!-- Status message -->
-<div role="status" aria-live="polite">
-  Saving changes...
-</div>
+<div role="status" aria-live="polite">Saving changes...</div>
 ```
 
 ### Custom Components
 
 **Accordion:**
+
 ```html
 <div class="accordion">
-  <button
-    aria-expanded="false"
-    aria-controls="panel-1"
-    id="accordion-1"
-  >
+  <button aria-expanded="false" aria-controls="panel-1" id="accordion-1">
     Section 1
   </button>
   <div id="panel-1" role="region" aria-labelledby="accordion-1" hidden>
@@ -398,14 +417,10 @@ function trapFocus(event) {
 ```
 
 **Tabs:**
+
 ```html
 <div role="tablist" aria-label="Content sections">
-  <button
-    role="tab"
-    aria-selected="true"
-    aria-controls="panel-1"
-    id="tab-1"
-  >
+  <button role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1">
     Tab 1
   </button>
   <button
@@ -419,9 +434,7 @@ function trapFocus(event) {
   </button>
 </div>
 
-<div role="tabpanel" id="panel-1" aria-labelledby="tab-1">
-  Panel 1 content
-</div>
+<div role="tabpanel" id="panel-1" aria-labelledby="tab-1">Panel 1 content</div>
 <div role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
   Panel 2 content
 </div>
@@ -430,6 +443,7 @@ function trapFocus(event) {
 ## Testing Checklist
 
 ### Automated Testing
+
 - [ ] Run axe DevTools or WAVE browser extension
 - [ ] Check HTML validation (W3C Validator)
 - [ ] Test color contrast ratios
@@ -437,6 +451,7 @@ function trapFocus(event) {
 - [ ] Check for missing alt text
 
 ### Manual Testing
+
 - [ ] Navigate entire site using only keyboard (Tab, Enter, Escape, Arrow keys)
 - [ ] Test with screen reader (NVDA, JAWS, or VoiceOver)
 - [ ] Verify focus indicators are visible
@@ -451,16 +466,19 @@ function trapFocus(event) {
 ### Screen Reader Testing
 
 **VoiceOver (Mac):**
+
 - Enable: Cmd + F5
 - Navigate: Control + Option + Arrow keys
 - Read all: Control + Option + A
 
 **NVDA (Windows):**
+
 - Navigate: Arrow keys (browse mode) or Tab (focus mode)
 - Read all: NVDA + Down Arrow
 - Elements list: NVDA + F7
 
 **Test Scenarios:**
+
 - Can users understand page structure?
 - Are headings descriptive and hierarchical?
 - Are form labels clear and associated?
@@ -477,14 +495,18 @@ Include on website:
 We are committed to ensuring digital accessibility for people with disabilities. We continually improve the user experience for everyone and apply relevant accessibility standards.
 
 ## Conformance Status
+
 This website is partially conformant with WCAG 2.1 Level AA. "Partially conformant" means that some parts of the content do not fully conform to the accessibility standard.
 
 ## Feedback
+
 We welcome your feedback on the accessibility of this site. Please contact us:
+
 - Email: accessibility@example.com
 - Phone: +1-555-0123
 
 ## Known Issues
+
 - [List any known accessibility issues and planned fixes]
 
 Last updated: [Date]
@@ -493,6 +515,7 @@ Last updated: [Date]
 ## Resources
 
 **Tools:**
+
 - axe DevTools (browser extension)
 - WAVE (web accessibility evaluation tool)
 - Lighthouse (Chrome DevTools)
@@ -500,6 +523,7 @@ Last updated: [Date]
 - Screen readers: NVDA, JAWS, VoiceOver
 
 **Guidelines:**
+
 - WCAG 2.1: https://www.w3.org/WAI/WCAG21/quickref/
 - ARIA Authoring Practices: https://www.w3.org/WAI/ARIA/apg/
 

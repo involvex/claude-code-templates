@@ -22,6 +22,7 @@ Create comprehensive constraint models for accurate simulation and decision-maki
 **Constraint Domain**: Use $ARGUMENTS to focus on business, technical, regulatory, or resource constraints
 
 **Constraint Framework**:
+
 1. **Hard Constraints** - Absolute limits that cannot be violated (legal, physical, technical)
 2. **Soft Constraints** - Preferences and trade-offs that can be managed (budget, quality, timing)
 3. **Dynamic Constraints** - Limitations that evolve over time (market, technology, capacity)

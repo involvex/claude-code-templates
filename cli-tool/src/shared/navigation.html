@@ -1,0 +1,77 @@
+<!-- Universal Navigation for Claude Code Dashboards -->
+<nav class="universal-nav">
+  <div class="nav-container">
+    <!-- Logo/Brand -->
+    <div class="nav-brand">
+      <span class="nav-logo">🔮</span>
+      <span class="nav-title">Claude Code</span>
+    </div>
+
+    <!-- Dashboard Links -->
+    <div class="nav-links">
+      <a
+        href="http://localhost:3333"
+        class="nav-link"
+        data-dashboard="analytics"
+        title="Analytics Dashboard"
+      >
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Analytics</span>
+      </a>
+      <a
+        href="http://localhost:3336"
+        class="nav-link"
+        data-dashboard="plugins"
+        title="Plugin Dashboard"
+      >
+        <span class="nav-icon">🔌</span>
+        <span class="nav-label">Plugins</span>
+      </a>
+      <a
+        href="http://localhost:3337"
+        class="nav-link"
+        data-dashboard="skills"
+        title="Skills Dashboard"
+      >
+        <span class="nav-icon">🎯</span>
+        <span class="nav-label">Skills</span>
+      </a>
+      <a
+        href="http://localhost:3338"
+        class="nav-link"
+        data-dashboard="hooks"
+        title="Hooks Dashboard"
+      >
+        <span class="nav-icon">🪝</span>
+        <span class="nav-label">Hooks</span>
+      </a>
+      <a
+        href="http://localhost:3335"
+        class="nav-link"
+        data-dashboard="chats"
+        title="Chats Mobile"
+      >
+        <span class="nav-icon">💬</span>
+        <span class="nav-label">Chats</span>
+      </a>
+    </div>
+
+    <!-- Scope Switcher -->
+    <div class="nav-scope">
+      <label class="scope-label">Scope:</label>
+      <select id="scopeSwitcher" class="scope-select">
+        <option value="all">All Scopes</option>
+        <option value="user">User (~/.claude)</option>
+        <option value="project">Project (./.claude)</option>
+        <option value="local">Local (./.claude/local)</option>
+      </select>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="nav-mobile-toggle" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>

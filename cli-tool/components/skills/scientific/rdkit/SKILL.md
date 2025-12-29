@@ -81,6 +81,7 @@ writer.close()
 ```
 
 **Important Notes:**
+
 - All `MolFrom*` functions return `None` on failure with error messages
 - Always check for `None` before processing molecules
 - Molecules are automatically sanitized on import (validates valence, perceives aromaticity)
@@ -109,6 +110,7 @@ Chem.SanitizeMol(mol, sanitizeOps=Chem.SANITIZE_ALL ^ Chem.SANITIZE_PROPERTIES)
 ```
 
 **Common Sanitization Issues:**
+
 - Atoms with explicit valence exceeding maximum allowed will raise exceptions
 - Invalid aromatic rings will cause kekulization errors
 - Radical electrons may not be properly assigned without explicit specification
@@ -326,6 +328,7 @@ macrocycle = Chem.MolFromSmarts('[r{12-}]')
 ```
 
 **Matching Rules:**
+
 - Unspecified properties in query match any value in target
 - Hydrogens are ignored unless explicitly specified
 - Charged query atom won't match uncharged target atom
@@ -353,6 +356,7 @@ for product_set in products:
 ```
 
 **Reaction Features:**
+
 - Atom mapping preserves specific atoms between reactants and products
 - Dummy atoms in products are replaced by corresponding reactant atoms
 - "Any" bonds inherit bond order from reactants
@@ -706,6 +710,7 @@ similarities = DataStructs.BulkTanimotoSimilarity(fps[0], fps[1:])
 ### Thread Safety
 
 RDKit operations are generally thread-safe for:
+
 - Molecule I/O (SMILES, mol blocks)
 - Coordinate generation
 - Fingerprinting and descriptors

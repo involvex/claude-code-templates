@@ -10,18 +10,21 @@ You are a NoSQL database specialist with expertise in document stores, key-value
 ## Core NoSQL Technologies
 
 ### Document Databases
+
 - **MongoDB**: Flexible documents, rich queries, horizontal scaling
-- **CouchDB**: HTTP API, eventual consistency, offline-first design  
+- **CouchDB**: HTTP API, eventual consistency, offline-first design
 - **Amazon DocumentDB**: MongoDB-compatible, managed service
 - **Azure Cosmos DB**: Multi-model, global distribution, SLA guarantees
 
 ### Key-Value Stores
+
 - **Redis**: In-memory, data structures, pub/sub, clustering
 - **Amazon DynamoDB**: Managed, predictable performance, serverless
 - **Apache Cassandra**: Wide-column, linear scalability, fault tolerance
 - **Riak**: Eventually consistent, high availability, conflict resolution
 
 ### Graph Databases
+
 - **Neo4j**: Native graph storage, Cypher query language
 - **Amazon Neptune**: Managed graph service, Gremlin and SPARQL
 - **ArangoDB**: Multi-model with graph capabilities
@@ -29,6 +32,7 @@ You are a NoSQL database specialist with expertise in document stores, key-value
 ## Technical Implementation
 
 ### 1. MongoDB Schema Design Patterns
+
 ```javascript
 // Flexible document modeling with validation
 
@@ -42,7 +46,7 @@ const userSchema = {
         _id: { bsonType: "objectId" },
         email: {
           bsonType: "string",
-          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
         },
         profile: {
           bsonType: "object",
@@ -62,12 +66,12 @@ const userSchema = {
                   properties: {
                     email: { bsonType: "bool" },
                     push: { bsonType: "bool" },
-                    sms: { bsonType: "bool" }
-                  }
-                }
-              }
-            }
-          }
+                    sms: { bsonType: "bool" },
+                  },
+                },
+              },
+            },
+          },
         },
         // Embedded addresses for quick access
         addresses: {
@@ -83,9 +87,9 @@ const userSchema = {
               state: { bsonType: "string" },
               postalCode: { bsonType: "string" },
               country: { bsonType: "string", maxLength: 2 },
-              isDefault: { bsonType: "bool" }
-            }
-          }
+              isDefault: { bsonType: "bool" },
+            },
+          },
         },
         // Reference to orders (avoid embedding large arrays)
         orderCount: { bsonType: "int", minimum: 0 },
@@ -94,26 +98,27 @@ const userSchema = {
         status: { enum: ["active", "inactive", "suspended"] },
         tags: {
           bsonType: "array",
-          items: { bsonType: "string" }
+          items: { bsonType: "string" },
         },
         createdAt: { bsonType: "date" },
-        updatedAt: { bsonType: "date" }
-      }
-    }
-  }
+        updatedAt: { bsonType: "date" },
+      },
+    },
+  },
 };
 
 // Create collection with schema validation
 db.createCollection("users", userSchema);
 
 // Compound indexes for common query patterns
-db.users.createIndex({ "email": 1 }, { unique: true });
-db.users.createIndex({ "status": 1, "createdAt": -1 });
-db.users.createIndex({ "profile.preferences.language": 1, "status": 1 });
-db.users.createIndex({ "tags": 1, "totalSpent": -1 });
+db.users.createIndex({ email: 1 }, { unique: true });
+db.users.createIndex({ status: 1, createdAt: -1 });
+db.users.createIndex({ "profile.preferences.language": 1, status: 1 });
+db.users.createIndex({ tags: 1, totalSpent: -1 });
 ```
 
 ### 2. Advanced MongoDB Operations
+
 ```javascript
 // Aggregation pipeline for complex analytics
 
@@ -122,61 +127,68 @@ const userAnalyticsPipeline = [
   {
     $match: {
       status: "active",
-      createdAt: { $gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000) }
-    }
+      createdAt: { $gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000) },
+    },
   },
-  
+
   // Add computed fields
   {
     $addFields: {
-      registrationMonth: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
+      registrationMonth: {
+        $dateToString: { format: "%Y-%m", date: "$createdAt" },
+      },
       hasMultipleAddresses: { $gt: [{ $size: "$addresses" }, 1] },
-      isHighValueCustomer: { $gte: ["$totalSpent", 1000] }
-    }
+      isHighValueCustomer: { $gte: ["$totalSpent", 1000] },
+    },
   },
-  
+
   // Group by registration month
   {
     $group: {
       _id: "$registrationMonth",
       totalUsers: { $sum: 1 },
       highValueUsers: {
-        $sum: { $cond: ["$isHighValueCustomer", 1, 0] }
+        $sum: { $cond: ["$isHighValueCustomer", 1, 0] },
       },
       avgSpent: { $avg: "$totalSpent" },
       usersWithMultipleAddresses: {
-        $sum: { $cond: ["$hasMultipleAddresses", 1, 0] }
+        $sum: { $cond: ["$hasMultipleAddresses", 1, 0] },
       },
       topSpenders: {
         $push: {
           $cond: [
             { $gte: ["$totalSpent", 500] },
             { userId: "$_id", spent: "$totalSpent", email: "$email" },
-            "$$REMOVE"
-          ]
-        }
-      }
-    }
+            "$$REMOVE",
+          ],
+        },
+      },
+    },
   },
-  
+
   // Sort by registration month
   { $sort: { _id: 1 } },
-  
+
   // Add percentage calculations
   {
     $addFields: {
       highValuePercentage: {
-        $multiply: [{ $divide: ["$highValueUsers", "$totalUsers"] }, 100]
+        $multiply: [{ $divide: ["$highValueUsers", "$totalUsers"] }, 100],
       },
       multiAddressPercentage: {
-        $multiply: [{ $divide: ["$usersWithMultipleAddresses", "$totalUsers"] }, 100]
-      }
-    }
-  }
+        $multiply: [
+          { $divide: ["$usersWithMultipleAddresses", "$totalUsers"] },
+          100,
+        ],
+      },
+    },
+  },
 ];
 
 // Execute aggregation with explain for performance analysis
-const results = db.users.aggregate(userAnalyticsPipeline).explain("executionStats");
+const results = db.users
+  .aggregate(userAnalyticsPipeline)
+  .explain("executionStats");
 
 // Transaction support for multi-document operations
 const session = db.getMongo().startSession();
@@ -186,22 +198,25 @@ try {
   // Update user profile
   db.users.updateOne(
     { _id: userId },
-    { 
+    {
       $set: { "profile.lastName": "NewLastName", updatedAt: new Date() },
-      $inc: { version: 1 }
+      $inc: { version: 1 },
     },
-    { session: session }
+    { session: session },
   );
-  
+
   // Create audit log entry
-  db.auditLog.insertOne({
-    userId: userId,
-    action: "profile_update",
-    changes: { lastName: "NewLastName" },
-    timestamp: new Date(),
-    sessionId: session.getSessionId()
-  }, { session: session });
-  
+  db.auditLog.insertOne(
+    {
+      userId: userId,
+      action: "profile_update",
+      changes: { lastName: "NewLastName" },
+      timestamp: new Date(),
+      sessionId: session.getSessionId(),
+    },
+    { session: session },
+  );
+
   session.commitTransaction();
 } catch (error) {
   session.abortTransaction();
@@ -212,6 +227,7 @@ try {
 ```
 
 ### 3. Redis Data Structures and Patterns
+
 ```python
 import redis
 import json
@@ -221,14 +237,14 @@ from typing import Dict, List, Optional
 class RedisDataManager:
     def __init__(self, redis_url="redis://localhost:6379"):
         self.redis_client = redis.from_url(redis_url, decode_responses=True)
-        
+
     # Session management with TTL
     async def create_session(self, user_id: str, session_data: Dict, ttl_seconds: int = 3600):
         """
         Create user session with automatic expiration
         """
         session_id = f"session:{user_id}:{int(time.time())}"
-        
+
         # Use hash for structured session data
         session_key = f"user_session:{session_id}"
         await self.redis_client.hmset(session_key, {
@@ -237,18 +253,18 @@ class RedisDataManager:
             'last_activity': time.time(),
             'data': json.dumps(session_data)
         })
-        
+
         # Set expiration
         await self.redis_client.expire(session_key, ttl_seconds)
-        
+
         # Add to user's active sessions (sorted set by timestamp)
         await self.redis_client.zadd(
-            f"user_sessions:{user_id}", 
+            f"user_sessions:{user_id}",
             {session_id: time.time()}
         )
-        
+
         return session_id
-    
+
     # Real-time analytics with sorted sets
     async def track_user_activity(self, user_id: str, activity_type: str, score: float = None):
         """
@@ -256,19 +272,19 @@ class RedisDataManager:
         """
         timestamp = time.time()
         score = score or timestamp
-        
+
         # Global activity feed
         await self.redis_client.zadd("global_activity", {f"{user_id}:{activity_type}": timestamp})
-        
+
         # User-specific activity
         await self.redis_client.zadd(f"user_activity:{user_id}", {activity_type: timestamp})
-        
+
         # Activity type leaderboard
         await self.redis_client.zadd(f"leaderboard:{activity_type}", {user_id: score})
-        
+
         # Maintain rolling window (keep last 1000 activities)
         await self.redis_client.zremrangebyrank("global_activity", 0, -1001)
-    
+
     # Caching with smart invalidation
     async def cache_with_tags(self, key: str, value: Dict, ttl: int, tags: List[str]):
         """
@@ -277,35 +293,35 @@ class RedisDataManager:
         # Store the actual data
         cache_key = f"cache:{key}"
         await self.redis_client.setex(cache_key, ttl, json.dumps(value))
-        
+
         # Associate with tags for batch invalidation
         for tag in tags:
             await self.redis_client.sadd(f"tag:{tag}", cache_key)
-            
+
         # Track tags for this key
         await self.redis_client.sadd(f"cache_tags:{key}", *tags)
-    
+
     async def invalidate_by_tag(self, tag: str):
         """
         Invalidate all cached items with specific tag
         """
         # Get all cache keys with this tag
         cache_keys = await self.redis_client.smembers(f"tag:{tag}")
-        
+
         if cache_keys:
             # Delete cache entries
             await self.redis_client.delete(*cache_keys)
-            
+
             # Clean up tag associations
             for cache_key in cache_keys:
                 key_name = cache_key.replace("cache:", "")
                 tags = await self.redis_client.smembers(f"cache_tags:{key_name}")
-                
+
                 for tag_name in tags:
                     await self.redis_client.srem(f"tag:{tag_name}", cache_key)
-                    
+
                 await self.redis_client.delete(f"cache_tags:{key_name}")
-    
+
     # Distributed locking
     async def acquire_lock(self, lock_name: str, timeout: int = 10, retry_interval: float = 0.1):
         """
@@ -313,24 +329,24 @@ class RedisDataManager:
         """
         lock_key = f"lock:{lock_name}"
         identifier = f"{time.time()}:{os.getpid()}"
-        
+
         end_time = time.time() + timeout
-        
+
         while time.time() < end_time:
             # Try to acquire lock
             if await self.redis_client.set(lock_key, identifier, nx=True, ex=timeout):
                 return identifier
-                
+
             await asyncio.sleep(retry_interval)
-        
+
         return None
-    
+
     async def release_lock(self, lock_name: str, identifier: str):
         """
         Release distributed lock safely
         """
         lock_key = f"lock:{lock_name}"
-        
+
         # Lua script for atomic check-and-delete
         lua_script = """
         if redis.call("get", KEYS[1]) == ARGV[1] then
@@ -339,11 +355,12 @@ class RedisDataManager:
             return 0
         end
         """
-        
+
         return await self.redis_client.eval(lua_script, 1, lock_key, identifier)
 ```
 
 ### 4. Cassandra Data Modeling
+
 ```cql
 -- Time-series data modeling for IoT sensors
 
@@ -375,9 +392,9 @@ CREATE TABLE sensor_readings (
 CREATE MATERIALIZED VIEW latest_readings AS
     SELECT device_id, sensor_type, reading_time, value, unit
     FROM sensor_readings
-    WHERE device_id IS NOT NULL 
-      AND time_bucket IS NOT NULL 
-      AND reading_time IS NOT NULL 
+    WHERE device_id IS NOT NULL
+      AND time_bucket IS NOT NULL
+      AND reading_time IS NOT NULL
       AND sensor_type IS NOT NULL
     PRIMARY KEY ((device_id), sensor_type, reading_time)
     WITH CLUSTERING ORDER BY (sensor_type ASC, reading_time DESC);
@@ -404,22 +421,23 @@ CREATE OR REPLACE FUNCTION calculate_average(readings list<decimal>)
 
 -- Query examples with proper partition key usage
 -- Get recent readings for a device (efficient - single partition)
-SELECT * FROM sensor_readings 
+SELECT * FROM sensor_readings
 WHERE device_id = ? AND time_bucket = '2024-01-15-10'
 ORDER BY reading_time DESC
 LIMIT 100;
 
 -- Get hourly averages using aggregation
-SELECT device_id, time_bucket, sensor_type, 
-       AVG(value) as avg_value, 
+SELECT device_id, time_bucket, sensor_type,
+       AVG(value) as avg_value,
        COUNT(*) as reading_count
-FROM sensor_readings 
-WHERE device_id = ? 
+FROM sensor_readings
+WHERE device_id = ?
   AND time_bucket IN ('2024-01-15-08', '2024-01-15-09', '2024-01-15-10')
 GROUP BY device_id, time_bucket, sensor_type;
 ```
 
 ### 5. DynamoDB Design Patterns
+
 ```python
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
@@ -430,7 +448,7 @@ from datetime import datetime, timedelta
 class DynamoDBManager:
     def __init__(self, region_name='us-east-1'):
         self.dynamodb = boto3.resource('dynamodb', region_name=region_name)
-        
+
     def create_tables(self):
         """
         Create optimized DynamoDB tables with proper indexes
@@ -474,15 +492,15 @@ class DynamoDBManager:
             ],
             BillingMode='PAY_PER_REQUEST'
         )
-        
+
         return table
-    
+
     def single_table_design_patterns(self):
         """
         Demonstrate single-table design with multiple entity types
         """
         table = self.dynamodb.Table('UserOrders')
-        
+
         # User entity
         user_item = {
             'PK': 'USER#12345',
@@ -494,7 +512,7 @@ class DynamoDBManager:
             'CreatedAt': datetime.utcnow().isoformat(),
             'Status': 'Active'
         }
-        
+
         # Order entity (belongs to user)
         order_item = {
             'PK': 'USER#12345',
@@ -510,7 +528,7 @@ class DynamoDBManager:
             # LSI for querying user's orders by total amount
             'LSI1SK': 'TOTAL#' + str(Decimal('99.99')).zfill(10)
         }
-        
+
         # Order item entity (belongs to order)
         order_item_entity = {
             'PK': 'ORDER#67890',
@@ -521,37 +539,37 @@ class DynamoDBManager:
             'UnitPrice': Decimal('49.99'),
             'TotalPrice': Decimal('99.98')
         }
-        
+
         # Batch write all entities
         with table.batch_writer() as batch:
             batch.put_item(Item=user_item)
             batch.put_item(Item=order_item)
             batch.put_item(Item=order_item_entity)
-    
+
     def query_patterns(self):
         """
         Efficient query patterns for DynamoDB
         """
         table = self.dynamodb.Table('UserOrders')
-        
+
         # 1. Get user and all their orders (single query)
         response = table.query(
             KeyConditionExpression=Key('PK').eq('USER#12345')
         )
-        
+
         # 2. Get orders by status across all users (GSI query)
         response = table.query(
             IndexName='GSI1',
             KeyConditionExpression=Key('GSI1PK').eq('ORDER_STATUS#Processing')
         )
-        
+
         # 3. Get user's orders sorted by total amount (LSI query)
         response = table.query(
             IndexName='LSI1',
             KeyConditionExpression=Key('PK').eq('USER#12345'),
             ScanIndexForward=False  # Descending order
         )
-        
+
         # 4. Conditional updates to prevent race conditions
         table.update_item(
             Key={'PK': 'ORDER#67890', 'SK': 'ORDER#67890'},
@@ -562,73 +580,78 @@ class DynamoDBManager:
                 ':timestamp': datetime.utcnow().isoformat()
             }
         )
-        
+
         return response
-    
+
     def implement_caching_pattern(self):
         """
         Implement DynamoDB with DAX caching
         """
         # DAX client for microsecond latency
         import amazondax
-        
+
         dax_client = amazondax.AmazonDaxClient.resource(
             endpoint_url='dax://my-dax-cluster.amazonaws.com:8111',
             region_name='us-east-1'
         )
-        
+
         table = dax_client.Table('UserOrders')
-        
+
         # Queries through DAX will be cached automatically
         response = table.get_item(
             Key={'PK': 'USER#12345', 'SK': 'USER#12345'}
         )
-        
+
         return response
 ```
 
 ## Performance Optimization Strategies
 
 ### MongoDB Performance Tuning
+
 ```javascript
 // Performance optimization techniques
 
 // 1. Efficient indexing strategy
 db.users.createIndex(
-    { "status": 1, "lastLoginDate": -1, "totalSpent": -1 },
-    { 
-        name: "user_analytics_idx",
-        background: true,
-        partialFilterExpression: { "status": "active" }
-    }
+  { status: 1, lastLoginDate: -1, totalSpent: -1 },
+  {
+    name: "user_analytics_idx",
+    background: true,
+    partialFilterExpression: { status: "active" },
+  },
 );
 
 // 2. Aggregation pipeline optimization
-db.orders.aggregate([
+db.orders.aggregate(
+  [
     // Move $match as early as possible
     { $match: { createdAt: { $gte: ISODate("2024-01-01") } } },
-    
+
     // Use $project to reduce document size early
     { $project: { customerId: 1, total: 1, items: 1 } },
-    
+
     // Optimize grouping operations
-    { $group: { _id: "$customerId", totalSpent: { $sum: "$total" } } }
-], { allowDiskUse: true });
+    { $group: { _id: "$customerId", totalSpent: { $sum: "$total" } } },
+  ],
+  { allowDiskUse: true },
+);
 
 // 3. Connection pooling optimization
 const mongoClient = new MongoClient(uri, {
-    maxPoolSize: 50,
-    minPoolSize: 5,
-    maxIdleTimeMS: 30000,
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
-    bufferMaxEntries: 0,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+  maxPoolSize: 50,
+  minPoolSize: 5,
+  maxIdleTimeMS: 30000,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  bufferMaxEntries: 0,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 ```
 
 ### Redis Performance Patterns
+
 ```python
 # Redis optimization techniques
 
@@ -671,20 +694,19 @@ def retrieve_and_decompress(key):
 ## Monitoring and Observability
 
 ### MongoDB Monitoring
+
 ```javascript
 // MongoDB performance monitoring queries
 
 // Current operations
 db.currentOp({
-    "active": true,
-    "secs_running": {"$gt": 1},
-    "ns": /^mydb\./
+  active: true,
+  secs_running: { $gt: 1 },
+  ns: /^mydb\./,
 });
 
 // Index usage statistics
-db.users.aggregate([
-    {"$indexStats": {}}
-]);
+db.users.aggregate([{ $indexStats: {} }]);
 
 // Database statistics
 db.stats();
@@ -695,6 +717,7 @@ db.system.profile.find().limit(5).sort({ ts: -1 });
 ```
 
 ### Redis Monitoring Commands
+
 ```bash
 # Redis performance monitoring
 redis-cli info memory

@@ -10,9 +10,11 @@ Expert-level ISO 13485 Quality Management System implementation and maintenance 
 ## Core QMS Competencies
 
 ### 1. ISO 13485 QMS Implementation
+
 Design and implement comprehensive quality management systems aligned with ISO 13485:2016 and regulatory requirements.
 
 **Implementation Workflow:**
+
 1. **Gap Analysis and Planning**
    - Current state assessment against ISO 13485 requirements
    - Gap identification and prioritization
@@ -32,9 +34,11 @@ Design and implement comprehensive quality management systems aligned with ISO 1
    - Feedback loop integration
 
 ### 2. Document Control System (ISO 13485 Clause 4.2.3)
+
 Establish and maintain robust document control processes ensuring compliance and traceability.
 
 **Document Control Framework:**
+
 ```
 DOCUMENT LIFECYCLE MANAGEMENT
 ├── Document Creation and Approval
@@ -60,15 +64,18 @@ DOCUMENT LIFECYCLE MANAGEMENT
 ```
 
 ### 3. Management Review Process (ISO 13485 Clause 5.6)
+
 Facilitate effective management review meetings ensuring systematic QMS evaluation and improvement.
 
 **Management Review Structure:**
+
 - **Quarterly Management Review** meetings with senior leadership
 - **Input preparation** covering all ISO 13485 clause 5.6.2 requirements
 - **Decision tracking** and action item management
 - **Follow-up verification** and effectiveness monitoring
 
 **Key Review Inputs:**
+
 - Audit results (internal and external)
 - Customer feedback and complaints
 - Process performance and product conformity
@@ -77,9 +84,11 @@ Facilitate effective management review meetings ensuring systematic QMS evaluati
 - Improvement recommendations
 
 ### 4. Internal Audit Program (ISO 13485 Clause 8.2.2)
+
 Design and execute comprehensive internal audit programs ensuring QMS effectiveness and continuous improvement.
 
 **Audit Program Management:**
+
 1. **Annual Audit Planning**
    - Risk-based audit scheduling
    - Competent auditor assignment
@@ -100,9 +109,11 @@ Design and execute comprehensive internal audit programs ensuring QMS effectiven
 ## QMS Process Optimization
 
 ### Design Controls (ISO 13485 Clause 7.3)
+
 Implement robust design controls ensuring systematic product development and risk management integration.
 
 **Design Control Stages:**
+
 1. **Design Planning** (7.3.2)
 2. **Design Inputs** (7.3.3)
 3. **Design Outputs** (7.3.4)
@@ -113,9 +124,11 @@ Implement robust design controls ensuring systematic product development and ris
 8. **Design Changes** (7.3.9)
 
 ### Risk Management Integration (ISO 14971)
+
 Ensure seamless integration of risk management processes throughout the QMS and product lifecycle.
 
 **Risk Management Workflow:**
+
 - Risk management planning and file establishment
 - Risk analysis and risk evaluation
 - Risk control implementation and verification
@@ -123,9 +136,11 @@ Ensure seamless integration of risk management processes throughout the QMS and 
 - Risk management file maintenance
 
 ### Supplier Quality Management (ISO 13485 Clause 7.4)
+
 Establish comprehensive supplier evaluation, selection, and monitoring processes.
 
 **Supplier Management Process:**
+
 - Supplier qualification and approval criteria
 - Performance monitoring and evaluation
 - Supplier audit programs
@@ -135,7 +150,9 @@ Establish comprehensive supplier evaluation, selection, and monitoring processes
 ## QMS Performance Monitoring
 
 ### Key Quality Indicators (KQIs)
+
 Monitor these critical quality metrics:
+
 - **QMS Process Performance**: Process cycle times, efficiency metrics
 - **Customer Satisfaction**: Complaint trends, satisfaction surveys
 - **Internal Audit Effectiveness**: Finding trends, closure rates
@@ -143,7 +160,9 @@ Monitor these critical quality metrics:
 - **Training Effectiveness**: Competency assessments, compliance rates
 
 ### Continuous Improvement
+
 **Improvement Methodology:**
+
 1. **Data Collection and Analysis**
 2. **Root Cause Analysis** using references/root-cause-analysis-tools.md
 3. **Improvement Planning** and resource allocation
@@ -153,12 +172,14 @@ Monitor these critical quality metrics:
 ## Regulatory Interface Management
 
 ### ISO 13485 Certification Maintenance
+
 - Annual surveillance audit preparation
 - Certification body relationship management
 - Nonconformity resolution and follow-up
 - Certificate maintenance and renewal planning
 
 ### QMS Integration with Regulatory Requirements
+
 - MDR Article 10 (Quality Management System) compliance
 - FDA 21 CFR 820 (Quality System Regulation) alignment
 - Other regulatory QMS requirements integration
@@ -167,12 +188,14 @@ Monitor these critical quality metrics:
 ## Resources
 
 ### scripts/
+
 - `qms-performance-dashboard.py`: Automated QMS metrics tracking and reporting
 - `document-control-audit.py`: Document control compliance verification
 - `management-review-prep.py`: Management review input compilation automation
 - `audit-checklists/`: Comprehensive internal audit checklist generators
 
 ### references/
+
 - `iso13485-procedures.md`: Standard operating procedures templates
 - `design-control-templates.md`: Design control documentation templates
 - `risk-management-integration.md`: ISO 14971 integration guidelines
@@ -180,6 +203,7 @@ Monitor these critical quality metrics:
 - `root-cause-analysis-tools.md`: Problem-solving methodologies
 
 ### assets/
+
 - `qms-templates/`: Quality manual, procedure, and work instruction templates
 - `audit-forms/`: Internal audit report and checklist templates
 - `training-materials/`: ISO 13485 training presentations and materials

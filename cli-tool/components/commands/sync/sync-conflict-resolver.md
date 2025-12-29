@@ -22,6 +22,7 @@ Implement comprehensive conflict resolution with intelligent automation:
 **Resolution Action**: Use $ARGUMENTS to specify detect conflicts, resolve using strategies, analyze patterns, configure rules, or generate reports
 
 **Conflict Resolution Framework**:
+
 1. **Conflict Detection** - Scan synchronized items, compare field versions, identify timing conflicts, flag structural issues
 2. **Intelligent Resolution** - Apply resolution strategies, handle field merging, preserve critical data, maintain relationships
 3. **Pattern Analysis** - Study conflict trends, identify frequent issues, suggest process improvements, optimize strategies

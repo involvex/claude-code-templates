@@ -3,6 +3,7 @@
 Comprehensive guide to backup strategies, disaster recovery planning, business continuity, and data protection for IT operations.
 
 ## Table of Contents
+
 - [Backup Strategy](#backup-strategy)
 - [Backup Types](#backup-types)
 - [Backup Tools](#backup-tools)
@@ -76,13 +77,13 @@ Retention Policy:
 
 ### Backup Matrix
 
-| System | Criticality | RPO | RTO | Backup Frequency | Retention | Method |
-|--------|-------------|-----|-----|------------------|-----------|--------|
-| Production Database | Critical | 15 min | 1 hour | Continuous (transaction logs) + Daily full | 30 days | Replication + Snapshots |
-| Application Servers | High | 1 hour | 4 hours | Hourly incremental | 7 days | Agent-based |
-| File Servers | Medium | 24 hours | 8 hours | Daily | 30 days | Filesystem snapshots |
-| Development | Low | 7 days | 24 hours | Weekly | 14 days | Full backup |
-| Workstations | Low | N/A | N/A | User responsibility | N/A | Cloud sync |
+| System              | Criticality | RPO      | RTO      | Backup Frequency                           | Retention | Method                  |
+| ------------------- | ----------- | -------- | -------- | ------------------------------------------ | --------- | ----------------------- |
+| Production Database | Critical    | 15 min   | 1 hour   | Continuous (transaction logs) + Daily full | 30 days   | Replication + Snapshots |
+| Application Servers | High        | 1 hour   | 4 hours  | Hourly incremental                         | 7 days    | Agent-based             |
+| File Servers        | Medium      | 24 hours | 8 hours  | Daily                                      | 30 days   | Filesystem snapshots    |
+| Development         | Low         | 7 days   | 24 hours | Weekly                                     | 14 days   | Full backup             |
+| Workstations        | Low         | N/A      | N/A      | User responsibility                        | N/A       | Cloud sync              |
 
 ## Backup Types
 
@@ -138,8 +139,7 @@ Use Case:
 Time Required:
   - Daily changes (10 GB): 5-15 minutes
 
-Restore Process:
-  1. Restore full backup (baseline)
+Restore Process: 1. Restore full backup (baseline)
   2. Apply incremental 1
   3. Apply incremental 2
   4. ... apply all incrementals in order
@@ -170,8 +170,7 @@ Time Required:
   - Day 2 differential: 20 GB (30 min)
   - Day 6 differential: 60 GB (90 min)
 
-Restore Process:
-  1. Restore full backup
+Restore Process: 1. Restore full backup
   2. Apply latest differential only
 ```
 
@@ -241,6 +240,7 @@ Examples:
 ### Open Source Backup Tools
 
 **Rsync (File-level)**:
+
 ```bash
 #!/bin/bash
 # Rsync backup script with rotation
@@ -269,6 +269,7 @@ echo "Backup completed: ${BACKUP_DIR}"
 ```
 
 **Restic (Encrypted, deduplicated backups)**:
+
 ```bash
 #!/bin/bash
 # Restic backup to S3
@@ -298,6 +299,7 @@ restic forget --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --prune
 ```
 
 **Borg Backup (Deduplicated, compressed)**:
+
 ```bash
 #!/bin/bash
 # Borg backup script
@@ -337,6 +339,7 @@ borg list ${REPO}
 ```
 
 **Bacula (Enterprise backup suite)**:
+
 ```conf
 # /etc/bacula/bacula-dir.conf - Director configuration
 
@@ -500,40 +503,44 @@ Active-Active (No DR site):
 
 ### DR Plan Template
 
-```markdown
+````markdown
 # Disaster Recovery Plan
 
 ## 1. Scope and Objectives
 
 ### Systems Covered
+
 - Production database cluster
 - Application servers (web tier)
 - API gateway
 - Authentication service
 
 ### Recovery Objectives
+
 - RTO: 4 hours
 - RPO: 1 hour
 - Maximum Tolerable Downtime: 24 hours
 
 ## 2. Roles and Responsibilities
 
-| Role | Name | Phone | Email | Responsibility |
-|------|------|-------|-------|----------------|
-| DR Coordinator | John Doe | +1-555-0100 | john@example.com | Overall coordination |
-| Infrastructure Lead | Jane Smith | +1-555-0101 | jane@example.com | Server recovery |
-| Database Lead | Bob Wilson | +1-555-0102 | bob@example.com | Database recovery |
-| Application Lead | Alice Johnson | +1-555-0103 | alice@example.com | Application recovery |
-| Communications Lead | Carol Martinez | +1-555-0104 | carol@example.com | Stakeholder updates |
+| Role                | Name           | Phone       | Email             | Responsibility       |
+| ------------------- | -------------- | ----------- | ----------------- | -------------------- |
+| DR Coordinator      | John Doe       | +1-555-0100 | john@example.com  | Overall coordination |
+| Infrastructure Lead | Jane Smith     | +1-555-0101 | jane@example.com  | Server recovery      |
+| Database Lead       | Bob Wilson     | +1-555-0102 | bob@example.com   | Database recovery    |
+| Application Lead    | Alice Johnson  | +1-555-0103 | alice@example.com | Application recovery |
+| Communications Lead | Carol Martinez | +1-555-0104 | carol@example.com | Stakeholder updates  |
 
 ## 3. Emergency Contact List
 
 ### Internal Contacts
+
 - CTO: +1-555-0200
 - VP Engineering: +1-555-0201
 - On-Call Engineer: PagerDuty escalation
 
 ### External Contacts
+
 - AWS Support: 1-877-632-3000
 - DNS Provider (Cloudflare): support ticket
 - ISP: 1-800-xxx-xxxx
@@ -541,6 +548,7 @@ Active-Active (No DR site):
 ## 4. DR Invocation Criteria
 
 Invoke DR plan if:
+
 - Primary datacenter is inaccessible (fire, flood, power outage > 4 hours)
 - Catastrophic system failure (ransomware, data corruption)
 - Prolonged network outage (> 2 hours)
@@ -551,6 +559,7 @@ Decision Maker: CTO or VP Engineering
 ## 5. Recovery Procedures
 
 ### Phase 1: Assessment (0-30 minutes)
+
 1. Assess extent of disaster
 2. Activate DR team (conference call)
 3. Declare disaster (DR Coordinator)
@@ -558,6 +567,7 @@ Decision Maker: CTO or VP Engineering
 5. Update status page
 
 ### Phase 2: Failover to DR Site (30 minutes - 2 hours)
+
 1. Verify DR site accessibility
 2. Restore latest backups to DR site
    - Database: Restore from S3 (1 hour)
@@ -566,17 +576,20 @@ Decision Maker: CTO or VP Engineering
 4. Validate connectivity and functionality
 
 ### Phase 3: Service Validation (2-3 hours)
+
 1. Run smoke tests
 2. Verify database integrity
 3. Test critical user workflows
 4. Monitor error rates and performance
 
 ### Phase 4: Operations at DR Site (3-4 hours)
+
 1. Begin normal operations from DR site
 2. Continuous monitoring
 3. Communicate to users: "Services restored"
 
 ### Phase 5: Return to Primary (Days/Weeks)
+
 1. Repair/rebuild primary site
 2. Replicate data back to primary
 3. Scheduled failback (low-traffic window)
@@ -586,6 +599,7 @@ Decision Maker: CTO or VP Engineering
 ## 6. Step-by-Step Recovery
 
 ### Database Recovery
+
 ```bash
 # 1. Restore database from S3 backup
 aws s3 cp s3://backups/db-latest.sql.gz /tmp/
@@ -605,8 +619,10 @@ psql production -c "SELECT MAX(created_at) FROM orders;"
 # Edit /etc/app/config.yaml
 # DB_HOST: dr-db.example.com
 ```
+````
 
 ### Application Recovery
+
 ```bash
 # 1. Pull latest code
 cd /opt/app
@@ -627,6 +643,7 @@ curl https://dr.example.com/health
 ```
 
 ### DNS Failover
+
 ```bash
 # Update DNS to point to DR site
 # Example: Cloudflare API
@@ -646,17 +663,20 @@ curl -X PUT "https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{r
 ## 7. Communication Plan
 
 ### Internal Communication
+
 - Slack channel: #incident-dr
 - Conference bridge: Zoom link
 - Update frequency: Every 30 minutes
 
 ### External Communication
+
 - Status page: status.example.com
 - Twitter: @example_status
 - Email: customers@example.com
 - Update frequency: Every hour or when status changes
 
 ### Communication Template
+
 ```
 Subject: Service Disruption - Disaster Recovery Activated
 
@@ -685,7 +705,8 @@ For more information: https://status.example.com
 - Owner: DR Coordinator
 - Last Updated: 2025-01-15
 - Next Review: 2025-04-15
-```
+
+````
 
 ## Business Continuity
 
@@ -726,7 +747,7 @@ Process:
      Customer support: Warm DR site, daily backups
      Email: Cloud-based (Office 365) - already resilient
      Payroll: Weekly backups, manual processing possible
-```
+````
 
 ### BCP vs DR
 
@@ -819,6 +840,7 @@ Level 4: Surprise DR Test (Optional)
 # DR Test Checklist
 
 ## Pre-Test (1 week before)
+
 - [ ] Schedule test date and time
 - [ ] Notify all stakeholders
 - [ ] Verify DR site readiness
@@ -828,6 +850,7 @@ Level 4: Surprise DR Test (Optional)
 - [ ] Set up monitoring and logging
 
 ## During Test
+
 - [ ] Start timer (measure RTO)
 - [ ] Activate DR team
 - [ ] Begin recovery procedures
@@ -837,6 +860,7 @@ Level 4: Surprise DR Test (Optional)
 - [ ] Capture screenshots/logs
 
 ## Validation
+
 - [ ] Database connectivity
 - [ ] Application functionality
 - [ ] User authentication
@@ -845,6 +869,7 @@ Level 4: Surprise DR Test (Optional)
 - [ ] Data integrity checks
 
 ## Post-Test
+
 - [ ] Calculate actual RTO/RPO
 - [ ] Debrief with team (within 48 hours)
 - [ ] Document lessons learned
@@ -854,12 +879,13 @@ Level 4: Surprise DR Test (Optional)
 - [ ] Report results to management
 
 ## Metrics to Capture
-- Time to detection: _____ minutes
-- Time to activation: _____ minutes
-- Time to recovery: _____ minutes
-- Data loss: _____ minutes/records
-- Issues encountered: _____
-- Success rate: _____%
+
+- Time to detection: **\_** minutes
+- Time to activation: **\_** minutes
+- Time to recovery: **\_** minutes
+- Data loss: **\_** minutes/records
+- Issues encountered: **\_**
+- Success rate: **\_**%
 ```
 
 ## Cloud Backup Solutions
@@ -885,9 +911,9 @@ Resources:
           - Sid: Enable IAM User Permissions
             Effect: Allow
             Principal:
-              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
-            Action: 'kms:*'
-            Resource: '*'
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action: "kms:*"
+            Resource: "*"
 
   BackupPlan:
     Type: AWS::Backup::BackupPlan
@@ -897,7 +923,7 @@ Resources:
         BackupPlanRule:
           - RuleName: DailyBackup
             TargetBackupVault: !Ref BackupVault
-            ScheduleExpression: "cron(0 2 * * ? *)"  # 2 AM daily
+            ScheduleExpression: "cron(0 2 * * ? *)" # 2 AM daily
             StartWindowMinutes: 60
             CompletionWindowMinutes: 120
             Lifecycle:
@@ -912,8 +938,8 @@ Resources:
         SelectionName: ProductionResources
         IamRoleArn: !GetAtt BackupRole.Arn
         Resources:
-          - !Sub 'arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*'
-          - !Sub 'arn:aws:rds:${AWS::Region}:${AWS::AccountId}:db:*'
+          - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
+          - !Sub "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:db:*"
         ListOfTags:
           - ConditionType: STRINGEQUALS
             ConditionKey: Environment

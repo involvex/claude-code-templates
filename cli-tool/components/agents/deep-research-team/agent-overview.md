@@ -216,6 +216,7 @@ You are the Report Generator, transforming synthesized research findings into co
 **Communication Protocol:**
 
 All agents use structured JSON for inter-agent communication, maintaining:
+
 - Phase status and completion tracking
 - Accumulated data and findings preservation
 - Quality metrics and confidence scoring

@@ -22,6 +22,7 @@ Setup comprehensive code formatting system with automated enforcement and team c
 **Language Focus**: Use $ARGUMENTS to configure JavaScript/TypeScript, Python, Rust, or multi-language formatting
 
 **Formatting Setup**:
+
 1. **Tool Installation** - Prettier, Black, rustfmt, language-specific formatters and plugins
 2. **Configuration** - Style rules, line length, indentation, quotes, trailing commas, language-specific options
 3. **IDE Integration** - Editor extensions, format-on-save, keyboard shortcuts, workspace settings

@@ -22,6 +22,7 @@ Implement production-ready monorepo with advanced workspace management and build
 **Monorepo Tool**: Use $ARGUMENTS to configure Nx, Lerna, Rush, Turborepo, or Yarn Workspaces
 
 **Monorepo Architecture**:
+
 1. **Workspace Structure** - Directory organization, package architecture, shared libraries, application separation
 2. **Dependency Management** - Workspace dependencies, version management, package hoisting, conflict resolution
 3. **Build Orchestration** - Task dependencies, parallel builds, incremental compilation, affected package detection

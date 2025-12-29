@@ -104,6 +104,7 @@ else:
 ## Common field types
 
 **Text fields:**
+
 ```python
 writer.update_page_form_field_values(
     writer.pages[0],
@@ -112,6 +113,7 @@ writer.update_page_form_field_values(
 ```
 
 **Checkboxes:**
+
 ```python
 # Check a checkbox
 writer.update_page_form_field_values(
@@ -127,6 +129,7 @@ writer.update_page_form_field_values(
 ```
 
 **Radio buttons:**
+
 ```python
 writer.update_page_form_field_values(
     writer.pages[0],

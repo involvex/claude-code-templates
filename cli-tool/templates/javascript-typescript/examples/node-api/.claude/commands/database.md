@@ -29,6 +29,7 @@ Create or optimize database operations based on the requirements:
 ## Database Patterns to Consider
 
 Based on your project setup:
+
 - **Repository Pattern**: Separate data access logic from business logic
 - **Active Record**: Models with built-in database operations
 - **Data Mapper**: Separate domain models from database schema
@@ -38,6 +39,7 @@ Based on your project setup:
 ## Operation Types
 
 Common database operations to implement:
+
 - **CRUD operations**: Create, Read, Update, Delete
 - **Bulk operations**: Batch inserts, updates, deletes
 - **Aggregation**: Complex queries with grouping and calculations

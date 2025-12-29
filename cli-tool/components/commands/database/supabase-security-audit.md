@@ -22,6 +22,7 @@ Execute comprehensive security audit with vulnerability assessment and policy op
 **Audit Scope**: Use $ARGUMENTS to focus on RLS policies, permission analysis, authentication security, API key management, or comprehensive security review
 
 **Security Audit Framework**:
+
 1. **RLS Policy Analysis** - Review Row Level Security policies, test policy effectiveness, identify policy gaps, optimize policy performance
 2. **Permission Assessment** - Analyze table permissions, review role-based access, validate permission hierarchies, identify over-privileged access
 3. **Authentication Security** - Review auth configuration, analyze JWT security, validate session management, assess multi-factor authentication

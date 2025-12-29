@@ -3,6 +3,7 @@
 Comprehensive guide to implementing observability, metrics collection, alerting strategies, and dashboard design for IT operations.
 
 ## Table of Contents
+
 - [Observability Principles](#observability-principles)
 - [The Three Pillars](#the-three-pillars)
 - [Metrics Strategy](#metrics-strategy)
@@ -15,6 +16,7 @@ Comprehensive guide to implementing observability, metrics collection, alerting 
 ## Observability Principles
 
 ### Definition
+
 **Observability**: The ability to understand the internal state of a system by examining its external outputs (metrics, logs, traces).
 
 **Monitoring vs Observability**:
@@ -29,30 +31,30 @@ Comprehensive guide to implementing observability, metrics collection, alerting 
 
 ```yaml
 1. Instrument Everything:
-   - Application code (business metrics, errors, latency)
-   - Infrastructure (CPU, memory, disk, network)
-   - Dependencies (databases, APIs, queues)
-   - User experience (frontend performance, transactions)
+  - Application code (business metrics, errors, latency)
+  - Infrastructure (CPU, memory, disk, network)
+  - Dependencies (databases, APIs, queues)
+  - User experience (frontend performance, transactions)
 
 2. High Cardinality Data:
-   - Enable filtering by user_id, region, version, etc.
-   - Support arbitrary dimensional queries
-   - Example: "Show me errors for user_id=123 in us-west-2 for version 2.3.1"
+  - Enable filtering by user_id, region, version, etc.
+  - Support arbitrary dimensional queries
+  - Example: "Show me errors for user_id=123 in us-west-2 for version 2.3.1"
 
 3. Context and Correlation:
-   - Link metrics, logs, and traces together
-   - Use consistent labels and tags across telemetry
-   - Include trace IDs in logs and metrics
+  - Link metrics, logs, and traces together
+  - Use consistent labels and tags across telemetry
+  - Include trace IDs in logs and metrics
 
 4. Real-Time and Historical:
-   - Real-time for incident response (< 1 min delay)
-   - Historical for trend analysis (retain 13+ months)
-   - Different retention policies by data type
+  - Real-time for incident response (< 1 min delay)
+  - Historical for trend analysis (retain 13+ months)
+  - Different retention policies by data type
 
 5. Self-Service:
-   - Empower teams to create their own dashboards
-   - Provide query language training
-   - Build reusable dashboard templates
+  - Empower teams to create their own dashboards
+  - Provide query language training
+  - Build reusable dashboard templates
 ```
 
 ## The Three Pillars
@@ -62,6 +64,7 @@ Comprehensive guide to implementing observability, metrics collection, alerting 
 **Definition**: Numeric measurements over time (counters, gauges, histograms).
 
 **Types**:
+
 ```yaml
 Counter:
   Description: Monotonically increasing value
@@ -94,6 +97,7 @@ Summary:
 ```
 
 **Metric Naming Convention**:
+
 ```
 {namespace}_{component}_{metric}_{unit}
 
@@ -109,6 +113,7 @@ Examples:
 **Definition**: Timestamped text records of discrete events.
 
 **Log Levels**:
+
 ```yaml
 ERROR:
   When: Failures requiring immediate attention
@@ -128,6 +133,7 @@ DEBUG:
 ```
 
 **Structured Logging Format**:
+
 ```json
 {
   "timestamp": "2025-01-15T14:32:10.123Z",
@@ -145,7 +151,7 @@ DEBUG:
     "stack_trace": "..."
   },
   "context": {
-    "amount": 150.00,
+    "amount": 150.0,
     "currency": "USD",
     "payment_method": "card_****1234"
   }
@@ -153,6 +159,7 @@ DEBUG:
 ```
 
 **Log Aggregation Best Practices**:
+
 ```yaml
 Collection:
   - Use lightweight agents (Fluentd, Filebeat, Vector)
@@ -176,6 +183,7 @@ Indexing:
 **Definition**: End-to-end request flow across distributed systems.
 
 **Trace Anatomy**:
+
 ```
 Trace (entire request)
 ├─ Span 1: API Gateway (50ms)
@@ -190,6 +198,7 @@ Critical Path: Span 1 → Span 3 → Span 4
 ```
 
 **Trace Context Propagation**:
+
 ```python
 # OpenTelemetry Python Example
 from opentelemetry import trace
@@ -218,6 +227,7 @@ with tracer.start_as_current_span("process_order") as span:
 ```
 
 **Sampling Strategies**:
+
 ```yaml
 Always Sample:
   - Errors and exceptions (100%)
@@ -240,43 +250,43 @@ Tail Sampling (after trace completion):
 
 ```yaml
 1. Latency:
-   Definition: Time to service a request
-   Metrics:
-     - http_request_duration_seconds (histogram)
-     - Percentiles: p50, p90, p95, p99
-   Thresholds:
-     - p50 < 100ms
-     - p95 < 500ms
-     - p99 < 1000ms
+  Definition: Time to service a request
+  Metrics:
+    - http_request_duration_seconds (histogram)
+    - Percentiles: p50, p90, p95, p99
+  Thresholds:
+    - p50 < 100ms
+    - p95 < 500ms
+    - p99 < 1000ms
 
 2. Traffic:
-   Definition: Demand on your system
-   Metrics:
-     - http_requests_per_second (counter rate)
-     - active_connections (gauge)
-   Analysis:
-     - Daily patterns
-     - Growth trends
-     - Capacity planning
+  Definition: Demand on your system
+  Metrics:
+    - http_requests_per_second (counter rate)
+    - active_connections (gauge)
+  Analysis:
+    - Daily patterns
+    - Growth trends
+    - Capacity planning
 
 3. Errors:
-   Definition: Rate of failed requests
-   Metrics:
-     - http_requests_total{status=~"5.."} (counter)
-     - error_rate = errors / total_requests
-   Thresholds:
-     - Error rate < 0.1% (99.9% success)
+  Definition: Rate of failed requests
+  Metrics:
+    - http_requests_total{status=~"5.."} (counter)
+    - error_rate = errors / total_requests
+  Thresholds:
+    - Error rate < 0.1% (99.9% success)
 
 4. Saturation:
-   Definition: How "full" your service is
-   Metrics:
-     - cpu_usage_percent (gauge)
-     - memory_usage_percent (gauge)
-     - disk_usage_percent (gauge)
-     - connection_pool_utilization (gauge)
-   Thresholds:
-     - Warning at 70%
-     - Critical at 85%
+  Definition: How "full" your service is
+  Metrics:
+    - cpu_usage_percent (gauge)
+    - memory_usage_percent (gauge)
+    - disk_usage_percent (gauge)
+    - connection_pool_utilization (gauge)
+  Thresholds:
+    - Warning at 70%
+    - Critical at 85%
 ```
 
 ### RED Method (for request-driven services)
@@ -317,6 +327,7 @@ Errors: Count of error events
 ### Metric Collection Patterns
 
 **Push vs Pull**:
+
 ```yaml
 Push Model (StatsD, CloudWatch):
   Pros:
@@ -350,6 +361,7 @@ Pull Model (Prometheus):
 ```
 
 **Prometheus Metrics Exposition**:
+
 ```python
 # Python Flask Example
 from prometheus_client import Counter, Histogram, Gauge, generate_latest
@@ -413,26 +425,27 @@ if __name__ == '__main__':
 ```
 
 **Prometheus Scrape Configuration**:
+
 ```yaml
 # prometheus.yml
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: 'production'
-    region: 'us-east-1'
+    cluster: "production"
+    region: "us-east-1"
 
 scrape_configs:
-  - job_name: 'api-servers'
+  - job_name: "api-servers"
     static_configs:
       - targets:
-          - 'api-1.example.com:8080'
-          - 'api-2.example.com:8080'
-          - 'api-3.example.com:8080'
-    metrics_path: '/metrics'
+          - "api-1.example.com:8080"
+          - "api-2.example.com:8080"
+          - "api-3.example.com:8080"
+    metrics_path: "/metrics"
     scrape_interval: 10s
 
-  - job_name: 'kubernetes-pods'
+  - job_name: "kubernetes-pods"
     kubernetes_sd_configs:
       - role: pod
     relabel_configs:
@@ -443,7 +456,8 @@ scrape_configs:
         action: replace
         target_label: __metrics_path__
         regex: (.+)
-      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+      - source_labels:
+          [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
         action: replace
         regex: ([^:]+)(?::\d+)?;(\d+)
         replacement: $1:$2
@@ -499,27 +513,27 @@ Symptoms of Alert Fatigue:
 
 Solutions:
   1. Alert Hygiene Reviews:
-     - Weekly review of all fired alerts
-     - Tune or remove alerts with >20% false positive rate
-     - Track alert effectiveness metrics
+    - Weekly review of all fired alerts
+    - Tune or remove alerts with >20% false positive rate
+    - Track alert effectiveness metrics
 
   2. Alert Grouping:
-     - Group related alerts (same root cause)
-     - Example: Don't alert on every pod failure if deployment is alerting
+    - Group related alerts (same root cause)
+    - Example: Don't alert on every pod failure if deployment is alerting
 
   3. Dynamic Thresholds:
-     - Use anomaly detection instead of static thresholds
-     - Adjust thresholds based on time of day/week
+    - Use anomaly detection instead of static thresholds
+    - Adjust thresholds based on time of day/week
 
   4. Escalation Policies:
-     - Primary on-call: 5 min
-     - Secondary on-call: 15 min
-     - Team lead: 30 min
-     - Engineering manager: 60 min
+    - Primary on-call: 5 min
+    - Secondary on-call: 15 min
+    - Team lead: 30 min
+    - Engineering manager: 60 min
 
   5. Maintenance Windows:
-     - Silence alerts during planned maintenance
-     - Auto-create maintenance windows from change tickets
+    - Silence alerts during planned maintenance
+    - Auto-create maintenance windows from change tickets
 ```
 
 ### Prometheus Alerting Rules
@@ -615,11 +629,11 @@ groups:
 # alertmanager.yml
 global:
   resolve_timeout: 5m
-  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+  pagerduty_url: "https://events.pagerduty.com/v2/enqueue"
 
 route:
-  receiver: 'default-receiver'
-  group_by: ['alertname', 'cluster', 'service']
+  receiver: "default-receiver"
+  group_by: ["alertname", "cluster", "service"]
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 4h
@@ -646,40 +660,40 @@ route:
           receiver: pagerduty-infrastructure
 
 receivers:
-  - name: 'default-receiver'
+  - name: "default-receiver"
     slack_configs:
-      - api_url: 'https://hooks.slack.com/services/XXX'
-        channel: '#alerts'
-        title: '{{ .GroupLabels.alertname }}'
-        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+      - api_url: "https://hooks.slack.com/services/XXX"
+        channel: "#alerts"
+        title: "{{ .GroupLabels.alertname }}"
+        text: "{{ range .Alerts }}{{ .Annotations.description }}{{ end }}"
 
-  - name: 'pagerduty-critical'
+  - name: "pagerduty-critical"
     pagerduty_configs:
-      - service_key: 'YOUR_PAGERDUTY_KEY'
-        description: '{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
+      - service_key: "YOUR_PAGERDUTY_KEY"
+        description: "{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}"
         details:
-          firing: '{{ .Alerts.Firing | len }}'
-          resolved: '{{ .Alerts.Resolved | len }}'
-          num_alerts: '{{ .Alerts | len }}'
+          firing: "{{ .Alerts.Firing | len }}"
+          resolved: "{{ .Alerts.Resolved | len }}"
+          num_alerts: "{{ .Alerts | len }}"
         links:
-          - href: '{{ .CommonAnnotations.runbook }}'
-            text: 'Runbook'
-          - href: '{{ .CommonAnnotations.dashboard }}'
-            text: 'Dashboard'
+          - href: "{{ .CommonAnnotations.runbook }}"
+            text: "Runbook"
+          - href: "{{ .CommonAnnotations.dashboard }}"
+            text: "Dashboard"
 
-  - name: 'slack-warnings'
+  - name: "slack-warnings"
     slack_configs:
-      - api_url: 'https://hooks.slack.com/services/YYY'
-        channel: '#alerts-warnings'
-        color: 'warning'
+      - api_url: "https://hooks.slack.com/services/YYY"
+        channel: "#alerts-warnings"
+        color: "warning"
 
 inhibit_rules:
   # Inhibit warning if critical is firing
   - source_match:
-      severity: 'critical'
+      severity: "critical"
     target_match:
-      severity: 'warning'
-    equal: ['alertname', 'service', 'instance']
+      severity: "warning"
+    equal: ["alertname", "service", "instance"]
 ```
 
 ## Dashboard Design
@@ -688,33 +702,33 @@ inhibit_rules:
 
 ```yaml
 1. Audience-Specific Dashboards:
-   - Executive Dashboard: Business metrics, SLAs, revenue impact
-   - Operations Dashboard: System health, alerts, capacity
-   - Development Dashboard: Deployment status, error rates, traces
-   - Service Dashboard: Detailed metrics for specific service
+  - Executive Dashboard: Business metrics, SLAs, revenue impact
+  - Operations Dashboard: System health, alerts, capacity
+  - Development Dashboard: Deployment status, error rates, traces
+  - Service Dashboard: Detailed metrics for specific service
 
 2. Information Hierarchy:
-   Top: Most critical information (current status)
-   Middle: Supporting metrics and trends
-   Bottom: Detailed breakdowns and diagnostics
+  Top: Most critical information (current status)
+  Middle: Supporting metrics and trends
+  Bottom: Detailed breakdowns and diagnostics
 
 3. Visual Best Practices:
-   - Use color purposefully (red=bad, green=good, yellow=warning)
-   - Avoid more than 6-8 panels per row
-   - Consistent time ranges across panels
-   - Include units in axis labels
-   - Use logarithmic scale for wide-ranging data
+  - Use color purposefully (red=bad, green=good, yellow=warning)
+  - Avoid more than 6-8 panels per row
+  - Consistent time ranges across panels
+  - Include units in axis labels
+  - Use logarithmic scale for wide-ranging data
 
 4. Dashboard Variables:
-   - Environment (production, staging, dev)
-   - Service/Component
-   - Time range
-   - Region/Datacenter
+  - Environment (production, staging, dev)
+  - Service/Component
+  - Time range
+  - Region/Datacenter
 
 5. Actionable Context:
-   - Link panels to detailed views
-   - Include threshold lines on graphs
-   - Add annotations for deployments/incidents
+  - Link panels to detailed views
+  - Include threshold lines on graphs
+  - Add annotations for deployments/incidents
 ```
 
 ### Grafana Dashboard Structure
@@ -829,22 +843,20 @@ Service-Specific Dashboard:
         "id": 1,
         "title": "Request Rate",
         "type": "graph",
-        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "sum(rate(http_requests_total{service=\"$service\", environment=\"$environment\"}[5m])) by (service)",
             "legendFormat": "{{service}}"
           }
         ],
-        "yaxes": [
-          {"format": "reqps", "label": "Requests/sec"}
-        ]
+        "yaxes": [{ "format": "reqps", "label": "Requests/sec" }]
       },
       {
         "id": 2,
         "title": "Error Rate",
         "type": "graph",
-        "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+        "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "sum(rate(http_requests_total{service=\"$service\", status=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"$service\"}[5m]))",
@@ -860,24 +872,20 @@ Service-Specific Dashboard:
             "fill": true
           }
         ],
-        "yaxes": [
-          {"format": "percentunit", "max": 0.05}
-        ]
+        "yaxes": [{ "format": "percentunit", "max": 0.05 }]
       },
       {
         "id": 3,
         "title": "Latency (p95)",
         "type": "graph",
-        "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+        "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=\"$service\"}[5m])) by (le, endpoint))",
             "legendFormat": "{{endpoint}}"
           }
         ],
-        "yaxes": [
-          {"format": "s", "label": "Duration"}
-        ]
+        "yaxes": [{ "format": "s", "label": "Duration" }]
       }
     ]
   }
@@ -994,7 +1002,7 @@ groups:
             (1 - avg_over_time(slo:availability:ratio[30d]))
           )
 
-# SLO alerting rules
+  # SLO alerting rules
   - name: slo_alerts
     rules:
       # Availability SLO burn rate alerts
@@ -1047,45 +1055,53 @@ groups:
       {
         "title": "Availability SLO (30 days)",
         "type": "gauge",
-        "targets": [{
-          "expr": "avg_over_time(slo:availability:ratio[30d])"
-        }],
+        "targets": [
+          {
+            "expr": "avg_over_time(slo:availability:ratio[30d])"
+          }
+        ],
         "options": {
           "min": 0.99,
           "max": 1.0,
           "thresholds": [
-            {"value": 0.999, "color": "green"},
-            {"value": 0.995, "color": "yellow"},
-            {"value": 0.99, "color": "red"}
+            { "value": 0.999, "color": "green" },
+            { "value": 0.995, "color": "yellow" },
+            { "value": 0.99, "color": "red" }
           ]
         }
       },
       {
         "title": "Error Budget Remaining",
         "type": "gauge",
-        "targets": [{
-          "expr": "slo:error_budget:availability:30d"
-        }],
+        "targets": [
+          {
+            "expr": "slo:error_budget:availability:30d"
+          }
+        ],
         "options": {
           "min": 0,
           "max": 1,
           "thresholds": [
-            {"value": 0.5, "color": "green"},
-            {"value": 0.25, "color": "yellow"},
-            {"value": 0, "color": "red"}
+            { "value": 0.5, "color": "green" },
+            { "value": 0.25, "color": "yellow" },
+            { "value": 0, "color": "red" }
           ]
         }
       },
       {
         "title": "Error Budget Burn Rate",
         "type": "graph",
-        "targets": [{
-          "expr": "(1 - slo:availability:ratio) / (1 - 0.999)",
-          "legendFormat": "Burn Rate (1x = normal consumption)"
-        }],
-        "yaxes": [{
-          "label": "Burn Rate Multiplier"
-        }],
+        "targets": [
+          {
+            "expr": "(1 - slo:availability:ratio) / (1 - 0.999)",
+            "legendFormat": "Burn Rate (1x = normal consumption)"
+          }
+        ],
+        "yaxes": [
+          {
+            "label": "Burn Rate Multiplier"
+          }
+        ],
         "alert": {
           "threshold": 1,
           "message": "Burn rate above normal"
@@ -1094,11 +1110,13 @@ groups:
       {
         "title": "SLO Compliance History",
         "type": "table",
-        "targets": [{
-          "expr": "avg_over_time(slo:availability:ratio[7d])",
-          "format": "table",
-          "legendFormat": "7 days"
-        }]
+        "targets": [
+          {
+            "expr": "avg_over_time(slo:availability:ratio[7d])",
+            "format": "table",
+            "legendFormat": "7 days"
+          }
+        ]
       }
     ]
   }
@@ -1109,16 +1127,16 @@ groups:
 
 ### Tool Comparison Matrix
 
-| Tool | Best For | Strengths | Weaknesses | Cost |
-|------|----------|-----------|------------|------|
-| **Prometheus + Grafana** | Kubernetes, metrics | Open source, powerful querying, service discovery | Logs/traces need separate tools, scale challenges | Free (self-hosted) |
-| **Datadog** | Full-stack observability | All-in-one, easy setup, great UX | Expensive at scale, vendor lock-in | $$$$ |
-| **New Relic** | APM, application performance | Deep code insights, distributed tracing | Can be complex, pricing | $$$$ |
-| **ELK Stack** | Log aggregation, search | Powerful search, flexible, open source | Complex to operate, resource-intensive | Free-$$ |
-| **Splunk** | Enterprise logs, security | Mature, powerful, compliance features | Very expensive, steep learning curve | $$$$$ |
-| **Cloudwatch** | AWS-native monitoring | Native AWS integration, no setup | Limited outside AWS, basic features | $$ |
-| **Azure Monitor** | Azure-native monitoring | Native Azure integration | Limited outside Azure | $$ |
-| **Google Cloud Monitoring** | GCP-native monitoring | Native GCP integration, free tier | Limited outside GCP | $ - $$ |
+| Tool                        | Best For                     | Strengths                                         | Weaknesses                                        | Cost               |
+| --------------------------- | ---------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------ |
+| **Prometheus + Grafana**    | Kubernetes, metrics          | Open source, powerful querying, service discovery | Logs/traces need separate tools, scale challenges | Free (self-hosted) |
+| **Datadog**                 | Full-stack observability     | All-in-one, easy setup, great UX                  | Expensive at scale, vendor lock-in                | $$$$               |
+| **New Relic**               | APM, application performance | Deep code insights, distributed tracing           | Can be complex, pricing                           | $$$$               |
+| **ELK Stack**               | Log aggregation, search      | Powerful search, flexible, open source            | Complex to operate, resource-intensive            | Free-$$            |
+| **Splunk**                  | Enterprise logs, security    | Mature, powerful, compliance features             | Very expensive, steep learning curve              | $$$$$              |
+| **Cloudwatch**              | AWS-native monitoring        | Native AWS integration, no setup                  | Limited outside AWS, basic features               | $$                 |
+| **Azure Monitor**           | Azure-native monitoring      | Native Azure integration                          | Limited outside Azure                             | $$                 |
+| **Google Cloud Monitoring** | GCP-native monitoring        | Native GCP integration, free tier                 | Limited outside GCP                               | $ - $$             |
 
 ### Prometheus Architecture
 
@@ -1178,7 +1196,7 @@ Cloud Services             │    (Storage &   │
 ### Complete Monitoring Stack (Docker Compose)
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   prometheus:
@@ -1190,9 +1208,9 @@ services:
       - ./alerts.yml:/etc/prometheus/alerts.yml
       - prometheus-data:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=30d'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=30d"
     restart: unless-stopped
 
   alertmanager:
@@ -1202,7 +1220,7 @@ services:
     volumes:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
     command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
     restart: unless-stopped
 
   grafana:
@@ -1224,9 +1242,9 @@ services:
     ports:
       - "9100:9100"
     command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro

@@ -12,6 +12,7 @@ Pydicom is a pure Python package for working with DICOM files, the standard form
 ## When to Use This Skill
 
 Use this skill when working with:
+
 - Medical imaging files (CT, MRI, X-ray, ultrasound, PET, etc.)
 - DICOM datasets requiring metadata extraction or modification
 - Pixel data extraction and image processing from medical scans
@@ -62,6 +63,7 @@ print(ds)
 ```
 
 **Key points:**
+
 - `dcmread()` returns a `Dataset` object
 - Access data elements using attribute notation (e.g., `ds.PatientName`) or tag notation (e.g., `ds[0x0010, 0x0010]`)
 - Use `ds.file_meta` to access file metadata like Transfer Syntax UID
@@ -297,6 +299,7 @@ ds_uncompressed.save_as('compressed_jpeg.dcm')
 ```
 
 **Common transfer syntaxes:**
+
 - `ExplicitVRLittleEndian` - Uncompressed, most common
 - `JPEGBaseline8Bit` - JPEG lossy compression
 - `JPEGLossless` - JPEG lossless compression
@@ -365,6 +368,7 @@ print(f"Voxel size: {pixel_spacing[0]}x{pixel_spacing[1]}x{slice_thickness} mm")
 This skill includes utility scripts in the `scripts/` directory:
 
 ### anonymize_dicom.py
+
 Anonymize DICOM files by removing or replacing Protected Health Information (PHI).
 
 ```bash
@@ -372,6 +376,7 @@ python scripts/anonymize_dicom.py input.dcm output.dcm
 ```
 
 ### dicom_to_image.py
+
 Convert DICOM files to common image formats (PNG, JPEG, TIFF).
 
 ```bash
@@ -380,6 +385,7 @@ python scripts/dicom_to_image.py input.dcm output.jpg --format JPEG
 ```
 
 ### extract_metadata.py
+
 Extract and display DICOM metadata in a readable format.
 
 ```bash
@@ -397,15 +403,19 @@ Detailed reference information is available in the `references/` directory:
 ## Common Issues and Solutions
 
 **Issue: "Unable to decode pixel data"**
+
 - Solution: Install additional compression handlers: `uv pip install pylibjpeg pylibjpeg-libjpeg python-gdcm`
 
 **Issue: "AttributeError" when accessing tags**
+
 - Solution: Check if attribute exists with `hasattr(ds, 'AttributeName')` or use `ds.get('AttributeName', default)`
 
 **Issue: Incorrect image display (too dark/bright)**
+
 - Solution: Apply VOI LUT windowing: `apply_voi_lut(pixel_array, ds)` or manually adjust with `WindowCenter` and `WindowWidth`
 
 **Issue: Memory issues with large series**
+
 - Solution: Process files iteratively, use memory-mapped arrays, or downsample images
 
 ## Best Practices
@@ -422,6 +432,7 @@ Detailed reference information is available in the `references/` directory:
 ## Documentation
 
 Official pydicom documentation: https://pydicom.github.io/pydicom/dev/
+
 - User Guide: https://pydicom.github.io/pydicom/dev/guides/user/index.html
 - Tutorials: https://pydicom.github.io/pydicom/dev/tutorials/index.html
 - API Reference: https://pydicom.github.io/pydicom/dev/reference/index.html

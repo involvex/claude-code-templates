@@ -24,12 +24,12 @@ from urllib.parse import quote_plus
 
 class ProductionConfig:
     """Production configuration."""
-    
+
     # Security
     SECRET_KEY = os.environ.get('SECRET_KEY')
     DEBUG = False
     TESTING = False
-    
+
     # Database
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         f"postgresql://{os.environ.get('DB_USER')}:{quote_plus(os.environ.get('DB_PASSWORD'))}@" \
@@ -41,7 +41,7 @@ class ProductionConfig:
         'pool_recycle': 3600,
         'pool_pre_ping': True
     }
-    
+
     # Security Headers
     SECURITY_HEADERS = {
         'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
@@ -50,30 +50,30 @@ class ProductionConfig:
         'X-XSS-Protection': '1; mode=block',
         'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
     }
-    
+
     # Session
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
     PERMANENT_SESSION_LIFETIME = 3600  # 1 hour
-    
+
     # Cache
     CACHE_TYPE = 'redis'
     CACHE_REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
     CACHE_DEFAULT_TIMEOUT = 300
-    
+
     # Rate Limiting
     RATELIMIT_STORAGE_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/1')
     RATELIMIT_DEFAULT = '100/hour'
-    
+
     # Logging
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
     LOG_FILE = os.environ.get('LOG_FILE', '/var/log/app/app.log')
-    
+
     # File Upload
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB
     UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', '/var/uploads')
-    
+
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
@@ -198,7 +198,7 @@ CMD ["gunicorn", "--config", "gunicorn.conf.py", "wsgi:app"]
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 
 services:
   web:
@@ -282,50 +282,50 @@ http {
     upstream app {
         server web:8000;
     }
-    
+
     # Rate limiting
     limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
     limit_req_zone $binary_remote_addr zone=login:10m rate=1r/s;
-    
+
     # SSL configuration
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384;
     ssl_prefer_server_ciphers off;
-    
+
     # Security headers
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "1; mode=block";
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    
+
     server {
         listen 80;
         server_name example.com www.example.com;
         return 301 https://$server_name$request_uri;
     }
-    
+
     server {
         listen 443 ssl http2;
         server_name example.com www.example.com;
-        
+
         ssl_certificate /etc/nginx/ssl/cert.pem;
         ssl_certificate_key /etc/nginx/ssl/key.pem;
-        
+
         # File upload size
         client_max_body_size 16M;
-        
+
         # Static files
         location /static/ {
             alias /var/uploads/static/;
             expires 1y;
             add_header Cache-Control "public, immutable";
         }
-        
+
         location /uploads/ {
             alias /var/uploads/;
             expires 1h;
         }
-        
+
         # API rate limiting
         location /api/ {
             limit_req zone=api burst=20 nodelay;
@@ -335,7 +335,7 @@ http {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
         }
-        
+
         # Login rate limiting
         location /auth/login {
             limit_req zone=login burst=5 nodelay;
@@ -345,7 +345,7 @@ http {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
         }
-        
+
         # Main application
         location / {
             proxy_pass http://app;
@@ -353,7 +353,7 @@ http {
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
-            
+
             # Timeout settings
             proxy_connect_timeout 60s;
             proxy_send_timeout 60s;
@@ -423,14 +423,14 @@ def health_check():
         'redis': check_redis(),
         'disk_space': check_disk_space()
     }
-    
+
     # Determine overall status
     if all(check['status'] == 'ok' for check in checks.values() if isinstance(check, dict)):
         status_code = 200
     else:
         status_code = 503
         checks['status'] = 'unhealthy'
-    
+
     return jsonify(checks), status_code
 
 def check_database():
@@ -457,14 +457,14 @@ def check_disk_space():
         import shutil
         total, used, free = shutil.disk_usage('/')
         free_percent = (free / total) * 100
-        
+
         if free_percent > 10:
             status = 'ok'
         elif free_percent > 5:
             status = 'warning'
         else:
             status = 'critical'
-        
+
         return {
             'status': status,
             'free_space_percent': round(free_percent, 2),
@@ -500,7 +500,7 @@ def setup_logging(app):
             ))
             file_handler.setLevel(getattr(logging, app.config.get('LOG_LEVEL', 'INFO')))
             app.logger.addHandler(file_handler)
-        
+
         # Console logging
         if not app.logger.handlers:
             stream_handler = logging.StreamHandler()
@@ -509,7 +509,7 @@ def setup_logging(app):
             ))
             stream_handler.setLevel(logging.INFO)
             app.logger.addHandler(stream_handler)
-        
+
         app.logger.setLevel(logging.INFO)
         app.logger.info('Application startup')
 
@@ -606,15 +606,15 @@ import time
 def setup_metrics(app):
     """Setup Prometheus metrics."""
     metrics = PrometheusMetrics(app)
-    
+
     # Custom metrics
     metrics.info('app_info', 'Application info', version='1.0.0')
-    
+
     # Database connection pool metrics
     @metrics.gauge('db_pool_size', 'Database connection pool size')
     def db_pool_size():
         from app.extensions import db
         return db.engine.pool.size()
-    
+
     return metrics
 ```

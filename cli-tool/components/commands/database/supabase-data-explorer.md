@@ -22,6 +22,7 @@ Execute comprehensive database exploration with intelligent analysis and insight
 **Exploration Focus**: Use $ARGUMENTS to specify table inspection, SQL query execution, data export, or comprehensive database inspection
 
 **Data Exploration Framework**:
+
 1. **Database Discovery** - Explore table structures, analyze relationships, identify data patterns, assess data quality metrics
 2. **Intelligent Querying** - Execute read-only queries via MCP, optimize query performance, provide result analysis, suggest query improvements
 3. **Data Analysis** - Generate data insights, identify trends and anomalies, calculate statistical summaries, analyze data distribution

@@ -33,6 +33,7 @@ Create or optimize Angular services based on the requirements:
 ## Service Patterns to Consider
 
 Based on the request:
+
 - **HTTP Data Services**: API calls with proper error handling and caching
 - **State Management**: Services for sharing data between components
 - **Authentication**: User authentication, token management, guards

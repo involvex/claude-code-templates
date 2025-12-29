@@ -11,14 +11,16 @@ description: Comprehensive Next.js migration assistant for Pages Router to App R
 ## Current Project Analysis
 
 ### Project Structure Analysis
+
 - Next.js version: !`grep '"next"' package.json | head -1`
 - Current router: !`ls -la pages/ 2>/dev/null && echo "Pages Router detected" || echo "No pages/ directory found"`
 - App router: !`ls -la app/ 2>/dev/null && echo "App Router detected" || echo "No app/ directory found"`
 - TypeScript: @tsconfig.json (if exists)
 
 ### File Structure Overview
+
 - Pages directory: @pages/ (if exists)
-- App directory: @app/ (if exists)  
+- App directory: @app/ (if exists)
 - Components: @components/ (if exists)
 - API routes: @pages/api/ or @app/api/
 - Styles: @styles/ (if exists)
@@ -28,10 +30,11 @@ description: Comprehensive Next.js migration assistant for Pages Router to App R
 ### 1. Pages Router to App Router Migration
 
 #### Pre-Migration Analysis
+
 ```typescript
 // Migration analysis tool
 interface MigrationAnalysis {
-  currentStructure: 'pages' | 'app' | 'hybrid';
+  currentStructure: "pages" | "app" | "hybrid";
   pagesCount: number;
   apiRoutesCount: number;
   customApp: boolean;
@@ -43,7 +46,7 @@ interface MigrationAnalysis {
 
 const analyzeMigrationComplexity = (): MigrationAnalysis => {
   return {
-    currentStructure: 'pages', // Detected from file structure
+    currentStructure: "pages", // Detected from file structure
     pagesCount: 0, // Count .js/.tsx files in pages/
     apiRoutesCount: 0, // Count files in pages/api/
     customApp: false, // Check for pages/_app
@@ -58,6 +61,7 @@ const analyzeMigrationComplexity = (): MigrationAnalysis => {
 #### Migration Steps
 
 ##### Step 1: Create App Directory Structure
+
 ```bash
 #!/bin/bash
 # Create app directory structure
@@ -147,57 +151,60 @@ echo "✅ App Router structure created"
 ```
 
 ##### Step 2: Migrate Pages to App Router
+
 ```typescript
 // Page migration utility
 interface PageMigration {
   source: string;
   destination: string;
-  type: 'page' | 'api' | 'dynamic' | 'nested';
+  type: "page" | "api" | "dynamic" | "nested";
   hasGetServerSideProps: boolean;
   hasGetStaticProps: boolean;
   hasGetStaticPaths: boolean;
 }
 
 const migratePage = async (pagePath: string): Promise<string> => {
-  const pageContent = readFileSync(pagePath, 'utf-8');
-  
+  const pageContent = readFileSync(pagePath, "utf-8");
+
   // Extract page component
   const componentMatch = pageContent.match(/export default function (\w+)/);
-  const componentName = componentMatch?.[1] || 'Page';
-  
+  const componentName = componentMatch?.[1] || "Page";
+
   // Check for data fetching methods
-  const hasGetServerSideProps = pageContent.includes('getServerSideProps');
-  const hasGetStaticProps = pageContent.includes('getStaticProps');
-  const hasGetStaticPaths = pageContent.includes('getStaticPaths');
-  
+  const hasGetServerSideProps = pageContent.includes("getServerSideProps");
+  const hasGetStaticProps = pageContent.includes("getStaticProps");
+  const hasGetStaticPaths = pageContent.includes("getStaticPaths");
+
   // Convert to App Router format
-  let appRouterCode = '';
-  
+  let appRouterCode = "";
+
   // Add metadata if page has Head component
-  if (pageContent.includes('from \'next/head\'')) {
+  if (pageContent.includes("from 'next/head'")) {
     appRouterCode += `import type { Metadata } from 'next'\n\n`;
     appRouterCode += generateMetadata(pageContent);
   }
-  
+
   // Convert data fetching
   if (hasGetServerSideProps) {
     appRouterCode += convertGetServerSideProps(pageContent);
   } else if (hasGetStaticProps) {
     appRouterCode += convertGetStaticProps(pageContent);
   }
-  
+
   // Convert component
   appRouterCode += convertPageComponent(pageContent);
-  
+
   return appRouterCode;
 };
 
 const convertGetServerSideProps = (content: string): string => {
   // Extract getServerSideProps logic and convert to Server Component
-  const gsspMatch = content.match(/export async function getServerSideProps[\s\S]*?(?=export|$)/);
-  
-  if (!gsspMatch) return '';
-  
+  const gsspMatch = content.match(
+    /export async function getServerSideProps[\s\S]*?(?=export|$)/,
+  );
+
+  if (!gsspMatch) return "";
+
   return `
 // Server Component with direct data fetching
 async function fetchData(context: any) {
@@ -222,29 +229,33 @@ export const metadata: Metadata = {
 const convertPageComponent = (content: string): string => {
   // Convert page component to App Router format
   return content
-    .replace(/import Head from \'next\/head\'/g, '')
-    .replace(/<Head>[\s\S]*?<\/Head>/g, '')
-    .replace(/export async function getServerSideProps[\s\S]*?(?=export)/g, '')
-    .replace(/export async function getStaticProps[\s\S]*?(?=export)/g, '')
-    .replace(/export async function getStaticPaths[\s\S]*?(?=export)/g, '');
+    .replace(/import Head from \'next\/head\'/g, "")
+    .replace(/<Head>[\s\S]*?<\/Head>/g, "")
+    .replace(/export async function getServerSideProps[\s\S]*?(?=export)/g, "")
+    .replace(/export async function getStaticProps[\s\S]*?(?=export)/g, "")
+    .replace(/export async function getStaticPaths[\s\S]*?(?=export)/g, "");
 };
 ```
 
 ##### Step 3: Migrate API Routes
+
 ```typescript
 // API route migration
 const migrateApiRoute = (apiPath: string): string => {
-  const apiContent = readFileSync(apiPath, 'utf-8');
-  
+  const apiContent = readFileSync(apiPath, "utf-8");
+
   // Convert to App Router API format
   let newApiContent = `import { NextRequest, NextResponse } from 'next/server'\n\n`;
-  
+
   // Extract handler functions
-  const methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
-  
-  methods.forEach(method => {
-    const handlerRegex = new RegExp(`if.*req\\.method.*===.*['"]${method}['"]`, 'i');
-    
+  const methods = ["GET", "POST", "PUT", "DELETE", "PATCH"];
+
+  methods.forEach((method) => {
+    const handlerRegex = new RegExp(
+      `if.*req\\.method.*===.*['"]${method}['"]`,
+      "i",
+    );
+
     if (apiContent.match(handlerRegex)) {
       newApiContent += `
 export async function ${method}(
@@ -267,7 +278,7 @@ export async function ${method}(
 `;
     }
   });
-  
+
   return newApiContent;
 };
 ```
@@ -275,6 +286,7 @@ export async function ${method}(
 ### 2. JavaScript to TypeScript Migration
 
 #### TypeScript Configuration Setup
+
 ```json
 // tsconfig.json
 {
@@ -308,6 +320,7 @@ export async function ${method}(
 ```
 
 #### File Conversion Process
+
 ```bash
 #!/bin/bash
 # Convert JavaScript files to TypeScript
@@ -319,41 +332,41 @@ find . -name "*.js" -o -name "*.jsx" | grep -v node_modules | grep -v .next | wh
   # Skip if TypeScript version already exists
   ts_file="${file%.*}.ts"
   tsx_file="${file%.*}.tsx"
-  
+
   if [[ -f "$ts_file" ]] || [[ -f "$tsx_file" ]]; then
     echo "⏭️  Skipping $file (TypeScript version exists)"
     continue
   fi
-  
+
   # Determine if file contains JSX
   if grep -q "jsx\|<.*>" "$file"; then
     new_file="${file%.*}.tsx"
   else
     new_file="${file%.*}.ts"
   fi
-  
+
   echo "📝 Converting $file -> $new_file"
-  
+
   # Copy file with new extension
   cp "$file" "$new_file"
-  
+
   # Add basic type annotations
   sed -i.bak '
     # Add React import for TSX files
     /^import.*React/!{
       /\.tsx$/s/^/import React from '\''react'\''\n/
     }
-    
+
     # Add basic prop types
     s/function \([A-Z][a-zA-Z]*\)(\([^)]*\))/function \1(\2: any)/g
-    
+
     # Add return type annotations for simple functions
     s/const \([a-zA-Z][a-zA-Z0-9]*\) = (/const \1 = (/g
   ' "$new_file"
-  
+
   # Remove backup file
   rm "${new_file}.bak" 2>/dev/null || true
-  
+
   echo "✅ Converted $file"
 done
 
@@ -364,35 +377,38 @@ echo "⚠️  Please review and add proper type annotations"
 ### 3. Class Components to Function Components Migration
 
 #### Component Analysis and Conversion
+
 ```typescript
 // Class to function component converter
 const convertClassComponent = (componentCode: string): string => {
   // Extract class component parts
-  const classMatch = componentCode.match(/class (\w+) extends (?:React\.)?Component/);
-  const componentName = classMatch?.[1] || 'Component';
-  
+  const classMatch = componentCode.match(
+    /class (\w+) extends (?:React\.)?Component/,
+  );
+  const componentName = classMatch?.[1] || "Component";
+
   // Extract state
   const stateMatch = componentCode.match(/state\s*=\s*{([^}]+)}/);
-  const initialState = stateMatch?.[1] || '';
-  
+  const initialState = stateMatch?.[1] || "";
+
   // Extract lifecycle methods
   const lifecycleMethods = extractLifecycleMethods(componentCode);
-  
+
   // Extract render method
   const renderMatch = componentCode.match(/render\(\)\s*{([\s\S]*?)(?=^\s*})/m);
-  const renderContent = renderMatch?.[1] || '';
-  
+  const renderContent = renderMatch?.[1] || "";
+
   // Generate function component
   let functionComponent = `import React, { useState, useEffect } from 'react';\n\n`;
-  
+
   // Add prop types if they exist
   const propsMatch = componentCode.match(/(\w+)Props/);
   if (propsMatch) {
     functionComponent += `interface ${propsMatch[1]}Props {\n  // Add prop definitions here\n}\n\n`;
   }
-  
+
   functionComponent += `const ${componentName}: React.FC<${componentName}Props> = (props) => {\n`;
-  
+
   // Convert state
   if (initialState) {
     const stateVars = parseState(initialState);
@@ -400,20 +416,20 @@ const convertClassComponent = (componentCode: string): string => {
       functionComponent += `  const [${name}, set${capitalize(name)}] = useState(${value});\n`;
     });
   }
-  
+
   // Convert lifecycle methods to hooks
   if (lifecycleMethods.componentDidMount) {
     functionComponent += `\n  useEffect(() => {\n`;
     functionComponent += `    ${lifecycleMethods.componentDidMount}\n`;
     functionComponent += `  }, []);\n`;
   }
-  
+
   if (lifecycleMethods.componentDidUpdate) {
     functionComponent += `\n  useEffect(() => {\n`;
     functionComponent += `    ${lifecycleMethods.componentDidUpdate}\n`;
     functionComponent += `  });\n`;
   }
-  
+
   if (lifecycleMethods.componentWillUnmount) {
     functionComponent += `\n  useEffect(() => {\n`;
     functionComponent += `    return () => {\n`;
@@ -421,22 +437,24 @@ const convertClassComponent = (componentCode: string): string => {
     functionComponent += `    };\n`;
     functionComponent += `  }, []);\n`;
   }
-  
+
   // Add render return
   functionComponent += `\n  return (\n`;
-  functionComponent += renderContent.replace(/this\.state\./g, '').replace(/this\.props\./g, 'props.');
+  functionComponent += renderContent
+    .replace(/this\.state\./g, "")
+    .replace(/this\.props\./g, "props.");
   functionComponent += `  );\n`;
   functionComponent += `};\n\n`;
   functionComponent += `export default ${componentName};`;
-  
+
   return functionComponent;
 };
 
 const extractLifecycleMethods = (code: string) => {
   return {
-    componentDidMount: extractMethod(code, 'componentDidMount'),
-    componentDidUpdate: extractMethod(code, 'componentDidUpdate'),
-    componentWillUnmount: extractMethod(code, 'componentWillUnmount'),
+    componentDidMount: extractMethod(code, "componentDidMount"),
+    componentDidUpdate: extractMethod(code, "componentDidUpdate"),
+    componentWillUnmount: extractMethod(code, "componentWillUnmount"),
   };
 };
 
@@ -448,9 +466,7 @@ const extractMethod = (code: string, methodName: string): string | null => {
 
 const parseState = (stateString: string) => {
   // Simple state parser - would need more robust implementation
-  return [
-    { name: 'example', value: 'null' }
-  ];
+  return [{ name: "example", value: "null" }];
 };
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -459,6 +475,7 @@ const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 ### 4. Modern React Patterns Migration
 
 #### Hook Conversion Patterns
+
 ```typescript
 // Convert common patterns to modern hooks
 
@@ -546,6 +563,7 @@ const MyComponent = () => {
 ## Comprehensive Migration Process
 
 ### 1. Pre-Migration Checklist
+
 ```bash
 #!/bin/bash
 # Pre-migration validation
@@ -594,6 +612,7 @@ fi
 ```
 
 ### 2. Migration Execution
+
 ```bash
 #!/bin/bash
 # Execute migration
@@ -641,6 +660,7 @@ echo "⚠️  Please review the migrated code and test thoroughly"
 ```
 
 ### 3. Post-Migration Validation
+
 ```bash
 #!/bin/bash
 # Post-migration validation
@@ -687,6 +707,7 @@ echo "✅ Post-migration validation completed"
 ## Migration Documentation and Guides
 
 ### 1. Migration Report Generation
+
 ```typescript
 // Generate comprehensive migration report
 interface MigrationReport {
@@ -708,13 +729,13 @@ interface MigrationReport {
 interface MigratedFile {
   original: string;
   migrated: string;
-  status: 'success' | 'warning' | 'error';
+  status: "success" | "warning" | "error";
   notes: string[];
 }
 
 interface Issue {
   file: string;
-  type: 'error' | 'warning';
+  type: "error" | "warning";
   message: string;
   solution?: string;
 }
@@ -735,32 +756,36 @@ const generateMigrationReport = (): MigrationReport => {
     },
     issues: [],
     recommendations: [
-      'Test all functionality thoroughly',
-      'Update any hardcoded imports',
-      'Review and optimize bundle splitting',
-      'Update documentation and README',
+      "Test all functionality thoroughly",
+      "Update any hardcoded imports",
+      "Review and optimize bundle splitting",
+      "Update documentation and README",
     ],
   };
 };
 ```
 
 ### 2. Best Practices Guide
+
 ```markdown
 # Migration Best Practices
 
 ## Before Migration
+
 - [ ] Update to latest Next.js version
 - [ ] Run full test suite
 - [ ] Create comprehensive backup
 - [ ] Review custom configurations
 
 ## During Migration
+
 - [ ] Migrate incrementally (pages first, then components)
 - [ ] Test each migration step
 - [ ] Keep detailed notes of changes
 - [ ] Handle TypeScript errors immediately
 
 ## After Migration
+
 - [ ] Update all imports and references
 - [ ] Test all functionality
 - [ ] Update documentation
@@ -768,6 +793,7 @@ const generateMigrationReport = (): MigrationReport => {
 - [ ] Clean up old files after validation
 
 ## Common Gotchas
+
 - Dynamic imports syntax changes
 - Middleware configuration updates
 - Environment variable handling

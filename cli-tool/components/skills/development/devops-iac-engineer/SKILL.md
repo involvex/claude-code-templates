@@ -20,6 +20,7 @@ This Skill helps DevOps teams design, implement, and maintain cloud infrastructu
 ## Core Principles
 
 ### Key DevOps Terminology (Consistent Throughout)
+
 - **Infrastructure as Code (IaC)**: Managing infrastructure through declarative code files
 - **GitOps**: Using Git as the single source of truth for infrastructure and applications
 - **Immutable Infrastructure**: Infrastructure components that are replaced rather than modified

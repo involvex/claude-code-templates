@@ -10,6 +10,7 @@ description: Draft professional emails for various contexts including business, 
 Provide context and purpose, and I'll draft an appropriate email.
 
 **What I need:**
+
 - Purpose of email (request, follow-up, announcement, etc.)
 - Recipient relationship (colleague, customer, manager, vendor)
 - Key points to include
@@ -168,18 +169,21 @@ Best,
 ## Tone guidelines
 
 ### Formal tone
+
 - Use complete sentences
 - Avoid contractions
 - Professional language
 - Proper titles (Dr., Mr., Ms.)
 
 ### Casual tone
+
 - Contractions acceptable
 - Conversational language
 - Still professional
 - First names
 
 ### Urgent tone
+
 - Clear subject line with [URGENT] or [ACTION REQUIRED]
 - Bold key points
 - Explicit deadline
@@ -188,12 +192,14 @@ Best,
 ## Subject line best practices
 
 **Good subject lines:**
+
 - "Action required: Submit timesheet by Friday"
 - "Q4 Sales Report - Review needed"
 - "Meeting rescheduled: Project kickoff now Thursday"
 - "Quick question about deployment process"
 
 **Bad subject lines:**
+
 - "Update"
 - "Question"
 - "Hello"
@@ -202,6 +208,7 @@ Best,
 ## Email etiquette
 
 **DO:**
+
 - Respond within 24 hours (even if just to acknowledge)
 - Use clear, specific subject lines
 - Keep it concise
@@ -211,6 +218,7 @@ Best,
 - End with clear call to action
 
 **DON'T:**
+
 - Use ALL CAPS
 - Over-use exclamation marks!!!
 - Mark everything as urgent
@@ -286,18 +294,21 @@ Cheers,
 ## Closing phrases by context
 
 **Formal:**
+
 - Sincerely
 - Best regards
 - Respectfully
 - Cordially
 
 **Professional:**
+
 - Best
 - Thanks
 - Kind regards
 - Regards
 
 **Casual:**
+
 - Cheers
 - Thanks!
 - Talk soon

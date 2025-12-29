@@ -22,6 +22,7 @@ Execute precise conversion of individual GitHub issues to Linear tasks:
 **Issue Target**: Use $ARGUMENTS to specify issue number, conversion options, team assignment, or processing preferences
 
 **Conversion Framework**:
+
 1. **Issue Analysis** - Fetch complete issue data, extract metadata, analyze content structure, infer priorities
 2. **Data Transformation** - Map fields accurately, convert formats, preserve relationships, enhance descriptions
 3. **Linear Integration** - Create task with proper formatting, assign team/project, set priorities, manage labels

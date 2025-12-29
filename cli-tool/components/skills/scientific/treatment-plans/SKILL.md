@@ -11,6 +11,7 @@ allowed-tools: [Read, Write, Edit, Bash]
 Treatment plan writing is the systematic documentation of clinical care strategies designed to address patient health conditions through evidence-based interventions, measurable goals, and structured follow-up. This skill provides comprehensive LaTeX templates and validation tools for creating **concise, focused** treatment plans (3-4 pages standard) across all medical specialties with full regulatory compliance.
 
 **Critical Principles:**
+
 1. **CONCISE & ACTIONABLE**: Treatment plans default to 3-4 pages maximum, focusing only on clinically essential information that impacts care decisions
 2. **Patient-Centered**: Plans must be evidence-based, measurable, and compliant with healthcare regulations (HIPAA, documentation standards)
 3. **Minimal Citations**: Use brief in-text citations only when needed to support clinical recommendations; avoid extensive bibliographies
@@ -20,6 +21,7 @@ Every treatment plan should include clear goals, specific interventions, defined
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Creating individualized treatment plans for patient care
 - Documenting therapeutic interventions for chronic disease management
 - Developing rehabilitation programs (physical therapy, occupational therapy, cardiac rehab)
@@ -36,27 +38,32 @@ This skill should be used when:
 **⚠️ MANDATORY: Every treatment plan MUST include at least 1 AI-generated figure using the scientific-schematics skill.**
 
 This is not optional. Treatment plans benefit greatly from visual elements. Before finalizing any document:
+
 1. Generate at minimum ONE schematic or diagram (e.g., treatment pathway flowchart, care coordination diagram, or therapy timeline)
 2. For complex plans: include decision algorithm flowchart
 3. For rehabilitation plans: include milestone progression diagram
 
 **How to generate figures:**
+
 - Use the **scientific-schematics** skill to generate AI-powered publication-quality diagrams
 - Simply describe your desired diagram in natural language
 - Nano Banana Pro will automatically generate, review, and refine the schematic
 
 **How to generate schematics:**
+
 ```bash
 python scripts/generate_schematic.py "your diagram description" -o figures/output.png
 ```
 
 The AI will automatically:
+
 - Create publication-quality images with proper formatting
 - Review and refine through multiple iterations
 - Ensure accessibility (colorblind-friendly, high contrast)
 - Save outputs in the figures/ directory
 
 **When to add schematics:**
+
 - Treatment pathway flowcharts
 - Care coordination diagrams
 - Therapy progression timelines
@@ -81,12 +88,14 @@ Treatment plans come in three format options based on clinical complexity and us
 **When to use**: Straightforward clinical scenarios, standard protocols, busy clinical settings
 
 **Format**: Single page containing all essential treatment information in scannable sections
+
 - No table of contents needed
 - No extensive narratives
 - Focused on actionable items only
 - Similar to precision oncology reports or treatment recommendation cards
 
 **Required sections** (all on one page):
+
 1. **Header Box**: Patient info, diagnosis, date, molecular/risk profile if applicable
 2. **Treatment Regimen**: Numbered list of specific interventions
 3. **Supportive Care**: Brief bullet points
@@ -96,6 +105,7 @@ Treatment plans come in three format options based on clinical complexity and us
 7. **Expected Outcome**: Timeline and success metrics
 
 **Design principles**:
+
 - Use small boxes/tables for organization (like the clinical treatment recommendation card format)
 - Eliminate all non-essential text
 - Use abbreviations familiar to clinicians
@@ -103,6 +113,7 @@ Treatment plans come in three format options based on clinical complexity and us
 - Think "quick reference card" not "comprehensive documentation"
 
 **Example structure**:
+
 ```latex
 [Patient ID/Diagnosis Box at top]
 
@@ -175,6 +186,7 @@ Following the Foundation Medicine model for precision medicine reporting and cli
      - Key milestone dates
 
 **Visual Format Requirements:**
+
 - Use `\thispagestyle{empty}` to remove page numbers from first page
 - All content must fit on page 1 (before `\newpage`)
 - Use colored boxes (tcolorbox package) with different colors for different information types
@@ -184,6 +196,7 @@ Following the Foundation Medicine model for precision medicine reporting and cli
 - Detailed sections start on page 3
 
 **Example First Page Structure:**
+
 ```latex
 \maketitle
 \thispagestyle{empty}
@@ -233,6 +246,7 @@ Treatment plans should prioritize **clarity and actionability** over exhaustive 
   - **5-6 pages** (rare): Only for highly complex cases with multiple comorbidities or multidisciplinary interventions
 
 **Streamlining Guidelines:**
+
 - **First Page Summary**: Use individual colored boxes to consolidate key information (goals, interventions, decision points) - this alone can often convey the essential treatment plan
 - **Eliminate Redundancy**: If information is in the first-page summary, don't repeat it verbatim in detailed sections
 - **Patient Education section**: 3-5 key bullet points on critical topics and warning signs only
@@ -261,7 +275,7 @@ The goal is professional, clinically complete documentation that respects clinic
   - Standard-of-care interventions widely accepted in the field
   - Basic medical facts and routine clinical practices
   - General patient education content
-- **Citation Format**: 
+- **Citation Format**:
   - Inline: "Initiate metformin as first-line therapy (ADA Standards of Care 2024)"
   - Minimal: "Treatment follows ACC/AHA heart failure guidelines"
   - Avoid formal numbered references and extensive bibliography sections unless document is for academic/research purposes
@@ -276,6 +290,7 @@ General medical treatment plans address common chronic conditions and acute medi
 #### Standard Components
 
 **Patient Information (De-identified)**
+
 - Demographics (age, sex, relevant medical background)
 - Active medical conditions and comorbidities
 - Current medications and allergies
@@ -284,6 +299,7 @@ General medical treatment plans address common chronic conditions and acute medi
 - **HIPAA Compliance**: Remove all 18 identifiers per Safe Harbor method
 
 **Diagnosis and Assessment Summary**
+
 - Primary diagnosis with ICD-10 code
 - Secondary diagnoses and comorbidities
 - Severity classification and staging
@@ -294,6 +310,7 @@ General medical treatment plans address common chronic conditions and acute medi
 **Treatment Goals (SMART Format)**
 
 Short-term goals (1-3 months):
+
 - **Specific**: Clearly defined outcome (e.g., "Reduce HbA1c to <7%")
 - **Measurable**: Quantifiable metrics (e.g., "Decrease systolic BP by 10 mmHg")
 - **Achievable**: Realistic given patient capabilities
@@ -301,6 +318,7 @@ Short-term goals (1-3 months):
 - **Time-bound**: Specific timeframe (e.g., "within 8 weeks")
 
 Long-term goals (6-12 months):
+
 - Disease control or remission targets
 - Functional improvement objectives
 - Quality of life enhancement
@@ -309,27 +327,31 @@ Long-term goals (6-12 months):
 
 **Interventions**
 
-*Pharmacological*:
+_Pharmacological_:
+
 - Medications with specific dosages, routes, frequencies
 - Titration schedules and target doses
 - Drug-drug interaction considerations
 - Monitoring for adverse effects
 - Medication reconciliation
 
-*Non-pharmacological*:
+_Non-pharmacological_:
+
 - Lifestyle modifications (diet, exercise, smoking cessation)
 - Behavioral interventions
 - Patient education and self-management
 - Monitoring and self-tracking (glucose, blood pressure, weight)
 - Assistive devices or adaptive equipment
 
-*Procedural*:
+_Procedural_:
+
 - Planned procedures or interventions
 - Referrals to specialists
 - Diagnostic testing schedule
 - Preventive care (vaccinations, screenings)
 
 **Timeline and Schedule**
+
 - Treatment phases with specific timeframes
 - Appointment frequency (weekly, monthly, quarterly)
 - Milestone assessments and goal evaluations
@@ -337,6 +359,7 @@ Long-term goals (6-12 months):
 - Expected duration of treatment
 
 **Monitoring Parameters**
+
 - Clinical outcomes to track (vital signs, lab values, symptoms)
 - Assessment tools and scales (e.g., PHQ-9, pain scales)
 - Frequency of monitoring
@@ -344,6 +367,7 @@ Long-term goals (6-12 months):
 - Patient-reported outcomes
 
 **Expected Outcomes**
+
 - Primary outcome measures
 - Success criteria and benchmarks
 - Expected timeline for improvement
@@ -351,6 +375,7 @@ Long-term goals (6-12 months):
 - Long-term prognosis
 
 **Follow-up Plan**
+
 - Scheduled appointments and reassessments
 - Communication plan (phone calls, secure messaging)
 - Emergency contact procedures
@@ -358,6 +383,7 @@ Long-term goals (6-12 months):
 - Transition or discharge planning
 
 **Patient Education**
+
 - Understanding of condition and treatment rationale
 - Self-management skills training
 - Medication administration and adherence
@@ -365,6 +391,7 @@ Long-term goals (6-12 months):
 - Resources and support services
 
 **Risk Mitigation**
+
 - Potential adverse effects and management
 - Drug interactions and contraindications
 - Fall prevention, infection prevention
@@ -389,6 +416,7 @@ Rehabilitation plans focus on restoring function, improving mobility, and enhanc
 #### Core Components
 
 **Functional Assessment**
+
 - Baseline functional status (ADLs, IADLs)
 - Range of motion, strength, balance, endurance
 - Gait analysis and mobility assessment
@@ -397,44 +425,51 @@ Rehabilitation plans focus on restoring function, improving mobility, and enhanc
 
 **Rehabilitation Goals**
 
-*Impairment-level goals*:
+_Impairment-level goals_:
+
 - Improve shoulder flexion to 140 degrees
 - Increase quadriceps strength by 2/5 MMT grades
 - Enhance balance (Berg Score >45/56)
 
-*Activity-level goals*:
+_Activity-level goals_:
+
 - Independent ambulation 150 feet with assistive device
 - Climb 12 stairs with handrail supervision
 - Transfer bed-to-chair independently
 
-*Participation-level goals*:
+_Participation-level goals_:
+
 - Return to work with modifications
 - Resume recreational activities
 - Independent community mobility
 
 **Therapeutic Interventions**
 
-*Physical Therapy*:
+_Physical Therapy_:
+
 - Therapeutic exercises (strengthening, stretching, endurance)
 - Manual therapy techniques
 - Gait training and balance activities
 - Modalities (heat, ice, electrical stimulation, ultrasound)
 - Assistive device training
 
-*Occupational Therapy*:
+_Occupational Therapy_:
+
 - ADL training (bathing, dressing, grooming, feeding)
 - Upper extremity strengthening and coordination
 - Adaptive equipment and modifications
 - Energy conservation techniques
 - Cognitive rehabilitation
 
-*Speech-Language Pathology*:
+_Speech-Language Pathology_:
+
 - Swallowing therapy and dysphagia management
 - Communication strategies and augmentative devices
 - Cognitive-linguistic therapy
 - Voice therapy
 
-*Other Services*:
+_Other Services_:
+
 - Recreational therapy
 - Aquatic therapy
 - Cardiac rehabilitation
@@ -442,6 +477,7 @@ Rehabilitation plans focus on restoring function, improving mobility, and enhanc
 - Vestibular rehabilitation
 
 **Treatment Schedule**
+
 - Frequency: 3x/week PT, 2x/week OT (example)
 - Session duration: 45-60 minutes
 - Treatment phase durations (acute, subacute, maintenance)
@@ -449,6 +485,7 @@ Rehabilitation plans focus on restoring function, improving mobility, and enhanc
 - Reassessment intervals
 
 **Progress Monitoring**
+
 - Weekly functional assessments
 - Standardized outcome measures
 - Goal attainment scaling
@@ -456,6 +493,7 @@ Rehabilitation plans focus on restoring function, improving mobility, and enhanc
 - Patient satisfaction
 
 **Home Exercise Program**
+
 - Specific exercises with repetitions/sets/frequency
 - Precautions and safety instructions
 - Progression criteria
@@ -478,6 +516,7 @@ Mental health treatment plans address psychiatric conditions through integrated 
 #### Essential Components
 
 **Psychiatric Assessment**
+
 - Primary psychiatric diagnosis (DSM-5 criteria)
 - Symptom severity and functional impairment
 - Co-occurring mental health conditions
@@ -488,19 +527,22 @@ Mental health treatment plans address psychiatric conditions through integrated 
 
 **Treatment Goals**
 
-*Symptom reduction*:
+_Symptom reduction_:
+
 - Decrease depression severity (PHQ-9 score from 18 to <10)
 - Reduce anxiety symptoms (GAD-7 score <5)
 - Improve sleep quality (Pittsburgh Sleep Quality Index)
 - Stabilize mood (reduced mood episodes)
 
-*Functional improvement*:
+_Functional improvement_:
+
 - Return to work or school
 - Improve social relationships and support
 - Enhance coping skills and emotional regulation
 - Increase engagement in meaningful activities
 
-*Recovery-oriented goals*:
+_Recovery-oriented goals_:
+
 - Build resilience and self-efficacy
 - Develop crisis management skills
 - Establish sustainable wellness routines
@@ -508,14 +550,16 @@ Mental health treatment plans address psychiatric conditions through integrated 
 
 **Therapeutic Interventions**
 
-*Psychotherapy*:
+_Psychotherapy_:
+
 - Evidence-based modality (CBT, DBT, ACT, psychodynamic, IPT)
 - Session frequency (weekly, biweekly)
 - Treatment duration (12-16 weeks, ongoing)
 - Specific techniques and targets
 - Group therapy participation
 
-*Psychopharmacology*:
+_Psychopharmacology_:
+
 - Medication class and rationale
 - Starting dose and titration schedule
 - Target symptoms
@@ -523,7 +567,8 @@ Mental health treatment plans address psychiatric conditions through integrated 
 - Side effect monitoring
 - Combination therapy considerations
 
-*Psychosocial Interventions*:
+_Psychosocial Interventions_:
+
 - Case management services
 - Peer support programs
 - Family therapy or psychoeducation
@@ -532,6 +577,7 @@ Mental health treatment plans address psychiatric conditions through integrated 
 - Substance abuse treatment
 
 **Safety Planning**
+
 - Crisis contacts and emergency services
 - Warning signs and triggers
 - Coping strategies and self-soothing techniques
@@ -540,6 +586,7 @@ Mental health treatment plans address psychiatric conditions through integrated 
 - Support system activation
 
 **Monitoring and Assessment**
+
 - Symptom rating scales (weekly or biweekly)
 - Medication adherence and side effects
 - Suicidal ideation screening
@@ -547,6 +594,7 @@ Mental health treatment plans address psychiatric conditions through integrated 
 - Treatment engagement and therapeutic alliance
 
 **Patient and Family Education**
+
 - Psychoeducation about diagnosis
 - Treatment rationale and expectations
 - Medication information
@@ -571,18 +619,21 @@ Comprehensive long-term care plans for chronic conditions requiring ongoing moni
 #### Key Features
 
 **Disease-Specific Targets**
+
 - Evidence-based treatment goals per guidelines
 - Stage-appropriate interventions
 - Complication prevention strategies
 - Disease progression monitoring
 
 **Self-Management Support**
+
 - Patient activation and engagement
 - Shared decision-making
 - Action plans for symptom changes
 - Technology-enabled monitoring (apps, remote monitoring)
 
 **Care Coordination**
+
 - Primary care physician oversight
 - Specialist consultations and co-management
 - Care transitions (hospital to home)
@@ -590,6 +641,7 @@ Comprehensive long-term care plans for chronic conditions requiring ongoing moni
 - Communication protocols
 
 **Population Health Integration**
+
 - Registry tracking and outreach
 - Preventive care and screening schedules
 - Quality measure reporting
@@ -613,6 +665,7 @@ Structured plans for surgical and procedural patients covering preoperative prep
 #### Components
 
 **Preoperative Assessment**
+
 - Surgical indication and planned procedure
 - Preoperative risk stratification (ASA class, cardiac risk)
 - Optimization of medical conditions
@@ -621,6 +674,7 @@ Structured plans for surgical and procedural patients covering preoperative prep
 - Informed consent and patient education
 
 **Perioperative Interventions**
+
 - Enhanced recovery after surgery (ERAS) protocols
 - Venous thromboembolism prophylaxis
 - Antibiotic prophylaxis
@@ -628,6 +682,7 @@ Structured plans for surgical and procedural patients covering preoperative prep
 - Pain management plan (multimodal analgesia)
 
 **Postoperative Care**
+
 - Immediate recovery goals (24-48 hours)
 - Early mobilization protocols
 - Diet advancement
@@ -636,6 +691,7 @@ Structured plans for surgical and procedural patients covering preoperative prep
 - Complication monitoring
 
 **Discharge Planning**
+
 - Activity restrictions and progression
 - Medication reconciliation
 - Follow-up appointments
@@ -649,6 +705,7 @@ Multimodal approaches to acute and chronic pain using evidence-based interventio
 #### Comprehensive Components
 
 **Pain Assessment**
+
 - Pain location, quality, intensity (0-10 scale)
 - Temporal pattern (constant, intermittent, breakthrough)
 - Aggravating and alleviating factors
@@ -658,20 +715,23 @@ Multimodal approaches to acute and chronic pain using evidence-based interventio
 
 **Multimodal Interventions**
 
-*Pharmacological*:
+_Pharmacological_:
+
 - Non-opioid analgesics (acetaminophen, NSAIDs)
 - Adjuvant medications (antidepressants, anticonvulsants, muscle relaxants)
 - Topical agents (lidocaine, capsaicin, diclofenac)
 - Opioid therapy (when appropriate, with risk mitigation)
 - Titration and rotation strategies
 
-*Interventional Procedures*:
+_Interventional Procedures_:
+
 - Nerve blocks and injections
 - Radiofrequency ablation
 - Spinal cord stimulation
 - Intrathecal drug delivery
 
-*Non-pharmacological*:
+_Non-pharmacological_:
+
 - Physical therapy and exercise
 - Cognitive-behavioral therapy for pain
 - Mindfulness and relaxation techniques
@@ -679,6 +739,7 @@ Multimodal approaches to acute and chronic pain using evidence-based interventio
 - TENS units
 
 **Opioid Safety (when prescribed)**
+
 - Indication and planned duration
 - Prescription drug monitoring program (PDMP) check
 - Opioid risk assessment tools
@@ -688,6 +749,7 @@ Multimodal approaches to acute and chronic pain using evidence-based interventio
 - Frequent follow-up and reassessment
 
 **Functional Goals**
+
 - Specific activity improvements
 - Sleep quality enhancement
 - Reduced pain interference
@@ -713,6 +775,7 @@ Multimodal approaches to acute and chronic pain using evidence-based interventio
 ### First Page Summary (Most Important)
 
 **ALWAYS create a one-page executive summary as the first page:**
+
 - The first page must contain ONLY: Title, Report Info Box, and Key Findings boxes
 - This provides an at-a-glance overview similar to precision medicine reports
 - Table of contents and detailed sections start on page 2 or later
@@ -736,7 +799,7 @@ All treatment goals should meet SMART criteria:
 ✓ **Cultural Competence**: Respect cultural beliefs, language preferences, health literacy  
 ✓ **Patient Preferences**: Honor treatment preferences and personal values  
 ✓ **Individualization**: Tailor plans to patient's unique circumstances  
-✓ **Empowerment**: Support patient activation and self-management  
+✓ **Empowerment**: Support patient activation and self-management
 
 ### Evidence-Based Practice
 
@@ -744,7 +807,7 @@ All treatment goals should meet SMART criteria:
 ✓ **Quality Measures**: Incorporate HEDIS, CMS quality measures  
 ✓ **Comparative Effectiveness**: Use treatments with proven efficacy  
 ✓ **Avoid Low-Value Care**: Eliminate unnecessary tests and interventions  
-✓ **Stay Current**: Update plans based on emerging evidence  
+✓ **Stay Current**: Update plans based on emerging evidence
 
 ### Documentation Standards
 
@@ -753,7 +816,7 @@ All treatment goals should meet SMART criteria:
 ✓ **Accuracy**: Ensure factual correctness and current information  
 ✓ **Timeliness**: Document plans promptly  
 ✓ **Legibility**: Professional formatting and organization  
-✓ **Signature and Date**: Authenticate all treatment plans  
+✓ **Signature and Date**: Authenticate all treatment plans
 
 ### Regulatory Compliance
 
@@ -761,7 +824,7 @@ All treatment goals should meet SMART criteria:
 ✓ **Informed Consent**: Document patient understanding and agreement  
 ✓ **Billing Support**: Include documentation to support medical necessity  
 ✓ **Quality Reporting**: Enable extraction of quality metrics  
-✓ **Legal Protection**: Maintain defensible clinical documentation  
+✓ **Legal Protection**: Maintain defensible clinical documentation
 
 ### Multidisciplinary Coordination
 
@@ -769,7 +832,7 @@ All treatment goals should meet SMART criteria:
 ✓ **Role Clarity**: Define responsibilities for each team member  
 ✓ **Care Transitions**: Ensure continuity across settings  
 ✓ **Specialist Integration**: Coordinate with subspecialty care  
-✓ **Patient-Centered Medical Home**: Align with PCMH principles  
+✓ **Patient-Centered Medical Home**: Align with PCMH principles
 
 ## LaTeX Template Usage
 
@@ -802,6 +865,7 @@ Use only when one-page format is insufficient due to complexity:
 ### Template Structure
 
 All LaTeX templates include:
+
 - Professional formatting with appropriate margins and fonts
 - Structured sections for all required components
 - Tables for medications, interventions, timelines
@@ -834,6 +898,7 @@ python check_completeness.py my_treatment_plan.tex
 ```
 
 The script checks for:
+
 - Patient information section
 - Diagnosis and assessment
 - SMART goals (short-term and long-term)
@@ -854,6 +919,7 @@ python validate_treatment_plan.py my_treatment_plan.tex
 ```
 
 Validation includes:
+
 - SMART goal criteria assessment
 - Evidence-based intervention verification
 - Timeline feasibility check
@@ -866,6 +932,7 @@ Validation includes:
 Review treatment plans against the quality checklist (`quality_checklist.md`):
 
 **Clinical Quality**
+
 - [ ] Diagnosis is accurate and properly coded (ICD-10)
 - [ ] Goals are SMART and patient-centered
 - [ ] Interventions are evidence-based and guideline-concordant
@@ -874,6 +941,7 @@ Review treatment plans against the quality checklist (`quality_checklist.md`):
 - [ ] Safety considerations are addressed
 
 **Patient-Centered Care**
+
 - [ ] Patient preferences and values incorporated
 - [ ] Shared decision-making documented
 - [ ] Health literacy appropriate language
@@ -881,6 +949,7 @@ Review treatment plans against the quality checklist (`quality_checklist.md`):
 - [ ] Patient education plan included
 
 **Regulatory Compliance**
+
 - [ ] HIPAA-compliant de-identification
 - [ ] Medical necessity documented
 - [ ] Informed consent noted
@@ -888,6 +957,7 @@ Review treatment plans against the quality checklist (`quality_checklist.md`):
 - [ ] Date of plan creation/revision
 
 **Coordination and Communication**
+
 - [ ] Specialist referrals documented
 - [ ] Care team roles defined
 - [ ] Follow-up schedule clear
@@ -929,10 +999,12 @@ Treatment plans may be developed for clinical trials or research studies:
 **Template**: `general_medical_treatment_plan.tex`
 
 **Goals**:
+
 - Short-term: Reduce HbA1c to <7.5% in 3 months
 - Long-term: Achieve HbA1c <7%, lose 15 pounds in 6 months
 
 **Interventions**:
+
 - Pharmacological: Metformin 500mg BID, titrate to 1000mg BID
 - Lifestyle: Mediterranean diet, 150 min/week moderate exercise
 - Education: Diabetes self-management education, glucose monitoring
@@ -944,10 +1016,12 @@ Treatment plans may be developed for clinical trials or research studies:
 **Template**: `rehabilitation_treatment_plan.tex`
 
 **Goals**:
+
 - Short-term: Improve right arm strength 2/5 to 3/5 in 4 weeks
 - Long-term: Independent ambulation 150 feet with cane in 12 weeks
 
 **Interventions**:
+
 - PT 3x/week: Gait training, balance, strengthening
 - OT 3x/week: ADL training, upper extremity function
 - SLP 2x/week: Dysphagia therapy
@@ -959,10 +1033,12 @@ Treatment plans may be developed for clinical trials or research studies:
 **Template**: `mental_health_treatment_plan.tex`
 
 **Goals**:
+
 - Short-term: Reduce PHQ-9 to <10 in 8 weeks
 - Long-term: Achieve remission (PHQ-9 <5), return to work
 
 **Interventions**:
+
 - Psychotherapy: CBT weekly sessions
 - Medication: Sertraline 50mg daily, titrate to 100mg
 - Lifestyle: Sleep hygiene, exercise 30 min 5x/week
@@ -974,11 +1050,13 @@ Treatment plans may be developed for clinical trials or research studies:
 **Template**: `perioperative_care_plan.tex`
 
 **Preoperative Goals**:
+
 - Optimize diabetes control (glucose <180)
 - Discontinue anticoagulation per protocol
 - Complete medical clearance
 
 **Postoperative Goals**:
+
 - Ambulate 50 feet by POD 1
 - 90-degree knee flexion by POD 3
 - Discharge home with PT services by POD 2-3
@@ -990,10 +1068,12 @@ Treatment plans may be developed for clinical trials or research studies:
 **Template**: `pain_management_plan.tex`
 
 **Goals**:
+
 - Short-term: Reduce pain to 4/10 in 6 weeks
 - Long-term: Return to work full-time, pain 2-3/10
 
 **Interventions**:
+
 - Pharmacological: Gabapentin 300mg TID, duloxetine 60mg daily
 - PT: Core strengthening, McKenzie exercises 2x/week x 8 weeks
 - Behavioral: CBT for pain, mindfulness meditation
@@ -1004,6 +1084,7 @@ Treatment plans may be developed for clinical trials or research studies:
 Treatment plans should align with:
 
 ### General Medicine
+
 - American Diabetes Association (ADA) Standards of Care
 - ACC/AHA Cardiovascular Guidelines
 - GOLD COPD Guidelines
@@ -1011,18 +1092,21 @@ Treatment plans should align with:
 - KDIGO Chronic Kidney Disease Guidelines
 
 ### Rehabilitation
+
 - APTA Clinical Practice Guidelines
 - AOTA Practice Guidelines
 - Cardiac Rehabilitation Guidelines (AHA/AACVPR)
 - Stroke Rehabilitation Guidelines
 
 ### Mental Health
+
 - APA Practice Guidelines
 - VA/DoD Clinical Practice Guidelines
 - NICE Guidelines (National Institute for Health and Care Excellence)
 - Cochrane Reviews for psychiatric interventions
 
 ### Pain Management
+
 - CDC Opioid Prescribing Guidelines
 - AAPM/APS Chronic Pain Guidelines
 - WHO Pain Ladder
@@ -1037,6 +1121,7 @@ python timeline_generator.py --plan my_treatment_plan.tex --output timeline.pdf
 ```
 
 Generates:
+
 - Gantt chart of treatment phases
 - Milestone markers for goal assessments
 - Medication titration schedules
@@ -1086,6 +1171,7 @@ Treatment plans can be enhanced with professional medical document styling using
 The `medical_treatment_plan.sty` package (located in `assets/medical_treatment_plan.sty`) provides:
 
 **Professional Color Scheme**
+
 - **Primary Blue** (RGB: 0, 102, 153): Headers, section titles, primary accents
 - **Secondary Blue** (RGB: 102, 178, 204): Light backgrounds, subtle accents
 - **Accent Blue** (RGB: 0, 153, 204): Hyperlinks, key highlights
@@ -1095,6 +1181,7 @@ The `medical_treatment_plan.sty` package (located in `assets/medical_treatment_p
 - **Light Gray** (RGB: 245, 245, 245): Background fills
 
 **Styled Elements**
+
 - Custom colored headers and footers with professional rules
 - Blue section titles with underlines for clear hierarchy
 - Enhanced table formatting with colored headers and alternating rows
@@ -1216,8 +1303,8 @@ Enhanced table environment with medical styling:
 \begin{tabular}{|p{5cm}|p{4cm}|p{4.5cm}|}
 \hline
 \tableheadercolor  % Blue header with white text
-\textcolor{white}{\textbf{Column 1}} & 
-\textcolor{white}{\textbf{Column 2}} & 
+\textcolor{white}{\textbf{Column 1}} &
+\textcolor{white}{\textbf{Column 2}} &
 \textcolor{white}{\textbf{Column 3}} \\
 \hline
 Data row 1 content & Value 1 & Details 1 \\
@@ -1233,6 +1320,7 @@ Data row 3 content & Value 3 & Details 3 \\
 ```
 
 **Features:**
+
 - Blue headers with white text for visual prominence
 - Alternating row colors (`\tablerowcolor`) for improved readability
 - Automatic centering and spacing
@@ -1288,6 +1376,7 @@ This creates an eye-catching blue box with white text and clear hierarchy.
 ### Compilation Requirements
 
 **Required LaTeX Packages** (automatically loaded by the style):
+
 - `geometry` - Page layout and margins
 - `xcolor` - Color support
 - `tcolorbox` with `[most]` library - Custom colored boxes
@@ -1393,6 +1482,7 @@ sudo texhash
 Other medical/clinical document styles available from CTAN:
 
 **Journal Styles:**
+
 ```bash
 # Install via TeX Live Manager
 tlmgr install nejm        # New England Journal of Medicine
@@ -1401,6 +1491,7 @@ tlmgr install bmj         # British Medical Journal
 ```
 
 **General Professional Styles:**
+
 ```bash
 tlmgr install apa7        # APA 7th edition (health sciences)
 tlmgr install IEEEtran    # IEEE (medical devices/engineering)
@@ -1408,6 +1499,7 @@ tlmgr install springer    # Springer journals
 ```
 
 **Download from CTAN:**
+
 - Visit: https://ctan.org/
 - Search for medical document classes
 - Download and install per package instructions
@@ -1415,6 +1507,7 @@ tlmgr install springer    # Springer journals
 ### Troubleshooting
 
 **Issue: Package not found**
+
 ```bash
 # Install missing packages via TeX Live Manager
 sudo tlmgr update --self
@@ -1422,21 +1515,25 @@ sudo tlmgr install tcolorbox tikz pgf
 ```
 
 **Issue: Missing characters (✓, ≥, etc.)**
+
 - Use XeLaTeX instead of PDFLaTeX
 - Or replace with LaTeX commands: `$\checkmark$`, `$\geq$`
 - Requires `amssymb` package for math symbols
 
 **Issue: Header height warnings**
+
 - Style file sets `\setlength{\headheight}{22pt}`
 - Adjust if needed for your content
 
 **Issue: Boxes not rendering**
+
 ```bash
 # Ensure complete tcolorbox installation
 sudo tlmgr install tcolorbox tikz pgf
 ```
 
 **Issue: Font not found (XeLaTeX)**
+
 - Comment out custom font lines in .sty file
 - Or install specified fonts on your system
 
@@ -1530,24 +1627,28 @@ sudo tlmgr install tcolorbox tikz pgf
 ### Benefits of Professional Styling
 
 **Clinical Practice:**
+
 - Faster information scanning during patient encounters
 - Clear visual hierarchy for critical vs. routine information
 - Professional appearance suitable for patient-facing documents
 - Color-coded sections reduce cognitive load
 
 **Educational Use:**
+
 - Enhanced readability for teaching materials
 - Visual differentiation of concept types (goals, warnings, procedures)
 - Professional presentation for case discussions
 - Print and digital-ready formats
 
 **Documentation Quality:**
+
 - Modern, polished appearance
 - Maintains clinical accuracy while improving aesthetics
 - Standardized formatting across treatment plans
 - Easy to customize for institutional branding
 
 **Patient Engagement:**
+
 - More approachable than dense text documents
 - Color coding helps patients identify key sections
 - Professional appearance builds trust
@@ -1556,21 +1657,25 @@ sudo tlmgr install tcolorbox tikz pgf
 ## Ethical Considerations
 
 ### Informed Consent
+
 All treatment plans should involve patient understanding and voluntary agreement to proposed interventions.
 
 ### Cultural Sensitivity
+
 Treatment plans must respect diverse cultural beliefs, health practices, and communication styles.
 
 ### Health Equity
+
 Consider social determinants of health, access barriers, and health disparities when developing plans.
 
 ### Privacy Protection
+
 Maintain strict HIPAA compliance; de-identify all protected health information in shared documents.
 
 ### Autonomy and Beneficence
+
 Balance medical recommendations with patient autonomy and values while promoting patient welfare.
 
 ## License
 
 Part of the Claude Scientific Writer project. See main LICENSE file.
-

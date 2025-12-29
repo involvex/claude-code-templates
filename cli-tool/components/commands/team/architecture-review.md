@@ -22,6 +22,7 @@ Execute comprehensive architectural analysis with actionable improvement recomme
 **Review Scope**: Use $ARGUMENTS to focus on specific modules, design patterns, dependency analysis, or security architecture
 
 **Architecture Analysis Framework**:
+
 1. **System Structure Assessment** - Map component hierarchy, identify architectural patterns, analyze module boundaries, assess layered design
 2. **Design Pattern Evaluation** - Identify implemented patterns, assess pattern consistency, detect anti-patterns, evaluate pattern effectiveness
 3. **Dependency Architecture** - Analyze coupling levels, detect circular dependencies, evaluate dependency injection, assess architectural boundaries

@@ -53,7 +53,9 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
+    Arial, sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
@@ -79,7 +81,9 @@ body {
   top: 0;
   left: 0;
   height: 100vh;
-  transition: width var(--transition-normal), transform var(--transition-normal);
+  transition:
+    width var(--transition-normal),
+    transform var(--transition-normal);
   z-index: 100;
   overflow: hidden;
 }
@@ -694,7 +698,7 @@ body {
 }
 
 .plugin-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -839,7 +843,7 @@ body {
 }
 
 .plugin-list-item::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -1627,7 +1631,7 @@ body {
   border: 1px solid var(--border-primary);
   border-radius: 6px;
   padding: var(--spacing-sm) var(--spacing-md);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 0.8125rem;
   color: var(--accent-primary);
   overflow-x: auto;
@@ -1809,13 +1813,17 @@ body {
 }
 
 .skill-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent-primary), var(--accent-hover));
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
   transform: scaleX(0);
   transition: transform var(--transition-fast);
 }
@@ -1932,7 +1940,11 @@ body {
 
 /* Main Context - Orange/Coral (Always Loaded) */
 .main-context {
-  background: linear-gradient(135deg, rgba(213, 116, 85, 0.1), rgba(213, 116, 85, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(213, 116, 85, 0.1),
+    rgba(213, 116, 85, 0.05)
+  );
   border: 2px solid rgba(213, 116, 85, 0.4);
 }
 
@@ -1942,7 +1954,11 @@ body {
 
 /* Discovery Context - Green (Loaded on Demand) */
 .discovery-context {
-  background: linear-gradient(135deg, rgba(46, 160, 67, 0.1), rgba(46, 160, 67, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(46, 160, 67, 0.1),
+    rgba(46, 160, 67, 0.05)
+  );
   border: 2px dashed rgba(46, 160, 67, 0.4);
 }
 
@@ -1952,7 +1968,11 @@ body {
 
 /* Progressive Context - Purple (Progressive Loading) */
 .progressive-context {
-  background: linear-gradient(135deg, rgba(163, 113, 247, 0.1), rgba(163, 113, 247, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(163, 113, 247, 0.1),
+    rgba(163, 113, 247, 0.05)
+  );
   border: 2px dashed rgba(163, 113, 247, 0.4);
 }
 
@@ -2029,7 +2049,7 @@ body {
 }
 
 .file-name {
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
   font-size: 0.875rem;
   color: var(--text-primary);
 }
@@ -2081,7 +2101,7 @@ body {
 }
 
 .tool-chip::before {
-  content: '🔧';
+  content: "🔧";
   font-size: 0.875rem;
 }
 
@@ -2098,7 +2118,7 @@ body {
   border-radius: 10px;
   padding: var(--spacing-lg);
   margin-top: var(--spacing-md);
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
   font-size: 0.875rem;
   max-height: 400px;
   overflow-y: auto;
@@ -2179,7 +2199,7 @@ body {
 }
 
 .content-viewer code {
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
   font-size: 0.875rem;
   line-height: 1.6;
   color: var(--text-primary);
@@ -2193,8 +2213,6 @@ body {
   max-height: 90vh;
   overflow-y: auto;
 }
-
-
 
 /* Source Filter Buttons */
 .source-filters {
@@ -2253,7 +2271,7 @@ body {
   .skills-container {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
-  
+
   .context-diagram {
     gap: var(--spacing-md);
   }
@@ -2264,16 +2282,16 @@ body {
     grid-template-columns: 1fr;
     padding: var(--spacing-md);
   }
-  
+
   .skill-modal {
     width: 95vw;
     max-height: 95vh;
   }
-  
+
   .context-diagram {
     gap: var(--spacing-sm);
   }
-  
+
   .skill-card-meta {
     flex-direction: column;
     gap: var(--spacing-sm);
@@ -2283,7 +2301,11 @@ body {
 /* ==================== MODERN CONTEXT FLOW DIAGRAM ==================== */
 
 .context-flow-diagram {
-  background: linear-gradient(180deg, rgba(13, 17, 23, 0.6), rgba(22, 27, 34, 0.8));
+  background: linear-gradient(
+    180deg,
+    rgba(13, 17, 23, 0.6),
+    rgba(22, 27, 34, 0.8)
+  );
   border: 1px solid var(--border-primary);
   border-radius: 16px;
   padding: var(--spacing-xl);
@@ -2317,7 +2339,7 @@ body {
 }
 
 .layer-header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -2333,7 +2355,11 @@ body {
 
 /* Main Layer */
 .layer-main .layer-header {
-  background: linear-gradient(135deg, rgba(213, 116, 85, 0.15), rgba(213, 116, 85, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(213, 116, 85, 0.15),
+    rgba(213, 116, 85, 0.08)
+  );
   border: 2px solid rgba(213, 116, 85, 0.4);
   box-shadow: 0 4px 12px rgba(213, 116, 85, 0.1);
 }
@@ -2349,7 +2375,11 @@ body {
 
 /* Discovery Layer */
 .layer-discovery .layer-header {
-  background: linear-gradient(135deg, rgba(46, 160, 67, 0.15), rgba(46, 160, 67, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(46, 160, 67, 0.15),
+    rgba(46, 160, 67, 0.08)
+  );
   border: 2px dashed rgba(46, 160, 67, 0.4);
   box-shadow: 0 4px 12px rgba(46, 160, 67, 0.1);
 }
@@ -2365,7 +2395,11 @@ body {
 
 /* Progressive Layer */
 .layer-progressive .layer-header {
-  background: linear-gradient(135deg, rgba(163, 113, 247, 0.15), rgba(163, 113, 247, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(163, 113, 247, 0.15),
+    rgba(163, 113, 247, 0.08)
+  );
   border: 2px dashed rgba(163, 113, 247, 0.4);
   box-shadow: 0 4px 12px rgba(163, 113, 247, 0.1);
 }
@@ -2476,7 +2510,10 @@ body {
 .layer-content {
   max-height: 500px;
   overflow: hidden;
-  transition: max-height var(--transition-normal), opacity var(--transition-normal), margin var(--transition-normal);
+  transition:
+    max-height var(--transition-normal),
+    opacity var(--transition-normal),
+    margin var(--transition-normal);
   opacity: 1;
   margin-top: var(--spacing-md);
 }
@@ -2517,7 +2554,7 @@ body {
   transition: all var(--transition-fast);
   cursor: pointer;
   position: relative;
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
 }
 
 .tree-node:hover {
@@ -2526,7 +2563,7 @@ body {
 }
 
 .tree-node::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 50%;
@@ -2618,13 +2655,18 @@ body {
 .arrow-line {
   width: 2px;
   height: 32px;
-  background: linear-gradient(180deg, rgba(213, 116, 85, 0.6), rgba(163, 113, 247, 0.6));
+  background: linear-gradient(
+    180deg,
+    rgba(213, 116, 85, 0.6),
+    rgba(163, 113, 247, 0.6)
+  );
   position: relative;
   animation: pulse-flow 2s ease-in-out infinite;
 }
 
 @keyframes pulse-flow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.6;
     box-shadow: 0 0 0 rgba(213, 116, 85, 0.4);
   }
@@ -2660,7 +2702,8 @@ body {
 }
 
 @keyframes bounce-arrow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -2719,11 +2762,11 @@ body {
 }
 
 .tree-node.folder.collapsed .node-icon::before {
-  content: '📁';
+  content: "📁";
 }
 
 .tree-node.folder:not(.collapsed) .node-icon::before {
-  content: '📂';
+  content: "📂";
 }
 
 .tree-node.folder .node-icon {
@@ -2775,7 +2818,11 @@ body {
 /* Buttons in footer */
 .modal-footer .btn-primary {
   padding: 0.625rem 1.25rem;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
   color: white;
   border: none;
   border-radius: 8px;
@@ -2788,7 +2835,11 @@ body {
 }
 
 .modal-footer .btn-primary:hover {
-  background: linear-gradient(135deg, var(--accent-hover), var(--accent-active));
+  background: linear-gradient(
+    135deg,
+    var(--accent-hover),
+    var(--accent-active)
+  );
   box-shadow: 0 4px 12px rgba(213, 116, 85, 0.3);
   transform: translateY(-1px);
 }
@@ -2873,7 +2924,6 @@ body {
 
 /* Skill Description Section */
 
-
 /* Section Titles */
 .section-title {
   display: flex;
@@ -2907,7 +2957,7 @@ body {
 }
 
 .content-viewer-header #currentFileName {
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
   color: var(--accent-primary);
 }
 
@@ -2947,7 +2997,7 @@ body {
 }
 
 .content-viewer code {
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
   font-size: 0.875rem;
   line-height: 1.6;
   color: var(--text-primary);
@@ -3102,15 +3152,27 @@ body {
 }
 
 .level-1 .level-header {
-  background: linear-gradient(135deg, rgba(213, 116, 85, 0.12), rgba(213, 116, 85, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(213, 116, 85, 0.12),
+    rgba(213, 116, 85, 0.04)
+  );
 }
 
 .level-2 .level-header {
-  background: linear-gradient(135deg, rgba(46, 160, 67, 0.12), rgba(46, 160, 67, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(46, 160, 67, 0.12),
+    rgba(46, 160, 67, 0.04)
+  );
 }
 
 .level-3 .level-header {
-  background: linear-gradient(135deg, rgba(163, 113, 247, 0.12), rgba(163, 113, 247, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(163, 113, 247, 0.12),
+    rgba(163, 113, 247, 0.04)
+  );
 }
 
 .level-number {
@@ -3212,7 +3274,7 @@ body {
   border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: var(--spacing-md);
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
 }
 
 .metadata-field {
@@ -3273,7 +3335,7 @@ body {
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm);
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
 }
 
 .file-item .file-icon {
@@ -3359,7 +3421,7 @@ body {
   padding: var(--spacing-sm);
   border-radius: 6px;
   transition: all var(--transition-fast);
-  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  font-family: "SF Mono", "Monaco", "Courier New", monospace;
 }
 
 .resource-file:hover {
@@ -3414,7 +3476,11 @@ body {
 .arrow-connector {
   width: 3px;
   height: 100%;
-  background: linear-gradient(180deg, rgba(213, 116, 85, 0.6), rgba(163, 113, 247, 0.6));
+  background: linear-gradient(
+    180deg,
+    rgba(213, 116, 85, 0.6),
+    rgba(163, 113, 247, 0.6)
+  );
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -3423,7 +3489,7 @@ body {
 }
 
 .arrow-connector::after {
-  content: '▼';
+  content: "▼";
   position: absolute;
   bottom: -12px;
   left: 50%;

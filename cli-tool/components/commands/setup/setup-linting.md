@@ -11,7 +11,7 @@ Configure comprehensive code linting and quality analysis: **$ARGUMENTS**
 ## Current Code Quality State
 
 - Languages detected: !`find . -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.rs" | head -5`
-- Existing linters: @.eslintrc.* or @pyproject.toml or @tslint.json
+- Existing linters: @.eslintrc.\* or @pyproject.toml or @tslint.json
 - Package manager: @package.json or @requirements.txt or @Cargo.toml
 - Code quality tools: !`which eslint flake8 pylint mypy clippy 2>/dev/null | wc -l`
 
@@ -22,6 +22,7 @@ Setup comprehensive code linting system with quality analysis and automated enfo
 **Language Focus**: Use $ARGUMENTS to configure JavaScript/TypeScript ESLint, Python linting, or multi-language quality analysis
 
 **Linting Configuration**:
+
 1. **Tool Installation** - ESLint, Flake8, Pylint, MyPy, Clippy, language-specific linters and plugins
 2. **Rule Configuration** - Code style rules, error detection, best practices, security patterns, performance guidelines
 3. **IDE Integration** - Real-time linting, error highlighting, quick fixes, workspace settings

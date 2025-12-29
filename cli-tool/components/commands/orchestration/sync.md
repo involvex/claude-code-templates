@@ -15,18 +15,23 @@ Analyzes git history and task status to identify discrepancies, automatically up
 ## Basic Commands
 
 ### Full Sync
+
 ```
 /orchestration/sync
 ```
+
 Performs complete synchronization between git and task status.
 
 ### Check Sync Status
+
 ```
 /orchestration/sync --check
 ```
+
 Reports inconsistencies without making changes.
 
 ### Sync Specific Orchestration
+
 ```
 /orchestration/sync --date 03_15_2024 --project auth_system
 ```
@@ -34,21 +39,25 @@ Reports inconsistencies without making changes.
 ## Sync Operations
 
 ### Git → Task Status
+
 Updates task status based on commit messages:
+
 ```
 Found commits:
 - feat(auth): implement JWT validation (TASK-003) ✓
   Status: in_progress → qa (based on commit)
-  
+
 - test(auth): add JWT validation tests (TASK-003) ✓
   Status: qa → completed (tests indicate completion)
-  
+
 - fix(auth): resolve token expiration (TASK-007) ✓
   Status: todos → in_progress (work started)
 ```
 
 ### Task Status → Git
+
 Identifies tasks marked complete without commits:
+
 ```
 Status Discrepancies:
 - TASK-005: Marked 'completed' but no commits found
@@ -59,6 +68,7 @@ Status Discrepancies:
 ## Detection Patterns
 
 ### Commit Pattern Matching
+
 ```
 Patterns detected:
 - "feat(auth): implement" → Implementation complete
@@ -69,6 +79,7 @@ Patterns detected:
 ```
 
 ### Task Reference Extraction
+
 ```
 Scanning commits for task references:
 - Explicit: "Task: TASK-003" ✓
@@ -80,6 +91,7 @@ Scanning commits for task references:
 ## Sync Rules
 
 ### Automatic Status Updates
+
 ```yaml
 sync_rules:
   commit_patterns:
@@ -94,6 +106,7 @@ sync_rules:
 ```
 
 ### Conflict Resolution
+
 ```
 Conflict detected for TASK-003:
 - Git evidence: 3 commits, tests passing
@@ -110,6 +123,7 @@ Resolution options:
 ## Analysis Reports
 
 ### Sync Summary
+
 ```
 Synchronization Report
 ======================
@@ -130,6 +144,7 @@ Warnings:
 ```
 
 ### Detailed Analysis
+
 ```
 Task: TASK-003 - JWT Implementation
 Current Status: in_progress
@@ -137,7 +152,7 @@ Git Evidence:
   - feat(auth): implement JWT validation (2 days ago)
   - test(auth): add validation tests (1 day ago)
   - fix(auth): handle edge cases (1 day ago)
-  
+
 Recommendation: Move to completed
 Confidence: High (95%)
 ```
@@ -145,36 +160,47 @@ Confidence: High (95%)
 ## Options
 
 ### Dry Run
+
 ```
 /orchestration/sync --dry-run
 ```
+
 Shows what would change without applying updates.
 
 ### Force Sync
+
 ```
 /orchestration/sync --force
 ```
+
 Applies all recommendations without prompting.
 
 ### Time Range
+
 ```
 /orchestration/sync --since "1 week ago"
 ```
+
 Only analyzes recent commits.
 
 ### Branch Specific
+
 ```
 /orchestration/sync --branch feature/auth
 ```
+
 Syncs only tasks related to specific branch.
 
 ## Integration Features
 
 ### Update Tracking Files
+
 ```
 /orchestration/sync --update-trackers
 ```
+
 Updates TASK-STATUS-TRACKER.yaml with:
+
 ```yaml
 git_tracking:
   TASK-003:
@@ -190,40 +216,51 @@ git_tracking:
 ```
 
 ### Generate Commit Report
+
 ```
 /orchestration/sync --commit-report
 ```
+
 Creates report of all task-related commits.
 
 ### Fix Orphaned Commits
+
 ```
 /orchestration/sync --link-orphans
 ```
+
 Associates commits without task references.
 
 ## Sync Strategies
 
 ### Conservative
+
 ```
 /orchestration/sync --conservative
 ```
+
 Only updates with high confidence matches.
 
 ### Aggressive
+
 ```
 /orchestration/sync --aggressive
 ```
+
 Updates based on any evidence.
 
 ### Interactive
+
 ```
 /orchestration/sync --interactive
 ```
+
 Prompts for each potential update.
 
 ## Examples
 
 ### Example 1: Daily Sync
+
 ```
 /orchestration/sync --since yesterday
 
@@ -234,6 +271,7 @@ Quick sync results:
 ```
 
 ### Example 2: Branch Merge Sync
+
 ```
 /orchestration/sync --after-merge feature/auth
 
@@ -244,6 +282,7 @@ Post-merge sync:
 ```
 
 ### Example 3: Audit Mode
+
 ```
 /orchestration/sync --audit --report
 
@@ -257,6 +296,7 @@ Audit Report:
 ## Webhook Integration
 
 ### Auto-sync on Push
+
 ```yaml
 git_hooks:
   post-commit: /orchestration/sync --last-commit
@@ -274,6 +314,7 @@ git_hooks:
 ## Configuration
 
 ### Sync Preferences
+
 ```yaml
 sync_config:
   auto_sync: true

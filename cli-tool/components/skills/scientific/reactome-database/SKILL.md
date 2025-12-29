@@ -12,6 +12,7 @@ Reactome is a free, open-source, curated pathway database with 2,825+ human path
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Performing pathway enrichment analysis on gene or protein lists
 - Analyzing gene expression data to identify relevant biological pathways
 - Querying specific pathway information, reactions, or molecular interactions
@@ -29,6 +30,7 @@ Reactome provides two main API services and a Python client library:
 Query and retrieve biological pathway data, molecular interactions, and entity information.
 
 **Common operations:**
+
 - Retrieve pathway information and hierarchies
 - Query specific entities (proteins, reactions, complexes)
 - Get participating molecules in pathways
@@ -42,6 +44,7 @@ Query and retrieve biological pathway data, molecular interactions, and entity i
 Perform computational analysis on gene lists and expression data.
 
 **Analysis types:**
+
 - **Overrepresentation Analysis**: Identify statistically significant pathways from gene/protein lists
 - **Expression Data Analysis**: Analyze gene expression datasets to find relevant pathways
 - **Species Comparison**: Compare pathway data across different organisms
@@ -53,6 +56,7 @@ Perform computational analysis on gene lists and expression data.
 Python client library that wraps Reactome API calls for easier programmatic access.
 
 **Installation:**
+
 ```bash
 uv pip install reactome2py
 ```
@@ -66,6 +70,7 @@ uv pip install reactome2py
 The Content Service uses REST protocol and returns data in JSON or plain text formats.
 
 **Get database version:**
+
 ```python
 import requests
 
@@ -75,6 +80,7 @@ print(f"Reactome version: {version}")
 ```
 
 **Query a specific entity:**
+
 ```python
 import requests
 
@@ -84,6 +90,7 @@ data = response.json()
 ```
 
 **Get participating molecules in a pathway:**
+
 ```python
 import requests
 
@@ -116,6 +123,7 @@ version = content.get_database_version()
 Submit a list of gene/protein identifiers to find enriched pathways.
 
 **Using REST API:**
+
 ```python
 import requests
 
@@ -139,6 +147,7 @@ for pathway in result["pathways"]:
 ```
 
 **Retrieve analysis by token:**
+
 ```python
 # Token is valid for 7 days
 response = requests.get(f"https://reactome.org/AnalysisService/token/{token}")
@@ -150,6 +159,7 @@ results = response.json()
 Analyze gene expression datasets with quantitative values.
 
 **Input format (TSV with header starting with #):**
+
 ```
 #Gene	Sample1	Sample2	Sample3
 TP53	2.5	3.1	2.8
@@ -158,6 +168,7 @@ EGFR	4.5	4.2	4.8
 ```
 
 **Submit expression data:**
+
 ```python
 import requests
 
@@ -209,6 +220,7 @@ print(f"View results: {url}")
 ### Supported Identifier Types
 
 Reactome accepts various identifier formats:
+
 - UniProt accessions (e.g., P04637)
 - Gene symbols (e.g., TP53)
 - Ensembl IDs (e.g., ENSG00000141510)
@@ -220,10 +232,12 @@ The system automatically detects identifier types.
 ### Input Format Requirements
 
 **For overrepresentation analysis:**
+
 - Plain text list of identifiers (one per line)
 - OR single column in TSV format
 
 **For expression analysis:**
+
 - TSV format with mandatory header row starting with "#"
 - Column 1: identifiers
 - Columns 2+: numeric expression values
@@ -232,6 +246,7 @@ The system automatically detects identifier types.
 ### Output Format
 
 All API responses return JSON containing:
+
 - `pathways`: Array of enriched pathways with statistical metrics
 - `summary`: Analysis metadata and token
 - `entities`: Matched and unmapped identifiers

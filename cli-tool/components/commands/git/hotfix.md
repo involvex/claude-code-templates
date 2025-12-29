@@ -23,6 +23,7 @@ Create a Git Flow hotfix branch for emergency production fixes:
 ### 1. Pre-Flight Validation
 
 **Critical Checks:**
+
 - **Verify hotfix name**: Ensure `$ARGUMENTS` is provided and descriptive
   - ✅ Valid: `critical-security-patch`, `payment-gateway-fix`, `auth-bypass-fix`
   - ❌ Invalid: `fix`, `hotfix1`, `bug`
@@ -33,6 +34,7 @@ Create a Git Flow hotfix branch for emergency production fixes:
 **⚠️ IMPORTANT: Hotfix Usage Guidelines**
 
 Hotfixes are ONLY for:
+
 - 🔒 Critical security vulnerabilities
 - 💥 Production-breaking bugs
 - 💰 Payment/transaction failures
@@ -40,6 +42,7 @@ Hotfixes are ONLY for:
 - 🔥 System downtime or crashes
 
 NOT for:
+
 - ❌ Regular bug fixes (use feature branch)
 - ❌ New features (use feature branch)
 - ❌ Performance improvements (use feature branch)
@@ -73,6 +76,7 @@ Version bump: PATCH (third number incremented)
 ```
 
 **Hotfix Version Rules:**
+
 - Always increment PATCH version (X.Y.Z → X.Y.Z+1)
 - Never increment MAJOR or MINOR for hotfixes
 - Examples:
@@ -150,6 +154,7 @@ This is an EMERGENCY production fix. Follow these steps:
 ### 5. Error Handling
 
 **No Hotfix Name Provided:**
+
 ```
 ❌ Hotfix name is required
 
@@ -167,6 +172,7 @@ For non-critical fixes, use:
 ```
 
 **Invalid Hotfix Name:**
+
 ```
 ❌ Invalid hotfix name: "fix"
 
@@ -185,6 +191,7 @@ Examples:
 ```
 
 **Uncommitted Changes:**
+
 ```
 ⚠️  Uncommitted changes detected in working directory:
 M  src/file.js
@@ -201,6 +208,7 @@ Options:
 ```
 
 **Main Branch Behind Remote:**
+
 ```
 ⚠️  Local main is behind origin/main by 2 commits
 
@@ -211,6 +219,7 @@ Options:
 ```
 
 **Not a Critical Issue:**
+
 ```
 ⚠️  Hotfix Confirmation Required
 
@@ -385,6 +394,7 @@ develop ────────────────────┴───
 ```
 
 **Important:**
+
 - Hotfixes branch from `main` (production)
 - Hotfixes merge to BOTH `main` AND `develop`
 - Tags are created on `main` after merge
@@ -406,6 +416,7 @@ develop ────────────────────┴───
 ## Best Practices
 
 **DO:**
+
 - ✅ Use hotfixes ONLY for critical production issues
 - ✅ Keep changes minimal and focused
 - ✅ Test thoroughly before deploying
@@ -416,6 +427,7 @@ develop ────────────────────┴───
 - ✅ Conduct post-mortem if appropriate
 
 **DON'T:**
+
 - ❌ Use hotfix for regular bug fixes
 - ❌ Add new features to hotfix
 - ❌ Refactor code during hotfix

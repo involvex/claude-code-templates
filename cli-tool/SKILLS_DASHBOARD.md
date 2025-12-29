@@ -11,18 +11,21 @@ The Skills Dashboard provides an elegant, modern interface to view and explore C
 The dashboard features a revolutionary **3-layer progressive context loading visualization** that shows exactly how skills load their context:
 
 #### Layer 1: MAIN CONTEXT (🟠 Coral)
+
 - **Always Loaded** - Badge with solid border
 - Contains `SKILL.md` - the core skill definition
 - Displayed with file icon and size
 - Always expanded by default
 
 #### Layer 2: SKILL DISCOVERY (🟢 Green)
+
 - **Loaded on Demand** - Badge with dashed border
 - Contains referenced documentation files (API.md, EXAMPLES.md, etc.)
 - Tree view with clickable file nodes
 - Shows when context triggers loading
 
 #### Layer 3: SUPPORTING RESOURCES (🟣 Purple)
+
 - **Progressive Loading** - Badge with dashed border
 - Contains scripts, templates, and utilities
 - Organized by folder (scripts/, templates/)
@@ -31,6 +34,7 @@ The dashboard features a revolutionary **3-layer progressive context loading vis
 ### 🌊 Animated Flow Arrows
 
 Between each layer, animated flow arrows show:
+
 - Gradient line with pulse animation
 - Descriptive labels explaining the trigger
 - Bouncing arrow head indicating direction
@@ -38,6 +42,7 @@ Between each layer, animated flow arrows show:
 ### 🌲 Interactive File Tree
 
 **Features:**
+
 - Expandable/collapsible layers (click header)
 - Folder grouping with file counts
 - File type icons (📄, 🐍, 📜, 📁, 📋)
@@ -48,16 +53,19 @@ Between each layer, animated flow arrows show:
 ### 🎭 Visual Design
 
 **Color System:**
+
 - Main Context: Coral (#ff9b7a) - warm, inviting
 - Skill Discovery: Green (#56d364) - fresh, dynamic
 - Progressive: Purple (#a371f7) - advanced, mysterious
 
 **Typography:**
+
 - Headers: System font stack
 - File names: Monospace (SF Mono, Monaco)
 - Numbers: Circular badges with borders
 
 **Effects:**
+
 - Smooth transitions (150-350ms)
 - Gradient backgrounds
 - Shadow elevations
@@ -88,6 +96,7 @@ npx claude-code-templates --skills-manager
 ### Explore Skill Details
 
 **In the modal:**
+
 - View skill description and allowed tools
 - See progressive loading flow diagram
 - Expand/collapse layers
@@ -97,6 +106,7 @@ npx claude-code-templates --skills-manager
 ## Technical Implementation
 
 ### Backend (`src/skill-dashboard.js`)
+
 - Express server on port 3337
 - Scans `~/.claude/skills/` and `.claude/skills/`
 - Parses YAML frontmatter
@@ -104,6 +114,7 @@ npx claude-code-templates --skills-manager
 - Provides REST API endpoints
 
 ### Frontend (`src/skill-dashboard-web/`)
+
 - Vanilla JavaScript (no frameworks)
 - Responsive CSS with CSS Grid
 - Interactive layer toggles
@@ -124,18 +135,24 @@ GET  /api/summary             - Statistics
 The implementation includes test skills demonstrating all features:
 
 ### 1. test-skill
+
 Basic skill with:
+
 - SKILL.md
 - reference.md (on demand)
 - scripts/helper.py (progressive)
 
 ### 2. pdf-processing
+
 Real-world skill with:
+
 - SKILL.md
 - FORMS.md (on demand)
 
 ### 3. advanced-test
+
 Comprehensive skill with:
+
 - SKILL.md
 - API.md, EXAMPLES.md, QUICKSTART.md (on demand)
 - scripts/process.py, validate.py, helper.sh (progressive)
@@ -155,6 +172,7 @@ Comprehensive skill with:
 ### Progressive Loading Strategy
 
 The visualization mirrors Claude Code's actual loading behavior:
+
 1. **Main Context**: Loaded when skill is invoked
 2. **Skill Discovery**: Loaded when referenced in conversation
 3. **Progressive**: Accessed/executed directly as needed
@@ -170,12 +188,14 @@ The visualization mirrors Claude Code's actual loading behavior:
 ### Creating Effective Skills
 
 **For optimal visualization:**
+
 1. Put core instructions in SKILL.md
 2. Reference documentation with markdown links
 3. Organize scripts in `scripts/` folder
 4. Place templates in `templates/` folder
 
 **Example SKILL.md:**
+
 ```markdown
 ---
 name: my-skill
@@ -221,15 +241,16 @@ my-skill/
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `Esc` | Close modal |
+| Key     | Action                        |
+| ------- | ----------------------------- |
+| `Esc`   | Close modal                   |
 | `Enter` | Expand/collapse focused layer |
-| `/` | Focus search |
+| `/`     | Focus search                  |
 
 ## Future Enhancements
 
 Potential improvements:
+
 - [ ] Skill dependency graph
 - [ ] Live preview of skill execution
 - [ ] Skill templates generator
@@ -240,6 +261,7 @@ Potential improvements:
 ## Credits
 
 Built with ❤️ for Claude Code Templates
+
 - Modern CSS Grid layout
 - Vanilla JavaScript for maximum performance
 - Inspired by VSCode file explorer

@@ -12,11 +12,13 @@ panic: runtime error: invalid memory address or nil pointer dereference
 ```
 
 **Causes**:
+
 1. Calling method on nil pointer
 2. Accessing field of nil struct
 3. Dereferencing nil pointer
 
 **Solutions**:
+
 ```go
 // Check for nil before use
 if user != nil {
@@ -55,11 +57,13 @@ panic: runtime error: index out of range [5] with length 3
 ```
 
 **Causes**:
+
 1. Accessing index beyond slice length
 2. Empty slice access
 3. Off-by-one error
 
 **Solutions**:
+
 ```go
 // Check length first
 if len(items) > index {
@@ -89,6 +93,7 @@ panic: runtime error: slice bounds out of range [:5] with length 3
 ```
 
 **Solutions**:
+
 ```go
 // Validate slice bounds
 func safeSlice(s []int, start, end int) []int {
@@ -116,10 +121,12 @@ panic: assignment to entry in nil map
 ```
 
 **Causes**:
+
 1. Writing to uninitialized map
 2. Map declared but not made
 
 **Solutions**:
+
 ```go
 // Wrong
 var m map[string]int
@@ -154,6 +161,7 @@ value := m["nonexistent"]  // Returns zero value, not error
 ```
 
 **Solutions**:
+
 ```go
 // Check if key exists
 value, ok := m["key"]
@@ -181,11 +189,13 @@ fatal error: all goroutines are asleep - deadlock!
 ```
 
 **Causes**:
+
 1. Channel send/receive with no corresponding operation
 2. Unbuffered channel blocking
 3. Waiting on channel that's never written to
 
 **Solutions**:
+
 ```go
 // Wrong - unbuffered channel blocks
 ch := make(chan int)
@@ -221,6 +231,7 @@ panic: send on closed channel
 ```
 
 **Solutions**:
+
 ```go
 // Only sender should close channel
 // Use sync.Once for safe closing
@@ -257,6 +268,7 @@ panic: interface conversion: interface {} is nil, not string
 ```
 
 **Solutions**:
+
 ```go
 // Use type assertion with ok
 value, ok := i.(string)
@@ -298,10 +310,12 @@ fatal error: concurrent map writes
 ```
 
 **Causes**:
+
 1. Multiple goroutines writing to same map
 2. No synchronization
 
 **Solutions**:
+
 ```go
 // Option 1: Use sync.Mutex
 type SafeMap struct {
@@ -341,6 +355,7 @@ Previous read by goroutine Y:
 ```
 
 **Solutions**:
+
 ```go
 // Use mutex for shared state
 var (
@@ -379,6 +394,7 @@ cannot find package "github.com/user/repo" in any of:
 ```
 
 **Solutions**:
+
 ```bash
 # Initialize go modules
 go mod init myproject
@@ -400,6 +416,7 @@ module declares its path as: github.com/old/path
 ```
 
 **Solutions**:
+
 ```bash
 # Update go.mod with replace directive
 # go.mod
@@ -468,11 +485,13 @@ if errors.As(err, &valErr) {
 ```
 
 **Causes**:
+
 1. Function/variable not defined
 2. Wrong package imported
 3. Unexported name (lowercase)
 
 **Solutions**:
+
 ```go
 // Check export - must be uppercase
 func PublicFunction() {}  // Exported
@@ -492,6 +511,7 @@ mypackage.PublicFunction()
 ```
 
 **Solutions**:
+
 ```go
 // Remove unused import
 // Or use blank identifier if needed for side effects
@@ -510,6 +530,7 @@ import _ "database/sql/driver"
 ```
 
 **Solutions**:
+
 ```go
 // Use the variable or remove it
 // Use blank identifier if intentionally unused
@@ -523,15 +544,15 @@ result, _ := riskyFunction()  // Intentionally ignore error (not recommended)
 
 ## Quick Reference Table
 
-| Error | Category | Quick Fix |
-|-------|----------|-----------|
-| nil pointer dereference | Nil | Check for nil before use |
-| index out of range | Slice | Check `len()` first |
-| assignment to nil map | Map | Use `make(map[K]V)` |
-| deadlock | Channel | Ensure send/receive pairs match |
-| send on closed channel | Channel | Only sender closes |
-| interface conversion nil | Interface | Use type assertion with ok |
-| concurrent map writes | Concurrency | Use `sync.Mutex` or `sync.Map` |
-| data race | Concurrency | Add synchronization, use `-race` |
-| cannot find package | Module | Run `go mod tidy` |
-| undefined | Build | Check export (uppercase) |
+| Error                    | Category    | Quick Fix                        |
+| ------------------------ | ----------- | -------------------------------- |
+| nil pointer dereference  | Nil         | Check for nil before use         |
+| index out of range       | Slice       | Check `len()` first              |
+| assignment to nil map    | Map         | Use `make(map[K]V)`              |
+| deadlock                 | Channel     | Ensure send/receive pairs match  |
+| send on closed channel   | Channel     | Only sender closes               |
+| interface conversion nil | Interface   | Use type assertion with ok       |
+| concurrent map writes    | Concurrency | Use `sync.Mutex` or `sync.Map`   |
+| data race                | Concurrency | Add synchronization, use `-race` |
+| cannot find package      | Module      | Run `go mod tidy`                |
+| undefined                | Build       | Check export (uppercase)         |

@@ -22,6 +22,7 @@ Create systematic future scenarios with comprehensive analysis and strategic imp
 **Time Horizon**: Use $ARGUMENTS to focus on near-term, medium-term, long-term, or disruption-focused scenarios
 
 **Scenario Framework**:
+
 1. **Trend Analysis** - Multi-dimensional trend identification across technology, social, economic, and regulatory domains
 2. **Scenario Architecture** - Baseline, optimistic, pessimistic, and transformation scenarios with cross-impact analysis
 3. **Plausibility Assessment** - Multi-criteria scoring based on historical precedent, logical consistency, and expert validation

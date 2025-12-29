@@ -22,6 +22,7 @@ Execute comprehensive realtime monitoring with performance optimization and debu
 **Monitoring Type**: Use $ARGUMENTS to focus on connection monitoring, subscription analysis, performance optimization, debugging assistance, or analytics reporting
 
 **Realtime Monitoring Framework**:
+
 1. **Connection Analysis** - Monitor active connections, analyze connection stability, track connection lifecycle, identify connection issues
 2. **Subscription Management** - Track active subscriptions, analyze subscription performance, optimize subscription patterns, manage subscription lifecycle
 3. **Performance Optimization** - Analyze message throughput, optimize payload sizes, reduce connection overhead, improve subscription efficiency

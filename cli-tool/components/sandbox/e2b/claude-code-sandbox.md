@@ -44,8 +44,9 @@ npx claude-code-templates@latest --sandbox e2b \
 ## Environment Setup
 
 The component will create:
+
 - `.claude/sandbox/e2b-launcher.py` - Python script to launch E2B sandbox
-- `.claude/sandbox/requirements.txt` - Python dependencies  
+- `.claude/sandbox/requirements.txt` - Python dependencies
 - `.claude/sandbox/.env.example` - Environment variables template
 
 ## API Key Configuration
@@ -53,6 +54,7 @@ The component will create:
 You can provide API keys in two ways:
 
 ### Option 1: CLI Parameters (Recommended)
+
 ```bash
 # Pass keys directly as command parameters
 npx claude-code-templates@latest --sandbox e2b \
@@ -62,7 +64,9 @@ npx claude-code-templates@latest --sandbox e2b \
 ```
 
 ### Option 2: Environment Variables
+
 Set these environment variables in your shell or `.env` file:
+
 ```bash
 export E2B_API_KEY=your_e2b_api_key_here
 export ANTHROPIC_API_KEY=your_anthropic_api_key_here

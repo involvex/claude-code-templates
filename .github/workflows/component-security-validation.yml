@@ -6,11 +6,6 @@ on:
       - 'cli-tool/components/**/*.md'
       - 'cli-tool/src/validation/**'
       - '.github/workflows/component-security-validation.yml'
-  push:
-    branches:
-      - main
-    paths:
-      - 'cli-tool/components/**/*.md'
 
 jobs:
   security-audit:

@@ -17,12 +17,14 @@ This skill pack provides frameworks, methodologies, tools, and best practices fo
 ### For New Security Professionals
 
 **Getting Started Checklist**:
+
 1. Read [SKILL.md](SKILL.md) for core principles and lifecycle
 2. Review [security-architecture.md](reference/security-architecture.md) for foundational concepts
 3. Study [compliance-frameworks.md](reference/compliance-frameworks.md) for your industry
 4. Practice with risk calculator: `python scripts/risk_calculator.py --interactive`
 
 **First 30 Days**:
+
 - Week 1: Learn security fundamentals and core principles
 - Week 2: Understand your organization's compliance requirements
 - Week 3: Shadow SOC operations and incident response
@@ -31,11 +33,13 @@ This skill pack provides frameworks, methodologies, tools, and best practices fo
 ### For Experienced Security Professionals
 
 **Quick Reference**:
+
 - [Security Operations](reference/security-operations.md): SOC playbooks, SIEM use cases, IR procedures
 - [Threat Modeling](reference/threat-modeling-risk.md): STRIDE methodology, attack trees, vulnerability scoring
 - [Application Security](reference/application-security.md): Secure coding, OWASP Top 10, DevSecOps pipeline
 
 **Common Tasks**:
+
 - Risk assessment: `python scripts/risk_calculator.py risks.csv`
 - Vulnerability prioritization: `python scripts/vuln_prioritizer.py vulnerabilities.csv`
 - Incident response: Use [incident-response-template.md](examples/incident-response-template.md)
@@ -69,6 +73,7 @@ security-compliance/
 **Situation**: You need to assess cybersecurity risks for your organization and create a risk register.
 
 **Steps**:
+
 1. Review risk assessment methodology in [threat-modeling-risk.md](reference/threat-modeling-risk.md)
 2. Create CSV file with your risks (use [risks.csv](examples/risks.csv) as template)
 3. Run risk calculator:
@@ -88,6 +93,7 @@ security-compliance/
 **Situation**: Your SaaS company needs SOC 2 Type II certification to close enterprise deals.
 
 **Steps**:
+
 1. Read SOC 2 section in [compliance-frameworks.md](reference/compliance-frameworks.md)
 2. Follow 6-month readiness roadmap:
    - Months 6-4: Scoping, gap assessment, policy development
@@ -107,6 +113,7 @@ security-compliance/
 **Situation**: Your SOC detected ransomware on multiple systems.
 
 **Steps**:
+
 1. Follow incident response lifecycle in [security-operations.md](reference/security-operations.md)
 2. Use IR playbook for ransomware (included in security-operations.md)
 3. Document everything using [incident-response-template.md](examples/incident-response-template.md)
@@ -129,6 +136,7 @@ security-compliance/
 **Situation**: Vulnerability scan identified 500+ vulnerabilities across your infrastructure. You need to prioritize patching.
 
 **Steps**:
+
 1. Export vulnerabilities to CSV (use [vulnerabilities.csv](examples/vulnerabilities.csv) as template)
 2. Add business context:
    - Asset criticality (1-5)
@@ -157,6 +165,7 @@ security-compliance/
 **Situation**: Your organization is moving to cloud and wants to implement Zero Trust.
 
 **Steps**:
+
 1. Read Zero Trust section in [security-architecture.md](reference/security-architecture.md)
 2. Follow Zero Trust implementation roadmap:
    - **Phase 1 (Months 1-3)**: Foundation - Strong IAM, MFA everywhere, asset inventory, logging
@@ -185,6 +194,7 @@ security-compliance/
 Calculate risk scores using both qualitative (risk matrix) and quantitative (ALE) methodologies.
 
 **Features**:
+
 - Quantitative: Single Loss Expectancy (SLE), Annualized Loss Expectancy (ALE)
 - Qualitative: Risk matrix (Likelihood × Impact), risk levels (Critical/High/Medium/Low)
 - Cost-benefit analysis for security controls
@@ -192,6 +202,7 @@ Calculate risk scores using both qualitative (risk matrix) and quantitative (ALE
 - CSV batch processing
 
 **Usage**:
+
 ```bash
 # Interactive mode
 python scripts/risk_calculator.py --interactive
@@ -204,6 +215,7 @@ python scripts/risk_calculator.py risks.csv --output risk_report.csv
 ```
 
 **Sample Output**:
+
 ```
 Risk Assessment Summary
 ============================================================
@@ -230,6 +242,7 @@ Top 5 Risks by ALE:
 Prioritize vulnerabilities based on CVSS score combined with business context.
 
 **Features**:
+
 - Enhanced CVSS scoring with business context
 - Factors: Asset criticality, exposure, data sensitivity, exploitability, compensating controls
 - Priority levels (P0-P3) with SLA recommendations
@@ -237,6 +250,7 @@ Prioritize vulnerabilities based on CVSS score combined with business context.
 - Filter by priority level
 
 **Usage**:
+
 ```bash
 # Interactive mode
 python scripts/vuln_prioritizer.py --interactive
@@ -252,6 +266,7 @@ python scripts/vuln_prioritizer.py vulnerabilities.csv --filter-level P0
 ```
 
 **Sample Output**:
+
 ```
 Vulnerability Summary
 ============================================================
@@ -280,6 +295,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 ## Best Practices
 
 ### Security Architecture
+
 - Design with security from the start (shift-left)
 - Apply defense in depth - multiple security layers
 - Implement Zero Trust: verify explicitly, use least privilege, assume breach
@@ -287,6 +303,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Encrypt data at rest and in transit with strong algorithms
 
 ### Compliance
+
 - Treat compliance as continuous, not one-time certification
 - Map controls across frameworks to maximize efficiency
 - Automate evidence collection where possible
@@ -294,6 +311,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Document everything - if it's not documented, it doesn't exist
 
 ### Risk Management
+
 - Conduct risk assessments at least annually
 - Use both qualitative (risk matrix) and quantitative (ALE) methods
 - Focus on business impact, not just technical severity
@@ -301,6 +319,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Track risk remediation with clear ownership and deadlines
 
 ### Security Operations
+
 - Centralize logging with SIEM for correlation
 - Tune alerts to reduce false positives (<20% target)
 - Maintain incident response plan and test it (tabletop exercises)
@@ -308,6 +327,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Conduct proactive threat hunting regularly
 
 ### Application Security
+
 - Integrate security into CI/CD pipeline (DevSecOps)
 - Use SAST, DAST, and SCA scanning
 - Follow OWASP Top 10 guidelines
@@ -319,6 +339,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 ## Integration with Other Skills
 
 ### With DevOps/Platform Engineering
+
 - Embed security in CI/CD pipelines (SAST, DAST, SCA, container scanning)
 - Implement Infrastructure as Code (IaC) security scanning
 - Automate security testing and compliance checks
@@ -326,6 +347,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Share responsibility for cloud security
 
 ### With Enterprise Architecture
+
 - Align security architecture with enterprise architecture
 - Participate in architecture review boards
 - Define security reference architectures and patterns
@@ -333,6 +355,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Design secure integration patterns for systems
 
 ### With IT Operations
+
 - Coordinate on patch management and change control
 - Collaborate on monitoring, logging, and alerting
 - Joint incident response (security + operational)
@@ -340,6 +363,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Manage privileged access together
 
 ### With Product Management
+
 - Provide security requirements for new features
 - Participate in threat modeling for new products
 - Balance security with user experience
@@ -347,6 +371,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Support security as product differentiator
 
 ### With Legal/Privacy
+
 - Coordinate on data privacy regulations (GDPR, CCPA)
 - Collaborate on breach notification requirements
 - Review vendor contracts for security terms
@@ -358,26 +383,31 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 ## Key Frameworks Reference
 
 ### NIST Cybersecurity Framework (CSF)
+
 **Functions**: Identify → Protect → Detect → Respond → Recover
 **Best for**: General organizations, government contractors
 **Maturity**: Tier 1 (Partial) to Tier 4 (Adaptive)
 
 ### CIS Critical Security Controls
+
 **Structure**: 18 controls, 3 Implementation Groups
 **Best for**: Practical, prioritized implementation
 **Focus**: Defend against common attack patterns
 
 ### ISO/IEC 27001
+
 **Structure**: ISMS with 14 domains, 93 controls (2022 version)
 **Best for**: International recognition, formal certification
 **Process**: Plan → Do → Check → Act
 
 ### SOC 2 Type II
+
 **Criteria**: Security (required) + Availability, Confidentiality, Processing Integrity, Privacy (optional)
 **Best for**: SaaS companies, cloud service providers
 **Audit**: 3-12 month observation period
 
 ### OWASP Top 10 (2021)
+
 1. Broken Access Control
 2. Cryptographic Failures
 3. Injection
@@ -394,27 +424,32 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 ## Metrics & KPIs
 
 ### Risk Management
+
 - Number of critical/high risks open
 - Risk remediation time (mean)
 - Compliance control effectiveness rate
 
 ### Vulnerability Management
+
 - Mean time to patch (MTTP) by severity
 - Vulnerability backlog (by severity)
 - Patch compliance rate
 
 ### Security Operations
+
 - Mean time to detect (MTTD)
 - Mean time to respond (MTTR)
 - Mean time to contain (MTTC)
 - False positive rate (target <20%)
 
 ### Incident Response
+
 - Number of incidents by severity
 - Incident recurrence rate
 - SLA compliance rate
 
 ### Application Security
+
 - Vulnerabilities found per 1000 lines of code
 - Security defects escaping to production
 - SAST/DAST scan coverage
@@ -424,6 +459,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 ## Additional Resources
 
 ### Training & Certifications
+
 - CISSP (Certified Information Systems Security Professional)
 - CISM (Certified Information Security Manager)
 - CEH (Certified Ethical Hacker)
@@ -432,6 +468,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Security+ (CompTIA)
 
 ### Communities
+
 - OWASP (Open Web Application Security Project)
 - SANS Reading Room
 - r/netsec, r/AskNetsec (Reddit)
@@ -439,6 +476,7 @@ CVE-2024-66666        vcenter.company.com              9.8    29.40      P0     
 - Local ISACA and ISC² chapters
 
 ### Tools
+
 - SIEM: Splunk, Elastic Security, Microsoft Sentinel
 - EDR: CrowdStrike, SentinelOne, Microsoft Defender
 - Vulnerability Scanning: Tenable, Qualys, Rapid7

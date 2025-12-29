@@ -23,14 +23,17 @@ Verify repository is in working state and fix issues. All commands run from repo
 ## CI Check Protocol
 
 ### Step 0: Environment Setup
+
 - Update dependencies: `pnpm i` (unless --skip-install)
 - Source environment: `.env` file if exists
 
 ### Step 1: Linting
+
 - Check linter passes: `pnpm lint`
 - Fix formatting issues automatically when possible
 
 ### Step 2: TypeScript & Build
+
 - Run comprehensive build checks:
   ```bash
   pnpm nx run-many --targets=build:types,build:dist,build:app,generate:docs,dev:run,typecheck
@@ -39,6 +42,7 @@ Verify repository is in working state and fix issues. All commands run from repo
 - Fix TypeScript errors and build issues
 
 ### Step 3: Test Coverage
+
 - Source `.env` file first if exists
 - Run test coverage: `pnpm nx run-many --target=test:coverage`
 - **NEVER** run normal test command (times out)
@@ -46,14 +50,17 @@ Verify repository is in working state and fix issues. All commands run from repo
 - For snapshot test failures: explain thesis before updating snapshots
 
 ### Step 4: Package Validation
+
 - Sort package.json: `pnpm run sort-package-json`
 - Lint packages: `pnpm nx run-many --targets=lint:package,lint:deps`
 
 ### Step 5: Double Check
+
 - If fixes made in any step, re-run all preceding checks
 - Ensure no regression introduced
 
 ### Step 6: Staging
+
 - Check status: `git status`
 - Add files: `git add`
 - **EXCLUDE**: Git submodules in `lib/*` folders
@@ -62,22 +69,26 @@ Verify repository is in working state and fix issues. All commands run from repo
 ## Error Handling Protocol
 
 ### 1. Diagnosis
+
 - Explain why command broke with complete analysis
 - Cite source code and logs supporting thesis
 - Add console logs if needed for confirmation
 - Ask for help if insufficient context
 
 ### 2. Fix Implementation
+
 - Propose specific fix with full explanation
 - Explain why fix will work
 - If fix fails, return to Step 1
 
 ### 3. Impact Analysis
+
 - Consider if same bug exists elsewhere
 - Search codebase for similar patterns
 - Fix related issues proactively
 
 ### 4. Cleanup
+
 - Remove all added console.logs after fixing
 - Run `pnpm run lint` to format files
 - Ask user before staging changes
@@ -86,6 +97,7 @@ Verify repository is in working state and fix issues. All commands run from repo
 ## Development Notes
 
 ### File Organization
+
 - Functions/types like `createTevmNode` are in:
   - Implementation: `createTevmNode.js`
   - Types: `TevmNode.ts`
@@ -94,18 +106,22 @@ Verify repository is in working state and fix issues. All commands run from repo
 ### Tool-Specific Tips
 
 #### pnpm i
+
 - If fails, abort unless simple syntax error (missing comma)
 
 #### pnpm lint (Biome)
+
 - Lints entire codebase
 - Auto-fixes most formatting issues
 
 #### TypeScript Builds
+
 - Look for types in node_modules if not obvious
 - For tevm packages, check monorepo structure
 - Consult documentation if multiple failures
 
 #### Test Execution
+
 - Use Vite test runner
 - Run packages individually for debugging
 - Add console logs to test assumptions
@@ -114,6 +130,7 @@ Verify repository is in working state and fix issues. All commands run from repo
 ## Success Criteria
 
 Print checklist at end with ✅ for passed steps:
+
 - ✅ Dependencies updated
 - ✅ Linting passed
 - ✅ TypeScript/Build passed

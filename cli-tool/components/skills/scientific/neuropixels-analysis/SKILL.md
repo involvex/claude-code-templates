@@ -12,6 +12,7 @@ Comprehensive toolkit for analyzing Neuropixels high-density neural recordings u
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Working with Neuropixels recordings (.ap.bin, .lf.bin, .meta files)
 - Loading data from SpikeGLX, Open Ephys, or NWB formats
 - Preprocessing neural recordings (filtering, CAR, bad channel detection)
@@ -24,17 +25,17 @@ This skill should be used when:
 
 ## Supported Hardware & Formats
 
-| Probe | Electrodes | Channels | Notes |
-|-------|-----------|----------|-------|
-| Neuropixels 1.0 | 960 | 384 | Requires phase_shift correction |
-| Neuropixels 2.0 (single) | 1280 | 384 | Denser geometry |
-| Neuropixels 2.0 (4-shank) | 5120 | 384 | Multi-region recording |
+| Probe                     | Electrodes | Channels | Notes                           |
+| ------------------------- | ---------- | -------- | ------------------------------- |
+| Neuropixels 1.0           | 960        | 384      | Requires phase_shift correction |
+| Neuropixels 2.0 (single)  | 1280       | 384      | Denser geometry                 |
+| Neuropixels 2.0 (4-shank) | 5120       | 384      | Multi-region recording          |
 
-| Format | Extension | Reader |
-|--------|-----------|--------|
-| SpikeGLX | `.ap.bin`, `.lf.bin`, `.meta` | `si.read_spikeglx()` |
-| Open Ephys | `.continuous`, `.oebin` | `si.read_openephys()` |
-| NWB | `.nwb` | `si.read_nwb()` |
+| Format     | Extension                     | Reader                |
+| ---------- | ----------------------------- | --------------------- |
+| SpikeGLX   | `.ap.bin`, `.lf.bin`, `.meta` | `si.read_spikeglx()`  |
+| Open Ephys | `.continuous`, `.oebin`       | `si.read_openephys()` |
+| NWB        | `.nwb`                        | `si.read_nwb()`       |
 
 ## Quick Start
 
@@ -217,18 +218,22 @@ metrics.to_csv('quality_metrics.csv')
 ## Key Parameters to Adjust
 
 ### Preprocessing
+
 - `freq_min`: Highpass cutoff (300-400 Hz typical)
 - `detect_threshold`: Bad channel detection sensitivity
 
 ### Motion Correction
+
 - `preset`: 'kilosort_like' (fast) or 'nonrigid_accurate' (better for severe drift)
 
 ### Spike Sorting (Kilosort4)
+
 - `batch_size`: Samples per batch (30000 default)
 - `nblocks`: Number of drift blocks (increase for long recordings)
 - `Th_learned`: Detection threshold (lower = more spikes)
 
 ### Quality Metrics
+
 - `snr_threshold`: Signal-to-noise cutoff (3-5 typical)
 - `isi_violations_ratio`: Refractory violations (0.01-0.5)
 - `presence_ratio`: Recording coverage (0.5-0.95)
@@ -236,31 +241,41 @@ metrics.to_csv('quality_metrics.csv')
 ## Bundled Resources
 
 ### scripts/preprocess_recording.py
+
 Automated preprocessing script:
+
 ```bash
 python scripts/preprocess_recording.py /path/to/data --output preprocessed/
 ```
 
 ### scripts/run_sorting.py
+
 Run spike sorting:
+
 ```bash
 python scripts/run_sorting.py preprocessed/ --sorter kilosort4 --output sorting/
 ```
 
 ### scripts/compute_metrics.py
+
 Compute quality metrics and apply curation:
+
 ```bash
 python scripts/compute_metrics.py sorting/ preprocessed/ --output metrics/ --curation allen
 ```
 
 ### scripts/export_to_phy.py
+
 Export to Phy for manual curation:
+
 ```bash
 python scripts/export_to_phy.py metrics/analyzer --output phy_export/
 ```
 
 ### assets/analysis_template.py
+
 Complete analysis template. Copy and customize:
+
 ```bash
 cp assets/analysis_template.py my_analysis.py
 # Edit parameters and run
@@ -268,28 +283,31 @@ python my_analysis.py
 ```
 
 ### reference/standard_workflow.md
+
 Detailed step-by-step workflow with explanations for each stage.
 
 ### reference/api_reference.md
+
 Quick function reference organized by module.
 
 ### reference/plotting_guide.md
+
 Comprehensive visualization guide for publication-quality figures.
 
 ## Detailed Reference Guides
 
-| Topic | Reference |
-|-------|-----------|
-| Full workflow | [reference/standard_workflow.md](reference/standard_workflow.md) |
-| API reference | [reference/api_reference.md](reference/api_reference.md) |
-| Plotting guide | [reference/plotting_guide.md](reference/plotting_guide.md) |
-| Preprocessing | [PREPROCESSING.md](PREPROCESSING.md) |
-| Spike sorting | [SPIKE_SORTING.md](SPIKE_SORTING.md) |
-| Motion correction | [MOTION_CORRECTION.md](MOTION_CORRECTION.md) |
-| Quality metrics | [QUALITY_METRICS.md](QUALITY_METRICS.md) |
-| Automated curation | [AUTOMATED_CURATION.md](AUTOMATED_CURATION.md) |
-| AI-assisted curation | [AI_CURATION.md](AI_CURATION.md) |
-| Waveform analysis | [ANALYSIS.md](ANALYSIS.md) |
+| Topic                | Reference                                                        |
+| -------------------- | ---------------------------------------------------------------- |
+| Full workflow        | [reference/standard_workflow.md](reference/standard_workflow.md) |
+| API reference        | [reference/api_reference.md](reference/api_reference.md)         |
+| Plotting guide       | [reference/plotting_guide.md](reference/plotting_guide.md)       |
+| Preprocessing        | [PREPROCESSING.md](PREPROCESSING.md)                             |
+| Spike sorting        | [SPIKE_SORTING.md](SPIKE_SORTING.md)                             |
+| Motion correction    | [MOTION_CORRECTION.md](MOTION_CORRECTION.md)                     |
+| Quality metrics      | [QUALITY_METRICS.md](QUALITY_METRICS.md)                         |
+| Automated curation   | [AUTOMATED_CURATION.md](AUTOMATED_CURATION.md)                   |
+| AI-assisted curation | [AI_CURATION.md](AI_CURATION.md)                                 |
+| Waveform analysis    | [ANALYSIS.md](ANALYSIS.md)                                       |
 
 ## Installation
 

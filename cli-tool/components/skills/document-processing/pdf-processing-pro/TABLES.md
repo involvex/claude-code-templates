@@ -37,6 +37,7 @@ python scripts/extract_tables.py report.pdf --output tables.csv
 ```
 
 Output:
+
 ```csv
 Name,Age,City
 John Doe,30,New York

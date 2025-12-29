@@ -22,6 +22,7 @@ Systematically migrate JavaScript codebase to TypeScript with proper typing and 
 **Migration Strategy**: Use $ARGUMENTS to specify gradual migration, complete conversion, strict mode, or incremental approach
 
 **Migration Process**:
+
 1. **Environment Setup** - TypeScript installation, tsconfig.json configuration, build tool integration
 2. **Type Definitions** - Install @types packages, create custom type declarations, define interfaces
 3. **File Migration** - Rename .js to .ts/.tsx, add type annotations, resolve compiler errors

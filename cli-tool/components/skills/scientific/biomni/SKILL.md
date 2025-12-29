@@ -21,6 +21,7 @@ Biomni excels at:
 ## When to Use This Skill
 
 Use biomni for:
+
 - **CRISPR screening** - Design screens, prioritize genes, analyze knockout effects
 - **Single-cell RNA-seq** - Cell type annotation, differential expression, trajectory analysis
 - **Drug discovery** - ADMET prediction, target identification, compound optimization
@@ -39,6 +40,7 @@ uv pip install biomni --upgrade
 ```
 
 Configure API keys (store in `.env` file or environment variables):
+
 ```bash
 export ANTHROPIC_API_KEY="your-key-here"
 # Optional: OpenAI, Azure, Google, Groq, AWS Bedrock keys
@@ -84,6 +86,7 @@ default_config.max_iterations = 50
 ```
 
 **Supported LLM Providers:**
+
 - Anthropic Claude (recommended): `claude-sonnet-4-20250514`, `claude-opus-4-20250514`
 - OpenAI: `gpt-4`, `gpt-4-turbo`
 - Azure OpenAI: via Azure configuration
@@ -122,6 +125,7 @@ agent.save_conversation_history("autophagy_screen_report.pdf")
 ### 3. Common Task Patterns
 
 #### CRISPR Screening Design
+
 ```python
 agent.go("""
 Design a genome-wide CRISPR knockout screen for identifying genes
@@ -133,6 +137,7 @@ affecting [phenotype] in [cell type]. Include:
 ```
 
 #### Single-Cell RNA-seq Analysis
+
 ```python
 agent.go("""
 Analyze this single-cell RNA-seq dataset:
@@ -145,6 +150,7 @@ File path: [path/to/data.h5ad]
 ```
 
 #### Drug ADMET Prediction
+
 ```python
 agent.go("""
 Predict ADMET properties for these drug candidates:
@@ -159,6 +165,7 @@ Focus on:
 ```
 
 #### GWAS Variant Interpretation
+
 ```python
 agent.go("""
 Interpret GWAS results for [trait/disease]:
@@ -175,6 +182,7 @@ See `references/use_cases.md` for comprehensive task examples across all biomedi
 ### 4. Data Integration
 
 Biomni integrates ~11GB of biomedical knowledge sources:
+
 - **Gene databases** - Ensembl, NCBI Gene, UniProt
 - **Protein structures** - PDB, AlphaFold
 - **Clinical datasets** - ClinVar, OMIM, HPO
@@ -220,25 +228,30 @@ dataset = evaluator.load_dataset()
 ## Best Practices
 
 ### Task Formulation
+
 - **Be specific** - Include biological context, organism, cell type, conditions
 - **Specify outputs** - Clearly state desired analysis outputs and formats
 - **Provide data paths** - Include file paths for datasets to analyze
 - **Set constraints** - Mention time/computational limits if relevant
 
 ### Security Considerations
+
 ⚠️ **Important**: Biomni executes LLM-generated code with full system privileges. For production use:
+
 - Run in isolated environments (Docker, VMs)
 - Avoid exposing sensitive credentials
 - Review generated code before execution in sensitive contexts
 - Use sandboxed execution environments when possible
 
 ### Performance Optimization
+
 - **Choose appropriate LLMs** - Claude Sonnet 4 recommended for balance of speed/quality
 - **Set reasonable timeouts** - Adjust `default_config.timeout_seconds` for complex tasks
 - **Monitor iterations** - Track `max_iterations` to prevent runaway loops
 - **Cache data** - Reuse downloaded data lake across sessions
 
 ### Result Documentation
+
 ```python
 # Always save conversation history for reproducibility
 agent.save_conversation_history("results/project_name_YYYYMMDD.pdf")
@@ -253,6 +266,7 @@ agent.save_conversation_history("results/project_name_YYYYMMDD.pdf")
 ## Resources
 
 ### References
+
 Detailed documentation available in the `references/` directory:
 
 - **`api_reference.md`** - Complete API documentation for A1 class, configuration, and evaluation
@@ -260,12 +274,14 @@ Detailed documentation available in the `references/` directory:
 - **`use_cases.md`** - Comprehensive task examples for all biomedical domains
 
 ### Scripts
+
 Helper scripts in the `scripts/` directory:
 
 - **`setup_environment.py`** - Interactive environment and API key configuration
 - **`generate_report.py`** - Enhanced PDF report generation with custom formatting
 
 ### External Resources
+
 - **GitHub**: https://github.com/snap-stanford/biomni
 - **Web Platform**: https://biomni.stanford.edu
 - **Paper**: https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1
@@ -277,6 +293,7 @@ Helper scripts in the `scripts/` directory:
 ### Common Issues
 
 **Data download fails**
+
 ```python
 # Manually trigger data lake download
 agent = A1(path='./data', llm='your-llm')
@@ -284,6 +301,7 @@ agent = A1(path='./data', llm='your-llm')
 ```
 
 **API key errors**
+
 ```bash
 # Verify environment variables
 echo $ANTHROPIC_API_KEY
@@ -291,12 +309,14 @@ echo $ANTHROPIC_API_KEY
 ```
 
 **Timeout on complex tasks**
+
 ```python
 from biomni.config import default_config
 default_config.timeout_seconds = 3600  # 1 hour
 ```
 
 **Memory issues with large datasets**
+
 - Use streaming for large files
 - Process data in chunks
 - Increase system memory allocation
@@ -304,6 +324,7 @@ default_config.timeout_seconds = 3600  # 1 hour
 ### Getting Help
 
 For issues or questions:
+
 - GitHub Issues: https://github.com/snap-stanford/biomni/issues
 - Documentation: Check `references/` files for detailed guidance
 - Community: Stanford SNAP lab and biomni contributors

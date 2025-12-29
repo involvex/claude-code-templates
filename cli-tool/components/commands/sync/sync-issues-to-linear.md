@@ -22,6 +22,7 @@ Execute comprehensive synchronization of GitHub issues to Linear workspace:
 **Sync Scope**: Use $ARGUMENTS to filter by issue state, labels, assignees, milestones, or specific issue sets
 
 **Synchronization Framework**:
+
 1. **Issue Discovery** - Fetch GitHub issues with comprehensive metadata, apply filters, validate requirements
 2. **Field Mapping** - Transform GitHub fields to Linear format, map priorities, convert labels, handle assignees
 3. **Data Validation** - Check required fields, validate user mappings, ensure data integrity, prevent duplicates

@@ -14,6 +14,7 @@ Latch is a Python framework for building and deploying bioinformatics workflows 
 The Latch platform provides four main areas of functionality:
 
 ### 1. Workflow Creation and Deployment
+
 - Define serverless workflows using Python decorators
 - Support for native Python, Nextflow, and Snakemake pipelines
 - Automatic containerization with Docker
@@ -21,6 +22,7 @@ The Latch platform provides four main areas of functionality:
 - Version control and reproducibility
 
 ### 2. Data Management
+
 - Cloud storage abstractions (LatchFile, LatchDir)
 - Structured data organization with Registry (Projects → Tables → Records)
 - Type-safe data operations with links and enums
@@ -28,6 +30,7 @@ The Latch platform provides four main areas of functionality:
 - Glob pattern matching for file selection
 
 ### 3. Resource Configuration
+
 - Pre-configured task decorators (@small_task, @large_task, @small_gpu_task, @large_gpu_task)
 - Custom resource specifications (CPU, memory, GPU, storage)
 - GPU support (K80, V100, A100)
@@ -35,6 +38,7 @@ The Latch platform provides four main areas of functionality:
 - Cost optimization strategies
 
 ### 4. Verified Workflows
+
 - Production-ready pre-built pipelines
 - Bulk RNA-seq, DESeq2, pathway analysis
 - AlphaFold and ColabFold for protein structure prediction
@@ -60,6 +64,7 @@ latch register my-workflow
 ```
 
 **Prerequisites:**
+
 - Docker installed and running
 - Latch account credentials
 - Python 3.8+
@@ -92,6 +97,7 @@ def my_workflow(input_file: LatchFile) -> LatchFile:
 This skill should be used when encountering any of the following scenarios:
 
 **Workflow Development:**
+
 - "Create a Latch workflow for RNA-seq analysis"
 - "Deploy my pipeline to Latch"
 - "Convert my Nextflow pipeline to Latch"
@@ -99,18 +105,21 @@ This skill should be used when encountering any of the following scenarios:
 - Working with `@workflow`, `@task` decorators
 
 **Data Management:**
+
 - "Organize my sequencing data in Latch Registry"
 - "How do I use LatchFile and LatchDir?"
 - "Set up sample tracking in Latch"
 - Working with `latch:///` paths
 
 **Resource Configuration:**
+
 - "Configure GPU for AlphaFold on Latch"
 - "My task is running out of memory"
 - "How do I optimize workflow costs?"
 - Working with task decorators
 
 **Verified Workflows:**
+
 - "Run AlphaFold on Latch"
 - "Use DESeq2 for differential expression"
 - "Available pre-built workflows"
@@ -121,7 +130,9 @@ This skill should be used when encountering any of the following scenarios:
 This skill includes comprehensive reference documentation organized by capability:
 
 ### references/workflow-creation.md
+
 **Read this for:**
+
 - Creating and registering workflows
 - Task definition and decorators
 - Supporting Python, Nextflow, Snakemake
@@ -131,6 +142,7 @@ This skill includes comprehensive reference documentation organized by capabilit
 - Troubleshooting registration issues
 
 **Key topics:**
+
 - `latch init` and `latch register` commands
 - `@workflow` and `@task` decorators
 - LatchFile and LatchDir basics
@@ -139,7 +151,9 @@ This skill includes comprehensive reference documentation organized by capabilit
 - Conditional UI sections
 
 ### references/data-management.md
+
 **Read this for:**
+
 - Cloud storage with LatchFile and LatchDir
 - Registry system (Projects, Tables, Records)
 - Linked records and relationships
@@ -149,6 +163,7 @@ This skill includes comprehensive reference documentation organized by capabilit
 - Account and workspace management
 
 **Key topics:**
+
 - `latch:///` path format
 - File transfer and glob patterns
 - Creating and querying Registry tables
@@ -157,7 +172,9 @@ This skill includes comprehensive reference documentation organized by capabilit
 - Workflow-Registry integration
 
 ### references/resource-configuration.md
+
 **Read this for:**
+
 - Task resource decorators
 - Custom CPU, memory, GPU configuration
 - GPU types (K80, V100, A100)
@@ -167,6 +184,7 @@ This skill includes comprehensive reference documentation organized by capabilit
 - Monitoring and debugging
 
 **Key topics:**
+
 - `@small_task`, `@large_task`, `@small_gpu_task`, `@large_gpu_task`
 - `@custom_task` with precise specifications
 - Multi-GPU configuration
@@ -174,7 +192,9 @@ This skill includes comprehensive reference documentation organized by capabilit
 - Platform limits and quotas
 
 ### references/verified-workflows.md
+
 **Read this for:**
+
 - Pre-built production workflows
 - Bulk RNA-seq and DESeq2
 - AlphaFold and ColabFold
@@ -184,6 +204,7 @@ This skill includes comprehensive reference documentation organized by capabilit
 - Integration with custom workflows
 
 **Key topics:**
+
 - `latch.verified` module imports
 - Available verified workflows
 - Workflow parameters and options
@@ -281,6 +302,7 @@ def registry_workflow(sample_id: str, table_id: str):
 ## Best Practices
 
 ### Workflow Design
+
 1. Use type annotations for all parameters
 2. Write clear docstrings (appear in UI)
 3. Start with standard task decorators, scale up if needed
@@ -288,18 +310,21 @@ def registry_workflow(sample_id: str, table_id: str):
 5. Implement proper error handling
 
 ### Data Management
+
 6. Use consistent folder structures
 7. Define Registry schemas before bulk entry
 8. Use linked records for relationships
 9. Store metadata in Registry for traceability
 
 ### Resource Configuration
+
 10. Right-size resources (don't over-allocate)
 11. Use GPU only when algorithms support it
 12. Monitor execution metrics and optimize
 13. Design for parallel execution when possible
 
 ### Development Workflow
+
 14. Test locally with Docker before registration
 15. Use version control for workflow code
 16. Document resource requirements
@@ -310,22 +335,26 @@ def registry_workflow(sample_id: str, table_id: str):
 ### Common Issues
 
 **Registration Failures:**
+
 - Ensure Docker is running
 - Check authentication with `latch login`
 - Verify all dependencies in Dockerfile
 - Use `--verbose` flag for detailed logs
 
 **Resource Problems:**
+
 - Out of memory: Increase memory in task decorator
 - Timeouts: Increase timeout parameter
 - Storage issues: Increase ephemeral storage_gib
 
 **Data Access:**
+
 - Use correct `latch:///` path format
 - Verify file exists in workspace
 - Check permissions for shared workspaces
 
 **Type Errors:**
+
 - Add type annotations to all parameters
 - Use LatchFile/LatchDir for file/directory parameters
 - Ensure workflow return type matches actual return
@@ -341,6 +370,7 @@ def registry_workflow(sample_id: str, table_id: str):
 ## Support
 
 For issues or questions:
+
 1. Check documentation links above
 2. Search GitHub issues
 3. Ask in Slack community

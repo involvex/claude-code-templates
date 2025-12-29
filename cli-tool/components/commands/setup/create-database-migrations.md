@@ -12,7 +12,7 @@ Create and manage database migrations: **$ARGUMENTS**
 
 - ORM detection: @package.json or @requirements.txt (detect Sequelize, Prisma, Alembic, etc.)
 - Migration files: !`find . -name "*migration*" -type f | head -5`
-- Database config: @config/database.* or @prisma/schema.prisma
+- Database config: @config/database.\* or @prisma/schema.prisma
 - Current schema: !`ls migrations/ 2>/dev/null | wc -l` migrations found
 
 ## Task
@@ -22,6 +22,7 @@ Create comprehensive database migrations with proper versioning and rollback cap
 **Migration Types**: Use $ARGUMENTS to specify table creation, column addition, table alteration, or data migration
 
 **Migration Framework**:
+
 1. **Migration Planning** - Analyze schema changes, dependencies, and data impact
 2. **Migration Generation** - Create timestamped migration files with up/down methods
 3. **Schema Updates** - Table creation, column modifications, index management

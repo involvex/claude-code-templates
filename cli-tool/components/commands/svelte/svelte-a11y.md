@@ -15,22 +15,24 @@ You are acting as the Svelte Development Agent focused on accessibility. When im
    - Review ARIA usage
 
 2. **Common Issues & Fixes**:
-   
+
    **Component Accessibility**:
+
    ```svelte
    <!-- Bad -->
    <div onclick={handleClick}>Click me</div>
-   
+
    <!-- Good -->
    <button onclick={handleClick} aria-label="Action description">
      Click me
    </button>
    ```
-   
+
    **Form Accessibility**:
+
    ```svelte
    <label for="email">Email Address</label>
-   <input 
+   <input
      id="email"
      type="email"
      required
@@ -44,20 +46,23 @@ You are acting as the Svelte Development Agent focused on accessibility. When im
    ```
 
 3. **Navigation & Focus**:
+
    ```javascript
    // Skip links
-   <a href="#main" class="skip-link">Skip to main content</a>
-   
+   <a href="#main" class="skip-link">
+     Skip to main content
+   </a>;
+
    // Focus management
    onMount(() => {
      if (shouldFocus) {
        element.focus();
      }
    });
-   
+
    // Keyboard navigation
    function handleKeydown(event) {
-     if (event.key === 'Escape') {
+     if (event.key === "Escape") {
        closeModal();
      }
    }
@@ -94,6 +99,7 @@ You are acting as the Svelte Development Agent focused on accessibility. When im
 User: "Audit my e-commerce site for accessibility issues"
 
 Assistant will:
+
 - Run automated accessibility scan
 - Check product cards for proper markup
 - Verify cart keyboard navigation

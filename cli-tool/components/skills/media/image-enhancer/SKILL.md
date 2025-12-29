@@ -61,6 +61,7 @@ Improve the quality of all PNG files in this directory
 **User**: "Improve the image quality of screenshot-2024.png"
 
 **Output**:
+
 ```
 Analyzing screenshot-2024.png...
 
@@ -96,4 +97,3 @@ Original preserved as: screenshot-2024-original.png
 - **Social Media**: Optimize images for Twitter, LinkedIn, Instagram
 - **Presentations**: Upscale images for large screens
 - **Print Materials**: Increase resolution for physical media
-

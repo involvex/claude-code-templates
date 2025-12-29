@@ -15,18 +15,23 @@ Hooks are automated scripts that execute at specific points during Claude Code s
 ## Key Benefits
 
 ### 🔄 Automated Workflows
+
 Execute custom scripts automatically when specific events occur during Claude Code sessions.
 
 ### 🛡️ Enhanced Security
+
 Validate and block potentially dangerous operations before they execute.
 
 ### 📊 Session Monitoring
+
 Track usage patterns, log operations, and gather analytics from your Claude Code sessions.
 
 ### 🔧 Custom Validation
+
 Implement project-specific rules and requirements that Claude must follow.
 
 ### ⚡ Real-time Feedback
+
 Provide immediate feedback to Claude based on the results of operations.
 
 ## Hook Configuration
@@ -35,14 +40,14 @@ Provide immediate feedback to Claude based on the results of operations.
 
 Hooks are configured in your Claude Code settings files with the following priority order:
 
-| Type | Location | Scope | Usage |
-|------|----------|-------|--------|
-| **User Settings** | `~/.claude/settings.json` | All projects | Personal hooks across all projects |
-| **Project Settings** | `.claude/settings.json` | Current project | Shared team hooks (committed to repo) |
+| Type                       | Location                      | Scope           | Usage                                  |
+| -------------------------- | ----------------------------- | --------------- | -------------------------------------- |
+| **User Settings**          | `~/.claude/settings.json`     | All projects    | Personal hooks across all projects     |
+| **Project Settings**       | `.claude/settings.json`       | Current project | Shared team hooks (committed to repo)  |
 | **Local Project Settings** | `.claude/settings.local.json` | Current project | Personal project hooks (not committed) |
-| **Enterprise Settings** | Managed by policy | Organization | Company-wide hooks and policies |
+| **Enterprise Settings**    | Managed by policy             | Organization    | Company-wide hooks and policies        |
 
-*When there are conflicts, settings files lower in the list take precedence.*
+_When there are conflicts, settings files lower in the list take precedence._
 
 ### Basic Hook Structure
 
@@ -70,6 +75,7 @@ Each hook is defined using event-based configuration:
 ### Configuration Elements
 
 #### Event Names
+
 - **PreToolUse**: Before Claude executes a tool
 - **PostToolUse**: After Claude executes a tool successfully
 - **UserPromptSubmit**: When user submits a prompt
@@ -81,7 +87,9 @@ Each hook is defined using event-based configuration:
 - **PreCompact**: Before compacting conversation history
 
 #### Matchers
+
 For tool-based events (PreToolUse, PostToolUse):
+
 ```json
 "matcher": "Write"              // Exact match for Write tool
 "matcher": "Edit|Write"         // Regex pattern for multiple tools
@@ -91,11 +99,12 @@ For tool-based events (PreToolUse, PostToolUse):
 ```
 
 #### Hook Commands
+
 ```json
 {
-  "type": "command",                           // Currently only "command" supported
-  "command": "/path/to/script.sh",            // Shell command to execute
-  "timeout": 30                               // Optional timeout in seconds (default: 60)
+  "type": "command", // Currently only "command" supported
+  "command": "/path/to/script.sh", // Shell command to execute
+  "timeout": 30 // Optional timeout in seconds (default: 60)
 }
 ```
 
@@ -107,6 +116,7 @@ For tool-based events (PreToolUse, PostToolUse):
 **Common Use Cases**: Permission control, input validation, security checks
 
 **Input Data**:
+
 ```json
 {
   "session_id": "abc123",
@@ -122,6 +132,7 @@ For tool-based events (PreToolUse, PostToolUse):
 ```
 
 **Common Matchers**:
+
 - `Bash` - Shell commands
 - `Write` - File creation
 - `Edit`, `MultiEdit` - File modifications
@@ -135,6 +146,7 @@ For tool-based events (PreToolUse, PostToolUse):
 **Common Use Cases**: Logging, validation, cleanup, triggering builds
 
 **Input Data**:
+
 ```json
 {
   "session_id": "abc123",
@@ -159,6 +171,7 @@ For tool-based events (PreToolUse, PostToolUse):
 **Common Use Cases**: Adding context, blocking sensitive prompts, prompt transformation
 
 **Input Data**:
+
 ```json
 {
   "session_id": "abc123",
@@ -175,16 +188,18 @@ For tool-based events (PreToolUse, PostToolUse):
 **Common Use Cases**: Loading project state, setting up environment, adding context
 
 **Input Data**:
+
 ```json
 {
   "session_id": "abc123",
   "transcript_path": "/path/to/conversation.jsonl",
   "hook_event_name": "SessionStart",
-  "source": "startup"  // "startup", "resume", or "clear"
+  "source": "startup" // "startup", "resume", or "clear"
 }
 ```
 
 **Matchers**:
+
 - `startup` - Normal Claude Code startup
 - `resume` - Resumed from `--resume`, `--continue`, or `/resume`
 - `clear` - After `/clear` command
@@ -195,6 +210,7 @@ For tool-based events (PreToolUse, PostToolUse):
 **Common Use Cases**: Automated testing, continuous workflows, quality checks
 
 **Input Data**:
+
 ```json
 {
   "session_id": "abc123",
@@ -210,13 +226,14 @@ For tool-based events (PreToolUse, PostToolUse):
 **Common Use Cases**: Saving session data, cleanup, logging statistics
 
 **Input Data**:
+
 ```json
 {
   "session_id": "abc123",
   "transcript_path": "/path/to/conversation.jsonl",
   "cwd": "/current/working/directory",
   "hook_event_name": "SessionEnd",
-  "reason": "exit"  // "clear", "logout", "prompt_input_exit", "other"
+  "reason": "exit" // "clear", "logout", "prompt_input_exit", "other"
 }
 ```
 
@@ -225,56 +242,62 @@ For tool-based events (PreToolUse, PostToolUse):
 ### Simple Exit Code Control
 
 **Exit Code 0**: Success
+
 - For most hooks: stdout shown to user in transcript mode (Ctrl+R)
 - For UserPromptSubmit and SessionStart: stdout added as context for Claude
 
 **Exit Code 2**: Blocking error
+
 - Blocks the operation and shows stderr to Claude for automated handling
 - Behavior varies by hook type (see reference table below)
 
 **Other Exit Codes**: Non-blocking error
+
 - Shows stderr to user and continues execution
 
 #### Exit Code 2 Behavior by Hook Type
 
-| Hook Event | Behavior |
-|------------|----------|
-| `PreToolUse` | Blocks tool execution, shows stderr to Claude |
-| `PostToolUse` | Shows stderr to Claude (tool already executed) |
-| `UserPromptSubmit` | Blocks prompt, erases it, shows stderr to user only |
-| `Stop`/`SubagentStop` | Blocks stopping, shows stderr to Claude |
-| `Notification` | Shows stderr to user only |
-| `SessionStart`/`SessionEnd`/`PreCompact` | Shows stderr to user only |
+| Hook Event                               | Behavior                                            |
+| ---------------------------------------- | --------------------------------------------------- |
+| `PreToolUse`                             | Blocks tool execution, shows stderr to Claude       |
+| `PostToolUse`                            | Shows stderr to Claude (tool already executed)      |
+| `UserPromptSubmit`                       | Blocks prompt, erases it, shows stderr to user only |
+| `Stop`/`SubagentStop`                    | Blocks stopping, shows stderr to Claude             |
+| `Notification`                           | Shows stderr to user only                           |
+| `SessionStart`/`SessionEnd`/`PreCompact` | Shows stderr to user only                           |
 
 ### Advanced JSON Output
 
 For sophisticated control, hooks can return structured JSON:
 
 #### Common JSON Fields
+
 ```json
 {
-  "continue": true,                    // Whether to continue execution (default: true)
-  "stopReason": "string",             // Message when continue is false
-  "suppressOutput": true,             // Hide stdout from transcript (default: false)
-  "systemMessage": "string"           // Warning message for user
+  "continue": true, // Whether to continue execution (default: true)
+  "stopReason": "string", // Message when continue is false
+  "suppressOutput": true, // Hide stdout from transcript (default: false)
+  "systemMessage": "string" // Warning message for user
 }
 ```
 
 #### PreToolUse Permission Control
+
 ```json
 {
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
-    "permissionDecision": "allow",     // "allow", "deny", or "ask"
+    "permissionDecision": "allow", // "allow", "deny", or "ask"
     "permissionDecisionReason": "Auto-approved safe operation"
   }
 }
 ```
 
 #### PostToolUse Feedback Control
+
 ```json
 {
-  "decision": "block",                // "block" or undefined
+  "decision": "block", // "block" or undefined
   "reason": "Code style violations detected",
   "hookSpecificOutput": {
     "hookEventName": "PostToolUse",
@@ -284,9 +307,10 @@ For sophisticated control, hooks can return structured JSON:
 ```
 
 #### UserPromptSubmit Processing
+
 ```json
 {
-  "decision": "block",                // "block" or undefined  
+  "decision": "block", // "block" or undefined
   "reason": "Sensitive information detected",
   "hookSpecificOutput": {
     "hookEventName": "UserPromptSubmit",
@@ -296,10 +320,11 @@ For sophisticated control, hooks can return structured JSON:
 ```
 
 #### SessionStart Context Loading
+
 ```json
 {
   "hookSpecificOutput": {
-    "hookEventName": "SessionStart", 
+    "hookEventName": "SessionStart",
     "additionalContext": "Recent issues: #123 (bug fix needed), #124 (feature ready)"
   }
 }
@@ -329,6 +354,7 @@ For sophisticated control, hooks can return structured JSON:
 ```
 
 **format-code.sh**:
+
 ```bash
 #!/bin/bash
 # Code formatting hook
@@ -384,7 +410,7 @@ echo "✅ Code formatting complete"
         "matcher": "Bash",
         "hooks": [
           {
-            "type": "command", 
+            "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/validate-bash.py"
           }
         ]
@@ -405,6 +431,7 @@ echo "✅ Code formatting complete"
 ```
 
 **validate-bash.py**:
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -424,10 +451,10 @@ DANGEROUS_PATTERNS = [
 try:
     input_data = json.load(sys.stdin)
     command = input_data.get('tool_input', {}).get('command', '')
-    
+
     if not command:
         sys.exit(0)
-    
+
     # Check for dangerous patterns
     for pattern, message in DANGEROUS_PATTERNS:
         if re.search(pattern, command, re.IGNORECASE):
@@ -435,7 +462,7 @@ try:
             print(f"Command: {command}", file=sys.stderr)
             print("Please review and confirm this command is safe.", file=sys.stderr)
             sys.exit(2)  # Block the command
-    
+
     # Auto-approve safe commands
     output = {
         "hookSpecificOutput": {
@@ -445,13 +472,14 @@ try:
         }
     }
     print(json.dumps(output))
-    
+
 except Exception as e:
     print(f"Hook error: {e}", file=sys.stderr)
     sys.exit(1)
 ```
 
 **check-sensitive.py**:
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -470,7 +498,7 @@ SENSITIVE_PATTERNS = [
 try:
     input_data = json.load(sys.stdin)
     prompt = input_data.get('prompt', '')
-    
+
     # Check for sensitive information
     for pattern, message in SENSITIVE_PATTERNS:
         if re.search(pattern, prompt):
@@ -480,13 +508,13 @@ try:
             }
             print(json.dumps(output))
             sys.exit(0)
-    
+
     # Add security reminder
     security_context = """
 🔒 Security reminder: This session is being monitored for sensitive information.
 Current security status: All prompts are scanned for passwords, API keys, and secrets.
 """
-    
+
     output = {
         "hookSpecificOutput": {
             "hookEventName": "UserPromptSubmit",
@@ -494,7 +522,7 @@ Current security status: All prompts are scanned for passwords, API keys, and se
         }
     }
     print(json.dumps(output))
-    
+
 except Exception as e:
     print(f"Hook error: {e}", file=sys.stderr)
     sys.exit(1)
@@ -521,6 +549,7 @@ except Exception as e:
 ```
 
 **load-context.sh**:
+
 ```bash
 #!/bin/bash
 # Project context loading hook
@@ -606,6 +635,7 @@ echo -e "\n✅ Project context loaded successfully"
 ```
 
 **auto-test.sh**:
+
 ```bash
 #!/bin/bash
 # Automated testing hook
@@ -676,6 +706,7 @@ fi
 ```
 
 **protect-files.py**:
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -687,7 +718,7 @@ from pathlib import Path
 PROTECTED_PATTERNS = [
     '.env*',
     '*.key',
-    '*.pem', 
+    '*.pem',
     'id_rsa*',
     'id_ed25519*',
     '.aws/credentials',
@@ -699,7 +730,7 @@ PROTECTED_PATTERNS = [
 # Critical system files
 CRITICAL_FILES = [
     '/etc/passwd',
-    '/etc/shadow', 
+    '/etc/shadow',
     '/etc/hosts',
     '/etc/fstab',
     '~/.bashrc',
@@ -710,32 +741,32 @@ CRITICAL_FILES = [
 def is_protected_file(file_path):
     """Check if file matches protection patterns"""
     path = Path(file_path)
-    
+
     # Check against patterns
     for pattern in PROTECTED_PATTERNS:
         if path.match(pattern) or any(part.match(pattern) for part in path.parts):
             return True, f"matches protected pattern: {pattern}"
-    
+
     # Check critical system files
     resolved_path = str(path.resolve())
     for critical in CRITICAL_FILES:
         critical_resolved = str(Path(critical).expanduser().resolve())
         if resolved_path == critical_resolved:
             return True, f"is a critical system file"
-    
+
     return False, None
 
 try:
     input_data = json.load(sys.stdin)
     tool_input = input_data.get('tool_input', {})
     file_path = tool_input.get('file_path', '')
-    
+
     if not file_path:
         sys.exit(0)
-    
+
     # Check if file is protected
     is_protected, reason = is_protected_file(file_path)
-    
+
     if is_protected:
         output = {
             "hookSpecificOutput": {
@@ -749,13 +780,13 @@ try:
         # Auto-approve safe files
         output = {
             "hookSpecificOutput": {
-                "hookEventName": "PreToolUse", 
+                "hookEventName": "PreToolUse",
                 "permissionDecision": "allow",
                 "permissionDecisionReason": "File passed protection checks"
             }
         }
         print(json.dumps(output))
-        
+
 except Exception as e:
     print(f"Hook error: {e}", file=sys.stderr)
     sys.exit(1)
@@ -790,7 +821,7 @@ Claude Code hooks work seamlessly with [Model Context Protocol (MCP)](/en/docs/c
         "matcher": "mcp__.*__write.*|mcp__.*__delete.*",
         "hooks": [
           {
-            "type": "command", 
+            "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/validate-destructive-mcp.py"
           }
         ]
@@ -814,19 +845,19 @@ import os
 
 try:
     input_data = json.load(sys.stdin)
-    
+
     # Only run in production-like environments
     env = os.environ.get('NODE_ENV', 'development')
     if env not in ['staging', 'production']:
         sys.exit(0)
-    
+
     # Only for specific project types
     if not os.path.exists('package.json'):
         sys.exit(0)
-    
+
     # Your hook logic here
     print("🚀 Production hook executed")
-    
+
 except Exception as e:
     print(f"Hook error: {e}", file=sys.stderr)
     sys.exit(1)
@@ -853,6 +884,7 @@ except Exception as e:
 ```
 
 **coordinate-tools.sh**:
+
 ```bash
 #!/bin/bash
 # Multi-tool coordination example
@@ -925,10 +957,10 @@ def init_db():
 
 try:
     input_data = json.load(sys.stdin)
-    
+
     # Initialize database
     conn = init_db()
-    
+
     # Log tool usage
     conn.execute('''
         INSERT INTO tool_usage (session_id, tool_name, file_path, success)
@@ -939,34 +971,34 @@ try:
         input_data.get('tool_input', {}).get('file_path', ''),
         input_data.get('tool_response', {}).get('success', True)
     ))
-    
+
     conn.commit()
-    
+
     # Generate usage summary periodically
     cursor = conn.cursor()
     cursor.execute('SELECT COUNT(*) FROM tool_usage WHERE date(timestamp) = date("now")')
     daily_count = cursor.fetchone()[0]
-    
+
     if daily_count % 10 == 0:  # Every 10th operation
         print(f"📊 Daily tool usage: {daily_count} operations")
-        
+
         # Show top tools today
         cursor.execute('''
             SELECT tool_name, COUNT(*) as count
-            FROM tool_usage 
+            FROM tool_usage
             WHERE date(timestamp) = date("now")
             GROUP BY tool_name
             ORDER BY count DESC
             LIMIT 3
         ''')
-        
+
         top_tools = cursor.fetchall()
         print("🏆 Most used tools today:")
         for tool, count in top_tools:
             print(f"  {tool}: {count} times")
-    
+
     conn.close()
-    
+
 except Exception as e:
     print(f"Analytics error: {e}", file=sys.stderr)
     sys.exit(0)  # Don't fail the operation for analytics errors
@@ -975,12 +1007,14 @@ except Exception as e:
 ## Best Practices
 
 ### 1. Hook Design Principles
+
 - **Single Responsibility**: Each hook should have one clear purpose
 - **Fail Gracefully**: Use exit code 0 for non-critical failures to avoid blocking operations
 - **Be Fast**: Keep hook execution time minimal to avoid slowing down Claude
 - **Idempotent**: Hooks should be safe to run multiple times with the same input
 
 ### 2. Error Handling
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -996,9 +1030,9 @@ logging.basicConfig(
 
 try:
     input_data = json.load(sys.stdin)
-    
+
     # Your hook logic here
-    
+
 except json.JSONDecodeError as e:
     logging.error(f"JSON decode error: {e}")
     print(f"Invalid JSON input: {e}", file=sys.stderr)
@@ -1010,24 +1044,26 @@ except Exception as e:
 ```
 
 ### 3. Input Validation
+
 ```python
 def validate_input(input_data):
     """Validate hook input data"""
     required_fields = ['session_id', 'hook_event_name']
-    
+
     for field in required_fields:
         if field not in input_data:
             raise ValueError(f"Missing required field: {field}")
-    
+
     # Validate file paths for path traversal
     file_path = input_data.get('tool_input', {}).get('file_path')
     if file_path and '..' in file_path:
         raise ValueError(f"Invalid file path: {file_path}")
-    
+
     return True
 ```
 
 ### 4. Configuration Management
+
 ```json
 {
   "hooks": {
@@ -1057,6 +1093,7 @@ def validate_input(input_data):
 5. **Secrets Management**: Never log or expose sensitive information
 
 ### Security Example
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -1069,15 +1106,15 @@ def sanitize_path(file_path):
     """Sanitize file path to prevent directory traversal"""
     if not file_path:
         return None
-    
+
     # Check for directory traversal
     if '..' in file_path or file_path.startswith('/'):
         raise ValueError(f"Unsafe path detected: {file_path}")
-    
+
     # Resolve to absolute path within project
     project_dir = os.environ.get('CLAUDE_PROJECT_DIR', '.')
     safe_path = Path(project_dir) / file_path
-    
+
     # Ensure path stays within project directory
     try:
         safe_path.resolve().relative_to(Path(project_dir).resolve())
@@ -1088,11 +1125,11 @@ def sanitize_path(file_path):
 try:
     input_data = json.load(sys.stdin)
     file_path = input_data.get('tool_input', {}).get('file_path')
-    
+
     if file_path:
         safe_path = sanitize_path(file_path)
         print(f"✅ Safe path validated: {safe_path}")
-    
+
 except Exception as e:
     print(f"Security validation failed: {e}", file=sys.stderr)
     sys.exit(2)  # Block unsafe operations
@@ -1134,6 +1171,7 @@ claude --debug
 ```
 
 Debug output includes:
+
 - Hook discovery and matching
 - Command execution details
 - Execution time and exit codes
@@ -1169,6 +1207,7 @@ print(json.dumps({'continue': True, 'systemMessage': 'Test successful'}))
 ### Community Hooks
 
 Share and discover hooks with the community:
+
 - [Claude Code Hooks Repository](https://github.com/anthropic/claude-code-hooks) (example)
 - Project-specific hook collections
 - Team-shared hook libraries
@@ -1178,6 +1217,7 @@ Share and discover hooks with the community:
 Use these templates as starting points:
 
 **Basic Hook Template**:
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -1188,13 +1228,13 @@ def main():
     try:
         # Read input
         input_data = json.load(sys.stdin)
-        
+
         # Your hook logic here
-        
+
         # Success
         print("Hook executed successfully")
         sys.exit(0)
-        
+
     except Exception as e:
         print(f"Hook error: {e}", file=sys.stderr)
         sys.exit(1)
@@ -1204,6 +1244,7 @@ if __name__ == "__main__":
 ```
 
 **JSON Output Template**:
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -1212,9 +1253,9 @@ import sys
 def main():
     try:
         input_data = json.load(sys.stdin)
-        
+
         # Your logic here
-        
+
         output = {
             "continue": True,
             "hookSpecificOutput": {
@@ -1222,10 +1263,10 @@ def main():
                 # Event-specific output
             }
         }
-        
+
         print(json.dumps(output))
         sys.exit(0)
-        
+
     except Exception as e:
         print(f"Hook error: {e}", file=sys.stderr)
         sys.exit(1)
@@ -1239,7 +1280,7 @@ if __name__ == "__main__":
 Claude Code hooks provide powerful automation capabilities that can significantly enhance your development workflow. With hooks, you can:
 
 - **Automate repetitive tasks** like code formatting and testing
-- **Enhance security** through validation and monitoring  
+- **Enhance security** through validation and monitoring
 - **Customize Claude's behavior** to match your team's requirements
 - **Integrate with external tools** and services
 - **Monitor and analyze** your development patterns

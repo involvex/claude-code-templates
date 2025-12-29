@@ -11,6 +11,7 @@ Automatically configure Vercel Analytics and Speed Insights for your React/Vite 
 **Usage:** `/vercel-analytics` (no arguments needed)
 
 **What it does:**
+
 - Installs @vercel/analytics and @vercel/speed-insights packages
 - Adds components to your React app
 - Configures SPA routing for Vercel deployment
@@ -19,6 +20,7 @@ Automatically configure Vercel Analytics and Speed Insights for your React/Vite 
 **Process:**
 
 1. **Install Vercel Packages**
+
    ```bash
    npm install @vercel/analytics @vercel/speed-insights
    ```
@@ -38,13 +40,13 @@ Automatically configure Vercel Analytics and Speed Insights for your React/Vite 
 4. **Create vercel.json Configuration**
    - Create `vercel.json` in project root
    - Add SPA rewrite rules:
+
    ```json
    {
-     "rewrites": [
-       { "source": "/(.*)", "destination": "/index.html" }
-     ]
+     "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
    }
    ```
+
    - This ensures all routes serve index.html (fixes 404s)
 
 5. **Verify Setup**
@@ -53,12 +55,14 @@ Automatically configure Vercel Analytics and Speed Insights for your React/Vite 
    - Display success message with next steps
 
 **Expected Outcome:**
+
 - ✅ Analytics tracking active
 - ✅ Speed Insights monitoring configured
 - ✅ SPA routing works correctly on Vercel
 - ✅ No 404 errors on direct route access
 
 **Next Steps:**
+
 1. Deploy to Vercel: `vercel deploy`
 2. View analytics at: https://vercel.com/dashboard/analytics
 3. Check Speed Insights: https://vercel.com/dashboard/speed-insights

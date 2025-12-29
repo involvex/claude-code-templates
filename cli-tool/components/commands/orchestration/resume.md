@@ -15,26 +15,33 @@ Restores full context for active orchestrations, showing current progress, ident
 ## Basic Commands
 
 ### List Active Orchestrations
+
 ```
 /orchestration/resume
 ```
+
 Shows all orchestrations with active (non-completed) tasks.
 
 ### Resume Specific Orchestration
+
 ```
 /orchestration/resume --date 03_15_2024 --project auth_system
 ```
+
 Loads complete context for a specific orchestration.
 
 ### Resume Most Recent
+
 ```
 /orchestration/resume --latest
 ```
+
 Automatically resumes the most recently active orchestration.
 
 ## Output Format
 
 ### Orchestration List View
+
 ```
 Active Task Orchestrations
 ==========================
@@ -43,7 +50,7 @@ Active Task Orchestrations
    Started: 3 days ago | Progress: 65% | Active Tasks: 3
    └─ Focus: JWT implementation, OAuth integration
 
-2. 03_14_2024/payment_processing  
+2. 03_14_2024/payment_processing
    Started: 4 days ago | Progress: 40% | Active Tasks: 2
    └─ Focus: Stripe webhooks, refund handling
 
@@ -55,6 +62,7 @@ Select orchestration to resume: [1-3] or use --date and --project
 ```
 
 ### Detailed Resume View
+
 ```
 Resuming: authentication_system (03_15_2024)
 ============================================
@@ -80,7 +88,7 @@ Resuming: authentication_system (03_15_2024)
 ## Next Available Tasks (Ready to Start)
 1. TASK-013: Password reset flow (4h, frontend)
    Files: src/auth/reset.tsx, src/api/auth.ts
-   
+
 2. TASK-014: Session management (3h, backend)
    Files: src/services/session.ts, src/middleware/auth.ts
 
@@ -99,10 +107,13 @@ Resuming: authentication_system (03_15_2024)
 ## Context Recovery Features
 
 ### Task Context
+
 ```
 /orchestration/resume --task TASK-003
 ```
+
 Shows:
+
 - Full task description and requirements
 - Implementation progress and notes
 - Related files with recent changes
@@ -110,23 +121,29 @@ Shows:
 - Dependencies and blockers
 
 ### File Context
+
 ```
 /orchestration/resume --show-files
 ```
+
 Lists all files mentioned in active tasks with:
+
 - Last modified time
 - Current git status
 - Which tasks reference them
 
 ### Dependency Context
+
 ```
 /orchestration/resume --deps
 ```
+
 Shows dependency graph focused on active tasks.
 
 ## Working State Recovery
 
 ### Git State Summary
+
 ```
 ## Git Working State
 Current Branch: feature/jwt-auth
@@ -143,6 +160,7 @@ Recommendation: Commit current changes before switching tasks
 ```
 
 ### Last Session Summary
+
 ```
 ## Last Session (2 hours ago)
 - Completed: TASK-002 (Database schema)
@@ -154,16 +172,19 @@ Recommendation: Commit current changes before switching tasks
 ## Filtering Options
 
 ### By Status
+
 ```
 /orchestration/resume --show in_progress,on_hold
 ```
 
 ### By Date Range
+
 ```
 /orchestration/resume --since "last week"
 ```
 
 ### By Completion
+
 ```
 /orchestration/resume --incomplete  # < 50% done
 /orchestration/resume --nearly-done  # > 80% done
@@ -172,70 +193,90 @@ Recommendation: Commit current changes before switching tasks
 ## Integration Features
 
 ### Direct Task Pickup
+
 ```
 /orchestration/resume --pickup TASK-013
 ```
+
 Automatically:
+
 1. Shows task details
 2. Moves to in_progress
 3. Shows relevant files
 4. Creates feature branch if needed
 
 ### Status Check Integration
+
 ```
 /orchestration/resume --with-status
 ```
+
 Includes full status report with resume context.
 
 ### Commit History
+
 ```
 /orchestration/resume --commits 5
 ```
+
 Shows last 5 commits related to the orchestration.
 
 ## Quick Resume Patterns
 
 ### Morning Standup
+
 ```
 /orchestration/resume --latest --with-status
 ```
+
 Perfect for daily standups - shows what you were working on and current state.
 
 ### Context Switch
+
 ```
 /orchestration/resume --save-state
 ```
+
 Saves current working state before switching to another orchestration.
 
 ### Team Handoff
+
 ```
 /orchestration/resume --handoff
 ```
+
 Generates detailed handoff notes for another developer.
 
 ## Examples
 
 ### Example 1: Quick Continue
+
 ```
 /orchestration/resume --latest --pickup-where-left-off
 ```
+
 Resumes exactly where you stopped, showing the in-progress task.
 
 ### Example 2: Monday Morning
+
 ```
 /orchestration/resume --since friday --show-completed
 ```
+
 Shows what was done Friday and what's next for Monday.
 
 ### Example 3: Multiple Projects
+
 ```
 /orchestration/resume --all --summary
 ```
+
 Quick overview of all active orchestrations.
 
 ## State Persistence
 
 The command reads from:
+
 - EXECUTION-TRACKER.md for progress metrics
 - TASK-STATUS-TRACKER.yaml for current state
 - Task files for detailed context

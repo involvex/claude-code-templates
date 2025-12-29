@@ -20,6 +20,7 @@ Create comprehensive Product Requirement Prompt (PRP) following structured resea
 Develop comprehensive PRP through systematic research and structured documentation:
 
 **Research Process**:
+
 1. **Documentation Review** - Analyze existing ai_docs/ and project documentation
 2. **Web Research** - Gather implementation examples, library docs, and best practices
 3. **Template Analysis** - Study base_template_v1 structure and existing PRPs
@@ -27,6 +28,7 @@ Develop comprehensive PRP through systematic research and structured documentati
 5. **Context Synthesis** - Compile comprehensive implementation context
 
 **PRP Development**:
+
 - Follow base_template_v1 structure exactly
 - Include specific file references and web resources
 - Provide curated codebase intelligence

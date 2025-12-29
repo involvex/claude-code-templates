@@ -3,32 +3,32 @@
 # Save to: .claude/error-solutions/<error-signature>.yaml
 
 # Unique identifier for this solution
-id: ""  # e.g., "nodejs-module-not-found-express"
+id: "" # e.g., "nodejs-module-not-found-express"
 
 # Timestamps
-created: ""  # ISO 8601 format: 2024-01-15T10:30:00Z
+created: "" # ISO 8601 format: 2024-01-15T10:30:00Z
 updated: ""
 
 # Error Details
 error:
   # Error classification
-  type: ""  # syntax, type, reference, runtime, network, permission, dependency, config, database, memory
-  category: ""  # Specific error category (e.g., ModuleNotFound, TypeError, ECONNREFUSED)
-  language: ""  # nodejs, python, java, go, rust, etc.
-  framework: ""  # react, express, django, spring, etc. (optional)
+  type: "" # syntax, type, reference, runtime, network, permission, dependency, config, database, memory
+  category: "" # Specific error category (e.g., ModuleNotFound, TypeError, ECONNREFUSED)
+  language: "" # nodejs, python, java, go, rust, etc.
+  framework: "" # react, express, django, spring, etc. (optional)
 
   # Error pattern for matching
-  pattern: ""  # Error message pattern, use {placeholder} for variables
+  pattern: "" # Error message pattern, use {placeholder} for variables
   # Examples:
   #   "Cannot find module '{module}'"
   #   "TypeError: Cannot read property '{prop}' of undefined"
   #   "ECONNREFUSED {host}:{port}"
 
   # Error code if applicable
-  code: ""  # e.g., ENOENT, E11000, 404
+  code: "" # e.g., ENOENT, E11000, 404
 
   # Context where error typically occurs
-  context: ""  # Brief description of when this error appears
+  context: "" # Brief description of when this error appears
 
 # Diagnosis
 diagnosis:

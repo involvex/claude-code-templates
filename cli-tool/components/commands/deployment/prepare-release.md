@@ -34,16 +34,17 @@ Systematic release preparation: $ARGUMENTS
    - Review and approve all pending pull requests
 
 3. **Version Management**
+
    ```bash
    # Check current version
    git describe --tags --abbrev=0
-   
+
    # Determine next version (semantic versioning)
    # MAJOR.MINOR.PATCH
    # MAJOR: Breaking changes
    # MINOR: New features (backward compatible)
    # PATCH: Bug fixes (backward compatible)
-   
+
    # Example version updates
    # 1.2.3 -> 1.2.4 (patch)
    # 1.2.3 -> 1.3.0 (minor)
@@ -51,12 +52,13 @@ Systematic release preparation: $ARGUMENTS
    ```
 
 4. **Code Freeze and Branch Management**
+
    ```bash
    # Create release branch from main
    git checkout main
    git pull origin main
    git checkout -b release/v1.2.3
-   
+
    # Alternative: Use main branch directly for smaller releases
    # Ensure no new features are merged during release process
    ```
@@ -70,36 +72,41 @@ Systematic release preparation: $ARGUMENTS
    ```bash
    # Node.js projects
    npm version patch  # or minor, major
-   
+
    # Python projects
    # Update version in setup.py, __init__.py, or pyproject.toml
-   
+
    # Manual version update
    sed -i 's/"version": "1.2.2"/"version": "1.2.3"/' package.json
    ```
 
 6. **Changelog Generation**
+
    ```markdown
    # CHANGELOG.md
-   
+
    ## [1.2.3] - 2024-01-15
-   
+
    ### Added
+
    - New user authentication system
    - Dark mode support for UI
    - API rate limiting functionality
-   
+
    ### Changed
+
    - Improved database query performance
    - Updated user interface design
    - Enhanced error handling
-   
+
    ### Fixed
+
    - Fixed memory leak in background tasks
    - Resolved issue with file upload validation
    - Fixed timezone handling in date calculations
-   
+
    ### Security
+
    - Updated dependencies with security patches
    - Improved input validation and sanitization
    ```
@@ -112,32 +119,34 @@ Systematic release preparation: $ARGUMENTS
    - Update migration guides if needed
 
 8. **Dependency Management**
+
    ```bash
    # Update and audit dependencies
    npm audit fix
    npm update
-   
+
    # Python
    pip-audit
    pip freeze > requirements.txt
-   
+
    # Review security vulnerabilities
    npm audit
    snyk test
    ```
 
 9. **Build and Artifact Generation**
+
    ```bash
    # Clean build environment
    npm run clean
    rm -rf dist/ build/
-   
+
    # Build production artifacts
    npm run build
-   
+
    # Verify build artifacts
    ls -la dist/
-   
+
    # Test built artifacts
    npm run test:build
    ```
@@ -154,10 +163,10 @@ Systematic release preparation: $ARGUMENTS
     npm test
     npm run test:integration
     npm run test:e2e
-    
+
     # Check code coverage
     npm run test:coverage
-    
+
     # Performance testing
     npm run test:performance
     ```
@@ -169,50 +178,57 @@ Systematic release preparation: $ARGUMENTS
     - Validate data protection and privacy measures
 
 12. **Release Notes Preparation**
+
     ```markdown
     # Release Notes v1.2.3
-    
+
     ## 🎉 What's New
+
     - **Dark Mode**: Users can now switch to dark mode in settings
     - **Enhanced Security**: Improved authentication with 2FA support
     - **Performance**: 40% faster page load times
-    
+
     ## 🔧 Improvements
+
     - Better error messages for form validation
     - Improved mobile responsiveness
     - Enhanced accessibility features
-    
+
     ## 🐛 Bug Fixes
+
     - Fixed issue with file downloads in Safari
     - Resolved memory leak in background tasks
     - Fixed timezone display issues
-    
+
     ## 📚 Documentation
+
     - Updated API documentation
     - New user onboarding guide
     - Enhanced troubleshooting section
-    
+
     ## 🔄 Migration Guide
+
     - No breaking changes in this release
     - Automatic database migrations included
     - See [Migration Guide](link) for details
     ```
 
 13. **Release Tagging and Versioning**
+
     ```bash
     # Create annotated tag
     git add .
     git commit -m "chore: prepare release v1.2.3"
     git tag -a v1.2.3 -m "Release version 1.2.3
-    
+
     Features:
     - Dark mode support
     - Enhanced authentication
-    
+
     Bug fixes:
     - Fixed file upload issues
     - Resolved memory leaks"
-    
+
     # Push tag to remote
     git push origin v1.2.3
     git push origin release/v1.2.3
@@ -226,13 +242,14 @@ Systematic release preparation: $ARGUMENTS
     - Prepare rollback procedures
 
 15. **Staging Environment Validation**
+
     ```bash
     # Deploy to staging
     ./deploy-staging.sh v1.2.3
-    
+
     # Run smoke tests
     npm run test:smoke:staging
-    
+
     # Manual validation checklist
     # [ ] User login/logout
     # [ ] Core functionality
@@ -249,15 +266,16 @@ Systematic release preparation: $ARGUMENTS
     - Plan communication strategy
 
 17. **Release Automation Setup**
+
     ```yaml
     # GitHub Actions Release Workflow
     name: Release
-    
+
     on:
       push:
         tags:
-          - 'v*'
-    
+          - "v*"
+
     jobs:
       release:
         runs-on: ubuntu-latest
@@ -266,17 +284,17 @@ Systematic release preparation: $ARGUMENTS
           - name: Setup Node.js
             uses: actions/setup-node@v3
             with:
-              node-version: '18'
-          
+              node-version: "18"
+
           - name: Install dependencies
             run: npm ci
-          
+
           - name: Run tests
             run: npm test
-          
+
           - name: Build
             run: npm run build
-          
+
           - name: Create Release
             uses: actions/create-release@v1
             env:
@@ -312,18 +330,21 @@ Systematic release preparation: $ARGUMENTS
 **Release Types and Considerations:**
 
 **Patch Release (1.2.3 → 1.2.4):**
+
 - Bug fixes only
 - No new features
 - Minimal testing required
 - Quick deployment
 
 **Minor Release (1.2.3 → 1.3.0):**
+
 - New features (backward compatible)
 - Enhanced functionality
 - Comprehensive testing
 - User communication needed
 
 **Major Release (1.2.3 → 2.0.0):**
+
 - Breaking changes
 - Significant new features
 - Migration guide required
@@ -331,6 +352,7 @@ Systematic release preparation: $ARGUMENTS
 - User training and support
 
 **Hotfix Release:**
+
 ```bash
 # Emergency hotfix process
 git checkout main
@@ -349,6 +371,7 @@ git push origin v1.2.4-hotfix.1
 ```
 
 Remember to:
+
 - Test everything thoroughly before release
 - Communicate clearly with all stakeholders
 - Have rollback procedures ready

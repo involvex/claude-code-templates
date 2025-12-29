@@ -23,11 +23,13 @@ for i, image in enumerate(images):
 ### Install Tesseract
 
 **macOS:**
+
 ```bash
 brew install tesseract
 ```
 
 **Ubuntu/Debian:**
+
 ```bash
 sudo apt-get install tesseract-ocr
 ```
@@ -55,6 +57,7 @@ text = pytesseract.image_to_string(image, lang="eng+spa+fra")
 ```
 
 Install additional languages:
+
 ```bash
 # macOS
 brew install tesseract-lang

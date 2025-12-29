@@ -36,7 +36,7 @@ npm run test:detailed
 
 # Test specific frameworks
 npm run test:react    # Test React setup
-npm run test:vue      # Test Vue setup  
+npm run test:vue      # Test Vue setup
 npm run test:node     # Test Node.js setup
 
 # Full test suite
@@ -112,21 +112,25 @@ node bin/create-claude-config.js --dry-run --language javascript-typescript --fr
 ### Framework-Specific Tests:
 
 **React:**
+
 - Component creation commands
 - Hooks management commands
 - State management helpers
 
 **Vue.js:**
+
 - Component creation commands
 - Composables helpers
 - Vue 3 patterns
 
 **Angular:**
+
 - Component generation
 - Service creation
 - Dependency injection patterns
 
 **Node.js:**
+
 - API endpoint creation
 - Middleware helpers
 - Database integration
@@ -167,6 +171,7 @@ The `prepublishOnly` script automatically runs tests before publishing:
 ```
 
 This ensures that:
+
 - Templates are synchronized
 - All tests pass
 - Package is ready for publication
@@ -174,6 +179,7 @@ This ensures that:
 ## Test Environments
 
 ### Local Development
+
 ```bash
 npm run dev:link    # Install locally
 # ... test commands ...
@@ -181,6 +187,7 @@ npm run dev:unlink  # Remove when done
 ```
 
 ### CI/CD Pipeline
+
 ```bash
 npm ci              # Clean install
 npm test           # Run test suite
@@ -188,6 +195,7 @@ npm run build      # If applicable
 ```
 
 ### Production Testing
+
 ```bash
 # Test published version
 npx claude-code-templates@latest --version
@@ -197,12 +205,14 @@ npx claude-code-templates@latest --help
 ## Debugging Tests
 
 ### Verbose Output
+
 ```bash
 # Add verbose flag to see detailed output
 claude-code-templates --language javascript-typescript --framework react --dry-run --yes --verbose
 ```
 
 ### Test Specific Scenarios
+
 ```bash
 # Create isolated test environment
 mkdir /tmp/test-claude && cd /tmp/test-claude
@@ -212,6 +222,7 @@ cat CLAUDE.md
 ```
 
 ### Check Generated Files
+
 ```bash
 # Verify file content
 find .claude -name "*.md" -exec echo "=== {} ===" \; -exec cat {} \;
@@ -220,6 +231,7 @@ find .claude -name "*.md" -exec echo "=== {} ===" \; -exec cat {} \;
 ## Common Issues & Solutions
 
 ### Permission Errors
+
 ```bash
 # If npm link fails due to permissions
 sudo npm link  # Use with caution
@@ -228,6 +240,7 @@ npm config set prefix ~/.npm-global
 ```
 
 ### Command Not Found
+
 ```bash
 # If linked command isn't found
 which claude-code-templates
@@ -236,6 +249,7 @@ echo $PATH
 ```
 
 ### Template Sync Issues
+
 ```bash
 # Force sync before testing
 npm run sync

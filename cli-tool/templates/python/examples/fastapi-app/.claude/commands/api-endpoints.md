@@ -111,7 +111,7 @@ async def get_posts(
 ):
     """
     Get all posts with pagination and filtering.
-    
+
     - **skip**: Number of posts to skip (for pagination)
     - **limit**: Maximum number of posts to return (1-100)
     - **search**: Search term for title and content
@@ -135,7 +135,7 @@ async def get_post(
 ):
     """
     Get a specific post by ID.
-    
+
     - **post_id**: Unique identifier for the post
     """
     post = post_service.get_post(db=db, post_id=post_id)
@@ -154,7 +154,7 @@ async def create_post(
 ):
     """
     Create a new post.
-    
+
     - **title**: Post title (required)
     - **content**: Post content (required)
     - **category**: Post category (optional)
@@ -175,7 +175,7 @@ async def update_post(
 ):
     """
     Update an existing post.
-    
+
     - **post_id**: Unique identifier for the post
     - **title**: Updated post title (optional)
     - **content**: Updated post content (optional)
@@ -188,13 +188,13 @@ async def update_post(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Post not found"
         )
-    
+
     if post.author_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to update this post"
         )
-    
+
     return post_service.update_post(
         db=db,
         post_id=post_id,
@@ -209,7 +209,7 @@ async def delete_post(
 ):
     """
     Delete a post.
-    
+
     - **post_id**: Unique identifier for the post to delete
     """
     post = post_service.get_post(db=db, post_id=post_id)
@@ -218,13 +218,13 @@ async def delete_post(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Post not found"
         )
-    
+
     if post.author_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to delete this post"
         )
-    
+
     post_service.delete_post(db=db, post_id=post_id)
 
 @router.post("/{post_id}/like", response_model=post_schemas.PostResponse)
@@ -235,7 +235,7 @@ async def like_post(
 ):
     """
     Like/unlike a post.
-    
+
     - **post_id**: Unique identifier for the post to like
     """
     post = post_service.get_post(db=db, post_id=post_id)
@@ -244,7 +244,7 @@ async def like_post(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Post not found"
         )
-    
+
     return post_service.toggle_like(
         db=db,
         post_id=post_id,
@@ -260,7 +260,7 @@ async def get_post_comments(
 ):
     """
     Get all comments for a specific post.
-    
+
     - **post_id**: Unique identifier for the post
     - **skip**: Number of comments to skip
     - **limit**: Maximum number of comments to return
@@ -271,7 +271,7 @@ async def get_post_comments(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Post not found"
         )
-    
+
     return post_service.get_post_comments(
         db=db,
         post_id=post_id,
@@ -295,13 +295,13 @@ class PostBase(BaseModel):
 
 class PostCreate(PostBase):
     """Schema for creating a post."""
-    
+
     @validator('title')
     def validate_title(cls, v):
         if not v.strip():
             raise ValueError('Title cannot be empty')
         return v.strip()
-    
+
     @validator('content')
     def validate_content(cls, v):
         if len(v.strip()) < 10:
@@ -314,13 +314,13 @@ class PostUpdate(BaseModel):
     content: Optional[str] = Field(None, min_length=1)
     category: Optional[str] = Field(None, max_length=50)
     published: Optional[bool] = None
-    
+
     @validator('title')
     def validate_title(cls, v):
         if v is not None and not v.strip():
             raise ValueError('Title cannot be empty')
         return v.strip() if v else v
-    
+
     @validator('content')
     def validate_content(cls, v):
         if v is not None and len(v.strip()) < 10:
@@ -335,7 +335,7 @@ class PostResponse(PostBase):
     updated_at: datetime
     like_count: int = 0
     comment_count: int = 0
-    
+
     class Config:
         from_attributes = True
 
@@ -354,7 +354,7 @@ class CommentResponse(CommentBase):
     author_id: int
     created_at: datetime
     updated_at: datetime
-    
+
     class Config:
         from_attributes = True
 ```
@@ -378,13 +378,13 @@ def get_posts(
 ) -> List[Post]:
     """Get posts with filtering and pagination."""
     query = db.query(Post)
-    
+
     if published is not None:
         query = query.filter(Post.published == published)
-    
+
     if category:
         query = query.filter(Post.category == category)
-    
+
     if search:
         query = query.filter(
             or_(
@@ -392,7 +392,7 @@ def get_posts(
                 Post.content.contains(search)
             )
         )
-    
+
     return query.offset(skip).limit(limit).all()
 
 def get_post(db: Session, post_id: int) -> Optional[Post]:
@@ -416,11 +416,11 @@ def update_post(
     db_post = db.query(Post).filter(Post.id == post_id).first()
     if not db_post:
         return None
-    
+
     update_data = post_update.dict(exclude_unset=True)
     for field, value in update_data.items():
         setattr(db_post, field, value)
-    
+
     db.commit()
     db.refresh(db_post)
     return db_post
@@ -430,7 +430,7 @@ def delete_post(db: Session, post_id: int) -> bool:
     db_post = db.query(Post).filter(Post.id == post_id).first()
     if not db_post:
         return False
-    
+
     db.delete(db_post)
     db.commit()
     return True
@@ -441,13 +441,13 @@ def toggle_like(db: Session, post_id: int, user_id: int) -> Post:
         PostLike.post_id == post_id,
         PostLike.user_id == user_id
     ).first()
-    
+
     if existing_like:
         db.delete(existing_like)
     else:
         new_like = PostLike(post_id=post_id, user_id=user_id)
         db.add(new_like)
-    
+
     db.commit()
     return get_post(db, post_id)
 ```
@@ -455,30 +455,35 @@ def toggle_like(db: Session, post_id: int, user_id: int) -> Post:
 ## Features Included
 
 ### API Documentation
+
 - **Automatic OpenAPI** schema generation
 - **Interactive docs** at `/docs`
 - **ReDoc documentation** at `/redoc`
 - **Request/Response examples** in schemas
 
 ### Validation & Serialization
+
 - **Pydantic models** for data validation
 - **Custom validators** for business rules
 - **Type hints** for better IDE support
 - **Automatic data conversion** and validation
 
 ### Error Handling
+
 - **HTTP status codes** for different scenarios
 - **Detailed error messages** with context
 - **Input validation errors** with field-specific messages
 - **Custom exception handlers** for consistent responses
 
 ### Security
+
 - **JWT authentication** with dependencies
 - **Role-based access control** for endpoints
 - **CORS middleware** for cross-origin requests
 - **Input sanitization** through Pydantic
 
 ### Performance
+
 - **Database query optimization** with SQLAlchemy
 - **Pagination support** for large datasets
 - **Async/await support** for concurrent requests

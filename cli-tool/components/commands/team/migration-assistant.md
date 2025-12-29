@@ -22,6 +22,7 @@ Execute systematic migration process with comprehensive safety measures and vali
 **Migration Action**: Use $ARGUMENTS to specify migration planning, analysis, execution, verification, or rollback operations
 
 **Migration Framework**:
+
 1. **Prerequisites Validation** - Verify GitHub CLI authentication, confirm Linear MCP connectivity, validate permissions, ensure backup storage
 2. **Migration Planning** - Assess data volume and complexity, design migration strategy, identify dependencies, create rollback plan
 3. **Risk Analysis** - Evaluate potential failure points, assess data integrity risks, identify system dependencies, plan contingency measures

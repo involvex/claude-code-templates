@@ -8,13 +8,15 @@ class ConversationTable {
     this.dataService = dataService;
     this.stateService = stateService;
     this.conversations = [];
-    this.currentFilter = 'all';
-    this.currentSort = { field: 'lastModified', direction: 'desc' };
+    this.currentFilter = "all";
+    this.currentSort = { field: "lastModified", direction: "desc" };
     this.pageSize = 50;
     this.currentPage = 1;
-    
+
     // Subscribe to state changes
-    this.unsubscribe = this.stateService.subscribe(this.handleStateChange.bind(this));
+    this.unsubscribe = this.stateService.subscribe(
+      this.handleStateChange.bind(this),
+    );
   }
 
   /**
@@ -32,7 +34,10 @@ class ConversationTable {
    * @param {string} action - Action that caused the change
    */
   handleStateChange(state, action) {
-    if (action === 'update_conversations' || action === 'update_conversation_states') {
+    if (
+      action === "update_conversations" ||
+      action === "update_conversation_states"
+    ) {
       this.conversations = state.conversations;
       this.updateTable();
     }
@@ -99,43 +104,45 @@ class ConversationTable {
    */
   bindEvents() {
     // Filter and search
-    const statusFilter = this.container.querySelector('#status-filter');
-    const searchInput = this.container.querySelector('#search-input');
-    
-    statusFilter.addEventListener('change', (e) => {
+    const statusFilter = this.container.querySelector("#status-filter");
+    const searchInput = this.container.querySelector("#search-input");
+
+    statusFilter.addEventListener("change", (e) => {
       this.currentFilter = e.target.value;
       this.currentPage = 1;
       this.updateTable();
     });
 
-    searchInput.addEventListener('input', (e) => {
+    searchInput.addEventListener("input", (e) => {
       this.searchTerm = e.target.value.toLowerCase();
       this.currentPage = 1;
       this.updateTable();
     });
 
     // Sorting
-    const sortHeaders = this.container.querySelectorAll('.sortable');
-    sortHeaders.forEach(header => {
-      header.addEventListener('click', () => {
+    const sortHeaders = this.container.querySelectorAll(".sortable");
+    sortHeaders.forEach((header) => {
+      header.addEventListener("click", () => {
         const field = header.dataset.field;
         this.handleSort(field);
       });
     });
 
     // Pagination
-    const prevBtn = this.container.querySelector('#prev-page');
-    const nextBtn = this.container.querySelector('#next-page');
-    
-    prevBtn.addEventListener('click', () => {
+    const prevBtn = this.container.querySelector("#prev-page");
+    const nextBtn = this.container.querySelector("#next-page");
+
+    prevBtn.addEventListener("click", () => {
       if (this.currentPage > 1) {
         this.currentPage--;
         this.updateTable();
       }
     });
 
-    nextBtn.addEventListener('click', () => {
-      const totalPages = Math.ceil(this.getFilteredConversations().length / this.pageSize);
+    nextBtn.addEventListener("click", () => {
+      const totalPages = Math.ceil(
+        this.getFilteredConversations().length / this.pageSize,
+      );
       if (this.currentPage < totalPages) {
         this.currentPage++;
         this.updateTable();
@@ -152,8 +159,8 @@ class ConversationTable {
       this.conversations = data.conversations || [];
       this.updateTable();
     } catch (error) {
-      console.error('Error loading conversations:', error);
-      this.showError('Failed to load conversations');
+      console.error("Error loading conversations:", error);
+      this.showError("Failed to load conversations");
     }
   }
 
@@ -163,10 +170,11 @@ class ConversationTable {
    */
   handleSort(field) {
     if (this.currentSort.field === field) {
-      this.currentSort.direction = this.currentSort.direction === 'asc' ? 'desc' : 'asc';
+      this.currentSort.direction =
+        this.currentSort.direction === "asc" ? "desc" : "asc";
     } else {
       this.currentSort.field = field;
-      this.currentSort.direction = 'asc';
+      this.currentSort.direction = "asc";
     }
     this.updateTable();
   }
@@ -179,16 +187,17 @@ class ConversationTable {
     let filtered = [...this.conversations];
 
     // Apply status filter
-    if (this.currentFilter !== 'all') {
-      filtered = filtered.filter(conv => conv.status === this.currentFilter);
+    if (this.currentFilter !== "all") {
+      filtered = filtered.filter((conv) => conv.status === this.currentFilter);
     }
 
     // Apply search filter
     if (this.searchTerm) {
-      filtered = filtered.filter(conv => 
-        conv.id.toLowerCase().includes(this.searchTerm) ||
-        conv.project.toLowerCase().includes(this.searchTerm) ||
-        conv.filename.toLowerCase().includes(this.searchTerm)
+      filtered = filtered.filter(
+        (conv) =>
+          conv.id.toLowerCase().includes(this.searchTerm) ||
+          conv.project.toLowerCase().includes(this.searchTerm) ||
+          conv.filename.toLowerCase().includes(this.searchTerm),
       );
     }
 
@@ -198,15 +207,15 @@ class ConversationTable {
       let bValue = b[this.currentSort.field];
 
       // Handle different data types
-      if (this.currentSort.field === 'lastModified') {
+      if (this.currentSort.field === "lastModified") {
         aValue = new Date(aValue).getTime();
         bValue = new Date(bValue).getTime();
-      } else if (typeof aValue === 'string') {
+      } else if (typeof aValue === "string") {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
       }
 
-      if (this.currentSort.direction === 'asc') {
+      if (this.currentSort.direction === "asc") {
         return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
       } else {
         return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
@@ -235,20 +244,22 @@ class ConversationTable {
    * @param {Array} conversations - Conversations to display
    */
   renderTableBody(conversations) {
-    const tbody = this.container.querySelector('#conversation-tbody');
-    
+    const tbody = this.container.querySelector("#conversation-tbody");
+
     if (conversations.length === 0) {
       tbody.innerHTML = `
         <tr class="no-data-row">
           <td colspan="7" class="no-data-cell">
-            ${this.currentFilter === 'all' ? 'No conversations found' : `No ${this.currentFilter} conversations found`}
+            ${this.currentFilter === "all" ? "No conversations found" : `No ${this.currentFilter} conversations found`}
           </td>
         </tr>
       `;
       return;
     }
 
-    tbody.innerHTML = conversations.map(conv => `
+    tbody.innerHTML = conversations
+      .map(
+        (conv) => `
       <tr class="conversation-row" data-id="${conv.id}">
         <td class="status-cell">
           <span class="status-badge status-${conv.status}">${conv.status}</span>
@@ -279,7 +290,9 @@ class ConversationTable {
           </button>
         </td>
       </tr>
-    `).join('');
+    `,
+      )
+      .join("");
 
     // Bind action buttons
     this.bindActionButtons();
@@ -289,18 +302,18 @@ class ConversationTable {
    * Bind action button events
    */
   bindActionButtons() {
-    const viewBtns = this.container.querySelectorAll('.view-btn');
-    const refreshBtns = this.container.querySelectorAll('.refresh-btn');
+    const viewBtns = this.container.querySelectorAll(".view-btn");
+    const refreshBtns = this.container.querySelectorAll(".refresh-btn");
 
-    viewBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    viewBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
         const conversationId = e.target.dataset.id;
         this.viewConversation(conversationId);
       });
     });
 
-    refreshBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    refreshBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
         const conversationId = e.target.dataset.id;
         this.refreshConversation(conversationId);
       });
@@ -312,11 +325,13 @@ class ConversationTable {
    * @param {string} conversationId - ID of conversation to view
    */
   viewConversation(conversationId) {
-    const conversation = this.conversations.find(conv => conv.id === conversationId);
+    const conversation = this.conversations.find(
+      (conv) => conv.id === conversationId,
+    );
     if (conversation) {
       this.stateService.setSelectedConversation(conversation);
       // Could trigger a modal or navigation to detail view
-      console.log('Viewing conversation:', conversation);
+      console.log("Viewing conversation:", conversation);
     }
   }
 
@@ -327,11 +342,11 @@ class ConversationTable {
   async refreshConversation(conversationId) {
     try {
       // Force refresh of conversation states
-      this.dataService.clearCacheEntry('/api/conversation-state');
+      this.dataService.clearCacheEntry("/api/conversation-state");
       const states = await this.dataService.getConversationStates();
       this.stateService.updateConversationStates(states);
     } catch (error) {
-      console.error('Error refreshing conversation:', error);
+      console.error("Error refreshing conversation:", error);
     }
   }
 
@@ -345,17 +360,17 @@ class ConversationTable {
     const endItem = Math.min(this.currentPage * this.pageSize, totalItems);
 
     // Update pagination text
-    const paginationText = this.container.querySelector('#pagination-text');
+    const paginationText = this.container.querySelector("#pagination-text");
     paginationText.textContent = `Showing ${startItem}-${endItem} of ${totalItems} conversations`;
 
     // Update page info
-    const pageInfo = this.container.querySelector('#page-info');
+    const pageInfo = this.container.querySelector("#page-info");
     pageInfo.textContent = `Page ${this.currentPage} of ${totalPages}`;
 
     // Update button states
-    const prevBtn = this.container.querySelector('#prev-page');
-    const nextBtn = this.container.querySelector('#next-page');
-    
+    const prevBtn = this.container.querySelector("#prev-page");
+    const nextBtn = this.container.querySelector("#next-page");
+
     prevBtn.disabled = this.currentPage === 1;
     nextBtn.disabled = this.currentPage === totalPages || totalPages === 0;
   }
@@ -364,9 +379,9 @@ class ConversationTable {
    * Update sort headers visual state
    */
   updateSortHeaders() {
-    const headers = this.container.querySelectorAll('.sortable');
-    headers.forEach(header => {
-      header.classList.remove('sort-asc', 'sort-desc');
+    const headers = this.container.querySelectorAll(".sortable");
+    headers.forEach((header) => {
+      header.classList.remove("sort-asc", "sort-desc");
       if (header.dataset.field === this.currentSort.field) {
         header.classList.add(`sort-${this.currentSort.direction}`);
       }
@@ -390,7 +405,7 @@ class ConversationTable {
     if (days > 0) return `${days}d ago`;
     if (hours > 0) return `${hours}h ago`;
     if (minutes > 0) return `${minutes}m ago`;
-    return 'Just now';
+    return "Just now";
   }
 
   /**
@@ -398,7 +413,7 @@ class ConversationTable {
    * @param {string} message - Error message to display
    */
   showError(message) {
-    const tbody = this.container.querySelector('#conversation-tbody');
+    const tbody = this.container.querySelector("#conversation-tbody");
     tbody.innerHTML = `
       <tr class="error-row">
         <td colspan="7" class="error-cell">
@@ -414,7 +429,9 @@ class ConversationTable {
    * @param {string} newState - New state
    */
   updateConversationState(conversationId, newState) {
-    const conversation = this.conversations.find(conv => conv.id === conversationId);
+    const conversation = this.conversations.find(
+      (conv) => conv.id === conversationId,
+    );
     if (conversation) {
       conversation.status = newState;
       this.updateTable();
@@ -432,6 +449,6 @@ class ConversationTable {
 }
 
 // Export for module use
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = ConversationTable;
 }

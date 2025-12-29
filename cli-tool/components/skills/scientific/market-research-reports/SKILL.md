@@ -11,6 +11,7 @@ allowed-tools: [Read, Write, Edit, Bash]
 Market research reports are comprehensive strategic documents that analyze industries, markets, and competitive landscapes to inform business decisions, investment strategies, and strategic planning. This skill generates **professional-grade reports of 50+ pages** with extensive visual content, modeled after deliverables from top consulting firms like McKinsey, BCG, Bain, Gartner, and Forrester.
 
 **Key Features:**
+
 - **Comprehensive length**: Reports are designed to be 50+ pages with no token constraints
 - **Visual-rich content**: 5-6 key diagrams generated at start (more added as needed during writing)
 - **Data-driven analysis**: Deep integration with research-lookup for market data
@@ -23,6 +24,7 @@ Market research reports are comprehensive strategic documents that analyze indus
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Creating comprehensive market analysis for investment decisions
 - Developing industry reports for strategic planning
 - Analyzing competitive landscapes and market dynamics
@@ -43,6 +45,7 @@ Every report should generate **6 essential visuals** at the start, with addition
 ### Visual Generation Tools
 
 **Use `scientific-schematics` for:**
+
 - Market growth trajectory charts
 - TAM/SAM/SOM breakdown diagrams (concentric circles)
 - Porter's Five Forces diagrams
@@ -69,6 +72,7 @@ python skills/scientific-schematics/scripts/generate_schematic.py \
 ```
 
 **Use `generate-image` for:**
+
 - Executive summary hero infographics
 - Industry/sector conceptual illustrations
 - Abstract technology visualizations
@@ -83,15 +87,15 @@ python skills/generate-image/scripts/generate_image.py \
 
 ### Recommended Visuals by Section (Generate as Needed)
 
-| Section | Priority Visuals | Optional Visuals |
-|---------|-----------------|------------------|
-| Executive Summary | Executive infographic (START) | - |
-| Market Size & Growth | Growth trajectory (START), TAM/SAM/SOM (START) | Regional breakdown, segment growth |
-| Competitive Landscape | Porter's Five Forces (START), Positioning matrix (START) | Market share chart, strategic groups |
-| Risk Analysis | Risk heatmap (START) | Mitigation matrix |
-| Strategic Recommendations | Opportunity matrix | Priority framework |
-| Implementation Roadmap | Timeline/Gantt | Milestone tracker |
-| Investment Thesis | Financial projections | Scenario analysis |
+| Section                   | Priority Visuals                                         | Optional Visuals                     |
+| ------------------------- | -------------------------------------------------------- | ------------------------------------ |
+| Executive Summary         | Executive infographic (START)                            | -                                    |
+| Market Size & Growth      | Growth trajectory (START), TAM/SAM/SOM (START)           | Regional breakdown, segment growth   |
+| Competitive Landscape     | Porter's Five Forces (START), Positioning matrix (START) | Market share chart, strategic groups |
+| Risk Analysis             | Risk heatmap (START)                                     | Mitigation matrix                    |
+| Strategic Recommendations | Opportunity matrix                                       | Priority framework                   |
+| Implementation Roadmap    | Timeline/Gantt                                           | Milestone tracker                    |
+| Investment Thesis         | Financial projections                                    | Scenario analysis                    |
 
 **Start with 6 priority visuals** (marked as START above), then generate additional visuals as specific sections are written and require visual support.
 
@@ -102,17 +106,20 @@ python skills/generate-image/scripts/generate_image.py \
 ### Front Matter (~5 pages)
 
 #### Cover Page (1 page)
+
 - Report title and subtitle
 - Hero visualization (generated)
 - Date and classification
 - Prepared for / Prepared by
 
 #### Table of Contents (1-2 pages)
+
 - Automated from LaTeX
 - List of Figures
 - List of Tables
 
 #### Executive Summary (2-3 pages)
+
 - **Market Snapshot Box**: Key metrics at a glance
 - **Investment Thesis**: 3-5 bullet point summary
 - **Key Findings**: Major discoveries and insights
@@ -126,6 +133,7 @@ python skills/generate-image/scripts/generate_image.py \
 #### Chapter 1: Market Overview & Definition (4-5 pages)
 
 **Content Requirements:**
+
 - Market definition and scope
 - Industry ecosystem mapping
 - Key stakeholders and their roles
@@ -133,10 +141,12 @@ python skills/generate-image/scripts/generate_image.py \
 - Historical context and evolution
 
 **Required Visuals (2):**
+
 1. Market ecosystem/value chain diagram
 2. Industry structure diagram
 
 **Key Data Points:**
+
 - Market definition criteria
 - Included/excluded segments
 - Geographic scope
@@ -147,6 +157,7 @@ python skills/generate-image/scripts/generate_image.py \
 #### Chapter 2: Market Size & Growth Analysis (6-8 pages)
 
 **Content Requirements:**
+
 - Total Addressable Market (TAM) calculation
 - Serviceable Addressable Market (SAM) definition
 - Serviceable Obtainable Market (SOM) estimation
@@ -157,12 +168,14 @@ python skills/generate-image/scripts/generate_image.py \
 - Segment-level analysis
 
 **Required Visuals (4):**
+
 1. Market growth trajectory chart (historical + projected)
 2. TAM/SAM/SOM concentric circles diagram
 3. Regional market breakdown (pie chart or treemap)
 4. Segment growth comparison (bar chart)
 
 **Key Data Points:**
+
 - Current market size (with source)
 - CAGR (historical and projected)
 - Market size by region
@@ -171,6 +184,7 @@ python skills/generate-image/scripts/generate_image.py \
 
 **Data Sources:**
 Use `research-lookup` to find:
+
 - Market research reports (Gartner, Forrester, IDC, etc.)
 - Industry association data
 - Government statistics
@@ -182,6 +196,7 @@ Use `research-lookup` to find:
 #### Chapter 3: Industry Drivers & Trends (5-6 pages)
 
 **Content Requirements:**
+
 - Macroeconomic factors
 - Technology trends
 - Regulatory drivers
@@ -190,15 +205,18 @@ Use `research-lookup` to find:
 - Industry-specific trends
 
 **Analysis Frameworks:**
+
 - **PESTLE Analysis**: Political, Economic, Social, Technological, Legal, Environmental
 - **Trend Impact Assessment**: Likelihood vs Impact matrix
 
 **Required Visuals (3):**
+
 1. Industry trends timeline or radar chart
 2. Driver impact matrix
 3. PESTLE analysis diagram
 
 **Key Data Points:**
+
 - Top 5-10 growth drivers with quantified impact
 - Emerging trends with timeline
 - Disruption factors
@@ -208,6 +226,7 @@ Use `research-lookup` to find:
 #### Chapter 4: Competitive Landscape (6-8 pages)
 
 **Content Requirements:**
+
 - Market structure analysis
 - Major player profiles
 - Market share analysis
@@ -216,17 +235,20 @@ Use `research-lookup` to find:
 - Competitive dynamics
 
 **Analysis Frameworks:**
+
 - **Porter's Five Forces**: Comprehensive industry analysis
 - **Competitive Positioning Matrix**: 2x2 matrix on key dimensions
 - **Strategic Group Mapping**: Cluster competitors by strategy
 
 **Required Visuals (4):**
+
 1. Porter's Five Forces diagram
 2. Market share pie chart or bar chart
 3. Competitive positioning matrix (2x2)
 4. Strategic group map
 
 **Key Data Points:**
+
 - Market share by company (top 10)
 - Competitive intensity rating
 - Entry barriers assessment
@@ -237,6 +259,7 @@ Use `research-lookup` to find:
 #### Chapter 5: Customer Analysis & Segmentation (4-5 pages)
 
 **Content Requirements:**
+
 - Customer segment definitions
 - Segment size and growth
 - Buying behavior analysis
@@ -245,16 +268,19 @@ Use `research-lookup` to find:
 - Value drivers by segment
 
 **Analysis Frameworks:**
+
 - **Customer Segmentation Matrix**: Size vs Growth
 - **Value Proposition Canvas**: Jobs, Pains, Gains
 - **Customer Journey Mapping**: Awareness to Advocacy
 
 **Required Visuals (3):**
+
 1. Customer segmentation breakdown (pie/treemap)
 2. Segment attractiveness matrix
 3. Customer journey or value proposition diagram
 
 **Key Data Points:**
+
 - Segment sizes and percentages
 - Growth rates by segment
 - Average deal size / revenue per customer
@@ -265,6 +291,7 @@ Use `research-lookup` to find:
 #### Chapter 6: Technology & Innovation Landscape (4-5 pages)
 
 **Content Requirements:**
+
 - Current technology stack
 - Emerging technologies
 - Innovation trends
@@ -273,15 +300,18 @@ Use `research-lookup` to find:
 - Patent landscape
 
 **Analysis Frameworks:**
+
 - **Technology Readiness Assessment**: TRL levels
 - **Hype Cycle Positioning**: Where technologies sit
 - **Technology Roadmap**: Evolution over time
 
 **Required Visuals (2):**
+
 1. Technology roadmap diagram
 2. Innovation/adoption curve or hype cycle
 
 **Key Data Points:**
+
 - R&D spending in the industry
 - Key technology milestones
 - Patent filing trends
@@ -292,6 +322,7 @@ Use `research-lookup` to find:
 #### Chapter 7: Regulatory & Policy Environment (3-4 pages)
 
 **Content Requirements:**
+
 - Current regulatory framework
 - Key regulatory bodies
 - Compliance requirements
@@ -300,9 +331,11 @@ Use `research-lookup` to find:
 - Impact assessment
 
 **Required Visuals (1):**
+
 1. Regulatory timeline or framework diagram
 
 **Key Data Points:**
+
 - Key regulations and effective dates
 - Compliance costs
 - Regulatory risks
@@ -313,6 +346,7 @@ Use `research-lookup` to find:
 #### Chapter 8: Risk Analysis (3-4 pages)
 
 **Content Requirements:**
+
 - Market risks
 - Competitive risks
 - Regulatory risks
@@ -322,15 +356,18 @@ Use `research-lookup` to find:
 - Risk mitigation strategies
 
 **Analysis Frameworks:**
+
 - **Risk Heatmap**: Probability vs Impact
 - **Risk Register**: Comprehensive risk inventory
 - **Mitigation Matrix**: Risk vs Mitigation strategy
 
 **Required Visuals (2):**
+
 1. Risk heatmap (probability vs impact)
 2. Risk mitigation matrix
 
 **Key Data Points:**
+
 - Top 10 risks with ratings
 - Risk probability scores
 - Impact severity scores
@@ -343,6 +380,7 @@ Use `research-lookup` to find:
 #### Chapter 9: Strategic Opportunities & Recommendations (4-5 pages)
 
 **Content Requirements:**
+
 - Opportunity identification
 - Opportunity sizing
 - Strategic options analysis
@@ -351,16 +389,19 @@ Use `research-lookup` to find:
 - Success factors
 
 **Analysis Frameworks:**
+
 - **Opportunity Attractiveness Matrix**: Attractiveness vs Ability to Win
 - **Strategic Options Framework**: Build, Buy, Partner, Ignore
 - **Priority Matrix**: Impact vs Effort
 
 **Required Visuals (3):**
+
 1. Opportunity matrix
 2. Strategic options framework
 3. Priority/recommendation matrix
 
 **Key Data Points:**
+
 - Opportunity sizes
 - Investment requirements
 - Expected returns
@@ -371,6 +412,7 @@ Use `research-lookup` to find:
 #### Chapter 10: Implementation Roadmap (3-4 pages)
 
 **Content Requirements:**
+
 - Phased implementation plan
 - Key milestones and deliverables
 - Resource requirements
@@ -379,10 +421,12 @@ Use `research-lookup` to find:
 - Governance structure
 
 **Required Visuals (2):**
+
 1. Implementation timeline/Gantt chart
 2. Milestone tracker or phase diagram
 
 **Key Data Points:**
+
 - Phase durations
 - Resource requirements
 - Key milestones with dates
@@ -393,6 +437,7 @@ Use `research-lookup` to find:
 #### Chapter 11: Investment Thesis & Financial Projections (3-4 pages)
 
 **Content Requirements:**
+
 - Investment summary
 - Financial projections
 - Scenario analysis
@@ -401,10 +446,12 @@ Use `research-lookup` to find:
 - Sensitivity analysis
 
 **Required Visuals (2):**
+
 1. Financial projection chart (revenue, growth)
 2. Scenario analysis comparison
 
 **Key Data Points:**
+
 - Revenue projections (3-5 years)
 - CAGR projections
 - ROI/IRR expectations
@@ -415,23 +462,27 @@ Use `research-lookup` to find:
 ### Back Matter (~5 pages)
 
 #### Appendix A: Methodology & Data Sources (1-2 pages)
+
 - Research methodology
 - Data collection approach
 - Data sources and citations
 - Limitations and assumptions
 
 #### Appendix B: Detailed Market Data Tables (2-3 pages)
+
 - Comprehensive market data tables
 - Regional breakdowns
 - Segment details
 - Historical data series
 
 #### Appendix C: Company Profiles (1-2 pages)
+
 - Brief profiles of key competitors
 - Financial highlights
 - Strategic focus areas
 
 #### References/Bibliography
+
 - All sources cited
 - BibTeX format for LaTeX
 
@@ -442,6 +493,7 @@ Use `research-lookup` to find:
 ### Phase 1: Research & Data Gathering
 
 **Step 1: Define Scope**
+
 - Clarify market definition
 - Set geographic boundaries
 - Determine time horizon
@@ -470,6 +522,7 @@ python skills/research-lookup/scripts/research_lookup.py \
 ```
 
 **Step 3: Data Organization**
+
 - Create `sources/` folder with research notes
 - Organize data by section
 - Identify data gaps
@@ -488,6 +541,7 @@ For each framework, conduct structured analysis:
 - **Competitive Positioning**: Define axes, plot competitors
 
 **Step 5: Develop Insights**
+
 - Synthesize findings into key insights
 - Identify strategic implications
 - Develop recommendations
@@ -571,6 +625,7 @@ Use the `market_report_template.tex` as a starting point. Write each section fol
 - **No token constraints**: Write fully, don't abbreviate
 
 **Writing Guidelines:**
+
 - Use active voice where possible
 - Lead with insights, support with data
 - Use numbered lists for recommendations
@@ -607,6 +662,7 @@ Verify the report meets quality standards:
 **Step 11: Peer Review**
 
 Use the peer-review skill to evaluate the report:
+
 - Assess comprehensiveness
 - Verify data accuracy
 - Check logical flow
@@ -618,22 +674,22 @@ Use the peer-review skill to evaluate the report:
 
 ### Page Count Targets
 
-| Section | Minimum Pages | Target Pages |
-|---------|---------------|--------------|
-| Front Matter | 4 | 5 |
-| Market Overview | 4 | 5 |
-| Market Size & Growth | 5 | 7 |
-| Industry Drivers | 4 | 6 |
-| Competitive Landscape | 5 | 7 |
-| Customer Analysis | 3 | 5 |
-| Technology Landscape | 3 | 5 |
-| Regulatory Environment | 2 | 4 |
-| Risk Analysis | 2 | 4 |
-| Strategic Recommendations | 3 | 5 |
-| Implementation Roadmap | 2 | 4 |
-| Investment Thesis | 2 | 4 |
-| Back Matter | 4 | 5 |
-| **TOTAL** | **43** | **66** |
+| Section                   | Minimum Pages | Target Pages |
+| ------------------------- | ------------- | ------------ |
+| Front Matter              | 4             | 5            |
+| Market Overview           | 4             | 5            |
+| Market Size & Growth      | 5             | 7            |
+| Industry Drivers          | 4             | 6            |
+| Competitive Landscape     | 5             | 7            |
+| Customer Analysis         | 3             | 5            |
+| Technology Landscape      | 3             | 5            |
+| Regulatory Environment    | 2             | 4            |
+| Risk Analysis             | 2             | 4            |
+| Strategic Recommendations | 3             | 5            |
+| Implementation Roadmap    | 2             | 4            |
+| Investment Thesis         | 2             | 4            |
+| Back Matter               | 4             | 5            |
+| **TOTAL**                 | **43**        | **66**       |
 
 ### Visual Quality Requirements
 
@@ -805,6 +861,7 @@ Generate 3 supporting visuals including opportunity matrix and priority framewor
 Before finalizing the report, verify:
 
 ### Structure Completeness
+
 - [ ] Cover page with hero visual
 - [ ] Table of contents (auto-generated)
 - [ ] List of figures (auto-generated)
@@ -817,6 +874,7 @@ Before finalizing the report, verify:
 - [ ] References/Bibliography
 
 ### Visual Completeness (Core 5-6)
+
 - [ ] Market growth trajectory chart (Priority 1)
 - [ ] TAM/SAM/SOM diagram (Priority 2)
 - [ ] Porter's Five Forces (Priority 3)
@@ -825,6 +883,7 @@ Before finalizing the report, verify:
 - [ ] Executive summary infographic (Priority 6, optional)
 
 ### Additional Visuals (Generate as Needed)
+
 - [ ] Market ecosystem diagram
 - [ ] Regional breakdown chart
 - [ ] Segment growth chart
@@ -839,6 +898,7 @@ Before finalizing the report, verify:
 - [ ] Other section-specific visuals
 
 ### Content Quality
+
 - [ ] All statistics have sources
 - [ ] Projections include assumptions
 - [ ] Frameworks properly applied
@@ -847,6 +907,7 @@ Before finalizing the report, verify:
 - [ ] No placeholder or incomplete sections
 
 ### Technical Quality
+
 - [ ] PDF compiles without errors
 - [ ] All figures render correctly
 - [ ] Cross-references work
@@ -882,18 +943,23 @@ Load these files for detailed guidance:
 ### Common Issues
 
 **Problem**: Report is under 50 pages
+
 - **Solution**: Expand data tables in appendices, add more detailed company profiles, include additional regional breakdowns
 
 **Problem**: Visuals not rendering
+
 - **Solution**: Check file paths in LaTeX, ensure images are in figures/ folder, verify file extensions
 
 **Problem**: Bibliography missing entries
+
 - **Solution**: Run bibtex after first xelatex pass, check .bib file for syntax errors
 
 **Problem**: Table/figure overflow
+
 - **Solution**: Use `\resizebox` or `adjustbox` package, reduce image width percentage
 
 **Problem**: Poor visual quality from generation
+
 - **Solution**: Use `--doc-type report` flag, increase iterations with `--iterations 5`
 
 ---

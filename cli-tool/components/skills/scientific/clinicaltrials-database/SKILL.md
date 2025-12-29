@@ -96,6 +96,7 @@ for study in results['studies']:
 ```
 
 **Common use cases:**
+
 - Finding trials for rare diseases
 - Identifying trials for comorbid conditions
 - Tracking trial availability for specific diagnoses
@@ -123,6 +124,7 @@ phase3_trials = [
 ```
 
 **Common use cases:**
+
 - Drug development tracking
 - Competitive intelligence for pharmaceutical companies
 - Treatment option research for clinicians
@@ -153,6 +155,7 @@ for study in results['studies']:
 ```
 
 **Common use cases:**
+
 - Patient referrals to local trials
 - Geographic trial distribution analysis
 - Site selection for new trials
@@ -182,6 +185,7 @@ for study in results['studies']:
 ```
 
 **Common use cases:**
+
 - Tracking institutional research portfolios
 - Analyzing funding organization priorities
 - Identifying collaboration opportunities
@@ -191,6 +195,7 @@ for study in results['studies']:
 Filter trials by recruitment or completion status using the `filter.overallStatus` parameter.
 
 **Valid status values:**
+
 - `RECRUITING` - Currently recruiting participants
 - `NOT_YET_RECRUITING` - Not yet open for recruitment
 - `ENROLLING_BY_INVITATION` - Only enrolling by invitation

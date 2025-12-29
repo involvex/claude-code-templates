@@ -1,6 +1,7 @@
 # Analytics State Detection System
 
 ## Overview
+
 This document describes how the Claude Code Analytics Dashboard determines and displays conversation states in real-time.
 
 ## State Detection Flow
@@ -10,6 +11,7 @@ This document describes how the Claude Code Analytics Dashboard determines and d
 The conversation state endpoint processes **ALL** conversations and calculates their current state:
 
 #### API Endpoint: `/api/conversation-state`
+
 - **Method**: GET
 - **Response Format**: `{ activeStates: {conversationId: state}, timestamp: number }`
 - **Update Frequency**: Called by frontend every 5-30 seconds
@@ -23,17 +25,19 @@ For each conversation, the system:
    - Returns states like: "Claude Code working...", "Awaiting user input...", "User typing..."
 
 2. **Falls back to Basic Heuristics** (for conversations without active processes):
+
    ```javascript
    const timeDiff = (now - new Date(conversation.lastModified)) / (1000 * 60); // minutes
-   
+
    if (timeDiff < 5) {
-     state = 'Recently active';
+     state = "Recently active";
    } else if (timeDiff < 60) {
-     state = 'Idle';
-   } else if (timeDiff < 1440) { // 24 hours
-     state = 'Inactive';
+     state = "Idle";
+   } else if (timeDiff < 1440) {
+     // 24 hours
+     state = "Inactive";
    } else {
-     state = 'Old';
+     state = "Old";
    }
    ```
 
@@ -42,6 +46,7 @@ For each conversation, the system:
 The StateCalculator determines detailed conversation states based on:
 
 #### Primary Factors:
+
 - **Running Process**: Whether there's an active Claude Code process
 - **Last Message Role**: 'user' vs 'assistant'
 - **Message Timing**: Time since last message
@@ -51,12 +56,14 @@ The StateCalculator determines detailed conversation states based on:
 #### State Categories:
 
 **Active Process States**:
+
 - `"Claude Code working..."` - User just sent message or recent file activity
 - `"Awaiting user input..."` - Claude responded and waiting for user
 - `"User typing..."` - User hasn't responded for a while
 - `"Awaiting response..."` - User sent message but Claude hasn't responded
 
 **Inactive Process States**:
+
 - `"Recently active"` - Modified within 5 minutes
 - `"Idle"` - Modified within 1 hour
 - `"Inactive"` - Modified within 24 hours
@@ -65,38 +72,41 @@ The StateCalculator determines detailed conversation states based on:
 ### 3. Frontend State Display (`AgentsPage.js`)
 
 #### State Mapping
+
 The frontend maps backend states to display labels and CSS classes:
 
 ```javascript
 // Label mapping
 const stateLabels = {
-  'Claude Code working...': 'Working',
-  'Awaiting user input...': 'Awaiting input',
-  'User typing...': 'Typing',
-  'Awaiting response...': 'Awaiting response',
-  'Recently active': 'Recent',
-  'Idle': 'Idle',
-  'Inactive': 'Inactive',
-  'Old': 'Old',
-  'unknown': 'Unknown'
+  "Claude Code working...": "Working",
+  "Awaiting user input...": "Awaiting input",
+  "User typing...": "Typing",
+  "Awaiting response...": "Awaiting response",
+  "Recently active": "Recent",
+  Idle: "Idle",
+  Inactive: "Inactive",
+  Old: "Old",
+  unknown: "Unknown",
 };
 
 // CSS class mapping
 const stateClasses = {
-  'Claude Code working...': 'status-active',
-  'Awaiting user input...': 'status-waiting',
-  'User typing...': 'status-typing',
-  'Awaiting response...': 'status-pending',
-  'Recently active': 'status-recent',
-  'Idle': 'status-idle',
-  'Inactive': 'status-inactive',
-  'Old': 'status-old',
-  'unknown': 'status-unknown'
+  "Claude Code working...": "status-active",
+  "Awaiting user input...": "status-waiting",
+  "User typing...": "status-typing",
+  "Awaiting response...": "status-pending",
+  "Recently active": "status-recent",
+  Idle: "status-idle",
+  Inactive: "status-inactive",
+  Old: "status-old",
+  unknown: "status-unknown",
 };
 ```
 
 #### Visual Indicators
+
 States are displayed in the conversation sidebar as:
+
 - **Status Dot**: Colored circle indicator
 - **Status Badge**: Text label with background color
 - **CSS Classes**: For consistent styling across components
@@ -104,10 +114,12 @@ States are displayed in the conversation sidebar as:
 ## Real-time Updates
 
 ### WebSocket Integration
+
 - State changes are pushed via WebSocket when available
 - Falls back to polling every 5-30 seconds when WebSocket unavailable
 
 ### Update Triggers
+
 - File system changes (FileWatcher)
 - Process detection updates
 - Periodic refresh intervals
@@ -147,11 +159,13 @@ curl -s "http://localhost:3333/api/conversations?page=0&limit=1" | jq '.paginati
 ## Configuration
 
 ### State Update Intervals
+
 - **With WebSocket**: 30 seconds cache duration
 - **Without WebSocket**: 5 seconds cache duration
 - **File Watch**: Immediate updates when files change
 
 ### Performance Considerations
+
 - StateCalculator uses caching to avoid repeated calculations
 - Quick state calculation for active processes only
 - Batch processing of all conversations in single API call
@@ -167,6 +181,7 @@ curl -s "http://localhost:3333/api/conversations?page=0&limit=1" | jq '.paginati
 ## Integration Points
 
 ### Files Involved
+
 - `/src/analytics.js` - Main server and API endpoints
 - `/src/analytics/core/StateCalculator.js` - Core state logic
 - `/src/analytics-web/components/AgentsPage.js` - Frontend display
@@ -174,6 +189,7 @@ curl -s "http://localhost:3333/api/conversations?page=0&limit=1" | jq '.paginati
 - `/src/analytics-web/index.html` - CSS styling
 
 ### Key Functions
+
 - `StateCalculator.determineConversationState()` - Main state detection
 - `StateCalculator.quickStateCalculation()` - Fast state for active processes
 - `AgentsPage.getStateClass()` - CSS class mapping

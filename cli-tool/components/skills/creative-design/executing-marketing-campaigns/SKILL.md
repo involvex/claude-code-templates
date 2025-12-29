@@ -20,6 +20,7 @@ This Skill helps marketing teams plan campaigns, develop messaging, manage execu
 ## Core Principles
 
 ### Key Marketing Terminology (Consistent Throughout)
+
 - **Campaign**: A coordinated set of marketing activities with unified messaging around a specific goal
 - **Channels**: Distribution platforms (email, social media, paid ads, blog, etc.)
 - **Target Audience**: Specific demographic/psychographic segments the campaign addresses

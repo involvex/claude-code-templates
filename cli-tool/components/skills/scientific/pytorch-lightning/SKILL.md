@@ -12,6 +12,7 @@ PyTorch Lightning is a deep learning framework that organizes PyTorch code to el
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Building, training, or deploying neural networks using PyTorch Lightning
 - Organizing PyTorch code into LightningModules
 - Configuring Trainers for multi-GPU/TPU training
@@ -115,6 +116,7 @@ Configure with: `Trainer(strategy="ddp", accelerator="gpu", devices=4)`
 ## Quick Workflow
 
 1. **Define model:**
+
    ```python
    class MyModel(L.LightningModule):
        def __init__(self):
@@ -133,6 +135,7 @@ Configure with: `Trainer(strategy="ddp", accelerator="gpu", devices=4)`
    ```
 
 2. **Prepare data:**
+
    ```python
    # Option 1: Direct DataLoaders
    train_loader = DataLoader(train_dataset, batch_size=32)
@@ -150,6 +153,7 @@ Configure with: `Trainer(strategy="ddp", accelerator="gpu", devices=4)`
 ## Resources
 
 ### scripts/
+
 Executable Python templates for common PyTorch Lightning patterns:
 
 - `template_lightning_module.py` - Complete LightningModule boilerplate
@@ -157,6 +161,7 @@ Executable Python templates for common PyTorch Lightning patterns:
 - `quick_trainer_setup.py` - Common Trainer configuration examples
 
 ### references/
+
 Detailed documentation for each PyTorch Lightning component:
 
 - `lightning_module.md` - Comprehensive LightningModule guide (methods, hooks, properties)

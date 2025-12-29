@@ -45,6 +45,7 @@ python scripts/extract_tables.py report.pdf --output tables.csv
 ### ✅ Production-ready scripts
 
 All scripts include:
+
 - **Error handling**: Graceful failures with detailed error messages
 - **Validation**: Input validation and type checking
 - **Logging**: Configurable logging with timestamps
@@ -65,6 +66,7 @@ All scripts include:
 ### PDF Form Processing
 
 For complete form workflows including:
+
 - Field analysis and detection
 - Dynamic form filling
 - Validation rules
@@ -76,6 +78,7 @@ See [FORMS.md](FORMS.md)
 ### Table Extraction
 
 For complex table extraction:
+
 - Multi-page tables
 - Merged cells
 - Nested tables
@@ -87,6 +90,7 @@ See [TABLES.md](TABLES.md)
 ### OCR Processing
 
 For scanned PDFs and image-based documents:
+
 - Tesseract integration
 - Language support
 - Image preprocessing
@@ -100,16 +104,19 @@ See [OCR.md](OCR.md)
 ### Form processing
 
 **analyze_form.py** - Extract form field information
+
 ```bash
 python scripts/analyze_form.py input.pdf [--output fields.json] [--verbose]
 ```
 
 **fill_form.py** - Fill PDF forms with data
+
 ```bash
 python scripts/fill_form.py input.pdf data.json output.pdf [--validate]
 ```
 
 **validate_form.py** - Validate form data before filling
+
 ```bash
 python scripts/validate_form.py data.json schema.json
 ```
@@ -117,6 +124,7 @@ python scripts/validate_form.py data.json schema.json
 ### Table extraction
 
 **extract_tables.py** - Extract tables to CSV/Excel
+
 ```bash
 python scripts/extract_tables.py input.pdf [--output tables.csv] [--format csv|excel]
 ```
@@ -124,6 +132,7 @@ python scripts/extract_tables.py input.pdf [--output tables.csv] [--format csv|e
 ### Text extraction
 
 **extract_text.py** - Extract text with formatting preservation
+
 ```bash
 python scripts/extract_text.py input.pdf [--output text.txt] [--preserve-formatting]
 ```
@@ -131,16 +140,19 @@ python scripts/extract_text.py input.pdf [--output text.txt] [--preserve-formatt
 ### Utilities
 
 **merge_pdfs.py** - Merge multiple PDFs
+
 ```bash
 python scripts/merge_pdfs.py file1.pdf file2.pdf file3.pdf --output merged.pdf
 ```
 
 **split_pdf.py** - Split PDF into individual pages
+
 ```bash
 python scripts/split_pdf.py input.pdf --output-dir pages/
 ```
 
 **validate_pdf.py** - Validate PDF integrity
+
 ```bash
 python scripts/validate_pdf.py input.pdf
 ```
@@ -228,6 +240,7 @@ pip install pdfplumber pypdf pillow pytesseract pandas
 ```
 
 Optional for OCR:
+
 ```bash
 # Install tesseract-ocr system package
 # macOS: brew install tesseract
@@ -258,16 +271,19 @@ Optional for OCR:
 ### Common issues
 
 **"Module not found" errors**:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 **Tesseract not found**:
+
 ```bash
 # Install tesseract system package (see Dependencies)
 ```
 
 **Memory errors with large PDFs**:
+
 ```python
 # Process page by page instead of loading entire PDF
 with pdfplumber.open("large.pdf") as pdf:
@@ -277,6 +293,7 @@ with pdfplumber.open("large.pdf") as pdf:
 ```
 
 **Permission errors**:
+
 ```bash
 chmod +x scripts/*.py
 ```
@@ -291,6 +308,7 @@ python scripts/extract_tables.py --help
 ```
 
 For detailed documentation on specific topics, see:
+
 - [FORMS.md](FORMS.md) - Complete form processing guide
 - [TABLES.md](TABLES.md) - Advanced table extraction
 - [OCR.md](OCR.md) - Scanned PDF processing

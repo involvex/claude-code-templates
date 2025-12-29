@@ -20,6 +20,7 @@ SHAP works with all model types: tree-based models (XGBoost, LightGBM, CatBoost,
 ## When to Use This Skill
 
 **Trigger this skill when users ask about**:
+
 - "Explain which features are most important in my model"
 - "Generate SHAP plots" (waterfall, beeswarm, bar, scatter, force, heatmap, etc.)
 - "Why did my model make this prediction?"
@@ -81,6 +82,7 @@ shap_values = explainer(X_test)
 ### Step 3: Visualize Results
 
 **For Global Understanding** (entire dataset):
+
 ```python
 # Beeswarm plot - shows feature importance with value distributions
 shap.plots.beeswarm(shap_values, max_display=15)
@@ -90,6 +92,7 @@ shap.plots.bar(shap_values)
 ```
 
 **For Individual Predictions**:
+
 ```python
 # Waterfall plot - detailed breakdown of single prediction
 shap.plots.waterfall(shap_values[0])
@@ -99,6 +102,7 @@ shap.plots.force(shap_values[0])
 ```
 
 **For Feature Relationships**:
+
 ```python
 # Scatter plot - feature-prediction relationship
 shap.plots.scatter(shap_values[:, "Feature_Name"])
@@ -118,6 +122,7 @@ This skill supports several common workflows. Choose the workflow that matches t
 **Goal**: Understand what drives model predictions
 
 **Steps**:
+
 1. Train model and create appropriate explainer
 2. Compute SHAP values for test set
 3. Generate global importance plots (beeswarm or bar)
@@ -125,6 +130,7 @@ This skill supports several common workflows. Choose the workflow that matches t
 5. Explain specific predictions (waterfall plots)
 
 **Example**:
+
 ```python
 # Step 1-2: Setup
 explainer = shap.TreeExplainer(model)
@@ -145,6 +151,7 @@ shap.plots.waterfall(shap_values[0])
 **Goal**: Identify and fix model issues
 
 **Steps**:
+
 1. Compute SHAP values
 2. Identify prediction errors
 3. Explain misclassified samples
@@ -159,6 +166,7 @@ shap.plots.waterfall(shap_values[0])
 **Goal**: Use SHAP insights to improve features
 
 **Steps**:
+
 1. Compute SHAP values for baseline model
 2. Identify nonlinear relationships (candidates for transformation)
 3. Identify feature interactions (candidates for interaction terms)
@@ -173,6 +181,7 @@ shap.plots.waterfall(shap_values[0])
 **Goal**: Compare multiple models to select best interpretable option
 
 **Steps**:
+
 1. Train multiple models
 2. Compute SHAP values for each
 3. Compare global feature importance
@@ -187,6 +196,7 @@ shap.plots.waterfall(shap_values[0])
 **Goal**: Detect and analyze model bias across demographic groups
 
 **Steps**:
+
 1. Identify protected attributes (gender, race, age, etc.)
 2. Compute SHAP values
 3. Compare feature importance across groups
@@ -201,6 +211,7 @@ shap.plots.waterfall(shap_values[0])
 **Goal**: Integrate SHAP explanations into production systems
 
 **Steps**:
+
 1. Train and save model
 2. Create and save explainer
 3. Build explanation service
@@ -217,17 +228,20 @@ shap.plots.waterfall(shap_values[0])
 **Definition**: SHAP values quantify each feature's contribution to a prediction, measured as the deviation from the expected model output (baseline).
 
 **Properties**:
+
 - **Additivity**: SHAP values sum to difference between prediction and baseline
 - **Fairness**: Based on Shapley values from game theory
 - **Consistency**: If a feature becomes more important, its SHAP value increases
 
 **Interpretation**:
+
 - Positive SHAP value → Feature pushes prediction higher
 - Negative SHAP value → Feature pushes prediction lower
 - Magnitude → Strength of feature's impact
 - Sum of SHAP values → Total prediction change from baseline
 
 **Example**:
+
 ```
 Baseline (expected value): 0.30
 Feature contributions (SHAP values):
@@ -242,6 +256,7 @@ Final prediction: 0.30 + 0.15 + 0.10 - 0.05 = 0.50
 **Purpose**: Represents "typical" input to establish baseline expectations
 
 **Selection**:
+
 - Random sample from training data (50-1000 samples)
 - Or use kmeans to select representative samples
 - For DeepExplainer/KernelExplainer: 100-1000 samples balances accuracy and speed
@@ -316,6 +331,7 @@ for idx in error_indices[:5]:
 ### Speed Considerations
 
 **Explainer Speed** (fastest to slowest):
+
 1. `LinearExplainer` - Nearly instantaneous
 2. `TreeExplainer` - Very fast
 3. `DeepExplainer` - Fast for neural networks
@@ -326,6 +342,7 @@ for idx in error_indices[:5]:
 ### Optimization Strategies
 
 **For Large Datasets**:
+
 ```python
 # Compute SHAP for subset
 shap_values = explainer(X_test[:1000])
@@ -339,6 +356,7 @@ for i in range(0, len(X_test), batch_size):
 ```
 
 **For Visualizations**:
+
 ```python
 # Sample subset for plots
 shap.plots.beeswarm(shap_values[:1000])
@@ -348,6 +366,7 @@ shap.plots.scatter(shap_values[:, "Feature"], alpha=0.3)
 ```
 
 **For Production**:
+
 ```python
 # Cache explainer
 import joblib
@@ -361,37 +380,45 @@ explainer = joblib.load('explainer.pkl')
 ## Troubleshooting
 
 ### Issue: Wrong explainer choice
+
 **Problem**: Using KernelExplainer for tree models (slow and unnecessary)
 **Solution**: Always use TreeExplainer for tree-based models
 
 ### Issue: Insufficient background data
+
 **Problem**: DeepExplainer/KernelExplainer with too few background samples
 **Solution**: Use 100-1000 representative samples
 
 ### Issue: Confusing units
+
 **Problem**: Interpreting log-odds as probabilities
 **Solution**: Check model output type; understand whether values are probabilities, log-odds, or raw outputs
 
 ### Issue: Plots don't display
+
 **Problem**: Matplotlib backend issues
 **Solution**: Ensure backend is set correctly; use `plt.show()` if needed
 
 ### Issue: Too many features cluttering plots
+
 **Problem**: Default max_display=10 may be too many or too few
 **Solution**: Adjust `max_display` parameter or use feature clustering
 
 ### Issue: Slow computation
+
 **Problem**: Computing SHAP for very large datasets
 **Solution**: Sample subset, use batching, or ensure using specialized explainer (not KernelExplainer)
 
 ## Integration with Other Tools
 
 ### Jupyter Notebooks
+
 - Interactive force plots work seamlessly
 - Inline plot display with `show=True` (default)
 - Combine with markdown for narrative explanations
 
 ### MLflow / Experiment Tracking
+
 ```python
 import mlflow
 
@@ -415,6 +442,7 @@ with mlflow.start_run():
 ```
 
 ### Production APIs
+
 ```python
 class ExplanationService:
     def __init__(self, model_path, explainer_path):
@@ -437,7 +465,9 @@ class ExplanationService:
 This skill includes comprehensive reference documentation organized by topic:
 
 ### references/explainers.md
+
 Complete guide to all explainer classes:
+
 - `TreeExplainer` - Fast, exact explanations for tree-based models
 - `DeepExplainer` - Deep learning models (TensorFlow, PyTorch)
 - `KernelExplainer` - Model-agnostic (works with any model)
@@ -448,7 +478,9 @@ Complete guide to all explainer classes:
 Includes: Constructor parameters, methods, supported models, when to use, examples, performance considerations.
 
 ### references/plots.md
+
 Comprehensive visualization guide:
+
 - **Waterfall plots** - Individual prediction breakdowns
 - **Beeswarm plots** - Global importance with value distributions
 - **Bar plots** - Clean feature importance summaries
@@ -461,7 +493,9 @@ Comprehensive visualization guide:
 Includes: Parameters, use cases, examples, best practices, plot selection guide.
 
 ### references/workflows.md
+
 Detailed workflows and best practices:
+
 - Basic model explanation workflow
 - Model debugging and validation
 - Feature engineering guidance
@@ -477,7 +511,9 @@ Detailed workflows and best practices:
 Includes: Step-by-step instructions, code examples, decision criteria, troubleshooting.
 
 ### references/theory.md
+
 Theoretical foundations:
+
 - Shapley values from game theory
 - Mathematical formulas and properties
 - Connection to other explanation methods (LIME, DeepLIFT, etc.)
@@ -492,17 +528,20 @@ Includes: Mathematical foundations, proofs, comparisons, advanced topics.
 ## Usage Guidelines
 
 **When to load reference files**:
+
 - Load `explainers.md` when user needs detailed information about specific explainer types or parameters
 - Load `plots.md` when user needs detailed visualization guidance or exploring plot options
 - Load `workflows.md` when user has complex multi-step tasks (debugging, fairness analysis, production deployment)
 - Load `theory.md` when user asks about theoretical foundations, Shapley values, or mathematical details
 
 **Default approach** (without loading references):
+
 - Use this SKILL.md for basic explanations and quick start
 - Provide standard workflows and common patterns
 - Reference files are available if more detail is needed
 
 **Loading references**:
+
 ```python
 # To load reference files, use the Read tool with appropriate file path:
 # /path/to/shap/references/explainers.md

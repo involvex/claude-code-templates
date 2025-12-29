@@ -31,6 +31,7 @@ Set up or optimize state management based on the requirements:
 ## State Management Selection Guide
 
 Choose based on complexity:
+
 - **Simple state**: React hooks + Context API
 - **Medium complexity**: Zustand or custom hooks
 - **Complex state**: Redux Toolkit with RTK Query

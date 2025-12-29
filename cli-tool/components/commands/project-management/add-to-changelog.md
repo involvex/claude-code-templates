@@ -9,6 +9,7 @@ description: Add entry to project changelog following Keep a Changelog format
 Add a new entry to the project's CHANGELOG.md file: **$ARGUMENTS**
 
 ## Usage Examples
+
 - `/add-to-changelog 1.1.0 added "New markdown to BlockDoc conversion feature"`
 - `/add-to-changelog 1.0.2 fixed "Bug in HTML renderer causing incorrect output"`
 
@@ -21,12 +22,14 @@ Add a new entry to the project's CHANGELOG.md file: **$ARGUMENTS**
 
 Add the specified change entry to CHANGELOG.md:
 
-**Arguments**: 
+**Arguments**:
+
 - Version: First argument (e.g., "1.1.0")
-- Change Type: Second argument (added/changed/deprecated/removed/fixed/security)  
+- Change Type: Second argument (added/changed/deprecated/removed/fixed/security)
 - Message: Third argument (description of the change)
 
 **Requirements**:
+
 1. Create CHANGELOG.md with standard header if it doesn't exist
 2. Find or create version section with today's date
 3. Add entry under appropriate change type section

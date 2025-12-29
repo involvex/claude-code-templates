@@ -15,32 +15,41 @@ Performs comprehensive analysis of active and historical orchestrations to ident
 ## Basic Commands
 
 ### Analyze Current Orchestration
+
 ```
 /orchestration/optimize
 ```
+
 Analyzes the most recently active orchestration for bottlenecks and inefficiencies.
 
 ### Optimize Specific Orchestration
+
 ```
 /orchestration/optimize --date 03_15_2024 --project auth_system
 ```
+
 Deep analysis of a specific orchestration with detailed recommendations.
 
 ### Performance Analysis
+
 ```
 /orchestration/optimize --performance
 ```
+
 Focuses on timing, velocity, and resource utilization metrics.
 
 ### Dependency Optimization
+
 ```
 /orchestration/optimize --dependencies
 ```
+
 Analyzes task dependencies for parallelization opportunities.
 
 ## Analysis Areas
 
 ### Bottleneck Detection
+
 ```
 ## Identified Bottlenecks
 
@@ -61,6 +70,7 @@ Resource Constraints:
 ```
 
 ### Velocity Metrics
+
 ```
 ## Velocity Analysis
 
@@ -79,6 +89,7 @@ Trending Issues:
 ```
 
 ### Dependency Analysis
+
 ```
 ## Dependency Optimization
 
@@ -102,11 +113,13 @@ Dependency Simplification:
 ## Optimization Strategies
 
 ### Resource Reallocation
+
 ```
 /orchestration/optimize --rebalance
 ```
 
 Suggests optimal task assignments:
+
 ```
 ## Recommended Resource Changes
 
@@ -127,16 +140,18 @@ Recommendations:
 ```
 
 ### Task Restructuring
+
 ```
 /orchestration/optimize --restructure
 ```
 
 Suggests task modifications:
+
 ```
 ## Task Restructuring Opportunities
 
 Oversized Tasks (>6h estimate):
-- TASK-003: JWT validation (8h) 
+- TASK-003: JWT validation (8h)
   → Split: JWT core (4h) + JWT middleware (3h) + Tests (1h)
 
 Undersized Tasks (<1h estimate):
@@ -150,11 +165,13 @@ Mislabeled Dependencies:
 ```
 
 ### Workflow Improvements
+
 ```
 /orchestration/optimize --workflow
 ```
 
 Process optimization suggestions:
+
 ```
 ## Workflow Optimization
 
@@ -177,17 +194,19 @@ Communication Improvements:
 ## Historical Analysis
 
 ### Trend Analysis
+
 ```
 /orchestration/optimize --trends --days 30
 ```
 
 Shows performance trends:
+
 ```
 ## 30-Day Performance Trends
 
 Velocity Trend: ↓ -15%
 - Week 1: 3.2 tasks/day
-- Week 2: 2.9 tasks/day  
+- Week 2: 2.9 tasks/day
 - Week 3: 2.8 tasks/day
 - Week 4: 2.7 tasks/day
 
@@ -202,6 +221,7 @@ Efficiency Indicators:
 ```
 
 ### Pattern Recognition
+
 ```
 ## Identified Patterns
 
@@ -225,33 +245,39 @@ Agent Specialization:
 ## Optimization Actions
 
 ### Immediate Actions
+
 ```
 /orchestration/optimize --execute immediate
 ```
 
 Applies safe optimizations:
+
 1. Rebalance current task assignments
 2. Remove identified false dependencies
 3. Update task estimates based on historical data
 4. Reschedule blocked tasks
 
 ### Structural Changes
+
 ```
 /orchestration/optimize --execute structural --confirm
 ```
 
 Requires confirmation for:
+
 1. Task splitting/merging
 2. Workflow process changes
 3. Agent role modifications
 4. Dependency restructuring
 
 ### Continuous Optimization
+
 ```
 /orchestration/optimize --schedule daily
 ```
 
 Sets up automated optimization:
+
 - Daily velocity monitoring
 - Weekly bottleneck analysis
 - Monthly trend reporting
@@ -260,11 +286,13 @@ Sets up automated optimization:
 ## Simulation Mode
 
 ### What-If Analysis
+
 ```
 /orchestration/optimize --simulate "add agent:dev-fullstack"
 ```
 
 Projects impact of changes:
+
 ```
 ## Simulation Results: Adding dev-fullstack
 
@@ -287,6 +315,7 @@ ROI Analysis:
 ## Integration Features
 
 ### Automated Optimization
+
 ```
 /orchestration/optimize --auto-apply --threshold conservative
 ```
@@ -294,6 +323,7 @@ ROI Analysis:
 Automatically applies optimizations meeting conservative safety criteria.
 
 ### Notification System
+
 ```
 /orchestration/optimize --alerts bottleneck,velocity,quality
 ```
@@ -301,6 +331,7 @@ Automatically applies optimizations meeting conservative safety criteria.
 Sets up alerts for optimization opportunities.
 
 ### Historical Learning
+
 ```
 /orchestration/optimize --learn-from previous_projects/
 ```
@@ -310,18 +341,21 @@ Incorporates lessons from past orchestrations.
 ## Reporting
 
 ### Optimization Report
+
 ```
 /orchestration/optimize --report detailed
 ```
 
 Generates comprehensive optimization report with:
+
 - Current state analysis
-- Identified opportunities  
+- Identified opportunities
 - Recommended actions
 - Expected impact metrics
 - Implementation timeline
 
 ### Executive Summary
+
 ```
 /orchestration/optimize --summary executive
 ```
@@ -339,16 +373,19 @@ High-level optimization insights for leadership.
 ## Examples
 
 ### Example 1: Daily Optimization Check
+
 ```
 /orchestration/optimize --quick --auto-rebalance
 ```
 
 ### Example 2: Deep Analysis for Struggling Project
+
 ```
 /orchestration/optimize --date 03_15_2024 --project auth_system --deep-analysis
 ```
 
 ### Example 3: Team Performance Review
+
 ```
 /orchestration/optimize --trends --days 90 --team-focus
 ```
@@ -356,7 +393,9 @@ High-level optimization insights for leadership.
 ## Configuration
 
 ### Optimization Rules
+
 Set in orchestration config:
+
 ```yaml
 optimization:
   auto_rebalance: true

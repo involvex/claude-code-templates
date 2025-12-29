@@ -118,6 +118,7 @@ fi
 ### 3. Branch-Specific Information
 
 **For Feature Branches:**
+
 ```
 🌿 FEATURE BRANCH: feature/user-authentication
 
@@ -146,6 +147,7 @@ Next steps:
 ```
 
 **For Release Branches:**
+
 ```
 🚀 RELEASE BRANCH: release/v1.3.0
 
@@ -181,6 +183,7 @@ Next steps:
 ```
 
 **For Hotfix Branches:**
+
 ```
 🔥 HOTFIX BRANCH: hotfix/critical-security-patch
 
@@ -214,6 +217,7 @@ Next steps:
 ```
 
 **For Main Branch:**
+
 ```
 🏠 MAIN BRANCH (Production)
 
@@ -245,6 +249,7 @@ To start new work:
 ```
 
 **For Develop Branch:**
+
 ```
 🔀 DEVELOP BRANCH (Integration)
 
@@ -330,6 +335,7 @@ Next Steps:
 ### 6. Error States
 
 **Not in Git Repository:**
+
 ```
 ❌ Not in a git repository
 
@@ -341,6 +347,7 @@ Or navigate to a git repository.
 ```
 
 **No Git Flow Structure:**
+
 ```
 ⚠️  Git Flow structure not detected
 
@@ -357,6 +364,7 @@ Or create branches manually:
 ```
 
 **Remote Not Configured:**
+
 ```
 ⚠️  No remote repository configured
 
@@ -425,12 +433,14 @@ Repository maintenance:
 ## Best Practices
 
 **Regular Status Checks:**
+
 - ✅ Run /flow-status daily
 - ✅ Check before starting new work
 - ✅ Verify before finishing branches
 - ✅ Monitor for stale branches
 
 **Status Indicators:**
+
 - ✓ Green: Good to proceed
 - ⚠️ Yellow: Attention needed
 - ✗ Red: Action required

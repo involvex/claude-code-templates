@@ -25,6 +25,7 @@ Implement production-grade blue-green deployment with comprehensive validation a
 ### 1. **Infrastructure Setup**
 
 #### Load Balancer Configuration (NGINX)
+
 ```nginx
 upstream blue {
     server blue-app-1:3000;
@@ -55,12 +56,12 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Environment $environment;
-        
+
         # Health check configuration
         proxy_connect_timeout 5s;
         proxy_send_timeout 5s;
         proxy_read_timeout 5s;
-        
+
         # Retry configuration
         proxy_next_upstream error timeout invalid_header http_500 http_502 http_503;
         proxy_next_upstream_tries 2;
@@ -85,6 +86,7 @@ server {
 ```
 
 #### HAProxy Configuration
+
 ```haproxy
 global
     daemon
@@ -136,6 +138,7 @@ frontend stats
 ### 2. **Kubernetes Blue-Green Implementation**
 
 #### Blue-Green Service Management
+
 ```yaml
 # blue-service.yaml
 apiVersion: v1
@@ -184,7 +187,7 @@ metadata:
 spec:
   selector:
     app: myapp
-    environment: blue  # Switch this to 'green' during deployment
+    environment: blue # Switch this to 'green' during deployment
   ports:
     - port: 80
       targetPort: 3000
@@ -192,6 +195,7 @@ spec:
 ```
 
 #### Blue-Green Deployments
+
 ```yaml
 # blue-deployment.yaml
 apiVersion: apps/v1
@@ -214,34 +218,34 @@ spec:
         environment: blue
     spec:
       containers:
-      - name: app
-        image: myapp:v1.0.0
-        ports:
-        - containerPort: 3000
-        env:
-        - name: ENVIRONMENT
-          value: "blue"
-        - name: VERSION
-          value: "v1.0.0"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: app
+          image: myapp:v1.0.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: ENVIRONMENT
+              value: "blue"
+            - name: VERSION
+              value: "v1.0.0"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 
 ---
 # green-deployment.yaml
@@ -265,39 +269,40 @@ spec:
         environment: green
     spec:
       containers:
-      - name: app
-        image: myapp:v1.1.0  # New version
-        ports:
-        - containerPort: 3000
-        env:
-        - name: ENVIRONMENT
-          value: "green"
-        - name: VERSION
-          value: "v1.1.0"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: app
+          image: myapp:v1.1.0 # New version
+          ports:
+            - containerPort: 3000
+          env:
+            - name: ENVIRONMENT
+              value: "green"
+            - name: VERSION
+              value: "v1.1.0"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 ```
 
 ### 3. **Deployment Automation Scripts**
 
 #### Blue-Green Deployment Script
+
 ```bash
 #!/bin/bash
 set -e
@@ -356,21 +361,21 @@ deploy_to_inactive() {
     local version=$1
     local current_env=$(get_current_env)
     local inactive_env=$(get_inactive_env "$current_env")
-    
+
     log "Current active environment: $current_env"
     log "Deploying version $version to $inactive_env environment"
-    
+
     # Update deployment with new image
     kubectl set image deployment/app-$inactive_env app=myapp:$version
-    
+
     # Wait for rollout to complete
     log "Waiting for deployment rollout to complete..."
     kubectl rollout status deployment/app-$inactive_env --timeout=600s
-    
+
     # Verify pods are running
     log "Verifying pods are running..."
     kubectl wait --for=condition=ready pod -l app=myapp,environment=$inactive_env --timeout=300s
-    
+
     log "Deployment to $inactive_env environment completed successfully"
 }
 
@@ -378,33 +383,33 @@ deploy_to_inactive() {
 health_check() {
     local env=$1
     local service_url="http://app-service-$env.$NAMESPACE.svc.cluster.local"
-    
+
     log "Performing health check for $env environment..."
-    
+
     # Use kubectl port-forward for internal testing
     kubectl port-forward service/app-service-$env 8080:80 &
     local port_forward_pid=$!
-    
+
     sleep 5  # Wait for port-forward to establish
-    
+
     local health_status=1
     local attempts=0
     local max_attempts=10
-    
+
     while [ $attempts -lt $max_attempts ]; do
         if curl -f -s http://localhost:8080/health > /dev/null; then
             health_status=0
             break
         fi
-        
+
         attempts=$((attempts + 1))
         log "Health check attempt $attempts/$max_attempts failed, retrying..."
         sleep 10
     done
-    
+
     # Clean up port-forward
     kill $port_forward_pid 2>/dev/null || true
-    
+
     if [ $health_status -eq 0 ]; then
         log "Health check passed for $env environment"
         return 0
@@ -417,55 +422,55 @@ health_check() {
 run_smoke_tests() {
     local env=$1
     log "Running smoke tests for $env environment..."
-    
+
     # Port-forward for testing
     kubectl port-forward service/app-service-$env 8080:80 &
     local port_forward_pid=$!
     sleep 5
-    
+
     local test_results=()
-    
+
     # Test 1: Health endpoint
     if curl -f -s http://localhost:8080/health | jq -e '.status == "healthy"' > /dev/null; then
         test_results+=("✅ Health endpoint")
     else
         test_results+=("❌ Health endpoint")
     fi
-    
+
     # Test 2: Version endpoint
     if curl -f -s http://localhost:8080/version > /dev/null; then
         test_results+=("✅ Version endpoint")
     else
         test_results+=("❌ Version endpoint")
     fi
-    
+
     # Test 3: Main application endpoint
     if curl -f -s http://localhost:8080/ > /dev/null; then
         test_results+=("✅ Main endpoint")
     else
         test_results+=("❌ Main endpoint")
     fi
-    
+
     # Test 4: Database connectivity (if applicable)
     if curl -f -s http://localhost:8080/db-health 2>/dev/null | jq -e '.connected == true' > /dev/null; then
         test_results+=("✅ Database connectivity")
     else
         test_results+=("⚠️  Database connectivity (not tested)")
     fi
-    
+
     # Clean up port-forward
     kill $port_forward_pid 2>/dev/null || true
-    
+
     # Display results
     log "Smoke test results for $env:"
     printf '%s\n' "${test_results[@]}"
-    
+
     # Check if all critical tests passed
     local failed_tests=$(printf '%s\n' "${test_results[@]}" | grep -c "❌" || true)
     if [ "$failed_tests" -gt 0 ]; then
         error "Smoke tests failed with $failed_tests failures"
     fi
-    
+
     log "All smoke tests passed for $env environment"
 }
 
@@ -473,20 +478,20 @@ run_smoke_tests() {
 switch_traffic() {
     local target_env=$1
     local current_env=$(get_current_env)
-    
+
     if [ "$target_env" = "$current_env" ]; then
         warn "Target environment ($target_env) is already active"
         return 0
     fi
-    
+
     log "Switching traffic from $current_env to $target_env"
-    
+
     # Create backup of current service configuration
     kubectl get service app-service-active -o yaml > "/tmp/service-backup-$(date +%Y%m%d-%H%M%S).yaml"
-    
+
     # Update service selector to point to new environment
     kubectl patch service app-service-active -p '{"spec":{"selector":{"environment":"'$target_env'"}}}'
-    
+
     # Verify the switch
     sleep 10
     local new_active_env=$(get_current_env)
@@ -495,11 +500,11 @@ switch_traffic() {
     else
         error "Failed to switch traffic to $target_env environment"
     fi
-    
+
     # Wait for load balancer to propagate changes
     log "Waiting for load balancer to propagate changes (30 seconds)..."
     sleep 30
-    
+
     # Verify external traffic is flowing to new environment
     local attempts=0
     local max_attempts=5
@@ -518,15 +523,15 @@ switch_traffic() {
 rollback() {
     local current_env=$(get_current_env)
     local previous_env=$(get_inactive_env "$current_env")
-    
+
     warn "Initiating rollback from $current_env to $previous_env"
-    
+
     # Verify previous environment is healthy
     health_check "$previous_env"
-    
+
     # Switch traffic back
     switch_traffic "$previous_env"
-    
+
     log "Rollback completed successfully"
 }
 
@@ -535,53 +540,53 @@ monitor_deployment() {
     local duration=${1:-300}  # Default 5 minutes
     local start_time=$(date +%s)
     local end_time=$((start_time + duration))
-    
+
     log "Monitoring deployment for ${duration} seconds..."
-    
+
     while [ $(date +%s) -lt $end_time ]; do
         local health_status=$(curl -s $HEALTH_CHECK_URL | jq -r '.status // "unknown"' 2>/dev/null || echo "unknown")
         local version=$(curl -s $VERSION_URL | jq -r '.version // "unknown"' 2>/dev/null || echo "unknown")
-        
+
         echo "$(date '+%H:%M:%S') - Health: $health_status, Version: $version"
-        
+
         # Check for critical issues
         if [ "$health_status" = "unhealthy" ]; then
             error "Application became unhealthy during monitoring period"
         fi
-        
+
         sleep 30
     done
-    
+
     log "Monitoring completed successfully"
 }
 
 # Full blue-green deployment process
 deploy() {
     local version=$1
-    
+
     if [ -z "$version" ]; then
         error "Version parameter is required"
     fi
-    
+
     log "Starting blue-green deployment for version $version"
-    
+
     # Step 1: Deploy to inactive environment
     deploy_to_inactive "$version"
-    
+
     # Step 2: Health check inactive environment
     local current_env=$(get_current_env)
     local inactive_env=$(get_inactive_env "$current_env")
     health_check "$inactive_env"
-    
+
     # Step 3: Run smoke tests
     run_smoke_tests "$inactive_env"
-    
+
     # Step 4: Switch traffic
     switch_traffic "$inactive_env"
-    
+
     # Step 5: Monitor new deployment
     monitor_deployment 300
-    
+
     log "Blue-green deployment completed successfully"
     log "New active environment: $inactive_env"
     log "Version deployed: $version"
@@ -607,7 +612,7 @@ case "${1:-deploy}" in
     "status")
         local current_env=$(get_current_env)
         local inactive_env=$(get_inactive_env "$current_env")
-        
+
         echo "=== Blue-Green Deployment Status ==="
         echo "Current active environment: $current_env"
         echo "Inactive environment: $inactive_env"
@@ -641,6 +646,7 @@ esac
 ### 4. **Configuration Management**
 
 #### Environment Configuration
+
 ```bash
 # config.sh
 #!/bin/bash
@@ -675,6 +681,7 @@ DB_BACKUP_BEFORE_DEPLOY="${DB_BACKUP_BEFORE_DEPLOY:-true}"
 ### 5. **Advanced Features**
 
 #### Canary Integration
+
 ```yaml
 # canary-service.yaml - For canary releases within blue-green
 apiVersion: v1
@@ -687,7 +694,7 @@ metadata:
 spec:
   selector:
     app: myapp
-    environment: green  # Route small percentage to green
+    environment: green # Route small percentage to green
   ports:
     - port: 80
       targetPort: 3000
@@ -701,24 +708,25 @@ metadata:
   name: app-ingress
   annotations:
     nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-weight: "10"  # 10% to canary
+    nginx.ingress.kubernetes.io/canary-weight: "10" # 10% to canary
     nginx.ingress.kubernetes.io/canary-by-header: "X-Canary"
     nginx.ingress.kubernetes.io/canary-by-header-value: "true"
 spec:
   rules:
-  - host: api.example.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: app-service-canary
-            port:
-              number: 80
+    - host: api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-service-canary
+                port:
+                  number: 80
 ```
 
 #### Database Migration Strategy
+
 ```bash
 #!/bin/bash
 # db-migration-strategy.sh
@@ -726,9 +734,9 @@ spec:
 handle_database_migrations() {
     local version=$1
     local target_env=$2
-    
+
     log "Handling database migrations for version $version"
-    
+
     case "$DB_MIGRATION_STRATEGY" in
         "forward-only")
             # Only run forward migrations, safe for blue-green
@@ -756,32 +764,33 @@ handle_database_migrations() {
 
 run_forward_migrations() {
     local version=$1
-    
+
     # Backup database before migrations
     if [ "$DB_BACKUP_BEFORE_DEPLOY" = "true" ]; then
         backup_database "pre-migration-$version-$(date +%Y%m%d-%H%M%S)"
     fi
-    
+
     # Run migrations
     kubectl run migration-job-$version \
         --image=myapp:$version \
         --restart=Never \
         --command -- /bin/sh -c "npm run migrate"
-    
+
     # Wait for migration to complete
     kubectl wait --for=condition=complete job/migration-job-$version --timeout=300s
-    
+
     # Verify migration success
     local exit_code=$(kubectl get job migration-job-$version -o jsonpath='{.status.conditions[?(@.type=="Complete")].status}')
     if [ "$exit_code" != "True" ]; then
         error "Database migration failed"
     fi
-    
+
     log "Database migrations completed successfully"
 }
 ```
 
 #### Monitoring Integration
+
 ```yaml
 # monitoring/prometheus-rules.yaml
 apiVersion: monitoring.coreos.com/v1
@@ -790,34 +799,34 @@ metadata:
   name: blue-green-deployment-rules
 spec:
   groups:
-  - name: blue-green-deployment
-    rules:
-    - alert: BlueGreenEnvironmentDown
-      expr: up{job="myapp", environment=~"blue|green"} == 0
-      for: 1m
-      labels:
-        severity: critical
-      annotations:
-        summary: "Blue-green environment {{ $labels.environment }} is down"
-        description: "Environment {{ $labels.environment }} has been down for more than 1 minute"
-    
-    - alert: BlueGreenHighErrorRate
-      expr: rate(http_requests_total{job="myapp", status=~"5.."}[5m]) > 0.1
-      for: 2m
-      labels:
-        severity: warning
-      annotations:
-        summary: "High error rate detected during blue-green deployment"
-        description: "Error rate is {{ $value }} errors per second"
-    
-    - alert: BlueGreenDeploymentStuck
-      expr: time() - kube_deployment_status_observed_generation{deployment=~"app-blue|app-green"} > 600
-      for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Blue-green deployment appears stuck"
-        description: "Deployment {{ $labels.deployment }} hasn't updated in over 10 minutes"
+    - name: blue-green-deployment
+      rules:
+        - alert: BlueGreenEnvironmentDown
+          expr: up{job="myapp", environment=~"blue|green"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Blue-green environment {{ $labels.environment }} is down"
+            description: "Environment {{ $labels.environment }} has been down for more than 1 minute"
+
+        - alert: BlueGreenHighErrorRate
+          expr: rate(http_requests_total{job="myapp", status=~"5.."}[5m]) > 0.1
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High error rate detected during blue-green deployment"
+            description: "Error rate is {{ $value }} errors per second"
+
+        - alert: BlueGreenDeploymentStuck
+          expr: time() - kube_deployment_status_observed_generation{deployment=~"app-blue|app-green"} > 600
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Blue-green deployment appears stuck"
+            description: "Deployment {{ $labels.deployment }} hasn't updated in over 10 minutes"
 ```
 
 This blue-green deployment system provides zero-downtime deployments with comprehensive validation, monitoring, and rollback capabilities. The implementation supports multiple platforms (Kubernetes, Docker Swarm, traditional deployments) and includes advanced features like database migration handling and canary releases.

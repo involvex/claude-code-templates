@@ -22,6 +22,7 @@ Comprehensive validation of PAC project structure and specification compliance:
 **Validation Scope**: Use $ARGUMENTS for specific files/epics or validate entire PAC structure
 
 **Validation Checks**:
+
 1. **Structure Validation** - Directory structure and required files
 2. **Configuration Compliance** - PAC config file format and values
 3. **Epic Validation** - YAML syntax, required fields, and spec compliance

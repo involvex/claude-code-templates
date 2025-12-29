@@ -2,32 +2,32 @@
  * AgentAnalyzer - Analyzes Claude Code specialized agent usage patterns
  * Extracts agent invocation data, usage frequency, and workflow patterns
  */
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const path = require('path');
+const chalk = require("chalk");
+const fs = require("fs-extra");
+const path = require("path");
 
 class AgentAnalyzer {
   constructor() {
     // Known Claude Code specialized agents
     this.AGENT_TYPES = {
-      'general-purpose': {
-        name: 'General Purpose',
-        description: 'Multi-step tasks and research',
-        color: '#3fb950',
-        icon: '🔧'
+      "general-purpose": {
+        name: "General Purpose",
+        description: "Multi-step tasks and research",
+        color: "#3fb950",
+        icon: "🔧",
       },
-      'claude-code-best-practices': {
-        name: 'Claude Code Best Practices',
-        description: 'Workflow optimization and setup guidance',
-        color: '#f97316',
-        icon: '⚡'
+      "claude-code-best-practices": {
+        name: "Claude Code Best Practices",
+        description: "Workflow optimization and setup guidance",
+        color: "#f97316",
+        icon: "⚡",
       },
-      'docusaurus-expert': {
-        name: 'Docusaurus Expert',
-        description: 'Documentation site management',
-        color: '#0969da',
-        icon: '📚'
-      }
+      "docusaurus-expert": {
+        name: "Docusaurus Expert",
+        description: "Documentation site management",
+        color: "#0969da",
+        icon: "📚",
+      },
     };
   }
 
@@ -49,86 +49,100 @@ class AgentAnalyzer {
       if (!messages && conversation.filePath) {
         messages = await this.parseJsonlFile(conversation.filePath);
       }
-      
+
       if (!messages) continue;
 
-      messages.forEach(message => {
+      messages.forEach((message) => {
         // Skip if outside date range
-        if (dateRange && !this.isWithinDateRange(message.timestamp, dateRange)) {
+        if (
+          dateRange &&
+          !this.isWithinDateRange(message.timestamp, dateRange)
+        ) {
           return;
         }
 
         // Look for Task tool usage with subagent_type
         // Handle both direct message structure and nested message structure
-        const messageContent = message.message ? message.message.content : message.content;
-        const messageRole = message.message ? message.message.role : message.role;
-        
-        if (messageRole === 'assistant' && 
-            messageContent && 
-            Array.isArray(messageContent)) {
-          
-          messageContent.forEach(content => {
-            if (content.type === 'tool_use' && 
-                content.name === 'Task' && 
-                content.input && 
-                content.input.subagent_type) {
-              
+        const messageContent = message.message
+          ? message.message.content
+          : message.content;
+        const messageRole = message.message
+          ? message.message.role
+          : message.role;
+
+        if (
+          messageRole === "assistant" &&
+          messageContent &&
+          Array.isArray(messageContent)
+        ) {
+          messageContent.forEach((content) => {
+            if (
+              content.type === "tool_use" &&
+              content.name === "Task" &&
+              content.input &&
+              content.input.subagent_type
+            ) {
               const agentType = content.input.subagent_type;
               const timestamp = new Date(message.timestamp);
-              const prompt = content.input.prompt || content.input.description || 'No description';
-              
+              const prompt =
+                content.input.prompt ||
+                content.input.description ||
+                "No description";
+
               // Initialize agent stats
               if (!agentStats[agentType]) {
                 agentStats[agentType] = {
                   type: agentType,
                   name: this.AGENT_TYPES[agentType]?.name || agentType,
-                  description: this.AGENT_TYPES[agentType]?.description || 'Custom agent',
-                  color: this.AGENT_TYPES[agentType]?.color || '#8b5cf6',
-                  icon: this.AGENT_TYPES[agentType]?.icon || '🤖',
+                  description:
+                    this.AGENT_TYPES[agentType]?.description || "Custom agent",
+                  color: this.AGENT_TYPES[agentType]?.color || "#8b5cf6",
+                  icon: this.AGENT_TYPES[agentType]?.icon || "🤖",
                   totalInvocations: 0,
                   uniqueConversations: new Set(),
                   firstUsed: timestamp,
                   lastUsed: timestamp,
                   prompts: [],
                   hourlyDistribution: new Array(24).fill(0),
-                  dailyUsage: {}
+                  dailyUsage: {},
                 };
               }
 
               const stats = agentStats[agentType];
-              
+
               // Update stats
               stats.totalInvocations++;
               stats.uniqueConversations.add(conversation.id);
               stats.lastUsed = new Date(Math.max(stats.lastUsed, timestamp));
               stats.firstUsed = new Date(Math.min(stats.firstUsed, timestamp));
-              
+
               // Store prompt for analysis
               stats.prompts.push({
                 text: prompt,
                 timestamp: timestamp,
-                conversationId: conversation.id
+                conversationId: conversation.id,
               });
-              
+
               // Track hourly distribution
               const hour = timestamp.getHours();
               stats.hourlyDistribution[hour]++;
-              
+
               // Track daily usage
-              const dateKey = timestamp.toISOString().split('T')[0];
+              const dateKey = timestamp.toISOString().split("T")[0];
               stats.dailyUsage[dateKey] = (stats.dailyUsage[dateKey] || 0) + 1;
-              
+
               // Add to timeline
               agentTimeline.push({
                 timestamp: timestamp,
                 agentType: agentType,
                 agentName: stats.name,
-                prompt: prompt.substring(0, 100) + (prompt.length > 100 ? '...' : ''),
+                prompt:
+                  prompt.substring(0, 100) + (prompt.length > 100 ? "..." : ""),
                 conversationId: conversation.id,
                 color: stats.color,
-                icon: stats.icon
+                icon: stats.icon,
               });
-              
+
               totalAgentInvocations++;
             }
           });
@@ -137,11 +151,13 @@ class AgentAnalyzer {
     }
 
     // Convert Sets to counts and finalize stats
-    Object.keys(agentStats).forEach(agentType => {
+    Object.keys(agentStats).forEach((agentType) => {
       const stats = agentStats[agentType];
       stats.uniqueConversations = stats.uniqueConversations.size;
-      stats.averageUsagePerConversation = stats.uniqueConversations > 0 ? 
-        (stats.totalInvocations / stats.uniqueConversations).toFixed(1) : 0;
+      stats.averageUsagePerConversation =
+        stats.uniqueConversations > 0
+          ? (stats.totalInvocations / stats.uniqueConversations).toFixed(1)
+          : 0;
     });
 
     // Sort timeline by timestamp
@@ -153,12 +169,14 @@ class AgentAnalyzer {
     return {
       totalAgentInvocations,
       totalAgentTypes: Object.keys(agentStats).length,
-      agentStats: Object.values(agentStats).sort((a, b) => b.totalInvocations - a.totalInvocations),
+      agentStats: Object.values(agentStats).sort(
+        (a, b) => b.totalInvocations - a.totalInvocations,
+      ),
       agentTimeline,
       workflowPatterns,
       popularHours: this.calculatePopularHours(agentStats),
       usageByDay: this.calculateDailyUsage(agentStats),
-      efficiency: this.calculateAgentEfficiency(agentStats)
+      efficiency: this.calculateAgentEfficiency(agentStats),
     };
   }
 
@@ -174,30 +192,33 @@ class AgentAnalyzer {
     let currentWorkflow = [];
     let lastTimestamp = null;
 
-    timeline.forEach(event => {
+    timeline.forEach((event) => {
       const currentTime = new Date(event.timestamp);
-      
+
       // Start new workflow if gap is too large or first event
-      if (!lastTimestamp || 
-          (currentTime - lastTimestamp) > (SESSION_GAP_MINUTES * 60 * 1000)) {
-        
+      if (
+        !lastTimestamp ||
+        currentTime - lastTimestamp > SESSION_GAP_MINUTES * 60 * 1000
+      ) {
         // Save previous workflow if it had multiple agents
         if (currentWorkflow.length > 1) {
-          const workflowKey = currentWorkflow.map(e => e.agentType).join(' → ');
+          const workflowKey = currentWorkflow
+            .map((e) => e.agentType)
+            .join(" → ");
           workflows[workflowKey] = (workflows[workflowKey] || 0) + 1;
         }
-        
+
         currentWorkflow = [event];
       } else {
         currentWorkflow.push(event);
       }
-      
+
       lastTimestamp = currentTime;
     });
 
     // Don't forget the last workflow
     if (currentWorkflow.length > 1) {
-      const workflowKey = currentWorkflow.map(e => e.agentType).join(' → ');
+      const workflowKey = currentWorkflow.map((e) => e.agentType).join(" → ");
       workflows[workflowKey] = (workflows[workflowKey] || 0) + 1;
     }
 
@@ -215,8 +236,8 @@ class AgentAnalyzer {
    */
   calculatePopularHours(agentStats) {
     const hourlyTotals = new Array(24).fill(0);
-    
-    Object.values(agentStats).forEach(stats => {
+
+    Object.values(agentStats).forEach((stats) => {
       stats.hourlyDistribution.forEach((count, hour) => {
         hourlyTotals[hour] += count;
       });
@@ -225,7 +246,7 @@ class AgentAnalyzer {
     return hourlyTotals.map((count, hour) => ({
       hour,
       count,
-      label: `${hour.toString().padStart(2, '0')}:00`
+      label: `${hour.toString().padStart(2, "0")}:00`,
     }));
   }
 
@@ -236,8 +257,8 @@ class AgentAnalyzer {
    */
   calculateDailyUsage(agentStats) {
     const dailyTotals = {};
-    
-    Object.values(agentStats).forEach(stats => {
+
+    Object.values(agentStats).forEach((stats) => {
       Object.entries(stats.dailyUsage).forEach(([date, count]) => {
         dailyTotals[date] = (dailyTotals[date] || 0) + count;
       });
@@ -247,7 +268,7 @@ class AgentAnalyzer {
       .map(([date, count]) => ({
         date,
         count,
-        timestamp: new Date(date)
+        timestamp: new Date(date),
       }))
       .sort((a, b) => a.timestamp - b.timestamp);
   }
@@ -261,15 +282,26 @@ class AgentAnalyzer {
     const agents = Object.values(agentStats);
     if (agents.length === 0) return {};
 
-    const totalInvocations = agents.reduce((sum, agent) => sum + agent.totalInvocations, 0);
-    const totalConversations = agents.reduce((sum, agent) => sum + agent.uniqueConversations, 0);
+    const totalInvocations = agents.reduce(
+      (sum, agent) => sum + agent.totalInvocations,
+      0,
+    );
+    const totalConversations = agents.reduce(
+      (sum, agent) => sum + agent.uniqueConversations,
+      0,
+    );
 
     return {
       averageInvocationsPerAgent: (totalInvocations / agents.length).toFixed(1),
-      averageConversationsPerAgent: (totalConversations / agents.length).toFixed(1),
+      averageConversationsPerAgent: (
+        totalConversations / agents.length
+      ).toFixed(1),
       mostUsedAgent: agents[0],
       agentDiversity: agents.length,
-      adoptionRate: (agents.filter(a => a.totalInvocations > 1).length / agents.length * 100).toFixed(1)
+      adoptionRate: (
+        (agents.filter((a) => a.totalInvocations > 1).length / agents.length) *
+        100
+      ).toFixed(1),
     };
   }
 
@@ -280,35 +312,42 @@ class AgentAnalyzer {
    */
   async parseJsonlFile(filePath) {
     try {
-      if (!await fs.pathExists(filePath)) {
+      if (!(await fs.pathExists(filePath))) {
         return null;
       }
 
-      const content = await fs.readFile(filePath, 'utf8');
-      const lines = content.trim().split('\n').filter(line => line.trim());
-      
-      return lines.map((line, index) => {
-        try {
-          // Skip empty or whitespace-only lines
-          if (!line.trim()) {
+      const content = await fs.readFile(filePath, "utf8");
+      const lines = content
+        .trim()
+        .split("\n")
+        .filter((line) => line.trim());
+
+      return lines
+        .map((line, index) => {
+          try {
+            // Skip empty or whitespace-only lines
+            if (!line.trim()) {
+              return null;
+            }
+
+            // Basic validation - must start with { and end with }
+            const trimmed = line.trim();
+            if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) {
+              return null;
+            }
+
+            return JSON.parse(trimmed);
+          } catch (error) {
+            // Only log significant parsing errors to avoid spam from occasional corrupted lines
+            if (index < 10 || index % 100 === 0) {
+              console.warn(
+                `Skipping corrupted JSONL line ${index + 1} in ${path.basename(filePath)}`,
+              );
+            }
             return null;
           }
-          
-          // Basic validation - must start with { and end with }
-          const trimmed = line.trim();
-          if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) {
-            return null;
-          }
-          
-          return JSON.parse(trimmed);
-        } catch (error) {
-          // Only log significant parsing errors to avoid spam from occasional corrupted lines
-          if (index < 10 || index % 100 === 0) {
-            console.warn(`Skipping corrupted JSONL line ${index + 1} in ${path.basename(filePath)}`);
-          }
-          return null;
-        }
-      }).filter(Boolean);
+        })
+        .filter(Boolean);
     } catch (error) {
       console.error(`Error reading JSONL file ${filePath}:`, error);
       return null;
@@ -323,11 +362,15 @@ class AgentAnalyzer {
    */
   isWithinDateRange(timestamp, dateRange) {
     if (!dateRange || (!dateRange.startDate && !dateRange.endDate)) return true;
-    
+
     const messageDate = new Date(timestamp);
-    const startDate = dateRange.startDate ? new Date(dateRange.startDate) : new Date(0);
-    const endDate = dateRange.endDate ? new Date(dateRange.endDate) : new Date();
-    
+    const startDate = dateRange.startDate
+      ? new Date(dateRange.startDate)
+      : new Date(0);
+    const endDate = dateRange.endDate
+      ? new Date(dateRange.endDate)
+      : new Date();
+
     return messageDate >= startDate && messageDate <= endDate;
   }
 
@@ -337,17 +380,19 @@ class AgentAnalyzer {
    * @returns {Object} Summary data
    */
   generateSummary(analysisResult) {
-    const { totalAgentInvocations, totalAgentTypes, agentStats, efficiency } = analysisResult;
-    
+    const { totalAgentInvocations, totalAgentTypes, agentStats, efficiency } =
+      analysisResult;
+
     return {
       totalInvocations: totalAgentInvocations,
       totalAgentTypes,
       topAgent: agentStats[0] || null,
       averageUsage: efficiency.averageInvocationsPerAgent,
       adoptionRate: efficiency.adoptionRate,
-      summary: totalAgentInvocations > 0 ? 
-        `${totalAgentInvocations} agent invocations across ${totalAgentTypes} different agents` :
-        'No agent usage detected'
+      summary:
+        totalAgentInvocations > 0
+          ? `${totalAgentInvocations} agent invocations across ${totalAgentTypes} different agents`
+          : "No agent usage detected",
     };
   }
 }

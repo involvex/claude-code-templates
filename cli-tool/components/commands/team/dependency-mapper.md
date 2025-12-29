@@ -22,6 +22,7 @@ Execute comprehensive dependency analysis with optimization recommendations:
 **Analysis Scope**: Use $ARGUMENTS to focus on task dependencies, code dependencies, circular dependency detection, or critical path analysis
 
 **Dependency Analysis Framework**:
+
 1. **Code Dependency Mapping** - Extract import statements, analyze module relationships, identify coupling levels, map file interdependencies
 2. **Task Relationship Analysis** - Query Linear task dependencies, extract task mentions, analyze project relationships, map epic structures
 3. **Dependency Graph Construction** - Build comprehensive graph structure, identify dependency chains, calculate critical paths, detect bottlenecks

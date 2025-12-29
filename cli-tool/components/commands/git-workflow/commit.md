@@ -123,6 +123,7 @@ When analyzing the diff, consider splitting commits based on these criteria:
 ## Examples
 
 Good commit messages:
+
 - ✨ feat: add user authentication system
 - 🐛 fix: resolve memory leak in rendering process
 - 📝 docs: update API documentation with new endpoints
@@ -141,6 +142,7 @@ Good commit messages:
 - ♿️ feat: improve form accessibility for screen readers
 
 Example of splitting commits:
+
 - First commit: ✨ feat: add new solc version type definitions
 - Second commit: 📝 docs: update documentation for new solc versions
 - Third commit: 🔧 chore: update package.json dependencies

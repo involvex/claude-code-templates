@@ -33,6 +33,7 @@ This skill provides comprehensive guidance across five major capability areas:
 Manage API authentication using access tokens and OAuth flows. Includes both client access tokens (for personal content) and OAuth tokens (for multi-user applications).
 
 **Key operations:**
+
 - Generate authorization links for OAuth flow
 - Exchange authorization codes for access tokens
 - Refresh expired tokens
@@ -45,6 +46,7 @@ Manage API authentication using access tokens and OAuth flows. Includes both cli
 Complete protocol lifecycle management from creation to publication.
 
 **Key operations:**
+
 - Search and discover protocols by keywords, filters, or DOI
 - Retrieve detailed protocol information with all steps
 - Create new protocols with metadata and tags
@@ -62,6 +64,7 @@ Complete protocol lifecycle management from creation to publication.
 Enable community engagement through comments and discussions.
 
 **Key operations:**
+
 - View protocol-level and step-level comments
 - Create new comments and threaded replies
 - Edit or delete your own comments
@@ -75,6 +78,7 @@ Enable community engagement through comments and discussions.
 Organize protocols within team workspaces with role-based permissions.
 
 **Key operations:**
+
 - List and access user workspaces
 - Retrieve workspace details and member lists
 - Request access or join workspaces
@@ -89,6 +93,7 @@ Organize protocols within team workspaces with role-based permissions.
 Upload, organize, and manage files associated with protocols.
 
 **Key operations:**
+
 - Search workspace files and folders
 - Upload files with metadata and tags
 - Download files and verify uploads
@@ -104,6 +109,7 @@ Upload, organize, and manage files associated with protocols.
 Supplementary functionality including profiles, notifications, and exports.
 
 **Key operations:**
+
 - Manage user profiles and settings
 - Query recently published protocols
 - Create and track experiment records
@@ -145,11 +151,13 @@ Follow the guidance in the relevant reference files:
 ## Base URL and Request Format
 
 All API requests use the base URL:
+
 ```
 https://protocols.io/api/v3
 ```
 
 All requests require the Authorization header:
+
 ```
 Authorization: Bearer YOUR_ACCESS_TOKEN
 ```
@@ -393,21 +401,25 @@ To load a reference file, read the file from the `references/` directory when ne
 ## Troubleshooting
 
 **Authentication Issues:**
+
 - Verify token is valid and not expired
 - Check Authorization header format: `Bearer YOUR_TOKEN`
 - Ensure appropriate token type (CLIENT vs OAUTH)
 
 **Rate Limiting:**
+
 - Implement exponential backoff for 429 errors
 - Monitor request frequency
 - Consider caching frequent requests
 
 **Permission Errors:**
+
 - Verify workspace/protocol access permissions
 - Check user role in workspace
 - Ensure protocol is not private if accessing without permission
 
 **File Upload Failures:**
+
 - Check file size against workspace limits
 - Verify file type is supported
 - Ensure multipart/form-data encoding is correct

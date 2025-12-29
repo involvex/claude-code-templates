@@ -22,6 +22,7 @@ Generate Linear tasks from GitHub pull requests with comprehensive content analy
 **PR Source**: Use $ARGUMENTS to specify PR number, team assignment, size estimation, or batch processing mode
 
 **Task Generation Framework**:
+
 1. **PR Analysis** - Extract comprehensive PR data, parse description structure, identify key components, analyze changes
 2. **Content Extraction** - Parse structured sections, extract checklists, identify technical details, capture requirements
 3. **Intelligent Sizing** - Estimate task complexity from code changes, file count, review comments, testing requirements

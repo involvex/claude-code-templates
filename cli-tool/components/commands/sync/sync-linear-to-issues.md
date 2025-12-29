@@ -22,6 +22,7 @@ Execute comprehensive synchronization of Linear tasks to GitHub issues:
 **Sync Scope**: Use $ARGUMENTS to filter by Linear team, project, priority levels, or task states
 
 **Synchronization Framework**:
+
 1. **Task Discovery** - Query Linear tasks with filters, extract metadata, validate requirements, prioritize sync
 2. **State Mapping** - Transform Linear states to GitHub equivalents, handle priority conversion, map project assignments
 3. **Content Transformation** - Build GitHub issue body, preserve formatting, handle attachments, maintain structure

@@ -12,6 +12,7 @@ RCSB PDB is the worldwide repository for 3D structural data of biological macrom
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Searching for protein or nucleic acid 3D structures by text, sequence, or structural similarity
 - Downloading coordinate files in PDB, mmCIF, or BinaryCIF formats
 - Retrieving structural metadata, experimental methods, or quality metrics
@@ -25,6 +26,7 @@ This skill should be used when:
 Find PDB entries using various search criteria:
 
 **Text Search:** Search by protein name, keywords, or descriptions
+
 ```python
 from rcsbapi.search import TextQuery
 query = TextQuery("hemoglobin")
@@ -33,6 +35,7 @@ print(f"Found {len(results)} structures")
 ```
 
 **Attribute Search:** Query specific properties (organism, resolution, method, etc.)
+
 ```python
 from rcsbapi.search import AttributeQuery
 from rcsbapi.search.attrs import rcsb_entity_source_organism
@@ -47,6 +50,7 @@ results = list(query())
 ```
 
 **Sequence Similarity:** Find structures similar to a given sequence
+
 ```python
 from rcsbapi.search import SequenceQuery
 
@@ -59,6 +63,7 @@ results = list(query())
 ```
 
 **Structure Similarity:** Find structures with similar 3D geometry
+
 ```python
 from rcsbapi.search import StructSimilarityQuery
 
@@ -70,6 +75,7 @@ results = list(query())
 ```
 
 **Combining Queries:** Use logical operators to build complex searches
+
 ```python
 from rcsbapi.search import TextQuery, AttributeQuery
 from rcsbapi.search.attrs import rcsb_entry_info
@@ -94,6 +100,7 @@ results = list(combined_query())
 Access detailed information about specific PDB entries:
 
 **Basic Entry Information:**
+
 ```python
 from rcsbapi.data import Schema, fetch
 
@@ -104,6 +111,7 @@ print(entry_data["exptl"][0]["method"])
 ```
 
 **Polymer Entity Information:**
+
 ```python
 # Get protein/nucleic acid information
 entity_data = fetch("4HHB_1", schema=Schema.POLYMER_ENTITY)
@@ -111,6 +119,7 @@ print(entity_data["entity_poly"]["pdbx_seq_one_letter_code"])
 ```
 
 **Using GraphQL for Flexible Queries:**
+
 ```python
 from rcsbapi.data import fetch
 
@@ -139,12 +148,14 @@ data = fetch(query_type="graphql", query=query)
 Retrieve coordinate files in various formats:
 
 **Download Methods:**
+
 - **PDB format** (legacy text format): `https://files.rcsb.org/download/{PDB_ID}.pdb`
 - **mmCIF format** (modern standard): `https://files.rcsb.org/download/{PDB_ID}.cif`
 - **BinaryCIF** (compressed binary): Use ModelServer API for efficient access
 - **Biological assembly**: `https://files.rcsb.org/download/{PDB_ID}.pdb1` (for assembly 1)
 
 **Example Download:**
+
 ```python
 import requests
 
@@ -169,6 +180,7 @@ Common operations with retrieved structures:
 
 **Parse and Analyze Coordinates:**
 Use BioPython or other structural biology libraries to work with downloaded files:
+
 ```python
 from Bio.PDB import PDBParser
 
@@ -184,6 +196,7 @@ for model in structure:
 ```
 
 **Extract Metadata:**
+
 ```python
 from rcsbapi.data import fetch, Schema
 
@@ -244,24 +257,28 @@ The `rcsb-api` package provides unified access to both Search and Data APIs thro
 ## Common Use Cases
 
 ### Drug Discovery
+
 - Search for structures of drug targets
 - Analyze ligand binding sites
 - Compare protein-ligand complexes
 - Identify similar binding pockets
 
 ### Protein Engineering
+
 - Find homologous structures for modeling
 - Analyze sequence-structure relationships
 - Compare mutant structures
 - Study protein stability and dynamics
 
 ### Structural Biology Research
+
 - Download structures for computational analysis
 - Build structure-based alignments
 - Analyze structural features (secondary structure, domains)
 - Compare experimental methods and quality metrics
 
 ### Education and Visualization
+
 - Retrieve structures for teaching
 - Generate molecular visualizations
 - Explore structure-function relationships
@@ -269,7 +286,7 @@ The `rcsb-api` package provides unified access to both Search and Data APIs thro
 
 ## Key Concepts
 
-**PDB ID:** Unique 4-character identifier (e.g., "4HHB") for each structure entry. AlphaFold and ModelArchive entries start with "AF_" or "MA_" prefixes.
+**PDB ID:** Unique 4-character identifier (e.g., "4HHB") for each structure entry. AlphaFold and ModelArchive entries start with "AF*" or "MA*" prefixes.
 
 **mmCIF/PDBx:** Modern file format that uses key-value structure, replacing legacy PDB format for large structures.
 
@@ -284,7 +301,9 @@ The `rcsb-api` package provides unified access to both Search and Data APIs thro
 This skill includes reference documentation in the `references/` directory:
 
 ### references/api_reference.md
+
 Comprehensive API documentation covering:
+
 - Detailed API endpoint specifications
 - Advanced query patterns and examples
 - Data schema reference

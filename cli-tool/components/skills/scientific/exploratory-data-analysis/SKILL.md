@@ -10,6 +10,7 @@ description: Perform comprehensive exploratory data analysis on scientific data 
 Perform comprehensive exploratory data analysis (EDA) on scientific data files across multiple domains. This skill provides automated file type detection, format-specific analysis, data quality assessment, and generates detailed markdown reports suitable for documentation and downstream analysis planning.
 
 **Key Capabilities:**
+
 - Automatic detection and analysis of 200+ scientific file formats
 - Comprehensive format-specific metadata extraction
 - Data quality and integrity assessment
@@ -21,6 +22,7 @@ Perform comprehensive exploratory data analysis (EDA) on scientific data files a
 ## When to Use This Skill
 
 Use this skill when:
+
 - User provides a path to a scientific data file for analysis
 - User asks to "explore", "analyze", or "summarize" a data file
 - User wants to understand the structure and content of scientific data
@@ -33,6 +35,7 @@ Use this skill when:
 The skill has comprehensive coverage of scientific file formats organized into six major categories:
 
 ### 1. Chemistry and Molecular Formats (60+ extensions)
+
 Structure files, computational chemistry outputs, molecular dynamics trajectories, and chemical databases.
 
 **File types include:** `.pdb`, `.cif`, `.mol`, `.mol2`, `.sdf`, `.xyz`, `.smi`, `.gro`, `.log`, `.fchk`, `.cube`, `.dcd`, `.xtc`, `.trr`, `.prmtop`, `.psf`, and more.
@@ -40,6 +43,7 @@ Structure files, computational chemistry outputs, molecular dynamics trajectorie
 **Reference file:** `references/chemistry_molecular_formats.md`
 
 ### 2. Bioinformatics and Genomics Formats (50+ extensions)
+
 Sequence data, alignments, annotations, variants, and expression data.
 
 **File types include:** `.fasta`, `.fastq`, `.sam`, `.bam`, `.vcf`, `.bed`, `.gff`, `.gtf`, `.bigwig`, `.h5ad`, `.loom`, `.counts`, `.mtx`, and more.
@@ -47,6 +51,7 @@ Sequence data, alignments, annotations, variants, and expression data.
 **Reference file:** `references/bioinformatics_genomics_formats.md`
 
 ### 3. Microscopy and Imaging Formats (45+ extensions)
+
 Microscopy images, medical imaging, whole slide imaging, and electron microscopy.
 
 **File types include:** `.tif`, `.nd2`, `.lif`, `.czi`, `.ims`, `.dcm`, `.nii`, `.mrc`, `.dm3`, `.vsi`, `.svs`, `.ome.tiff`, and more.
@@ -54,6 +59,7 @@ Microscopy images, medical imaging, whole slide imaging, and electron microscopy
 **Reference file:** `references/microscopy_imaging_formats.md`
 
 ### 4. Spectroscopy and Analytical Chemistry Formats (35+ extensions)
+
 NMR, mass spectrometry, IR/Raman, UV-Vis, X-ray, chromatography, and other analytical techniques.
 
 **File types include:** `.fid`, `.mzML`, `.mzXML`, `.raw`, `.mgf`, `.spc`, `.jdx`, `.xy`, `.cif` (crystallography), `.wdf`, and more.
@@ -61,6 +67,7 @@ NMR, mass spectrometry, IR/Raman, UV-Vis, X-ray, chromatography, and other analy
 **Reference file:** `references/spectroscopy_analytical_formats.md`
 
 ### 5. Proteomics and Metabolomics Formats (30+ extensions)
+
 Mass spec proteomics, metabolomics, lipidomics, and multi-omics data.
 
 **File types include:** `.mzML`, `.pepXML`, `.protXML`, `.mzid`, `.mzTab`, `.sky`, `.mgf`, `.msp`, `.h5ad`, and more.
@@ -68,6 +75,7 @@ Mass spec proteomics, metabolomics, lipidomics, and multi-omics data.
 **Reference file:** `references/proteomics_metabolomics_formats.md`
 
 ### 6. General Scientific Data Formats (30+ extensions)
+
 Arrays, tables, hierarchical data, compressed archives, and common scientific formats.
 
 **File types include:** `.npy`, `.npz`, `.csv`, `.xlsx`, `.json`, `.hdf5`, `.zarr`, `.parquet`, `.mat`, `.fits`, `.nc`, `.xml`, and more.
@@ -86,6 +94,7 @@ When a user provides a file path, first identify the file type:
 4. Load format-specific information
 
 **Example:**
+
 ```
 User: "Analyze data.fastq"
 → Extension: .fastq
@@ -97,6 +106,7 @@ User: "Analyze data.fastq"
 ### Step 2: Load Format-Specific Information
 
 Based on the file type, read the corresponding reference file to understand:
+
 - **Typical Data:** What kind of data this format contains
 - **Use Cases:** Common applications for this format
 - **Python Libraries:** How to read the file in Python
@@ -109,6 +119,7 @@ Search the reference file for the specific extension (e.g., search for "### .fas
 Use the `scripts/eda_analyzer.py` script OR implement custom analysis:
 
 **Option A: Use the analyzer script**
+
 ```python
 # The script automatically:
 # 1. Detects file type
@@ -123,6 +134,7 @@ python scripts/eda_analyzer.py <filepath> [output.md]
 Based on the format information from the reference file, perform appropriate analysis:
 
 For tabular data (CSV, TSV, Excel):
+
 - Load with pandas
 - Check dimensions, data types
 - Analyze missing values
@@ -131,18 +143,21 @@ For tabular data (CSV, TSV, Excel):
 - Check for duplicates
 
 For sequence data (FASTA, FASTQ):
+
 - Count sequences
 - Analyze length distributions
 - Calculate GC content
 - Assess quality scores (FASTQ)
 
 For images (TIFF, ND2, CZI):
+
 - Check dimensions (X, Y, Z, C, T)
 - Analyze bit depth and value range
 - Extract metadata (channels, timestamps, spatial calibration)
 - Calculate intensity statistics
 
 For arrays (NPY, HDF5):
+
 - Check shape and dimensions
 - Analyze data type
 - Calculate statistical summaries
@@ -153,6 +168,7 @@ For arrays (NPY, HDF5):
 Create a markdown report with the following sections:
 
 #### Required Sections:
+
 1. **Title and Metadata**
    - Filename and timestamp
    - File size and location
@@ -185,11 +201,13 @@ Create a markdown report with the following sections:
    - Visualization approaches
 
 #### Template Location
+
 Use `assets/report_template.md` as a guide for report structure.
 
 ### Step 5: Save Report
 
 Save the markdown report with a descriptive filename:
+
 - Pattern: `{original_filename}_eda_report.md`
 - Example: `experiment_data.fastq` → `experiment_data_eda_report.md`
 
@@ -205,6 +223,7 @@ Each reference file contains comprehensive information for dozens of file types.
 ### Reference File Structure
 
 Each format entry includes:
+
 - **Description:** What the format is
 - **Typical Data:** What it contains
 - **Use Cases:** Common applications
@@ -212,15 +231,18 @@ Each format entry includes:
 - **EDA Approach:** Specific analyses to perform
 
 **Example lookup:**
+
 ```markdown
 ### .pdb - Protein Data Bank
+
 **Description:** Standard format for 3D structures of biological macromolecules
 **Typical Data:** Atomic coordinates, residue information, secondary structure
 **Use Cases:** Protein structure analysis, molecular visualization, docking
 **Python Libraries:**
+
 - `Biopython`: `Bio.PDB`
 - `MDAnalysis`: `MDAnalysis.Universe('file.pdb')`
-**EDA Approach:**
+  **EDA Approach:**
 - Structure validation (bond lengths, angles)
 - B-factor distribution
 - Missing residues detection
@@ -234,6 +256,7 @@ Each format entry includes:
 Reference files are large (10,000+ words each). To efficiently use them:
 
 1. **Search by extension:** Use grep to find the specific format
+
    ```python
    import re
    with open('references/chemistry_molecular_formats.md', 'r') as f:
@@ -343,6 +366,7 @@ Many scientific formats require specialized libraries:
 **Problem:** Import error when trying to read a file
 
 **Solution:** Provide clear installation instructions
+
 ```python
 try:
     from Bio import SeqIO
@@ -351,6 +375,7 @@ except ImportError:
 ```
 
 Common requirements by category:
+
 - **Bioinformatics:** `biopython`, `pysam`, `pyBigWig`
 - **Chemistry:** `rdkit`, `mdanalysis`, `cclib`
 - **Microscopy:** `tifffile`, `nd2reader`, `aicsimageio`, `pydicom`
@@ -400,6 +425,7 @@ The script supports automatic analysis for many common formats, but custom analy
 ### Multi-File Analysis
 
 When analyzing multiple related files:
+
 1. Perform individual EDA on each file
 2. Create a summary comparison report
 3. Identify relationships and dependencies
@@ -408,6 +434,7 @@ When analyzing multiple related files:
 ### Quality Control
 
 For data quality assessment:
+
 1. Check format compliance
 2. Validate metadata consistency
 3. Assess completeness
@@ -417,6 +444,7 @@ For data quality assessment:
 ### Preprocessing Recommendations
 
 Based on data characteristics, recommend:
+
 1. Normalization strategies
 2. Missing value imputation
 3. Outlier handling
@@ -426,9 +454,11 @@ Based on data characteristics, recommend:
 ## Resources
 
 ### scripts/
+
 - `eda_analyzer.py`: Comprehensive analysis script that can be run directly or imported
 
 ### references/
+
 - `chemistry_molecular_formats.md`: 60+ chemistry/molecular file formats
 - `bioinformatics_genomics_formats.md`: 50+ bioinformatics formats
 - `microscopy_imaging_formats.md`: 45+ imaging formats
@@ -437,4 +467,5 @@ Based on data characteristics, recommend:
 - `general_scientific_formats.md`: 30+ general formats
 
 ### assets/
+
 - `report_template.md`: Comprehensive markdown template for EDA reports

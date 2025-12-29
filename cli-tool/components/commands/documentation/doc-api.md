@@ -36,8 +36,9 @@ Generate comprehensive API documentation with interactive features: $ARGUMENTS
      - **API Blueprint**: Markdown-based API documentation
 
 3. **API Specification Generation**
-   
+
    **For REST APIs with OpenAPI:**
+
    ```yaml
    openapi: 3.0.0
    info:
@@ -56,14 +57,14 @@ Generate comprehensive API documentation with interactive features: $ARGUMENTS
              schema:
                type: integer
          responses:
-           '200':
+           "200":
              description: Successful response
              content:
                application/json:
                  schema:
                    type: array
                    items:
-                     $ref: '#/components/schemas/User'
+                     $ref: "#/components/schemas/User"
    components:
      schemas:
        User:
@@ -109,25 +110,26 @@ Generate comprehensive API documentation with interactive features: $ARGUMENTS
    - Include rate limiting and throttling information
 
 9. **Interactive Documentation Setup**
-   
+
    **Swagger UI Integration:**
+
    ```html
    <!DOCTYPE html>
    <html>
-   <head>
-     <title>API Documentation</title>
-     <link rel="stylesheet" type="text/css" href="./swagger-ui-bundle.css" />
-   </head>
-   <body>
-     <div id="swagger-ui"></div>
-     <script src="./swagger-ui-bundle.js"></script>
-     <script>
-       SwaggerUIBundle({
-         url: './api-spec.yaml',
-         dom_id: '#swagger-ui'
-       });
-     </script>
-   </body>
+     <head>
+       <title>API Documentation</title>
+       <link rel="stylesheet" type="text/css" href="./swagger-ui-bundle.css" />
+     </head>
+     <body>
+       <div id="swagger-ui"></div>
+       <script src="./swagger-ui-bundle.js"></script>
+       <script>
+         SwaggerUIBundle({
+           url: "./api-spec.yaml",
+           dom_id: "#swagger-ui",
+         });
+       </script>
+     </body>
    </html>
    ```
 
@@ -140,25 +142,26 @@ Generate comprehensive API documentation with interactive features: $ARGUMENTS
       - **C#**: XML documentation comments
 
 11. **Automated Documentation Generation**
-    
+
     **For Node.js/Express:**
+
     ```javascript
-    const swaggerJsdoc = require('swagger-jsdoc');
-    const swaggerUi = require('swagger-ui-express');
-    
+    const swaggerJsdoc = require("swagger-jsdoc");
+    const swaggerUi = require("swagger-ui-express");
+
     const options = {
       definition: {
-        openapi: '3.0.0',
+        openapi: "3.0.0",
         info: {
-          title: 'API Documentation',
-          version: '1.0.0',
+          title: "API Documentation",
+          version: "1.0.0",
         },
       },
-      apis: ['./routes/*.js'],
+      apis: ["./routes/*.js"],
     };
-    
+
     const specs = swaggerJsdoc(options);
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
     ```
 
 12. **Testing Integration**
@@ -206,6 +209,7 @@ Generate comprehensive API documentation with interactive features: $ARGUMENTS
 **Framework-Specific Examples:**
 
 **FastAPI (Python):**
+
 ```python
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -224,11 +228,12 @@ async def get_user(user_id: int):
 ```
 
 **Spring Boot (Java):**
+
 ```java
 @RestController
 @Api(tags = "Users")
 public class UserController {
-    
+
     @GetMapping("/users/{id}")
     @ApiOperation(value = "Get user by ID")
     public ResponseEntity<User> getUser(

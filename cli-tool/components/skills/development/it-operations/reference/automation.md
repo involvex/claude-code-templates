@@ -3,6 +3,7 @@
 Comprehensive guide to IT automation, scripting, configuration management, orchestration tools, and reducing operational toil.
 
 ## Table of Contents
+
 - [Automation Strategy](#automation-strategy)
 - [Scripting Best Practices](#scripting-best-practices)
 - [Configuration Management](#configuration-management)
@@ -701,7 +702,6 @@ if __name__ == '__main__':
 
 ```yaml
 # playbook.yml - Web server setup playbook
-
 ---
 - name: Configure web servers
   hosts: webservers
@@ -760,11 +760,11 @@ if __name__ == '__main__':
         state: directory
         owner: "{{ app_user }}"
         group: "{{ app_user }}"
-        mode: '0755'
+        mode: "0755"
 
     - name: Clone application repository
       git:
-        repo: 'https://github.com/example/myapp.git'
+        repo: "https://github.com/example/myapp.git"
         dest: "{{ app_path }}"
         version: main
       become_user: "{{ app_user }}"
@@ -777,7 +777,7 @@ if __name__ == '__main__':
         dest: /etc/nginx/sites-available/myapp
         owner: root
         group: root
-        mode: '0644'
+        mode: "0644"
       notify: restart nginx
 
     - name: Enable Nginx site
@@ -808,7 +808,7 @@ if __name__ == '__main__':
         dest: /etc/systemd/system/myapp.service
         owner: root
         group: root
-        mode: '0644'
+        mode: "0644"
       notify: restart myapp
 
     - name: Enable and start application service
@@ -837,19 +837,19 @@ if __name__ == '__main__':
 # Nginx template (templates/nginx.conf.j2)
 ---
 server {
-    listen {{ nginx_port }};
-    server_name {{ ansible_hostname }};
+listen {{ nginx_port }};
+server_name {{ ansible_hostname }};
 
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
+location / {
+proxy_pass http://127.0.0.1:8000;
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
 
-    location /static {
-        alias {{ app_path }}/static;
-    }
+location /static {
+alias {{ app_path }}/static;
+}
 }
 ```
 
@@ -1031,11 +1031,11 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'terraform/**'
+      - "terraform/**"
   push:
     branches: [main]
     paths:
-      - 'terraform/**'
+      - "terraform/**"
 
 env:
   TF_VERSION: 1.6.0
@@ -1147,7 +1147,7 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          text: 'Terraform applied successfully'
+          text: "Terraform applied successfully"
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
         if: always()
 ```
@@ -1156,7 +1156,7 @@ jobs:
 
 ### ChatOps Integration
 
-```python
+````python
 # Slack bot for runbook automation
 
 from slack_bolt import App
@@ -1247,7 +1247,7 @@ def execute_deployment(deployment_id):
 if __name__ == "__main__":
     handler = SocketModeHandler(app, "xapp-your-app-token")
     handler.start()
-```
+````
 
 ## Self-Healing Systems
 

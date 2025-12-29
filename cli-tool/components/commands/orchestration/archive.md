@@ -15,26 +15,33 @@ Manages the archival process for completed orchestrations, extracting insights, 
 ## Basic Commands
 
 ### Archive Completed Orchestrations
+
 ```
 /orchestration/archive
 ```
+
 Identifies and archives all fully completed orchestrations automatically.
 
 ### Archive Specific Orchestration
+
 ```
 /orchestration/archive --date 03_15_2024 --project auth_system
 ```
+
 Archives a specific orchestration with full data preservation.
 
 ### Archive with Analysis
+
 ```
 /orchestration/archive --analyze
 ```
+
 Performs comprehensive analysis before archiving, extracting lessons learned.
 
 ## Archival Process
 
 ### Pre-Archive Analysis
+
 ```
 ## Pre-Archive Analysis for: auth_system (03_15_2024)
 
@@ -54,12 +61,13 @@ Ready for Archive: ✓
 ```
 
 ### Data Extraction
+
 ```
 ## Extracting Archive Data
 
 Performance Metrics:
 ✓ Task completion times
-✓ Velocity calculations  
+✓ Velocity calculations
 ✓ Quality metrics
 ✓ Resource utilization
 ✓ Dependency patterns
@@ -78,6 +86,7 @@ Learning Points:
 ```
 
 ### Archive Structure
+
 ```
 /archived-orchestrations/
 └── 2024/
@@ -103,30 +112,38 @@ Learning Points:
 ## Archive Options
 
 ### Quick Archive
+
 ```
 /orchestration/archive --quick
 ```
+
 Fast archival without detailed analysis, suitable for simple orchestrations.
 
 ### Deep Analysis Archive
+
 ```
 /orchestration/archive --deep-analysis
 ```
+
 Comprehensive analysis including:
+
 - Detailed performance metrics
 - Pattern recognition
 - Predictive insights
 - Comparative analysis with similar projects
 
 ### Selective Archive
+
 ```
 /orchestration/archive --include tasks,metrics --exclude original-files
 ```
+
 Custom archive content selection.
 
 ## Analysis Features
 
 ### Performance Analysis
+
 ```
 ## Performance Analysis Summary
 
@@ -149,6 +166,7 @@ Quality Metrics:
 ```
 
 ### Team Performance
+
 ```
 ## Team Performance Insights
 
@@ -170,6 +188,7 @@ Collaboration Patterns:
 ```
 
 ### Lessons Learned Extraction
+
 ```
 ## Lessons Learned
 
@@ -201,12 +220,13 @@ Estimation Insights:
 ## Archive Validation
 
 ### Completeness Check
+
 ```
 ## Archive Completeness Validation
 
 Required Data:
 ✓ All 24 task files preserved
-✓ Status tracking history complete  
+✓ Status tracking history complete
 ✓ Git commit correlation verified
 ✓ Performance metrics calculated
 ✓ Agent assignments recorded
@@ -221,12 +241,13 @@ Archive Quality: 100% Complete
 ```
 
 ### Historical Correlation
+
 ```
 ## Historical Correlation Analysis
 
 Similar Projects Comparison:
 - user_management (02_20_2024): 85% similar
-- payment_system (01_15_2024): 60% similar  
+- payment_system (01_15_2024): 60% similar
 - admin_dashboard (03_01_2024): 45% similar
 
 Performance Comparison:
@@ -244,107 +265,137 @@ Learning Application Opportunities:
 ## Archive Formats
 
 ### Standard Archive
+
 ```
 /orchestration/archive --format standard
 ```
+
 Creates structured archive with all essential data and analysis.
 
-### Lightweight Archive  
+### Lightweight Archive
+
 ```
 /orchestration/archive --format light
 ```
+
 Minimal archive with key metrics and lessons learned only.
 
 ### Research Archive
+
 ```
 /orchestration/archive --format research
 ```
+
 Comprehensive archive suitable for academic research or deep analysis.
 
 ### Template Archive
+
 ```
 /orchestration/archive --format template
 ```
+
 Creates reusable templates from successful patterns.
 
 ## Query and Retrieval
 
 ### Search Archives
+
 ```
 /orchestration/archive --search "JWT authentication"
 ```
+
 Finds archived orchestrations with similar requirements.
 
 ### Compare Archives
+
 ```
 /orchestration/archive --compare 03_15_2024 02_20_2024
 ```
+
 Detailed comparison between two archived orchestrations.
 
 ### Extract Templates
+
 ```
 /orchestration/archive --extract-template auth_system
 ```
+
 Creates orchestration template from successful archive.
 
 ## Integration Features
 
 ### Metrics Dashboard
+
 ```
 /orchestration/archive --dashboard
 ```
+
 Generates visual dashboard of archived orchestration metrics.
 
 ### Knowledge Base
+
 ```
 /orchestration/archive --knowledge-base
 ```
+
 Integrates lessons learned into searchable knowledge base.
 
 ### Predictive Analysis
+
 ```
 /orchestration/archive --predict similar_to:auth_system
 ```
+
 Uses archived data to predict outcomes for similar future projects.
 
 ## Automation Options
 
 ### Auto-Archive Completed
+
 ```
 /orchestration/archive --auto-schedule weekly
 ```
+
 Automatically archives completed orchestrations weekly.
 
 ### Smart Archive Rules
+
 ```
 /orchestration/archive --rules "age:>30days status:completed"
 ```
+
 Archives orchestrations meeting specific criteria.
 
 ### Archive Notifications
+
 ```
 /orchestration/archive --notify team@company.com
 ```
+
 Sends archive completion notifications with key insights.
 
 ## Examples
 
 ### Example 1: Standard Project Archive
+
 ```
 /orchestration/archive --date 03_15_2024 --project auth_system --analyze
 ```
 
 ### Example 2: Batch Archive Completed
+
 ```
 /orchestration/archive --all-completed --since "last month"
 ```
 
 ### Example 3: Create Project Template
+
 ```
 /orchestration/archive --date 03_15_2024 --create-template auth_pattern
 ```
 
 ### Example 4: Research Analysis
+
 ```
 /orchestration/archive --search "authentication" --analyze-patterns
 ```
@@ -352,18 +403,22 @@ Sends archive completion notifications with key insights.
 ## Storage Management
 
 ### Archive Location
+
 ```
 Default: ./archived-orchestrations/
 Custom: /orchestration/archive --location /shared/archives/
 ```
 
 ### Compression Options
+
 ```
 /orchestration/archive --compress high
 ```
+
 Reduces storage requirements while preserving data integrity.
 
 ### Retention Policies
+
 ```
 /orchestration/archive --retention "keep:2years delete:metrics-only"
 ```
@@ -380,6 +435,7 @@ Reduces storage requirements while preserving data integrity.
 ## Configuration
 
 ### Archive Settings
+
 ```yaml
 archive:
   auto_archive_after: "30 days"
@@ -393,15 +449,19 @@ archive:
 ## Recovery Options
 
 ### Restore from Archive
+
 ```
 /orchestration/archive --restore 03_15_2024_auth_system
 ```
+
 Restores archived orchestration to active state (rare use case).
 
 ### Extract Specific Data
+
 ```
 /orchestration/archive --extract metrics 03_15_2024_auth_system
 ```
+
 Retrieves specific data from archived orchestration.
 
 ## Notes

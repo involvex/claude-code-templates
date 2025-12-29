@@ -11,12 +11,14 @@ ModuleNotFoundError: No module named 'package_name'
 ```
 
 **Causes**:
+
 1. Package not installed
 2. Virtual environment not activated
 3. Wrong Python version
 4. Typo in module name
 
 **Diagnosis**:
+
 ```bash
 # Check if package installed
 pip show package_name
@@ -31,6 +33,7 @@ echo $VIRTUAL_ENV
 ```
 
 **Solutions**:
+
 ```bash
 # Install package
 pip install package_name
@@ -53,12 +56,14 @@ ImportError: cannot import name 'MyClass' from 'mymodule'
 ```
 
 **Causes**:
+
 1. Name doesn't exist in module
 2. Circular import
 3. Module structure changed
 4. Typo in name
 
 **Diagnosis**:
+
 ```python
 # Check what's available
 import mymodule
@@ -69,6 +74,7 @@ print(dir(mymodule))
 ```
 
 **Solutions**:
+
 ```python
 # Circular import fix - move import inside function
 def my_function():
@@ -89,11 +95,13 @@ TypeError: 'NoneType' object is not subscriptable
 ```
 
 **Causes**:
+
 1. Function returned None (forgot return)
 2. dict.get() returned None
 3. API response is None
 
 **Solutions**:
+
 ```python
 # Add None check
 if result is not None:
@@ -116,11 +124,13 @@ TypeError: 'str' object is not callable
 ```
 
 **Causes**:
+
 1. Variable shadows built-in function
 2. Missing method parentheses somewhere
 3. Property accessed as method
 
 **Common Culprits**:
+
 ```python
 # Shadowing built-ins - DON'T DO THIS
 list = [1, 2, 3]        # Shadows list()
@@ -131,6 +141,7 @@ id = 123                # Shadows id()
 ```
 
 **Solutions**:
+
 ```python
 # Rename variables
 my_list = [1, 2, 3]
@@ -149,10 +160,12 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'
 ```
 
 **Causes**:
+
 1. Mixing types in operation
 2. Unexpected type from input/API
 
 **Solutions**:
+
 ```python
 # Convert types explicitly
 result = str(number) + text
@@ -174,11 +187,13 @@ AttributeError: 'NoneType' object has no attribute 'split'
 ```
 
 **Causes**:
+
 1. Variable is None when it shouldn't be
 2. Function returned None
 3. Failed assignment
 
 **Solutions**:
+
 ```python
 # Guard against None
 if text is not None:
@@ -200,17 +215,20 @@ AttributeError: module 'json' has no attribute 'loads'
 ```
 
 **Causes**:
+
 1. Local file shadows standard library
 2. Wrong module imported
 3. Outdated module version
 
 **Diagnosis**:
+
 ```python
 import json
 print(json.__file__)  # Check which file is loaded
 ```
 
 **Solutions**:
+
 ```bash
 # If local file shadows stdlib
 mv json.py my_json_utils.py
@@ -231,11 +249,13 @@ KeyError: 'username'
 ```
 
 **Causes**:
+
 1. Key doesn't exist in dict
 2. Typo in key name
 3. Data structure changed
 
 **Solutions**:
+
 ```python
 # Use .get() with default
 username = data.get('username', 'anonymous')
@@ -258,11 +278,13 @@ IndexError: list index out of range
 ```
 
 **Causes**:
+
 1. Accessing index beyond list length
 2. Empty list
 3. Off-by-one error
 
 **Solutions**:
+
 ```python
 # Check length first
 if len(my_list) > index:
@@ -289,11 +311,13 @@ ValueError: invalid literal for int() with base 10: 'abc'
 ```
 
 **Causes**:
+
 1. Non-numeric string to int()
 2. Float string to int()
 3. Empty string
 
 **Solutions**:
+
 ```python
 # Safe conversion
 def safe_int(value, default=0):
@@ -319,10 +343,12 @@ ValueError: too many values to unpack (expected 2)
 ```
 
 **Causes**:
+
 1. Unpacking mismatch
 2. Data has more/fewer items than expected
 
 **Solutions**:
+
 ```python
 # Use * to capture rest
 first, *rest = [1, 2, 3, 4]  # first=1, rest=[2,3,4]
@@ -344,11 +370,13 @@ FileNotFoundError: [Errno 2] No such file or directory: 'file.txt'
 ```
 
 **Causes**:
+
 1. File doesn't exist
 2. Wrong path (relative vs absolute)
 3. Typo in filename
 
 **Solutions**:
+
 ```python
 from pathlib import Path
 
@@ -374,17 +402,20 @@ PermissionError: [Errno 13] Permission denied: '/path/to/file'
 ```
 
 **Causes**:
+
 1. No write permission
 2. File owned by another user
 3. File is read-only
 
 **Diagnosis**:
+
 ```bash
 ls -la /path/to/file
 stat /path/to/file
 ```
 
 **Solutions**:
+
 ```bash
 # Change permissions
 chmod 644 /path/to/file
@@ -412,11 +443,13 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff
 ```
 
 **Causes**:
+
 1. File not UTF-8 encoded
 2. Binary file read as text
 3. Mixed encodings
 
 **Solutions**:
+
 ```python
 # Try different encoding
 with open('file.txt', encoding='latin-1') as f:
@@ -447,11 +480,13 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 1
 ```
 
 **Causes**:
+
 1. Invalid JSON syntax
 2. Empty string/file
 3. HTML returned instead of JSON
 
 **Diagnosis**:
+
 ```python
 # Print raw content first
 print(repr(response.text))
@@ -459,6 +494,7 @@ print(response.text[:100])
 ```
 
 **Solutions**:
+
 ```python
 # Check before parsing
 if response.text:
@@ -484,11 +520,13 @@ RecursionError: maximum recursion depth exceeded
 ```
 
 **Causes**:
+
 1. Infinite recursion
 2. Missing base case
 3. Deep data structure
 
 **Solutions**:
+
 ```python
 # Increase limit (temporary fix)
 import sys
@@ -522,11 +560,13 @@ RuntimeError: Event loop is closed
 ```
 
 **Causes**:
+
 1. Trying to use closed event loop
 2. Event loop not properly managed
 3. Windows-specific issue with ProactorEventLoop
 
 **Solutions**:
+
 ```python
 # Use asyncio.run() (Python 3.7+)
 asyncio.run(main())
@@ -553,10 +593,12 @@ RuntimeError: cannot reuse already awaited coroutine
 ```
 
 **Causes**:
+
 1. Awaiting same coroutine twice
 2. Storing coroutine in variable and reusing
 
 **Solutions**:
+
 ```python
 # Wrong - reusing coroutine
 coro = fetch_data()
@@ -577,17 +619,17 @@ await asyncio.gather(task1, task2)
 
 ## Quick Reference Table
 
-| Error | Category | Quick Fix |
-|-------|----------|-----------|
-| `ModuleNotFoundError` | Import | `pip install <pkg>` |
-| `ImportError: circular` | Import | Move import inside function |
-| `TypeError: NoneType subscript` | Type | Add `if x is not None` check |
-| `TypeError: not callable` | Type | Check for shadowed built-ins |
-| `AttributeError: NoneType` | Attribute | Guard against None |
-| `KeyError` | Dict | Use `.get()` with default |
-| `IndexError` | List | Check `len()` first |
-| `ValueError: int()` | Value | Use try/except |
-| `FileNotFoundError` | File | Use `Path.exists()` check |
-| `UnicodeDecodeError` | Encoding | Try `encoding='latin-1'` |
-| `JSONDecodeError` | JSON | Check response content first |
-| `RecursionError` | Recursion | Convert to iteration |
+| Error                           | Category  | Quick Fix                    |
+| ------------------------------- | --------- | ---------------------------- |
+| `ModuleNotFoundError`           | Import    | `pip install <pkg>`          |
+| `ImportError: circular`         | Import    | Move import inside function  |
+| `TypeError: NoneType subscript` | Type      | Add `if x is not None` check |
+| `TypeError: not callable`       | Type      | Check for shadowed built-ins |
+| `AttributeError: NoneType`      | Attribute | Guard against None           |
+| `KeyError`                      | Dict      | Use `.get()` with default    |
+| `IndexError`                    | List      | Check `len()` first          |
+| `ValueError: int()`             | Value     | Use try/except               |
+| `FileNotFoundError`             | File      | Use `Path.exists()` check    |
+| `UnicodeDecodeError`            | Encoding  | Try `encoding='latin-1'`     |
+| `JSONDecodeError`               | JSON      | Check response content first |
+| `RecursionError`                | Recursion | Convert to iteration         |

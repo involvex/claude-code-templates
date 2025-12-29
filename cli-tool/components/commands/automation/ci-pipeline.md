@@ -23,6 +23,7 @@ Automate CI/CD pipeline management with comprehensive workflow orchestration.
 ## Pipeline Operations
 
 ### Setup New Pipeline
+
 Create complete CI/CD pipeline with:
 
 ```yaml
@@ -46,20 +47,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run linter
         run: npm run lint
-      
+
       - name: Run tests
         run: npm run test:coverage
-      
+
       - name: Build application
         run: npm run build
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
@@ -67,6 +68,7 @@ jobs:
 ```
 
 ### Multi-Environment Deployment
+
 ```yaml
 # .github/workflows/deploy.yml
 name: Deploy
@@ -108,62 +110,65 @@ jobs:
 ```
 
 ### Security & Quality Gates
+
 ```yaml
-  security-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Run security audit
-        run: npm audit --audit-level=moderate
-      
-      - name: Scan for secrets
-        uses: trufflesecurity/trufflehog@main
-        with:
-          path: ./
-          base: main
-          head: HEAD
-      
-      - name: SAST Scan
-        uses: github/super-linter@v4
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+security-scan:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Run security audit
+      run: npm audit --audit-level=moderate
+
+    - name: Scan for secrets
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: main
+        head: HEAD
+
+    - name: SAST Scan
+      uses: github/super-linter@v4
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Performance Testing
+
 ```yaml
-  performance:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Performance Test
-        run: |
-          npm run build
-          npm run start:test &
-          sleep 10
-          npx lighthouse http://localhost:3000 --output=json --output-path=./lighthouse.json
-      
-      - name: Comment PR
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const fs = require('fs');
-            const lighthouse = JSON.parse(fs.readFileSync('./lighthouse.json'));
-            const score = lighthouse.lhr.categories.performance.score * 100;
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `⚡ Performance Score: ${score}/100`
-            });
+performance:
+  runs-on: ubuntu-latest
+  if: github.event_name == 'pull_request'
+  steps:
+    - uses: actions/checkout@v4
+    - name: Performance Test
+      run: |
+        npm run build
+        npm run start:test &
+        sleep 10
+        npx lighthouse http://localhost:3000 --output=json --output-path=./lighthouse.json
+
+    - name: Comment PR
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const lighthouse = JSON.parse(fs.readFileSync('./lighthouse.json'));
+          const score = lighthouse.lhr.categories.performance.score * 100;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `⚡ Performance Score: ${score}/100`
+          });
 ```
 
 ## Advanced Features
 
 ### 1. **Matrix Strategy Testing**
+
 ```yaml
 strategy:
   matrix:
@@ -176,6 +181,7 @@ strategy:
 ```
 
 ### 2. **Conditional Workflows**
+
 ```yaml
 - name: Skip CI
   if: contains(github.event.head_commit.message, '[skip ci]')
@@ -187,15 +193,16 @@ strategy:
 ```
 
 ### 3. **Workflow Dependencies**
+
 ```yaml
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
   build:
     needs: test
     runs-on: ubuntu-latest
-    
+
   deploy:
     needs: [test, build]
     if: github.ref == 'refs/heads/main'
@@ -203,6 +210,7 @@ jobs:
 ```
 
 ### 4. **Cache Optimization**
+
 ```yaml
 - name: Cache node modules
   uses: actions/cache@v3
@@ -220,6 +228,7 @@ jobs:
 ```
 
 ### 5. **Artifact Management**
+
 ```yaml
 - name: Upload build artifacts
   uses: actions/upload-artifact@v3
@@ -236,11 +245,12 @@ jobs:
 ```
 
 ### 6. **Environment Management**
+
 ```yaml
 environments:
   staging:
     url: https://staging.example.com
-    
+
   production:
     url: https://example.com
     protection_rules:
@@ -254,6 +264,7 @@ environments:
 ## Pipeline Monitoring
 
 ### Status Checks
+
 ```bash
 # Check workflow status
 gh run list --workflow=ci.yml --limit=10
@@ -267,6 +278,7 @@ gh api repos/:owner/:repo/actions/runs \
 ```
 
 ### Performance Metrics
+
 ```bash
 # Average build time
 gh api repos/:owner/:repo/actions/runs \
@@ -282,6 +294,7 @@ gh api repos/:owner/:repo/actions/runs \
 ### Common Issues
 
 #### 1. **Workflow Permission Issues**
+
 ```yaml
 permissions:
   contents: read
@@ -291,6 +304,7 @@ permissions:
 ```
 
 #### 2. **Secret Management**
+
 ```bash
 # Add repository secret
 gh secret set STAGING_API_URL --body "https://staging-api.example.com"
@@ -300,6 +314,7 @@ gh secret list
 ```
 
 #### 3. **Timeout Configuration**
+
 ```yaml
 jobs:
   long-running-job:
@@ -312,6 +327,7 @@ jobs:
 ```
 
 #### 4. **Debugging Workflows**
+
 ```yaml
 - name: Debug information
   run: |
@@ -324,21 +340,25 @@ jobs:
 ## Best Practices
 
 ### 1. **Fail Fast Strategy**
+
 - Run fastest jobs first
 - Use `fail-fast: true` in matrix
 - Implement early validation steps
 
 ### 2. **Security First**
+
 - Never store secrets in code
 - Use least privilege permissions
 - Scan for vulnerabilities early
 
 ### 3. **Efficiency Optimization**
+
 - Use appropriate cache strategies
 - Minimize workflow duration
 - Parallel job execution
 
 ### 4. **Monitoring & Alerting**
+
 - Track build success rates
 - Monitor deployment frequency
 - Alert on critical failures
@@ -346,6 +366,7 @@ jobs:
 ## Integration Examples
 
 ### Docker Integration
+
 ```yaml
 - name: Build Docker image
   run: |
@@ -360,6 +381,7 @@ jobs:
 ```
 
 ### Cloud Deployment
+
 ```yaml
 - name: Deploy to AWS
   uses: aws-actions/configure-aws-credentials@v2

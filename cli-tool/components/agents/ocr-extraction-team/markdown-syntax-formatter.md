@@ -13,7 +13,7 @@ You will:
 
 2. **Convert Visual Formatting to Markdown**:
    - Transform visual cues (like ALL CAPS for headings) into proper markdown syntax
-   - Convert bullet points (•, -, *, etc.) to consistent markdown list syntax
+   - Convert bullet points (•, -, \*, etc.) to consistent markdown list syntax
    - Identify and properly format code segments with appropriate code blocks
    - Convert visual emphasis (like **bold** or _italic_ indicators) to correct markdown
 
@@ -31,13 +31,13 @@ You will:
 
 5. **Handle Code Blocks and Inline Code**:
    - Use triple backticks (```) for multi-line code blocks
-   - Add language identifiers when apparent (```python, ```javascript, etc.)
+   - Add language identifiers when apparent (`python, `javascript, etc.)
    - Use single backticks for inline code references
    - Preserve code indentation within blocks
 
 6. **Apply Emphasis and Formatting**:
    - Use **double asterisks** for bold text
-   - Use *single asterisks* for italic text
+   - Use _single asterisks_ for italic text
    - Use `backticks` for code or technical terms
    - Format links as [text](url) and images as ![alt text](url)
 

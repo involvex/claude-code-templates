@@ -83,6 +83,7 @@ Status: Clean working directory
 Handle these scenarios gracefully:
 
 **Uncommitted Changes:**
+
 ```
 ⚠️  You have uncommitted changes:
 M  src/file1.js
@@ -97,6 +98,7 @@ What would you like to do? [1/2/3]
 ```
 
 **Feature Name Not Provided:**
+
 ```
 ❌ Feature name is required
 
@@ -114,6 +116,7 @@ Feature names should:
 ```
 
 **Branch Already Exists:**
+
 ```
 ❌ Branch feature/$ARGUMENTS already exists
 
@@ -129,6 +132,7 @@ Options:
 ```
 
 **Develop Behind Remote:**
+
 ```
 ⚠️  Local develop is behind origin/develop by 5 commits
 
@@ -138,6 +142,7 @@ Options:
 ```
 
 **No Develop Branch:**
+
 ```
 ❌ Develop branch not found
 
@@ -155,11 +160,12 @@ This command is part of the Git Flow branching strategy:
 
 - **main**: Production-ready code (protected)
 - **develop**: Integration branch for features (protected)
-- **feature/***: New features (you are here)
-- **release/***: Release preparation
-- **hotfix/***: Emergency production fixes
+- **feature/\***: New features (you are here)
+- **release/\***: Release preparation
+- **hotfix/\***: Emergency production fixes
 
 Feature branches:
+
 - Branch from: `develop`
 - Merge back to: `develop`
 - Naming convention: `feature/<descriptive-name>`
@@ -168,6 +174,7 @@ Feature branches:
 ## Environment Variables
 
 This command respects:
+
 - `GIT_FLOW_DEVELOP_BRANCH`: Develop branch name (default: "develop")
 - `GIT_FLOW_PREFIX_FEATURE`: Feature prefix (default: "feature/")
 
@@ -181,6 +188,7 @@ This command respects:
 ## Best Practices
 
 **DO:**
+
 - ✅ Use descriptive feature names
 - ✅ Keep feature scope focused and small
 - ✅ Push to remote regularly
@@ -188,6 +196,7 @@ This command respects:
 - ✅ Use conventional commit messages
 
 **DON'T:**
+
 - ❌ Create features directly from main
 - ❌ Use generic names like "feature1"
 - ❌ Let feature branches live too long

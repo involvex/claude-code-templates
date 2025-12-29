@@ -22,6 +22,7 @@ Execute efficient bulk import of GitHub issues to Linear with comprehensive mana
 **Import Scope**: Use $ARGUMENTS to filter by state, labels, milestones, or configure batch processing parameters
 
 **Import Pipeline**:
+
 1. **Pre-Import Analysis** - Issue discovery, duplicate detection, import estimation, resource planning
 2. **Batch Configuration** - Dynamic batch sizing, rate limit management, progress tracking, error handling
 3. **Data Transformation** - Field mapping, priority inference, user mapping, content enhancement

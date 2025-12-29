@@ -46,17 +46,17 @@ cors = CORS()
 def create_app(config_class=None):
     """Application factory function."""
     app = Flask(__name__)
-    
+
     # Load configuration
     if config_class is None:
         config_class = os.environ.get('FLASK_CONFIG', 'development')
-    
+
     if isinstance(config_class, str):
         from app.config import config
         app.config.from_object(config[config_class])
     else:
         app.config.from_object(config_class)
-    
+
     # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
@@ -64,37 +64,37 @@ def create_app(config_class=None):
     mail.init_app(app)
     csrf.init_app(app)
     cors.init_app(app)
-    
+
     # Configure login manager
     login.login_view = 'auth.login'
     login.login_message = 'Please log in to access this page.'
     login.login_message_category = 'info'
-    
+
     # Register blueprints
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
-    
+
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
-    
+
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
-    
+
     from app.admin import bp as admin_bp
     app.register_blueprint(admin_bp, url_prefix='/admin')
-    
+
     # Error handlers
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
-    
+
     # Configure logging
     if not app.debug and not app.testing:
         if not os.path.exists('logs'):
             os.mkdir('logs')
-        
+
         file_handler = RotatingFileHandler(
-            'logs/app.log', 
-            maxBytes=10240, 
+            'logs/app.log',
+            maxBytes=10240,
             backupCount=10
         )
         file_handler.setFormatter(logging.Formatter(
@@ -102,10 +102,10 @@ def create_app(config_class=None):
         ))
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)
-        
+
         app.logger.setLevel(logging.INFO)
         app.logger.info('Flask application startup')
-    
+
     return app
 
 # Import models (avoid circular imports)
@@ -126,7 +126,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
+
     # Mail configuration
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT') or 587)
@@ -134,15 +134,15 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
-    
+
     # Pagination
     POSTS_PER_PAGE = 10
     USERS_PER_PAGE = 50
-    
+
     # Upload configuration
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB
     UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
-    
+
     @staticmethod
     def init_app(app):
         pass
@@ -163,11 +163,11 @@ class ProductionConfig(Config):
     """Production configuration."""
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
-    
+
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
-        
+
         # Log to stderr
         import logging
         from logging import StreamHandler
@@ -210,7 +210,7 @@ def index():
         per_page=current_app.config['POSTS_PER_PAGE'],
         error_out=False
     )
-    
+
     return render_template('index.html', posts=posts)
 
 @bp.route('/about')
@@ -243,22 +243,22 @@ def login():
     """User login."""
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
-    
+
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password', 'error')
             return redirect(url_for('auth.login'))
-        
+
         login_user(user, remember=form.remember_me.data)
-        
+
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('main.index')
-        
+
         return redirect(next_page)
-    
+
     return render_template('auth/login.html', form=form)
 
 @bp.route('/logout')
@@ -274,17 +274,17 @@ def register():
     """User registration."""
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
-    
+
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        
+
         flash('Registration successful!', 'success')
         return redirect(url_for('auth.login'))
-    
+
     return render_template('auth/register.html', form=form)
 ```
 
@@ -302,15 +302,15 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    
+
     posts = db.relationship('Post', backref='author', lazy='dynamic')
-    
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-    
+
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def __repr__(self):
         return f'<User {self.username}>'
 
@@ -326,9 +326,9 @@ class Post(db.Model):
     published = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    
+
     def __repr__(self):
         return f'<Post {self.title}>'
 ```

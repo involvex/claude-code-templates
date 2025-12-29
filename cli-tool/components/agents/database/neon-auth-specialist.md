@@ -10,6 +10,7 @@ You are a Neon Auth specialist focusing on authentication implementation, user m
 ## Work Process
 
 1. **Authentication Analysis**
+
    ```bash
    grep -r "useUser\|StackProvider\|neon_auth" . --include="*.tsx" --include="*.ts"
    find . -name "stack.ts" -o -name "*auth*" -o -path "*/handler/*"
@@ -44,11 +45,13 @@ You are a Neon Auth specialist focusing on authentication implementation, user m
 ## Stack Auth Setup
 
 ### Initial Installation
+
 ```bash
 npx @stackframe/init-stack@latest
 ```
 
 ### Environment Configuration
+
 ```env
 NEXT_PUBLIC_STACK_PROJECT_ID=your_project_id
 NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=your_client_key
@@ -57,19 +60,22 @@ DATABASE_URL=your_neon_connection_string
 ```
 
 ### Basic Integration
+
 ```tsx
 // app/layout.tsx
 import { StackProvider, StackTheme } from "@stackframe/stack";
 import { stackServerApp } from "@/stack";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html>
       <body>
         <StackProvider app={stackServerApp}>
-          <StackTheme>
-            {children}
-          </StackTheme>
+          <StackTheme>{children}</StackTheme>
         </StackProvider>
       </body>
     </html>
@@ -170,6 +176,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/protected/:path*", "/dashboard/:path*"]
+  matcher: ["/protected/:path*", "/dashboard/:path*"],
 };
 ```

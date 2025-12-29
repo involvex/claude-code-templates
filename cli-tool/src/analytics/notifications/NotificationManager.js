@@ -2,7 +2,7 @@
  * NotificationManager - Manages notifications and real-time updates
  * Part of the modular backend architecture for Phase 3
  */
-const chalk = require('chalk');
+const chalk = require("chalk");
 
 class NotificationManager {
   constructor(webSocketServer) {
@@ -18,16 +18,16 @@ class NotificationManager {
    * Initialize the notification manager
    */
   async initialize() {
-    console.log(chalk.blue('📢 Initializing Notification Manager...'));
-    
+    console.log(chalk.blue("📢 Initializing Notification Manager..."));
+
     // Setup WebSocket event listeners
     if (this.webSocketServer) {
-      this.webSocketServer.on('refresh_requested', (data) => {
+      this.webSocketServer.on("refresh_requested", (data) => {
         this.handleRefreshRequest(data);
       });
     }
-    
-    console.log(chalk.green('✅ Notification Manager initialized'));
+
+    console.log(chalk.green("✅ Notification Manager initialized"));
   }
 
   /**
@@ -37,38 +37,55 @@ class NotificationManager {
    * @param {string} newState - New state
    * @param {Object} metadata - Additional metadata
    */
-  notifyConversationStateChange(conversationId, oldState, newState, metadata = {}) {
+  notifyConversationStateChange(
+    conversationId,
+    oldState,
+    newState,
+    metadata = {},
+  ) {
     const notification = {
-      type: 'conversation_state_change',
+      type: "conversation_state_change",
       conversationId,
       oldState,
       newState,
       metadata,
       timestamp: new Date().toISOString(),
-      id: this.generateNotificationId()
+      id: this.generateNotificationId(),
     };
 
     // Throttle rapid state changes for the same conversation
     const throttleKey = `state_${conversationId}`;
     if (this.isThrottled(throttleKey)) {
-      console.log(chalk.yellow(`⏱️ Throttling state change for conversation ${conversationId}`));
+      console.log(
+        chalk.yellow(
+          `⏱️ Throttling state change for conversation ${conversationId}`,
+        ),
+      );
       return;
     }
 
     this.addToHistory(notification);
-    
+
     // Send via WebSocket
     if (this.webSocketServer) {
-      this.webSocketServer.notifyConversationStateChange(conversationId, newState, {
-        oldState,
-        ...metadata
-      });
+      this.webSocketServer.notifyConversationStateChange(
+        conversationId,
+        newState,
+        {
+          oldState,
+          ...metadata,
+        },
+      );
     }
 
     // Send to local subscribers
-    this.notifySubscribers('conversation_state_change', notification);
+    this.notifySubscribers("conversation_state_change", notification);
 
-    console.log(chalk.green(`🔄 State change: ${conversationId} ${oldState} → ${newState}`));
+    console.log(
+      chalk.green(
+        `🔄 State change: ${conversationId} ${oldState} → ${newState}`,
+      ),
+    );
   }
 
   /**
@@ -76,18 +93,18 @@ class NotificationManager {
    * @param {Object} data - Refreshed data
    * @param {string} source - Source of the refresh
    */
-  notifyDataRefresh(data, source = 'system') {
+  notifyDataRefresh(data, source = "system") {
     const notification = {
-      type: 'data_refresh',
+      type: "data_refresh",
       data,
       source,
       timestamp: new Date().toISOString(),
-      id: this.generateNotificationId()
+      id: this.generateNotificationId(),
     };
 
     // Throttle data refresh notifications
-    if (this.isThrottled('data_refresh')) {
-      console.log(chalk.yellow('⏱️ Throttling data refresh notification'));
+    if (this.isThrottled("data_refresh")) {
+      console.log(chalk.yellow("⏱️ Throttling data refresh notification"));
       return;
     }
 
@@ -99,7 +116,7 @@ class NotificationManager {
     }
 
     // Send to local subscribers
-    this.notifySubscribers('data_refresh', notification);
+    this.notifySubscribers("data_refresh", notification);
 
     console.log(chalk.green(`📊 Data refreshed (source: ${source})`));
   }
@@ -112,12 +129,12 @@ class NotificationManager {
    */
   notifyNewMessage(conversationId, message, metadata = {}) {
     const notification = {
-      type: 'new_message',
+      type: "new_message",
       conversationId,
       message,
       metadata,
       timestamp: new Date().toISOString(),
-      id: this.generateNotificationId()
+      id: this.generateNotificationId(),
     };
 
     // Don't throttle new message notifications - they should be immediate
@@ -125,20 +142,27 @@ class NotificationManager {
 
     // Send via WebSocket to conversation_updates channel
     if (this.webSocketServer) {
-      this.webSocketServer.broadcast({
-        type: 'new_message',
-        data: {
-          conversationId,
-          message,
-          metadata
-        }
-      }, 'conversation_updates');
+      this.webSocketServer.broadcast(
+        {
+          type: "new_message",
+          data: {
+            conversationId,
+            message,
+            metadata,
+          },
+        },
+        "conversation_updates",
+      );
     }
 
     // Send to local subscribers
-    this.notifySubscribers('new_message', notification);
+    this.notifySubscribers("new_message", notification);
 
-    console.log(chalk.blue(`📨 New message notification sent for conversation ${conversationId}`));
+    console.log(
+      chalk.blue(
+        `📨 New message notification sent for conversation ${conversationId}`,
+      ),
+    );
   }
 
   /**
@@ -146,13 +170,13 @@ class NotificationManager {
    * @param {Object} status - System status
    * @param {string} level - Notification level (info, warning, error)
    */
-  notifySystemStatus(status, level = 'info') {
+  notifySystemStatus(status, level = "info") {
     const notification = {
-      type: 'system_status',
+      type: "system_status",
       status,
       level,
       timestamp: new Date().toISOString(),
-      id: this.generateNotificationId()
+      id: this.generateNotificationId(),
     };
 
     this.addToHistory(notification);
@@ -161,15 +185,19 @@ class NotificationManager {
     if (this.webSocketServer) {
       this.webSocketServer.notifySystemStatus({
         ...status,
-        level
+        level,
       });
     }
 
     // Send to local subscribers
-    this.notifySubscribers('system_status', notification);
+    this.notifySubscribers("system_status", notification);
 
-    const emoji = level === 'error' ? '❌' : level === 'warning' ? '⚠️' : 'ℹ️';
-    console.log(chalk[level === 'error' ? 'red' : level === 'warning' ? 'yellow' : 'blue'](`${emoji} System status: ${status.message || JSON.stringify(status)}`));
+    const emoji = level === "error" ? "❌" : level === "warning" ? "⚠️" : "ℹ️";
+    console.log(
+      chalk[
+        level === "error" ? "red" : level === "warning" ? "yellow" : "blue"
+      ](`${emoji} System status: ${status.message || JSON.stringify(status)}`),
+    );
   }
 
   /**
@@ -179,16 +207,17 @@ class NotificationManager {
    */
   notifyFileChange(filePath, changeType) {
     const notification = {
-      type: 'file_change',
+      type: "file_change",
       filePath,
       changeType,
       timestamp: new Date().toISOString(),
-      id: this.generateNotificationId()
+      id: this.generateNotificationId(),
     };
 
     // Throttle file change notifications for the same file
     const throttleKey = `file_${filePath}`;
-    if (this.isThrottled(throttleKey, 2000)) { // 2 second throttle for files
+    if (this.isThrottled(throttleKey, 2000)) {
+      // 2 second throttle for files
       return;
     }
 
@@ -196,17 +225,20 @@ class NotificationManager {
 
     // Send via WebSocket
     if (this.webSocketServer) {
-      this.webSocketServer.broadcast({
-        type: 'file_change',
-        data: {
-          filePath,
-          changeType
-        }
-      }, 'file_updates');
+      this.webSocketServer.broadcast(
+        {
+          type: "file_change",
+          data: {
+            filePath,
+            changeType,
+          },
+        },
+        "file_updates",
+      );
     }
 
     // Send to local subscribers
-    this.notifySubscribers('file_change', notification);
+    this.notifySubscribers("file_change", notification);
 
     console.log(chalk.cyan(`📁 File ${changeType}: ${filePath}`));
   }
@@ -218,15 +250,16 @@ class NotificationManager {
    */
   notifyProcessChange(processes, changedProcesses) {
     const notification = {
-      type: 'process_change',
+      type: "process_change",
       processes,
       changedProcesses,
       timestamp: new Date().toISOString(),
-      id: this.generateNotificationId()
+      id: this.generateNotificationId(),
     };
 
     // Throttle process change notifications
-    if (this.isThrottled('process_change', 5000)) { // 5 second throttle for processes
+    if (this.isThrottled("process_change", 5000)) {
+      // 5 second throttle for processes
       return;
     }
 
@@ -234,20 +267,27 @@ class NotificationManager {
 
     // Send via WebSocket
     if (this.webSocketServer) {
-      this.webSocketServer.broadcast({
-        type: 'process_change',
-        data: {
-          processes,
-          changedProcesses
-        }
-      }, 'process_updates');
+      this.webSocketServer.broadcast(
+        {
+          type: "process_change",
+          data: {
+            processes,
+            changedProcesses,
+          },
+        },
+        "process_updates",
+      );
     }
 
     // Send to local subscribers
-    this.notifySubscribers('process_change', notification);
+    this.notifySubscribers("process_change", notification);
 
     if (changedProcesses.length > 0) {
-      console.log(chalk.blue(`⚡ Process changes detected: ${changedProcesses.length} processes`));
+      console.log(
+        chalk.blue(
+          `⚡ Process changes detected: ${changedProcesses.length} processes`,
+        ),
+      );
     }
   }
 
@@ -257,11 +297,11 @@ class NotificationManager {
    */
   handleRefreshRequest(data) {
     console.log(chalk.blue(`🔄 Refresh requested by client: ${data.clientId}`));
-    
+
     // Emit refresh event that analytics server can listen to
-    this.notifySubscribers('refresh_requested', {
+    this.notifySubscribers("refresh_requested", {
       clientId: data.clientId,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -275,9 +315,9 @@ class NotificationManager {
     if (!this.subscribers.has(type)) {
       this.subscribers.set(type, new Set());
     }
-    
+
     this.subscribers.get(type).add(callback);
-    
+
     // Return unsubscribe function
     return () => {
       const typeSubscribers = this.subscribers.get(type);
@@ -299,11 +339,14 @@ class NotificationManager {
     const typeSubscribers = this.subscribers.get(type);
     if (!typeSubscribers) return;
 
-    typeSubscribers.forEach(callback => {
+    typeSubscribers.forEach((callback) => {
       try {
         callback(notification);
       } catch (error) {
-        console.error(chalk.red(`Error in notification subscriber for ${type}:`), error);
+        console.error(
+          chalk.red(`Error in notification subscriber for ${type}:`),
+          error,
+        );
       }
     });
   }
@@ -317,11 +360,11 @@ class NotificationManager {
   isThrottled(key, throttleTime = this.defaultThrottleTime) {
     const now = Date.now();
     const lastTime = this.throttleMap.get(key);
-    
-    if (lastTime && (now - lastTime) < throttleTime) {
+
+    if (lastTime && now - lastTime < throttleTime) {
       return true;
     }
-    
+
     this.throttleMap.set(key, now);
     return false;
   }
@@ -332,7 +375,7 @@ class NotificationManager {
    */
   addToHistory(notification) {
     this.notificationHistory.push(notification);
-    
+
     // Keep history size manageable
     if (this.notificationHistory.length > this.maxHistorySize) {
       this.notificationHistory.shift();
@@ -347,11 +390,11 @@ class NotificationManager {
    */
   getHistory(type = null, limit = 100) {
     let history = this.notificationHistory;
-    
+
     if (type) {
-      history = history.filter(notification => notification.type === type);
+      history = history.filter((notification) => notification.type === type);
     }
-    
+
     return history.slice(-limit);
   }
 
@@ -362,13 +405,17 @@ class NotificationManager {
   clearHistory(type = null) {
     if (type) {
       this.notificationHistory = this.notificationHistory.filter(
-        notification => notification.type !== type
+        (notification) => notification.type !== type,
       );
     } else {
       this.notificationHistory = [];
     }
-    
-    console.log(chalk.yellow(`🗑️ Cleared notification history${type ? ` for type: ${type}` : ''}`));
+
+    console.log(
+      chalk.yellow(
+        `🗑️ Cleared notification history${type ? ` for type: ${type}` : ""}`,
+      ),
+    );
   }
 
   /**
@@ -385,7 +432,7 @@ class NotificationManager {
    */
   getStats() {
     const typeCount = {};
-    this.notificationHistory.forEach(notification => {
+    this.notificationHistory.forEach((notification) => {
       typeCount[notification.type] = (typeCount[notification.type] || 0) + 1;
     });
 
@@ -395,8 +442,12 @@ class NotificationManager {
       subscriberCount: this.subscribers.size,
       typeCount,
       throttleMapSize: this.throttleMap.size,
-      webSocketConnected: this.webSocketServer ? this.webSocketServer.isRunning : false,
-      webSocketClients: this.webSocketServer ? this.webSocketServer.getStats().clientCount : 0
+      webSocketConnected: this.webSocketServer
+        ? this.webSocketServer.isRunning
+        : false,
+      webSocketClients: this.webSocketServer
+        ? this.webSocketServer.getStats().clientCount
+        : 0,
     };
   }
 
@@ -405,7 +456,7 @@ class NotificationManager {
    * @param {Array} notifications - Array of notifications
    * @param {string} batchType - Type of batch
    */
-  createBatch(notifications, batchType = 'batch') {
+  createBatch(notifications, batchType = "batch") {
     if (notifications.length === 0) return;
 
     const batchNotification = {
@@ -413,7 +464,7 @@ class NotificationManager {
       notifications,
       count: notifications.length,
       timestamp: new Date().toISOString(),
-      id: this.generateNotificationId()
+      id: this.generateNotificationId(),
     };
 
     this.addToHistory(batchNotification);
@@ -424,15 +475,17 @@ class NotificationManager {
         type: batchType,
         data: {
           notifications,
-          count: notifications.length
-        }
+          count: notifications.length,
+        },
       });
     }
 
     // Send to local subscribers
     this.notifySubscribers(batchType, batchNotification);
 
-    console.log(chalk.green(`📦 Batch notification sent: ${notifications.length} items`));
+    console.log(
+      chalk.green(`📦 Batch notification sent: ${notifications.length} items`),
+    );
   }
 
   /**
@@ -441,7 +494,7 @@ class NotificationManager {
   cleanupThrottleMap() {
     const now = Date.now();
     const maxAge = this.defaultThrottleTime * 10; // 10x throttle time
-    
+
     this.throttleMap.forEach((timestamp, key) => {
       if (now - timestamp > maxAge) {
         this.throttleMap.delete(key);
@@ -472,13 +525,13 @@ class NotificationManager {
    * Shutdown the notification manager
    */
   async shutdown() {
-    console.log(chalk.yellow('📢 Shutting down Notification Manager...'));
-    
+    console.log(chalk.yellow("📢 Shutting down Notification Manager..."));
+
     this.stopPeriodicCleanup();
     this.subscribers.clear();
     this.throttleMap.clear();
-    
-    console.log(chalk.green('✅ Notification Manager shut down'));
+
+    console.log(chalk.green("✅ Notification Manager shut down"));
   }
 }
 

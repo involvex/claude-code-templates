@@ -32,6 +32,7 @@ Create or optimize Vue composables based on the requirements:
 ## Common Composable Patterns
 
 Based on the request:
+
 - **Data fetching**: API calls with loading/error states
 - **Form handling**: Input management, validation, submission
 - **State management**: Local state, persistence, computed values

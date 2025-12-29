@@ -10,6 +10,7 @@ description: This skill should be used when working with LaminDB, an open-source
 LaminDB is an open-source data framework for biology designed to make data queryable, traceable, reproducible, and FAIR (Findable, Accessible, Interoperable, Reusable). It provides a unified platform that combines lakehouse architecture, lineage tracking, feature stores, biological ontologies, LIMS (Laboratory Information Management System), and ELN (Electronic Lab Notebook) capabilities through a single Python API.
 
 **Core Value Proposition:**
+
 - **Queryability**: Search and filter datasets by metadata, features, and ontology terms
 - **Traceability**: Automatic lineage tracking from raw data through analysis to results
 - **Reproducibility**: Version control for data, code, and environment
@@ -36,12 +37,14 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 ### 1. Core Concepts and Data Lineage
 
 **Core entities:**
+
 - **Artifacts**: Versioned datasets (DataFrame, AnnData, Parquet, Zarr, etc.)
 - **Records**: Experimental entities (samples, perturbations, instruments)
 - **Runs & Transforms**: Computational lineage tracking (what code produced what data)
 - **Features**: Typed metadata fields for annotation and querying
 
 **Key workflows:**
+
 - Create and version artifacts from files or Python objects
 - Track notebook/script execution with `ln.track()` and `ln.finish()`
 - Annotate artifacts with typed features
@@ -53,6 +56,7 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 ### 2. Data Management and Querying
 
 **Query capabilities:**
+
 - Registry exploration and lookup with auto-complete
 - Single record retrieval with `get()`, `one()`, `one_or_none()`
 - Filtering with comparison operators (`__gt`, `__lte`, `__contains`, `__startswith`)
@@ -63,6 +67,7 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 - Streaming large datasets without loading into memory
 
 **Key workflows:**
+
 - Browse artifacts with filters and ordering
 - Query by features, creation date, creator, size, etc.
 - Stream large files in chunks or with array slicing
@@ -74,16 +79,19 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 ### 3. Annotation and Validation
 
 **Curation process:**
+
 1. **Validation**: Confirm datasets match desired schemas
 2. **Standardization**: Fix typos, map synonyms to canonical terms
 3. **Annotation**: Link datasets to metadata entities for queryability
 
 **Schema types:**
+
 - **Flexible schemas**: Validate only known columns, allow additional metadata
 - **Minimal required schemas**: Specify essential columns, permit extras
 - **Strict schemas**: Complete control over structure and values
 
 **Supported data types:**
+
 - DataFrames (Parquet, CSV)
 - AnnData (single-cell genomics)
 - MuData (multi-modal)
@@ -91,6 +99,7 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 - TileDB-SOMA (scalable arrays)
 
 **Key workflows:**
+
 - Define features and schemas for data validation
 - Use `DataFrameCurator` or `AnnDataCurator` for validation
 - Standardize values with `.cat.standardize()`
@@ -103,6 +112,7 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 ### 4. Biological Ontologies
 
 **Available ontologies (via Bionty):**
+
 - Genes (Ensembl), Proteins (UniProt)
 - Cell types (CL), Cell lines (CLO)
 - Tissues (Uberon), Diseases (Mondo, DOID)
@@ -111,6 +121,7 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 - Organisms (NCBItaxon), Drugs (DrugBank)
 
 **Key workflows:**
+
 - Import public ontologies with `bt.CellType.import_source()`
 - Search ontologies with keyword or exact matching
 - Standardize terms using synonym mapping
@@ -125,30 +136,36 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 ### 5. Integrations
 
 **Workflow managers:**
+
 - Nextflow: Track pipeline processes and outputs
 - Snakemake: Integrate into Snakemake rules
 - Redun: Combine with Redun task tracking
 
 **MLOps platforms:**
+
 - Weights & Biases: Link experiments with data artifacts
 - MLflow: Track models and experiments
 - HuggingFace: Track model fine-tuning
 - scVI-tools: Single-cell analysis workflows
 
 **Storage systems:**
+
 - Local filesystem, AWS S3, Google Cloud Storage
 - S3-compatible (MinIO, Cloudflare R2)
 - HTTP/HTTPS endpoints (read-only)
 - HuggingFace datasets
 
 **Array stores:**
+
 - TileDB-SOMA (with cellxgene support)
 - DuckDB for SQL queries on Parquet files
 
 **Visualization:**
+
 - Vitessce for interactive spatial/single-cell visualization
 
 **Version control:**
+
 - Git integration for source code tracking
 
 **Reference:** `references/integrations.md` - Read this for integration patterns, code examples, and troubleshooting for third-party systems.
@@ -156,28 +173,33 @@ LaminDB provides six interconnected capability areas, each documented in detail 
 ### 6. Setup and Deployment
 
 **Installation:**
+
 - Basic: `uv pip install lamindb`
 - With extras: `uv pip install 'lamindb[gcp,zarr,fcs]'`
 - Modules: bionty, wetlab, clinical
 
 **Instance types:**
+
 - Local SQLite (development)
 - Cloud storage + SQLite (small teams)
 - Cloud storage + PostgreSQL (production)
 
 **Storage options:**
+
 - Local filesystem
 - AWS S3 with configurable regions and permissions
 - Google Cloud Storage
 - S3-compatible endpoints (MinIO, Cloudflare R2)
 
 **Configuration:**
+
 - Cache management for cloud files
 - Multi-user system configurations
 - Git repository sync
 - Environment variables
 
 **Deployment patterns:**
+
 - Local dev → Cloud production migration
 - Multi-region deployments
 - Shared storage with personal instances

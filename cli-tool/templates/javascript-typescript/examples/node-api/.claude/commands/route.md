@@ -29,6 +29,7 @@ Create or optimize API routes based on the requirements:
 ## Route Patterns to Consider
 
 Based on the request:
+
 - **CRUD operations**: Create, Read, Update, Delete for resources
 - **RESTful endpoints**: GET, POST, PUT, PATCH, DELETE with proper semantics
 - **Nested resources**: Parent/child resource relationships
@@ -40,6 +41,7 @@ Based on the request:
 ## Framework-Specific Implementation
 
 Adapt to your project's framework:
+
 - **Express**: Router instances, middleware chains, route handlers
 - **Fastify**: Route plugins, schema validation, hooks
 - **NestJS**: Controllers, decorators, DTOs, guards, interceptors

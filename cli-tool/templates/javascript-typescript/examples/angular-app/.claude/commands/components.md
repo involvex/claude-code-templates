@@ -35,6 +35,7 @@ Create or optimize Angular components based on the requirements:
 ## Component Patterns to Consider
 
 Based on the request:
+
 - **Smart Components**: Container components that manage state and services
 - **Dumb Components**: Presentation components that only receive inputs
 - **Feature Components**: Components specific to business features
@@ -59,5 +60,5 @@ Based on the request:
 - Don't install new dependencies without asking
 - Consider component reusability and single responsibility principle
 - Add proper TypeScript types for all component properties and methods
-- Use trackBy functions for performance in *ngFor loops
+- Use trackBy functions for performance in \*ngFor loops
 - Implement proper unsubscription patterns to prevent memory leaks

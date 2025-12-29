@@ -42,52 +42,62 @@ Create comprehensive troubleshooting guide with systematic diagnostic procedures
    - Define severity levels and response times
 
 4. **Diagnostic Tools and Commands**
-   
-   ```markdown
+
+   ````markdown
    ## Essential Diagnostic Commands
-   
+
    ### System Health
+
    ```bash
    # Check system resources
    top                    # CPU and memory usage
    df -h                 # Disk space
    free -m               # Memory usage
    netstat -tuln         # Network connections
-   
+
    # Application logs
    tail -f /var/log/app.log
    journalctl -u service-name -f
-   
+
    # Database connectivity
    mysql -u user -p -e "SELECT 1"
    psql -h host -U user -d db -c "SELECT 1"
    ```
+   ````
+
+   ```
+
    ```
 
 5. **Issue Categories and Solutions**
 
    **Performance Issues:**
+
    ```markdown
    ### Slow Response Times
-   
+
    **Symptoms:**
+
    - API responses > 5 seconds
    - User interface freezing
    - Database timeouts
-   
+
    **Diagnostic Steps:**
+
    1. Check system resources (CPU, memory, disk)
    2. Review application logs for errors
    3. Analyze database query performance
    4. Check network connectivity and latency
-   
+
    **Common Causes:**
+
    - Database connection pool exhaustion
    - Inefficient database queries
    - Memory leaks in application
    - Network bandwidth limitations
-   
+
    **Solutions:**
+
    - Restart application services
    - Optimize database queries
    - Increase connection pool size
@@ -95,21 +105,22 @@ Create comprehensive troubleshooting guide with systematic diagnostic procedures
    ```
 
 6. **Error Code Documentation**
-   
+
    ```markdown
    ## Error Code Reference
-   
+
    ### HTTP Status Codes
+
    - **500 Internal Server Error**
      - Check application logs for stack traces
      - Verify database connectivity
      - Check environment variables
-   
+
    - **404 Not Found**
      - Verify URL routing configuration
      - Check if resources exist
      - Review API endpoint documentation
-   
+
    - **503 Service Unavailable**
      - Check service health status
      - Verify load balancer configuration
@@ -123,100 +134,122 @@ Create comprehensive troubleshooting guide with systematic diagnostic procedures
    - Include local development setup problems
 
 8. **Database Troubleshooting**
-   
-   ```markdown
+
+   ````markdown
    ### Database Connection Issues
-   
+
    **Symptoms:**
+
    - "Connection refused" errors
    - "Too many connections" errors
    - Slow query performance
-   
+
    **Diagnostic Commands:**
+
    ```sql
    -- Check active connections
    SHOW PROCESSLIST;
-   
+
    -- Check database size
-   SELECT table_schema, 
-          ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) AS 'DB Size in MB' 
-   FROM information_schema.tables 
+   SELECT table_schema,
+          ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) AS 'DB Size in MB'
+   FROM information_schema.tables
    GROUP BY table_schema;
-   
+
    -- Check slow queries
    SHOW VARIABLES LIKE 'slow_query_log';
    ```
+   ````
+
+   ```
+
    ```
 
 9. **Network and Connectivity Issues**
-   
-   ```markdown
+
+   ````markdown
    ### Network Troubleshooting
-   
+
    **Basic Connectivity:**
+
    ```bash
    # Test basic connectivity
    ping example.com
    telnet host port
    curl -v https://api.example.com/health
-   
+
    # DNS resolution
    nslookup example.com
    dig example.com
-   
+
    # Network routing
    traceroute example.com
    ```
-   
+   ````
+
    **SSL/TLS Issues:**
+
    ```bash
    # Check SSL certificate
    openssl s_client -connect example.com:443
    curl -vI https://example.com
    ```
+
+   ```
+
    ```
 
 10. **Application-Specific Troubleshooting**
-    
+
     **Memory Issues:**
-    ```markdown
+
+    ````markdown
     ### Out of Memory Errors
-    
+
     **Java Applications:**
+
     ```bash
     # Check heap usage
     jstat -gc [PID]
     jmap -dump:format=b,file=heapdump.hprof [PID]
-    
+
     # Analyze heap dump
     jhat heapdump.hprof
     ```
-    
+    ````
+
     **Node.js Applications:**
+
     ```bash
     # Monitor memory usage
     node --inspect app.js
     # Use Chrome DevTools for memory profiling
     ```
+
+    ```
+
     ```
 
 11. **Security and Authentication Issues**
-    
+
     ```markdown
     ### Authentication Failures
-    
+
     **Symptoms:**
+
     - 401 Unauthorized responses
     - Token validation errors
     - Session timeout issues
-    
+
     **Diagnostic Steps:**
+
     1. Verify credentials and tokens
     2. Check token expiration
     3. Validate authentication service
     4. Review CORS configuration
-    
+
     **Common Solutions:**
+
     - Refresh authentication tokens
     - Clear browser cookies/cache
     - Verify CORS headers
@@ -224,34 +257,40 @@ Create comprehensive troubleshooting guide with systematic diagnostic procedures
     ```
 
 12. **Deployment and Configuration Issues**
-    
-    ```markdown
+
+    ````markdown
     ### Deployment Failures
-    
+
     **Container Issues:**
+
     ```bash
     # Check container status
     docker ps -a
     docker logs container-name
-    
+
     # Check resource limits
     docker stats
-    
+
     # Debug container
     docker exec -it container-name /bin/bash
     ```
-    
+    ````
+
     **Kubernetes Issues:**
+
     ```bash
     # Check pod status
     kubectl get pods
     kubectl describe pod pod-name
     kubectl logs pod-name
-    
+
     # Check service connectivity
     kubectl get svc
     kubectl port-forward pod-name 8080:8080
     ```
+
+    ```
+
     ```
 
 13. **Monitoring and Alerting Setup**
@@ -262,23 +301,26 @@ Create comprehensive troubleshooting guide with systematic diagnostic procedures
     - Document monitoring thresholds
 
 14. **Escalation Procedures**
-    
+
     ```markdown
     ## Escalation Matrix
-    
+
     ### Severity Levels
-    
+
     **Critical (P1):** System down, data loss
+
     - Immediate response required
     - Escalate to on-call engineer
     - Notify management within 30 minutes
-    
+
     **High (P2):** Major functionality impaired
+
     - Response within 2 hours
     - Escalate to senior engineer
     - Provide hourly updates
-    
+
     **Medium (P3):** Minor functionality issues
+
     - Response within 8 hours
     - Assign to appropriate team member
     - Provide daily updates
@@ -306,16 +348,18 @@ Create comprehensive troubleshooting guide with systematic diagnostic procedures
     - Integrate with ticketing systems
 
 18. **Team Communication**
-    
+
     ```markdown
     ## Communication Channels
-    
+
     ### Immediate Response
+
     - Slack: #incidents channel
     - Phone: On-call rotation
     - Email: alerts@company.com
-    
+
     ### Status Updates
+
     - Status page: status.company.com
     - Twitter: @company_status
     - Internal wiki: troubleshooting section
@@ -338,6 +382,7 @@ Create comprehensive troubleshooting guide with systematic diagnostic procedures
 **Advanced Troubleshooting Techniques:**
 
 **Log Analysis:**
+
 ```bash
 # Search for specific errors
 grep -i "error" /var/log/app.log | tail -50
@@ -350,6 +395,7 @@ tail -f /var/log/app.log | grep -i "exception"
 ```
 
 **Performance Profiling:**
+
 ```bash
 # System performance
 iostat -x 1
@@ -362,6 +408,7 @@ perf record -p [PID]
 ```
 
 Remember to:
+
 - Keep troubleshooting guides up-to-date
 - Test all documented procedures regularly
 - Collect feedback from users and improve guides

@@ -23,6 +23,7 @@ This command helps you perform common Git operations following best practices fo
 ## Common Workflows
 
 ### Feature Development
+
 ```bash
 # Create and switch to feature branch
 git checkout -b feature/user-authentication
@@ -46,6 +47,7 @@ git push -u origin feature/user-authentication
 ```
 
 ### Hotfix Workflow
+
 ```bash
 # Create hotfix branch from main
 git checkout main
@@ -66,6 +68,7 @@ git push -u origin hotfix/security-patch
 ```
 
 ### Sync with Remote
+
 ```bash
 # Update main branch
 git checkout main
@@ -81,6 +84,7 @@ git merge main
 ## Commit Message Conventions
 
 ### Conventional Commits Format
+
 ```
 <type>[optional scope]: <description>
 
@@ -90,6 +94,7 @@ git merge main
 ```
 
 ### Common Types
+
 - **feat**: New feature
 - **fix**: Bug fix
 - **docs**: Documentation changes
@@ -99,6 +104,7 @@ git merge main
 - **chore**: Maintenance tasks
 
 ### Examples
+
 ```bash
 # Feature
 git commit -m "feat(auth): add OAuth2 integration"
@@ -118,6 +124,7 @@ BREAKING CHANGE: API responses now use 'data' wrapper"
 ## Branch Management
 
 ### Git Flow Strategy
+
 ```bash
 # Main branches
 main        # Production-ready code
@@ -130,6 +137,7 @@ hotfix/*    # Quick fixes to production
 ```
 
 ### GitHub Flow (Simplified)
+
 ```bash
 # Only main branch + feature branches
 main        # Production-ready code
@@ -139,6 +147,7 @@ feature/*   # All new work
 ## Conflict Resolution
 
 ### When Conflicts Occur
+
 ```bash
 # Start merge/rebase
 git merge feature-branch
@@ -158,6 +167,7 @@ git rebase --continue
 ```
 
 ### Conflict Markers
+
 ```javascript
 <<<<<<< HEAD
 // Your current branch code
@@ -171,6 +181,7 @@ const user = getAuthenticatedUser();
 ## Useful Git Commands
 
 ### Status and Information
+
 ```bash
 git status                    # Check working directory status
 git log --oneline            # View commit history
@@ -179,6 +190,7 @@ git remote -v                # List remote repositories
 ```
 
 ### Undoing Changes
+
 ```bash
 git checkout -- file.js     # Discard changes to file
 git reset HEAD file.js       # Unstage file
@@ -187,6 +199,7 @@ git reset --hard HEAD~1     # Undo last commit (discard changes)
 ```
 
 ### Stashing Work
+
 ```bash
 git stash                    # Save current work
 git stash pop               # Apply and remove latest stash
@@ -207,6 +220,7 @@ git stash apply stash@{1}   # Apply specific stash
 ## Git Hooks (Optional)
 
 ### Pre-commit Hook
+
 ```bash
 #!/bin/sh
 # .git/hooks/pre-commit
@@ -227,6 +241,7 @@ fi
 ```
 
 ### Commit Message Hook
+
 ```bash
 #!/bin/sh
 # .git/hooks/commit-msg

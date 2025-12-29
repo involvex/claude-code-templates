@@ -20,24 +20,28 @@ This skill should be used when searching for gene expression datasets, retrievin
 GEO organizes data hierarchically using different accession types:
 
 **Series (GSE):** A complete experiment with a set of related samples
+
 - Example: GSE123456
 - Contains experimental design, samples, and overall study information
 - Largest organizational unit in GEO
 - Current count: 264,928+ series
 
 **Sample (GSM):** A single experimental sample or biological replicate
+
 - Example: GSM987654
 - Contains individual sample data, protocols, and metadata
 - Linked to platforms and series
 - Current count: 8,068,632+ samples
 
 **Platform (GPL):** The microarray or sequencing platform used
+
 - Example: GPL570 (Affymetrix Human Genome U133 Plus 2.0 Array)
 - Describes the technology and probe/feature annotations
 - Shared across multiple experiments
 - Current count: 27,739+ platforms
 
 **DataSet (GDS):** Curated collections with consistent formatting
+
 - Example: GDS5678
 - Experimentally-comparable samples organized by study design
 - Processed for differential analysis
@@ -45,6 +49,7 @@ GEO organizes data hierarchically using different accession types:
 - Ideal for quick comparative analyses
 
 **Profiles:** Gene-specific expression data linked to sequence features
+
 - Queryable by gene name or annotation
 - Cross-references to Entrez Gene
 - Enables gene-centric searches across all studies
@@ -138,6 +143,7 @@ results = advanced_geo_search(search_terms)
 **GEOparse** is the primary Python library for accessing GEO data:
 
 **Installation:**
+
 ```bash
 uv pip install GEOparse
 ```
@@ -678,24 +684,28 @@ Entrez.api_key = "your_api_key_here"
 ## Common Use Cases
 
 ### Transcriptomics Research
+
 - Download gene expression data for specific conditions
 - Compare expression profiles across studies
 - Identify differentially expressed genes
 - Perform meta-analyses across multiple datasets
 
 ### Drug Response Studies
+
 - Analyze gene expression changes after drug treatment
 - Identify biomarkers for drug response
 - Compare drug effects across cell lines or patients
 - Build predictive models for drug sensitivity
 
 ### Disease Biology
+
 - Study gene expression in disease vs. normal tissues
 - Identify disease-associated expression signatures
 - Compare patient subgroups and disease stages
 - Correlate expression with clinical outcomes
 
 ### Biomarker Discovery
+
 - Screen for diagnostic or prognostic markers
 - Validate biomarkers across independent cohorts
 - Compare marker performance across platforms
@@ -728,21 +738,25 @@ For quick analysis without coding, use GEO2R:
 ## Rate Limiting and Best Practices
 
 **NCBI E-utilities Rate Limits:**
+
 - Without API key: 3 requests per second
 - With API key: 10 requests per second
 - Implement delays between requests: `time.sleep(0.34)` (no API key) or `time.sleep(0.1)` (with API key)
 
 **FTP Access:**
+
 - No rate limits for FTP downloads
 - Preferred method for bulk downloads
 - Can download entire directories with wget -r
 
 **GEOparse Caching:**
+
 - GEOparse automatically caches downloaded files in destdir
 - Subsequent calls use cached data
 - Clean cache periodically to save disk space
 
 **Optimal Practices:**
+
 - Use GEOparse for series-level access (easiest)
 - Use E-utilities for metadata searching and batch queries
 - Use FTP for direct file downloads and bulk operations
@@ -754,6 +768,7 @@ For quick analysis without coding, use GEO2R:
 ### references/geo_reference.md
 
 Comprehensive reference documentation covering:
+
 - Detailed E-utilities API specifications and endpoints
 - Complete SOFT and MINiML file format documentation
 - Advanced GEOparse usage patterns and examples

@@ -22,6 +22,7 @@ Generate comprehensive standup report with team activity analysis and progress i
 **Time Range**: Use $ARGUMENTS to specify yesterday, last 24 hours, since Friday, or custom date range for analysis
 
 **Standup Report Framework**:
+
 1. **Git Activity Analysis** - Extract commit activity, analyze code changes, identify contributors, assess impact scope
 2. **Linear Task Progress** - Query task updates, analyze completion status, track sprint progress, identify blockers
 3. **Pull Request Activity** - Review PR submissions, analyze review activity, track merge status, assess collaboration patterns

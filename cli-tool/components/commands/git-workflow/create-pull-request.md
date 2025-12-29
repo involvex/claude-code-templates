@@ -43,7 +43,6 @@ This guide explains how to create pull requests using GitHub CLI in our project.
 ## Best Practices
 
 1. **PR Title Format**: Use conventional commit format with emojis
-
    - Always include an appropriate emoji at the beginning of the title
    - Use the actual emoji character (not the code representation like `:sparkles:`)
    - Examples:
@@ -52,7 +51,6 @@ This guide explains how to create pull requests using GitHub CLI in our project.
      - `📝(readme): Update installation instructions`
 
 2. **Description Template**: Always use our PR template structure from `.github/pull_request_template.md`:
-
    - Issue reference
    - Why the change is needed
    - Review focus points
@@ -61,7 +59,6 @@ This guide explains how to create pull requests using GitHub CLI in our project.
    - Additional notes
 
 3. **Template Accuracy**: Ensure your PR description precisely follows the template structure:
-
    - Don't modify or rename the PR-Agent sections (`pr_agent:summary` and `pr_agent:walkthrough`)
    - Keep all section headers exactly as they appear in the template
    - Don't add custom sections that aren't in the template

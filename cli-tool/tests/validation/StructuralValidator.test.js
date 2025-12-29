@@ -1,16 +1,16 @@
-const StructuralValidator = require('../../src/validation/validators/StructuralValidator');
-const fs = require('fs-extra');
-const path = require('path');
+const StructuralValidator = require("../../src/validation/validators/StructuralValidator");
+const fs = require("fs-extra");
+const path = require("path");
 
-describe('StructuralValidator', () => {
+describe("StructuralValidator", () => {
   let validator;
 
   beforeEach(() => {
     validator = new StructuralValidator();
   });
 
-  describe('Valid Component', () => {
-    it('should pass validation for a well-formed agent', async () => {
+  describe("Valid Component", () => {
+    it("should pass validation for a well-formed agent", async () => {
       const content = `---
 name: test-agent
 description: A test agent for validation testing purposes
@@ -27,8 +27,8 @@ Use this agent for testing.
 
       const component = {
         content,
-        path: 'test-agent.md',
-        type: 'agent'
+        path: "test-agent.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
@@ -38,23 +38,23 @@ Use this agent for testing.
       expect(result.score).toBeGreaterThan(90);
     });
 
-    it('should validate the real frontend-developer agent', async () => {
+    it("should validate the real frontend-developer agent", async () => {
       const agentPath = path.join(
         __dirname,
-        '../../components/agents/development-team/frontend-developer.md'
+        "../../components/agents/development-team/frontend-developer.md",
       );
 
       if (!fs.existsSync(agentPath)) {
-        console.log('Skipping test: frontend-developer.md not found');
+        console.log("Skipping test: frontend-developer.md not found");
         return;
       }
 
-      const content = await fs.readFile(agentPath, 'utf8');
+      const content = await fs.readFile(agentPath, "utf8");
 
       const component = {
         content,
         path: agentPath,
-        type: 'agent'
+        type: "agent",
       };
 
       const result = await validator.validate(component);
@@ -65,14 +65,14 @@ Use this agent for testing.
     });
   });
 
-  describe('Frontmatter Validation', () => {
-    it('should error when frontmatter is missing', async () => {
-      const content = 'This is content without frontmatter';
+  describe("Frontmatter Validation", () => {
+    it("should error when frontmatter is missing", async () => {
+      const content = "This is content without frontmatter";
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
@@ -80,12 +80,12 @@ Use this agent for testing.
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_E001'
-        })
+          code: "STRUCT_E001",
+        }),
       );
     });
 
-    it('should error when frontmatter YAML is invalid', async () => {
+    it("should error when frontmatter YAML is invalid", async () => {
       const content = `---
 name: test
 description: test
@@ -95,8 +95,8 @@ Content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
@@ -104,12 +104,12 @@ Content`;
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_E002'
-        })
+          code: "STRUCT_E002",
+        }),
       );
     });
 
-    it('should error when required fields are missing', async () => {
+    it("should error when required fields are missing", async () => {
       const content = `---
 name: test-agent
 ---
@@ -117,31 +117,31 @@ Content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'STRUCT_E006')).toBe(true);
+      expect(result.errors.some((e) => e.code === "STRUCT_E006")).toBe(true);
     });
   });
 
-  describe('File Size Validation', () => {
-    it('should error when file size exceeds limit', async () => {
+  describe("File Size Validation", () => {
+    it("should error when file size exceeds limit", async () => {
       const largeContent = `---
 name: large-agent
 description: This is a large test agent
 tools: Read
 ---
 
-${' Large content '.repeat(20000)}`; // Create >100KB file
+${" Large content ".repeat(20000)}`; // Create >100KB file
 
       const component = {
         content: largeContent,
-        path: 'large.md',
-        type: 'agent'
+        path: "large.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
@@ -149,14 +149,14 @@ ${' Large content '.repeat(20000)}`; // Create >100KB file
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_E003'
-        })
+          code: "STRUCT_E003",
+        }),
       );
     });
 
-    it('should warn when file size approaches limit', async () => {
+    it("should warn when file size approaches limit", async () => {
       // Create content that is ~85KB (80% of 100KB limit)
-      const largeText = 'X'.repeat(5000); // 5KB chunk
+      const largeText = "X".repeat(5000); // 5KB chunk
       const mediumContent = `---
 name: medium-agent
 description: This is a medium test agent
@@ -167,18 +167,18 @@ ${largeText.repeat(17)}`; // 85KB total
 
       const component = {
         content: mediumContent,
-        path: 'medium.md',
-        type: 'agent'
+        path: "medium.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
-      expect(result.warnings.some(w => w.code === 'STRUCT_W002')).toBe(true);
+      expect(result.warnings.some((w) => w.code === "STRUCT_W002")).toBe(true);
     });
   });
 
-  describe('Description Validation', () => {
-    it('should warn when description is too short', async () => {
+  describe("Description Validation", () => {
+    it("should warn when description is too short", async () => {
       const content = `---
 name: test-agent
 description: Short
@@ -188,21 +188,21 @@ Content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_W003'
-        })
+          code: "STRUCT_W003",
+        }),
       );
     });
 
-    it('should warn when description is too long', async () => {
-      const longDescription = 'A '.repeat(300);
+    it("should warn when description is too long", async () => {
+      const longDescription = "A ".repeat(300);
       const content = `---
 name: test-agent
 description: ${longDescription}
@@ -212,22 +212,22 @@ Content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_W004'
-        })
+          code: "STRUCT_W004",
+        }),
       );
     });
   });
 
-  describe('Tools Validation', () => {
-    it('should validate valid tools', async () => {
+  describe("Tools Validation", () => {
+    it("should validate valid tools", async () => {
       const content = `---
 name: test-agent
 description: A test agent with valid tools
@@ -237,8 +237,8 @@ Content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
@@ -246,7 +246,7 @@ Content`;
       expect(result.valid).toBe(true);
     });
 
-    it('should warn about unknown tools', async () => {
+    it("should warn about unknown tools", async () => {
       const content = `---
 name: test-agent
 description: A test agent with unknown tools
@@ -256,22 +256,22 @@ Content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_W006'
-        })
+          code: "STRUCT_W006",
+        }),
       );
     });
   });
 
-  describe('Model Validation', () => {
-    it('should warn when model is missing', async () => {
+  describe("Model Validation", () => {
+    it("should warn when model is missing", async () => {
       const content = `---
 name: test-agent
 description: A test agent without model
@@ -281,20 +281,20 @@ Content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_W007'
-        })
+          code: "STRUCT_W007",
+        }),
       );
     });
 
-    it('should warn about unknown model', async () => {
+    it("should warn about unknown model", async () => {
       const content = `---
 name: test-agent
 description: A test agent with unknown model
@@ -305,22 +305,22 @@ Content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_W008'
-        })
+          code: "STRUCT_W008",
+        }),
       );
     });
   });
 
-  describe('Content Structure Validation', () => {
-    it('should warn when content is too short', async () => {
+  describe("Content Structure Validation", () => {
+    it("should warn when content is too short", async () => {
       const content = `---
 name: test-agent
 description: A test agent with minimal content
@@ -330,20 +330,20 @@ Short`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_W009'
-        })
+          code: "STRUCT_W009",
+        }),
       );
     });
 
-    it('should warn when no headers are present', async () => {
+    it("should warn when no headers are present", async () => {
       const content = `---
 name: test-agent
 description: A test agent without headers in content
@@ -354,21 +354,24 @@ It just has plain text and no structure.`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_W010'
-        })
+          code: "STRUCT_W010",
+        }),
       );
     });
 
-    it('should warn when too many sections', async () => {
-      const manyHeaders = Array.from({ length: 25 }, (_, i) => `## Section ${i + 1}`).join('\n\n');
+    it("should warn when too many sections", async () => {
+      const manyHeaders = Array.from(
+        { length: 25 },
+        (_, i) => `## Section ${i + 1}`,
+      ).join("\n\n");
       const content = `---
 name: test-agent
 description: A test agent with too many sections
@@ -378,22 +381,22 @@ ${manyHeaders}`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
 
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_W011'
-        })
+          code: "STRUCT_W011",
+        }),
       );
     });
   });
 
-  describe('Encoding Validation', () => {
-    it('should error when null bytes are present', async () => {
+  describe("Encoding Validation", () => {
+    it("should error when null bytes are present", async () => {
       const content = `---
 name: test-agent
 description: A test agent with null bytes
@@ -403,8 +406,8 @@ Content with \0 null byte`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);
@@ -412,14 +415,14 @@ Content with \0 null byte`;
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          code: 'STRUCT_E005'
-        })
+          code: "STRUCT_E005",
+        }),
       );
     });
   });
 
-  describe('Score Calculation', () => {
-    it('should calculate score correctly', async () => {
+  describe("Score Calculation", () => {
+    it("should calculate score correctly", async () => {
       const content = `---
 name: test-agent
 description: A test agent for score testing purposes
@@ -431,8 +434,8 @@ Good content`;
 
       const component = {
         content,
-        path: 'test.md',
-        type: 'agent'
+        path: "test.md",
+        type: "agent",
       };
 
       const result = await validator.validate(component);

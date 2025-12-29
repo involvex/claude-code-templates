@@ -3,16 +3,19 @@
 ## Cloud Platform Selection
 
 ### AWS (Amazon Web Services)
+
 - **Strengths**: Market leader, most services, mature ecosystem
 - **Best for**: Enterprise, startups, wide service selection
 - **Key Services**: EC2, EKS, RDS, S3, Lambda, CloudFormation
 
 ### Azure (Microsoft Azure)
+
 - **Strengths**: Enterprise integration, hybrid cloud, Microsoft stack
 - **Best for**: Windows workloads, hybrid scenarios, Microsoft shops
 - **Key Services**: VMs, AKS, SQL Database, Blob Storage, ARM Templates
 
 ### GCP (Google Cloud Platform)
+
 - **Strengths**: Kubernetes-native, ML/AI, data analytics
 - **Best for**: Kubernetes, data processing, ML workloads
 - **Key Services**: Compute Engine, GKE, Cloud SQL, Cloud Storage, Deployment Manager
@@ -20,6 +23,7 @@
 ## AWS Architecture Patterns
 
 ### Multi-Tier Web Application
+
 ```
 Internet
     │
@@ -47,37 +51,44 @@ Internet
 ### AWS Well-Architected Framework Pillars
 
 **1. Operational Excellence**
+
 - IaC (Terraform/CloudFormation)
 - CI/CD automation
 - Monitoring and observability
 
 **2. Security**
+
 - IAM least privilege
 - Encryption at rest and in transit
 - Network segmentation (VPC, Security Groups)
 
 **3. Reliability**
+
 - Multi-AZ deployment
 - Auto Scaling
 - Backup and disaster recovery
 
 **4. Performance Efficiency**
+
 - Right-sizing instances
 - CloudFront for content delivery
 - ElastiCache for caching
 
 **5. Cost Optimization**
+
 - Reserved Instances
 - Spot Instances
 - Auto Scaling based on demand
 
 **6. Sustainability**
+
 - Region selection for renewable energy
 - Right-sizing to minimize waste
 
 ### AWS Core Services
 
 #### Compute
+
 ```hcl
 # EC2 Instance
 resource "aws_instance" "app" {
@@ -140,6 +151,7 @@ resource "aws_lambda_function" "processor" {
 ```
 
 #### Storage
+
 ```hcl
 # S3 Bucket
 resource "aws_s3_bucket" "data" {
@@ -194,6 +206,7 @@ resource "aws_efs_file_system" "shared" {
 ```
 
 #### Database
+
 ```hcl
 # RDS PostgreSQL
 resource "aws_db_instance" "main" {
@@ -250,6 +263,7 @@ resource "aws_dynamodb_table" "sessions" {
 ## Azure Architecture Patterns
 
 ### Multi-Tier Application on Azure
+
 ```
 Internet
     │
@@ -277,6 +291,7 @@ Internet
 ### Azure Core Services
 
 #### Compute
+
 ```hcl
 # Virtual Machine
 resource "azurerm_linux_virtual_machine" "app" {
@@ -353,6 +368,7 @@ resource "azurerm_linux_function_app" "processor" {
 ## GCP Architecture Patterns
 
 ### Multi-Tier Application on GCP
+
 ```
 Internet
     │
@@ -379,6 +395,7 @@ Internet
 ### GCP Core Services
 
 #### Compute
+
 ```hcl
 # Compute Engine Instance
 resource "google_compute_instance" "app" {
@@ -462,18 +479,21 @@ resource "google_container_node_pool" "main" {
 ## Multi-Cloud Strategy
 
 ### When to Use Multi-Cloud
+
 ✓ **Avoid vendor lock-in**
 ✓ **Leverage best-of-breed services**
 ✓ **Geographic requirements**
 ✓ **Disaster recovery**
 
 ### Multi-Cloud Challenges
+
 ✗ Increased complexity
 ✗ Higher operational overhead
 ✗ Different APIs and tools
 ✗ Data transfer costs
 
 ### Multi-Cloud Tools
+
 - **Terraform**: Unified IaC across clouds
 - **Kubernetes**: Consistent compute layer
 - **Service Mesh**: Unified networking
@@ -482,6 +502,7 @@ resource "google_container_node_pool" "main" {
 ## Cost Optimization Strategies
 
 ### AWS Cost Optimization
+
 ```hcl
 # Savings Plans / Reserved Instances
 # Purchase via AWS Console or API
@@ -536,6 +557,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "data" {
 ```
 
 ### Cost Monitoring
+
 ```hcl
 # AWS Budget
 resource "aws_budgets_budget" "monthly" {
@@ -558,28 +580,34 @@ resource "aws_budgets_budget" "monthly" {
 ## Disaster Recovery
 
 ### RTO/RPO Targets
+
 - **RTO (Recovery Time Objective)**: Maximum acceptable downtime
 - **RPO (Recovery Point Objective)**: Maximum acceptable data loss
 
 ### DR Strategies (Lowest to Highest Cost)
 
 **1. Backup & Restore (RPO: hours, RTO: hours)**
+
 - Regular backups to cloud storage
 - Restore when needed
 
 **2. Pilot Light (RPO: minutes, RTO: hours)**
+
 - Minimal infrastructure always running
 - Scale up when needed
 
 **3. Warm Standby (RPO: seconds, RTO: minutes)**
+
 - Scaled-down version running
 - Scale up for failover
 
 **4. Multi-Site Active/Active (RPO: none, RTO: none)**
+
 - Full capacity in multiple regions
 - Traffic distributed across sites
 
 ### Multi-Region Setup (AWS)
+
 ```hcl
 provider "aws" {
   alias  = "primary"
@@ -657,6 +685,7 @@ resource "aws_route53_record" "app_dr" {
 ## Best Practices Summary
 
 ### AWS
+
 - Use IAM roles, not access keys
 - Enable CloudTrail in all regions
 - Encrypt everything (S3, EBS, RDS)
@@ -664,6 +693,7 @@ resource "aws_route53_record" "app_dr" {
 - Tag all resources for cost allocation
 
 ### Azure
+
 - Use Managed Identities
 - Enable Azure Policy for governance
 - Use Azure Key Vault for secrets
@@ -671,6 +701,7 @@ resource "aws_route53_record" "app_dr" {
 - Use Resource Groups for organization
 
 ### GCP
+
 - Use Service Accounts with least privilege
 - Enable Cloud Audit Logs
 - Use VPC Service Controls
@@ -681,15 +712,15 @@ resource "aws_route53_record" "app_dr" {
 
 ## Cloud Service Comparison
 
-| Service Type | AWS | Azure | GCP |
-|--------------|-----|-------|-----|
-| Compute | EC2 | Virtual Machines | Compute Engine |
-| Containers | ECS, EKS | AKS | GKE |
-| Serverless | Lambda | Functions | Cloud Functions |
-| Storage | S3 | Blob Storage | Cloud Storage |
-| Database (SQL) | RDS | SQL Database | Cloud SQL |
-| Database (NoSQL) | DynamoDB | Cosmos DB | Firestore |
-| Networking | VPC | Virtual Network | VPC |
-| Load Balancer | ALB/NLB | App Gateway | Cloud Load Balancing |
-| CDN | CloudFront | Front Door | Cloud CDN |
-| IAM | IAM | Azure AD | Cloud IAM |
+| Service Type     | AWS        | Azure            | GCP                  |
+| ---------------- | ---------- | ---------------- | -------------------- |
+| Compute          | EC2        | Virtual Machines | Compute Engine       |
+| Containers       | ECS, EKS   | AKS              | GKE                  |
+| Serverless       | Lambda     | Functions        | Cloud Functions      |
+| Storage          | S3         | Blob Storage     | Cloud Storage        |
+| Database (SQL)   | RDS        | SQL Database     | Cloud SQL            |
+| Database (NoSQL) | DynamoDB   | Cosmos DB        | Firestore            |
+| Networking       | VPC        | Virtual Network  | VPC                  |
+| Load Balancer    | ALB/NLB    | App Gateway      | Cloud Load Balancing |
+| CDN              | CloudFront | Front Door       | Cloud CDN            |
+| IAM              | IAM        | Azure AD         | Cloud IAM            |

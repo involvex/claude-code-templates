@@ -264,21 +264,21 @@ CommandLine="*/s*" AND CommandLine="*http*"
 
 ### Incident Response Plan Structure
 
-```markdown
+````markdown
 # Incident Response Plan
 
 ## 1. Preparation
 
 ### Incident Response Team (CIRT)
 
-| Role | Name | Contact | Responsibilities |
-|------|------|---------|-----------------|
-| Incident Commander | Jane Doe | +1-555-0101 | Overall coordination |
-| Security Lead | John Smith | +1-555-0102 | Technical investigation |
-| IT Lead | Bob Johnson | +1-555-0103 | System remediation |
-| Communications | Alice Brown | +1-555-0104 | Internal/external comms |
-| Legal | Carol White | +1-555-0105 | Legal implications |
-| HR | Dave Lee | +1-555-0106 | Insider threats |
+| Role               | Name        | Contact     | Responsibilities        |
+| ------------------ | ----------- | ----------- | ----------------------- |
+| Incident Commander | Jane Doe    | +1-555-0101 | Overall coordination    |
+| Security Lead      | John Smith  | +1-555-0102 | Technical investigation |
+| IT Lead            | Bob Johnson | +1-555-0103 | System remediation      |
+| Communications     | Alice Brown | +1-555-0104 | Internal/external comms |
+| Legal              | Carol White | +1-555-0105 | Legal implications      |
+| HR                 | Dave Lee    | +1-555-0106 | Insider threats         |
 
 ### Tools and Resources
 
@@ -303,12 +303,12 @@ CommandLine="*/s*" AND CommandLine="*http*"
 
 ### Incident Classification
 
-| Severity | Definition | Examples | Response Time |
-|----------|-----------|----------|---------------|
+| Severity      | Definition                                   | Examples                                                             | Response Time    |
+| ------------- | -------------------------------------------- | -------------------------------------------------------------------- | ---------------- |
 | P0 - Critical | Active breach, data exfiltration, ransomware | Active data theft, ransomware encryption, complete system compromise | Immediate (24/7) |
-| P1 - High | Confirmed malware, unauthorized access | Malware on critical system, confirmed intrusion | 1 hour |
-| P2 - Medium | Suspicious activity requiring investigation | Potential malware, failed intrusion attempt | 4 hours |
-| P3 - Low | Policy violation, informational | Minor policy violation, phishing email (no click) | 24 hours |
+| P1 - High     | Confirmed malware, unauthorized access       | Malware on critical system, confirmed intrusion                      | 1 hour           |
+| P2 - Medium   | Suspicious activity requiring investigation  | Potential malware, failed intrusion attempt                          | 4 hours          |
+| P3 - Low      | Policy violation, informational              | Minor policy violation, phishing email (no click)                    | 24 hours         |
 
 ### Initial Assessment Questions
 
@@ -326,6 +326,7 @@ When receiving an incident report, gather:
 ### Incident Documentation
 
 Create ticket in Jira with:
+
 - Incident ID (auto-generated)
 - Classification (P0-P3)
 - Timeline of events
@@ -339,6 +340,7 @@ Create ticket in Jira with:
 ### Short-term Containment (Stop the Bleeding)
 
 **Network-Based Containment**:
+
 ```bash
 # Isolate compromised system (via firewall)
 # Block inbound and outbound traffic except to/from SOC analyst workstation
@@ -357,8 +359,10 @@ Disable-ADAccount -Identity compromised_user
 # Linux
 usermod -L compromised_user
 ```
+````
 
 **Endpoint-Based Containment**:
+
 ```bash
 # Using EDR (CrowdStrike example via API)
 curl -X POST "https://api.crowdstrike.com/devices/v2/actions/contain" \
@@ -374,6 +378,7 @@ pkill -9 -f malware
 ```
 
 **Account-Based Containment**:
+
 ```bash
 # Reset password and revoke sessions
 # Azure AD
@@ -508,6 +513,7 @@ Before returning systems to production:
 Attendees: CIRT members, affected business units, leadership
 
 Agenda:
+
 1. Incident timeline review
 2. What went well?
 3. What could be improved?
@@ -520,9 +526,11 @@ Agenda:
 # Incident Report: [Incident ID]
 
 ## Executive Summary
+
 Brief non-technical summary of what happened, impact, and resolution.
 
 ## Incident Details
+
 - **Incident ID**: INC-2025-001
 - **Severity**: P1 (High)
 - **Detected**: 2025-01-15 14:23 UTC
@@ -531,23 +539,26 @@ Brief non-technical summary of what happened, impact, and resolution.
 - **Total Duration**: 44 hours
 
 ## Timeline
-| Time (UTC) | Event |
-|-----------|-------|
-| 2025-01-15 14:23 | SIEM alert: Unusual outbound traffic from web server |
-| 2025-01-15 14:30 | Analyst confirms malware on web-01.company.com |
-| 2025-01-15 14:45 | Server isolated from network |
-| 2025-01-15 15:00 | CIRT activated, incident commander assigned |
-| 2025-01-15 16:00 | Root cause identified: Unpatched Log4Shell vuln |
-| 2025-01-15 16:45 | All vulnerable servers patched and restarted |
-| 2025-01-16 09:00 | Forensic analysis completed |
+
+| Time (UTC)       | Event                                                  |
+| ---------------- | ------------------------------------------------------ |
+| 2025-01-15 14:23 | SIEM alert: Unusual outbound traffic from web server   |
+| 2025-01-15 14:30 | Analyst confirms malware on web-01.company.com         |
+| 2025-01-15 14:45 | Server isolated from network                           |
+| 2025-01-15 15:00 | CIRT activated, incident commander assigned            |
+| 2025-01-15 16:00 | Root cause identified: Unpatched Log4Shell vuln        |
+| 2025-01-15 16:45 | All vulnerable servers patched and restarted           |
+| 2025-01-16 09:00 | Forensic analysis completed                            |
 | 2025-01-17 10:00 | Systems restored, monitoring in place, incident closed |
 
 ## Root Cause
+
 Apache web server running vulnerable version of Log4j (2.14.1) was exploited
 via crafted HTTP User-Agent header. Patch released on 2021-12-10 was not
 applied due to lack of automated patch management.
 
 ## Impact Assessment
+
 - **Systems Affected**: 3 web servers (web-01, web-02, web-03)
 - **Data Compromised**: None confirmed
 - **Downtime**: 12 hours (web services offline during remediation)
@@ -556,6 +567,7 @@ applied due to lack of automated patch management.
 - **Regulatory**: No breach notification required
 
 ## Actions Taken
+
 1. Isolated affected servers from network
 2. Captured forensic images
 3. Analyzed malware (CobaltStrike beacon)
@@ -568,17 +580,20 @@ applied due to lack of automated patch management.
 ## Lessons Learned
 
 ### What Went Well
+
 - SIEM alert fired immediately
 - CIRT responded within 15 minutes
 - Isolation prevented lateral movement
 - Backups were recent and intact
 
 ### What Could Be Improved
+
 - Patch management process too slow (vulnerability was 1 month old)
 - No vulnerability scanning for application dependencies
 - Incident response playbook for ransomware needed update
 
 ## Recommendations
+
 1. **Implement automated patch management** (Priority: High, Owner: IT, Due: 2025-02-15)
    - Deploy Patch Manager to automate patching
    - SLA: Critical patches within 7 days
@@ -597,11 +612,13 @@ applied due to lack of automated patch management.
    - Integrate with vulnerability management workflow
 
 ## Regulatory Reporting
+
 - **GDPR Breach Notification**: Not required (no personal data compromised)
 - **State Breach Laws**: Not required
 - **Cyber Insurance**: Notified on 2025-01-15, claim filed
 
 ## Sign-off
+
 - **Incident Commander**: Jane Doe, 2025-01-18
 - **CISO**: John Smith, 2025-01-18
 ```
@@ -726,6 +743,7 @@ Team Metrics:
 **Duration**: 90 minutes
 
 **Participants**:
+
 - Incident Commander
 - Security team
 - IT team
@@ -789,6 +807,7 @@ Inject 6 (1:15): Post-incident
 ```
 
 **Facilitator Notes**:
+
 - Pause after each inject for discussion
 - Ask probing questions to test knowledge
 - Document gaps in procedures or knowledge
@@ -800,12 +819,14 @@ Inject 6 (1:15): Post-incident
 ## Ransomware Tabletop Exercise - After Action Report
 
 ### Strengths
+
 - Team quickly activated CIRT
 - Network isolation performed correctly
 - Good understanding of legal/regulatory requirements
 - Clear communication during exercise
 
 ### Areas for Improvement
+
 1. **Backup Strategy**
    - Current: Backups stored online, vulnerable to ransomware
    - Recommendation: Implement 3-2-1 backup strategy (3 copies, 2 media types, 1 offsite)
@@ -831,6 +852,7 @@ Inject 6 (1:15): Post-incident
    - Due: 2025-02-15
 
 ### Next Steps
+
 - Schedule follow-up tabletop in 6 months
 - Conduct technical drill (actual backup restoration test)
 - Update incident response plan based on lessons learned
@@ -842,13 +864,15 @@ Inject 6 (1:15): Post-incident
 
 ### Phishing Email Response Playbook
 
-```markdown
+````markdown
 ## Phishing Email Response Playbook
 
 ### Trigger
+
 User reports suspicious email via "Report Phishing" button or to security@company.com
 
 ### Severity Classification
+
 - **P1 (High)**: User clicked link or entered credentials
 - **P2 (Medium)**: User opened attachment
 - **P3 (Low)**: User did not interact with email
@@ -856,73 +880,91 @@ User reports suspicious email via "Report Phishing" button or to security@compan
 ### Response Steps
 
 #### Step 1: Triage (Within 15 minutes)
+
 □ Review reported email
 □ Classify severity (P1/P2/P3)
 □ Check email gateway logs for delivery count
-   ```bash
-   # Exchange example
-   Get-MessageTrace -SenderAddress "phishing@evil.com" -StartDate (Get-Date).AddHours(-24)
-   ```
+
+```bash
+# Exchange example
+Get-MessageTrace -SenderAddress "phishing@evil.com" -StartDate (Get-Date).AddHours(-24)
+```
+````
 
 #### Step 2: Analysis
+
 □ Analyze email headers (sender IP, SPF/DKIM/DMARC results)
 □ Check URLs in email (use URL sandbox like urlscan.io)
 □ Analyze attachments (upload to VirusTotal, do not execute)
 □ Search threat intelligence for IOCs (AlienVault OTX, VirusTotal)
 
 #### Step 3: Containment
+
 □ Delete email from all mailboxes
-   ```powershell
-   # Office 365 example
-   $SearchName = "Phishing Campaign - evil.com"
-   New-ComplianceSearch -Name $SearchName -ExchangeLocation All -ContentMatchQuery '(subject:"Invoice 12345") AND (from:phishing@evil.com)'
-   Start-ComplianceSearch -Identity $SearchName
-   # After search completes:
-   New-ComplianceSearchAction -SearchName $SearchName -Purge -PurgeType HardDelete
-   ```
+
+```powershell
+# Office 365 example
+$SearchName = "Phishing Campaign - evil.com"
+New-ComplianceSearch -Name $SearchName -ExchangeLocation All -ContentMatchQuery '(subject:"Invoice 12345") AND (from:phishing@evil.com)'
+Start-ComplianceSearch -Identity $SearchName
+# After search completes:
+New-ComplianceSearchAction -SearchName $SearchName -Purge -PurgeType HardDelete
+```
 
 □ Block sender domain/IP at email gateway
 □ Block malicious URLs at web proxy/firewall
 
 #### Step 4: Credential Reset (If P1 - User Clicked/Entered Credentials)
+
 □ Force password reset for affected user
-   ```powershell
-   Set-ADUser -Identity affected_user -ChangePasswordAtLogon $true
-   ```
+
+```powershell
+Set-ADUser -Identity affected_user -ChangePasswordAtLogon $true
+```
+
 □ Revoke active sessions
-   ```powershell
-   Revoke-AzureADUserAllRefreshToken -ObjectId user@company.com
-   ```
+
+```powershell
+Revoke-AzureADUserAllRefreshToken -ObjectId user@company.com
+```
+
 □ Monitor account for suspicious activity (24-48 hours)
 □ Enable additional logging on account
 
 #### Step 5: Malware Scan (If P2 - User Opened Attachment)
+
 □ Isolate endpoint (if not already quarantined by EDR)
 □ Run full antivirus/EDR scan
 □ Check for IOCs from attachment analysis
 □ If malware found, follow Malware Incident Playbook
 
 #### Step 6: User Communication
+
 □ Notify affected users that email was malicious
 □ Thank users who reported (reinforce positive behavior)
 □ If credentials reset, provide instructions
 □ For P3 (no interaction), no additional user action needed
 
 #### Step 7: Documentation
+
 □ Update incident ticket with:
-  - Email headers and content
-  - Number of recipients
-  - Number who clicked/opened
-  - IOCs identified
-  - Actions taken
-□ Add IOCs to threat intelligence platform
-□ Create detection rules for similar emails
+
+- Email headers and content
+- Number of recipients
+- Number who clicked/opened
+- IOCs identified
+- Actions taken
+  □ Add IOCs to threat intelligence platform
+  □ Create detection rules for similar emails
 
 #### Step 8: Prevention
+
 □ Update email gateway rules to block similar emails
 □ Add sender domain to blacklist
 □ If widespread campaign, send security awareness notice
 □ Consider additional user training if many users clicked
+
 ```
 
 This comprehensive security operations and incident response guide provides SOC teams with the structure, processes, and playbooks needed to detect, respond to, and recover from security incidents effectively.
+```

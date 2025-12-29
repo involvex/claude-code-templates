@@ -47,6 +47,7 @@ cocoindex --app-dir /path/to/project <command> ...
 The `APP_TARGET` tells the CLI where flow definitions are located:
 
 ### Python Module
+
 ```bash
 # Load from module name
 cocoindex update main
@@ -56,6 +57,7 @@ cocoindex update my_package.flows
 ```
 
 ### Python File
+
 ```bash
 # Load from file path
 cocoindex update main.py
@@ -65,6 +67,7 @@ cocoindex update path/to/flows.py
 ```
 
 ### Specific Flow
+
 ```bash
 # Target specific flow in module
 cocoindex update main:MyFlowName
@@ -88,12 +91,14 @@ cocoindex setup main.py:MyFlow
 ```
 
 **What it does:**
+
 - Creates internal storage tables in Postgres
 - Creates target resources (database tables, vector collections, graph structures)
 - Updates schemas if flow definition changed
 - No-op if already set up and no changes needed
 
 **When to use:**
+
 - First time running a flow
 - After modifying flow structure (new fields, new targets)
 - After dropping flows to recreate resources
@@ -117,12 +122,14 @@ cocoindex update --reexport main.py
 ```
 
 **What it does:**
+
 - Reads source data
 - Applies transformations
 - Updates target databases
 - Uses incremental processing (only processes changed data)
 
 **Options:**
+
 - `--setup` - Run setup first if needed
 - `--reexport` - Reexport all data even if unchanged (useful after data loss)
 
@@ -142,17 +149,20 @@ cocoindex update --reexport main.py -L
 ```
 
 **What it does:**
+
 - Performs initial one-time update
 - Continuously monitors source changes
 - Automatically processes updates
 - Runs until aborted (Ctrl-C)
 
 **Requires:**
+
 - At least one source with change capture enabled:
   - `refresh_interval` parameter on source
   - Source-specific change capture (Postgres notifications, S3 events, etc.)
 
 **Example with refresh interval:**
+
 ```python
 data_scope["documents"] = flow_builder.add_source(
     cocoindex.sources.LocalFile(path="documents"),
@@ -173,6 +183,7 @@ cocoindex drop main.py:MyFlow
 ```
 
 **What it does:**
+
 - Drops internal storage tables
 - Drops target resources (tables, collections, graphs)
 - Cleans up all persistent data
@@ -192,6 +203,7 @@ cocoindex show main.py
 ```
 
 **What it shows:**
+
 - Flow name and structure
 - Sources configured
 - Transformations defined
@@ -214,18 +226,21 @@ cocoindex evaluate main.py:MyFlow --no-cache
 ```
 
 **What it does:**
+
 - Runs transformations
 - Saves results to files (JSON, CSV, etc.)
 - Does NOT update targets
 - Uses existing cache by default
 
 **When to use:**
+
 - Testing flow logic before running full update
 - Debugging transformation issues
 - Inspecting intermediate data
 - Validating output format
 
 **Options:**
+
 - `--output-dir PATH` - Directory for output files (default: `eval_{flow_name}_{timestamp}`)
 - `--no-cache` - Disable reading from cache (still doesn't write to cache)
 
@@ -298,6 +313,7 @@ cocoindex show main.py
 **Problem:** CLI can't find the flow definition.
 
 **Solutions:**
+
 ```bash
 # Make sure APP_TARGET is correct
 cocoindex show main.py  # Should list flows
@@ -314,6 +330,7 @@ cocoindex show main.py:CorrectFlowName
 **Problem:** Can't connect to Postgres.
 
 **Solutions:**
+
 ```bash
 # Check .env file exists
 cat .env | grep COCOINDEX_DATABASE_URL
@@ -330,6 +347,7 @@ cocoindex --env-file /path/to/.env update main.py
 **Problem:** Flow definition changed but resources not updated.
 
 **Solution:**
+
 ```bash
 # Re-run setup to update schemas
 cocoindex setup main.py
@@ -344,6 +362,7 @@ cocoindex update main.py
 
 **Solution:**
 Add refresh_interval or use source-specific change capture:
+
 ```python
 data_scope["docs"] = flow_builder.add_source(
     cocoindex.sources.LocalFile(path="docs"),
@@ -381,6 +400,7 @@ COCOINDEX_SOURCE_MAX_INFLIGHT_BYTES=1073741824  # 1GB
 ```
 
 Or per-source in code:
+
 ```python
 data_scope["docs"] = flow_builder.add_source(
     cocoindex.sources.LocalFile(path="docs"),

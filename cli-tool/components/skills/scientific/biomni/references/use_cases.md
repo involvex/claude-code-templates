@@ -48,6 +48,7 @@ agent.save_conversation_history("autophagy_screen_design.pdf")
 ```
 
 **Expected Output:**
+
 - sgRNA library with ~80,000 guides (4 per gene × ~20,000 genes)
 - On-target and off-target scores for each sgRNA
 - Prioritized gene list based on pathway enrichment
@@ -763,11 +764,13 @@ Generate model in SBML format and simulation results.
 ### 1. Be Specific and Detailed
 
 **Poor:**
+
 ```python
 agent.go("Analyze this RNA-seq data")
 ```
 
 **Good:**
+
 ```python
 agent.go("""
 Analyze bulk RNA-seq data from cancer vs. normal samples.
@@ -784,6 +787,7 @@ Tasks:
 ### 2. Include File Paths and Formats
 
 Always specify:
+
 - Exact file paths
 - File formats (VCF, BAM, CSV, H5AD, etc.)
 - Data structure (columns, sample IDs)
@@ -791,6 +795,7 @@ Always specify:
 ### 3. Set Clear Success Criteria
 
 Define thresholds and cutoffs:
+
 - Statistical significance (P < 0.05, FDR < 0.1)
 - Fold change thresholds
 - Quality filters
@@ -799,6 +804,7 @@ Define thresholds and cutoffs:
 ### 4. Request Visualizations
 
 Explicitly ask for plots:
+
 - Volcano plots, MA plots
 - Heatmaps, PCA plots
 - Network diagrams
@@ -807,6 +813,7 @@ Explicitly ask for plots:
 ### 5. Specify Biological Context
 
 Include:
+
 - Organism (human, mouse, etc.)
 - Tissue/cell type
 - Disease/condition
@@ -815,6 +822,7 @@ Include:
 ### 6. Request Interpretations
 
 Ask agent to:
+
 - Interpret biological significance
 - Suggest follow-up experiments
 - Identify limitations

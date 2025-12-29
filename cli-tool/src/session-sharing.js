@@ -1,11 +1,11 @@
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const path = require('path');
-const os = require('os');
-const { exec } = require('child_process');
-const { promisify } = require('util');
+const chalk = require("chalk");
+const fs = require("fs-extra");
+const path = require("path");
+const os = require("os");
+const { exec } = require("child_process");
+const { promisify } = require("util");
 const execAsync = promisify(exec);
-const QRCode = require('qrcode');
+const QRCode = require("qrcode");
 
 /**
  * SessionSharing - Handles exporting Claude Code sessions as downloadable context
@@ -22,12 +22,20 @@ class SessionSharing {
    * @param {Object} options - Export options (messageLimit, etc.)
    * @returns {Promise<Object>} Export result with markdown content and filename
    */
-  async exportSessionAsMarkdown(conversationId, conversationData, options = {}) {
-    console.log(chalk.blue(`📥 Preparing session ${conversationId} for download...`));
+  async exportSessionAsMarkdown(
+    conversationId,
+    conversationData,
+    options = {},
+  ) {
+    console.log(
+      chalk.blue(`📥 Preparing session ${conversationId} for download...`),
+    );
 
     try {
       // 1. Get conversation messages
-      const allMessages = await this.conversationAnalyzer.getParsedConversation(conversationData.filePath);
+      const allMessages = await this.conversationAnalyzer.getParsedConversation(
+        conversationData.filePath,
+      );
 
       // Limit messages to avoid large file sizes (default: last 100 messages)
       const messageLimit = options.messageLimit || 100;
@@ -37,12 +45,15 @@ class SessionSharing {
       const markdown = this.convertToMarkdown(messages, conversationData, {
         messageCount: messages.length,
         totalMessageCount: allMessages.length,
-        wasLimited: allMessages.length > messageLimit
+        wasLimited: allMessages.length > messageLimit,
       });
 
       // 3. Generate filename
-      const projectName = (conversationData.project || 'session').replace(/[^a-zA-Z0-9-_]/g, '-');
-      const date = new Date().toISOString().split('T')[0];
+      const projectName = (conversationData.project || "session").replace(
+        /[^a-zA-Z0-9-_]/g,
+        "-",
+      );
+      const date = new Date().toISOString().split("T")[0];
       const filename = `claude-context-${projectName}-${date}.md`;
 
       console.log(chalk.green(`✅ Session exported successfully!`));
@@ -54,10 +65,10 @@ class SessionSharing {
         filename,
         messageCount: messages.length,
         totalMessageCount: allMessages.length,
-        wasLimited: allMessages.length > messageLimit
+        wasLimited: allMessages.length > messageLimit,
       };
     } catch (error) {
-      console.error(chalk.red('❌ Failed to export session:'), error.message);
+      console.error(chalk.red("❌ Failed to export session:"), error.message);
       throw error;
     }
   }
@@ -73,20 +84,24 @@ class SessionSharing {
     const lines = [];
 
     // Header for Claude Code
-    lines.push('# Previous Conversation Context\n');
-    lines.push('> **Note to Claude Code**: This file contains the complete conversation history from a previous session. Read and understand this context to continue helping the user with their task.\n');
-    lines.push(`**Project:** ${conversationData.project || 'Unknown'}`);
-    lines.push(`**Date:** ${new Date().toISOString().split('T')[0]}`);
-    lines.push(`**Messages in this export:** ${stats.messageCount}${stats.wasLimited ? ` (most recent from a total of ${stats.totalMessageCount})` : ''}`);
-    lines.push('');
-    lines.push('---');
-    lines.push('');
+    lines.push("# Previous Conversation Context\n");
+    lines.push(
+      "> **Note to Claude Code**: This file contains the complete conversation history from a previous session. Read and understand this context to continue helping the user with their task.\n",
+    );
+    lines.push(`**Project:** ${conversationData.project || "Unknown"}`);
+    lines.push(`**Date:** ${new Date().toISOString().split("T")[0]}`);
+    lines.push(
+      `**Messages in this export:** ${stats.messageCount}${stats.wasLimited ? ` (most recent from a total of ${stats.totalMessageCount})` : ""}`,
+    );
+    lines.push("");
+    lines.push("---");
+    lines.push("");
 
     // Conversation
-    lines.push('## 💬 Conversation History\n');
+    lines.push("## 💬 Conversation History\n");
 
     messages.forEach((msg, index) => {
-      const role = msg.role === 'user' ? '👤 User' : '🤖 Assistant';
+      const role = msg.role === "user" ? "👤 User" : "🤖 Assistant";
       const timestamp = new Date(msg.timestamp).toLocaleString();
 
       lines.push(`### Message ${index + 1}: ${role}`);
@@ -94,35 +109,41 @@ class SessionSharing {
 
       // Extract text content from message
       if (Array.isArray(msg.content)) {
-        msg.content.forEach(block => {
-          if (block.type === 'text') {
+        msg.content.forEach((block) => {
+          if (block.type === "text") {
             lines.push(block.text);
-          } else if (block.type === 'tool_use') {
-            lines.push(`\`\`\`${block.name || 'tool'}`);
+          } else if (block.type === "tool_use") {
+            lines.push(`\`\`\`${block.name || "tool"}`);
             lines.push(JSON.stringify(block.input || {}, null, 2));
-            lines.push('```');
-          } else if (block.type === 'tool_result') {
-            lines.push('**Tool Result:**');
-            lines.push('```');
-            lines.push(typeof block.content === 'string' ? block.content : JSON.stringify(block.content, null, 2));
-            lines.push('```');
+            lines.push("```");
+          } else if (block.type === "tool_result") {
+            lines.push("**Tool Result:**");
+            lines.push("```");
+            lines.push(
+              typeof block.content === "string"
+                ? block.content
+                : JSON.stringify(block.content, null, 2),
+            );
+            lines.push("```");
           }
         });
-      } else if (typeof msg.content === 'string') {
+      } else if (typeof msg.content === "string") {
         lines.push(msg.content);
       }
 
-      lines.push('');
-      lines.push('---');
-      lines.push('');
+      lines.push("");
+      lines.push("---");
+      lines.push("");
     });
 
     // Footer
-    lines.push('\n---');
-    lines.push('');
-    lines.push('*Generated by Claude Code Templates - [aitmpl.com](https://aitmpl.com)*');
+    lines.push("\n---");
+    lines.push("");
+    lines.push(
+      "*Generated by Claude Code Templates - [aitmpl.com](https://aitmpl.com)*",
+    );
 
-    return lines.join('\n');
+    return lines.join("\n");
   }
 
   /**
@@ -134,24 +155,26 @@ class SessionSharing {
    */
   async exportSessionData(conversationId, conversationData, options = {}) {
     // Get all messages from the conversation
-    const allMessages = await this.conversationAnalyzer.getParsedConversation(conversationData.filePath);
+    const allMessages = await this.conversationAnalyzer.getParsedConversation(
+      conversationData.filePath,
+    );
 
     // Limit messages to avoid large file sizes (default: last 100 messages)
     const messageLimit = options.messageLimit || 100;
     const messages = allMessages.slice(-messageLimit);
 
     // Convert parsed messages back to JSONL format (original Claude Code format)
-    const jsonlMessages = messages.map(msg => {
+    const jsonlMessages = messages.map((msg) => {
       // Reconstruct original JSONL entry format
       const entry = {
         uuid: msg.uuid || msg.id,
-        type: msg.role === 'assistant' ? 'assistant' : 'user',
+        type: msg.role === "assistant" ? "assistant" : "user",
         timestamp: msg.timestamp.toISOString(),
         message: {
           id: msg.id,
           role: msg.role,
-          content: msg.content
-        }
+          content: msg.content,
+        },
       };
 
       // Add model info for assistant messages
@@ -174,31 +197,38 @@ class SessionSharing {
 
     // Create export package
     const exportData = {
-      version: '1.0.0',
+      version: "1.0.0",
       exported_at: new Date().toISOString(),
       conversation: {
         id: conversationId,
-        project: conversationData.project || 'shared-session',
+        project: conversationData.project || "shared-session",
         created: conversationData.created,
         lastModified: conversationData.lastModified,
         messageCount: messages.length,
         totalMessageCount: allMessages.length,
         wasLimited: allMessages.length > messageLimit,
         tokens: conversationData.tokens,
-        model: conversationData.modelInfo?.primaryModel || 'claude-sonnet-4-5-20250929'
+        model:
+          conversationData.modelInfo?.primaryModel ||
+          "claude-sonnet-4-5-20250929",
       },
       messages: jsonlMessages,
       metadata: {
-        exportTool: 'claude-code-templates',
-        exportVersion: require('../package.json').version || '1.0.0',
+        exportTool: "claude-code-templates",
+        exportVersion: require("../package.json").version || "1.0.0",
         messageLimit: messageLimit,
-        description: 'Claude Code session export - can be cloned with: npx claude-code-templates@latest --clone-session <url>'
-      }
+        description:
+          "Claude Code session export - can be cloned with: npx claude-code-templates@latest --clone-session <url>",
+      },
     };
 
     // Log information about exported messages
     if (allMessages.length > messageLimit) {
-      console.log(chalk.yellow(`⚠️  Session has ${allMessages.length} messages, exporting last ${messageLimit} messages`));
+      console.log(
+        chalk.yellow(
+          `⚠️  Session has ${allMessages.length} messages, exporting last ${messageLimit} messages`,
+        ),
+      );
     } else {
       console.log(chalk.gray(`📊 Exporting ${messages.length} messages`));
     }
@@ -213,14 +243,14 @@ class SessionSharing {
    * @returns {Promise<string>} Upload URL
    */
   async uploadToX0(sessionData, conversationId) {
-    const tmpDir = path.join(os.tmpdir(), 'claude-code-sessions');
+    const tmpDir = path.join(os.tmpdir(), "claude-code-sessions");
     await fs.ensureDir(tmpDir);
 
     const tmpFile = path.join(tmpDir, `session-${conversationId}.json`);
 
     try {
       // Write session data to temp file
-      await fs.writeFile(tmpFile, JSON.stringify(sessionData, null, 2), 'utf8');
+      await fs.writeFile(tmpFile, JSON.stringify(sessionData, null, 2), "utf8");
 
       console.log(chalk.gray(`📁 Created temp file: ${tmpFile}`));
       console.log(chalk.gray(`📤 Uploading to x0.at...`));
@@ -230,19 +260,21 @@ class SessionSharing {
       // Response: Direct URL in plain text
       const { stdout, stderr } = await execAsync(
         `curl -s -F "file=@${tmpFile}" ${this.uploadUrl}`,
-        { maxBuffer: 10 * 1024 * 1024 } // 10MB buffer
+        { maxBuffer: 10 * 1024 * 1024 }, // 10MB buffer
       );
 
       // x0.at returns URL directly in plain text
       const uploadUrl = stdout.trim();
 
       // Validate response
-      if (!uploadUrl || !uploadUrl.startsWith('http')) {
+      if (!uploadUrl || !uploadUrl.startsWith("http")) {
         throw new Error(`Invalid response from x0.at: ${uploadUrl || stderr}`);
       }
 
       console.log(chalk.green(`✅ Uploaded to x0.at successfully`));
-      console.log(chalk.yellow(`⚠️  Files kept for 3-100 days (based on size)`));
+      console.log(
+        chalk.yellow(`⚠️  Files kept for 3-100 days (based on size)`),
+      );
       console.log(chalk.gray(`🔓 Note: Files are not encrypted by default`));
 
       // Clean up temp file
@@ -274,8 +306,12 @@ class SessionSharing {
       this.validateSessionData(sessionData);
 
       console.log(chalk.green(`✅ Session downloaded successfully`));
-      console.log(chalk.gray(`📊 Project: ${sessionData.conversation.project}`));
-      console.log(chalk.gray(`💬 Messages: ${sessionData.conversation.messageCount}`));
+      console.log(
+        chalk.gray(`📊 Project: ${sessionData.conversation.project}`),
+      );
+      console.log(
+        chalk.gray(`💬 Messages: ${sessionData.conversation.messageCount}`),
+      );
       console.log(chalk.gray(`🤖 Model: ${sessionData.conversation.model}`));
 
       // 3. Install session in Claude Code directory
@@ -288,11 +324,13 @@ class SessionSharing {
       const resumeCommand = `claude --resume ${installResult.conversationId}`;
       console.log(chalk.yellow(`\n💡 To continue this conversation, run:`));
       console.log(chalk.white(`\n   ${resumeCommand}\n`));
-      console.log(chalk.gray(`   Or open Claude Code to see it in your sessions list`));
+      console.log(
+        chalk.gray(`   Or open Claude Code to see it in your sessions list`),
+      );
 
       return installResult;
     } catch (error) {
-      console.error(chalk.red('❌ Failed to clone session:'), error.message);
+      console.error(chalk.red("❌ Failed to clone session:"), error.message);
       throw error;
     }
   }
@@ -306,7 +344,7 @@ class SessionSharing {
     try {
       // Use curl to download (works with x0.at and other services)
       const { stdout, stderr } = await execAsync(`curl -L "${url}"`, {
-        maxBuffer: 50 * 1024 * 1024 // 50MB buffer for large sessions
+        maxBuffer: 50 * 1024 * 1024, // 50MB buffer for large sessions
       });
 
       if (stderr && !stdout) {
@@ -317,8 +355,10 @@ class SessionSharing {
       const sessionData = JSON.parse(stdout);
       return sessionData;
     } catch (error) {
-      if (error.message.includes('Unexpected token')) {
-        throw new Error('Invalid session file - corrupted or not a Claude Code session');
+      if (error.message.includes("Unexpected token")) {
+        throw new Error(
+          "Invalid session file - corrupted or not a Claude Code session",
+        );
       }
       throw error;
     }
@@ -331,19 +371,19 @@ class SessionSharing {
    */
   validateSessionData(sessionData) {
     if (!sessionData.version) {
-      throw new Error('Invalid session file - missing version');
+      throw new Error("Invalid session file - missing version");
     }
 
     if (!sessionData.conversation || !sessionData.conversation.id) {
-      throw new Error('Invalid session file - missing conversation data');
+      throw new Error("Invalid session file - missing conversation data");
     }
 
     if (!sessionData.messages || !Array.isArray(sessionData.messages)) {
-      throw new Error('Invalid session file - missing or invalid messages');
+      throw new Error("Invalid session file - missing or invalid messages");
     }
 
     if (sessionData.messages.length === 0) {
-      throw new Error('Invalid session file - no messages found');
+      throw new Error("Invalid session file - no messages found");
     }
   }
 
@@ -355,15 +395,15 @@ class SessionSharing {
    */
   async installSession(sessionData, options = {}) {
     const homeDir = os.homedir();
-    const claudeDir = path.join(homeDir, '.claude');
+    const claudeDir = path.join(homeDir, ".claude");
 
     // Determine project directory
-    const projectName = sessionData.conversation.project || 'shared-session';
+    const projectName = sessionData.conversation.project || "shared-session";
     const projectDirName = this.sanitizeProjectName(projectName);
 
     // Create project directory structure
     // Format: ~/.claude/projects/-path-to-project/
-    const projectDir = path.join(claudeDir, 'projects', projectDirName);
+    const projectDir = path.join(claudeDir, "projects", projectDirName);
     await fs.ensureDir(projectDir);
 
     // Generate conversation filename with original ID
@@ -372,16 +412,18 @@ class SessionSharing {
 
     // Convert messages back to JSONL format (one JSON object per line)
     const jsonlContent = sessionData.messages
-      .map(msg => JSON.stringify(msg))
-      .join('\n');
+      .map((msg) => JSON.stringify(msg))
+      .join("\n");
 
     // Write conversation file
-    await fs.writeFile(conversationFile, jsonlContent, 'utf8');
+    await fs.writeFile(conversationFile, jsonlContent, "utf8");
 
-    console.log(chalk.gray(`📝 Created conversation file: ${conversationFile}`));
+    console.log(
+      chalk.gray(`📝 Created conversation file: ${conversationFile}`),
+    );
 
     // Create or update settings.json
-    const settingsFile = path.join(projectDir, 'settings.json');
+    const settingsFile = path.join(projectDir, "settings.json");
     const settings = {
       projectName: sessionData.conversation.project,
       projectPath: options.projectPath || process.cwd(),
@@ -389,12 +431,12 @@ class SessionSharing {
       originalExport: {
         exportedAt: sessionData.exported_at,
         exportTool: sessionData.metadata?.exportTool,
-        exportVersion: sessionData.metadata?.exportVersion
+        exportVersion: sessionData.metadata?.exportVersion,
       },
-      importedAt: new Date().toISOString()
+      importedAt: new Date().toISOString(),
     };
 
-    await fs.writeFile(settingsFile, JSON.stringify(settings, null, 2), 'utf8');
+    await fs.writeFile(settingsFile, JSON.stringify(settings, null, 2), "utf8");
 
     console.log(chalk.gray(`⚙️  Created settings file: ${settingsFile}`));
 
@@ -404,7 +446,7 @@ class SessionSharing {
       projectDir,
       projectPath: settings.projectPath,
       conversationId,
-      messageCount: sessionData.messages.length
+      messageCount: sessionData.messages.length,
     };
   }
 
@@ -417,25 +459,28 @@ class SessionSharing {
     try {
       // Generate QR code as Data URL (for web display)
       const qrDataUrl = await QRCode.toDataURL(command, {
-        errorCorrectionLevel: 'M',
-        type: 'image/png',
+        errorCorrectionLevel: "M",
+        type: "image/png",
         width: 300,
         margin: 2,
         color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
       });
 
       return {
         dataUrl: qrDataUrl,
-        command: command
+        command: command,
       };
     } catch (error) {
-      console.warn(chalk.yellow('⚠️  Could not generate QR code:'), error.message);
+      console.warn(
+        chalk.yellow("⚠️  Could not generate QR code:"),
+        error.message,
+      );
       return {
         dataUrl: null,
-        command: command
+        command: command,
       };
     }
   }
@@ -448,8 +493,8 @@ class SessionSharing {
   sanitizeProjectName(projectName) {
     // Replace spaces and special chars with hyphens
     return projectName
-      .replace(/[^a-zA-Z0-9-_]/g, '-')
-      .replace(/-+/g, '-')
+      .replace(/[^a-zA-Z0-9-_]/g, "-")
+      .replace(/-+/g, "-")
       .toLowerCase();
   }
 }

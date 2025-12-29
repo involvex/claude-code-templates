@@ -22,6 +22,7 @@ Execute comprehensive learning capture with automatic knowledge integration:
 **Capture Type**: Use $ARGUMENTS to focus on project learnings, implementation corrections, structure insights, or workflow improvements
 
 **Learning Capture Framework**:
+
 1. **Learning Identification** - Detect new project knowledge, identify implementation corrections, recognize structural insights, note workflow discoveries
 2. **Knowledge Classification** - Categorize learning type, assess importance level, determine integration location, evaluate reusability potential
 3. **Context Analysis** - Analyze session context, identify triggering conditions, assess knowledge applicability, determine documentation needs

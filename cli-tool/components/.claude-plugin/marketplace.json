@@ -7,7 +7,14 @@
         "name": "Claude Code Templates Team"
       },
       "category": "development",
-      "keywords": ["frontend", "react", "typescript", "ui", "responsive", "accessibility"],
+      "keywords": [
+        "frontend",
+        "react",
+        "typescript",
+        "ui",
+        "responsive",
+        "accessibility"
+      ],
       "license": "MIT",
       "repository": "https://github.com/davila7/claude-code-templates"
     },
@@ -18,7 +25,14 @@
         "name": "Claude Code Templates Team"
       },
       "category": "development",
-      "keywords": ["backend", "api", "microservices", "database", "architecture", "scalability"],
+      "keywords": [
+        "backend",
+        "api",
+        "microservices",
+        "database",
+        "architecture",
+        "scalability"
+      ],
       "license": "MIT",
       "repository": "https://github.com/davila7/claude-code-templates"
     },
@@ -29,7 +43,14 @@
         "name": "Claude Code Templates Team"
       },
       "category": "development",
-      "keywords": ["fullstack", "frontend", "backend", "database", "api", "typescript"],
+      "keywords": [
+        "fullstack",
+        "frontend",
+        "backend",
+        "database",
+        "api",
+        "typescript"
+      ],
       "license": "MIT",
       "repository": "https://github.com/davila7/claude-code-templates"
     },
@@ -40,7 +61,14 @@
         "name": "Claude Code Templates Team"
       },
       "category": "devops",
-      "keywords": ["devops", "ci-cd", "infrastructure", "kubernetes", "docker", "terraform"],
+      "keywords": [
+        "devops",
+        "ci-cd",
+        "infrastructure",
+        "kubernetes",
+        "docker",
+        "terraform"
+      ],
       "license": "MIT",
       "repository": "https://github.com/davila7/claude-code-templates"
     },
@@ -51,7 +79,14 @@
         "name": "Claude Code Templates Team"
       },
       "category": "mobile",
-      "keywords": ["mobile", "react-native", "flutter", "ios", "android", "cross-platform"],
+      "keywords": [
+        "mobile",
+        "react-native",
+        "flutter",
+        "ios",
+        "android",
+        "cross-platform"
+      ],
       "license": "MIT",
       "repository": "https://github.com/davila7/claude-code-templates"
     },
@@ -73,7 +108,14 @@
         "name": "Claude Code Templates Team"
       },
       "category": "design",
-      "keywords": ["ui", "ux", "design", "wireframes", "prototyping", "accessibility"],
+      "keywords": [
+        "ui",
+        "ux",
+        "design",
+        "wireframes",
+        "prototyping",
+        "accessibility"
+      ],
       "license": "MIT",
       "repository": "https://github.com/davila7/claude-code-templates"
     },

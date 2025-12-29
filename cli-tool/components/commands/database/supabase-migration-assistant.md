@@ -22,6 +22,7 @@ Execute comprehensive migration management with automated validation and testing
 **Migration Type**: Use $ARGUMENTS to specify table creation, schema alterations, data seeding, or migration rollback
 
 **Migration Management Framework**:
+
 1. **Migration Planning** - Analyze schema requirements, design migration strategy, identify dependencies, plan rollback procedures
 2. **Code Generation** - Generate migration SQL files, create TypeScript types, implement safety checks, optimize execution order
 3. **Validation Testing** - Test migration on development data, validate schema changes, verify data integrity, check constraint violations

@@ -62,6 +62,7 @@ Download these 5 YouTube videos:
 **User**: "Download this YouTube video: https://youtube.com/watch?v=abc123"
 
 **Output**:
+
 ```
 Downloading from YouTube...
 
@@ -84,6 +85,7 @@ Saved to: ~/Downloads/
 ## Important Notes
 
 ⚠️ **Copyright & Fair Use**
+
 - Only download videos you have permission to download
 - Respect copyright laws and platform terms of service
 - Use for personal, educational, or fair use purposes
@@ -103,4 +105,3 @@ Saved to: ~/Downloads/
 - **Content Creation**: Download your own content from platforms
 - **Backup**: Save important videos before they're removed
 - **Offline Viewing**: Watch videos without internet access
-

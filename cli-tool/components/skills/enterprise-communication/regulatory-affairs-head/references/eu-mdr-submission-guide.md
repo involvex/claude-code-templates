@@ -3,24 +3,28 @@
 ## MDR Classification and Conformity Assessment Routes
 
 ### Class I Devices
+
 - **Self-certification** under Annex II
 - **Technical documentation** requirements per Annex II
 - **Declaration of Conformity** mandatory
 - **UDI registration** required
 
 ### Class IIa Devices
+
 - **Notified Body involvement** for Annex III Module C2 + Annex V
 - **Quality management system** assessment
 - **Technical documentation** review
 - **Ongoing surveillance** requirements
 
 ### Class IIb Devices
+
 - **Notified Body certification** under Annex III Module B + C or D
 - **Type examination** or **Full quality assurance** route
 - **Design examination** requirements
 - **Production surveillance** obligations
 
 ### Class III Devices
+
 - **Comprehensive Notified Body assessment**
 - **Type examination** + production surveillance OR
 - **Full quality assurance** system approach
@@ -29,6 +33,7 @@
 ## Key MDR Submission Requirements
 
 ### 1. Technical Documentation (Annex II)
+
 - Device description and intended purpose
 - Risk management documentation (ISO 14971)
 - Clinical evidence per Annex XIV
@@ -36,6 +41,7 @@
 - Performance evaluation reports
 
 ### 2. Quality Management System (Annex I, Chapter II)
+
 - ISO 13485 compliant QMS
 - Design controls implementation
 - Risk management integration
@@ -43,6 +49,7 @@
 - Post-market surveillance system
 
 ### 3. Clinical Evidence Requirements
+
 - **Clinical evaluation plan** per Annex XIV
 - **Literature review** and gap analysis
 - **Clinical investigation** if required
@@ -50,6 +57,7 @@
 - **Clinical evaluation report** updating
 
 ### 4. UDI System Implementation
+
 - **UDI-DI assignment** and registration
 - **UDI-PI requirements** for higher risk devices
 - **EUDAMED registration** obligations
@@ -58,6 +66,7 @@
 ## Submission Timeline Framework
 
 ### Pre-Submission Phase (6-12 months)
+
 1. **Gap analysis** against MDR requirements
 2. **Classification confirmation** with regulatory experts
 3. **Notified Body selection** and preliminary discussions
@@ -65,6 +74,7 @@
 5. **UDI strategy** and EUDAMED preparation
 
 ### Submission Preparation (3-6 months)
+
 1. **Technical documentation** compilation
 2. **QMS documentation** review and update
 3. **Clinical evaluation** completion
@@ -72,6 +82,7 @@
 5. **Notified Body application** submission
 
 ### Review and Certification (6-18 months)
+
 1. **Initial assessment** by Notified Body
 2. **Questions and clarifications** response
 3. **Audit activities** coordination

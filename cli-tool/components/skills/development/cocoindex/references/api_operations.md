@@ -50,6 +50,7 @@ await my_flow.setup_async(report_to_stdout=True)
 ```
 
 **When to use:**
+
 - Before first update
 - After modifying flow structure
 - After dropping flow to recreate resources
@@ -221,6 +222,7 @@ my_flow.evaluate_and_dump(
 ```
 
 **Use cases:**
+
 - Testing flow logic
 - Debugging transformations
 - Inspecting intermediate data

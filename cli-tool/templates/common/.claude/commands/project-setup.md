@@ -23,6 +23,7 @@ This command helps you set up new projects with proper directory structure, conf
 ## Project Structure Templates
 
 ### Generic Project Structure
+
 ```
 project-name/
 ├── README.md                 # Project documentation
@@ -53,6 +54,7 @@ project-name/
 ```
 
 ### Web Application Structure
+
 ```
 web-app/
 ├── public/                  # Static assets
@@ -74,6 +76,7 @@ web-app/
 ```
 
 ### API Project Structure
+
 ```
 api-project/
 ├── src/
@@ -99,6 +102,7 @@ api-project/
 ## Essential Configuration Files
 
 ### .gitignore Template
+
 ```gitignore
 # Dependencies
 node_modules/
@@ -131,6 +135,7 @@ Thumbs.db
 ```
 
 ### README.md Template
+
 ```markdown
 # Project Name
 
@@ -145,26 +150,34 @@ Brief description of what this project does.
 ## Installation
 
 \`\`\`bash
+
 # Clone the repository
+
 git clone https://github.com/username/project-name.git
 
 # Install dependencies
+
 npm install
 
 # Copy environment file
+
 cp .env.example .env
 \`\`\`
 
 ## Usage
 
 \`\`\`bash
+
 # Start development server
+
 npm run dev
 
 # Run tests
+
 npm test
 
 # Build for production
+
 npm run build
 \`\`\`
 
@@ -182,6 +195,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 ```
 
 ### .env.example Template
+
 ```env
 # Application
 NODE_ENV=development
@@ -207,6 +221,7 @@ EMAIL_SERVICE_API_KEY=your-email-key
 ## Development Environment Setup
 
 ### Package.json Scripts
+
 ```json
 {
   "scripts": {
@@ -226,6 +241,7 @@ EMAIL_SERVICE_API_KEY=your-email-key
 ```
 
 ### Git Initialization
+
 ```bash
 # Initialize Git repository
 git init
@@ -251,12 +267,14 @@ git push -u origin main
 ## Language-Specific Setup
 
 ### Node.js/JavaScript
+
 ```bash
 npm init -y
 npm install --save-dev nodemon jest eslint prettier
 ```
 
 ### Python
+
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -264,6 +282,7 @@ pip install -r requirements.txt
 ```
 
 ### Docker Setup
+
 ```dockerfile
 # Dockerfile
 FROM node:16-alpine
@@ -277,7 +296,7 @@ CMD ["npm", "start"]
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 services:
   app:
     build: .

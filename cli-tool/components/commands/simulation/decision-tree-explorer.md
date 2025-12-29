@@ -22,6 +22,7 @@ Create comprehensive decision tree analysis for optimal choice selection:
 **Decision Context**: Use $ARGUMENTS to analyze strategic decisions, investments, operations, or crisis responses
 
 **Decision Framework**:
+
 1. **Option Generation** - Comprehensive alternative identification including hybrid and innovative approaches
 2. **Probability Assessment** - Systematic likelihood estimation using base rates, expert judgment, and market data
 3. **Expected Value Analysis** - Multi-dimensional value calculation including financial, strategic, and risk factors

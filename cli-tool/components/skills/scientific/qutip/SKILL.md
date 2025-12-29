@@ -89,6 +89,7 @@ result = mcsolve(H, psi0, tlist, c_ops, ntraj=500, e_ops=[num(N)])
 ```
 
 **Solver selection guide:**
+
 - `sesolve`: Pure states, unitary evolution
 - `mesolve`: Mixed states, dissipation, general open systems
 - `mcsolve`: Quantum jumps, photon counting, individual trajectories

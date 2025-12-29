@@ -15,21 +15,27 @@ Removes a task completely from the orchestration system, handling all dependenci
 ## Basic Commands
 
 ### Remove Single Task
+
 ```
 /orchestration/remove TASK-003
 ```
+
 Shows impact analysis and confirms before removal.
 
 ### Force Remove
+
 ```
 /orchestration/remove TASK-003 --force
 ```
+
 Skips confirmation (use with caution).
 
 ### Dry Run
+
 ```
 /orchestration/remove TASK-003 --dry-run
 ```
+
 Shows what would be affected without making changes.
 
 ## Impact Analysis
@@ -68,21 +74,23 @@ Proceed with removal? [y/N]
 ## Removal Process
 
 ### 1. Update Dependent Tasks
+
 ```
 Updating dependent tasks:
 - TASK-005: Removing dependency on TASK-003
   New status: Ready to start (no blockers)
-  
+
 - TASK-007: Removing dependency on TASK-003
   Warning: Still blocked by TASK-009
 ```
 
 ### 2. Update Tracking Files
+
 ```yaml
 # TASK-STATUS-TRACKER.yaml updates:
 status_history:
   TASK-003: [REMOVED - archived to .removed/]
-  
+
 current_status_summary:
   in_progress: [TASK-003 removed from list]
 
@@ -95,6 +103,7 @@ removal_log:
 ```
 
 ### 3. Update Coordination Documents
+
 ```
 Updates applied:
 ✓ MASTER-COORDINATION.md - Removed from Wave 1
@@ -106,32 +115,41 @@ Updates applied:
 ## Options
 
 ### Archive Instead of Delete
+
 ```
 /orchestration/remove TASK-003 --archive
 ```
+
 Moves to `.removed/` directory instead of deleting.
 
 ### Remove Multiple Tasks
+
 ```
 /orchestration/remove TASK-003,TASK-005,TASK-008
 ```
+
 Analyzes and removes multiple tasks in dependency order.
 
 ### Remove by Pattern
+
 ```
 /orchestration/remove --pattern "oauth-*"
 ```
+
 Removes all tasks matching pattern.
 
 ### Cascade Removal
+
 ```
 /orchestration/remove TASK-003 --cascade
 ```
+
 Also removes tasks that depend on this task.
 
 ## Handling Special Cases
 
 ### Task with Commits
+
 ```
 Warning: TASK-003 has associated commits:
 - abc123: "feat(auth): implement JWT validation"
@@ -144,6 +162,7 @@ Options:
 ```
 
 ### Task in QA/Completed
+
 ```
 Warning: TASK-003 is in 'completed' status
 
@@ -154,6 +173,7 @@ This usually means work was done. Consider:
 ```
 
 ### Critical Path Task
+
 ```
 ERROR: TASK-003 is on the critical path!
 
@@ -167,27 +187,33 @@ Override with --force-critical
 ## Removal Strategies
 
 ### Soft Remove (Default)
+
 ```
 /orchestration/remove TASK-003
 ```
+
 - Archives task file
 - Updates all references
 - Logs removal reason
 - Preserves git history
 
 ### Hard Remove
+
 ```
 /orchestration/remove TASK-003 --hard
 ```
+
 - Deletes task file permanently
 - Removes all traces
 - Updates git tracking
 - No recovery possible
 
 ### Replace Remove
+
 ```
 /orchestration/remove TASK-003 --replace-with TASK-015
 ```
+
 - Transfers dependencies to new task
 - Updates all references
 - Maintains continuity
@@ -195,20 +221,25 @@ Override with --force-critical
 ## Undo Capabilities
 
 ### Recent Removal
+
 ```
 /orchestration/remove --undo-last
 ```
+
 Restores the most recently removed task.
 
 ### Restore from Archive
+
 ```
 /orchestration/remove --restore TASK-003
 ```
+
 Restores archived task with all references.
 
 ## Examples
 
 ### Example 1: Obsolete Feature
+
 ```
 /orchestration/remove TASK-008 --reason "Feature descoped"
 
@@ -221,6 +252,7 @@ Task removed successfully.
 ```
 
 ### Example 2: Duplicate Task
+
 ```
 /orchestration/remove TASK-012 --replace-with TASK-005
 
@@ -233,6 +265,7 @@ Duplicate removed, TASK-005 updated.
 ```
 
 ### Example 3: Changed Requirements
+
 ```
 /orchestration/remove TASK-003,TASK-004,TASK-005 --reason "Auth system redesigned"
 
@@ -247,6 +280,7 @@ Proceed? [y/N]
 ## Audit Trail
 
 All removals are logged:
+
 ```yaml
 # .orchestration-audit.yaml
 removals:
@@ -271,6 +305,7 @@ removals:
 ## Integration
 
 ### With Other Commands
+
 ```
 # First check status
 /orchestration/status --task TASK-003
@@ -280,6 +315,7 @@ removals:
 ```
 
 ### Bulk Operations
+
 ```
 # Find and remove all on-hold tasks older than 30 days
 /orchestration/find --status on_hold --older-than 30d | /orchestration/remove --batch

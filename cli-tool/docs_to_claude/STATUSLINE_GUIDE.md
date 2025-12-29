@@ -15,18 +15,23 @@ Status lines are customizable information displays that appear at the bottom of 
 ## Key Benefits
 
 ### 📊 Real-time Session Information
+
 Display current model, directories, git status, and project metrics at a glance.
 
 ### 🎨 Visual Customization
+
 Use colors, emojis, and formatting to create informative and visually appealing status displays.
 
 ### 🔄 Dynamic Updates
+
 Status line refreshes automatically as your session progresses and context changes.
 
 ### 🛠️ Full Programmability
+
 Write custom scripts in any language to display exactly the information you need.
 
 ### ⚡ Contextual Awareness
+
 Access rich session data including costs, duration, model info, and workspace details.
 
 ## Status Line Configuration
@@ -36,7 +41,9 @@ Access rich session data including costs, duration, model info, and workspace de
 You can set up a status line in two ways:
 
 #### 1. Interactive Setup
+
 Use the built-in command for guided setup:
+
 ```bash
 /statusline
 ```
@@ -44,6 +51,7 @@ Use the built-in command for guided setup:
 This will help you create a status line, often reproducing your terminal prompt by default.
 
 **With custom instructions**:
+
 ```bash
 /statusline show the model name in orange and git branch in green
 /statusline include current time and session cost
@@ -51,9 +59,11 @@ This will help you create a status line, often reproducing your terminal prompt 
 ```
 
 #### 2. Manual Configuration
+
 Add directly to your settings file:
 
 **File**: `.claude/settings.json`
+
 ```json
 {
   "statusLine": {
@@ -65,16 +75,17 @@ Add directly to your settings file:
 ```
 
 **Configuration Options**:
+
 - `type`: Always `"command"` (only supported type currently)
 - `command`: Path to your status line script (absolute or relative to home directory)
 - `padding`: Optional spacing from edges (default has padding, set to `0` for edge-to-edge)
 
 ### Settings File Locations
 
-| Type | Location | Scope | Usage |
-|------|----------|-------|--------|
-| **User Settings** | `~/.claude/settings.json` | All projects | Personal status line across all projects |
-| **Project Settings** | `.claude/settings.json` | Current project | Team-shared status line (committed) |
+| Type                       | Location                      | Scope           | Usage                                        |
+| -------------------------- | ----------------------------- | --------------- | -------------------------------------------- |
+| **User Settings**          | `~/.claude/settings.json`     | All projects    | Personal status line across all projects     |
+| **Project Settings**       | `.claude/settings.json`       | Current project | Team-shared status line (committed)          |
 | **Local Project Settings** | `.claude/settings.local.json` | Current project | Personal project status line (not committed) |
 
 ## Session Data Input
@@ -114,15 +125,18 @@ Your status line script receives comprehensive session data via stdin:
 ### Available Data Fields
 
 #### Model Information
+
 - `model.id`: Full model identifier
 - `model.display_name`: Human-readable model name (Sonnet, Haiku, Opus)
 
 #### Workspace Information
+
 - `workspace.current_dir`: Current working directory
 - `workspace.project_dir`: Original project root directory
 - `cwd`: Current working directory (same as workspace.current_dir)
 
 #### Session Metrics
+
 - `cost.total_cost_usd`: Total API cost in USD
 - `cost.total_duration_ms`: Total session duration
 - `cost.total_api_duration_ms`: Total API request time
@@ -130,6 +144,7 @@ Your status line script receives comprehensive session data via stdin:
 - `cost.total_lines_removed`: Lines of code removed
 
 #### Session Identity
+
 - `session_id`: Unique session identifier
 - `transcript_path`: Path to conversation transcript
 - `version`: Claude Code version
@@ -140,6 +155,7 @@ Your status line script receives comprehensive session data via stdin:
 ### 1. Essential Information Display
 
 **statusline.sh**:
+
 ```bash
 #!/bin/bash
 # Essential status line with model, directory, and git info
@@ -183,6 +199,7 @@ echo -e "\033[94m[$MODEL_DISPLAY]\033[0m \033[93m📁 $DISPLAY_DIR\033[0m$GIT_IN
 ### 2. Comprehensive Development Status
 
 **dev-statusline.py**:
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -195,18 +212,18 @@ def get_git_info():
     """Get comprehensive git information"""
     if not os.path.exists('.git'):
         return ""
-    
+
     try:
         # Current branch
-        branch = subprocess.check_output(['git', 'branch', '--show-current'], 
+        branch = subprocess.check_output(['git', 'branch', '--show-current'],
                                        stderr=subprocess.DEVNULL).decode().strip()
         if not branch:
             return ""
-        
+
         # Check for changes
         status_cmd = ['git', 'status', '--porcelain']
         status_output = subprocess.check_output(status_cmd, stderr=subprocess.DEVNULL).decode().strip()
-        
+
         if status_output:
             # Count changes
             lines = status_output.split('\n')
@@ -214,19 +231,19 @@ def get_git_info():
             added = sum(1 for line in lines if line.startswith('A'))
             deleted = sum(1 for line in lines if line.startswith(' D'))
             untracked = sum(1 for line in lines if line.startswith('??'))
-            
+
             changes = []
             if modified: changes.append(f"~{modified}")
             if added: changes.append(f"+{added}")
             if deleted: changes.append(f"-{deleted}")
             if untracked: changes.append(f"?{untracked}")
-            
+
             status_indicator = f"({','.join(changes)})" if changes else "±"
         else:
             status_indicator = "✓"
-        
+
         return f" \033[32m🌿 {branch}{status_indicator}\033[0m"
-    
+
     except subprocess.CalledProcessError:
         return ""
 
@@ -253,7 +270,7 @@ def get_node_version():
     """Get Node.js version if available"""
     try:
         if os.path.exists('package.json'):
-            version = subprocess.check_output(['node', '--version'], 
+            version = subprocess.check_output(['node', '--version'],
                                             stderr=subprocess.DEVNULL).decode().strip()
             return f" \033[32m⬢ {version}\033[0m"
     except (subprocess.CalledProcessError, FileNotFoundError):
@@ -264,7 +281,7 @@ def get_python_version():
     """Get Python version if available"""
     try:
         if os.path.exists('requirements.txt') or os.path.exists('pyproject.toml'):
-            version = subprocess.check_output(['python', '--version'], 
+            version = subprocess.check_output(['python', '--version'],
                                             stderr=subprocess.DEVNULL).decode().strip()
             version = version.replace('Python ', '')
             return f" \033[33m🐍 {version}\033[0m"
@@ -275,29 +292,29 @@ def get_python_version():
 def main():
     # Read JSON from stdin
     data = json.load(sys.stdin)
-    
+
     # Extract basic information
     model = data['model']['display_name']
     current_dir = data['workspace']['current_dir']
     project_dir = data['workspace']['project_dir']
-    
+
     # Calculate relative directory
     if current_dir.startswith(project_dir):
         rel_dir = current_dir[len(project_dir):].lstrip('/')
         display_dir = rel_dir if rel_dir else os.path.basename(project_dir)
     else:
         display_dir = os.path.basename(current_dir)
-    
+
     # Session metrics
     cost = data['cost']
     duration_str = format_duration(cost['total_duration_ms'])
     cost_str = format_cost(cost['total_cost_usd'])
-    
+
     # Lines changed
     lines_info = ""
     if cost['total_lines_added'] > 0 or cost['total_lines_removed'] > 0:
         lines_info = f" \033[36m📝 +{cost['total_lines_added']}/-{cost['total_lines_removed']}\033[0m"
-    
+
     # Build status line
     status_parts = [
         f"\033[94m[{model}]\033[0m",
@@ -308,7 +325,7 @@ def main():
         lines_info,
         f"\033[90m⏱ {duration_str} • {cost_str}\033[0m"
     ]
-    
+
     # Filter empty parts and join
     status_line = "".join(part for part in status_parts if part.strip())
     print(status_line)
@@ -320,6 +337,7 @@ if __name__ == "__main__":
 ### 3. Minimal Clean Status
 
 **minimal-statusline.sh**:
+
 ```bash
 #!/bin/bash
 # Minimal, clean status line
@@ -346,69 +364,72 @@ echo "$MODEL • $DIR_NAME$BRANCH"
 ### 4. Performance-Focused Status
 
 **performance-statusline.js**:
+
 ```javascript
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 // Read JSON from stdin
-let input = '';
-process.stdin.on('data', chunk => input += chunk);
-process.stdin.on('end', () => {
+let input = "";
+process.stdin.on("data", (chunk) => (input += chunk));
+process.stdin.on("end", () => {
+  try {
+    const data = JSON.parse(input);
+
+    // Extract information
+    const model = data.model.display_name;
+    const currentDir = data.workspace.current_dir;
+    const projectDir = data.workspace.project_dir;
+    const cost = data.cost;
+
+    // Calculate directory display
+    const displayDir = currentDir.startsWith(projectDir)
+      ? currentDir.slice(projectDir.length + 1) || path.basename(projectDir)
+      : path.basename(currentDir);
+
+    // Performance metrics
+    const avgResponseTime =
+      cost.total_api_duration_ms / Math.max(1, cost.total_duration_ms / 10000);
+    const efficiency =
+      cost.total_lines_added / Math.max(0.01, cost.total_cost_usd * 100);
+
+    // Git status (cached for performance)
+    let gitInfo = "";
     try {
-        const data = JSON.parse(input);
-        
-        // Extract information
-        const model = data.model.display_name;
-        const currentDir = data.workspace.current_dir;
-        const projectDir = data.workspace.project_dir;
-        const cost = data.cost;
-        
-        // Calculate directory display
-        const displayDir = currentDir.startsWith(projectDir)
-            ? currentDir.slice(projectDir.length + 1) || path.basename(projectDir)
-            : path.basename(currentDir);
-        
-        // Performance metrics
-        const avgResponseTime = cost.total_api_duration_ms / Math.max(1, cost.total_duration_ms / 10000);
-        const efficiency = cost.total_lines_added / Math.max(0.01, cost.total_cost_usd * 100);
-        
-        // Git status (cached for performance)
-        let gitInfo = '';
-        try {
-            if (fs.existsSync('.git/HEAD')) {
-                const headContent = fs.readFileSync('.git/HEAD', 'utf8').trim();
-                if (headContent.startsWith('ref: refs/heads/')) {
-                    const branch = headContent.replace('ref: refs/heads/', '');
-                    gitInfo = ` \x1b[32m⭐ ${branch}\x1b[0m`;
-                }
-            }
-        } catch (e) {
-            // Ignore git errors
+      if (fs.existsSync(".git/HEAD")) {
+        const headContent = fs.readFileSync(".git/HEAD", "utf8").trim();
+        if (headContent.startsWith("ref: refs/heads/")) {
+          const branch = headContent.replace("ref: refs/heads/", "");
+          gitInfo = ` \x1b[32m⭐ ${branch}\x1b[0m`;
         }
-        
-        // Build status with performance focus
-        const parts = [
-            `\x1b[94m[${model}]\x1b[0m`,
-            `\x1b[93m📁 ${displayDir}\x1b[0m`,
-            gitInfo,
-            `\x1b[36m⚡ ${efficiency.toFixed(0)} lines/¢\x1b[0m`,
-            `\x1b[90m${avgResponseTime.toFixed(0)}ms avg\x1b[0m`
-        ];
-        
-        console.log(parts.filter(p => p.trim()).join(' '));
-        
-    } catch (error) {
-        console.log(`[Status Error] ${error.message}`);
+      }
+    } catch (e) {
+      // Ignore git errors
     }
+
+    // Build status with performance focus
+    const parts = [
+      `\x1b[94m[${model}]\x1b[0m`,
+      `\x1b[93m📁 ${displayDir}\x1b[0m`,
+      gitInfo,
+      `\x1b[36m⚡ ${efficiency.toFixed(0)} lines/¢\x1b[0m`,
+      `\x1b[90m${avgResponseTime.toFixed(0)}ms avg\x1b[0m`,
+    ];
+
+    console.log(parts.filter((p) => p.trim()).join(" "));
+  } catch (error) {
+    console.log(`[Status Error] ${error.message}`);
+  }
 });
 ```
 
 ### 5. Project-Aware Status Line
 
 **project-statusline.py**:
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -434,13 +455,13 @@ def detect_project_type():
                     framework = "🚂"
                 else:
                     framework = "📦"
-                
+
                 name = package.get('name', 'unknown')
                 version = package.get('version', '0.0.0')
                 return f"{framework} {name}@{version}"
             except:
                 return "📦 Node.js"
-    
+
     elif os.path.exists('Cargo.toml'):
         try:
             with open('Cargo.toml', 'r') as f:
@@ -456,7 +477,7 @@ def detect_project_type():
                 return f"🦀 {name}@{version}"
         except:
             return "🦀 Rust"
-    
+
     elif os.path.exists('go.mod'):
         try:
             with open('go.mod', 'r') as f:
@@ -466,7 +487,7 @@ def detect_project_type():
                     return f"🐹 {module_name}"
         except:
             return "🐹 Go"
-    
+
     elif os.path.exists('pyproject.toml') or os.path.exists('requirements.txt'):
         if os.path.exists('pyproject.toml'):
             try:
@@ -480,19 +501,19 @@ def detect_project_type():
                 return "🐍 Python"
         else:
             return "🐍 Python"
-    
+
     elif os.path.exists('pom.xml'):
         return "☕ Java/Maven"
-    
+
     elif os.path.exists('build.gradle') or os.path.exists('build.gradle.kts'):
         return "☕ Java/Gradle"
-    
+
     elif os.path.exists('Gemfile'):
         return "💎 Ruby"
-    
+
     elif os.path.exists('composer.json'):
         return "🐘 PHP"
-    
+
     return "📁 Generic"
 
 def get_testing_status():
@@ -500,7 +521,7 @@ def get_testing_status():
     test_files = []
     for pattern in ['*test*', '*spec*', 'tests/', '__tests__/', 'test/']:
         test_files.extend(Path('.').glob(pattern))
-    
+
     if test_files:
         return " \033[32m🧪\033[0m"
     return ""
@@ -521,41 +542,41 @@ def get_ci_status():
 
 def main():
     data = json.load(sys.stdin)
-    
+
     # Basic info
     model = data['model']['display_name']
     current_dir = data['workspace']['current_dir']
     project_dir = data['workspace']['project_dir']
-    
+
     # Directory display
     if current_dir.startswith(project_dir):
         rel_dir = current_dir[len(project_dir):].lstrip('/')
         display_dir = rel_dir if rel_dir else os.path.basename(project_dir)
     else:
         display_dir = os.path.basename(current_dir)
-    
+
     # Project detection
     project_info = detect_project_type()
-    
+
     # Git info
     git_info = ""
     if os.path.exists('.git'):
         try:
-            branch = subprocess.check_output(['git', 'branch', '--show-current'], 
+            branch = subprocess.check_output(['git', 'branch', '--show-current'],
                                            stderr=subprocess.DEVNULL).decode().strip()
             if branch:
                 git_info = f" \033[32m🌿 {branch}\033[0m"
         except:
             pass
-    
+
     # Additional status indicators
     test_status = get_testing_status()
     docker_status = get_docker_status()
     ci_status = get_ci_status()
-    
+
     # Session cost
     cost_str = f"${data['cost']['total_cost_usd']:.3f}" if data['cost']['total_cost_usd'] >= 0.001 else f"{data['cost']['total_cost_usd']*100:.1f}¢"
-    
+
     # Build final status
     status = f"\033[94m[{model}]\033[0m \033[93m{project_info}\033[0m{git_info}{test_status}{docker_status}{ci_status} \033[90m{cost_str}\033[0m"
     print(status)
@@ -567,6 +588,7 @@ if __name__ == "__main__":
 ### 6. Time and Productivity Status
 
 **productivity-statusline.sh**:
+
 ```bash
 #!/bin/bash
 # Productivity-focused status line with time tracking
@@ -639,7 +661,7 @@ mkdir -p "$CACHE_DIR"
 get_git_info_cached() {
     local cache_file="$CACHE_DIR/git_info_$(pwd | sed 's/\//_/g')"
     local cache_timeout=5  # seconds
-    
+
     if [[ -f "$cache_file" && $(($(date +%s) - $(stat -f %m "$cache_file" 2>/dev/null || echo 0))) -lt $cache_timeout ]]; then
         cat "$cache_file"
     else
@@ -686,7 +708,7 @@ COLORS = {
     },
     'staging': {
         'model': '\033[93m',  # Yellow for staging
-        'directory': '\033[94m', 
+        'directory': '\033[94m',
         'git': '\033[92m',
         'reset': '\033[0m'
     },
@@ -706,17 +728,17 @@ def detect_environment():
         return 'production'
     elif env in ['staging', 'stage']:
         return 'staging'
-    
+
     # Check for environment files
     if os.path.exists('.env.production'):
         return 'production'
     elif os.path.exists('.env.staging'):
         return 'staging'
-    
+
     # Check git branch
     try:
         import subprocess
-        branch = subprocess.check_output(['git', 'branch', '--show-current'], 
+        branch = subprocess.check_output(['git', 'branch', '--show-current'],
                                        stderr=subprocess.DEVNULL).decode().strip()
         if branch in ['main', 'master', 'production']:
             return 'production'
@@ -724,32 +746,32 @@ def detect_environment():
             return 'staging'
     except:
         pass
-    
+
     return 'development'
 
 def main():
     data = json.load(sys.stdin)
-    
+
     # Detect environment and get colors
     env = detect_environment()
     colors = COLORS[env]
-    
+
     # Extract data
     model = data['model']['display_name']
     current_dir = os.path.basename(data['workspace']['current_dir'])
-    
+
     # Environment indicator
     env_indicator = {
         'production': '🔴 PROD',
-        'staging': '🟡 STAGE', 
+        'staging': '🟡 STAGE',
         'development': '🟢 DEV'
     }[env]
-    
+
     # Build colored status line
     status = (f"{colors['model']}[{model}]{colors['reset']} "
              f"{colors['directory']}📁 {current_dir}{colors['reset']} "
              f"{env_indicator}")
-    
+
     print(status)
 
 if __name__ == "__main__":
@@ -815,72 +837,72 @@ def get_priority_info(data):
     """Determine what information is most important to show"""
     current_dir = data['workspace']['current_dir']
     cost = data['cost']
-    
+
     priorities = []
-    
+
     # High priority: Expensive session
     if cost['total_cost_usd'] > 0.05:  # More than 5 cents
         priorities.append(('cost', f"💰 ${cost['total_cost_usd']:.3f}", 1))
-    
+
     # High priority: Long session
     if cost['total_duration_ms'] > 300000:  # More than 5 minutes
         duration_min = cost['total_duration_ms'] / 60000
         priorities.append(('duration', f"⏱ {duration_min:.1f}m", 1))
-    
+
     # Medium priority: Significant changes
     if cost['total_lines_added'] + cost['total_lines_removed'] > 50:
         net_lines = cost['total_lines_added'] - cost['total_lines_removed']
         sign = '+' if net_lines >= 0 else ''
         priorities.append(('changes', f"📝 {sign}{net_lines}", 2))
-    
+
     # Medium priority: Git status with changes
     try:
         if os.path.exists('.git'):
-            status_output = subprocess.check_output(['git', 'status', '--porcelain'], 
+            status_output = subprocess.check_output(['git', 'status', '--porcelain'],
                                                   stderr=subprocess.DEVNULL).decode().strip()
             if status_output:
                 change_count = len(status_output.split('\n'))
                 priorities.append(('git_changes', f"⚠️ {change_count} changed", 2))
     except:
         pass
-    
+
     # Low priority: Time
     current_time = datetime.now().strftime("%H:%M")
     priorities.append(('time', f"🕐 {current_time}", 3))
-    
+
     return priorities
 
 def main():
     data = json.load(sys.stdin)
-    
+
     # Basic info (always shown)
     model = data['model']['display_name']
     current_dir = os.path.basename(data['workspace']['current_dir'])
-    
+
     # Get prioritized additional info
     priorities = get_priority_info(data)
-    
+
     # Sort by priority and take top items
     priorities.sort(key=lambda x: x[2])  # Sort by priority level
-    
+
     # Build status line with space management
     max_length = 80  # Estimate terminal width
     base_status = f"[{model}] 📁 {current_dir}"
     remaining_space = max_length - len(base_status)
-    
+
     additional_info = []
     for info_type, info_text, priority in priorities:
         if len(' • '.join(additional_info + [info_text])) < remaining_space - 3:
             additional_info.append(info_text)
         else:
             break  # Stop adding info if we're running out of space
-    
+
     # Combine everything
     if additional_info:
         full_status = f"{base_status} • {' • '.join(additional_info)}"
     else:
         full_status = base_status
-    
+
     print(full_status)
 
 if __name__ == "__main__":
@@ -890,18 +912,21 @@ if __name__ == "__main__":
 ## Best Practices
 
 ### 1. Performance Optimization
+
 - **Keep scripts fast**: Status lines update frequently, so optimize for speed
 - **Cache expensive operations**: Use caching for git status, file system checks
 - **Limit external command calls**: Minimize subprocess execution
 - **Use efficient parsing**: Prefer lightweight JSON parsing methods
 
 ### 2. Visual Design
+
 - **Be concise**: Status lines should fit on one line
 - **Use meaningful colors**: Color-code different types of information
 - **Choose clear icons**: Use universally understood emojis and symbols
 - **Maintain consistency**: Stick to a consistent visual style
 
 ### 3. Error Handling
+
 ```bash
 #!/bin/bash
 # Robust error handling example
@@ -929,6 +954,7 @@ echo "[$MODEL] $DIR_NAME$GIT_INFO"
 ### 4. Testing and Development
 
 **Test your status line script**:
+
 ```bash
 # Create test JSON input
 echo '{
@@ -939,6 +965,7 @@ echo '{
 ```
 
 **Debug with logging**:
+
 ```python
 #!/usr/bin/env python3
 import json
@@ -955,12 +982,12 @@ logging.basicConfig(
 try:
     data = json.load(sys.stdin)
     logging.debug(f"Received data: {data}")
-    
+
     # Your status line logic
     result = "Status line output"
     logging.debug(f"Generated: {result}")
     print(result)
-    
+
 except Exception as e:
     logging.error(f"Error: {e}")
     print("[Status Error]")  # Fallback display
@@ -993,6 +1020,7 @@ fi
 ### Personal Development Setup
 
 **.claude/settings.json** (Project):
+
 ```json
 {
   "statusLine": {
@@ -1006,6 +1034,7 @@ fi
 ### Team-Shared Configuration
 
 **.claude/settings.json** (Committed):
+
 ```json
 {
   "statusLine": {
@@ -1019,10 +1048,11 @@ fi
 ### Environment-Specific Status
 
 **.claude/settings.local.json** (Not committed):
+
 ```json
 {
   "statusLine": {
-    "type": "command", 
+    "type": "command",
     "command": "$HOME/.claude/statuslines/production-status.py",
     "padding": 0
   }
@@ -1056,11 +1086,12 @@ fi
 ### Debug Tools
 
 **Test JSON Input**:
+
 ```json
 {
   "hook_event_name": "Status",
   "session_id": "test-123",
-  "model": {"display_name": "Sonnet"},
+  "model": { "display_name": "Sonnet" },
   "workspace": {
     "current_dir": "/Users/you/project",
     "project_dir": "/Users/you/project"
@@ -1075,11 +1106,13 @@ fi
 ```
 
 **Test Command**:
+
 ```bash
 echo 'test-json-here' | ~/.claude/statusline.sh
 ```
 
 **Performance Testing**:
+
 ```bash
 time echo 'test-json' | ~/.claude/statusline.sh
 ```
@@ -1092,7 +1125,7 @@ time echo 'test-json' | ~/.claude/statusline.sh
 # Minimal
 [Sonnet] 📁 my-project
 
-# Git-aware  
+# Git-aware
 [Sonnet] 📁 src • 🌿 feature-branch
 
 # Development-focused
@@ -1113,7 +1146,7 @@ time echo 'test-json' | ~/.claude/statusline.sh
 Claude Code status lines provide a powerful way to customize your development interface with contextual information that matters to you. With status lines, you can:
 
 - **Monitor session metrics** like cost, duration, and productivity
-- **Display project context** including git status, environment, and dependencies  
+- **Display project context** including git status, environment, and dependencies
 - **Track development progress** with real-time updates
 - **Customize the interface** to match your workflow and preferences
 - **Enhance situational awareness** during coding sessions

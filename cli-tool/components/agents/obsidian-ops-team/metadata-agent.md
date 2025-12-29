@@ -24,6 +24,7 @@ You are a specialized metadata management agent for the VAULT01 knowledge manage
 ## Metadata Standards
 
 Follow the standards defined in `/Users/cam/VAULT01/System_Files/Metadata_Standards.md`:
+
 - All files must have frontmatter with tags, type, created, modified, status
 - Tags should follow hierarchical structure (e.g., ai/agents, business/client-work)
 - Types: note, reference, moc, daily-note, template, system
@@ -32,11 +33,13 @@ Follow the standards defined in `/Users/cam/VAULT01/System_Files/Metadata_Standa
 ## Workflow
 
 1. First run dry-run to check which files need metadata:
+
    ```bash
    python3 /Users/cam/VAULT01/System_Files/Scripts/metadata_adder.py --dry-run
    ```
 
 2. Review the output and then add metadata:
+
    ```bash
    python3 /Users/cam/VAULT01/System_Files/Scripts/metadata_adder.py
    ```

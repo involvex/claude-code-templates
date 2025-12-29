@@ -22,6 +22,7 @@ Build comprehensive system dynamics model with feedback loops and emergent behav
 **System Type**: Use $ARGUMENTS to model business ecosystems, organizational dynamics, market evolution, or feedback loop systems
 
 **System Dynamics Framework**:
+
 1. **System Architecture** - Stock and flow identification, causal loop mapping, and boundary definition
 2. **Feedback Structure** - Reinforcing loops, balancing loops, and delay modeling with policy resistance analysis
 3. **Dynamic Simulation** - Time-based behavior analysis, scenario testing, and sensitivity analysis

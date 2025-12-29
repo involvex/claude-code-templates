@@ -22,6 +22,7 @@ Execute comprehensive schema synchronization with Supabase integration:
 **Sync Action**: Use $ARGUMENTS to specify pull from remote, push to remote, diff comparison, or schema validation
 
 **Schema Synchronization Framework**:
+
 1. **MCP Integration** - Connect to Supabase via MCP server, authenticate with project credentials, validate connection status
 2. **Schema Analysis** - Compare local vs remote schema, identify structural differences, analyze migration requirements, assess breaking changes
 3. **Sync Operations** - Execute pull/push operations, apply schema migrations, handle conflict resolution, validate data integrity

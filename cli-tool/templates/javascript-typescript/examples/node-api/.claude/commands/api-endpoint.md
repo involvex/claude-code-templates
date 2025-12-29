@@ -29,6 +29,7 @@ Create a new API endpoint with all necessary components:
 ## Framework-Specific Patterns
 
 I'll adapt to your project's framework:
+
 - **Express**: Routes, controllers, middleware
 - **Fastify**: Routes, handlers, schemas, plugins
 - **NestJS**: Controllers, services, DTOs, guards

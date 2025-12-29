@@ -122,11 +122,13 @@ Generate a copy-pastable X thread from any content source - blog posts, articles
    - Encourage engagement: "What's your take?"
 
 **Thread Numbering:**
+
 - Include "(1/6)" style numbering in EVERY tweet
 - Count MUST be accurate
 - Place at the end of each tweet
 
 **Character Limits:**
+
 - Each post: MAX 280 characters (including thread number)
 - Account for URL shortening: URLs = 23 chars on X
 - Leave buffer of 10-15 chars for safety

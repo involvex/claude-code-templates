@@ -11,6 +11,7 @@ Convert blog posts to Medium-ready format with proper HTML structure and image h
 **Usage:** `$ARGUMENTS`
 
 **Examples:**
+
 ```bash
 /publisher:medium my-post           # Default English
 /publisher:medium my-post ja        # Japanese
@@ -49,6 +50,7 @@ Convert blog posts to Medium-ready format with proper HTML structure and image h
    - Follow image markers to upload diagrams
 
 **Output:**
+
 - HTML preview file with copy button
 - Clear image upload markers
 - File paths shown for each image

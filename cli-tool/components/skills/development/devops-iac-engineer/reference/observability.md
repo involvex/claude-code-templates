@@ -3,16 +3,19 @@
 ## The Three Pillars of Observability
 
 ### 1. Metrics (What is happening?)
+
 - **Definition**: Numeric measurements over time
 - **Examples**: CPU usage, request rate, error rate, latency
 - **Tools**: Prometheus, Datadog, CloudWatch, New Relic
 
 ### 2. Logs (Why is it happening?)
+
 - **Definition**: Timestamped event records
 - **Examples**: Application logs, access logs, error logs
 - **Tools**: ELK Stack, Splunk, CloudWatch Logs, Loki
 
 ### 3. Traces (Where is it happening?)
+
 - **Definition**: Request journey through distributed system
 - **Examples**: Service call chains, database queries, external API calls
 - **Tools**: Jaeger, Zipkin, AWS X-Ray, Datadog APM
@@ -20,6 +23,7 @@
 ## SLI/SLO/SLA Framework
 
 ### Service Level Indicators (SLIs)
+
 **Quantitative measurements of service quality**
 
 ```yaml
@@ -42,6 +46,7 @@ throughput:
 ```
 
 ### Service Level Objectives (SLOs)
+
 **Target values for SLIs**
 
 ```yaml
@@ -61,6 +66,7 @@ error_rate_slo:
 ```
 
 ### Service Level Agreements (SLAs)
+
 **Business contracts with consequences**
 
 ```yaml
@@ -77,14 +83,15 @@ web_application_sla:
 ## Prometheus Setup
 
 ### Prometheus Configuration
+
 ```yaml
 # prometheus.yml
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: 'production'
-    environment: 'prod'
+    cluster: "production"
+    environment: "prod"
 
 # Alert manager configuration
 alerting:
@@ -100,12 +107,12 @@ rule_files:
 # Scrape configurations
 scrape_configs:
   # Prometheus self-monitoring
-  - job_name: 'prometheus'
+  - job_name: "prometheus"
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ["localhost:9090"]
 
   # Kubernetes pods
-  - job_name: 'kubernetes-pods'
+  - job_name: "kubernetes-pods"
     kubernetes_sd_configs:
       - role: pod
     relabel_configs:
@@ -116,7 +123,8 @@ scrape_configs:
         action: replace
         target_label: __metrics_path__
         regex: (.+)
-      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+      - source_labels:
+          [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
         action: replace
         regex: ([^:]+)(?::\d+)?;(\d+)
         replacement: $1:$2
@@ -131,7 +139,7 @@ scrape_configs:
         target_label: kubernetes_pod_name
 
   # Node exporter
-  - job_name: 'node-exporter'
+  - job_name: "node-exporter"
     kubernetes_sd_configs:
       - role: node
     relabel_configs:
@@ -140,6 +148,7 @@ scrape_configs:
 ```
 
 ### Alert Rules
+
 ```yaml
 # alert-rules.yml
 groups:
@@ -222,6 +231,7 @@ groups:
 ## Structured Logging
 
 ### Best Practices
+
 ```json
 {
   "timestamp": "2025-10-17T10:30:45.123Z",
@@ -249,60 +259,61 @@ groups:
 ```
 
 ### Logging Configuration (Node.js Example)
+
 ```javascript
-const winston = require('winston');
+const winston = require("winston");
 
 const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
+  level: process.env.LOG_LEVEL || "info",
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.json()
+    winston.format.json(),
   ),
   defaultMeta: {
     service: process.env.SERVICE_NAME,
     version: process.env.SERVICE_VERSION,
-    environment: process.env.ENVIRONMENT
+    environment: process.env.ENVIRONMENT,
   },
   transports: [
     new winston.transports.Console(),
     new winston.transports.File({
-      filename: 'error.log',
-      level: 'error'
+      filename: "error.log",
+      level: "error",
     }),
     new winston.transports.File({
-      filename: 'combined.log'
-    })
-  ]
+      filename: "combined.log",
+    }),
+  ],
 });
 
 // Usage with correlation ID
 app.use((req, res, next) => {
-  req.id = req.headers['x-request-id'] || uuidv4();
+  req.id = req.headers["x-request-id"] || uuidv4();
   req.logger = logger.child({
     request_id: req.id,
-    trace_id: req.headers['x-trace-id']
+    trace_id: req.headers["x-trace-id"],
   });
   next();
 });
 
-app.post('/api/orders', async (req, res) => {
-  req.logger.info('Creating order', {
-    customer_id: req.body.customer_id
+app.post("/api/orders", async (req, res) => {
+  req.logger.info("Creating order", {
+    customer_id: req.body.customer_id,
   });
 
   try {
     const order = await createOrder(req.body);
-    req.logger.info('Order created successfully', {
-      order_id: order.id
+    req.logger.info("Order created successfully", {
+      order_id: order.id,
     });
     res.json(order);
   } catch (error) {
-    req.logger.error('Failed to create order', {
+    req.logger.error("Failed to create order", {
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 ```
@@ -310,6 +321,7 @@ app.post('/api/orders', async (req, res) => {
 ## Distributed Tracing
 
 ### OpenTelemetry Configuration
+
 ```yaml
 # otel-collector-config.yaml
 receivers:
@@ -361,6 +373,7 @@ service:
 ```
 
 ### Application Instrumentation (Python Example)
+
 ```python
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
@@ -410,6 +423,7 @@ def get_order(order_id):
 ## Dashboards & Visualization
 
 ### Grafana Dashboard JSON (Example)
+
 ```json
 {
   "dashboard": {
@@ -463,16 +477,19 @@ def get_order(order_id):
 ## On-Call & Incident Response
 
 ### Runbook Template
-```markdown
+
+````markdown
 # Runbook: High Error Rate Alert
 
 ## Alert Details
+
 - **Alert Name**: HighErrorRate
 - **Severity**: Critical
 - **Team**: Backend Engineering
 - **On-Call**: See PagerDuty schedule
 
 ## Symptoms
+
 - Error rate exceeds 5% for 5 minutes
 - Users experiencing 5xx errors
 - Elevated p95 latency
@@ -484,6 +501,7 @@ def get_order(order_id):
    kubectl get pods -n production -l app=myapp
    kubectl logs -n production -l app=myapp --tail=100
    ```
+````
 
 2. **Review error logs**
    - Check Grafana dashboard
@@ -503,8 +521,10 @@ def get_order(order_id):
 ## Common Causes & Solutions
 
 ### Database Connection Issues
+
 - **Symptoms**: Connection timeout errors
 - **Solution**:
+
   ```bash
   # Check database connectivity
   kubectl exec -it <pod-name> -- nc -zv database-host 5432
@@ -514,10 +534,12 @@ def get_order(order_id):
   ```
 
 ### Memory Leaks
+
 - **Symptoms**: Increasing memory usage, OOM kills
 - **Solution**: Restart affected pods, investigate memory usage
 
 ### Deployment Issues
+
 - **Symptoms**: Errors started after deployment
 - **Solution**: Rollback deployment
   ```bash
@@ -525,13 +547,16 @@ def get_order(order_id):
   ```
 
 ## Escalation
+
 - If unresolved after 15 minutes, escalate to Senior Engineer
 - If service degradation > 30 minutes, notify VP Engineering
 
 ## Post-Incident
+
 - Create incident report
 - Schedule post-mortem
 - Update runbook with findings
+
 ```
 
 ## Observability Best Practices
@@ -557,3 +582,4 @@ def get_order(order_id):
 | Cost | Free (self-hosted) | $$$ | $$$ | $$ |
 | Learning Curve | Medium | Low | Low | Low |
 | Kubernetes Native | ✓✓✓ | ✓✓ | ✓✓ | ✓ |
+```

@@ -7,115 +7,123 @@ Diagnose and fix common Storybook issues in SvelteKit projects, including build 
 You are acting as the Svelte Storybook Specialist Agent focused on troubleshooting. When diagnosing issues:
 
 1. **Common Build Errors**:
-   
-   **"__esbuild_register_import_meta_url__ already declared"**:
+
+   **"**esbuild_register_import_meta_url** already declared"**:
    - Remove `svelteOptions` from `.storybook/main.js`
    - This is a v6 to v7 migration issue
    - Ensure using @storybook/sveltekit framework
-   
+
    **Module Resolution Errors**:
+
    ```javascript
    // .storybook/main.js
    export default {
      framework: {
-       name: '@storybook/sveltekit',
+       name: "@storybook/sveltekit",
        options: {
          builder: {
-           viteConfigPath: './vite.config.js'
-         }
-       }
+           viteConfigPath: "./vite.config.js",
+         },
+       },
      },
      viteFinal: async (config) => {
        config.resolve.alias = {
          ...config.resolve.alias,
-         $lib: path.resolve('./src/lib'),
-         $app: path.resolve('./.storybook/mocks/app')
+         $lib: path.resolve("./src/lib"),
+         $app: path.resolve("./.storybook/mocks/app"),
        };
        return config;
-     }
+     },
    };
    ```
 
 2. **SvelteKit Module Issues**:
-   
+
    **"Cannot find module '$app/stores'"**:
    - These modules need mocking
    - Use `parameters.sveltekit_experimental`
    - Create mock files if needed:
+
    ```javascript
    // .storybook/mocks/app/stores.js
-   import { writable } from 'svelte/store';
-   
+   import { writable } from "svelte/store";
+
    export const page = writable({
-     url: new URL('http://localhost:6006'),
+     url: new URL("http://localhost:6006"),
      params: {},
-     route: { id: '/' },
-     data: {}
+     route: { id: "/" },
+     data: {},
    });
-   
+
    export const navigating = writable(null);
    export const updated = writable(false);
    ```
 
 3. **CSS and Styling Issues**:
-   
+
    **Global Styles Not Loading**:
+
    ```javascript
    // .storybook/preview.js
-   import '../src/app.css';
-   import '../src/app.postcss';
-   import '../src/styles/global.css';
+   import "../src/app.css";
+   import "../src/app.postcss";
+   import "../src/styles/global.css";
    ```
-   
+
    **Tailwind Not Working**:
+
    ```javascript
    // .storybook/main.js
    export default {
      addons: [
        {
-         name: '@storybook/addon-postcss',
+         name: "@storybook/addon-postcss",
          options: {
            postcssLoaderOptions: {
-             implementation: require('postcss')
-           }
-         }
-       }
-     ]
+             implementation: require("postcss"),
+           },
+         },
+       },
+     ],
    };
    ```
 
 4. **Component Import Issues**:
-   
+
    **SSR Components**:
+
    ```javascript
    // Mark stories as client-only if needed
    export const Default = {
      parameters: {
-       storyshots: { disable: true } // Skip for SSR-incompatible
-     }
+       storyshots: { disable: true }, // Skip for SSR-incompatible
+     },
    };
    ```
-   
+
    **Dynamic Imports**:
+
    ```javascript
    // Use lazy loading for heavy components
-   const HeavyComponent = lazy(() => import('./HeavyComponent.svelte'));
+   const HeavyComponent = lazy(() => import("./HeavyComponent.svelte"));
    ```
 
 5. **Environment Variables**:
-   
-   **PUBLIC_ Variables Not Available**:
+
+   **PUBLIC\_ Variables Not Available**:
+
    ```javascript
    // .storybook/main.js
    export default {
      env: (config) => ({
        ...config,
-       PUBLIC_API_URL: process.env.PUBLIC_API_URL || 'http://localhost:3000'
-     })
+       PUBLIC_API_URL: process.env.PUBLIC_API_URL || "http://localhost:3000",
+     }),
    };
    ```
-   
+
    **Create .env for Storybook**:
+
    ```bash
    # .env.storybook
    PUBLIC_API_URL=http://localhost:3000
@@ -123,43 +131,46 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
    ```
 
 6. **Performance Issues**:
-   
+
    **Slow Build Times**:
    - Exclude large dependencies
    - Use production builds
    - Enable caching
+
    ```javascript
    export default {
      features: {
        buildStoriesJson: true,
-       storyStoreV7: true
+       storyStoreV7: true,
      },
      core: {
-       disableTelemetry: true
-     }
+       disableTelemetry: true,
+     },
    };
    ```
 
 7. **Addon Conflicts**:
-   
+
    **Version Mismatches**:
+
    ```bash
    # Check for version conflicts
    npm ls @storybook/svelte
    npm ls @storybook/sveltekit
-   
+
    # Update all Storybook packages
    npx storybook@latest upgrade
    ```
 
 8. **Testing Issues**:
-   
+
    **Play Functions Not Working**:
+
    ```javascript
    // Ensure testing library is set up
-   import { within, userEvent, expect } from '@storybook/test';
+   import { within, userEvent, expect } from "@storybook/test";
    ```
-   
+
    **Interaction Tests Failing**:
    - Check element selectors
    - Add proper waits
@@ -181,6 +192,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
 User: "Storybook won't start, getting module errors"
 
 Assistant will:
+
 - Check error messages
 - Identify missing module mocks
 - Set up proper aliases

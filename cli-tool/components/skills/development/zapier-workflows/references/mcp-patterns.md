@@ -17,6 +17,7 @@ This file documents preferred MCP tools, usage patterns, and orchestration workf
 **Purpose:** [What this MCP tool does]
 **When to use:** [Trigger words or scenarios]
 **Available actions:**
+
 - [Action 1]
 - [Action 2]
 - [Action 3]
@@ -30,11 +31,13 @@ This file documents preferred MCP tools, usage patterns, and orchestration workf
 **THIS IS A TEMPLATE, NOT A REAL WORKFLOW**
 
 **Trigger phrases:**
+
 - "[Trigger phrase 1]"
 - "[Trigger phrase 2]"
 - "[Trigger phrase 3]"
 
 **Workflow:**
+
 1. **[Step 1]:**
    - [Description of what to do]
    - [Details about the action]
@@ -52,6 +55,7 @@ This file documents preferred MCP tools, usage patterns, and orchestration workf
    - [Details]
 
 **Example:**
+
 ```
 User: "[Example user request]"
 
@@ -65,6 +69,7 @@ Claude:
 ```
 
 **Best Practices:**
+
 - [Best practice 1]
 - [Best practice 2]
 - [Best practice 3]
@@ -73,11 +78,13 @@ Claude:
 
 ## Tool Preferences (User-Specific)
 
-*Add your tool preferences here as you configure them.*
+_Add your tool preferences here as you configure them._
 
 **Example:**
+
 ```markdown
 ### [Tool Name] Preferences
+
 - **Preference 1:** [Value]
 - **Preference 2:** [Value]
 - **Sheet/Resource names:** [Specific names to use]
@@ -87,11 +94,13 @@ Claude:
 
 ## Learning Section
 
-*When the user teaches new patterns or preferences, add them here using the Edit tool.*
+_When the user teaches new patterns or preferences, add them here using the Edit tool._
 
 **Template for new patterns:**
+
 ```markdown
 ### [Pattern Name]
+
 **Added:** YYYY-MM-DD
 **Trigger:** [When to use this pattern]
 **Steps:** [What to do]
@@ -100,4 +109,4 @@ Claude:
 
 ---
 
-*This file is editable by Claude during conversations. When the user teaches new patterns, updates preferences, or corrects approaches, Claude should update this file using the Edit tool.*
+_This file is editable by Claude during conversations. When the user teaches new patterns, updates preferences, or corrects approaches, Claude should update this file using the Edit tool._

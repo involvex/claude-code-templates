@@ -39,6 +39,7 @@ project/
 ### When to Record
 
 Record a solution when:
+
 - You spent significant time debugging
 - The error is likely to recur
 - The solution isn't obvious
@@ -47,12 +48,14 @@ Record a solution when:
 ### How to Record
 
 1. Copy the template:
+
 ```bash
 mkdir -p .claude/error-solutions
 cp solution-template.yaml .claude/error-solutions/<error-signature>.yaml
 ```
 
 2. Fill in the details:
+
 ```yaml
 id: "nodejs-module-not-found-express"
 created: "2024-01-15T10:30:00Z"
@@ -96,6 +99,7 @@ Create consistent signatures for matching:
 ### Pattern: `[language]-[category]-[specific]`
 
 Examples:
+
 - `nodejs-module-not-found-express`
 - `react-hydration-mismatch-date`
 - `python-import-error-circular`
@@ -106,10 +110,10 @@ Examples:
 
 Replace specific values with placeholders:
 
-| Original | Normalized |
-|----------|------------|
-| `Cannot find module 'express'` | `Cannot find module '{module}'` |
-| `User 12345 not found` | `User {id} not found` |
+| Original                            | Normalized                         |
+| ----------------------------------- | ---------------------------------- |
+| `Cannot find module 'express'`      | `Cannot find module '{module}'`    |
+| `User 12345 not found`              | `User {id} not found`              |
 | `Connection refused 127.0.0.1:5432` | `Connection refused {host}:{port}` |
 
 ## Lookup Process
@@ -141,10 +145,10 @@ ls .claude/error-solutions/ | grep "nodejs-module-not-found"
 ```yaml
 # Compare error pattern
 error:
-  pattern: "Cannot find module '{module}'"  # Matches!
+  pattern: "Cannot find module '{module}'" # Matches!
 
 # Check context
-context: "Starting Node.js server"  # Same context!
+context: "Starting Node.js server" # Same context!
 ```
 
 ### 4. Apply Solution
@@ -155,8 +159,8 @@ Follow the steps in `solution.immediate` or `solution.proper`.
 
 ```yaml
 metadata:
-  occurrences: 6  # Increment
-  last_resolved: "2024-01-20T14:30:00Z"  # Update
+  occurrences: 6 # Increment
+  last_resolved: "2024-01-20T14:30:00Z" # Update
 ```
 
 ## Best Practices
@@ -164,6 +168,7 @@ metadata:
 ### Writing Good Solutions
 
 1. **Be Specific**
+
    ```yaml
    # Bad
    root_cause: "Something wrong with dependencies"
@@ -173,13 +178,15 @@ metadata:
    ```
 
 2. **Include Commands**
+
    ```yaml
    commands:
      - "npm install express"
-     - "npm ls express"  # Verify installation
+     - "npm ls express" # Verify installation
    ```
 
 3. **Document Verification**
+
    ```yaml
    verification:
      - "Server starts without error"
@@ -196,6 +203,7 @@ metadata:
 ### Organizing Solutions
 
 **By Language/Framework:**
+
 ```
 nodejs-*.yaml
 python-*.yaml
@@ -203,6 +211,7 @@ react-*.yaml
 ```
 
 **By Error Type:**
+
 ```
 *-connection-refused-*.yaml
 *-module-not-found-*.yaml
@@ -212,6 +221,7 @@ react-*.yaml
 ### Team Sharing
 
 1. **Version Control**
+
    ```bash
    # Add to git
    git add .claude/error-solutions/
@@ -294,7 +304,7 @@ diagnosis:
     - "Host directory owned by different user"
 solution:
   immediate:
-    - "chmod 777 /host/path"  # Quick but not secure
+    - "chmod 777 /host/path" # Quick but not secure
   proper:
     - "Match container user ID to host user"
     - "Use named volume instead of bind mount"

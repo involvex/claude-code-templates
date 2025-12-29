@@ -18,36 +18,40 @@ description: Create a new Next.js application with best practices and optimal co
 ## Scaffolding Requirements
 
 ### 1. Project Initialization
+
 Based on provided arguments, determine setup options:
+
 - **TypeScript**: Check for `--typescript` flag or detect existing TS config
 - **Tailwind CSS**: Check for `--tailwind` flag or detect existing config
 - **App Router**: Check for `--app-router` flag (default for new projects)
 - **ESLint/Prettier**: Always include for code quality
 
 ### 2. Next.js Configuration
+
 Create optimized `next.config.js` with:
+
 ```javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    optimizePackageImports: ['lucide-react', '@heroicons/react'],
+    optimizePackageImports: ["lucide-react", "@heroicons/react"],
   },
   images: {
-    formats: ['image/webp', 'image/avif'],
+    formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
   },
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
         ],
       },
@@ -57,13 +61,17 @@ const nextConfig = {
 ```
 
 ### 3. Essential Dependencies
+
 Install core dependencies:
+
 - **Production**: `next`, `react`, `react-dom`
 - **Development**: `eslint`, `eslint-config-next`, `typescript` (if TS), `@types/*` (if TS)
 - **Optional**: `tailwindcss`, `prettier`, `husky`, `lint-staged`
 
 ### 4. Project Structure
+
 Create optimal directory structure:
+
 ```
 project-name/
 ├── app/                    # App Router (Next.js 13+)
@@ -88,6 +96,7 @@ project-name/
 ### 5. Configuration Files
 
 #### ESLint Configuration
+
 ```json
 {
   "extends": ["next/core-web-vitals"],
@@ -99,6 +108,7 @@ project-name/
 ```
 
 #### TypeScript Configuration (if applicable)
+
 ```json
 {
   "compilerOptions": {
@@ -133,6 +143,7 @@ project-name/
 ### 6. Starter Components
 
 #### Root Layout
+
 ```typescript
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -159,6 +170,7 @@ export default function RootLayout({
 ```
 
 #### Home Page
+
 ```typescript
 export default function Home() {
   return (
@@ -175,7 +187,9 @@ export default function Home() {
 ```
 
 ### 7. Development Scripts
+
 Update package.json with optimized scripts:
+
 ```json
 {
   "scripts": {
@@ -191,7 +205,9 @@ Update package.json with optimized scripts:
 ```
 
 ### 8. Documentation
+
 Create comprehensive README.md with:
+
 - Project overview and features
 - Installation and setup instructions
 - Development workflow
@@ -225,6 +241,7 @@ Create comprehensive README.md with:
 ## Post-Scaffolding Tasks
 
 After scaffolding, run these commands to verify setup:
+
 ```bash
 cd [project-name]
 npm install

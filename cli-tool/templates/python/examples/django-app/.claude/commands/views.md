@@ -38,17 +38,17 @@ from .forms import PostForm
 def post_list(request):
     """Display list of posts with pagination and filtering."""
     posts = Post.objects.filter(status='published').select_related('author', 'category')
-    
+
     # Search functionality
     search_query = request.GET.get('search')
     if search_query:
         posts = posts.filter(title__icontains=search_query)
-    
+
     # Category filtering
     category_id = request.GET.get('category')
     if category_id:
         posts = posts.filter(category_id=category_id)
-    
+
     context = {
         'posts': posts,
         'categories': Category.objects.all(),
@@ -59,7 +59,7 @@ def post_list(request):
 def post_detail(request, slug):
     """Display individual post details."""
     post = get_object_or_404(Post, slug=slug, status='published')
-    
+
     context = {
         'post': post,
         'related_posts': Post.objects.filter(
@@ -83,14 +83,14 @@ def post_create(request):
             return redirect('post_detail', slug=post.slug)
     else:
         form = PostForm()
-    
+
     return render(request, 'blog/post_form.html', {'form': form})
 
 @login_required
 def post_edit(request, slug):
     """Edit existing post."""
     post = get_object_or_404(Post, slug=slug, author=request.user)
-    
+
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
@@ -99,9 +99,9 @@ def post_edit(request, slug):
             return redirect('post_detail', slug=post.slug)
     else:
         form = PostForm(instance=post)
-    
+
     return render(request, 'blog/post_form.html', {
-        'form': form, 
+        'form': form,
         'post': post
     })
 
@@ -112,10 +112,10 @@ class PostListView(ListView):
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     paginate_by = 10
-    
+
     def get_queryset(self):
         return Post.objects.filter(status='published').select_related('author', 'category')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
@@ -126,7 +126,7 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
-    
+
     def get_queryset(self):
         return Post.objects.filter(status='published')
 
@@ -135,7 +135,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
-    
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -145,7 +145,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
-    
+
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
 
@@ -154,7 +154,7 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('post_list')
-    
+
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
 
@@ -208,14 +208,14 @@ urlpatterns = [
     path('post/<slug:slug>/', views.post_detail, name='post_detail'),
     path('create/', views.post_create, name='post_create'),
     path('edit/<slug:slug>/', views.post_edit, name='post_edit'),
-    
+
     # Class-based views
     path('posts/', views.PostListView.as_view(), name='post_list_cbv'),
     path('posts/<slug:slug>/', views.PostDetailView.as_view(), name='post_detail_cbv'),
     path('posts/create/', views.PostCreateView.as_view(), name='post_create_cbv'),
     path('posts/<slug:slug>/edit/', views.PostUpdateView.as_view(), name='post_edit_cbv'),
     path('posts/<slug:slug>/delete/', views.PostDeleteView.as_view(), name='post_delete_cbv'),
-    
+
     # API endpoints
     path('api/posts/', views.api_post_list, name='api_post_list'),
 ]

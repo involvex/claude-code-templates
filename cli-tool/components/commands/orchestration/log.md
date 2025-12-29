@@ -15,21 +15,27 @@ Automatically creates work logs in your connected project management tools or kn
 ## Basic Commands
 
 ### Log Current Task
+
 ```
 /orchestration/log
 ```
+
 Logs the currently in-progress task to available tools.
 
 ### Log Specific Task
+
 ```
 /orchestration/log TASK-003
 ```
+
 Logs a specific task's work.
 
 ### Choose Destination
+
 ```
 /orchestration/log TASK-003 --choose
 ```
+
 Manually select where to log the work.
 
 ## Destination Selection
@@ -46,15 +52,17 @@ Available destinations:
 4. GitHub Issue (#123)
 5. None - Skip logging
 
-Choose destination [1-5]: 
+Choose destination [1-5]:
 ```
 
 ## Obsidian Integration
 
 ### Daily Note Logging
+
 ```
 /orchestration/log --obsidian-daily
 ```
+
 Appends to today's daily note:
 
 ```markdown
@@ -66,21 +74,25 @@ Appends to today's daily note:
 **Status**: Completed → QA
 
 **What I did:**
+
 - Implemented JWT token validation middleware
-- Added refresh token logic  
+- Added refresh token logic
 - Created comprehensive test suite
 - Fixed edge case with token expiration
 
 **Code Stats:**
+
 - Files: 8 modified
 - Lines: +245 -23
 - Coverage: 95%
 
 **Related Tasks:**
+
 - Next: [[TASK-005]] - User Profile API
 - Blocked: [[TASK-007]] - Waiting for this
 
 **Commits:**
+
 - `abc123`: feat(auth): implement JWT validation
 - `def456`: test(auth): add validation tests
 
@@ -88,20 +100,25 @@ Appends to today's daily note:
 ```
 
 ### Project Note Logging
+
 ```
 /orchestration/log --obsidian-project "Authentication System"
 ```
+
 Creates or appends to project-specific note.
 
 ### Custom Obsidian Location
+
 ```
 /orchestration/log --obsidian-path "Projects/Sprint 24/Work Log"
 ```
 
 ## Linear Integration
+
 ```
 /orchestration/log TASK-003 --linear-issue ENG-1234
 ```
+
 Creates work log comment in Linear issue.
 
 ## Smart Detection
@@ -124,40 +141,48 @@ Use suggestion? [Y/n/choose different]
 ## Work Log Formats
 
 ### Obsidian Format
+
 ```markdown
 ## 📋 Task: TASK-003 - JWT Implementation
 
 ### Summary
-- **Status**: 🟢 Completed  
+
+- **Status**: 🟢 Completed
 - **Duration**: 4h 30m
 - **Date**: 2024-03-15
 
 ### Progress Details
+
 - [x] Token structure design
 - [x] Validation middleware
 - [x] Refresh mechanism
 - [x] Test coverage
 
 ### Technical Notes
+
 - Used RS256 algorithm for signing
 - Tokens expire after 15 minutes
 - Refresh tokens last 7 days
 
 ### Links
+
 - Linear: [ENG-1234](linear://issue/ENG-1234)
 - PR: [#456](github.com/...)
 - Docs: [[JWT Implementation Guide]]
 
 ### Next Actions
+
 - [ ] Code review feedback
 - [ ] Deploy to staging
 - [ ] Update API documentation
 
 ---
-*Logged via Task Orchestration at 15:30*
+
+_Logged via Task Orchestration at 15:30_
 ```
 
 ### Linear Format
+
 ```
 Work log comment in Linear with task details, time tracking, and progress updates.
 ```
@@ -179,6 +204,7 @@ Press Enter to confirm, Space to toggle
 ## Batch Operations
 
 ### Daily Summary to Obsidian
+
 ```
 /orchestration/log --daily-summary --obsidian
 
@@ -190,7 +216,7 @@ Creates summary in daily note:
 - [[TASK-003]]: JWT Implementation (4.5h) ✅
 - [[TASK-008]]: Login UI Updates (2h) ✅
 
-### In Progress  
+### In Progress
 - [[TASK-005]]: User Profile API (1.5h) 🔄
 
 ### Total Time: 8 hours
@@ -206,6 +232,7 @@ Creates summary in daily note:
 ```
 
 ### Weekly Report
+
 ```
 /orchestration/log --weekly --obsidian-path "Weekly Reviews/Week 11"
 ```
@@ -213,6 +240,7 @@ Creates summary in daily note:
 ## Templates
 
 ### Configure Obsidian Template
+
 ```yaml
 obsidian_template:
   daily_note:
@@ -220,7 +248,7 @@ obsidian_template:
     include_stats: true
     add_tags: true
     link_tasks: true
-  
+
   project_note:
     create_if_missing: true
     append_to_section: "## Task Progress"
@@ -228,6 +256,7 @@ obsidian_template:
 ```
 
 ### Configure Linear Template
+
 ```yaml
 linear_template:
   include_time: true
@@ -257,12 +286,13 @@ Logging to 2 destinations...
 ✓ Linear: Comment added to ENG-1234
 ✓ Obsidian: Added to daily note
 
-View logs? [y/N]: 
+View logs? [y/N]:
 ```
 
 ## Examples
 
 ### Example 1: End of Day Logging
+
 ```
 /orchestration/log --eod
 
@@ -283,6 +313,7 @@ Choice [1]: 1
 ```
 
 ### Example 2: Sprint Review
+
 ```
 /orchestration/log --sprint-review --week 11
 
@@ -302,6 +333,7 @@ Choice [3]: 3
 ```
 
 ### Example 3: No Connection Found
+
 ```
 /orchestration/log TASK-009
 
@@ -311,7 +343,7 @@ Where would you like to log this?
 1. Obsidian - Daily Note
 2. Obsidian - Create Project Note
 3. Linear - Search for issue
-4. GitHub - Create new issue  
+4. GitHub - Create new issue
 5. Skip logging
 
 Choice: 2
@@ -323,16 +355,17 @@ Enter project name: Security Audit
 ## Configuration
 
 ### Default Destinations
+
 ```yaml
 log_defaults:
-  no_connection: "ask"  # ask|obsidian-daily|skip
-  multi_connection: "ask"  # ask|all|first
-  
+  no_connection: "ask" # ask|obsidian-daily|skip
+  multi_connection: "ask" # ask|all|first
+
   obsidian:
-    default_location: "daily"  # daily|project|custom
+    default_location: "daily" # daily|project|custom
     project_folder: "Projects"
     daily_folder: "Daily Notes"
-  
+
   linear:
     auto_update_status: true
     include_commits: true

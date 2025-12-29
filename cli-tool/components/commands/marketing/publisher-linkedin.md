@@ -11,6 +11,7 @@ Create professional LinkedIn posts from any content source with optional media a
 **Usage:** `$ARGUMENTS`
 
 **Examples:**
+
 ```bash
 /publisher:linkedin my-post                    # Auto-detect and attach blog diagrams
 /publisher:linkedin my-post en                 # English with diagrams
@@ -51,6 +52,7 @@ Create professional LinkedIn posts from any content source with optional media a
    - Open LinkedIn in browser for review
 
 **LinkedIn API Authentication:**
+
 1. Create LinkedIn app at https://www.linkedin.com/developers/apps
 2. Add credentials to .env:
    ```

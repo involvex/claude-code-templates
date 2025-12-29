@@ -22,6 +22,7 @@ Design comprehensive database schema with optimal structure and performance:
 **Schema Type**: Use $ARGUMENTS to specify relational, NoSQL, hybrid approach, or normalization level
 
 **Design Framework**:
+
 1. **Requirements Analysis** - Business entities, relationships, data flow, and access patterns
 2. **Entity Modeling** - Tables/collections, attributes, primary/foreign keys, constraints
 3. **Relationship Design** - One-to-one, one-to-many, many-to-many associations

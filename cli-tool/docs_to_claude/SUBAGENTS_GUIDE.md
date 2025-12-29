@@ -14,25 +14,29 @@ Agents are specialized AI assistants that Claude Code can use for specific tasks
 ## Key Benefits
 
 ### 🔄 Context Preservation
+
 Each agent operates in its own context, avoiding contamination of the main conversation.
 
 ### 🧠 Specialized Expertise
+
 Agents can be fine-tuned with detailed instructions for specific domains.
 
 ### ♻️ Reusability
+
 Once created, they can be used across different projects and shared with the team.
 
 ### 🛡️ Flexible Permissions
+
 Each agent can have different levels of access to tools.
 
 ## File Locations
 
-| Type | Location | Scope | Priority |
-|------|----------|-------|----------|
-| **Project Agents** | `.claude/agents/` | Available in current project | Higher |
-| **User Agents** | `~/.claude/agents/` | Available across all projects | Lower |
+| Type               | Location            | Scope                         | Priority |
+| ------------------ | ------------------- | ----------------------------- | -------- |
+| **Project Agents** | `.claude/agents/`   | Available in current project  | Higher   |
+| **User Agents**    | `~/.claude/agents/` | Available across all projects | Lower    |
 
-*When there are name conflicts, project agents take precedence.*
+_When there are name conflicts, project agents take precedence._
 
 ## File Format
 
@@ -42,8 +46,8 @@ Each agent is defined in a Markdown file with this structure:
 ---
 name: agent-name
 description: Description of when this agent should be invoked
-tools: tool1, tool2, tool3  # Optional
-model: sonnet  # Optional: sonnet, opus, haiku
+tools: tool1, tool2, tool3 # Optional
+model: sonnet # Optional: sonnet, opus, haiku
 ---
 
 Your agent's system prompt goes here. This can be multiple paragraphs
@@ -57,23 +61,27 @@ the agent should follow.
 ## Configuration Fields
 
 ### `name` Field (Required)
+
 - **Format**: Lowercase letters and hyphens only
 - **Examples**: `code-reviewer`, `security-auditor`, `test-runner`
 - **Purpose**: Unique identifier for the agent
 
 ### `description` Field (Required)
+
 - **Format**: Natural language description
 - **Includes**: When to use the agent, what type of tasks it handles
 - **Tip**: Use phrases like "Use PROACTIVELY" to encourage automatic usage
 - **Example**: `"Expert code review specialist. Use PROACTIVELY after writing or modifying code."`
 
 ### `tools` Field (Optional)
+
 - **Default**: If omitted, inherits all available tools
 - **Format**: Comma-separated list
 - **Common tools**: `Read, Edit, Bash, Grep, Glob, Write`
 - **Example**: `tools: Read, Edit, Bash`
 
 ### `model` Field (Optional)
+
 - **Options**: `sonnet` (default), `opus`, `haiku`
 - **Usage**: For tasks requiring different capabilities
 - **Example**: `model: opus` for complex tasks
@@ -81,6 +89,7 @@ the agent should follow.
 ## Available Tools
 
 ### Core Tools
+
 - **Read**: Read files
 - **Edit**: Edit existing files
 - **Write**: Create new files
@@ -90,6 +99,7 @@ the agent should follow.
 - **LS**: List directories
 
 ### Advanced Tools
+
 - **MultiEdit**: Edit multiple files
 - **NotebookEdit**: Edit Jupyter notebooks
 - **WebFetch**: Fetch web content
@@ -112,6 +122,7 @@ You are a senior code reviewer ensuring high standards of code quality and secur
 ## Review Process
 
 When invoked:
+
 1. Run `git diff` to see recent changes
 2. Focus on modified files
 3. Begin review immediately
@@ -119,17 +130,20 @@ When invoked:
 ## Review Checklist
 
 ### Critical Issues (MUST fix)
+
 - Exposed secrets or API keys
 - Obvious security vulnerabilities
 - Logic errors causing failures
 
 ### Warnings (SHOULD fix)
+
 - Duplicated code
 - Missing error handling
 - Insufficient input validation
 - Performance issues
 
 ### Suggestions (CONSIDER improving)
+
 - Code readability
 - Function and variable names
 - Test coverage
@@ -139,14 +153,16 @@ When invoked:
 
 Organize feedback by priority:
 ```
-🚨 CRITICAL: [specific issue]
-   └── Solution: [specific code to fix]
 
-⚠️  WARNING: [issue]
-   └── Suggestion: [how to improve]
+🚨 CRITICAL: [specific issue]
+└── Solution: [specific code to fix]
+
+⚠️ WARNING: [issue]
+└── Suggestion: [how to improve]
 
 💡 SUGGESTION: [optional improvement]
-   └── Benefit: [why it's useful]
+└── Benefit: [why it's useful]
+
 ```
 
 Always include specific code examples for fixes.
@@ -167,17 +183,20 @@ You are a security auditor specializing in application security and secure codin
 ## Focus Areas
 
 ### Authentication/Authorization
+
 - JWT, OAuth2, SAML
 - Secure session handling
 - Role-based access control
 
 ### OWASP Top 10 Vulnerabilities
+
 - SQL Injection
 - Cross-Site Scripting (XSS)
 - Cross-Site Request Forgery (CSRF)
 - Sensitive data exposure
 
 ### Secure Configuration
+
 - Security headers (CSP, HSTS, etc.)
 - CORS configuration
 - Encryption in transit and at rest
@@ -200,25 +219,30 @@ You are a security auditor specializing in application security and secure codin
    - Document findings
 
 ## Report Format
-
 ```
+
 🔒 SECURITY AUDIT REPORT
 
 ## Executive Summary
+
 - Risk Level: [HIGH/MEDIUM/LOW]
 - Vulnerabilities Found: X
 - Critical Recommendations: X
 
 ## Critical Findings
+
 [List of high-risk vulnerabilities]
 
 ## Recommendations
+
 [Specific remediation actions]
 
 ## Compliance Checklist
+
 - [ ] OWASP Top 10 verified
 - [ ] Security headers configured
 - [ ] Authentication implemented correctly
+
 ```
 
 Focus on practical fixes over theoretical risks. Include OWASP references.
@@ -226,7 +250,7 @@ Focus on practical fixes over theoretical risks. Include OWASP references.
 
 ### 3. Performance Optimizer
 
-```markdown
+````markdown
 ---
 name: performance-optimizer
 description: Performance optimization specialist. Use PROACTIVELY when detecting performance issues or to optimize existing code.
@@ -239,6 +263,7 @@ You are a performance optimization specialist with expertise in frontend and bac
 ## Optimization Areas
 
 ### Frontend
+
 - Bundle size and code splitting
 - Component lazy loading
 - Image optimization
@@ -246,6 +271,7 @@ You are a performance optimization specialist with expertise in frontend and bac
 - Core Web Vitals
 
 ### Backend
+
 - Database queries
 - Algorithms and data structures
 - Strategic caching
@@ -260,6 +286,7 @@ You are a performance optimization specialist with expertise in frontend and bac
    npm run build -- --analyze
    lighthouse --chrome-flags="--headless" URL
    ```
+````
 
 2. **Bottleneck Identification**
    - CPU and memory profiling
@@ -274,11 +301,13 @@ You are a performance optimization specialist with expertise in frontend and bac
 ## Target Metrics
 
 ### Web Vitals
+
 - **LCP (Largest Contentful Paint)**: < 2.5s
 - **FID (First Input Delay)**: < 100ms
 - **CLS (Cumulative Layout Shift)**: < 0.1
 
 ### Backend
+
 - **Response Time**: < 200ms for APIs
 - **Database Queries**: < 50ms average
 - **Memory Usage**: Stable without memory leaks
@@ -302,7 +331,8 @@ You are a performance optimization specialist with expertise in frontend and bac
 - [ ] Additional suggested optimization
 - [ ] Continuous monitoring
 ```
-```
+
+````
 
 ### 4. Test Runner
 
@@ -339,19 +369,23 @@ You are a test automation expert and software quality specialist.
 ## Testing Strategy
 
 ### Testing Pyramid
-```
+````
+
        🔺 E2E Tests (Few, slow)
       🔺🔺 Integration Tests (Some)
-   🔺🔺🔺 Unit Tests (Many, fast)
-```
+
+🔺🔺🔺 Unit Tests (Many, fast)
+
+````
 
 ### Automated Process
 1. **Detect code changes**
    ```bash
    git diff --name-only HEAD~1
-   ```
+````
 
 2. **Run relevant tests**
+
    ```bash
    npm test -- --testPathPattern="related"
    ```
@@ -369,12 +403,13 @@ You are a test automation expert and software quality specialist.
 ## Testing Conventions
 
 ### Test Structure
+
 ```javascript
-describe('ComponentName', () => {
-  describe('when condition', () => {
-    it('should behavior expectation', () => {
+describe("ComponentName", () => {
+  describe("when condition", () => {
+    it("should behavior expectation", () => {
       // Arrange
-      // Act  
+      // Act
       // Assert
     });
   });
@@ -382,14 +417,16 @@ describe('ComponentName', () => {
 ```
 
 ### Descriptive Names
+
 - ✅ `should return user data when valid ID provided`
 - ❌ `test user function`
 
 ### Clear Assertions
+
 ```javascript
 // ✅ Specific
 expect(response.status).toBe(200);
-expect(response.data.user.name).toBe('John Doe');
+expect(response.data.user.name).toBe("John Doe");
 
 // ❌ Generic
 expect(response).toBeTruthy();
@@ -398,6 +435,7 @@ expect(response).toBeTruthy();
 ## Failure Analysis
 
 For each failing test:
+
 1. **Identify root cause**
 2. **Reproduce failure locally**
 3. **Fix code or test**
@@ -421,7 +459,8 @@ For each failing test:
 ## Failed Tests
 [Detail of each failure with implemented solution]
 ```
-```
+
+````
 
 ## Best Practices for Creating Agents
 
@@ -449,9 +488,10 @@ For each failing test:
 
 ### Response Format
 Consistent template with clear sections
-```
+````
 
 ### 3. Tool Limitation
+
 ```yaml
 # ✅ Specific to purpose
 tools: Read, Grep, Bash
@@ -461,6 +501,7 @@ tools: Read, Edit, Write, Bash, Grep, Glob, WebFetch, WebSearch
 ```
 
 ### 4. Effective Descriptions
+
 ```yaml
 # ✅ Specific and actionable
 description: "Code security auditor. Use PROACTIVELY for security reviews, auth implementations, and OWASP compliance checks."
@@ -470,6 +511,7 @@ description: "Helps with code stuff."
 ```
 
 ### 5. Agent Testing
+
 - **Test with real cases** from your project
 - **Verify it follows instructions** consistently
 - **Adjust prompt based** on results
@@ -478,22 +520,26 @@ description: "Helps with code stuff."
 ## Useful Commands for Management
 
 ### Create Project Agent
+
 ```bash
 mkdir -p .claude/agents
 ```
 
 ### Create User Agent
+
 ```bash
 mkdir -p ~/.claude/agents
 ```
 
 ### Validate YAML Format
+
 ```bash
 # Verify frontmatter syntax
 head -20 .claude/agents/your-agent.md
 ```
 
 ### Agent Testing
+
 ```bash
 # In Claude Code, use slash command
 /agents
@@ -502,17 +548,21 @@ head -20 .claude/agents/your-agent.md
 ## Advanced Use Cases
 
 ### 1. Agent Chaining
+
 ```
 > First use code-reviewer to find issues, then use security-auditor to verify vulnerabilities
 ```
 
 ### 2. Contextual Agents
+
 The correct agent is automatically selected based on:
+
 - Task description
 - Current project context
 - Required tools
 
 ### 3. Specialized Workflow
+
 ```markdown
 ---
 name: deployment-orchestrator
@@ -521,9 +571,10 @@ tools: Bash, Read, Write
 ---
 
 Orchestrates deployment with these steps:
+
 1. Pre-deployment checks
 2. Build process
-3. Testing validation  
+3. Testing validation
 4. Environment deployment
 5. Post-deployment verification
 6. Rollback procedures if needed
@@ -532,24 +583,32 @@ Orchestrates deployment with these steps:
 ## Common Troubleshooting
 
 ### Issue: Agent doesn't invoke automatically
-**Solution**: 
+
+**Solution**:
+
 - Improve `description` with specific keywords
 - Add "Use PROACTIVELY" in description
 - Ensure filename matches `name` field
 
 ### Issue: Agent doesn't have tool access
+
 **Solution**:
+
 - Verify tools are listed correctly in `tools`
 - Or omit `tools` field to inherit all tools
 
 ### Issue: System prompt too generic
+
 **Solution**:
+
 - Add specific examples of expected input/output
 - Define objective success metrics
 - Include specific commands it should execute
 
 ### Issue: Conflicts between agents
+
 **Solution**:
+
 - Use unique, descriptive names
 - Project agents (.claude/agents/) have priority
 - Remove duplicate or obsolete agents

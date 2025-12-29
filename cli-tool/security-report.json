@@ -8963,9 +8963,7 @@
               "message": "Unknown tools specified: MultiEdit",
               "metadata": {
                 "path": "components/agents/development-team/cli-ui-designer.md",
-                "invalidTools": [
-                  "MultiEdit"
-                ]
+                "invalidTools": ["MultiEdit"]
               },
               "timestamp": "2025-12-20T21:02:08.259Z"
             },
@@ -10589,9 +10587,7 @@
               "message": "Unknown tools specified: TodoWrite",
               "metadata": {
                 "path": "components/agents/development-tools/context-manager.md",
-                "invalidTools": [
-                  "TodoWrite"
-                ]
+                "invalidTools": ["TodoWrite"]
               },
               "timestamp": "2025-12-20T21:02:09.129Z"
             }
@@ -12328,9 +12324,7 @@
               "message": "Unknown tools specified: AskUserQuestion",
               "metadata": {
                 "path": "components/agents/devops-infrastructure/deployment-engineer.md",
-                "invalidTools": [
-                  "AskUserQuestion"
-                ]
+                "invalidTools": ["AskUserQuestion"]
               },
               "timestamp": "2025-12-20T21:02:10.161Z"
             }
@@ -14213,9 +14207,7 @@
               "message": "Missing recommended fields: model",
               "metadata": {
                 "path": "components/agents/expert-advisors/agent-expert.md",
-                "missingFields": [
-                  "model"
-                ]
+                "missingFields": ["model"]
               },
               "timestamp": "2025-12-20T21:02:11.254Z"
             },
@@ -18930,10 +18922,7 @@
               "message": "Unknown tools specified: MultiEdit, LS",
               "metadata": {
                 "path": "components/agents/obsidian-ops-team/metadata-agent.md",
-                "invalidTools": [
-                  "MultiEdit",
-                  "LS"
-                ]
+                "invalidTools": ["MultiEdit", "LS"]
               },
               "timestamp": "2025-12-20T21:02:14.701Z"
             }
@@ -19103,9 +19092,7 @@
               "message": "Unknown tools specified: LS",
               "metadata": {
                 "path": "components/agents/obsidian-ops-team/moc-agent.md",
-                "invalidTools": [
-                  "LS"
-                ]
+                "invalidTools": ["LS"]
               },
               "timestamp": "2025-12-20T21:02:14.802Z"
             }
@@ -19275,9 +19262,7 @@
               "message": "Unknown tools specified: LS",
               "metadata": {
                 "path": "components/agents/obsidian-ops-team/review-agent.md",
-                "invalidTools": [
-                  "LS"
-                ]
+                "invalidTools": ["LS"]
               },
               "timestamp": "2025-12-20T21:02:14.899Z"
             }
@@ -19447,9 +19432,7 @@
               "message": "Unknown tools specified: MultiEdit",
               "metadata": {
                 "path": "components/agents/obsidian-ops-team/tag-agent.md",
-                "invalidTools": [
-                  "MultiEdit"
-                ]
+                "invalidTools": ["MultiEdit"]
               },
               "timestamp": "2025-12-20T21:02:14.993Z"
             }
@@ -19619,9 +19602,7 @@
               "message": "Unknown tools specified: LS",
               "metadata": {
                 "path": "components/agents/obsidian-ops-team/vault-optimizer.md",
-                "invalidTools": [
-                  "LS"
-                ]
+                "invalidTools": ["LS"]
               },
               "timestamp": "2025-12-20T21:02:15.092Z"
             }
@@ -27018,9 +26999,7 @@
               "message": "Unknown tools specified: LS",
               "metadata": {
                 "path": "components/agents/web-tools/url-link-extractor.md",
-                "invalidTools": [
-                  "LS"
-                ]
+                "invalidTools": ["LS"]
               },
               "timestamp": "2025-12-20T21:02:19.943Z"
             },
@@ -27402,10 +27381,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/automation/act.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:20.170Z"
             },
@@ -31497,10 +31473,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/documentation/create-architecture-documentation.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:22.346Z"
             },
@@ -33963,10 +33936,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/git/feature.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:23.644Z"
             },
@@ -34320,10 +34290,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/git/flow-status.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:23.822Z"
             },
@@ -34516,10 +34483,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/git/hotfix.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:23.915Z"
             },
@@ -34712,10 +34676,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/git/release.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:24.006Z"
             },
@@ -36570,10 +36531,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/marketing/publisher-all.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:25.107Z"
             },
@@ -36754,10 +36712,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/marketing/publisher-devto.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:25.191Z"
             },
@@ -36938,10 +36893,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/marketing/publisher-linkedin.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:25.276Z"
             },
@@ -37145,10 +37097,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/marketing/publisher-medium.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:25.361Z"
             },
@@ -37329,10 +37278,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/marketing/publisher-x.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:25.448Z"
             },
@@ -49358,10 +49304,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/setup/vercel-analytics.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:31.981Z"
             },
@@ -63601,10 +63544,7 @@
               "message": "Missing recommended fields: usage, examples",
               "metadata": {
                 "path": "components/commands/utilities/ultra-think.md",
-                "missingFields": [
-                  "usage",
-                  "examples"
-                ]
+                "missingFields": ["usage", "examples"]
               },
               "timestamp": "2025-12-20T21:02:39.870Z"
             },

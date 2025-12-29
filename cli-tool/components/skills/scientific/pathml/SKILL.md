@@ -12,6 +12,7 @@ PathML is a comprehensive Python toolkit for computational pathology workflows, 
 ## When to Use This Skill
 
 Apply this skill for:
+
 - Loading and processing whole-slide images (WSI) in various proprietary formats
 - Preprocessing H&E stained tissue images with stain normalization
 - Nucleus detection, segmentation, and classification workflows
@@ -37,6 +38,7 @@ Load whole-slide images from 160+ proprietary formats including Aperio SVS, Hama
 Build modular preprocessing pipelines by composing transforms for image manipulation, quality control, stain normalization, tissue detection, and mask operations. PathML's Pipeline architecture enables reproducible, scalable preprocessing across large datasets.
 
 **Key transforms:**
+
 - `StainNormalizationHE` - Macenko/Vahadane stain normalization
 - `TissueDetectionHE`, `NucleusDetectionHE` - Tissue/nucleus segmentation
 - `MedianBlur`, `GaussianBlur` - Noise reduction
@@ -55,6 +57,7 @@ Construct spatial graphs representing cellular and tissue-level relationships. E
 Train and deploy deep learning models for nucleus detection, segmentation, and classification. PathML integrates PyTorch with pre-built models (HoVer-Net, HACTNet), custom DataLoaders, and ONNX support for inference.
 
 **Key models:**
+
 - **HoVer-Net** - Simultaneous nucleus segmentation and classification
 - **HACTNet** - Hierarchical cell-type classification
 
@@ -111,6 +114,7 @@ for tile in wsi.tiles:
 ### Common Workflows
 
 **H&E Image Analysis:**
+
 1. Load WSI with appropriate slide class
 2. Apply tissue detection and stain normalization
 3. Perform nucleus detection or train segmentation models
@@ -118,6 +122,7 @@ for tile in wsi.tiles:
 5. Conduct downstream analysis
 
 **Multiparametric Imaging (CODEX):**
+
 1. Load CODEX slide with `CODEXSlide`
 2. Collapse multi-run channel data
 3. Segment cells using Mesmer model
@@ -125,6 +130,7 @@ for tile in wsi.tiles:
 5. Export to AnnData for single-cell analysis
 
 **Training ML Models:**
+
 1. Prepare dataset with public pathology data
 2. Create PyTorch DataLoader with PathML datasets
 3. Train HoVer-Net or custom models

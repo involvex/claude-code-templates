@@ -13,9 +13,9 @@ class StateService {
       systemHealth: {},
       isLoading: false,
       error: null,
-      lastUpdate: null
+      lastUpdate: null,
     };
-    
+
     this.subscribers = new Set();
     this.stateHistory = [];
     this.maxHistorySize = 50;
@@ -28,7 +28,7 @@ class StateService {
    */
   subscribe(callback) {
     this.subscribers.add(callback);
-    
+
     // Return unsubscribe function
     return () => {
       this.subscribers.delete(callback);
@@ -57,7 +57,7 @@ class StateService {
    * @param {Object} newState - New state object
    * @param {string} action - Action that caused the state change
    */
-  setState(newState, action = 'setState') {
+  setState(newState, action = "setState") {
     // Save current state to history
     this.saveStateToHistory(action);
 
@@ -65,7 +65,7 @@ class StateService {
     this.state = {
       ...this.state,
       ...newState,
-      lastUpdate: Date.now()
+      lastUpdate: Date.now(),
     };
 
     // Notify all subscribers
@@ -90,7 +90,7 @@ class StateService {
     this.stateHistory.push({
       state: { ...this.state },
       action,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     // Keep history size manageable
@@ -105,15 +105,15 @@ class StateService {
    * @param {Object} changedState - The state that changed
    */
   notifySubscribers(action, changedState) {
-    this.subscribers.forEach(callback => {
+    this.subscribers.forEach((callback) => {
       try {
         callback(this.state, action, changedState);
       } catch (error) {
-        console.error('Error in StateService subscriber:', error);
+        console.error("Error in StateService subscriber:", error);
       }
     });
   }
-  
+
   /**
    * Notify listeners with specific action and data (alias for real-time events)
    * @param {string} action - Action type
@@ -128,7 +128,7 @@ class StateService {
    * @param {Array} conversations - New conversations data
    */
   updateConversations(conversations) {
-    this.setState({ conversations }, 'update_conversations');
+    this.setState({ conversations }, "update_conversations");
   }
 
   /**
@@ -136,7 +136,7 @@ class StateService {
    * @param {Object} states - New conversation states
    */
   updateConversationStates(states) {
-    this.setState({ conversationStates: states }, 'update_conversation_states');
+    this.setState({ conversationStates: states }, "update_conversation_states");
   }
 
   /**
@@ -144,7 +144,7 @@ class StateService {
    * @param {Object} summary - New summary data
    */
   updateSummary(summary) {
-    this.setState({ summary }, 'update_summary');
+    this.setState({ summary }, "update_summary");
   }
 
   /**
@@ -152,7 +152,7 @@ class StateService {
    * @param {Object} chartData - New chart data
    */
   updateChartData(chartData) {
-    this.setState({ chartData }, 'update_chart_data');
+    this.setState({ chartData }, "update_chart_data");
   }
 
   /**
@@ -160,7 +160,10 @@ class StateService {
    * @param {Object} conversation - Selected conversation
    */
   setSelectedConversation(conversation) {
-    this.setState({ selectedConversation: conversation }, 'select_conversation');
+    this.setState(
+      { selectedConversation: conversation },
+      "select_conversation",
+    );
   }
 
   /**
@@ -168,7 +171,7 @@ class StateService {
    * @param {boolean} isLoading - Loading state
    */
   setLoading(isLoading) {
-    this.setState({ isLoading }, 'set_loading');
+    this.setState({ isLoading }, "set_loading");
   }
 
   /**
@@ -176,14 +179,14 @@ class StateService {
    * @param {Error|string} error - Error object or message
    */
   setError(error) {
-    this.setState({ error }, 'set_error');
+    this.setState({ error }, "set_error");
   }
 
   /**
    * Clear error state
    */
   clearError() {
-    this.setState({ error: null }, 'clear_error');
+    this.setState({ error: null }, "clear_error");
   }
 
   /**
@@ -191,7 +194,7 @@ class StateService {
    * @param {Object} health - System health data
    */
   updateSystemHealth(health) {
-    this.setState({ systemHealth: health }, 'update_system_health');
+    this.setState({ systemHealth: health }, "update_system_health");
   }
 
   /**
@@ -202,15 +205,21 @@ class StateService {
   notifyConversationStateChange(conversationId, newState) {
     const currentStates = { ...this.state.conversationStates };
     currentStates[conversationId] = newState;
-    
-    this.setState({ conversationStates: currentStates }, 'conversation_state_change');
-    
-    // Also update the conversation in the conversations array
-    const updatedConversations = this.state.conversations.map(conv => 
-      conv.id === conversationId ? { ...conv, status: newState } : conv
+
+    this.setState(
+      { conversationStates: currentStates },
+      "conversation_state_change",
     );
-    
-    this.setState({ conversations: updatedConversations }, 'update_conversation_status');
+
+    // Also update the conversation in the conversations array
+    const updatedConversations = this.state.conversations.map((conv) =>
+      conv.id === conversationId ? { ...conv, status: newState } : conv,
+    );
+
+    this.setState(
+      { conversations: updatedConversations },
+      "update_conversation_status",
+    );
   }
 
   /**
@@ -219,7 +228,10 @@ class StateService {
    * @returns {Object|null} Conversation object or null if not found
    */
   getConversationById(conversationId) {
-    return this.state.conversations.find(conv => conv.id === conversationId) || null;
+    return (
+      this.state.conversations.find((conv) => conv.id === conversationId) ||
+      null
+    );
   }
 
   /**
@@ -228,7 +240,7 @@ class StateService {
    * @returns {Array} Array of conversations with specified status
    */
   getConversationsByStatus(status) {
-    return this.state.conversations.filter(conv => conv.status === status);
+    return this.state.conversations.filter((conv) => conv.status === status);
   }
 
   /**
@@ -250,17 +262,20 @@ class StateService {
    * Reset state to initial values
    */
   resetState() {
-    this.setState({
-      conversations: [],
-      summary: {},
-      chartData: {},
-      selectedConversation: null,
-      conversationStates: {},
-      systemHealth: {},
-      isLoading: false,
-      error: null,
-      lastUpdate: null
-    }, 'reset_state');
+    this.setState(
+      {
+        conversations: [],
+        summary: {},
+        chartData: {},
+        selectedConversation: null,
+        conversationStates: {},
+        systemHealth: {},
+        isLoading: false,
+        error: null,
+        lastUpdate: null,
+      },
+      "reset_state",
+    );
   }
 
   /**
@@ -274,12 +289,12 @@ class StateService {
       conversationsCount: this.state.conversations.length,
       lastUpdate: this.state.lastUpdate,
       hasError: !!this.state.error,
-      isLoading: this.state.isLoading
+      isLoading: this.state.isLoading,
     };
   }
 }
 
 // Export for module use
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = StateService;
 }

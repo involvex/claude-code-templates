@@ -3,11 +3,13 @@
 ## Kubernetes Architecture Essentials
 
 ### Core Components
+
 - **Control Plane**: API Server, Scheduler, Controller Manager, etcd
 - **Worker Nodes**: Kubelet, Kube-proxy, Container Runtime
 - **Add-ons**: CoreDNS, Metrics Server, Ingress Controller
 
 ### Key Kubernetes Resources
+
 - **Workloads**: Pods, Deployments, StatefulSets, DaemonSets, Jobs, CronJobs
 - **Networking**: Services, Ingress, NetworkPolicies
 - **Configuration**: ConfigMaps, Secrets
@@ -17,6 +19,7 @@
 ## Production-Ready Deployment Pattern
 
 ### Deployment with Best Practices
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -36,7 +39,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 0  # Zero-downtime deployment
+      maxUnavailable: 0 # Zero-downtime deployment
 
   selector:
     matchLabels:
@@ -66,153 +69,154 @@ spec:
 
       # Init container for setup tasks
       initContainers:
-      - name: init-config
-        image: busybox:1.36
-        command: ['sh', '-c', 'echo Initializing... && sleep 2']
-        securityContext:
-          allowPrivilegeEscalation: false
-          runAsNonRoot: true
-          runAsUser: 1000
-          capabilities:
-            drop:
-              - ALL
+        - name: init-config
+          image: busybox:1.36
+          command: ["sh", "-c", "echo Initializing... && sleep 2"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
 
       containers:
-      - name: myapp
-        image: myapp:1.0.0
-        imagePullPolicy: IfNotPresent
+        - name: myapp
+          image: myapp:1.0.0
+          imagePullPolicy: IfNotPresent
 
-        # Resource limits and requests
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+          # Resource limits and requests
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 
-        # Container security
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 1000
-          capabilities:
-            drop:
-              - ALL
+          # Container security
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
 
-        # Health checks
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
 
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 3
-          successThreshold: 1
-          failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
 
-        startupProbe:
-          httpGet:
-            path: /startup
-            port: 8080
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          failureThreshold: 30  # 5 minutes max startup time
+          startupProbe:
+            httpGet:
+              path: /startup
+              port: 8080
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            failureThreshold: 30 # 5 minutes max startup time
 
-        # Environment variables
-        env:
-        - name: ENV
-          value: "production"
-        - name: LOG_LEVEL
-          value: "info"
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
+          # Environment variables
+          env:
+            - name: ENV
+              value: "production"
+            - name: LOG_LEVEL
+              value: "info"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
 
-        # Environment from ConfigMap
-        envFrom:
-        - configMapRef:
-            name: myapp-config
-        - secretRef:
-            name: myapp-secrets
+          # Environment from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: myapp-config
+            - secretRef:
+                name: myapp-secrets
 
-        # Container ports
-        ports:
-        - name: http
-          containerPort: 8080
-          protocol: TCP
-        - name: metrics
-          containerPort: 9090
-          protocol: TCP
+          # Container ports
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
 
-        # Volume mounts
-        volumeMounts:
-        - name: config
-          mountPath: /etc/myapp
-          readOnly: true
-        - name: secrets
-          mountPath: /etc/secrets
-          readOnly: true
-        - name: tmp
-          mountPath: /tmp
-        - name: cache
-          mountPath: /var/cache
+          # Volume mounts
+          volumeMounts:
+            - name: config
+              mountPath: /etc/myapp
+              readOnly: true
+            - name: secrets
+              mountPath: /etc/secrets
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+            - name: cache
+              mountPath: /var/cache
 
       # Volumes
       volumes:
-      - name: config
-        configMap:
-          name: myapp-config
-      - name: secrets
-        secret:
-          secretName: myapp-secrets
-          defaultMode: 0400
-      - name: tmp
-        emptyDir: {}
-      - name: cache
-        emptyDir: {}
+        - name: config
+          configMap:
+            name: myapp-config
+        - name: secrets
+          secret:
+            secretName: myapp-secrets
+            defaultMode: 0400
+        - name: tmp
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
 
       # Pod scheduling
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - myapp
-              topologyKey: kubernetes.io/hostname
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - myapp
+                topologyKey: kubernetes.io/hostname
 
       # Tolerations for node taints
       tolerations:
-      - key: "node-role.kubernetes.io/spot"
-        operator: "Exists"
-        effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/spot"
+          operator: "Exists"
+          effect: "NoSchedule"
 ```
 
 ### Service Configuration
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -228,14 +232,14 @@ spec:
   selector:
     app: myapp
   ports:
-  - name: http
-    port: 80
-    targetPort: 8080
-    protocol: TCP
-  - name: https
-    port: 443
-    targetPort: 8443
-    protocol: TCP
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 8443
+      protocol: TCP
 
   # Session affinity (optional)
   sessionAffinity: ClientIP
@@ -250,16 +254,17 @@ metadata:
   name: myapp-headless
   namespace: production
 spec:
-  clusterIP: None  # Headless service for StatefulSets
+  clusterIP: None # Headless service for StatefulSets
   selector:
     app: myapp
   ports:
-  - name: http
-    port: 8080
-    targetPort: 8080
+    - name: http
+      port: 8080
+      targetPort: 8080
 ```
 
 ### Ingress with TLS
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -275,26 +280,27 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
 spec:
   tls:
-  - hosts:
-    - myapp.example.com
-    secretName: myapp-tls
+    - hosts:
+        - myapp.example.com
+      secretName: myapp-tls
 
   rules:
-  - host: myapp.example.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: myapp
-            port:
-              number: 8080
+    - host: myapp.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp
+                port:
+                  number: 8080
 ```
 
 ## Configuration Management
 
 ### ConfigMap
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -320,6 +326,7 @@ data:
 ```
 
 ### Secrets Management
+
 ```yaml
 # ❌ NOT RECOMMENDED - Base64 is not encryption!
 apiVersion: v1
@@ -329,7 +336,7 @@ metadata:
   namespace: production
 type: Opaque
 data:
-  db-password: cGFzc3dvcmQxMjM=  # base64 encoded
+  db-password: cGFzc3dvcmQxMjM= # base64 encoded
 
 ---
 # ✅ BETTER - Use Sealed Secrets
@@ -340,7 +347,7 @@ metadata:
   namespace: production
 spec:
   encryptedData:
-    db-password: AgBqV7zJ8...  # Encrypted with controller's public key
+    db-password: AgBqV7zJ8... # Encrypted with controller's public key
 
 ---
 # ✅ BEST - Use External Secrets Operator with AWS Secrets Manager
@@ -360,12 +367,12 @@ spec:
     creationPolicy: Owner
 
   data:
-  - secretKey: db-password
-    remoteRef:
-      key: prod/myapp/db-password
-  - secretKey: api-key
-    remoteRef:
-      key: prod/myapp/api-key
+    - secretKey: db-password
+      remoteRef:
+        key: prod/myapp/db-password
+    - secretKey: api-key
+      remoteRef:
+        key: prod/myapp/api-key
 ```
 
 ## StatefulSets for Stateful Applications
@@ -394,73 +401,74 @@ spec:
         runAsUser: 999
 
       containers:
-      - name: postgres
-        image: postgres:15-alpine
-
-        env:
-        - name: POSTGRES_DB
-          value: myapp
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secrets
-              key: username
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secrets
-              key: password
-        - name: PGDATA
-          value: /var/lib/postgresql/data/pgdata
-
-        ports:
         - name: postgres
-          containerPort: 5432
+          image: postgres:15-alpine
 
-        resources:
-          requests:
-            memory: "1Gi"
-            cpu: "500m"
-          limits:
-            memory: "2Gi"
-            cpu: "1000m"
+          env:
+            - name: POSTGRES_DB
+              value: myapp
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
 
-        livenessProbe:
-          exec:
-            command:
-            - /bin/sh
-            - -c
-            - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          ports:
+            - name: postgres
+              containerPort: 5432
 
-        readinessProbe:
-          exec:
-            command:
-            - /bin/sh
-            - -c
-            - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
 
-        volumeMounts:
-        - name: data
-          mountPath: /var/lib/postgresql/data
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
 
   volumeClaimTemplates:
-  - metadata:
-      name: data
-    spec:
-      accessModes: ["ReadWriteOnce"]
-      storageClassName: gp3
-      resources:
-        requests:
-          storage: 100Gi
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: gp3
+        resources:
+          requests:
+            storage: 100Gi
 ```
 
 ## Autoscaling
 
 ### Horizontal Pod Autoscaler (HPA)
+
 ```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -477,51 +485,52 @@ spec:
   maxReplicas: 20
 
   metrics:
-  # CPU-based scaling
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
+    # CPU-based scaling
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
 
-  # Memory-based scaling
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
+    # Memory-based scaling
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
 
-  # Custom metrics (requires metrics adapter)
-  - type: Pods
-    pods:
-      metric:
-        name: http_requests_per_second
-      target:
-        type: AverageValue
-        averageValue: "1000"
+    # Custom metrics (requires metrics adapter)
+    - type: Pods
+      pods:
+        metric:
+          name: http_requests_per_second
+        target:
+          type: AverageValue
+          averageValue: "1000"
 
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 300
       policies:
-      - type: Percent
-        value: 50
-        periodSeconds: 60
+        - type: Percent
+          value: 50
+          periodSeconds: 60
     scaleUp:
       stabilizationWindowSeconds: 0
       policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 15
-      - type: Pods
-        value: 4
-        periodSeconds: 15
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 4
+          periodSeconds: 15
       selectPolicy: Max
 ```
 
 ### Vertical Pod Autoscaler (VPA)
+
 ```yaml
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -535,25 +544,26 @@ spec:
     name: myapp
 
   updatePolicy:
-    updateMode: "Auto"  # "Off", "Initial", "Recreate", or "Auto"
+    updateMode: "Auto" # "Off", "Initial", "Recreate", or "Auto"
 
   resourcePolicy:
     containerPolicies:
-    - containerName: myapp
-      minAllowed:
-        cpu: 100m
-        memory: 128Mi
-      maxAllowed:
-        cpu: 2000m
-        memory: 2Gi
-      controlledResources:
-      - cpu
-      - memory
+      - containerName: myapp
+        minAllowed:
+          cpu: 100m
+          memory: 128Mi
+        maxAllowed:
+          cpu: 2000m
+          memory: 2Gi
+        controlledResources:
+          - cpu
+          - memory
 ```
 
 ## RBAC (Role-Based Access Control)
 
 ### ServiceAccount, Role, and RoleBinding
+
 ```yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -568,12 +578,12 @@ metadata:
   name: myapp-role
   namespace: production
 rules:
-- apiGroups: [""]
-  resources: ["configmaps", "secrets"]
-  verbs: ["get", "list"]
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -582,9 +592,9 @@ metadata:
   name: myapp-rolebinding
   namespace: production
 subjects:
-- kind: ServiceAccount
-  name: myapp
-  namespace: production
+  - kind: ServiceAccount
+    name: myapp
+    namespace: production
 roleRef:
   kind: Role
   name: myapp-role
@@ -592,18 +602,19 @@ roleRef:
 ```
 
 ### ClusterRole for Cluster-Wide Permissions
+
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: pod-reader
 rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: [""]
-  resources: ["nodes"]
-  verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -611,9 +622,9 @@ kind: ClusterRoleBinding
 metadata:
   name: read-pods-global
 subjects:
-- kind: ServiceAccount
-  name: myapp
-  namespace: production
+  - kind: ServiceAccount
+    name: myapp
+    namespace: production
 roleRef:
   kind: ClusterRole
   name: pod-reader
@@ -623,6 +634,7 @@ roleRef:
 ## Network Policies
 
 ### Restrict Ingress Traffic
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -635,67 +647,68 @@ spec:
       app: myapp
 
   policyTypes:
-  - Ingress
-  - Egress
+    - Ingress
+    - Egress
 
   ingress:
-  # Allow traffic from nginx ingress controller
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: ingress-nginx
-    - podSelector:
-        matchLabels:
-          app: nginx-ingress
-    ports:
-    - protocol: TCP
-      port: 8080
+    # Allow traffic from nginx ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app: nginx-ingress
+      ports:
+        - protocol: TCP
+          port: 8080
 
-  # Allow traffic from prometheus for metrics
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: monitoring
-    - podSelector:
-        matchLabels:
-          app: prometheus
-    ports:
-    - protocol: TCP
-      port: 9090
+    # Allow traffic from prometheus for metrics
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+        - podSelector:
+            matchLabels:
+              app: prometheus
+      ports:
+        - protocol: TCP
+          port: 9090
 
   egress:
-  # Allow DNS
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          name: kube-system
-    - podSelector:
-        matchLabels:
-          k8s-app: kube-dns
-    ports:
-    - protocol: UDP
-      port: 53
+    # Allow DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: kube-system
+        - podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
 
-  # Allow database access
-  - to:
-    - podSelector:
-        matchLabels:
-          app: postgres
-    ports:
-    - protocol: TCP
-      port: 5432
+    # Allow database access
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
 
-  # Allow external HTTPS
-  - to:
-    - namespaceSelector: {}
-    ports:
-    - protocol: TCP
-      port: 443
+    # Allow external HTTPS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 443
 ```
 
 ## Jobs and CronJobs
 
 ### Job for One-Time Task
+
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -704,7 +717,7 @@ metadata:
   namespace: production
 spec:
   backoffLimit: 3
-  activeDeadlineSeconds: 600  # 10 minutes timeout
+  activeDeadlineSeconds: 600 # 10 minutes timeout
 
   template:
     metadata:
@@ -714,28 +727,29 @@ spec:
       restartPolicy: OnFailure
 
       containers:
-      - name: migrate
-        image: myapp:1.0.0
-        command: ["/app/migrate"]
-        args: ["--direction", "up"]
+        - name: migrate
+          image: myapp:1.0.0
+          command: ["/app/migrate"]
+          args: ["--direction", "up"]
 
-        env:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: myapp-secrets
-              key: database-url
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: myapp-secrets
+                  key: database-url
 
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 ```
 
 ### CronJob for Scheduled Tasks
+
 ```yaml
 apiVersion: batch/v1
 kind: CronJob
@@ -743,48 +757,49 @@ metadata:
   name: backup-database
   namespace: production
 spec:
-  schedule: "0 2 * * *"  # Daily at 2 AM
+  schedule: "0 2 * * *" # Daily at 2 AM
   timeZone: "America/New_York"
-  concurrencyPolicy: Forbid  # Don't allow concurrent runs
+  concurrencyPolicy: Forbid # Don't allow concurrent runs
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
 
   jobTemplate:
     spec:
       backoffLimit: 2
-      activeDeadlineSeconds: 3600  # 1 hour timeout
+      activeDeadlineSeconds: 3600 # 1 hour timeout
 
       template:
         spec:
           restartPolicy: OnFailure
 
           containers:
-          - name: backup
-            image: postgres:15-alpine
-            command:
-            - /bin/sh
-            - -c
-            - |
-              pg_dump -h $DB_HOST -U $DB_USER -d $DB_NAME | \
-              gzip > /backup/backup-$(date +%Y%m%d-%H%M%S).sql.gz
-
-            envFrom:
-            - secretRef:
-                name: postgres-secrets
-
-            volumeMounts:
             - name: backup
-              mountPath: /backup
+              image: postgres:15-alpine
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  pg_dump -h $DB_HOST -U $DB_USER -d $DB_NAME | \
+                  gzip > /backup/backup-$(date +%Y%m%d-%H%M%S).sql.gz
+
+              envFrom:
+                - secretRef:
+                    name: postgres-secrets
+
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
 
           volumes:
-          - name: backup
-            persistentVolumeClaim:
-              claimName: backup-pvc
+            - name: backup
+              persistentVolumeClaim:
+                claimName: backup-pvc
 ```
 
 ## Helm Charts
 
 ### Chart Structure
+
 ```
 myapp-chart/
 ├── Chart.yaml
@@ -805,6 +820,7 @@ myapp-chart/
 ```
 
 ### Chart.yaml
+
 ```yaml
 apiVersion: v2
 name: myapp
@@ -826,13 +842,14 @@ dependencies:
 ```
 
 ### values.yaml
+
 ```yaml
 replicaCount: 3
 
 image:
   repository: myapp
   pullPolicy: IfNotPresent
-  tag: ""  # Defaults to chart appVersion
+  tag: "" # Defaults to chart appVersion
 
 imagePullSecrets: []
 
@@ -857,7 +874,7 @@ securityContext:
   runAsUser: 1000
   capabilities:
     drop:
-    - ALL
+      - ALL
 
 service:
   type: ClusterIP
@@ -908,6 +925,7 @@ postgresql:
 ```
 
 ### Helm Commands
+
 ```bash
 # Install chart
 helm install myapp ./myapp-chart -n production

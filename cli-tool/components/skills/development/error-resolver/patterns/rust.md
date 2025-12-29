@@ -15,6 +15,7 @@ error[E0507]: cannot move out of borrowed content
 ```
 
 **Solutions**:
+
 ```rust
 // Clone if needed
 let s = vec[0].clone();
@@ -37,10 +38,12 @@ error[E0502]: cannot borrow `x` as mutable because it is also borrowed as immuta
 ```
 
 **Causes**:
+
 1. Mutable and immutable borrows overlap
 2. Iterator invalidation
 
 **Solutions**:
+
 ```rust
 // Wrong
 let r1 = &vec;
@@ -71,6 +74,7 @@ error[E0499]: cannot borrow `x` as mutable more than once at a time
 ```
 
 **Solutions**:
+
 ```rust
 // Wrong
 let r1 = &mut vec;
@@ -96,6 +100,7 @@ error[E0382]: borrow of moved value: `s`
 ```
 
 **Solutions**:
+
 ```rust
 // Wrong
 let s = String::from("hello");
@@ -133,6 +138,7 @@ error[E0106]: missing lifetime specifier
 ```
 
 **Solutions**:
+
 ```rust
 // Add lifetime annotation
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -166,6 +172,7 @@ error: lifetime may not live long enough
 ```
 
 **Solutions**:
+
 ```rust
 // Match lifetimes correctly
 fn example<'a>(x: &'a str) -> &'a str {
@@ -200,6 +207,7 @@ error[E0308]: mismatched types
 ```
 
 **Solutions**:
+
 ```rust
 // Parse strings to numbers
 let x: i32 = "42".parse().unwrap();
@@ -225,6 +233,7 @@ error[E0277]: the trait bound `MyType: Debug` is not satisfied
 ```
 
 **Solutions**:
+
 ```rust
 // Derive the trait
 #[derive(Debug)]
@@ -256,6 +265,7 @@ error[E0425]: cannot find value `my_var` in this scope
 ```
 
 **Solutions**:
+
 ```rust
 // Import from module
 use my_module::MyType;
@@ -281,6 +291,7 @@ error[E0277]: the `?` operator can only be used in a function that returns `Resu
 ```
 
 **Solutions**:
+
 ```rust
 // Match return types
 fn example() -> Option<i32> {
@@ -316,6 +327,7 @@ thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: ...'
 ```
 
 **Solutions**:
+
 ```rust
 // Use pattern matching
 match option {
@@ -351,6 +363,7 @@ error[E0277]: `Rc<T>` cannot be sent between threads safely
 ```
 
 **Solutions**:
+
 ```rust
 // Use Arc instead of Rc for threads
 use std::sync::Arc;
@@ -381,6 +394,7 @@ error[E0277]: `RefCell<T>` cannot be shared between threads safely
 ```
 
 **Solutions**:
+
 ```rust
 // Use Mutex or RwLock instead of RefCell
 use std::sync::Mutex;
@@ -406,6 +420,7 @@ error[E0373]: closure may outlive the current function, but it borrows `x`
 ```
 
 **Solutions**:
+
 ```rust
 // Use move to take ownership
 let x = String::from("hello");
@@ -435,6 +450,7 @@ error: no rules expected the token `)`
 ```
 
 **Solutions**:
+
 ```rust
 // Check macro syntax
 vec![]           // Empty vector
@@ -459,6 +475,7 @@ error: future cannot be sent between threads safely
 ```
 
 **Solutions**:
+
 ```rust
 // Use Send-safe types
 // Arc instead of Rc
@@ -486,6 +503,7 @@ error[E0728]: `await` is only allowed inside `async` functions and blocks
 ```
 
 **Solutions**:
+
 ```rust
 // Mark function as async
 async fn example() {
@@ -517,6 +535,7 @@ error[E0432]: unresolved import `crate::module`
 ```
 
 **Solutions**:
+
 ```rust
 // Check module structure
 // src/lib.rs or src/main.rs
@@ -542,6 +561,7 @@ error[E0433]: failed to resolve: use of undeclared crate or module `tokio`
 ```
 
 **Solutions**:
+
 ```toml
 # Add to Cargo.toml
 [dependencies]
@@ -557,16 +577,16 @@ cargo build
 
 ## Quick Reference Table
 
-| Error | Category | Quick Fix |
-|-------|----------|-----------|
-| cannot move out of borrowed | Ownership | Clone or use reference |
-| cannot borrow as mutable | Borrow | End previous borrow first |
-| value borrowed after move | Move | Clone or use reference |
-| missing lifetime specifier | Lifetime | Add `<'a>` annotation |
-| mismatched types | Type | Use conversion methods |
-| trait bound not satisfied | Trait | Derive or implement trait |
-| `?` operator wrong return | Error | Match return type |
-| unwrap on None/Err | Error | Use `?` or pattern match |
-| cannot be sent between threads | Concurrency | Use Arc/Mutex |
-| closure may outlive | Closure | Add `move` keyword |
-| unresolved import | Module | Check mod declaration |
+| Error                          | Category    | Quick Fix                 |
+| ------------------------------ | ----------- | ------------------------- |
+| cannot move out of borrowed    | Ownership   | Clone or use reference    |
+| cannot borrow as mutable       | Borrow      | End previous borrow first |
+| value borrowed after move      | Move        | Clone or use reference    |
+| missing lifetime specifier     | Lifetime    | Add `<'a>` annotation     |
+| mismatched types               | Type        | Use conversion methods    |
+| trait bound not satisfied      | Trait       | Derive or implement trait |
+| `?` operator wrong return      | Error       | Match return type         |
+| unwrap on None/Err             | Error       | Use `?` or pattern match  |
+| cannot be sent between threads | Concurrency | Use Arc/Mutex             |
+| closure may outlive            | Closure     | Add `move` keyword        |
+| unresolved import              | Module      | Check mod declaration     |

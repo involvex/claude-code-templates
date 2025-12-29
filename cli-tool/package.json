@@ -1,6 +1,6 @@
 {
   "name": "claude-code-templates",
-  "version": "1.28.3",
+  "version": "1.28.4",
   "description": "CLI tool to setup Claude Code configurations with framework-specific commands, automation hooks and MCP Servers for your projects",
   "main": "src/index.js",
   "bin": {
@@ -15,6 +15,7 @@
   },
   "scripts": {
     "start": "node bin/create-claude-config.js",
+    "build": "echo 'Build complete'",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -28,6 +29,13 @@
     "test:vue": "make test-vue",
     "test:node": "make test-node",
     "test:all": "npm run test:coverage && make test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\" --ignore-path ../.gitignore",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\" --ignore-path ../.gitignore",
+    "validate": "npm run format:check && npm run lint",
+    "prebuild": "npm run validate",
+    "prepublishOnly": "npm run validate && npm run build",
     "dev:link": "npm link",
     "dev:unlink": "npm unlink -g claude-code-templates",
     "pretest:commands": "npm run dev:link",
@@ -61,7 +69,7 @@
     "rust",
     "go"
   ],
-  "author": "Claude Code Templates",
+  "author": "involvex",
   "license": "MIT",
   "dependencies": {
     "boxen": "^5.1.2",
@@ -83,12 +91,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davila7/claude-code-templates.git"
+    "url": "git+https://github.com/involvex/claude-code-templates.git"
   },
   "bugs": {
-    "url": "https://github.com/davila7/claude-code-templates/issues"
+    "url": "https://github.com/involvex/claude-code-templates.git/issues"
   },
-  "homepage": "https://github.com/davila7/claude-code-templates#readme",
+  "homepage": "https://github.com/involvex/claude-code-templates#readme",
   "files": [
     "bin/",
     "src/",
@@ -99,6 +107,8 @@
   ],
   "devDependencies": {
     "jest": "^30.0.4",
-    "jest-watch-typeahead": "^3.0.1"
+    "jest-watch-typeahead": "^3.0.1",
+    "eslint": "^9.39.2",
+    "prettier": "^3.2.5"
   }
 }

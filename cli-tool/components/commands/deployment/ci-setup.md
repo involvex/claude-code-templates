@@ -42,17 +42,18 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
    - Establish semantic versioning strategy
 
 4. **Build Pipeline Configuration**
-   
+
    **GitHub Actions Example:**
+
    ```yaml
    name: CI/CD Pipeline
-   
+
    on:
      push:
-       branches: [ main, develop ]
+       branches: [main, develop]
      pull_request:
-       branches: [ main ]
-   
+       branches: [main]
+
    jobs:
      test:
        runs-on: ubuntu-latest
@@ -61,20 +62,21 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
          - name: Setup Node.js
            uses: actions/setup-node@v3
            with:
-             node-version: '18'
-             cache: 'npm'
+             node-version: "18"
+             cache: "npm"
          - run: npm ci
          - run: npm run test
          - run: npm run build
    ```
 
    **GitLab CI Example:**
+
    ```yaml
    stages:
      - test
      - build
      - deploy
-   
+
    test:
      stage: test
      script:
@@ -98,6 +100,7 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
    - Configure test reporting and coverage
 
    **Multi-stage Testing:**
+
    ```yaml
    test:
      strategy:
@@ -126,6 +129,7 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
    - Set up artifact management
 
    **Caching Example:**
+
    ```yaml
    - name: Cache node modules
      uses: actions/cache@v3
@@ -143,12 +147,13 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
    - Implement security scanning for images
 
    **Multi-stage Dockerfile:**
+
    ```dockerfile
    FROM node:18-alpine AS builder
    WORKDIR /app
    COPY package*.json ./
    RUN npm ci --only=production
-   
+
    FROM node:18-alpine AS runtime
    WORKDIR /app
    COPY --from=builder /app/node_modules ./node_modules
@@ -181,17 +186,18 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
     - Configure SAST (Static Application Security Testing)
     - Implement secrets scanning
 
-   **Security Scanning Example:**
-   ```yaml
-   security:
-     runs-on: ubuntu-latest
-     steps:
-       - uses: actions/checkout@v3
-       - name: Run Snyk to check for vulnerabilities
-         uses: snyk/actions/node@master
-         env:
-           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-   ```
+    **Security Scanning Example:**
+
+```yaml
+security:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+```
 
 14. **Database Migration Handling**
     - Automate database schema migrations
@@ -211,27 +217,28 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
     - Implement environment promotion workflow
     - Configure environment-specific configurations
 
-   **Environment Deployment:**
-   ```yaml
-   deploy-staging:
-     needs: test
-     if: github.ref == 'refs/heads/develop'
-     runs-on: ubuntu-latest
-     steps:
-       - name: Deploy to staging
-         run: |
-           # Deploy to staging environment
-   
-   deploy-production:
-     needs: test
-     if: github.ref == 'refs/heads/main'
-     runs-on: ubuntu-latest
-     environment: production
-     steps:
-       - name: Deploy to production
-         run: |
-           # Deploy to production environment
-   ```
+    **Environment Deployment:**
+
+```yaml
+deploy-staging:
+  needs: test
+  if: github.ref == 'refs/heads/develop'
+  runs-on: ubuntu-latest
+  steps:
+    - name: Deploy to staging
+      run: |
+        # Deploy to staging environment
+
+deploy-production:
+  needs: test
+  if: github.ref == 'refs/heads/main'
+  runs-on: ubuntu-latest
+  environment: production
+  steps:
+    - name: Deploy to production
+      run: |
+        # Deploy to production environment
+```
 
 17. **Rollback and Recovery**
     - Implement automated rollback procedures
@@ -269,14 +276,15 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
 8. **Rollback**: Always have a rollback strategy
 
 **Sample Complete Pipeline:**
+
 ```yaml
 name: Full CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   lint-and-test:
@@ -285,8 +293,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
       - run: npm ci
       - run: npm run lint
       - run: npm run test:coverage

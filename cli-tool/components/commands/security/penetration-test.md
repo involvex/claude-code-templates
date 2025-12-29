@@ -22,6 +22,7 @@ Conduct systematic penetration testing following ethical hacking methodologies:
 **Test Target**: Use $ARGUMENTS to focus on web application, API, authentication, or comprehensive testing
 
 **Testing Phases**:
+
 1. **Reconnaissance** - Service discovery, technology fingerprinting, attack surface mapping
 2. **Vulnerability Assessment** - OWASP Top 10, injection flaws, broken authentication
 3. **Exploitation Testing** - XSS, CSRF, SQL injection, privilege escalation attempts
@@ -30,6 +31,7 @@ Conduct systematic penetration testing following ethical hacking methodologies:
 6. **Infrastructure Testing** - Network security, container security, configuration issues
 
 **Testing Methodology**:
+
 - Follow OWASP Testing Guide and NIST guidelines
 - Use both automated tools and manual testing techniques
 - Document all findings with proof-of-concept examples

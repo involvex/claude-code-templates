@@ -19,6 +19,7 @@ Create a new ticket within an epic following Product as Code specification: **$A
 Create a new Product as Code ticket within an existing epic:
 
 **Arguments**:
+
 - Ticket name (required if not using --name flag)
 - --epic <epic-id>: Parent epic ID (required)
 - --type <type>: Ticket type (feature/bug/task/spike)
@@ -27,6 +28,7 @@ Create a new Product as Code ticket within an existing epic:
 - --create-branch: Automatically create git branch
 
 **Ticket Creation Process**:
+
 1. Validate PAC configuration exists (suggest `/project:pac-configure` if missing)
 2. Select or validate parent epic
 3. Generate unique ticket ID and sequence number

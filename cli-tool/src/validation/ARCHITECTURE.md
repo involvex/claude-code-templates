@@ -1,11 +1,13 @@
 # Security Audit System Architecture
 
 ## Overview
+
 This document outlines the security validation system for Claude Code Templates components (agents, commands, MCPs, settings, hooks).
 
 ## Industry Standards Reference
 
 ### Implemented Standards
+
 - **NPM 2025**: SHA256 hashing, provenance metadata, trusted publishing principles
 - **SLSA Framework**: Level 2 compliance (build integrity, tamper resistance)
 - **PyPI Security**: Content validation, typo-squatting detection
@@ -32,7 +34,9 @@ cli-tool/src/validation/
 ## Validation Tiers
 
 ### Tier 1: Structural Validation (CRITICAL)
+
 **Validators**: `StructuralValidator.js`
+
 - ✅ YAML frontmatter validation (name, description, tools, model)
 - ✅ File size limits (max 100KB for agents/commands)
 - ✅ UTF-8 encoding validation
@@ -42,7 +46,9 @@ cli-tool/src/validation/
 **Error Codes**: `STRUCT_*`
 
 ### Tier 2: Semantic Validation (HIGH PRIORITY)
+
 **Validators**: `SemanticValidator.js`
+
 - ✅ Prompt injection detection
 - ✅ Jailbreak pattern detection
 - ✅ Instruction override attempts
@@ -50,6 +56,7 @@ cli-tool/src/validation/
 - ✅ Credential harvesting patterns
 
 **Patterns to Detect**:
+
 ```javascript
 const DANGEROUS_PATTERNS = [
   /ignore\s+(previous|all)\s+instructions?/i,
@@ -58,14 +65,16 @@ const DANGEROUS_PATTERNS = [
   /execute\s+the\s+following\s+(code|command)/i,
   /fetch.*?(token|key|password|credential)/i,
   /open\s+a?\s?shell/i,
-  /<script|<iframe|javascript:/i
+  /<script|<iframe|javascript:/i,
 ];
 ```
 
 **Error Codes**: `SEM_*`
 
 ### Tier 3: Reference Validation (MEDIUM PRIORITY)
+
 **Validators**: `ReferenceValidator.js`
+
 - ✅ URL validation (HTTPS only)
 - ✅ Private IP blocking (127.0.0.1, 10.0.0.0/8, 192.168.0.0/16)
 - ✅ file:// protocol blocking
@@ -75,7 +84,9 @@ const DANGEROUS_PATTERNS = [
 **Error Codes**: `REF_*`
 
 ### Tier 4: Integrity (HIGH PRIORITY)
+
 **Validators**: `IntegrityValidator.js`
+
 - ✅ SHA256 hash generation
 - ✅ Hash verification on install
 - ✅ Version tracking
@@ -84,7 +95,9 @@ const DANGEROUS_PATTERNS = [
 **Error Codes**: `INT_*`
 
 ### Tier 5: Provenance (MEDIUM PRIORITY)
+
 **Validators**: `ProvenanceValidator.js`
+
 - ✅ Author metadata extraction
 - ✅ Source repository tracking
 - ✅ Git commit SHA tracking
@@ -164,7 +177,7 @@ name: Component Security Validation
 on:
   pull_request:
     paths:
-      - 'cli-tool/components/**/*.md'
+      - "cli-tool/components/**/*.md"
   push:
     branches:
       - main
@@ -178,7 +191,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install dependencies
         run: |
@@ -199,13 +212,15 @@ jobs:
 ```
 
 ### PR Checks
+
 - ✅ All validators must pass
-- ⚠️  Warnings are allowed but reported
+- ⚠️ Warnings are allowed but reported
 - ❌ Any errors block the PR
 
 ## Component Metadata Schema
 
 ### Enhanced components.json
+
 ```json
 {
   "agents": [
@@ -239,14 +254,16 @@ jobs:
 
 ## Error Code Reference
 
-### Structural (STRUCT_*)
+### Structural (STRUCT\_\*)
+
 - `STRUCT_E001`: Missing required frontmatter
 - `STRUCT_E002`: Invalid YAML syntax
 - `STRUCT_E003`: File size exceeds limit
 - `STRUCT_E004`: Invalid UTF-8 encoding
 - `STRUCT_W001`: Missing optional field
 
-### Semantic (SEM_*)
+### Semantic (SEM\_\*)
+
 - `SEM_E001`: Jailbreak pattern detected
 - `SEM_E002`: Prompt injection detected
 - `SEM_E003`: Instruction override attempt
@@ -254,20 +271,23 @@ jobs:
 - `SEM_E005`: Credential harvesting pattern
 - `SEM_W001`: Suspicious instruction wording
 
-### References (REF_*)
+### References (REF\_\*)
+
 - `REF_E001`: Insecure protocol (file://, http://)
 - `REF_E002`: Private IP address detected
 - `REF_E003`: Malicious URL (Safe Browsing)
 - `REF_E004`: Dangerous HTML tag
 - `REF_W001`: Missing HTTPS
 
-### Integrity (INT_*)
+### Integrity (INT\_\*)
+
 - `INT_E001`: Hash mismatch
 - `INT_E002`: Missing version
 - `INT_E003`: Invalid signature
 - `INT_W001`: No signature provided
 
-### Provenance (PROV_*)
+### Provenance (PROV\_\*)
+
 - `PROV_E001`: Missing author
 - `PROV_E002`: Invalid repository URL
 - `PROV_W001`: Unverified author
@@ -276,16 +296,19 @@ jobs:
 ## Testing Strategy
 
 ### Unit Tests
+
 ```bash
 npm test -- --testPathPattern=validation
 ```
 
 ### Integration Tests
+
 ```bash
 npm run test:integration -- validation
 ```
 
 ### Test Coverage
+
 - Target: 90%+ for validators
 - Mocking: GitHub API, Safe Browsing API
 - Fixtures: Malicious and benign component examples
@@ -293,17 +316,20 @@ npm run test:integration -- validation
 ## Future Enhancements
 
 ### Phase 2
+
 - [ ] LLM-based semantic analysis (lightweight model)
 - [ ] Community reporting system
 - [ ] Automated revocation mechanism
 - [ ] Digital signatures with PGP/GPG
 
 ### Phase 3
+
 - [ ] Real-time validation API endpoint
 - [ ] Browser extension for component preview
 - [ ] Trust score system (0-100)
 - [ ] Historical vulnerability tracking
 
 ## Security Contact
+
 For security concerns, please open an issue at:
 https://github.com/danimesq/claude-code-templates/security

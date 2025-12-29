@@ -22,6 +22,7 @@ Execute comprehensive velocity tracking with predictive analytics and optimizati
 **Analysis Period**: Use $ARGUMENTS to focus on sprint velocity, monthly trends, quarterly patterns, or comprehensive trend analysis
 
 **Velocity Tracking Framework**:
+
 1. **Historical Velocity Analysis** - Extract sprint completion data, analyze story point delivery, calculate team throughput, identify performance patterns
 2. **Consistency Assessment** - Measure velocity stability, identify variance patterns, assess predictability factors, evaluate planning accuracy
 3. **Capacity Correlation** - Analyze team size impact, assess skill level effects, evaluate availability constraints, measure external factor influence

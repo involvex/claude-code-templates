@@ -15,38 +15,49 @@ Creates detailed reports for project management, sprint reviews, and performance
 ## Report Types
 
 ### Executive Summary
+
 ```
 /task-report executive
 ```
+
 High-level overview for stakeholders with key metrics and progress.
 
 ### Sprint Report
+
 ```
 /task-report sprint --date 03_15_2024
 ```
+
 Detailed sprint progress with burndown charts and velocity.
 
 ### Daily Standup
+
 ```
 /task-report standup
 ```
+
 What was completed, in progress, and blocked.
 
 ### Performance Report
+
 ```
 /task-report performance --period week
 ```
+
 Team and individual performance metrics.
 
 ### Dependency Report
+
 ```
 /task-report dependencies
 ```
+
 Visual dependency graph and bottleneck analysis.
 
 ## Output Examples
 
 ### Executive Summary Report
+
 ```
 EXECUTIVE SUMMARY - Authentication System Project
 ================================================
@@ -87,16 +98,18 @@ NEXT MILESTONES
 ```
 
 ### Sprint Burndown Report
+
 ```
 /task-report burndown --sprint current
 ```
+
 ```
 SPRINT BURNDOWN - Sprint 24
 ===========================
 
 Tasks Remaining by Day:
 Day 1: ████████████████████ 24
-Day 2: ████████████████     20 
+Day 2: ████████████████     20
 Day 3: ████████████         15 (TODAY)
 Day 4: ████████             10 (projected)
 Day 5: ████                 5  (projected)
@@ -110,6 +123,7 @@ Risk Assessment: ON TRACK
 ```
 
 ### Performance Report
+
 ```
 TEAM PERFORMANCE REPORT - Week 11
 =================================
@@ -137,6 +151,7 @@ Quality Metrics:
 ## Customization Options
 
 ### Time Period
+
 ```
 /task-report summary --from 2024-03-01 --to 2024-03-15
 /task-report summary --last 7d
@@ -144,11 +159,13 @@ Quality Metrics:
 ```
 
 ### Specific Project
+
 ```
 /task-report sprint --project authentication_system
 ```
 
 ### Format Options
+
 ```
 /task-report executive --format markdown
 /task-report executive --format html
@@ -156,6 +173,7 @@ Quality Metrics:
 ```
 
 ### Include/Exclude
+
 ```
 /task-report summary --include completed,qa
 /task-report summary --exclude on_hold
@@ -164,42 +182,53 @@ Quality Metrics:
 ## Specialized Reports
 
 ### Critical Path Analysis
+
 ```
 /task-report critical-path
 ```
+
 Shows tasks that directly impact completion time.
 
 ### Bottleneck Analysis
+
 ```
 /task-report bottlenecks
 ```
+
 Identifies tasks causing delays.
 
 ### Resource Utilization
+
 ```
 /task-report resources
 ```
+
 Shows agent allocation and availability.
 
 ### Risk Assessment
+
 ```
 /task-report risks
 ```
+
 Identifies potential delays and issues.
 
 ## Visualization Options
 
 ### Gantt Chart
+
 ```
 /task-report gantt --weeks 2
 ```
 
 ### Dependency Graph
+
 ```
 /task-report dependencies --visual
 ```
 
 ### Status Flow
+
 ```
 /task-report flow --animated
 ```
@@ -207,12 +236,14 @@ Identifies potential delays and issues.
 ## Automated Reports
 
 ### Schedule Reports
+
 ```
 /task-report schedule daily-standup --at "9am"
 /task-report schedule weekly-summary --every friday
 ```
 
 ### Email Reports
+
 ```
 /task-report executive --email team@company.com
 ```
@@ -220,11 +251,13 @@ Identifies potential delays and issues.
 ## Comparison Reports
 
 ### Sprint Comparison
+
 ```
 /task-report compare --sprint 23 24
 ```
 
 ### Week over Week
+
 ```
 /task-report trends --weeks 4
 ```
@@ -232,26 +265,33 @@ Identifies potential delays and issues.
 ## Examples
 
 ### Example 1: Morning Status
+
 ```
 /task-report standup --format slack
 ```
+
 Generates Slack-formatted standup report.
 
 ### Example 2: Sprint Review
+
 ```
 /task-report sprint --include-velocity --include-burndown
 ```
+
 Comprehensive sprint metrics for review meeting.
 
 ### Example 3: Blocker Focus
+
 ```
 /task-report blockers --show-dependencies --show-resolution
 ```
+
 Deep dive into what's blocking progress.
 
 ## Integration Features
 
 ### Export to Tools
+
 ```
 /task-report export-jira
 /task-report export-asana
@@ -259,9 +299,11 @@ Deep dive into what's blocking progress.
 ```
 
 ### API Endpoints
+
 ```
 /task-report api --generate-endpoint
 ```
+
 Creates API endpoint for external access.
 
 ## Best Practices
@@ -274,6 +316,7 @@ Creates API endpoint for external access.
 ## Report Components
 
 Each report can include:
+
 - Summary statistics
 - Timeline visualization
 - Task lists by status

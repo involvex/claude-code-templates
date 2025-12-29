@@ -9,6 +9,7 @@ This skill provides expert guidance on all aspects of IT operations, from managi
 ## What This Skill Covers
 
 ### Core Operations
+
 - **Monitoring & Observability**: Comprehensive monitoring strategies, alerting, dashboards, and SLI/SLO/SLA frameworks
 - **Incident Management**: Structured incident response, root cause analysis, post-mortems, and on-call management
 - **Infrastructure Management**: Server lifecycle, network operations, capacity planning, and cloud infrastructure
@@ -16,6 +17,7 @@ This skill provides expert guidance on all aspects of IT operations, from managi
 - **Backup & Recovery**: Backup strategies, disaster recovery planning, business continuity, and recovery testing
 
 ### Key Frameworks
+
 - **ITIL Service Management**: Service strategy, design, transition, operation, and continual service improvement
 - **Site Reliability Engineering (SRE)**: Error budgets, toil reduction, automation-first approach
 - **Observability**: The three pillars (metrics, logs, traces), Golden Signals, RED/USE methods
@@ -58,6 +60,7 @@ This skill provides expert guidance on all aspects of IT operations, from managi
 ### For Mature Operations Teams
 
 Enhance your existing practices:
+
 - **Advanced Observability**: Implement distributed tracing, anomaly detection, predictive alerting
 - **Self-Healing Systems**: Build event-driven automation that responds to alerts automatically
 - **Chaos Engineering**: Proactively test system resilience through controlled failure injection
@@ -81,9 +84,11 @@ it-operations/
 ## Common Scenarios
 
 ### Scenario 1: High CPU Alert
+
 **Problem**: Alert fires indicating high CPU usage on production server
 
 **Response**:
+
 1. Check [monitoring.md](reference/monitoring.md) for diagnostic queries
 2. Follow incident response workflow in [incident-management.md](reference/incident-management.md)
 3. Investigate top CPU consumers
@@ -94,9 +99,11 @@ it-operations/
 5. Document in post-incident review
 
 ### Scenario 2: Service Outage
+
 **Problem**: Critical application is completely down
 
 **Response**:
+
 1. Declare P1 incident ([incident-management.md](reference/incident-management.md))
 2. Activate incident response team
 3. Check recent changes (deployments, configuration)
@@ -106,9 +113,11 @@ it-operations/
 7. Conduct blameless post-mortem
 
 ### Scenario 3: Capacity Planning
+
 **Problem**: Need to forecast infrastructure needs for next quarter
 
 **Response**:
+
 1. Collect baseline metrics ([monitoring.md](reference/monitoring.md))
 2. Analyze trends ([infrastructure.md](reference/infrastructure.md) - Capacity Planning section)
 3. Calculate growth rate and forecast
@@ -116,9 +125,11 @@ it-operations/
 5. Budget approval and execution
 
 ### Scenario 4: Disaster Recovery Test
+
 **Problem**: Annual DR test is scheduled
 
 **Response**:
+
 1. Review DR plan ([backup-recovery.md](reference/backup-recovery.md))
 2. Notify stakeholders of test window
 3. Execute failover to DR site
@@ -128,9 +139,11 @@ it-operations/
 7. Document results and improvements
 
 ### Scenario 5: Toil Reduction Initiative
+
 **Problem**: Team spending too much time on manual tasks
 
 **Response**:
+
 1. Track time spent on tasks (weekly)
 2. Calculate automation ROI ([automation.md](reference/automation.md))
 3. Prioritize high-impact, high-ROI tasks
@@ -143,24 +156,28 @@ it-operations/
 ### Operational Excellence
 
 **Proactive Operations**:
+
 - Monitor leading indicators, not just failures
 - Implement capacity planning (don't wait for outages)
 - Test disaster recovery regularly (quarterly minimum)
 - Automate repetitive tasks (reduce toil below 50%)
 
 **Blameless Culture**:
+
 - Focus on systems, not people
 - Post-mortems are learning opportunities
 - Reward transparency and sharing failures
 - Track action items to completion
 
 **Documentation**:
+
 - Runbooks for every service
 - Up-to-date architecture diagrams
 - Searchable knowledge base
 - Regularly reviewed and updated
 
 **Continuous Improvement**:
+
 - Track operational metrics (MTTR, MTTA, toil percentage)
 - Regular retrospectives
 - Implement lessons learned from incidents
@@ -169,6 +186,7 @@ it-operations/
 ### Key Metrics to Track
 
 **Reliability**:
+
 - Availability (uptime percentage)
 - MTTR (Mean Time to Recovery)
 - MTTA (Mean Time to Acknowledge)
@@ -176,18 +194,21 @@ it-operations/
 - Incident count by severity
 
 **Efficiency**:
+
 - Toil percentage (target < 50%)
 - Automation coverage (target > 70%)
 - Alert volume (trending down)
 - False positive rate (target < 20%)
 
 **Capacity**:
+
 - CPU utilization trends
 - Memory utilization trends
 - Storage growth rate
 - Network bandwidth usage
 
 **Change Management**:
+
 - Change success rate (target > 95%)
 - Deployment frequency
 - Lead time for changes
@@ -208,6 +229,7 @@ This IT Operations skill complements:
 Stay current with IT operations practices:
 
 **Industry Resources**:
+
 - Google SRE Book (free online)
 - ITIL 4 Foundation
 - AWS Well-Architected Framework
@@ -215,12 +237,14 @@ Stay current with IT operations practices:
 - HashiCorp Learn (Terraform, Vault)
 
 **Communities**:
+
 - SRE Weekly newsletter
 - DevOps subreddit
 - USENIX LISA conference
 - Local DevOps/SRE meetups
 
 **Certifications**:
+
 - ITIL 4 Foundation
 - AWS Certified SysOps Administrator
 - Certified Kubernetes Administrator (CKA)
@@ -238,6 +262,7 @@ When working with this skill:
 ## Contributing
 
 This skill improves through real-world experience. Consider updating:
+
 - Runbooks based on actual incidents
 - Automation scripts that proved valuable
 - Monitoring queries that caught issues early

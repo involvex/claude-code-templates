@@ -10,18 +10,21 @@ A comprehensive skill for managing IT infrastructure operations, ensuring servic
 ## Core Principles
 
 ### 1. Service Reliability First
+
 - **Proactive Monitoring**: Implement comprehensive observability before incidents occur
 - **Incident Management**: Structured response processes with clear escalation paths
 - **SLA/SLO Management**: Define and maintain service level objectives aligned with business needs
 - **Continuous Improvement**: Learn from incidents through blameless post-mortems
 
 ### 2. Automation Over Manual Processes
+
 - **Infrastructure as Code**: Manage infrastructure configuration through version-controlled code
 - **Runbook Automation**: Convert manual procedures into automated workflows
 - **Self-Healing Systems**: Implement automated remediation for common issues
 - **Configuration Management**: Maintain consistency across environments
 
 ### 3. ITIL Service Management
+
 - **Service Strategy**: Align IT services with business objectives
 - **Service Design**: Design resilient, scalable services
 - **Service Transition**: Manage changes with minimal disruption
@@ -29,6 +32,7 @@ A comprehensive skill for managing IT infrastructure operations, ensuring servic
 - **Continual Service Improvement**: Iteratively enhance service quality
 
 ### 4. Operational Excellence
+
 - **Documentation**: Maintain current runbooks, procedures, and architecture diagrams
 - **Knowledge Management**: Build searchable knowledge bases from incident resolutions
 - **Capacity Planning**: Forecast and provision resources proactively
@@ -87,35 +91,39 @@ A comprehensive skill for managing IT infrastructure operations, ensuring servic
 
 ### Alert Configuration Decision Matrix
 
-| Scenario | Alert Type | Threshold | Response Time | Escalation |
-|----------|-----------|-----------|---------------|------------|
-| Service completely down | Page | Immediate | < 5 min | Immediate to on-call |
-| Service degraded | Page | 2-3 failures | < 15 min | After 15 min to on-call |
-| High resource usage | Warning | > 80% sustained | < 1 hour | After 2 hours to team lead |
-| Approaching capacity | Info | > 70% trend | < 24 hours | Weekly capacity review |
-| Configuration drift | Ticket | Any deviation | < 7 days | Monthly review |
+| Scenario                | Alert Type | Threshold       | Response Time | Escalation                 |
+| ----------------------- | ---------- | --------------- | ------------- | -------------------------- |
+| Service completely down | Page       | Immediate       | < 5 min       | Immediate to on-call       |
+| Service degraded        | Page       | 2-3 failures    | < 15 min      | After 15 min to on-call    |
+| High resource usage     | Warning    | > 80% sustained | < 1 hour      | After 2 hours to team lead |
+| Approaching capacity    | Info       | > 70% trend     | < 24 hours    | Weekly capacity review     |
+| Configuration drift     | Ticket     | Any deviation   | < 7 days      | Monthly review             |
 
 ### Incident Severity Classification
 
 **Priority 1 (Critical)**
+
 - Complete service outage affecting all users
 - Data loss or security breach
 - Financial impact > $10K/hour
 - Response: Immediate, 24/7, all hands on deck
 
 **Priority 2 (High)**
+
 - Partial service outage affecting many users
 - Significant performance degradation
 - Financial impact $1K-$10K/hour
 - Response: < 30 minutes during business hours
 
 **Priority 3 (Medium)**
+
 - Service degradation affecting some users
 - Non-critical functionality impaired
 - Workaround available
 - Response: < 4 hours during business hours
 
 **Priority 4 (Low)**
+
 - Minor issues with minimal impact
 - Cosmetic problems
 - Enhancement requests
@@ -156,23 +164,25 @@ Risk Score Interpretation:
 
 ### Monitoring Tool Selection
 
-| Requirement | Prometheus + Grafana | Datadog | New Relic | ELK Stack | Splunk |
-|-------------|---------------------|---------|-----------|-----------|---------|
-| Cost | Free (self-hosted) | $$$$ | $$$$ | Free-$$ | $$$$$ |
-| Metrics | Excellent | Excellent | Excellent | Good | Good |
-| Logs | Via Loki | Excellent | Excellent | Excellent | Excellent |
-| Traces | Via Tempo | Excellent | Excellent | Limited | Good |
-| Learning Curve | Steep | Moderate | Moderate | Steep | Steep |
-| Cloud-Native | Excellent | Excellent | Excellent | Good | Good |
-| On-Premises | Excellent | Good | Good | Excellent | Excellent |
-| APM | Via exporters | Excellent | Excellent | Limited | Good |
+| Requirement    | Prometheus + Grafana | Datadog   | New Relic | ELK Stack | Splunk    |
+| -------------- | -------------------- | --------- | --------- | --------- | --------- |
+| Cost           | Free (self-hosted)   | $$$$      | $$$$      | Free-$$   | $$$$$     |
+| Metrics        | Excellent            | Excellent | Excellent | Good      | Good      |
+| Logs           | Via Loki             | Excellent | Excellent | Excellent | Excellent |
+| Traces         | Via Tempo            | Excellent | Excellent | Limited   | Good      |
+| Learning Curve | Steep                | Moderate  | Moderate  | Steep     | Steep     |
+| Cloud-Native   | Excellent            | Excellent | Excellent | Good      | Good      |
+| On-Premises    | Excellent            | Good      | Good      | Excellent | Excellent |
+| APM            | Via exporters        | Excellent | Excellent | Limited   | Good      |
 
 ## Common Operational Challenges
 
 ### Challenge 1: Alert Fatigue
+
 **Problem**: Too many false positive alerts causing team burnout
 
 **Solution**:
+
 ```yaml
 Alert Tuning Process:
 1. Measure baseline alert volume and false positive rate
@@ -190,9 +200,11 @@ Alert Tuning Process:
 ```
 
 ### Challenge 2: Incident Documentation During Crisis
+
 **Problem**: Teams skip documentation during high-pressure incidents
 
 **Solution**:
+
 - Assign dedicated scribe role (not the incident commander)
 - Use incident management tools (PagerDuty, Opsgenie) with automatic timeline
 - Template-based incident reports with required fields
@@ -200,24 +212,28 @@ Alert Tuning Process:
 - Gamify documentation (track and recognize thorough documentation)
 
 ### Challenge 3: Knowledge Silos
+
 **Problem**: Critical knowledge trapped in individual team members' heads
 
 **Solution**:
+
 ```yaml
 Knowledge Transfer Strategy:
-- Pair Programming/Shadowing: 20% of sprint capacity
-- Runbook Requirements: Every system must have runbook
-- Lunch & Learn Sessions: Weekly 30-min knowledge sharing
-- Cross-Training Matrix: Track who knows what, identify gaps
-- On-Call Rotation: Everyone rotates to spread knowledge
-- Post-Incident Reviews: Mandatory team sharing
-- Documentation Sprints: Quarterly focus on doc completion
+  - Pair Programming/Shadowing: 20% of sprint capacity
+  - Runbook Requirements: Every system must have runbook
+  - Lunch & Learn Sessions: Weekly 30-min knowledge sharing
+  - Cross-Training Matrix: Track who knows what, identify gaps
+  - On-Call Rotation: Everyone rotates to spread knowledge
+  - Post-Incident Reviews: Mandatory team sharing
+  - Documentation Sprints: Quarterly focus on doc completion
 ```
 
 ### Challenge 4: Balancing Stability vs Innovation
+
 **Problem**: Operations team resists change to maintain stability
 
 **Solution**:
+
 - Implement change windows (planned maintenance periods)
 - Use blue-green or canary deployments for lower risk
 - Establish "innovation time" (Google 20% time model)
@@ -228,6 +244,7 @@ Knowledge Transfer Strategy:
 ## Key Metrics & KPIs
 
 ### Service Reliability Metrics
+
 ```yaml
 Availability:
   Formula: (Total Time - Downtime) / Total Time × 100
@@ -261,6 +278,7 @@ Incident Recurrence Rate:
 ```
 
 ### Operational Efficiency Metrics
+
 ```yaml
 Toil Percentage:
   Definition: Time spent on manual, repetitive tasks
@@ -291,6 +309,7 @@ Knowledge Base Utilization:
 ## Integration Points
 
 ### With Development Teams
+
 - Participate in design reviews for operational requirements
 - Provide deployment automation and CI/CD pipeline support
 - Share monitoring and logging requirements
@@ -298,6 +317,7 @@ Knowledge Base Utilization:
 - Joint ownership of SLOs and error budgets
 
 ### With Security Teams
+
 - Implement security monitoring and alerting
 - Manage access controls and authentication systems
 - Coordinate vulnerability patching and remediation
@@ -305,6 +325,7 @@ Knowledge Base Utilization:
 - Maintain compliance with security policies
 
 ### With Business Stakeholders
+
 - Report on service availability and performance
 - Communicate planned maintenance windows
 - Provide capacity planning forecasts
@@ -314,8 +335,10 @@ Knowledge Base Utilization:
 ## Best Practices
 
 ### 1. Blameless Post-Mortems
+
 ```markdown
 Post-Incident Review Template:
+
 - Incident Summary (what happened, when, impact)
 - Timeline of Events (detailed chronology)
 - Root Cause Analysis (5 Whys or Fishbone)
@@ -325,6 +348,7 @@ Post-Incident Review Template:
 - Lessons Learned (shareable insights)
 
 Rules:
+
 - No blame or punishment
 - Focus on systems and processes, not people
 - Everyone can speak freely
@@ -332,6 +356,7 @@ Rules:
 ```
 
 ### 2. Runbook Standards
+
 ```yaml
 Runbook Contents:
   - Service Overview: Purpose, dependencies, architecture
@@ -352,6 +377,7 @@ Maintenance:
 ```
 
 ### 3. On-Call Best Practices
+
 ```yaml
 On-Call Preparation:
   - Laptop with VPN access
@@ -376,6 +402,7 @@ Post On-Call:
 ```
 
 ### 4. Change Management Discipline
+
 ```yaml
 Standard Change Process:
   1. Create change request (RFC)
@@ -405,6 +432,7 @@ Emergency Change Process:
 ## Reference Files
 
 For detailed technical guidance, see:
+
 - [reference/monitoring.md](reference/monitoring.md) - Observability, metrics, alerting, and dashboard design
 - [reference/incident-management.md](reference/incident-management.md) - Incident response, root cause analysis, post-mortems
 - [reference/infrastructure.md](reference/infrastructure.md) - Server management, network operations, capacity planning

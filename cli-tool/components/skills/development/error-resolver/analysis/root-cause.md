@@ -58,39 +58,39 @@ FIX: Update checklist + add ESLint rule
 
 ### Category: Null/Undefined Errors
 
-| Symptom | Common Root Causes |
-|---------|-------------------|
-| `undefined` variable | Missing return statement |
-| `null` from API | Resource not found, not handled |
-| Missing property | Object schema changed |
-| Array index undefined | Off-by-one error |
+| Symptom               | Common Root Causes              |
+| --------------------- | ------------------------------- |
+| `undefined` variable  | Missing return statement        |
+| `null` from API       | Resource not found, not handled |
+| Missing property      | Object schema changed           |
+| Array index undefined | Off-by-one error                |
 
 ### Category: Network Errors
 
-| Symptom | Common Root Causes |
-|---------|-------------------|
-| Connection refused | Service not started/crashed |
-| Timeout | Database slow, N+1 queries |
-| 401/403 | Token expired, wrong credentials |
-| CORS | Missing server headers |
+| Symptom            | Common Root Causes               |
+| ------------------ | -------------------------------- |
+| Connection refused | Service not started/crashed      |
+| Timeout            | Database slow, N+1 queries       |
+| 401/403            | Token expired, wrong credentials |
+| CORS               | Missing server headers           |
 
 ### Category: Type Errors
 
-| Symptom | Common Root Causes |
-|---------|-------------------|
-| Not a function | Wrong import (default vs named) |
-| Cannot iterate | Expected array, got object |
-| Invalid JSON | HTML error page returned |
-| Type mismatch | Form data is string, expected number |
+| Symptom        | Common Root Causes                   |
+| -------------- | ------------------------------------ |
+| Not a function | Wrong import (default vs named)      |
+| Cannot iterate | Expected array, got object           |
+| Invalid JSON   | HTML error page returned             |
+| Type mismatch  | Form data is string, expected number |
 
 ### Category: State Errors
 
-| Symptom | Common Root Causes |
-|---------|-------------------|
-| Stale data | Missing refresh, caching issue |
+| Symptom        | Common Root Causes                |
+| -------------- | --------------------------------- |
+| Stale data     | Missing refresh, caching issue    |
 | Race condition | Async operations not synchronized |
-| Infinite loop | useEffect dependencies wrong |
-| Memory leak | Event listeners not cleaned |
+| Infinite loop  | useEffect dependencies wrong      |
+| Memory leak    | Event listeners not cleaned       |
 
 ---
 
@@ -150,8 +150,8 @@ async function processData(data) {
   // step2(data)
 
   // Keep other half
-  step3(data)
-  step4(data)
+  step3(data);
+  step4(data);
 }
 // Error still happens? -> Problem in step3 or step4
 // Error gone? -> Problem in step1 or step2
@@ -183,19 +183,19 @@ Create smallest code that reproduces error:
 // Add code piece by piece until error appears
 
 // Step 1 - Basic setup
-const express = require('express')
-const app = express()
+const express = require("express");
+const app = express();
 // No error yet
 
 // Step 2 - Add middleware
-app.use(express.json())
+app.use(express.json());
 // No error yet
 
 // Step 3 - Add route
-app.get('/user', async (req, res) => {
-  const user = await getUser(req.query.id)
-  res.json({ name: user.name })  // ERROR HERE!
-})
+app.get("/user", async (req, res) => {
+  const user = await getUser(req.query.id);
+  res.json({ name: user.name }); // ERROR HERE!
+});
 
 // Minimal repro: getUser returns undefined for invalid ID
 ```
@@ -226,12 +226,12 @@ app.get('/user', async (req, res) => {
 
 ### Environment Comparison
 
-| Factor | Working | Broken |
-|--------|---------|--------|
-| Node version | 18.0 | 20.0 |
-| Database | Local | Remote |
-| Auth | Dev token | Prod token |
-| Data volume | 100 rows | 1M rows |
+| Factor       | Working   | Broken     |
+| ------------ | --------- | ---------- |
+| Node version | 18.0      | 20.0       |
+| Database     | Local     | Remote     |
+| Auth         | Dev token | Prod token |
+| Data volume  | 100 rows  | 1M rows    |
 
 ---
 
@@ -265,18 +265,18 @@ Error!
 
 ```javascript
 async function processOrder(orderId) {
-  console.log('[1] Input:', orderId)
+  console.log("[1] Input:", orderId);
 
-  const order = await getOrder(orderId)
-  console.log('[2] Order:', JSON.stringify(order))
+  const order = await getOrder(orderId);
+  console.log("[2] Order:", JSON.stringify(order));
 
-  const user = await getUser(order.userId)
-  console.log('[3] User:', JSON.stringify(user))
+  const user = await getUser(order.userId);
+  console.log("[3] User:", JSON.stringify(user));
 
-  const result = calculateTotal(order, user)
-  console.log('[4] Result:', result)
+  const result = calculateTotal(order, user);
+  console.log("[4] Result:", result);
 
-  return result
+  return result;
 }
 ```
 
@@ -289,16 +289,16 @@ async function processOrder(orderId) {
 ```javascript
 // BAD: Fix symptom
 if (user === undefined) {
-  user = {}  // Hide the problem
+  user = {}; // Hide the problem
 }
-return user.name
+return user.name;
 
 // GOOD: Fix root cause
-const user = await getUser(id)
+const user = await getUser(id);
 if (!user) {
-  throw new NotFoundError(`User ${id} not found`)
+  throw new NotFoundError(`User ${id} not found`);
 }
-return user.name
+return user.name;
 ```
 
 ### Blame Shifting
@@ -332,23 +332,28 @@ After finding root cause, document:
 ## Incident: API 500 Errors on /users endpoint
 
 ### Symptom
+
 500 errors returned for some user IDs
 
 ### Root Cause
+
 getUserById() returns null for deleted users,
 but caller doesn't handle null case
 
 ### Contributing Factors
+
 1. No input validation on user ID
 2. Soft delete doesn't mark related sessions
 3. Missing null check in handler
 
 ### Fix
+
 1. Add null check with proper error response
 2. Invalidate sessions on user deletion
 3. Add validation for user ID format
 
 ### Prevention
+
 1. Add nullable return type to function signature
 2. Update code review checklist
 3. Add integration test for deleted user case

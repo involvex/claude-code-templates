@@ -11,7 +11,7 @@ Perform comprehensive security assessment: $ARGUMENTS
 ## Current Environment
 
 - Dependency scan: !`npm audit --audit-level=moderate 2>/dev/null || pip check 2>/dev/null || echo "No package manager detected"`
-- Environment files: @.env* (if exists)
+- Environment files: @.env\* (if exists)
 - Security config: @.github/workflows/security.yml or @security/ (if exists)
 - Recent commits: !`git log --oneline --grep="security\|fix" -10`
 

@@ -41,45 +41,50 @@ pip install -e 'packages/markitdown[all]'
 
 ## Optional Dependencies
 
-| Feature | Installation | Use Case |
-|---------|--------------|----------|
-| All formats | `pip install 'markitdown[all]'` | Everything |
-| PDF | `pip install 'markitdown[pdf]'` | PDF documents |
-| Word | `pip install 'markitdown[docx]'` | DOCX files |
-| PowerPoint | `pip install 'markitdown[pptx]'` | PPTX files |
-| Excel (new) | `pip install 'markitdown[xlsx]'` | XLSX files |
-| Excel (old) | `pip install 'markitdown[xls]'` | XLS files |
-| Outlook | `pip install 'markitdown[outlook]'` | MSG files |
-| Azure DI | `pip install 'markitdown[az-doc-intel]'` | Enhanced PDF |
-| Audio | `pip install 'markitdown[audio-transcription]'` | WAV/MP3 |
-| YouTube | `pip install 'markitdown[youtube-transcription]'` | YouTube videos |
+| Feature     | Installation                                      | Use Case       |
+| ----------- | ------------------------------------------------- | -------------- |
+| All formats | `pip install 'markitdown[all]'`                   | Everything     |
+| PDF         | `pip install 'markitdown[pdf]'`                   | PDF documents  |
+| Word        | `pip install 'markitdown[docx]'`                  | DOCX files     |
+| PowerPoint  | `pip install 'markitdown[pptx]'`                  | PPTX files     |
+| Excel (new) | `pip install 'markitdown[xlsx]'`                  | XLSX files     |
+| Excel (old) | `pip install 'markitdown[xls]'`                   | XLS files      |
+| Outlook     | `pip install 'markitdown[outlook]'`               | MSG files      |
+| Azure DI    | `pip install 'markitdown[az-doc-intel]'`          | Enhanced PDF   |
+| Audio       | `pip install 'markitdown[audio-transcription]'`   | WAV/MP3        |
+| YouTube     | `pip install 'markitdown[youtube-transcription]'` | YouTube videos |
 
 ## System Dependencies
 
 ### OCR Support (for scanned documents and images)
 
 #### macOS
+
 ```bash
 brew install tesseract
 ```
 
 #### Ubuntu/Debian
+
 ```bash
 sudo apt-get update
 sudo apt-get install tesseract-ocr
 ```
 
 #### Windows
+
 Download from: https://github.com/UB-Mannheim/tesseract/wiki
 
 ### Poppler Utils (for advanced PDF operations)
 
 #### macOS
+
 ```bash
 brew install poppler
 ```
 
 #### Ubuntu/Debian
+
 ```bash
 sudo apt-get install poppler-utils
 ```
@@ -165,6 +170,7 @@ echo 'export OPENROUTER_API_KEY="sk-or-v1-..."' >> ~/.zshrc   # macOS
 ```
 
 **Why OpenRouter?**
+
 - Access to 100+ AI models through one API
 - Choose between GPT-4, Claude, Gemini, and more
 - Competitive pricing
@@ -172,6 +178,7 @@ echo 'export OPENROUTER_API_KEY="sk-or-v1-..."' >> ~/.zshrc   # macOS
 - Simple OpenAI-compatible interface
 
 **Popular Models for Image Description:**
+
 - `anthropic/claude-sonnet-4.5` - **Recommended** - Best for scientific vision
 - `anthropic/claude-opus-4.5` - Excellent technical analysis
 - `openai/gpt-4o` - Good vision understanding
@@ -209,21 +216,25 @@ docker run --rm -i markitdown:latest < input.pdf > output.md
 ## Troubleshooting
 
 ### Import Error
+
 ```
 ModuleNotFoundError: No module named 'markitdown'
 ```
 
 **Solution**: Ensure you're in the correct virtual environment and markitdown is installed:
+
 ```bash
 pip install 'markitdown[all]'
 ```
 
 ### Missing Feature
+
 ```
 Error: PDF conversion not supported
 ```
 
 **Solution**: Install the specific feature:
+
 ```bash
 pip install 'markitdown[pdf]'
 ```
@@ -235,6 +246,7 @@ pip install 'markitdown[pdf]'
 ### Permission Errors
 
 **Solution**: Use virtual environment or install with `--user` flag:
+
 ```bash
 pip install --user 'markitdown[all]'
 ```
@@ -258,6 +270,7 @@ pip uninstall markitdown
 ## Next Steps
 
 After installation:
+
 1. Read `QUICK_REFERENCE.md` for basic usage
 2. See `SKILL.md` for comprehensive guide
 3. Try example scripts in `scripts/` directory
@@ -290,12 +303,12 @@ def test_basic():
     # Create a simple test file
     with open("test.txt", "w") as f:
         f.write("Hello MarkItDown!")
-    
+
     # Convert it
     result = md.convert("test.txt")
     print("✓ Basic conversion works")
     print(result.text_content)
-    
+
     # Cleanup
     import os
     os.remove("test.txt")
@@ -305,6 +318,7 @@ if __name__ == "__main__":
 ```
 
 Run it:
+
 ```bash
 python test_markitdown.py
 ```
@@ -315,4 +329,3 @@ python test_markitdown.py
 - **GitHub Issues**: https://github.com/microsoft/markitdown/issues
 - **Examples**: `assets/example_usage.md`
 - **API Reference**: `references/api_reference.md`
-

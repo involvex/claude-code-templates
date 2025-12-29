@@ -28,7 +28,7 @@ Implement comprehensive automated release system:
 
 2. **Create Version Tracking**
    - For Node.js: Use package.json version field
-   - For Python: Use __version__ in __init__.py or pyproject.toml
+   - For Python: Use **version** in **init**.py or pyproject.toml
    - For Go: Use version in go.mod
    - For others: Create version.txt file
    - Ensure version follows semantic versioning (MAJOR.MINOR.PATCH)
@@ -112,21 +112,25 @@ Arguments: $ARGUMENTS
 ### Additional Considerations
 
 **For Monorepos:**
+
 - Set up independent versioning per package
 - Configure changelog per package
 - Use conventional commits scopes
 
 **For Libraries:**
+
 - Include API compatibility checks
 - Generate API documentation
 - Add upgrade guides for breaking changes
 
 **For Applications:**
+
 - Include Docker image versioning
 - Set up deployment triggers
 - Add rollback procedures
 
 **Best Practices:**
+
 - Always create release branches for hotfixes
 - Use release candidates for major versions
 - Maintain upgrade guides
@@ -134,6 +138,7 @@ Arguments: $ARGUMENTS
 - Document rollback procedures
 
 This automated release system provides:
+
 - ✅ Consistent versioning
 - ✅ Automatic changelog generation
 - ✅ Clear contribution guidelines

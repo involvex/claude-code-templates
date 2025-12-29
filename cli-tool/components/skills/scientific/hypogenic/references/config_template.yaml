@@ -13,8 +13,8 @@ data:
 
 # Model configuration
 model:
-  name: "gpt-4"  # or "gpt-3.5-turbo", "claude-3", etc.
-  api_key_env: "OPENAI_API_KEY"  # Environment variable for API key
+  name: "gpt-4" # or "gpt-3.5-turbo", "claude-3", etc.
+  api_key_env: "OPENAI_API_KEY" # Environment variable for API key
   temperature: 0.7
   max_tokens: 2048
 
@@ -26,14 +26,14 @@ cache:
 
 # Hypothesis generation parameters
 generation:
-  method: "hypogenic"  # Options: "hypogenic", "hyporefine", "union"
+  method: "hypogenic" # Options: "hypogenic", "hyporefine", "union"
   num_hypotheses: 20
   batch_size: 5
   max_iterations: 10
 
   # For HypoRefine method
   literature:
-    papers_directory: "papers/"  # Directory containing PDF files
+    papers_directory: "papers/" # Directory containing PDF files
     num_papers: 10
 
   # For Union methods
@@ -101,22 +101,22 @@ prompts:
 
 # Inference configuration
 inference:
-  method: "voting"  # Options: "voting", "weighted", "ensemble"
+  method: "voting" # Options: "voting", "weighted", "ensemble"
   confidence_threshold: 0.7
-  max_samples: 1000  # Limit for large test sets
+  max_samples: 1000 # Limit for large test sets
 
 # Output configuration
 output:
   directory: "output/"
-  save_intermediate: true  # Save hypotheses after each iteration
-  format: "json"  # Options: "json", "csv"
+  save_intermediate: true # Save hypotheses after each iteration
+  format: "json" # Options: "json", "csv"
   verbose: true
 
 # Custom label extraction (optional)
 # Define a custom function in your code to parse specific output formats
 label_extraction:
-  pattern: "PREDICTION: {label}"  # Regex pattern for extracting predictions
-  valid_labels: ["0", "1"]  # Expected label values
+  pattern: "PREDICTION: {label}" # Regex pattern for extracting predictions
+  valid_labels: ["0", "1"] # Expected label values
 
 # Task-specific settings
 task:
@@ -145,6 +145,6 @@ evaluation:
 
 # Logging
 logging:
-  level: "INFO"  # Options: "DEBUG", "INFO", "WARNING", "ERROR"
+  level: "INFO" # Options: "DEBUG", "INFO", "WARNING", "ERROR"
   file: "logs/hypogenic.log"
   console: true

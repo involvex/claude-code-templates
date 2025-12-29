@@ -5,21 +5,25 @@ Execute Claude Code in isolated cloud environments for secure code generation an
 ## Available Sandbox Providers
 
 ### E2B Sandbox (`e2b`)
+
 Run Claude Code in E2B's secure cloud environment with pre-configured development tools.
 
 **Component**: `e2b/claude-code-sandbox.md`
 
 **Files Created**:
+
 - `.claude/sandbox/e2b-launcher.py` - Python launcher script
 - `.claude/sandbox/requirements.txt` - Python dependencies
 - `.claude/sandbox/.env.example` - Environment variables template
 
 ### Cloudflare Sandbox (`cloudflare`)
+
 Execute AI-powered code in Cloudflare Workers with global edge deployment and sub-second cold starts.
 
 **Component**: `cloudflare/claude-code-sandbox.md`
 
 **Files Created**:
+
 - `.claude/sandbox/cloudflare/src/index.ts` - Cloudflare Worker source
 - `.claude/sandbox/cloudflare/launcher.ts` - TypeScript launcher
 - `.claude/sandbox/cloudflare/monitor.ts` - Monitoring tool
@@ -30,6 +34,7 @@ Execute AI-powered code in Cloudflare Workers with global edge deployment and su
 ## Quick Start
 
 ### E2B Sandbox
+
 ```bash
 # Simple execution with API keys as parameters (recommended)
 npx claude-code-templates@latest --sandbox e2b \
@@ -50,6 +55,7 @@ npx claude-code-templates@latest --sandbox e2b --prompt "Create a React todo app
 ```
 
 ### Cloudflare Sandbox
+
 ```bash
 # Execute via deployed Cloudflare Worker
 npx claude-code-templates@latest --sandbox cloudflare \
@@ -75,6 +81,7 @@ curl -X POST https://your-worker.workers.dev/execute \
    - Anthropic API Key: https://console.anthropic.com
 
 2. **Create Environment File**:
+
    ```bash
    # In your project/.claude/sandbox/.env
    E2B_API_KEY=your_e2b_api_key_here
@@ -100,11 +107,13 @@ curl -X POST https://your-worker.workers.dev/execute \
 ## Usage Examples
 
 ### Basic Web Development
+
 ```bash
 npx claude-code-templates@latest --sandbox e2b --prompt "Create an HTML page with modern CSS animations"
 ```
 
-### Full Stack with Components  
+### Full Stack with Components
+
 ```bash
 npx claude-code-templates@latest --sandbox e2b \
   --agent fullstack-developer \
@@ -113,6 +122,7 @@ npx claude-code-templates@latest --sandbox e2b \
 ```
 
 ### Data Analysis
+
 ```bash
 npx claude-code-templates@latest --sandbox e2b \
   --agent data-scientist \
@@ -120,6 +130,7 @@ npx claude-code-templates@latest --sandbox e2b \
 ```
 
 ### Security Audit
+
 ```bash
 npx claude-code-templates@latest --sandbox e2b \
   --agent security-auditor \
@@ -140,6 +151,7 @@ npx claude-code-templates@latest --sandbox e2b \
 ## ✅ Production Ready Features (v1.20.3+)
 
 ### Enhanced E2B Integration
+
 - **Automatic File Download**: Generated files are automatically downloaded to local `./e2b-output/` directory
 - **Extended Timeouts**: 15-minute sandbox lifetime with intelligent timeout management
 - **Detailed Logging**: Step-by-step execution monitoring with debugging information
@@ -147,6 +159,7 @@ npx claude-code-templates@latest --sandbox e2b \
 - **Error Recovery**: Retry logic for connection issues and comprehensive error handling
 
 ### Advanced Debugging Tools
+
 - **Real-time Monitor** (`e2b-monitor.py`): System resource monitoring and performance analysis
 - **Debug Guide** (`SANDBOX_DEBUGGING.md`): Comprehensive troubleshooting documentation
 - **Sandbox State Tracking**: Live monitoring of file system changes and process execution
@@ -162,22 +175,23 @@ The system is designed to support multiple sandbox providers:
 
 ## Sandbox Comparison
 
-| Feature | E2B | Cloudflare | Best For |
-|---------|-----|------------|----------|
-| **Cold Start** | 2-3 seconds | ~100ms | Cloudflare for speed |
-| **Max Duration** | Hours | 30 seconds (Workers) | E2B for long tasks |
-| **Environment** | Full Linux VM | V8 isolates + containers | E2B for flexibility |
-| **Languages** | Any (full OS) | Python, Node.js | E2B for variety |
-| **Global Distribution** | Single region | Edge network | Cloudflare for latency |
-| **Pricing Model** | Usage-based | $5/month flat | Depends on volume |
-| **Setup Complexity** | Low | Medium | E2B for simplicity |
-| **Local Development** | Cloud only | Docker required | E2B for quick start |
-| **Claude Integration** | Native template | API-based | E2B for turnkey |
-| **File Downloads** | Automatic | API-based | E2B for ease |
+| Feature                 | E2B             | Cloudflare               | Best For               |
+| ----------------------- | --------------- | ------------------------ | ---------------------- |
+| **Cold Start**          | 2-3 seconds     | ~100ms                   | Cloudflare for speed   |
+| **Max Duration**        | Hours           | 30 seconds (Workers)     | E2B for long tasks     |
+| **Environment**         | Full Linux VM   | V8 isolates + containers | E2B for flexibility    |
+| **Languages**           | Any (full OS)   | Python, Node.js          | E2B for variety        |
+| **Global Distribution** | Single region   | Edge network             | Cloudflare for latency |
+| **Pricing Model**       | Usage-based     | $5/month flat            | Depends on volume      |
+| **Setup Complexity**    | Low             | Medium                   | E2B for simplicity     |
+| **Local Development**   | Cloud only      | Docker required          | E2B for quick start    |
+| **Claude Integration**  | Native template | API-based                | E2B for turnkey        |
+| **File Downloads**      | Automatic       | API-based                | E2B for ease           |
 
 ## Troubleshooting
 
 ### Python Not Found
+
 ```bash
 # Install Python 3.11+
 brew install python3  # macOS
@@ -185,6 +199,7 @@ brew install python3  # macOS
 ```
 
 ### API Keys Not Set
+
 ```bash
 # Create .env file in .claude/sandbox/
 echo "E2B_API_KEY=your_key_here" >> .claude/sandbox/.env
@@ -192,6 +207,7 @@ echo "ANTHROPIC_API_KEY=your_key_here" >> .claude/sandbox/.env
 ```
 
 ### Dependencies Installation Failed
+
 ```bash
 # Manual installation
 cd .claude/sandbox
@@ -235,6 +251,7 @@ The sandbox system integrates seamlessly with the existing Claude Code Templates
 ## Choosing the Right Sandbox
 
 ### Use E2B when you need:
+
 - ✅ Long-running operations (hours)
 - ✅ Full Linux environment access
 - ✅ Quick setup with minimal configuration
@@ -243,6 +260,7 @@ The sandbox system integrates seamlessly with the existing Claude Code Templates
 - ✅ Native Claude Code integration
 
 ### Use Cloudflare when you need:
+
 - ✅ Sub-second cold starts
 - ✅ Global edge distribution
 - ✅ Predictable flat-rate pricing

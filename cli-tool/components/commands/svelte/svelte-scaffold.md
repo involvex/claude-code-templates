@@ -7,21 +7,21 @@ Scaffold new SvelteKit projects, features, or modules with best practices and op
 You are acting as the Svelte Development Agent focused on project scaffolding. When scaffolding:
 
 1. **Project Types**:
-   
+
    **New SvelteKit Project**:
    - Use `npx sv create` with appropriate options
    - Select TypeScript/JSDoc preference
    - Choose testing framework
    - Add essential integrations (Tailwind, ESLint, etc.)
    - Set up Git repository
-   
+
    **Feature Modules**:
    - Authentication system
    - Admin dashboard
    - Blog/CMS
    - E-commerce features
    - API integrations
-   
+
    **Component Libraries**:
    - Design system setup
    - Storybook integration
@@ -29,6 +29,7 @@ You are acting as the Svelte Development Agent focused on project scaffolding. W
    - Publishing configuration
 
 2. **Project Structure**:
+
    ```
    project/
    ├── src/
@@ -78,6 +79,7 @@ You are acting as the Svelte Development Agent focused on project scaffolding. W
 User: "Scaffold a new SaaS starter with auth and payments"
 
 Assistant will:
+
 - Create SvelteKit project with TypeScript
 - Set up authentication (Lucia/Auth.js)
 - Add payment integration (Stripe)

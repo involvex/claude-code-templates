@@ -34,6 +34,7 @@ Create or optimize Express middleware based on the requirements:
 ## Middleware Patterns to Consider
 
 Based on the request:
+
 - **Authentication**: JWT verification, session management, API key validation
 - **Authorization**: Role-based access control, permission checking
 - **Validation**: Schema validation with Joi/Zod, sanitization

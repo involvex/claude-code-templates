@@ -5,6 +5,7 @@
 ### Board Composition
 
 #### Ideal Board Structure
+
 - **Size**: 7-9 members (odd number for voting)
 - **Independence**: Majority independent directors
 - **Diversity**: Gender, ethnicity, expertise, experience
@@ -12,37 +13,41 @@
 
 #### Board Roles
 
-| Role | Responsibilities | Typical Background |
-|------|-----------------|-------------------|
-| Chairman | Board leadership, CEO liaison | Former CEO, Industry veteran |
-| Lead Independent Director | Independent voice, executive sessions | Senior executive experience |
-| Audit Committee Chair | Financial oversight, auditor relationship | CFO/CPA background |
-| Compensation Committee Chair | Executive compensation, succession | HR/Executive experience |
-| Nominating Committee Chair | Board composition, governance | Governance expertise |
+| Role                         | Responsibilities                          | Typical Background           |
+| ---------------------------- | ----------------------------------------- | ---------------------------- |
+| Chairman                     | Board leadership, CEO liaison             | Former CEO, Industry veteran |
+| Lead Independent Director    | Independent voice, executive sessions     | Senior executive experience  |
+| Audit Committee Chair        | Financial oversight, auditor relationship | CFO/CPA background           |
+| Compensation Committee Chair | Executive compensation, succession        | HR/Executive experience      |
+| Nominating Committee Chair   | Board composition, governance             | Governance expertise         |
 
 ### Board Meeting Management
 
 #### Annual Board Calendar
 
 **Q1 Meeting**
+
 - Annual strategy review
 - Previous year performance
 - Current year priorities
 - Risk assessment update
 
-**Q2 Meeting** 
+**Q2 Meeting**
+
 - Q1 results review
 - Strategic initiative progress
 - Competitive landscape
 - Talent review
 
 **Q3 Meeting**
+
 - Mid-year performance
 - Budget preview
 - Strategic planning session
 - Succession planning
 
 **Q4 Meeting**
+
 - Annual budget approval
 - Executive compensation
 - Board evaluation
@@ -51,21 +56,25 @@
 #### Meeting Preparation Timeline
 
 **T-4 Weeks**
+
 - Agenda draft to Chairman
 - Pre-read preparation begins
 - Committee meetings scheduled
 
 **T-2 Weeks**
+
 - Materials to review committee
 - Final agenda confirmation
 - Logistics coordination
 
 **T-1 Week**
+
 - Board package distribution
 - Pre-meeting calls as needed
 - Final preparations
 
 **T-0 Meeting Day**
+
 - Executive session (start)
 - Board meeting
 - Executive session (end)
@@ -115,6 +124,7 @@
 #### Between Meetings
 
 **Monthly Update Email**
+
 ```
 Subject: [Company] CEO Update - [Month Year]
 
@@ -140,6 +150,7 @@ Best,
 ```
 
 **Flash Reports** (When needed)
+
 - Material events
 - Major wins/losses
 - Press coverage
@@ -148,6 +159,7 @@ Best,
 #### Managing Difficult Conversations
 
 **Delivering Bad News**
+
 1. Don't delay - inform promptly
 2. Lead with facts
 3. Own the responsibility
@@ -155,6 +167,7 @@ Best,
 5. Set realistic timeline
 
 **Handling Dissent**
+
 1. Listen fully
 2. Acknowledge concerns
 3. Provide data/rationale
@@ -168,6 +181,7 @@ Best,
 #### Institutional Investors
 
 **Types**:
+
 - Mutual funds
 - Pension funds
 - Hedge funds
@@ -175,6 +189,7 @@ Best,
 - Sovereign wealth funds
 
 **Engagement Strategy**:
+
 - Quarterly earnings calls
 - Annual investor day
 - Conference participation
@@ -184,6 +199,7 @@ Best,
 #### Retail Investors
 
 **Channels**:
+
 - Website IR section
 - Annual reports
 - Proxy statements
@@ -201,7 +217,7 @@ Best,
 
 Financial Highlights:
 • Revenue: $X (±Y% YoY)
-• Net Income: $X (±Y% YoY)  
+• Net Income: $X (±Y% YoY)
 • EPS: $X (±Y% YoY)
 • [Other key metric]
 
@@ -228,8 +244,9 @@ Contact:
 #### Earnings Call Script Structure
 
 **CEO Opening (5 minutes)**
+
 ```
-Good [morning/afternoon], and welcome to [Company's] 
+Good [morning/afternoon], and welcome to [Company's]
 [Quarter] earnings call.
 
 Today I'll cover:
@@ -244,6 +261,7 @@ I'll now turn it over to our CFO...
 ```
 
 **CFO Section (10 minutes)**
+
 ```
 Thank you [CEO name].
 
@@ -262,6 +280,7 @@ Now back to [CEO] for closing remarks...
 ```
 
 **Q&A Management**
+
 - Anticipate top 10 questions
 - Prepare fact sheets
 - Designate responders
@@ -273,6 +292,7 @@ Now back to [CEO] for closing remarks...
 #### Value Proposition
 
 **Investment Thesis Elements**:
+
 1. Market opportunity size
 2. Competitive advantages
 3. Growth strategy
@@ -283,17 +303,20 @@ Now back to [CEO] for closing remarks...
 #### Key Messages Architecture
 
 **Primary Messages** (Memorize)
+
 1. [Core value proposition]
 2. [Differentiation]
 3. [Growth trajectory]
 
 **Supporting Points** (Have ready)
+
 - Market data
 - Customer proof points
 - Financial metrics
 - Strategic initiatives
 
 **Proof Points** (Document)
+
 - Case studies
 - Metrics
 - Third-party validation
@@ -304,30 +327,35 @@ Now back to [CEO] for closing remarks...
 #### 6-Month Planning Timeline
 
 **T-6 Months**
+
 - Set date and venue
 - Define objectives
 - Identify speakers
 - Begin content development
 
 **T-4 Months**
+
 - Develop presentations
 - Coordinate logistics
 - Begin rehearsals
 - Create save-the-date
 
 **T-2 Months**
+
 - Finalize content
 - Complete rehearsals
 - Send invitations
 - Prepare materials
 
 **T-1 Month**
+
 - Final preparations
 - Media training
 - Q&A preparation
 - Technology testing
 
 **T-0 Event Day**
+
 - Execute program
 - Manage Q&A
 - Network sessions
@@ -351,6 +379,7 @@ Now back to [CEO] for closing remarks...
 ### Shareholder Activism Defense
 
 #### Early Warning Signs
+
 - Stake building (13D/13G filings)
 - Public criticism
 - Media campaigns
@@ -360,24 +389,28 @@ Now back to [CEO] for closing remarks...
 #### Response Playbook
 
 **1. Preparation Phase**
+
 - Vulnerability assessment
 - Response team formation
 - Advisor engagement
 - Board alignment
 
 **2. Engagement Phase**
+
 - Direct dialogue
 - Understanding demands
 - Finding common ground
 - Negotiation strategy
 
 **3. Defense Phase** (if needed)
+
 - Public response
 - Proxy fight preparation
 - Shareholder outreach
 - Media strategy
 
 **4. Resolution Phase**
+
 - Settlement negotiations
 - Implementation planning
 - Communication strategy
@@ -387,17 +420,18 @@ Now back to [CEO] for closing remarks...
 
 #### Key Filings
 
-| Form | Purpose | Timing |
-|------|---------|--------|
-| 10-K | Annual report | 60-90 days after FY end |
-| 10-Q | Quarterly report | 40-45 days after Q end |
-| 8-K | Material events | 4 business days |
-| DEF 14A | Proxy statement | Before annual meeting |
-| S-1/S-3 | Securities registration | As needed |
+| Form    | Purpose                 | Timing                  |
+| ------- | ----------------------- | ----------------------- |
+| 10-K    | Annual report           | 60-90 days after FY end |
+| 10-Q    | Quarterly report        | 40-45 days after Q end  |
+| 8-K     | Material events         | 4 business days         |
+| DEF 14A | Proxy statement         | Before annual meeting   |
+| S-1/S-3 | Securities registration | As needed               |
 
 #### Disclosure Requirements
 
 **Material Information**:
+
 - Financial results
 - Major transactions
 - Leadership changes
@@ -406,6 +440,7 @@ Now back to [CEO] for closing remarks...
 - Risk changes
 
 **Regulation FD Compliance**:
+
 - No selective disclosure
 - Simultaneous public release
 - Documented procedures
@@ -416,24 +451,28 @@ Now back to [CEO] for closing remarks...
 #### IR Crisis Response
 
 **Hour 1: Assessment**
+
 - Gather facts
 - Assess materiality
 - Consult legal
 - Prepare holding statement
 
 **Hours 2-4: Response**
+
 - Draft 8-K if required
 - Prepare FAQ
 - Update website
 - Notify exchanges
 
 **Hours 4-8: Communication**
+
 - Issue press release
 - Update analysts
 - Employee communication
 - Monitor reactions
 
 **Day 2+: Follow-up**
+
 - Investor calls
 - Media interviews
 - Ongoing updates
@@ -444,6 +483,7 @@ Now back to [CEO] for closing remarks...
 #### IR Effectiveness KPIs
 
 **Quantitative Metrics**:
+
 - Share price performance vs peers
 - Trading volume/liquidity
 - Analyst coverage
@@ -451,6 +491,7 @@ Now back to [CEO] for closing remarks...
 - Valuation multiples vs peers
 
 **Qualitative Metrics**:
+
 - Analyst sentiment
 - Media coverage tone
 - Investor feedback
@@ -460,6 +501,7 @@ Now back to [CEO] for closing remarks...
 #### Shareholder Analysis
 
 **Ownership Tracking**:
+
 - Top 20 shareholders
 - Ownership changes
 - Peer ownership overlap
@@ -467,6 +509,7 @@ Now back to [CEO] for closing remarks...
 - Investment style mix
 
 **Engagement Metrics**:
+
 - Meeting count
 - Conference participation
 - Earnings call attendance
@@ -480,6 +523,7 @@ Now back to [CEO] for closing remarks...
 #### Annual Board Evaluation
 
 **Process**:
+
 1. Anonymous surveys
 2. Individual interviews
 3. Peer feedback
@@ -488,6 +532,7 @@ Now back to [CEO] for closing remarks...
 6. Progress monitoring
 
 **Evaluation Areas**:
+
 - Board composition
 - Meeting effectiveness
 - Information quality
@@ -503,6 +548,7 @@ Now back to [CEO] for closing remarks...
 **Participants**: Independent directors only
 
 **Typical Topics**:
+
 - CEO performance
 - Succession planning
 - Board dynamics
@@ -512,6 +558,7 @@ Now back to [CEO] for closing remarks...
 ### D&O Insurance & Indemnification
 
 **Coverage Levels**:
+
 - Primary: $10-25M
 - Excess: $25-100M+
 - Side A: Individual protection
@@ -519,6 +566,7 @@ Now back to [CEO] for closing remarks...
 - Side C: Securities claims
 
 **Best Practices**:
+
 - Annual review
 - Competitive benchmarking
 - Claims history analysis
@@ -530,6 +578,7 @@ Now back to [CEO] for closing remarks...
 #### ESG Integration
 
 **Board Oversight**:
+
 - ESG committee or full board
 - Regular ESG updates
 - Metrics in dashboard
@@ -537,6 +586,7 @@ Now back to [CEO] for closing remarks...
 - Stakeholder feedback
 
 **Reporting Framework**:
+
 - SASB standards
 - TCFD recommendations
 - GRI guidelines
@@ -544,6 +594,7 @@ Now back to [CEO] for closing remarks...
 - Integrated reporting
 
 **Investor Communication**:
+
 - ESG highlights in earnings
 - Dedicated ESG report
 - Website ESG section

@@ -22,23 +22,23 @@ import os
 
 class Settings(BaseSettings):
     """Production settings."""
-    
+
     # App
     PROJECT_NAME: str = "FastAPI App"
     VERSION: str = "1.0.0"
     SECRET_KEY: str = os.getenv("SECRET_KEY", "dev-key")
-    
+
     # Server
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     WORKERS: int = 4
-    
+
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./app.db")
-    
+
     # Redis
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
-    
+
     class Config:
         env_file = ".env"
 
@@ -76,7 +76,7 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 
 services:
   app:

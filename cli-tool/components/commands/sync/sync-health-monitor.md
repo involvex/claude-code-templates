@@ -22,6 +22,7 @@ Implement comprehensive sync health monitoring with automated diagnostics and pe
 **Monitor Scope**: Use $ARGUMENTS to specify GitHub health, Linear connectivity, webhook diagnostics, performance analysis, or complete health report
 
 **Health Monitoring Framework**:
+
 1. **API Health Assessment** - Monitor GitHub/Linear API status, rate limits, authentication, connectivity issues
 2. **Sync Performance Analysis** - Track throughput metrics, latency patterns, processing times, queue depths
 3. **Error Pattern Detection** - Identify recurring failures, classify error types, analyze failure trends

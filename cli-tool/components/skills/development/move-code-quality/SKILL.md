@@ -10,6 +10,7 @@ You are an expert Move language code reviewer with deep knowledge of the Move Bo
 ## When to Use This Skill
 
 Activate this skill when:
+
 - User asks to "check Move code quality", "review Move code", or "analyze Move package"
 - User mentions Move 2024 Edition compliance
 - Working in a directory containing `.move` files or `Move.toml`
@@ -40,6 +41,7 @@ Analyze code across these **11 categories with 50+ specific rules**:
 #### 1. Code Organization
 
 **Use Move Formatter**
+
 - Check if code appears formatted consistently
 - Recommend formatter tools: CLI (npm), CI/CD integration, VSCode/Cursor plugin
 
@@ -48,14 +50,17 @@ Analyze code across these **11 categories with 50+ specific rules**:
 #### 2. Package Manifest (Move.toml)
 
 **Use Right Edition**
+
 - ✅ MUST have: `edition = "2024.beta"` or `edition = "2024"`
 - ❌ CRITICAL if missing: All checklist features require Move 2024 Edition
 
 **Implicit Framework Dependency**
+
 - ✅ For Sui 1.45+: No explicit `Sui`, `Bridge`, `MoveStdlib`, `SuiSystem` in `[dependencies]`
 - ❌ OUTDATED: Explicit framework dependencies listed
 
 **Prefix Named Addresses**
+
 - ✅ GOOD: `my_protocol_math = "0x0"` (project-specific prefix)
 - ❌ BAD: `math = "0x0"` (generic, conflict-prone)
 
@@ -64,23 +69,28 @@ Analyze code across these **11 categories with 50+ specific rules**:
 #### 3. Imports, Modules & Constants
 
 **Using Module Label (Modern Syntax)**
+
 - ✅ GOOD: `module my_package::my_module;` followed by declarations
 - ❌ BAD: `module my_package::my_module { ... }` (legacy curly braces)
 
 **No Single Self in Use Statements**
+
 - ✅ GOOD: `use my_package::my_module;`
 - ❌ BAD: `use my_package::my_module::{Self};` (redundant braces)
 - ✅ GOOD when importing members: `use my_package::my_module::{Self, Member};`
 
 **Group Use Statements with Self**
+
 - ✅ GOOD: `use my_package::my_module::{Self, OtherMember};`
 - ❌ BAD: Separate imports for module and its members
 
 **Error Constants in EPascalCase**
+
 - ✅ GOOD: `const ENotAuthorized: u64 = 0;`
 - ❌ BAD: `const NOT_AUTHORIZED: u64 = 0;` (all-caps reserved for regular constants)
 
 **Regular Constants in ALL_CAPS**
+
 - ✅ GOOD: `const MY_CONSTANT: vector<u8> = b"value";`
 - ❌ BAD: `const MyConstant: vector<u8> = b"value";` (PascalCase suggests error)
 
@@ -89,18 +99,22 @@ Analyze code across these **11 categories with 50+ specific rules**:
 #### 4. Structs
 
 **Capabilities Suffixed with Cap**
+
 - ✅ GOOD: `public struct AdminCap has key, store { id: UID }`
 - ❌ BAD: `public struct Admin has key, store { id: UID }` (unclear it's a capability)
 
 **No Potato in Names**
+
 - ✅ GOOD: `public struct Promise {}`
 - ❌ BAD: `public struct PromisePotato {}` (redundant, abilities show it's hot potato)
 
 **Events Named in Past Tense**
+
 - ✅ GOOD: `public struct UserRegistered has copy, drop { user: address }`
 - ❌ BAD: `public struct RegisterUser has copy, drop { user: address }` (ambiguous)
 
 **Positional Structs for Dynamic Field Keys**
+
 - ✅ CANONICAL: `public struct DynamicFieldKey() has copy, drop, store;`
 - ⚠️ ACCEPTABLE: `public struct DynamicField has copy, drop, store {}`
 
@@ -109,17 +123,20 @@ Analyze code across these **11 categories with 50+ specific rules**:
 #### 5. Functions
 
 **No Public Entry - Use Public or Entry**
+
 - ✅ GOOD: `public fun do_something(): T { ... }` (composable, returns value)
 - ✅ GOOD: `entry fun mint_and_transfer(...) { ... }` (transaction endpoint only)
 - ❌ BAD: `public entry fun do_something() { ... }` (redundant combination)
 - **Reason**: Public functions are more permissive and enable PTB composition
 
 **Composable Functions for PTBs**
+
 - ✅ GOOD: `public fun mint(ctx: &mut TxContext): NFT { ... }`
 - ❌ BAD: `public fun mint_and_transfer(ctx: &mut TxContext) { transfer::transfer(...) }` (not composable)
 - **Benefit**: Returning values enables Programmable Transaction Block chaining
 
 **Objects Go First (Except Clock)**
+
 - ✅ GOOD parameter order:
   1. Objects (mutable, then immutable)
   2. Capabilities
@@ -128,6 +145,7 @@ Analyze code across these **11 categories with 50+ specific rules**:
   5. TxContext (always last)
 
 Example:
+
 ```move
 // ✅ GOOD
 public fun call_app(
@@ -151,10 +169,12 @@ public fun call_app(
 ```
 
 **Capabilities Go Second**
+
 - ✅ GOOD: `public fun authorize(app: &mut App, cap: &AdminCap)`
 - ❌ BAD: `public fun authorize(cap: &AdminCap, app: &mut App)` (breaks method associativity)
 
-**Getters Named After Field + _mut**
+**Getters Named After Field + \_mut**
+
 - ✅ GOOD: `public fun name(u: &User): String` (immutable accessor)
 - ✅ GOOD: `public fun details_mut(u: &mut User): &mut Details` (mutable accessor)
 - ❌ BAD: `public fun get_name(u: &User): String` (unnecessary prefix)
@@ -164,31 +184,37 @@ public fun call_app(
 #### 6. Function Body: Struct Methods
 
 **Common Coin Operations**
+
 - ✅ GOOD: `payment.split(amount, ctx).into_balance()`
 - ✅ BETTER: `payment.balance_mut().split(amount)`
 - ✅ CONVERT: `balance.into_coin(ctx)`
 - ❌ BAD: `coin::into_balance(coin::split(&mut payment, amount, ctx))`
 
 **Don't Import std::string::utf8**
+
 - ✅ GOOD: `b"hello, world!".to_string()`
 - ✅ GOOD: `b"hello, world!".to_ascii_string()`
 - ❌ BAD: `use std::string::utf8; let str = utf8(b"hello, world!");`
 
 **UID Has Delete Method**
+
 - ✅ GOOD: `id.delete();`
 - ❌ BAD: `object::delete(id);`
 
 **Context Has sender() Method**
+
 - ✅ GOOD: `ctx.sender()`
 - ❌ BAD: `tx_context::sender(ctx)`
 
 **Vector Has Literal & Associated Functions**
+
 - ✅ GOOD: `let mut my_vec = vector[10];`
 - ✅ GOOD: `let first = my_vec[0];`
 - ✅ GOOD: `assert!(my_vec.length() == 1);`
 - ❌ BAD: `let mut my_vec = vector::empty(); vector::push_back(&mut my_vec, 10);`
 
 **Collections Support Index Syntax**
+
 - ✅ GOOD: `&x[&10]` and `&mut x[&10]` (for VecMap, etc.)
 - ❌ BAD: `x.get(&10)` and `x.get_mut(&10)`
 
@@ -197,8 +223,10 @@ public fun call_app(
 #### 7. Option Macros
 
 **Destroy And Call Function (do!)**
+
 - ✅ GOOD: `opt.do!(|value| call_function(value));`
 - ❌ BAD:
+
 ```move
 if (opt.is_some()) {
     let inner = opt.destroy_some();
@@ -207,9 +235,11 @@ if (opt.is_some()) {
 ```
 
 **Destroy Some With Default (destroy_or!)**
+
 - ✅ GOOD: `let value = opt.destroy_or!(default_value);`
 - ✅ GOOD: `let value = opt.destroy_or!(abort ECannotBeEmpty);`
 - ❌ BAD:
+
 ```move
 let value = if (opt.is_some()) {
     opt.destroy_some()
@@ -223,26 +253,32 @@ let value = if (opt.is_some()) {
 #### 8. Loop Macros
 
 **Do Operation N Times (do!)**
+
 - ✅ GOOD: `32u8.do!(|_| do_action());`
 - ❌ BAD: Manual while loop with counter
 
 **New Vector From Iteration (tabulate!)**
+
 - ✅ GOOD: `vector::tabulate!(32, |i| i);`
 - ❌ BAD: Manual while loop with push_back
 
 **Do Operation on Every Element (do_ref!)**
+
 - ✅ GOOD: `vec.do_ref!(|e| call_function(e));`
 - ❌ BAD: Manual index-based while loop
 
 **Destroy Vector & Call Function (destroy!)**
+
 - ✅ GOOD: `vec.destroy!(|e| call(e));`
 - ❌ BAD: `while (!vec.is_empty()) { call(vec.pop_back()); }`
 
 **Fold Vector Into Single Value (fold!)**
+
 - ✅ GOOD: `let sum = source.fold!(0, |acc, v| acc + v);`
 - ❌ BAD: Manual accumulation with while loop
 
 **Filter Elements of Vector (filter!)**
+
 - ✅ GOOD: `let filtered = source.filter!(|e| e > 10);` (requires T: drop)
 - ❌ BAD: Manual filtering with conditional push_back
 
@@ -251,6 +287,7 @@ let value = if (opt.is_some()) {
 #### 9. Other Improvements
 
 **Ignored Values in Unpack (.. syntax)**
+
 - ✅ GOOD: `let MyStruct { id, .. } = value;` (Move 2024)
 - ❌ BAD: `let MyStruct { id, field_1: _, field_2: _, field_3: _ } = value;`
 
@@ -259,30 +296,37 @@ let value = if (opt.is_some()) {
 #### 10. Testing
 
 **Merge #[test] and #[expected_failure]**
+
 - ✅ GOOD: `#[test, expected_failure]`
 - ❌ BAD: Separate `#[test]` and `#[expected_failure]` on different lines
 
 **Don't Clean Up expected_failure Tests**
+
 - ✅ GOOD: End with `abort` to show failure point
 - ❌ BAD: Include `test.end()` or other cleanup in expected_failure tests
 
-**Don't Prefix Tests with test_**
+**Don't Prefix Tests with test\_**
+
 - ✅ GOOD: `#[test] fun this_feature_works() { }`
 - ❌ BAD: `#[test] fun test_this_feature() { }` (redundant in test module)
 
 **Don't Use TestScenario When Unnecessary**
+
 - ✅ GOOD for simple tests: `let ctx = &mut tx_context::dummy();`
 - ❌ OVERKILL: Full TestScenario setup for basic functionality
 
 **Don't Use Abort Codes in assert!**
+
 - ✅ GOOD: `assert!(is_success);`
 - ❌ BAD: `assert!(is_success, 0);` (may conflict with app error codes)
 
 **Use assert_eq! Whenever Possible**
+
 - ✅ GOOD: `assert_eq!(result, expected_value);` (shows both values on failure)
 - ❌ BAD: `assert!(result == expected_value);`
 
 **Use "Black Hole" destroy Function**
+
 - ✅ GOOD: `use sui::test_utils::destroy; destroy(nft);`
 - ❌ BAD: Custom `destroy_for_testing()` functions
 
@@ -291,12 +335,15 @@ let value = if (opt.is_some()) {
 #### 11. Comments
 
 **Doc Comments Start With ///**
+
 - ✅ GOOD: `/// Cool method!`
 - ❌ BAD: JavaDoc-style `/** ... */` (not supported)
 
 **Complex Logic Needs Comments**
+
 - ✅ GOOD: Explain non-obvious operations, potential issues, TODOs
 - Example:
+
 ```move
 // Note: can underflow if value is smaller than 10.
 // TODO: add an `assert!` here
@@ -313,8 +360,9 @@ Present findings in this format:
 ## Move Code Quality Analysis
 
 ### Summary
+
 - ✅ X checks passed
-- ⚠️  Y improvements recommended
+- ⚠️ Y improvements recommended
 - ❌ Z critical issues
 
 ### Critical Issues (Fix These First)
@@ -331,7 +379,7 @@ Present findings in this format:
 \`\`\`toml
 [package]
 name = "my_package"
-edition = "2024.beta"  # Add this line
+edition = "2024.beta" # Add this line
 \`\`\`
 
 ### Important Improvements
@@ -347,7 +395,7 @@ edition = "2024.beta"  # Add this line
 **Current**:
 \`\`\`move
 module my_package::my_module {
-    public struct A {}
+public struct A {}
 }
 \`\`\`
 
@@ -363,6 +411,7 @@ public struct A {}
 [Continue with lower priority items...]
 
 ### Next Steps
+
 1. [Prioritized action items]
 2. [Links to Move Book sections]
 ```
@@ -370,6 +419,7 @@ public struct A {}
 ### Phase 4: Interactive Review
 
 After presenting findings:
+
 - Offer to fix issues automatically
 - Provide detailed explanations for specific items
 - Show more examples from Move Book if requested

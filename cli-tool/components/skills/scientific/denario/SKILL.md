@@ -12,6 +12,7 @@ Denario is a multiagent AI system designed to automate scientific research workf
 ## When to Use This Skill
 
 Use this skill when:
+
 - Analyzing datasets to generate novel research hypotheses
 - Developing structured research methodologies
 - Executing computational experiments and generating visualizations
@@ -39,6 +40,7 @@ For Docker deployment or building from source, see `references/installation.md`.
 ## LLM API Configuration
 
 Denario requires API keys from supported LLM providers. Supported providers include:
+
 - Google Vertex AI
 - OpenAI
 - Other LLM services compatible with AG2/LangGraph
@@ -121,6 +123,7 @@ The generated paper includes proper formatting for the specified journal, integr
 ## Available Journals
 
 Denario supports multiple journal formatting styles:
+
 - `Journal.APS` - American Physical Society format
 - Additional journals may be available; check `references/research_pipeline.md` for the complete list
 
@@ -195,6 +198,7 @@ For literature search functionality and additional workflow examples, see `refer
 ## Detailed References
 
 For comprehensive documentation:
+
 - **Installation options**: `references/installation.md`
 - **LLM configuration**: `references/llm_configuration.md`
 - **Complete API reference**: `references/research_pipeline.md`
@@ -203,6 +207,7 @@ For comprehensive documentation:
 ## Troubleshooting
 
 Common issues and solutions:
+
 - **API key errors**: Ensure environment variables are set correctly (see `references/llm_configuration.md`)
 - **LaTeX compilation**: Install TeX distribution or use Docker image with pre-installed LaTeX
 - **Package conflicts**: Use virtual environments or Docker for isolation

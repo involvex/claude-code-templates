@@ -545,6 +545,7 @@ FCS files consist of four segments:
 4. **ANALYSIS** (optional): Results from data processing
 
 Access these segments via FlowData attributes:
+
 - `flow.header` - HEADER segment
 - `flow.text` - TEXT segment keywords
 - `flow.events` - DATA segment (as bytes)
@@ -557,6 +558,7 @@ For comprehensive API documentation including all parameters, methods, exception
 **Read:** `references/api_reference.md`
 
 The reference includes:
+
 - Complete FlowData class documentation
 - All utility functions (read_multiple_data_sets, create_fcs)
 - Exception classes and handling
@@ -571,6 +573,7 @@ When working with complex FCS operations or encountering unusual file formats, l
 **NumPy Arrays:** All event data is returned as NumPy ndarrays with shape (events, channels)
 
 **Pandas DataFrames:** Easily convert to DataFrames for analysis:
+
 ```python
 import pandas as pd
 df = pd.DataFrame(flow.as_array(), columns=flow.pnn_labels)

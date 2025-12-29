@@ -27,7 +27,7 @@ testpaths = tests
 python_files = test_*.py
 python_classes = Test*
 python_functions = test_*
-addopts = 
+addopts =
     --cov=app
     --cov-report=term-missing
     --cov-report=html:htmlcov
@@ -93,28 +93,28 @@ async def test_engine():
         echo=False,
         future=True
     )
-    
+
     # Create tables
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     yield engine
-    
+
     # Drop tables and dispose engine
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
-    
+
     await engine.dispose()
 
 @pytest.fixture
 async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
     """Create database session for testing."""
     TestSessionLocal = sessionmaker(
-        test_engine, 
-        class_=AsyncSession, 
+        test_engine,
+        class_=AsyncSession,
         expire_on_commit=False
     )
-    
+
     async with TestSessionLocal() as session:
         yield session
 
@@ -123,7 +123,7 @@ def override_get_db(db_session: AsyncSession) -> Generator:
     """Override database dependency."""
     async def _override_get_db():
         yield db_session
-    
+
     app.dependency_overrides[get_db] = _override_get_db
     yield
     app.dependency_overrides = {}
@@ -152,7 +152,7 @@ async def test_user(db_session: AsyncSession) -> User:
         "is_active": True,
         "is_superuser": False
     }
-    
+
     user = User(**user_data)
     db_session.add(user)
     await db_session.commit()
@@ -171,7 +171,7 @@ async def superuser(db_session: AsyncSession) -> User:
         "is_active": True,
         "is_superuser": True
     }
-    
+
     user = User(**user_data)
     db_session.add(user)
     await db_session.commit()
@@ -213,10 +213,10 @@ from app.core.security import get_password_hash
 
 class UserFactory(factory.Factory):
     """Factory for User model."""
-    
+
     class Meta:
         model = User
-    
+
     username = Faker('user_name')
     email = Faker('email')
     first_name = Faker('first_name')
@@ -236,10 +236,10 @@ class SuperUserFactory(UserFactory):
 
 class PostFactory(factory.Factory):
     """Factory for Post model."""
-    
+
     class Meta:
         model = Post
-    
+
     title = Faker('sentence', nb_words=4)
     content = Faker('text', max_nb_chars=1000)
     slug = Faker('slug')
@@ -262,11 +262,11 @@ from tests.factories import UserFactory
 
 class TestUserAPI:
     """Test User API endpoints."""
-    
+
     @pytest.mark.asyncio
     async def test_create_user(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         superuser_headers: dict
     ):
         """Test POST /api/v1/users/."""
@@ -277,24 +277,24 @@ class TestUserAPI:
             "first_name": "New",
             "last_name": "User"
         }
-        
+
         response = await async_client.post(
             "/api/v1/users/",
             json=user_data,
             headers=superuser_headers
         )
-        
+
         assert response.status_code == 201
         data = response.json()
         assert data["username"] == user_data["username"]
         assert data["email"] == user_data["email"]
         assert "password" not in data
         assert "hashed_password" not in data
-    
+
     @pytest.mark.asyncio
     async def test_get_users(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User,
         auth_headers: dict
     ):
@@ -303,7 +303,7 @@ class TestUserAPI:
             "/api/v1/users/",
             headers=auth_headers
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "items" in data
@@ -311,11 +311,11 @@ class TestUserAPI:
         assert "page" in data
         assert "size" in data
         assert len(data["items"]) >= 1
-    
+
     @pytest.mark.asyncio
     async def test_get_user(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User,
         auth_headers: dict
     ):
@@ -324,17 +324,17 @@ class TestUserAPI:
             f"/api/v1/users/{test_user.id}",
             headers=auth_headers
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert data["id"] == test_user.id
         assert data["username"] == test_user.username
         assert data["email"] == test_user.email
-    
+
     @pytest.mark.asyncio
     async def test_update_user(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User,
         auth_headers: dict
     ):
@@ -344,23 +344,23 @@ class TestUserAPI:
             "last_name": "Name",
             "bio": "Updated bio"
         }
-        
+
         response = await async_client.put(
             f"/api/v1/users/{test_user.id}",
             json=update_data,
             headers=auth_headers
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert data["first_name"] == update_data["first_name"]
         assert data["last_name"] == update_data["last_name"]
         assert data["bio"] == update_data["bio"]
-    
+
     @pytest.mark.asyncio
     async def test_delete_user(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User,
         superuser_headers: dict
     ):
@@ -369,26 +369,26 @@ class TestUserAPI:
             f"/api/v1/users/{test_user.id}",
             headers=superuser_headers
         )
-        
+
         assert response.status_code == 204
-        
+
         # Verify user is deleted
         get_response = await async_client.get(
             f"/api/v1/users/{test_user.id}",
             headers=superuser_headers
         )
         assert get_response.status_code == 404
-    
+
     @pytest.mark.asyncio
     async def test_unauthorized_access(self, async_client: AsyncClient):
         """Test unauthorized access to protected endpoints."""
         response = await async_client.get("/api/v1/users/")
         assert response.status_code == 401
-    
+
     @pytest.mark.asyncio
     async def test_forbidden_access(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         auth_headers: dict
     ):
         """Test forbidden access to admin endpoints."""
@@ -397,13 +397,13 @@ class TestUserAPI:
             "email": "unauthorized@example.com",
             "password": "pass123"
         }
-        
+
         response = await async_client.post(
             "/api/v1/users/",
             json=user_data,
             headers=auth_headers  # Regular user, not superuser
         )
-        
+
         assert response.status_code == 403
 ```
 
@@ -418,10 +418,10 @@ from app.core.security import create_access_token, decode_token
 
 class TestAuthAPI:
     """Test authentication API endpoints."""
-    
+
     @pytest.mark.asyncio
     async def test_register(
-        self, 
+        self,
         async_client: AsyncClient
     ):
         """Test user registration."""
@@ -432,22 +432,22 @@ class TestAuthAPI:
             "first_name": "New",
             "last_name": "User"
         }
-        
+
         response = await async_client.post(
             "/api/v1/auth/register",
             json=user_data
         )
-        
+
         assert response.status_code == 201
         data = response.json()
         assert data["username"] == user_data["username"]
         assert data["email"] == user_data["email"]
         assert "password" not in data
-    
+
     @pytest.mark.asyncio
     async def test_register_duplicate_email(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User
     ):
         """Test registration with duplicate email."""
@@ -458,19 +458,19 @@ class TestAuthAPI:
             "first_name": "Test",
             "last_name": "User"
         }
-        
+
         response = await async_client.post(
             "/api/v1/auth/register",
             json=user_data
         )
-        
+
         assert response.status_code == 400
         assert "Email already registered" in response.json()["detail"]
-    
+
     @pytest.mark.asyncio
     async def test_login(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User
     ):
         """Test user login."""
@@ -478,29 +478,29 @@ class TestAuthAPI:
             "username": test_user.username,
             "password": "testpass123"
         }
-        
+
         response = await async_client.post(
             "/api/v1/auth/login",
             data=login_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "access_token" in data
         assert "refresh_token" in data
         assert data["token_type"] == "bearer"
         assert "expires_in" in data
-        
+
         # Verify token is valid
         payload = decode_token(data["access_token"])
         assert payload is not None
         assert payload["sub"] == str(test_user.id)
-    
+
     @pytest.mark.asyncio
     async def test_login_invalid_credentials(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User
     ):
         """Test login with invalid credentials."""
@@ -508,20 +508,20 @@ class TestAuthAPI:
             "username": test_user.username,
             "password": "wrongpassword"
         }
-        
+
         response = await async_client.post(
             "/api/v1/auth/login",
             data=login_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         )
-        
+
         assert response.status_code == 401
         assert "Incorrect username or password" in response.json()["detail"]
-    
+
     @pytest.mark.asyncio
     async def test_get_current_user(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User,
         auth_headers: dict
     ):
@@ -530,39 +530,39 @@ class TestAuthAPI:
             "/api/v1/auth/me",
             headers=auth_headers
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert data["id"] == test_user.id
         assert data["username"] == test_user.username
         assert data["email"] == test_user.email
-    
+
     @pytest.mark.asyncio
     async def test_refresh_token(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User
     ):
         """Test token refresh."""
         from app.core.security import create_refresh_token
-        
+
         refresh_token = create_refresh_token(subject=test_user.id)
-        
+
         response = await async_client.post(
             "/api/v1/auth/refresh",
             json={"refresh_token": refresh_token}
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "access_token" in data
         assert "refresh_token" in data
         assert data["token_type"] == "bearer"
-    
+
     @pytest.mark.asyncio
     async def test_change_password(
-        self, 
-        async_client: AsyncClient, 
+        self,
+        async_client: AsyncClient,
         test_user: User,
         auth_headers: dict
     ):
@@ -571,13 +571,13 @@ class TestAuthAPI:
             "current_password": "testpass123",
             "new_password": "newpass123"
         }
-        
+
         response = await async_client.post(
             "/api/v1/auth/change-password",
             json=password_data,
             headers=auth_headers
         )
-        
+
         assert response.status_code == 200
         assert "Password changed successfully" in response.json()["message"]
 ```
@@ -593,7 +593,7 @@ from app.core.security import verify_password, get_password_hash
 
 class TestUserModel:
     """Test User model."""
-    
+
     @pytest.mark.asyncio
     async def test_create_user(self, db_session: AsyncSession):
         """Test user creation."""
@@ -604,12 +604,12 @@ class TestUserModel:
             "first_name": "Test",
             "last_name": "User"
         }
-        
+
         user = User(**user_data)
         db_session.add(user)
         await db_session.commit()
         await db_session.refresh(user)
-        
+
         assert user.id is not None
         assert user.username == "testuser"
         assert user.email == "test@example.com"
@@ -618,12 +618,12 @@ class TestUserModel:
         assert user.is_superuser is False
         assert user.created_at is not None
         assert user.updated_at is not None
-    
+
     def test_password_verification(self):
         """Test password verification."""
         password = "testpassword123"
         hashed = get_password_hash(password)
-        
+
         user = User(
             username="test",
             email="test@example.com",
@@ -631,10 +631,10 @@ class TestUserModel:
             first_name="Test",
             last_name="User"
         )
-        
+
         assert user.verify_password(password)
         assert not user.verify_password("wrongpassword")
-    
+
     def test_user_dict_excludes_password(self):
         """Test that dict() method excludes password."""
         user = User(
@@ -644,12 +644,12 @@ class TestUserModel:
             first_name="Test",
             last_name="User"
         )
-        
+
         user_dict = user.dict()
         assert "hashed_password" not in user_dict
         assert "username" in user_dict
         assert "email" in user_dict
-    
+
     def test_user_repr(self):
         """Test user string representation."""
         user = User(
@@ -660,7 +660,7 @@ class TestUserModel:
             first_name="Test",
             last_name="User"
         )
-        
+
         assert repr(user) == "<User(id=1)>"
 ```
 
@@ -676,12 +676,12 @@ from app.core.security import get_password_hash
 
 class TestUserRepository:
     """Test UserRepository."""
-    
+
     @pytest.mark.asyncio
     async def test_create_user(self, db_session: AsyncSession):
         """Test user creation through repository."""
         repo = UserRepository(User, db_session)
-        
+
         user_data = {
             "username": "repouser",
             "email": "repo@example.com",
@@ -689,44 +689,44 @@ class TestUserRepository:
             "first_name": "Repo",
             "last_name": "User"
         }
-        
+
         user = await repo.create(user_data)
-        
+
         assert user.id is not None
         assert user.username == "repouser"
         assert user.email == "repo@example.com"
-    
+
     @pytest.mark.asyncio
     async def test_get_by_email(self, db_session: AsyncSession, test_user: User):
         """Test get user by email."""
         repo = UserRepository(User, db_session)
-        
+
         found_user = await repo.get_by_email(test_user.email)
-        
+
         assert found_user is not None
         assert found_user.id == test_user.id
         assert found_user.email == test_user.email
-    
+
     @pytest.mark.asyncio
     async def test_get_by_username(self, db_session: AsyncSession, test_user: User):
         """Test get user by username."""
         repo = UserRepository(User, db_session)
-        
+
         found_user = await repo.get_by_username(test_user.username)
-        
+
         assert found_user is not None
         assert found_user.id == test_user.id
         assert found_user.username == test_user.username
-    
+
     @pytest.mark.asyncio
     async def test_get_multi_with_pagination(
-        self, 
-        db_session: AsyncSession, 
+        self,
+        db_session: AsyncSession,
         test_user: User
     ):
         """Test get multiple users with pagination."""
         repo = UserRepository(User, db_session)
-        
+
         # Create additional users
         for i in range(5):
             user_data = {
@@ -737,36 +737,36 @@ class TestUserRepository:
                 "last_name": "Test"
             }
             await repo.create(user_data)
-        
+
         # Test pagination
         users = await repo.get_multi(skip=0, limit=3)
         assert len(users) == 3
-        
+
         users_page_2 = await repo.get_multi(skip=3, limit=3)
         assert len(users_page_2) >= 1  # At least test_user
-    
+
     @pytest.mark.asyncio
     async def test_update_user(self, db_session: AsyncSession, test_user: User):
         """Test user update."""
         repo = UserRepository(User, db_session)
-        
+
         updated_user = await repo.update(test_user.id, {
             "first_name": "Updated",
             "bio": "Updated bio"
         })
-        
+
         assert updated_user is not None
         assert updated_user.first_name == "Updated"
         assert updated_user.bio == "Updated bio"
-    
+
     @pytest.mark.asyncio
     async def test_delete_user(self, db_session: AsyncSession, test_user: User):
         """Test user deletion."""
         repo = UserRepository(User, db_session)
-        
+
         result = await repo.delete(test_user.id)
         assert result is True
-        
+
         # Verify user is deleted
         deleted_user = await repo.get(test_user.id)
         assert deleted_user is None
@@ -786,37 +786,37 @@ from tests.factories import UserFactory
 @pytest.mark.slow
 class TestPerformance:
     """Test application performance."""
-    
+
     @pytest.mark.asyncio
     async def test_concurrent_requests(
-        self, 
+        self,
         async_client: AsyncClient,
         auth_headers: dict
     ):
         """Test concurrent API requests."""
-        
+
         async def make_request():
             response = await async_client.get(
                 "/api/v1/users/",
                 headers=auth_headers
             )
             return response.status_code
-        
+
         # Make 10 concurrent requests
         start_time = time.time()
         tasks = [make_request() for _ in range(10)]
         results = await asyncio.gather(*tasks)
         end_time = time.time()
-        
+
         # All requests should succeed
         assert all(status == 200 for status in results)
-        
+
         # Should complete within reasonable time
         assert (end_time - start_time) < 5.0
-    
+
     @pytest.mark.asyncio
     async def test_large_dataset_pagination(
-        self, 
+        self,
         async_client: AsyncClient,
         db_session,
         auth_headers: dict
@@ -827,10 +827,10 @@ class TestPerformance:
         for i in range(100):
             user = UserFactory.build()
             users.append(user)
-        
+
         db_session.add_all(users)
         await db_session.commit()
-        
+
         # Test pagination performance
         start_time = time.time()
         response = await async_client.get(
@@ -838,11 +838,11 @@ class TestPerformance:
             headers=auth_headers
         )
         end_time = time.time()
-        
+
         assert response.status_code == 200
         data = response.json()
         assert len(data["items"]) == 50
-        
+
         # Should complete quickly
         assert (end_time - start_time) < 1.0
 ```
@@ -858,29 +858,29 @@ from app.services.email import EmailService
 
 class TestExternalServices:
     """Test external service integrations."""
-    
+
     @pytest.mark.asyncio
     @respx.mock
     async def test_email_service(
-        self, 
+        self,
         async_client: AsyncClient
     ):
         """Test email service with mocked external API."""
         # Mock email service API
         respx.post("https://api.emailservice.com/send").mock(
             return_value=httpx.Response(
-                200, 
+                200,
                 json={"message": "Email sent successfully"}
             )
         )
-        
+
         email_service = EmailService()
         result = await email_service.send_email(
             to="test@example.com",
             subject="Test",
             body="Test email"
         )
-        
+
         assert result["success"] is True
 ```
 
@@ -900,11 +900,11 @@ def assert_response_json(response: Response, expected_keys: list[str] = None):
     """Assert response is valid JSON with expected keys."""
     assert response.headers.get("content-type") == "application/json"
     data = response.json()
-    
+
     if expected_keys:
         for key in expected_keys:
             assert key in data, f"Missing key '{key}' in response"
-    
+
     return data
 
 def create_auth_headers(token: str) -> Dict[str, str]:
@@ -914,14 +914,14 @@ def create_auth_headers(token: str) -> Dict[str, str]:
 async def create_test_users(db_session, count: int = 5) -> list:
     """Create multiple test users."""
     from tests.factories import UserFactory
-    
+
     users = []
     for i in range(count):
         user = UserFactory.build()
         users.append(user)
-    
+
     db_session.add_all(users)
     await db_session.commit()
-    
+
     return users
 ```

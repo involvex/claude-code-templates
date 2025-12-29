@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+package-lock.json
+bun.lock
+
+# Build outputs
+dist/
+build/
+*.min.js
+
+# Documentation (preserve formatting)
+docs/components.json
+docs/trending-data.json
+
+# Templates and components (preserve original formatting)
+cli-tool/components/**
+cli-tool/templates/**
+
+# Logs
+*.log
+
+# Cache
+.cache/
+.vercel/
+.next/
+
+# IDE
+.vscode/
+.idea/

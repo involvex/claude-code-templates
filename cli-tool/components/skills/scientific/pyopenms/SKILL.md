@@ -106,6 +106,7 @@ fdr.apply(peptide_ids)
 Perform untargeted metabolomics preprocessing and analysis.
 
 Typical workflow:
+
 1. Load and process raw data
 2. Detect features
 3. Align retention times across samples
@@ -189,6 +190,7 @@ print(df.head())
 ## Integration with Other Tools
 
 PyOpenMS integrates with:
+
 - **Pandas**: Export data to DataFrames
 - **NumPy**: Work with peak arrays
 - **Scikit-learn**: Machine learning on MS data

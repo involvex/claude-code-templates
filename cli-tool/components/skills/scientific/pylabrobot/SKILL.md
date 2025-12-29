@@ -12,6 +12,7 @@ PyLabRobot is a hardware-agnostic, pure Python Software Development Kit for auto
 ## When to Use This Skill
 
 Use this skill when:
+
 - Programming liquid handling robots (Hamilton STAR/STARlet, Opentrons OT-2, Tecan EVO)
 - Automating laboratory workflows involving pipetting, sample preparation, or analytical measurements
 - Managing deck layouts and laboratory resources (plates, tips, containers, troughs)
@@ -29,6 +30,7 @@ PyLabRobot provides comprehensive laboratory automation through six main capabil
 ### 1. Liquid Handling (`references/liquid-handling.md`)
 
 Control liquid handling robots for aspirating, dispensing, and transferring liquids. Key operations include:
+
 - **Basic Operations**: Aspirate, dispense, transfer liquids between wells
 - **Tip Management**: Pick up, drop, and track pipette tips automatically
 - **Advanced Techniques**: Multi-channel pipetting, serial dilutions, plate replication
@@ -38,6 +40,7 @@ Control liquid handling robots for aspirating, dispensing, and transferring liqu
 ### 2. Resource Management (`references/resources.md`)
 
 Manage laboratory resources in a hierarchical system:
+
 - **Resource Types**: Plates, tip racks, troughs, tubes, carriers, and custom labware
 - **Deck Layout**: Assign resources to deck positions with coordinate systems
 - **State Management**: Track tip presence, liquid volumes, and resource states
@@ -47,6 +50,7 @@ Manage laboratory resources in a hierarchical system:
 ### 3. Hardware Backends (`references/hardware-backends.md`)
 
 Connect to diverse laboratory equipment through backend abstraction:
+
 - **Liquid Handlers**: Hamilton STAR (full support), Opentrons OT-2, Tecan EVO
 - **Simulation**: ChatterboxBackend for protocol testing without hardware
 - **Platform Support**: Works on Windows, macOS, Linux, and Raspberry Pi
@@ -55,6 +59,7 @@ Connect to diverse laboratory equipment through backend abstraction:
 ### 4. Analytical Equipment (`references/analytical-equipment.md`)
 
 Integrate plate readers and analytical instruments:
+
 - **Plate Readers**: BMG CLARIOstar for absorbance, luminescence, fluorescence
 - **Scales**: Mettler Toledo integration for mass measurements
 - **Integration Patterns**: Combine liquid handlers with analytical equipment
@@ -63,6 +68,7 @@ Integrate plate readers and analytical instruments:
 ### 5. Material Handling (`references/material-handling.md`)
 
 Control environmental and material handling equipment:
+
 - **Heater Shakers**: Hamilton HeaterShaker, Inheco ThermoShake
 - **Incubators**: Inheco and Thermo Fisher incubators with temperature control
 - **Centrifuges**: Agilent VSpin with bucket positioning and spin control
@@ -72,6 +78,7 @@ Control environmental and material handling equipment:
 ### 6. Visualization & Simulation (`references/visualization.md`)
 
 Visualize and simulate laboratory protocols:
+
 - **Browser Visualizer**: Real-time 3D visualization of deck state
 - **Simulation Mode**: Test protocols without physical hardware
 - **State Tracking**: Monitor tip presence and liquid volumes visually
@@ -105,6 +112,7 @@ await lh.drop_tips()
 ## Working with References
 
 This skill organizes detailed information across multiple reference files. Load the relevant reference when:
+
 - **Liquid Handling**: Writing pipetting protocols, tip management, transfers
 - **Resources**: Defining deck layouts, managing plates/tips, custom labware
 - **Hardware Backends**: Connecting to specific robots, switching platforms

@@ -3,16 +3,19 @@
 ## Security Principles
 
 ### Defense in Depth
+
 - **Multiple layers of security controls**
 - Network security, application security, data security
 - No single point of failure
 
 ### Least Privilege
+
 - **Minimum permissions necessary**
 - Regular access reviews
 - Time-bound elevated access
 
 ### Zero Trust
+
 - **Never trust, always verify**
 - Verify every request regardless of origin
 - Micro-segmentation and strict access controls
@@ -20,6 +23,7 @@
 ## Secrets Management
 
 ### ❌ Never Do This
+
 ```yaml
 # NEVER hardcode secrets!
 apiVersion: v1
@@ -28,15 +32,16 @@ metadata:
   name: bad-example
 spec:
   containers:
-  - name: app
-    env:
-    - name: DATABASE_PASSWORD
-      value: "SuperSecret123!"  # 🚨 NEVER DO THIS
-    - name: API_KEY
-      value: "sk-abc123def456"  # 🚨 NEVER DO THIS
+    - name: app
+      env:
+        - name: DATABASE_PASSWORD
+          value: "SuperSecret123!" # 🚨 NEVER DO THIS
+        - name: API_KEY
+          value: "sk-abc123def456" # 🚨 NEVER DO THIS
 ```
 
 ### ✅ Use External Secrets Operator
+
 ```yaml
 # External Secrets with AWS Secrets Manager
 apiVersion: external-secrets.io/v1beta1
@@ -56,16 +61,17 @@ spec:
     creationPolicy: Owner
 
   data:
-  - secretKey: database-password
-    remoteRef:
-      key: prod/myapp/database-password
+    - secretKey: database-password
+      remoteRef:
+        key: prod/myapp/database-password
 
-  - secretKey: api-key
-    remoteRef:
-      key: prod/myapp/api-key
+    - secretKey: api-key
+      remoteRef:
+        key: prod/myapp/api-key
 ```
 
 ### ✅ Use Sealed Secrets
+
 ```bash
 # Install kubeseal
 brew install kubeseal
@@ -81,6 +87,7 @@ kubectl apply -f sealed-secret.yaml
 ```
 
 ### AWS Secrets Manager with IRSA
+
 ```yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -98,6 +105,7 @@ metadata:
 ## Container Security
 
 ### Secure Dockerfile
+
 ```dockerfile
 # Use specific version tags, not 'latest'
 FROM node:20.10.0-alpine3.19 AS builder
@@ -157,6 +165,7 @@ LABEL org.opencontainers.image.source="https://github.com/myorg/myapp" \
 ### Security Scanning
 
 #### Trivy (Container Vulnerability Scanner)
+
 ```bash
 # Scan Docker image
 trivy image myapp:latest
@@ -172,6 +181,7 @@ trivy image -f json -o results.json myapp:latest
 ```
 
 #### Grype (Vulnerability Scanner)
+
 ```bash
 # Scan image
 grype myapp:latest
@@ -212,44 +222,45 @@ spec:
       type: RuntimeDefault
 
   containers:
-  - name: app
-    image: myapp:1.0.0
+    - name: app
+      image: myapp:1.0.0
 
-    securityContext:
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      runAsNonRoot: true
-      runAsUser: 1000
-      capabilities:
-        drop:
-        - ALL
-        add:
-        - NET_BIND_SERVICE  # Only if needed
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1000
+        capabilities:
+          drop:
+            - ALL
+          add:
+            - NET_BIND_SERVICE # Only if needed
 
-    resources:
-      limits:
-        memory: "512Mi"
-        cpu: "500m"
-      requests:
-        memory: "256Mi"
-        cpu: "250m"
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
 
-    volumeMounts:
-    - name: tmp
-      mountPath: /tmp
-    - name: cache
-      mountPath: /var/cache
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: cache
+          mountPath: /var/cache
 
   volumes:
-  - name: tmp
-    emptyDir: {}
-  - name: cache
-    emptyDir: {}
+    - name: tmp
+      emptyDir: {}
+    - name: cache
+      emptyDir: {}
 ```
 
 ## Network Security
 
 ### Network Policies
+
 ```yaml
 # Default deny all ingress
 apiVersion: networking.k8s.io/v1
@@ -260,7 +271,7 @@ metadata:
 spec:
   podSelector: {}
   policyTypes:
-  - Ingress
+    - Ingress
 
 ---
 # Allow specific ingress
@@ -275,50 +286,51 @@ spec:
       app: myapp
 
   policyTypes:
-  - Ingress
-  - Egress
+    - Ingress
+    - Egress
 
   ingress:
-  # Allow from ingress controller
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: ingress-nginx
-    ports:
-    - protocol: TCP
-      port: 8080
+    # Allow from ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
 
   egress:
-  # Allow DNS
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          name: kube-system
-    - podSelector:
-        matchLabels:
-          k8s-app: kube-dns
-    ports:
-    - protocol: UDP
-      port: 53
+    # Allow DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: kube-system
+        - podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
 
-  # Allow database
-  - to:
-    - podSelector:
-        matchLabels:
-          app: postgres
-    ports:
-    - protocol: TCP
-      port: 5432
+    # Allow database
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
 
-  # Allow HTTPS egress
-  - to:
-    - namespaceSelector: {}
-    ports:
-    - protocol: TCP
-      port: 443
+    # Allow HTTPS egress
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 443
 ```
 
 ### AWS Security Groups (Terraform)
+
 ```hcl
 # Application Security Group
 resource "aws_security_group" "app" {
@@ -360,6 +372,7 @@ resource "aws_security_group" "app" {
 ## IAM & RBAC
 
 ### Kubernetes RBAC
+
 ```yaml
 # Least privilege service account
 apiVersion: v1
@@ -376,16 +389,16 @@ metadata:
   name: myapp-role
   namespace: production
 rules:
-# Only read ConfigMaps and Secrets
-- apiGroups: [""]
-  resources: ["configmaps", "secrets"]
-  verbs: ["get", "list"]
-  resourceNames: ["myapp-config", "myapp-secrets"]
+  # Only read ConfigMaps and Secrets
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list"]
+    resourceNames: ["myapp-config", "myapp-secrets"]
 
-# Read own pod information
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get"]
+  # Read own pod information
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get"]
 
 ---
 # Bind role to service account
@@ -395,9 +408,9 @@ metadata:
   name: myapp-rolebinding
   namespace: production
 subjects:
-- kind: ServiceAccount
-  name: myapp
-  namespace: production
+  - kind: ServiceAccount
+    name: myapp
+    namespace: production
 roleRef:
   kind: Role
   name: myapp-role
@@ -405,6 +418,7 @@ roleRef:
 ```
 
 ### AWS IAM Policy (Terraform)
+
 ```hcl
 # Least privilege IAM policy
 data "aws_iam_policy_document" "app" {
@@ -450,6 +464,7 @@ resource "aws_iam_policy" "app" {
 ## Compliance & Policy as Code
 
 ### OPA (Open Policy Agent)
+
 ```rego
 # Deny pods running as root
 package kubernetes.admission
@@ -487,6 +502,7 @@ deny[msg] {
 ```
 
 ### Terraform Sentinel Policy
+
 ```hcl
 # sentinel.hcl
 policy "require-tags" {
@@ -518,6 +534,7 @@ main = rule {
 ## Security Scanning in CI/CD
 
 ### GitHub Actions Security Workflow
+
 ```yaml
 name: Security Scan
 
@@ -550,14 +567,14 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: myapp:${{ github.sha }}
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
 
       - name: Upload to GitHub Security
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
   terraform-scan:
     runs-on: ubuntu-latest
@@ -585,6 +602,7 @@ jobs:
 ## Encryption
 
 ### At Rest
+
 ```hcl
 # S3 bucket encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "app" {
@@ -615,6 +633,7 @@ resource "aws_ebs_volume" "app" {
 ```
 
 ### In Transit
+
 ```yaml
 # Enforce TLS in Ingress
 apiVersion: networking.k8s.io/v1
@@ -627,9 +646,9 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   tls:
-  - hosts:
-    - app.example.com
-    secretName: app-tls
+    - hosts:
+        - app.example.com
+      secretName: app-tls
 ```
 
 ## Security Best Practices Checklist

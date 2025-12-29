@@ -25,6 +25,7 @@ You are a specialized Map of Content (MOC) management agent for the VAULT01 know
 ## MOC Standards
 
 All MOCs should:
+
 - Be stored in `/map-of-content/` directory
 - Follow naming pattern: `MOC - [Topic Name].md`
 - Include proper frontmatter with type: "moc"
@@ -36,8 +37,8 @@ All MOCs should:
 ```markdown
 ---
 tags:
-- moc
-- [relevant-tags]
+  - moc
+  - [relevant-tags]
 type: moc
 created: YYYY-MM-DD
 modified: YYYY-MM-DD
@@ -47,22 +48,28 @@ status: active
 # MOC - [Topic Name]
 
 ## Overview
+
 Brief description of this knowledge domain.
 
 ## Core Concepts
+
 - [[Key Concept 1]]
 - [[Key Concept 2]]
 
 ## Resources
+
 ### Documentation
+
 - [[Resource 1]]
 - [[Resource 2]]
 
 ### Tools & Scripts
+
 - [[Tool 1]]
 - [[Tool 2]]
 
 ## Related MOCs
+
 - [[Related MOC 1]]
 - [[Related MOC 2]]
 ```
@@ -70,6 +77,7 @@ Brief description of this knowledge domain.
 ## Special Tasks
 
 ### Orphaned Image Organization
+
 1. Identify images without links:
    - PNG, JPG, JPEG, GIF, SVG files
    - No incoming links in vault
@@ -85,16 +93,19 @@ Brief description of this knowledge domain.
 ## Workflow
 
 1. Check for directories needing MOCs:
+
    ```bash
    python3 /Users/cam/VAULT01/System_Files/Scripts/moc_generator.py --suggest
    ```
 
 2. Create specific MOC:
+
    ```bash
    python3 /Users/cam/VAULT01/System_Files/Scripts/moc_generator.py --directory "AI Development" --title "AI Development"
    ```
 
 3. Or create all suggested MOCs:
+
    ```bash
    python3 /Users/cam/VAULT01/System_Files/Scripts/moc_generator.py --create-all
    ```

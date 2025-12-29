@@ -39,16 +39,16 @@ bin/rails generate authentication User first_name:string last_name:string
 # app/models/user.rb
 class User < ApplicationRecord
   has_secure_password
-  
+
   validates :email, presence: true, uniqueness: true
   validates :password, length: { minimum: 8 }, if: -> { new_record? || !password.blank? }
-  
+
   normalizes :email, with: ->(email) { email.strip.downcase }
-  
+
   before_save :normalize_email
-  
+
   private
-  
+
   def normalize_email
     self.email = email.downcase.strip
   end
@@ -61,14 +61,14 @@ end
 # app/controllers/authentication_controller.rb
 class AuthenticationController < ApplicationController
   skip_before_action :authenticate_user!, only: [:new, :create]
-  
+
   def new
     # Login page
   end
-  
+
   def create
     user = User.find_by(email: params[:email])
-    
+
     if user&.authenticate(params[:password])
       login(user)
       redirect_to root_path, notice: 'Logged in successfully'
@@ -77,19 +77,19 @@ class AuthenticationController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-  
+
   def destroy
     logout
     redirect_to root_path, notice: 'Logged out successfully'
   end
-  
+
   private
-  
+
   def login(user)
     session[:user_id] = user.id
     @current_user = user
   end
-  
+
   def logout
     session[:user_id] = nil
     @current_user = nil
@@ -103,14 +103,14 @@ end
 # app/controllers/registrations_controller.rb
 class RegistrationsController < ApplicationController
   skip_before_action :authenticate_user!
-  
+
   def new
     @user = User.new
   end
-  
+
   def create
     @user = User.new(user_params)
-    
+
     if @user.save
       login(@user)
       redirect_to root_path, notice: 'Account created successfully'
@@ -118,13 +118,13 @@ class RegistrationsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-  
+
   private
-  
+
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name)
   end
-  
+
   def login(user)
     session[:user_id] = user.id
     @current_user = user
@@ -138,25 +138,25 @@ end
 # app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  
+
   before_action :authenticate_user!
-  
+
   private
-  
+
   def authenticate_user!
     redirect_to login_path, alert: 'Please log in to continue' unless current_user
   end
-  
+
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
   helper_method :current_user
-  
+
   def logged_in?
     !!current_user
   end
   helper_method :logged_in?
-  
+
   def require_login
     unless logged_in?
       flash[:alert] = 'You must be logged in to access this page'
@@ -169,27 +169,28 @@ end
 ## Authentication Views
 
 ### Login Form
+
 ```erb
 <!-- app/views/authentication/new.html.erb -->
 <div class="authentication-form">
   <h1>Log In</h1>
-  
+
   <%= form_with url: login_path, local: true, class: "auth-form" do |form| %>
     <div class="form-group">
       <%= form.label :email, "Email" %>
       <%= form.email_field :email, required: true, autofocus: true, class: "form-control" %>
     </div>
-    
+
     <div class="form-group">
       <%= form.label :password, "Password" %>
       <%= form.password_field :password, required: true, class: "form-control" %>
     </div>
-    
+
     <div class="form-actions">
       <%= form.submit "Log In", class: "btn btn-primary" %>
     </div>
   <% end %>
-  
+
   <div class="auth-links">
     <%= link_to "Don't have an account? Sign up", signup_path %>
   </div>
@@ -197,11 +198,12 @@ end
 ```
 
 ### Registration Form
+
 ```erb
 <!-- app/views/registrations/new.html.erb -->
 <div class="authentication-form">
   <h1>Sign Up</h1>
-  
+
   <%= form_with model: @user, url: signup_path, local: true, class: "auth-form" do |form| %>
     <% if @user.errors.any? %>
       <div class="error-messages">
@@ -213,38 +215,38 @@ end
         </ul>
       </div>
     <% end %>
-    
+
     <div class="form-group">
       <%= form.label :first_name, "First Name" %>
       <%= form.text_field :first_name, class: "form-control" %>
     </div>
-    
+
     <div class="form-group">
       <%= form.label :last_name, "Last Name" %>
       <%= form.text_field :last_name, class: "form-control" %>
     </div>
-    
+
     <div class="form-group">
       <%= form.label :email, "Email" %>
       <%= form.email_field :email, required: true, class: "form-control" %>
     </div>
-    
+
     <div class="form-group">
       <%= form.label :password, "Password" %>
       <%= form.password_field :password, required: true, minlength: 8, class: "form-control" %>
       <small class="form-text">Minimum 8 characters</small>
     </div>
-    
+
     <div class="form-group">
       <%= form.label :password_confirmation, "Confirm Password" %>
       <%= form.password_field :password_confirmation, required: true, class: "form-control" %>
     </div>
-    
+
     <div class="form-actions">
       <%= form.submit "Sign Up", class: "btn btn-primary" %>
     </div>
   <% end %>
-  
+
   <div class="auth-links">
     <%= link_to "Already have an account? Log in", login_path %>
   </div>
@@ -260,14 +262,14 @@ Rails.application.routes.draw do
   get    'login',  to: 'authentication#new'
   post   'login',  to: 'authentication#create'
   delete 'logout', to: 'authentication#destroy'
-  
+
   # Registration routes
   get  'signup', to: 'registrations#new'
   post 'signup', to: 'registrations#create'
-  
+
   # User management routes
   resources :users, except: [:new, :create]
-  
+
   # Root route
   root 'dashboard#index'
 end
@@ -284,10 +286,10 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :password_digest, null: false
       t.string :first_name
       t.string :last_name
-      
+
       t.timestamps
     end
-    
+
     add_index :users, :email, unique: true
   end
 end
@@ -296,15 +298,16 @@ end
 ## Advanced Authentication Features
 
 ### Password Reset
+
 ```ruby
 # app/controllers/password_resets_controller.rb
 class PasswordResetsController < ApplicationController
   skip_before_action :authenticate_user!
-  
+
   def new
     # Password reset request form
   end
-  
+
   def create
     @user = User.find_by(email: params[:email])
     if @user
@@ -315,14 +318,14 @@ class PasswordResetsController < ApplicationController
       render :new
     end
   end
-  
+
   def edit
     @user = User.find_by(password_reset_token: params[:id])
     if @user.nil? || @user.password_reset_sent_at < 2.hours.ago
       redirect_to new_password_reset_path, alert: 'Password reset has expired'
     end
   end
-  
+
   def update
     @user = User.find_by(password_reset_token: params[:id])
     if @user && @user.password_reset_sent_at > 2.hours.ago
@@ -336,9 +339,9 @@ class PasswordResetsController < ApplicationController
       redirect_to new_password_reset_path, alert: 'Password reset has expired'
     end
   end
-  
+
   private
-  
+
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
   end
@@ -346,16 +349,17 @@ end
 ```
 
 ### User Model Extensions
+
 ```ruby
 # app/models/user.rb (extended)
 class User < ApplicationRecord
   has_secure_password
-  
+
   validates :email, presence: true, uniqueness: true
   validates :password, length: { minimum: 8 }, if: -> { new_record? || !password.blank? }
-  
+
   normalizes :email, with: ->(email) { email.strip.downcase }
-  
+
   # Password reset functionality
   def send_password_reset
     generate_token(:password_reset_token)
@@ -363,17 +367,17 @@ class User < ApplicationRecord
     save!
     UserMailer.password_reset(self).deliver_now
   end
-  
+
   def full_name
     "#{first_name} #{last_name}".strip
   end
-  
+
   def initials
     "#{first_name&.first}#{last_name&.first}".upcase
   end
-  
+
   private
-  
+
   def generate_token(column)
     begin
       self[column] = SecureRandom.urlsafe_base64
@@ -412,11 +416,11 @@ module AuthenticationHelper
     if user.avatar.present?
       image_tag user.avatar, alt: user.full_name, class: "avatar", size: "#{size}x#{size}"
     else
-      content_tag :div, user.initials, class: "avatar avatar-initials", 
+      content_tag :div, user.initials, class: "avatar avatar-initials",
                   style: "width: #{size}px; height: #{size}px; line-height: #{size}px;"
     end
   end
-  
+
   def current_user_menu
     if logged_in?
       render 'shared/user_menu'
@@ -438,14 +442,14 @@ RSpec.describe User, type: :model do
     it { should validate_length_of(:password).is_at_least(8) }
     it { should have_secure_password }
   end
-  
+
   describe 'email normalization' do
     it 'normalizes email to lowercase' do
       user = User.create!(email: 'USER@EXAMPLE.COM', password: 'password123')
       expect(user.email).to eq('user@example.com')
     end
   end
-  
+
   describe '#full_name' do
     it 'returns combined first and last name' do
       user = User.new(first_name: 'John', last_name: 'Doe')
@@ -458,7 +462,7 @@ end
 RSpec.describe AuthenticationController, type: :controller do
   describe 'POST #create' do
     let(:user) { create(:user, password: 'password123') }
-    
+
     context 'with valid credentials' do
       it 'logs in the user' do
         post :create, params: { email: user.email, password: 'password123' }
@@ -466,7 +470,7 @@ RSpec.describe AuthenticationController, type: :controller do
         expect(response).to redirect_to(root_path)
       end
     end
-    
+
     context 'with invalid credentials' do
       it 'does not log in the user' do
         post :create, params: { email: user.email, password: 'wrong' }

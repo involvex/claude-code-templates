@@ -22,6 +22,7 @@ Systematically update project dependencies with comprehensive testing and compat
 **Update Strategy**: Use $ARGUMENTS to specify patch updates, minor updates, major updates, or security-only updates
 
 **Update Process**:
+
 1. **Dependency Analysis** - Audit current versions, identify outdated packages, assess security vulnerabilities
 2. **Impact Assessment** - Check changelogs, breaking changes, deprecation warnings, compatibility matrix
 3. **Staged Updates** - Apply patch updates first, then minor, finally major versions with testing between stages

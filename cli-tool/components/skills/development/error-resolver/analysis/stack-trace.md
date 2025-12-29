@@ -29,6 +29,7 @@ TypeError: Cannot read property 'name' of undefined
 ```
 
 **Components**:
+
 - `TypeError` - Error type
 - `Cannot read property 'name' of undefined` - Error message
 - `/app/src/services/user.js:45:23` - File:Line:Column
@@ -38,6 +39,7 @@ TypeError: Cannot read property 'name' of undefined
 ### Key Patterns
 
 **User Code vs Framework**:
+
 ```
     at getUser (/app/src/services/user.js:45:23)     <- YOUR CODE
     at handler (/app/src/routes/api.js:12:18)        <- YOUR CODE
@@ -48,6 +50,7 @@ TypeError: Cannot read property 'name' of undefined
 Focus on frames in YOUR code first.
 
 **Anonymous Functions**:
+
 ```
     at Object.<anonymous> (/app/index.js:5:1)
     at Array.forEach (<anonymous>)
@@ -55,6 +58,7 @@ Focus on frames in YOUR code first.
 ```
 
 Add function names for better traces:
+
 ```javascript
 // Instead of
 const handler = () => { ... }
@@ -64,6 +68,7 @@ const handler = function userHandler() { ... }
 ```
 
 **Async Stack Traces** (Node.js 12+):
+
 ```
 Error: Failed
     at fetchData (/app/src/api.js:10:9)
@@ -96,6 +101,7 @@ KeyError: 'name'
 **Reading Order**: Top = entry point, Bottom = error (opposite of JS!)
 
 **Components**:
+
 - `File "/app/processor.py"` - File path
 - `line 25` - Line number
 - `in process_data` - Function name
@@ -104,6 +110,7 @@ KeyError: 'name'
 ### Key Patterns
 
 **Chained Exceptions** (Python 3):
+
 ```python
 Traceback (most recent call last):
   File "app.py", line 5, in main
@@ -121,6 +128,7 @@ ValueError: Invalid JSON input
 Read both tracebacks - first is root cause, second is re-raised.
 
 **List Comprehension**:
+
 ```python
   File "/app/transformer.py", line 15, in <listcomp>
 ```
@@ -143,6 +151,7 @@ java.lang.NullPointerException: Cannot invoke method on null
 ```
 
 **Components**:
+
 - `java.lang.NullPointerException` - Exception class
 - `com.example.UserService.getUser` - Package.Class.Method
 - `UserService.java:45` - File:Line
@@ -151,6 +160,7 @@ java.lang.NullPointerException: Cannot invoke method on null
 ### Key Patterns
 
 **Caused By Chain**:
+
 ```java
 Exception in thread "main" RuntimeException: Processing failed
     at App.main(App.java:10)
@@ -165,6 +175,7 @@ Caused by: SocketException: Connection reset
 Root cause is at the bottom "Caused by".
 
 **Lambda Expressions**:
+
 ```java
     at App.lambda$main$0(App.java:15)
 ```
@@ -189,6 +200,7 @@ exit status 2
 ```
 
 **Components**:
+
 - `panic: runtime error` - Error type
 - `goroutine 1 [running]` - Which goroutine
 - `main.processItems` - Package.Function
@@ -198,6 +210,7 @@ exit status 2
 ### Key Patterns
 
 **Multiple Goroutines**:
+
 ```go
 goroutine 1 [running]:
     ...
@@ -252,34 +265,35 @@ Skip framework/library frames, focus on your code:
 
 ### Step 3: Extract Key Info
 
-| What | Example |
-|------|---------|
-| Error Type | `TypeError`, `NullPointerException` |
-| Message | `Cannot read property 'x' of undefined` |
-| File | `/app/src/user.js` |
-| Line | `45` |
-| Function | `getUser` |
-| Value | `undefined` |
+| What       | Example                                 |
+| ---------- | --------------------------------------- |
+| Error Type | `TypeError`, `NullPointerException`     |
+| Message    | `Cannot read property 'x' of undefined` |
+| File       | `/app/src/user.js`                      |
+| Line       | `45`                                    |
+| Function   | `getUser`                               |
+| Value      | `undefined`                             |
 
 ### Step 4: Read the Context
 
 ```javascript
 // Line 45
-const userName = user.profile.name
+const userName = user.profile.name;
 //               ^--- user is undefined
 ```
 
 ### Step 5: Trace the Source
 
 Go up the stack:
+
 1. Where is `user` defined?
 2. Where does it come from?
 3. Why is it undefined?
 
 ```javascript
 // In API handler (line 12)
-const user = await getUserById(id)  // Returns undefined if not found!
-return response.json({ name: user.profile.name })
+const user = await getUserById(id); // Returns undefined if not found!
+return response.json({ name: user.profile.name });
 ```
 
 ---
@@ -295,6 +309,7 @@ TypeError: n is not a function
 ```
 
 **Solutions**:
+
 1. Use source maps
 2. Run unminified build for debugging
 3. Add `devtool: 'source-map'` to webpack
@@ -307,6 +322,7 @@ Error: Something went wrong
 ```
 
 **Causes**:
+
 - Error created with `new Error()` but not thrown
 - Stack trimmed by error handling
 - Async context lost
@@ -356,9 +372,9 @@ traceback.install()
 
 ```javascript
 // Get stack trace anywhere
-console.trace('Here')
+console.trace("Here");
 
 // Error with custom stack
-const err = new Error('Debug')
-console.log(err.stack)
+const err = new Error("Debug");
+console.log(err.stack);
 ```

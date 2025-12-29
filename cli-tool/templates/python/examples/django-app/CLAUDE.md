@@ -9,12 +9,14 @@ This is a Django web application project optimized for scalable web development 
 ## Django-Specific Development Commands
 
 ### Project Management
+
 - `django-admin startproject myproject` - Create new Django project
 - `python manage.py startapp myapp` - Create new Django app
 - `python manage.py runserver` - Start development server
 - `python manage.py runserver 0.0.0.0:8000` - Start server accessible from network
 
 ### Database Management
+
 - `python manage.py makemigrations` - Create database migrations
 - `python manage.py migrate` - Apply database migrations
 - `python manage.py showmigrations` - Show migration status
@@ -22,21 +24,25 @@ This is a Django web application project optimized for scalable web development 
 - `python manage.py dbshell` - Open database shell
 
 ### User Management
+
 - `python manage.py createsuperuser` - Create admin superuser
 - `python manage.py changepassword username` - Change user password
 - `python manage.py shell` - Open Django shell
 
 ### Static Files & Media
+
 - `python manage.py collectstatic` - Collect static files for production
 - `python manage.py findstatic filename` - Find static file location
 
 ### Testing & Quality
+
 - `python manage.py test` - Run Django tests
 - `python manage.py test app_name` - Run tests for specific app
 - `python manage.py test --keepdb` - Run tests keeping test database
 - `coverage run --source='.' manage.py test` - Run tests with coverage
 
 ### Development Tools
+
 - `python manage.py check` - Check for Django issues
 - `python manage.py validate` - Validate models
 - `python manage.py inspectdb` - Generate models from existing database
@@ -76,6 +82,7 @@ myproject/
 ## Django Settings Configuration
 
 ### Base Settings (settings/base.py)
+
 ```python
 import os
 from pathlib import Path
@@ -140,6 +147,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 ## Django Best Practices
 
 ### Models
+
 - Use descriptive model names (singular)
 - Add `__str__` methods for better admin interface
 - Use `related_name` for foreign keys
@@ -147,6 +155,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 - Add proper Meta class with ordering
 
 ### Views
+
 - Use class-based views for complex logic
 - Implement proper error handling
 - Add pagination for list views
@@ -154,12 +163,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 - Implement proper permission checks
 
 ### URLs
+
 - Use app namespaces
 - Use descriptive URL names
 - Group related URLs in separate files
 - Use slug fields for SEO-friendly URLs
 
 ### Templates
+
 - Extend base templates
 - Use template inheritance effectively
 - Create reusable template tags
@@ -167,6 +178,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 - Use Django's built-in template filters
 
 ### Forms
+
 - Use Django forms for validation
 - Implement custom form validation
 - Use ModelForms when appropriate
@@ -176,6 +188,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 ## Security Considerations
 
 ### Django Security Settings
+
 ```python
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True
@@ -190,6 +203,7 @@ CSRF_COOKIE_SECURE = True
 ```
 
 ### User Authentication
+
 - Use Django's built-in authentication
 - Implement proper password policies
 - Add two-factor authentication if needed
@@ -199,6 +213,7 @@ CSRF_COOKIE_SECURE = True
 ## Testing Strategy
 
 ### Test Organization
+
 ```python
 # tests/test_models.py
 from django.test import TestCase
@@ -214,7 +229,7 @@ class PostModelTest(TestCase):
             email='test@example.com',
             password='testpass123'
         )
-    
+
     def test_post_creation(self):
         post = Post.objects.create(
             title='Test Post',
@@ -226,6 +241,7 @@ class PostModelTest(TestCase):
 ```
 
 ### Test Types
+
 - **Unit tests** for models and utilities
 - **Integration tests** for views and forms
 - **Functional tests** for user workflows
@@ -234,6 +250,7 @@ class PostModelTest(TestCase):
 ## Deployment Considerations
 
 ### Production Settings
+
 - Use environment variables for sensitive data
 - Configure proper logging
 - Set up static file serving
@@ -241,6 +258,7 @@ class PostModelTest(TestCase):
 - Implement proper caching strategy
 
 ### Docker Configuration
+
 ```dockerfile
 FROM python:3.11-slim
 
@@ -259,6 +277,7 @@ CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myproject.wsgi:application"]
 ## Performance Optimization
 
 ### Database Optimization
+
 - Use `select_related()` for foreign keys
 - Use `prefetch_related()` for many-to-many
 - Add database indexes for frequent queries
@@ -266,6 +285,7 @@ CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myproject.wsgi:application"]
 - Use database query optimization tools
 
 ### Caching Strategy
+
 - Implement Redis/Memcached for session storage
 - Use template fragment caching
 - Implement view-level caching
@@ -275,6 +295,7 @@ CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myproject.wsgi:application"]
 ## Common Django Patterns
 
 ### Custom User Model
+
 ```python
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -283,12 +304,13 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 ```
 
 ### Custom Managers
+
 ```python
 class PublishedManager(models.Manager):
     def get_queryset(self):
@@ -297,7 +319,7 @@ class PublishedManager(models.Manager):
 class Post(models.Model):
     title = models.CharField(max_length=200)
     status = models.CharField(max_length=20, default='draft')
-    
+
     objects = models.Manager()  # Default manager
     published = PublishedManager()  # Custom manager
 ```
@@ -305,6 +327,7 @@ class Post(models.Model):
 ## Django Extensions & Tools
 
 ### Useful Third-Party Packages
+
 - **Django REST Framework** - API development
 - **Celery** - Asynchronous task processing
 - **Django Debug Toolbar** - Development debugging

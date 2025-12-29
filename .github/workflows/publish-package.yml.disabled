@@ -29,27 +29,34 @@ jobs:
         with:
           node-version: '18'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@davila7'
+          scope: '@involvex'
 
       - name: Configure package for GitHub Packages
         working-directory: ./cli-tool
         run: |
           # Update package.json for GitHub Packages
-          npm pkg set name="@davila7/claude-code-templates"
+          npm pkg set name="@involvex/claude-code-templates"
           npm pkg set repository.type="git"
-          npm pkg set repository.url="git+https://github.com/davila7/claude-code-templates.git"
+          npm pkg set repository.url="git+https://github.com/involvex/claude-code-templates.git"
           npm pkg set publishConfig.registry="https://npm.pkg.github.com"
-          
+
           echo "Updated package.json for GitHub Packages:"
           cat package.json
 
       - name: Install dependencies
-        working-directory: ./cli-tool
         run: npm ci
 
+      - name: Run format check
+        run: npm run format:check
+
+      - name: Run linting
+        run: npm run lint
+
       - name: Run tests
-        working-directory: ./cli-tool
         run: npm test
+
+      - name: Run build validation
+        run: npm run build
 
       - name: Get current version
         working-directory: ./cli-tool
@@ -69,12 +76,13 @@ jobs:
         run: |
           echo "🎉 Package Published to GitHub Packages!"
           echo "========================================"
-          echo "Package: @davila7/claude-code-templates"
+          echo "Package: @involvex/claude-code-templates"
           echo "Version: ${{ env.NEW_VERSION }}"
           echo "Registry: GitHub Packages"
+          echo "Author: involvex"
           echo ""
           echo "Install with:"
-          echo "npm install -g @davila7/claude-code-templates --registry=https://npm.pkg.github.com"
+          echo "npm install -g @involvex/claude-code-templates --registry=https://npm.pkg.github.com"
           echo ""
           echo "Note: This workflow only publishes to GitHub Packages."
           echo "Main npm registry publication is handled manually."

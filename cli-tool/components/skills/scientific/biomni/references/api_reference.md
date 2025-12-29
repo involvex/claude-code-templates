@@ -36,6 +36,7 @@ agent = A1(
 - **`mcp_config`** (str, optional) - Path to MCP (Model Context Protocol) server configuration file for external tool integration.
 
 **Example:**
+
 ```python
 # Basic initialization
 agent = A1(path='./biomni_data', llm='claude-sonnet-4-20250514')
@@ -59,12 +60,15 @@ result = agent.go(query: str)
 ```
 
 **Parameters:**
+
 - **`query`** (str) - Natural language description of the biomedical task to execute
 
 **Returns:**
+
 - **`str`** - Final answer or analysis result from the agent
 
 **Behavior:**
+
 1. Decomposes query into executable sub-tasks
 2. Retrieves relevant knowledge from integrated databases
 3. Generates and executes Python code for analysis
@@ -72,6 +76,7 @@ result = agent.go(query: str)
 5. Returns final synthesized answer
 
 **Example:**
+
 ```python
 result = agent.go("""
 Identify genes associated with Alzheimer's disease from GWAS data.
@@ -92,10 +97,12 @@ agent.save_conversation_history(
 ```
 
 **Parameters:**
+
 - **`output_path`** (str) - File path for saved report
 - **`format`** (str, optional, default='pdf') - Output format: `'pdf'`, `'html'`, or `'markdown'`
 
 **Example:**
+
 ```python
 agent.save_conversation_history('reports/alzheimers_gwas_analysis.pdf')
 ```
@@ -111,6 +118,7 @@ agent.reset()
 Use when starting a new independent task to clear previous context.
 
 **Example:**
+
 ```python
 # Task 1
 agent.go("Analyze dataset A")
@@ -174,6 +182,7 @@ evaluator = BiomniEval1(
 ```
 
 **Example:**
+
 ```python
 evaluator = BiomniEval1()
 ```
@@ -193,14 +202,17 @@ score = evaluator.evaluate(
 ```
 
 **Parameters:**
+
 - **`task_type`** (str) - Task category: `'crispr_design'`, `'scrna_analysis'`, `'gwas_interpretation'`, `'drug_admet'`, `'clinical_diagnosis'`
 - **`instance_id`** (str) - Unique identifier for task instance from dataset
 - **`answer`** (str) - Agent's answer to evaluate
 
 **Returns:**
+
 - **`float`** - Evaluation score (0.0 to 1.0)
 
 **Example:**
+
 ```python
 # Generate answer
 result = agent.go("Design CRISPR screen for autophagy genes")
@@ -223,9 +235,11 @@ dataset = evaluator.load_dataset()
 ```
 
 **Returns:**
+
 - **`dict`** - Dictionary with task instances organized by task type
 
 **Example:**
+
 ```python
 dataset = evaluator.load_dataset()
 
@@ -245,9 +259,11 @@ results = evaluator.run_benchmark(
 ```
 
 **Returns:**
+
 - **`dict`** - Results with scores, timing, and detailed metrics per task
 
 **Example:**
+
 ```python
 results = evaluator.run_benchmark(
     agent=agent,

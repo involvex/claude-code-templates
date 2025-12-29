@@ -11,12 +11,14 @@ description: Generate optimized React components for Next.js with TypeScript and
 ## Project Context Analysis
 
 ### Framework Detection
+
 - Next.js config: @next.config.js
 - TypeScript config: @tsconfig.json (if exists)
 - Tailwind config: @tailwind.config.js (if exists)
 - Package.json: @package.json
 
 ### Existing Component Patterns
+
 - Components directory: @components/
 - App directory: @app/ (if App Router)
 - Pages directory: @pages/ (if Pages Router)
@@ -25,14 +27,18 @@ description: Generate optimized React components for Next.js with TypeScript and
 ## Component Generation Requirements
 
 ### 1. Component Type Detection
+
 Based on arguments and context, determine component type:
+
 - **Client Component**: Interactive UI with state/events (`--client` or default for interactive components)
 - **Server Component**: Static rendering, data fetching (`--server` or default for Next.js 13+)
 - **Page Component**: Route-level component (`--page`)
 - **Layout Component**: Shared layout wrapper (`--layout`)
 
 ### 2. File Structure Creation
+
 Generate comprehensive component structure:
+
 ```
 components/[ComponentName]/
 ├── index.ts                    # Barrel export
@@ -46,6 +52,7 @@ components/[ComponentName]/
 ### 3. Component Templates
 
 #### Server Component Template
+
 ```typescript
 import { FC } from 'react';
 import styles from './ComponentName.module.css';
@@ -63,7 +70,7 @@ interface ComponentNameProps {
 
 /**
  * ComponentName - Server Component
- * 
+ *
  * @description Brief description of component purpose
  * @example
  * <ComponentName>Content</ComponentName>
@@ -84,6 +91,7 @@ export default ComponentName;
 ```
 
 #### Client Component Template
+
 ```typescript
 'use client';
 
@@ -107,7 +115,7 @@ interface ComponentNameProps {
 
 /**
  * ComponentName - Client Component
- * 
+ *
  * @description Interactive component with client-side functionality
  * @example
  * <ComponentName onClick={() => console.log('clicked')}>
@@ -142,6 +150,7 @@ export default ComponentName;
 ```
 
 #### Page Component Template
+
 ```typescript
 import { Metadata } from 'next';
 import ComponentName from '@/components/ComponentName';
@@ -167,6 +176,7 @@ export default function Page({ params, searchParams }: PageProps) {
 ```
 
 #### Layout Component Template
+
 ```typescript
 import { FC } from 'react';
 import styles from './Layout.module.css';
@@ -181,7 +191,7 @@ interface LayoutProps {
 
 /**
  * Layout - Shared layout component
- * 
+ *
  * @description Provides consistent layout structure across pages
  */
 export const Layout: FC<LayoutProps> = ({
@@ -193,11 +203,11 @@ export const Layout: FC<LayoutProps> = ({
       <header className={styles.header}>
         {title && <h1 className={styles.title}>{title}</h1>}
       </header>
-      
+
       <main className={styles.main}>
         {children}
       </main>
-      
+
       <footer className={styles.footer}>
         <p>&copy; 2024 Your App</p>
       </footer>
@@ -211,6 +221,7 @@ export default Layout;
 ### 4. CSS Module Templates
 
 #### Basic Component Styles
+
 ```css
 /* ComponentName.module.css */
 .container {
@@ -254,7 +265,7 @@ export default Layout;
   .container {
     padding: 0.75rem;
   }
-  
+
   .button {
     padding: 0.75rem 1rem;
   }
@@ -262,6 +273,7 @@ export default Layout;
 ```
 
 #### Layout Styles
+
 ```css
 /* Layout.module.css */
 .layout {
@@ -300,17 +312,18 @@ export default Layout;
 ```
 
 ### 5. TypeScript Types
+
 ```typescript
 // types.ts
 export interface BaseComponentProps {
   children?: React.ReactNode;
   className?: string;
-  'data-testid'?: string;
+  "data-testid"?: string;
 }
 
 export interface ButtonProps extends BaseComponentProps {
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "outline";
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
   loading?: boolean;
   onClick?: () => void;
@@ -330,6 +343,7 @@ export interface BreadcrumbItem {
 ```
 
 ### 6. Unit Tests
+
 ```typescript
 // ComponentName.test.tsx
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -350,22 +364,22 @@ describe('ComponentName', () => {
   it('handles click events', () => {
     const handleClick = jest.fn();
     render(<ComponentName onClick={handleClick}>Click me</ComponentName>);
-    
+
     const button = screen.getByText('Click me');
     fireEvent.click(button);
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('toggles active state on click', () => {
     render(<ComponentName>Toggle</ComponentName>);
     const button = screen.getByText('Toggle');
-    
+
     expect(button).not.toHaveClass('active');
-    
+
     fireEvent.click(button);
     expect(button).toHaveClass('active');
-    
+
     fireEvent.click(button);
     expect(button).not.toHaveClass('active');
   });
@@ -373,7 +387,7 @@ describe('ComponentName', () => {
   it('is accessible', () => {
     render(<ComponentName>Accessible Button</ComponentName>);
     const button = screen.getByRole('button');
-    
+
     expect(button).toBeInTheDocument();
     expect(button).toHaveAccessibleName('Accessible Button');
   });
@@ -381,26 +395,27 @@ describe('ComponentName', () => {
 ```
 
 ### 7. Storybook Stories (if detected)
+
 ```typescript
 // ComponentName.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import ComponentName from './ComponentName';
+import type { Meta, StoryObj } from "@storybook/react";
+import ComponentName from "./ComponentName";
 
 const meta: Meta<typeof ComponentName> = {
-  title: 'Components/ComponentName',
+  title: "Components/ComponentName",
   component: ComponentName,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
     docs: {
       description: {
-        component: 'A reusable component built for Next.js applications.',
+        component: "A reusable component built for Next.js applications.",
       },
     },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    onClick: { action: 'clicked' },
-    className: { control: 'text' },
+    onClick: { action: "clicked" },
+    className: { control: "text" },
   },
 };
 
@@ -409,36 +424,39 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: 'Default Component',
+    children: "Default Component",
   },
 };
 
 export const WithCustomClass: Story = {
   args: {
-    children: 'Custom Styled',
-    className: 'custom-style',
+    children: "Custom Styled",
+    className: "custom-style",
   },
 };
 
 export const Interactive: Story = {
   args: {
-    children: 'Click me',
-    onClick: () => alert('Component clicked!'),
+    children: "Click me",
+    onClick: () => alert("Component clicked!"),
   },
 };
 ```
 
 ### 8. Barrel Export
+
 ```typescript
 // index.ts
-export { default } from './ComponentName';
-export type { ComponentNameProps } from './ComponentName';
+export { default } from "./ComponentName";
+export type { ComponentNameProps } from "./ComponentName";
 ```
 
 ## Framework-Specific Optimizations
 
 ### Tailwind CSS Integration (if detected)
+
 Replace CSS modules with Tailwind classes:
+
 ```typescript
 export const ComponentName: FC<ComponentNameProps> = ({
   children,
@@ -453,12 +471,14 @@ export const ComponentName: FC<ComponentNameProps> = ({
 ```
 
 ### Next.js App Router Optimizations
+
 - **Server Components**: Default for non-interactive components
 - **Client Components**: Explicit 'use client' directive
 - **Metadata**: Include metadata for page components
 - **Loading States**: Implement loading.tsx for async components
 
 ### Accessibility Features
+
 - **ARIA Labels**: Proper labeling for screen readers
 - **Keyboard Navigation**: Tab order and keyboard shortcuts
 - **Focus Management**: Visible focus indicators

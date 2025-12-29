@@ -12,11 +12,13 @@ error: failed to push some refs to 'origin'
 ```
 
 **Causes**:
+
 1. Remote has commits you don't have locally
 2. Force push required (history rewritten)
 3. Branch protection rules
 
 **Solutions**:
+
 ```bash
 # Option 1: Pull and merge first (safest)
 git pull origin main
@@ -58,12 +60,14 @@ fatal: Could not read from remote repository.
 ```
 
 **Causes**:
+
 1. SSH key not added to agent
 2. SSH key not added to GitHub/GitLab
 3. Wrong SSH key
 4. Using HTTPS URL instead of SSH
 
 **Diagnosis**:
+
 ```bash
 # Test SSH connection
 ssh -T git@github.com
@@ -74,6 +78,7 @@ ssh-add -l
 ```
 
 **Solutions**:
+
 ```bash
 # Add SSH key to agent
 eval "$(ssh-agent -s)"
@@ -100,11 +105,13 @@ fatal: Authentication failed for 'https://github.com/...'
 ```
 
 **Causes**:
+
 1. Wrong credentials
 2. Password auth disabled (GitHub)
 3. Token expired
 
 **Solutions**:
+
 ```bash
 # Use Personal Access Token instead of password
 # Generate at: GitHub -> Settings -> Developer settings -> Personal access tokens
@@ -135,6 +142,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 ```
 
 **Resolution Workflow**:
+
 ```bash
 # 1. See conflicting files
 git status
@@ -157,6 +165,7 @@ git commit
 ```
 
 **Tools**:
+
 ```bash
 # Use merge tool
 git mergetool
@@ -167,6 +176,7 @@ git config --global mergetool.vscode.cmd 'code --wait $MERGED'
 ```
 
 **Abort if needed**:
+
 ```bash
 git merge --abort
 # Or
@@ -182,6 +192,7 @@ error: cannot pull with rebase: You have unstaged changes.
 ```
 
 **Solutions**:
+
 ```bash
 # Option 1: Stash changes
 git stash
@@ -209,6 +220,7 @@ error: Your local changes to the following files would be overwritten by checkou
 ```
 
 **Solutions**:
+
 ```bash
 # Option 1: Stash changes
 git stash
@@ -235,11 +247,13 @@ error: pathspec 'branch-name' did not match any file(s) known to git
 ```
 
 **Causes**:
+
 1. Branch doesn't exist
 2. Typo in branch name
 3. Remote branch not fetched
 
 **Solutions**:
+
 ```bash
 # List all branches
 git branch -a
@@ -266,6 +280,7 @@ You are in 'detached HEAD' state.
 **What it means**: You checked out a commit, not a branch.
 
 **Solutions**:
+
 ```bash
 # Go back to branch
 git checkout main
@@ -286,6 +301,7 @@ fatal: Cannot do soft reset with paths.
 ```
 
 **Solution**: Use different command:
+
 ```bash
 # To unstage file
 git restore --staged file.js
@@ -302,6 +318,7 @@ fatal: Failed to resolve 'HEAD~1' as a valid ref.
 ```
 
 **Solution**:
+
 ```bash
 # Stash changes first
 git stash
@@ -320,6 +337,7 @@ No stash entries found.
 ```
 
 **Check stashes**:
+
 ```bash
 # List all stashes
 git stash list
@@ -336,6 +354,7 @@ CONFLICT (content): Merge conflict in file.js
 ```
 
 **Solutions**:
+
 ```bash
 # Resolve conflicts manually (same as merge conflicts)
 # Then either:
@@ -356,6 +375,7 @@ error: cannot rebase: You have unstaged changes.
 ```
 
 **Solution**:
+
 ```bash
 git stash
 git rebase origin/main
@@ -372,6 +392,7 @@ error: could not apply abc1234... commit message
 ```
 
 **Resolution**:
+
 ```bash
 # 1. Fix conflicts in files
 
@@ -399,6 +420,7 @@ fatal: no submodule mapping found in .gitmodules for path 'submodule-path'
 ```
 
 **Solutions**:
+
 ```bash
 # Initialize submodules
 git submodule init
@@ -420,6 +442,7 @@ HEAD detached at abc1234
 ```
 
 **Solution**:
+
 ```bash
 cd submodule-path
 git checkout main  # Or desired branch
@@ -439,6 +462,7 @@ remote: error: File large-file.zip is 150.00 MB; this exceeds GitHub's file size
 ```
 
 **Solutions**:
+
 ```bash
 # Install Git LFS
 brew install git-lfs  # macOS
@@ -463,6 +487,7 @@ Encountered 1 file that should have been a pointer, but wasn't
 ```
 
 **Solutions**:
+
 ```bash
 # Fetch LFS objects
 git lfs fetch --all
@@ -486,6 +511,7 @@ Please tell me who you are.
 ```
 
 **Solution**:
+
 ```bash
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
@@ -502,6 +528,7 @@ fatal: detected dubious ownership in repository
 **Causes**: Repository owned by different user (common in Docker/WSL).
 
 **Solution**:
+
 ```bash
 # Add exception for this repo
 git config --global --add safe.directory /path/to/repo
@@ -514,16 +541,16 @@ git config --global --add safe.directory '*'
 
 ## Quick Reference Table
 
-| Error | Category | Quick Fix |
-|-------|----------|-----------|
-| Push rejected | Push | `git pull --rebase` then push |
-| Permission denied | Auth | Check SSH key: `ssh-add -l` |
-| Auth failed | Auth | Use Personal Access Token |
-| Merge conflict | Merge | Edit file, remove markers, `git add` |
-| Unstaged changes | Checkout | `git stash` first |
-| Pathspec not found | Branch | `git fetch` then checkout |
-| HEAD detached | Branch | `git checkout main` |
-| No stash entries | Stash | Nothing was stashed |
-| Rebase conflict | Rebase | Fix conflict, `git rebase --continue` |
-| File too large | LFS | Use Git LFS for large files |
-| Identity unknown | Config | Set user.email and user.name |
+| Error              | Category | Quick Fix                             |
+| ------------------ | -------- | ------------------------------------- |
+| Push rejected      | Push     | `git pull --rebase` then push         |
+| Permission denied  | Auth     | Check SSH key: `ssh-add -l`           |
+| Auth failed        | Auth     | Use Personal Access Token             |
+| Merge conflict     | Merge    | Edit file, remove markers, `git add`  |
+| Unstaged changes   | Checkout | `git stash` first                     |
+| Pathspec not found | Branch   | `git fetch` then checkout             |
+| HEAD detached      | Branch   | `git checkout main`                   |
+| No stash entries   | Stash    | Nothing was stashed                   |
+| Rebase conflict    | Rebase   | Fix conflict, `git rebase --continue` |
+| File too large     | LFS      | Use Git LFS for large files           |
+| Identity unknown   | Config   | Set user.email and user.name          |

@@ -14,11 +14,13 @@ Arboreto is a computational library for inferring gene regulatory networks (GRNs
 ## Quick Start
 
 Install arboreto:
+
 ```bash
 uv pip install arboreto
 ```
 
 Basic GRN inference:
+
 ```python
 import pandas as pd
 from arboreto.algo import grnboost2
@@ -41,6 +43,7 @@ if __name__ == '__main__':
 ### 1. Basic GRN Inference
 
 For standard GRN inference workflows including:
+
 - Input data preparation (Pandas DataFrame or NumPy array)
 - Running inference with GRNBoost2 or GENIE3
 - Filtering by transcription factors
@@ -49,6 +52,7 @@ For standard GRN inference workflows including:
 **See**: `references/basic_inference.md`
 
 **Use the ready-to-run script**: `scripts/basic_grn_inference.py` for standard inference tasks:
+
 ```bash
 python scripts/basic_grn_inference.py expression_data.tsv output_network.tsv --tf-file tfs.txt --seed 777
 ```
@@ -58,16 +62,19 @@ python scripts/basic_grn_inference.py expression_data.tsv output_network.tsv --t
 Arboreto provides two algorithms:
 
 **GRNBoost2 (Recommended)**:
+
 - Fast gradient boosting-based inference
 - Optimized for large datasets (10k+ observations)
 - Default choice for most analyses
 
 **GENIE3**:
+
 - Random Forest-based inference
 - Original multiple regression approach
 - Use for comparison or validation
 
 Quick comparison:
+
 ```python
 from arboreto.algo import grnboost2, genie3
 
@@ -85,11 +92,13 @@ network_genie3 = genie3(expression_data=matrix)
 Scale inference from local multi-core to cluster environments:
 
 **Local (default)** - Uses all available cores automatically:
+
 ```python
 network = grnboost2(expression_data=matrix)
 ```
 
 **Custom local client** - Control resources:
+
 ```python
 from distributed import LocalCluster, Client
 
@@ -103,6 +112,7 @@ local_cluster.close()
 ```
 
 **Cluster computing** - Connect to remote Dask scheduler:
+
 ```python
 from distributed import Client
 
@@ -123,6 +133,7 @@ uv pip install arboreto
 ## Common Use Cases
 
 ### Single-Cell RNA-seq Analysis
+
 ```python
 import pandas as pd
 from arboreto.algo import grnboost2
@@ -140,6 +151,7 @@ if __name__ == '__main__':
 ```
 
 ### Bulk RNA-seq with TF Filtering
+
 ```python
 from arboreto.utils import load_tf_names
 from arboreto.algo import grnboost2
@@ -160,6 +172,7 @@ if __name__ == '__main__':
 ```
 
 ### Comparative Analysis (Multiple Conditions)
+
 ```python
 from arboreto.algo import grnboost2
 
@@ -177,13 +190,14 @@ if __name__ == '__main__':
 
 Arboreto returns a DataFrame with regulatory links:
 
-| Column | Description |
-|--------|-------------|
-| `TF` | Transcription factor (regulator) |
-| `target` | Target gene |
+| Column       | Description                                     |
+| ------------ | ----------------------------------------------- |
+| `TF`         | Transcription factor (regulator)                |
+| `target`     | Target gene                                     |
 | `importance` | Regulatory importance score (higher = stronger) |
 
 **Filtering strategy**:
+
 - Top N links per target gene
 - Importance threshold (e.g., > 0.5)
 - Statistical significance testing (permutation tests)
@@ -204,11 +218,13 @@ network = grnboost2(expression_data=sc_data, tf_names=tf_list)
 ## Reproducibility
 
 Always set a seed for reproducible results:
+
 ```python
 network = grnboost2(expression_data=matrix, seed=777)
 ```
 
 Run multiple seeds for robustness analysis:
+
 ```python
 from distributed import LocalCluster, Client
 

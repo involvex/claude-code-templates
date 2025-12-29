@@ -18,13 +18,15 @@ Plan and organize sprint: $ARGUMENTS
 ## Instructions
 
 1. **Check Linear Integration**
-First, verify if the Linear MCP server is connected:
+   First, verify if the Linear MCP server is connected:
+
 - If connected: Proceed with full integration
 - If not connected: Ask user to install Linear MCP server from https://github.com/modelcontextprotocol/servers
 - Fallback: Use GitHub issues and manual input
 
 2. **Gather Sprint Context**
-Collect the following information:
+   Collect the following information:
+
 - Sprint duration (e.g., 2 weeks)
 - Sprint start date
 - Team members involved
@@ -34,6 +36,7 @@ Collect the following information:
 3. **Analyze Current State**
 
 #### With Linear Connected:
+
 ```
 1. Fetch all backlog items from Linear
 2. Get in-progress tasks and their status
@@ -43,6 +46,7 @@ Collect the following information:
 ```
 
 #### Without Linear (Fallback):
+
 ```
 1. Analyze GitHub issues by labels and milestones
 2. Review open pull requests and their status
@@ -58,11 +62,13 @@ Generate a comprehensive sprint plan including:
 # Sprint Planning Report - [Sprint Name]
 
 ## Sprint Overview
+
 - Duration: [Start Date] to [End Date]
 - Team Members: [List]
 - Sprint Goal: [Description]
 
 ## Capacity Analysis
+
 - Total Available Hours: [Calculation]
 - Previous Sprint Velocity: [Points/Hours]
 - Recommended Capacity: [80-85% of total]
@@ -70,6 +76,7 @@ Generate a comprehensive sprint plan including:
 ## Proposed Sprint Backlog
 
 ### High Priority Tasks
+
 1. [Task ID] - [Title]
    - Estimate: [Points/Hours]
    - Assignee: [Name]
@@ -77,22 +84,27 @@ Generate a comprehensive sprint plan including:
    - Acceptance Criteria: [Details]
 
 ### Medium Priority Tasks
+
 [Similar format]
 
 ### Nice-to-Have Tasks
+
 [Similar format]
 
 ## Risk Assessment
+
 - Technical Risks: [List]
 - Resource Risks: [List]
 - Dependency Risks: [List]
 
 ## Recommendations
+
 1. [Specific recommendations based on analysis]
 2. [Resource allocation suggestions]
 3. [Risk mitigation strategies]
 
 ## Metrics to Track
+
 - Velocity
 - Burndown rate
 - Blocked time
@@ -102,6 +114,7 @@ Generate a comprehensive sprint plan including:
 5. **Interactive Planning Session**
 
 Offer to help with:
+
 1. Task breakdown and estimation
 2. Dependency mapping
 3. Resource balancing
@@ -111,6 +124,7 @@ Offer to help with:
 ## Error Handling
 
 ### Linear Connection Issues
+
 ```
 "I notice the Linear MCP server is not connected. To get the most value from sprint planning:
 
@@ -124,6 +138,7 @@ For now, I'll proceed using GitHub data and manual input."
 ```
 
 ### Missing Data
+
 ```
 "I need more information to create an effective sprint plan:
 - [List specific missing data]
@@ -133,9 +148,11 @@ For now, I'll proceed using GitHub data and manual input."
 ## Example Usage
 
 ### User Input:
+
 "Help me plan our next 2-week sprint starting Monday"
 
 ### Assistant Response:
+
 ```
 I'll help you plan your sprint. Let me first check your Linear integration...
 
@@ -182,6 +199,7 @@ Would you like me to:
 ## Output Formats
 
 Offer multiple output options:
+
 1. Markdown report (default)
 2. CSV for spreadsheet import
 3. JSON for automation tools

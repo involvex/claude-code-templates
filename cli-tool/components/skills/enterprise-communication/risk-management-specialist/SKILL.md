@@ -10,9 +10,11 @@ Expert-level medical device risk management implementing ISO 14971 throughout th
 ## Core Risk Management Competencies
 
 ### 1. Risk Management Process Implementation (ISO 14971)
+
 Establish and maintain comprehensive risk management processes integrated throughout the product development and lifecycle.
 
 **Risk Management Process Framework:**
+
 ```
 ISO 14971 RISK MANAGEMENT PROCESS
 ├── Risk Management Planning
@@ -43,9 +45,11 @@ ISO 14971 RISK MANAGEMENT PROCESS
 ```
 
 ### 2. Risk Analysis and Hazard Identification
+
 Conduct systematic risk analysis identifying all potential hazards and hazardous situations throughout device lifecycle.
 
 **Risk Analysis Methodology:**
+
 1. **Intended Use and Context Analysis**
    - Medical indication and patient population
    - Use environment and conditions
@@ -65,15 +69,18 @@ Conduct systematic risk analysis identifying all potential hazards and hazardous
    - Multiple fault condition evaluation
 
 ### 3. Risk Estimation and Evaluation
+
 Apply systematic risk estimation methodologies ensuring consistent and defensible risk assessments.
 
 **Risk Estimation Framework:**
+
 - **Probability Assessment**: Statistical data, literature, expert judgment
 - **Severity Assessment**: Clinical outcome evaluation and classification
 - **Risk Level Determination**: Risk matrix application and documentation
 - **Risk Acceptability Evaluation**: Criteria application and justification
 
 **Risk Evaluation Decision Tree:**
+
 ```
 RISK EVALUATION PROCESS
 ├── Is Risk Acceptable? (per criteria)
@@ -90,9 +97,11 @@ RISK EVALUATION PROCESS
 ```
 
 ### 4. Risk Control Implementation and Verification
+
 Implement comprehensive risk control measures following the hierarchy of risk control per ISO 14971.
 
 **Risk Control Hierarchy:**
+
 1. **Inherent Safety by Design**
    - Design modifications eliminating hazards
    - Fail-safe design implementation
@@ -112,6 +121,7 @@ Implement comprehensive risk control measures following the hierarchy of risk co
    - Contraindications and precautions
 
 **Risk Control Verification:**
+
 - Risk control effectiveness testing and validation
 - Verification protocol development and execution
 - Test results analysis and documentation
@@ -120,18 +130,22 @@ Implement comprehensive risk control measures following the hierarchy of risk co
 ## Advanced Risk Management Applications
 
 ### Software Risk Management (IEC 62304 Integration)
+
 Integrate software lifecycle processes with risk management ensuring comprehensive software safety assessment.
 
 **Software Risk Management Process:**
+
 - **Software Safety Classification**: Class A, B, or C determination
 - **Software Hazard Analysis**: Software contribution to hazardous situations
 - **Software Risk Control**: Architecture and design safety measures
 - **Software Risk Management File**: Integration with overall risk management file
 
 ### Cybersecurity Risk Management
+
 Implement cybersecurity risk management per FDA guidance and emerging international standards.
 
 **Cybersecurity Risk Framework:**
+
 1. **Cybersecurity Threat Modeling**
    - Asset identification and vulnerability assessment
    - Threat source analysis and attack vector evaluation
@@ -145,9 +159,11 @@ Implement cybersecurity risk management per FDA guidance and emerging internatio
    - **Compensating Controls**: Additional safeguards and mitigations
 
 ### Human Factors and Use Error Risk Management
+
 Integrate human factors engineering with risk management addressing use-related risks.
 
 **Use Error Risk Management:**
+
 - **Use-Related Risk Analysis**: Task analysis and use scenario evaluation
 - **Use Error Identification**: Critical task and use error analysis
 - **Use Error Risk Estimation**: Probability and severity assessment
@@ -156,9 +172,11 @@ Integrate human factors engineering with risk management addressing use-related 
 ## Risk Management File Management
 
 ### Risk Management Documentation
+
 Maintain comprehensive risk management files ensuring traceability and regulatory compliance.
 
 **Risk Management File Structure:**
+
 - **Risk Management Plan**: Objectives, scope, criteria, and responsibilities
 - **Risk Analysis Records**: Hazard identification, risk estimation, evaluation
 - **Risk Control Records**: Control measures, verification, validation results
@@ -166,9 +184,11 @@ Maintain comprehensive risk management files ensuring traceability and regulator
 - **Risk Management Report**: Summary of risk management activities and conclusions
 
 ### Risk Management File Maintenance
+
 Ensure risk management files remain current throughout product lifecycle.
 
 **File Maintenance Protocol:**
+
 - **Design Change Impact Assessment**: Risk analysis updates for design changes
 - **Post-Market Information Integration**: Surveillance data incorporation
 - **Risk Control Effectiveness Review**: Ongoing effectiveness verification
@@ -177,27 +197,33 @@ Ensure risk management files remain current throughout product lifecycle.
 ## Cross-functional Integration
 
 ### Quality Management System Integration
+
 Ensure seamless integration of risk management with quality management system processes.
 
 **QMS-Risk Management Interface:**
+
 - **Design Controls**: Risk management integration in design and development
 - **Document Control**: Risk management file configuration management
 - **CAPA Integration**: Risk assessment for corrective and preventive actions
 - **Management Review**: Risk management performance reporting
 
 ### Regulatory Submission Integration
+
 Coordinate risk management documentation with regulatory submission requirements.
 
 **Regulatory Integration Points:**
+
 - **FDA Submissions**: Risk analysis and risk management summaries
 - **EU MDR Technical Documentation**: Risk management file integration
 - **ISO 13485 Certification**: Risk management process compliance
 - **Post-Market Requirements**: Risk management in post-market surveillance
 
 ### Clinical and Post-Market Integration
+
 Integrate risk management with clinical evaluation and post-market surveillance activities.
 
 **Clinical-Risk Interface:**
+
 - **Clinical Risk Assessment**: Clinical data integration with risk analysis
 - **Clinical Investigation**: Risk management in clinical study design
 - **Post-Market Surveillance**: Risk signal detection and evaluation
@@ -206,12 +232,14 @@ Integrate risk management with clinical evaluation and post-market surveillance 
 ## Resources
 
 ### scripts/
+
 - `risk-assessment-automation.py`: Automated risk analysis workflow and documentation
 - `risk-matrix-calculator.py`: Risk estimation and evaluation automation
 - `risk-control-tracker.py`: Risk control implementation and verification tracking
 - `post-production-risk-monitor.py`: Post-market risk information analysis
 
 ### references/
+
 - `iso14971-implementation-guide.md`: Complete ISO 14971 implementation framework
 - `software-risk-management.md`: IEC 62304 integration with risk management
 - `cybersecurity-risk-framework.md`: Medical device cybersecurity risk management
@@ -219,6 +247,7 @@ Integrate risk management with clinical evaluation and post-market surveillance 
 - `risk-acceptability-criteria.md`: Risk acceptability frameworks and examples
 
 ### assets/
+
 - `risk-templates/`: Risk management plan, risk analysis, and risk control templates
 - `risk-matrices/`: Standardized risk estimation and evaluation matrices
 - `hazard-libraries/`: Medical device hazard identification libraries

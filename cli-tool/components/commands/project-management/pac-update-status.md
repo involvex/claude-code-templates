@@ -19,6 +19,7 @@ Update ticket status and track progress in Product as Code workflow: **$ARGUMENT
 Update PAC ticket status and track development progress:
 
 **Arguments**:
+
 - --ticket <ticket-id>: Ticket ID to update (or select interactively)
 - --status <status>: New status (backlog/in-progress/review/blocked/done/cancelled)
 - --assignee <assignee>: Update assignee
@@ -26,6 +27,7 @@ Update PAC ticket status and track development progress:
 - --epic <epic-id>: Filter tickets by epic for selection
 
 **Status Update Process**:
+
 1. Validate PAC environment and locate ticket
 2. Load current ticket state and validate status transitions
 3. Update ticket YAML with new status and timestamp

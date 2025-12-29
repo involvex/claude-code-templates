@@ -26,12 +26,14 @@ Invoke this skill when tasks involve:
 ### 1. Graph Creation and Manipulation
 
 NetworkX supports four main graph types:
+
 - **Graph**: Undirected graphs with single edges
 - **DiGraph**: Directed graphs with one-way connections
 - **MultiGraph**: Undirected graphs allowing multiple edges between nodes
 - **MultiDiGraph**: Directed graphs with multiple edges
 
 Create graphs by:
+
 ```python
 import networkx as nx
 
@@ -56,6 +58,7 @@ G.add_edge(1, 4, weight=0.8, relation='interacts')
 NetworkX provides extensive algorithms for network analysis:
 
 **Shortest Paths**:
+
 ```python
 # Find shortest path
 path = nx.shortest_path(G, source=1, target=5)
@@ -63,6 +66,7 @@ length = nx.shortest_path_length(G, source=1, target=5, weight='weight')
 ```
 
 **Centrality Measures**:
+
 ```python
 # Degree centrality
 degree_cent = nx.degree_centrality(G)
@@ -75,6 +79,7 @@ pagerank = nx.pagerank(G)
 ```
 
 **Community Detection**:
+
 ```python
 from networkx.algorithms import community
 
@@ -83,6 +88,7 @@ communities = community.greedy_modularity_communities(G)
 ```
 
 **Connectivity**:
+
 ```python
 # Check connectivity
 is_connected = nx.is_connected(G)
@@ -98,6 +104,7 @@ components = list(nx.connected_components(G))
 Create synthetic networks for testing, simulation, or modeling:
 
 **Classic Graphs**:
+
 ```python
 # Complete graph
 G = nx.complete_graph(n=10)
@@ -111,6 +118,7 @@ G = nx.petersen_graph()
 ```
 
 **Random Networks**:
+
 ```python
 # Erdős-Rényi random graph
 G = nx.erdos_renyi_graph(n=100, p=0.1, seed=42)
@@ -123,6 +131,7 @@ G = nx.watts_strogatz_graph(n=100, k=6, p=0.1, seed=42)
 ```
 
 **Structured Networks**:
+
 ```python
 # Grid graph
 G = nx.grid_2d_graph(m=5, n=7)
@@ -138,6 +147,7 @@ G = nx.random_tree(n=100, seed=42)
 NetworkX supports numerous file formats and data sources:
 
 **File Formats**:
+
 ```python
 # Edge list
 G = nx.read_edgelist('graph.edgelist')
@@ -157,6 +167,7 @@ G = nx.node_link_graph(data)
 ```
 
 **Pandas Integration**:
+
 ```python
 import pandas as pd
 
@@ -169,6 +180,7 @@ df = nx.to_pandas_edgelist(G)
 ```
 
 **Matrix Formats**:
+
 ```python
 import numpy as np
 
@@ -188,6 +200,7 @@ G = nx.from_scipy_sparse_array(A)
 Create clear and informative network visualizations:
 
 **Basic Visualization**:
+
 ```python
 import matplotlib.pyplot as plt
 
@@ -202,6 +215,7 @@ plt.show()
 ```
 
 **Customization**:
+
 ```python
 # Color by degree
 node_colors = [G.degree(n) for n in G.nodes()]
@@ -218,6 +232,7 @@ nx.draw(G, width=edge_widths)
 ```
 
 **Layout Algorithms**:
+
 ```python
 # Spring layout (force-directed)
 pos = nx.spring_layout(G, seed=42)
@@ -233,6 +248,7 @@ pos = nx.spectral_layout(G)
 ```
 
 **Publication Quality**:
+
 ```python
 plt.figure(figsize=(12, 8))
 pos = nx.spring_layout(G, seed=42)
@@ -252,6 +268,7 @@ plt.savefig('network.pdf', bbox_inches='tight')  # Vector format
 ### Installation
 
 Ensure NetworkX is installed:
+
 ```python
 # Check if installed
 import networkx as nx
@@ -267,6 +284,7 @@ print(nx.__version__)
 Most NetworkX tasks follow this pattern:
 
 1. **Create or Load Graph**:
+
    ```python
    # From scratch
    G = nx.Graph()
@@ -277,6 +295,7 @@ Most NetworkX tasks follow this pattern:
    ```
 
 2. **Examine Structure**:
+
    ```python
    print(f"Nodes: {G.number_of_nodes()}")
    print(f"Edges: {G.number_of_edges()}")
@@ -285,6 +304,7 @@ Most NetworkX tasks follow this pattern:
    ```
 
 3. **Analyze**:
+
    ```python
    # Compute metrics
    degree_cent = nx.degree_centrality(G)
@@ -298,6 +318,7 @@ Most NetworkX tasks follow this pattern:
    ```
 
 4. **Visualize**:
+
    ```python
    pos = nx.spring_layout(G, seed=42)
    nx.draw(G, pos=pos, with_labels=True)
@@ -305,6 +326,7 @@ Most NetworkX tasks follow this pattern:
    ```
 
 5. **Export Results**:
+
    ```python
    # Save graph
    nx.write_graphml(G, 'analyzed_network.graphml')
@@ -322,17 +344,20 @@ Most NetworkX tasks follow this pattern:
 **Floating Point Precision**: When graphs contain floating-point numbers, all results are inherently approximate due to precision limitations. This can affect algorithm outcomes, particularly in minimum/maximum computations.
 
 **Memory and Performance**: Each time a script runs, graph data must be loaded into memory. For large networks:
+
 - Use appropriate data structures (sparse matrices for large sparse graphs)
 - Consider loading only necessary subgraphs
 - Use efficient file formats (pickle for Python objects, compressed formats)
 - Leverage approximate algorithms for very large networks (e.g., `k` parameter in centrality calculations)
 
 **Node and Edge Types**:
+
 - Nodes can be any hashable Python object (numbers, strings, tuples, custom objects)
 - Use meaningful identifiers for clarity
 - When removing nodes, all incident edges are automatically removed
 
 **Random Seeds**: Always set random seeds for reproducibility in random graph generation and force-directed layouts:
+
 ```python
 G = nx.erdos_renyi_graph(n=100, p=0.1, seed=42)
 pos = nx.spring_layout(G, seed=42)
@@ -341,6 +366,7 @@ pos = nx.spring_layout(G, seed=42)
 ## Quick Reference
 
 ### Basic Operations
+
 ```python
 # Create
 G = nx.Graph()
@@ -364,6 +390,7 @@ G.clear()
 ```
 
 ### Essential Algorithms
+
 ```python
 # Paths
 nx.shortest_path(G, source, target)
@@ -388,6 +415,7 @@ community.greedy_modularity_communities(G)
 ```
 
 ### File I/O Quick Reference
+
 ```python
 # Read
 nx.read_edgelist('file.txt')
@@ -409,18 +437,23 @@ nx.to_pandas_edgelist(G)
 This skill includes comprehensive reference documentation:
 
 ### references/graph-basics.md
+
 Detailed guide on graph types, creating and modifying graphs, adding nodes and edges, managing attributes, examining structure, and working with subgraphs.
 
 ### references/algorithms.md
+
 Complete coverage of NetworkX algorithms including shortest paths, centrality measures, connectivity, clustering, community detection, flow algorithms, tree algorithms, matching, coloring, isomorphism, and graph traversal.
 
 ### references/generators.md
+
 Comprehensive documentation on graph generators including classic graphs, random models (Erdős-Rényi, Barabási-Albert, Watts-Strogatz), lattices, trees, social network models, and specialized generators.
 
 ### references/io.md
+
 Complete guide to reading and writing graphs in various formats: edge lists, adjacency lists, GraphML, GML, JSON, CSV, Pandas DataFrames, NumPy arrays, SciPy sparse matrices, database integration, and format selection guidelines.
 
 ### references/visualization.md
+
 Extensive documentation on visualization techniques including layout algorithms, customizing node and edge appearance, labels, interactive visualizations with Plotly and PyVis, 3D networks, bipartite layouts, and creating publication-quality figures.
 
 ## Additional Resources

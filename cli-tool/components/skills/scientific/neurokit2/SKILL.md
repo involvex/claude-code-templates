@@ -12,6 +12,7 @@ NeuroKit2 is a comprehensive Python toolkit for processing and analyzing physiol
 ## When to Use This Skill
 
 Apply this skill when working with:
+
 - **Cardiac signals**: ECG, PPG, heart rate variability (HRV), pulse analysis
 - **Brain signals**: EEG frequency bands, microstates, complexity, source localization
 - **Autonomic signals**: Electrodermal activity (EDA/GSR), skin conductance responses (SCR)
@@ -28,12 +29,14 @@ Apply this skill when working with:
 Process electrocardiogram and photoplethysmography signals for cardiovascular analysis. See `references/ecg_cardiac.md` for detailed workflows.
 
 **Primary workflows:**
+
 - ECG processing pipeline: cleaning → R-peak detection → delineation → quality assessment
 - HRV analysis across time, frequency, and nonlinear domains
 - PPG pulse analysis and quality assessment
 - ECG-derived respiration extraction
 
 **Key functions:**
+
 ```python
 import neurokit2 as nk
 
@@ -52,12 +55,14 @@ hrv = nk.hrv(peaks, sampling_rate=1000)  # Time, frequency, nonlinear domains
 Compute comprehensive HRV metrics from cardiac signals. See `references/hrv.md` for all indices and domain-specific analysis.
 
 **Supported domains:**
+
 - **Time domain**: SDNN, RMSSD, pNN50, SDSD, and derived metrics
 - **Frequency domain**: ULF, VLF, LF, HF, VHF power and ratios
 - **Nonlinear domain**: Poincaré plot (SD1/SD2), entropy measures, fractal dimensions
 - **Specialized**: Respiratory sinus arrhythmia (RSA), recurrence quantification analysis (RQA)
 
 **Key functions:**
+
 ```python
 # All HRV indices at once
 hrv_indices = nk.hrv(peaks, sampling_rate=1000)
@@ -74,6 +79,7 @@ hrv_rsa = nk.hrv_rsa(peaks, rsp_signal, sampling_rate=1000)
 Analyze electroencephalography signals for frequency power, complexity, and microstate patterns. See `references/eeg.md` for detailed workflows and MNE integration.
 
 **Primary capabilities:**
+
 - Frequency band power analysis (Delta, Theta, Alpha, Beta, Gamma)
 - Channel quality assessment and re-referencing
 - Source localization (sLORETA, MNE)
@@ -81,6 +87,7 @@ Analyze electroencephalography signals for frequency power, complexity, and micr
 - Global field power and dissimilarity measures
 
 **Key functions:**
+
 ```python
 # Power analysis across frequency bands
 power = nk.eeg_power(eeg_data, sampling_rate=250, channels=['Fz', 'Cz', 'Pz'])
@@ -96,12 +103,14 @@ dynamic = nk.microstates_dynamic(microstates)
 Process skin conductance signals for autonomic nervous system assessment. See `references/eda.md` for detailed workflows.
 
 **Primary workflows:**
+
 - Signal decomposition into tonic and phasic components
 - Skin conductance response (SCR) detection and analysis
 - Sympathetic nervous system index calculation
 - Autocorrelation and changepoint detection
 
 **Key functions:**
+
 ```python
 # Complete EDA processing
 signals, info = nk.eda_process(eda_signal, sampling_rate=100)
@@ -118,12 +127,14 @@ sympathetic = nk.eda_sympathetic(signals, sampling_rate=100)
 Analyze breathing patterns and respiratory variability. See `references/rsp.md` for detailed workflows.
 
 **Primary capabilities:**
+
 - Respiratory rate calculation and variability analysis
 - Breathing amplitude and symmetry assessment
 - Respiratory volume per time (fMRI applications)
 - Respiratory amplitude variability (RAV)
 
 **Key functions:**
+
 ```python
 # Complete RSP processing
 signals, info = nk.rsp_process(rsp_signal, sampling_rate=100)
@@ -140,6 +151,7 @@ rvt = nk.rsp_rvt(signals, sampling_rate=100)
 Process muscle activity signals for activation detection and amplitude analysis. See `references/emg.md` for workflows.
 
 **Key functions:**
+
 ```python
 # Complete EMG processing
 signals, info = nk.emg_process(emg_signal, sampling_rate=1000)
@@ -153,6 +165,7 @@ activation = nk.emg_activation(signals, sampling_rate=1000, method='threshold')
 Analyze eye movement and blink patterns. See `references/eog.md` for workflows.
 
 **Key functions:**
+
 ```python
 # Complete EOG processing
 signals, info = nk.eog_process(eog_signal, sampling_rate=500)
@@ -166,6 +179,7 @@ features = nk.eog_features(signals, sampling_rate=500)
 Apply filtering, decomposition, and transformation operations to any signal. See `references/signal_processing.md` for comprehensive utilities.
 
 **Key operations:**
+
 - Filtering (lowpass, highpass, bandpass, bandstop)
 - Decomposition (EMD, SSA, wavelet)
 - Peak detection and correction
@@ -174,6 +188,7 @@ Apply filtering, decomposition, and transformation operations to any signal. See
 - Autocorrelation and synchrony analysis
 
 **Key functions:**
+
 ```python
 # Filtering
 filtered = nk.signal_filter(signal, sampling_rate=1000, lowcut=0.5, highcut=40)
@@ -190,6 +205,7 @@ psd = nk.signal_psd(signal, sampling_rate=1000)
 Compute nonlinear dynamics, fractal dimensions, and information-theoretic measures. See `references/complexity.md` for all available metrics.
 
 **Available measures:**
+
 - **Entropy**: Shannon, approximate, sample, permutation, spectral, fuzzy, multiscale
 - **Fractal dimensions**: Katz, Higuchi, Petrosian, Sevcik, correlation dimension
 - **Nonlinear dynamics**: Lyapunov exponents, Lempel-Ziv complexity, recurrence quantification
@@ -197,6 +213,7 @@ Compute nonlinear dynamics, fractal dimensions, and information-theoretic measur
 - **Information theory**: Fisher information, mutual information
 
 **Key functions:**
+
 ```python
 # Multiple complexity metrics at once
 complexity_indices = nk.complexity(signal, sampling_rate=1000)
@@ -212,12 +229,14 @@ lyap = nk.complexity_lyapunov(signal, sampling_rate=1000)
 Create epochs around stimulus events and analyze physiological responses. See `references/epochs_events.md` for workflows.
 
 **Primary capabilities:**
+
 - Epoch creation from event markers
 - Event-related averaging and visualization
 - Baseline correction options
 - Grand average computation with confidence intervals
 
 **Key functions:**
+
 ```python
 # Find events in signal
 events = nk.events_find(trigger_signal, threshold=0.5)
@@ -235,6 +254,7 @@ grand_average = nk.epochs_average(epochs)
 Process multiple physiological signals simultaneously with unified output. See `references/bio_module.md` for integration workflows.
 
 **Key functions:**
+
 ```python
 # Process multiple signals at once
 bio_signals, bio_info = nk.bio_process(
@@ -254,11 +274,13 @@ bio_analysis = nk.bio_analyze(bio_signals, sampling_rate=1000)
 NeuroKit2 automatically selects between two analysis modes based on data duration:
 
 **Event-related analysis** (< 10 seconds):
+
 - Analyzes stimulus-locked responses
 - Epoch-based segmentation
 - Suitable for experimental paradigms with discrete trials
 
 **Interval-related analysis** (≥ 10 seconds):
+
 - Characterizes physiological patterns over extended periods
 - Resting state or continuous activities
 - Suitable for baseline measurements and long-term monitoring
@@ -272,6 +294,7 @@ uv pip install neurokit2
 ```
 
 For development version:
+
 ```bash
 uv pip install https://github.com/neuropsychology/NeuroKit/zipball/dev
 ```
@@ -279,6 +302,7 @@ uv pip install https://github.com/neuropsychology/NeuroKit/zipball/dev
 ## Common Workflows
 
 ### Quick Start: ECG Analysis
+
 ```python
 import neurokit2 as nk
 
@@ -296,6 +320,7 @@ nk.ecg_plot(signals, info)
 ```
 
 ### Multi-Modal Analysis
+
 ```python
 # Process multiple signals
 bio_signals, bio_info = nk.bio_process(
@@ -310,6 +335,7 @@ results = nk.bio_analyze(bio_signals, sampling_rate=1000)
 ```
 
 ### Event-Related Potential
+
 ```python
 # Find events
 events = nk.events_find(trigger_channel, threshold=0.5)

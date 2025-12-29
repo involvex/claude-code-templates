@@ -15,27 +15,35 @@ Automatically creates well-structured commits when tasks move to QA or completio
 ## Basic Commands
 
 ### Commit Current Task
+
 ```
 /orchestration/commit
 ```
+
 Commits changes for the task currently in progress.
 
 ### Commit Specific Task
+
 ```
 /orchestration/commit TASK-003
 ```
+
 Commits changes related to a specific task.
 
 ### Batch Commit
+
 ```
 /orchestration/commit --batch
 ```
+
 Groups related completed tasks into logical commits.
 
 ## Commit Message Generation
 
 ### Automatic Format
+
 Based on task type and content:
+
 ```
 feat(auth): implement JWT token validation
 
@@ -49,6 +57,7 @@ Time: 4.5 hours
 ```
 
 ### Type Mapping
+
 ```
 Task Type     -> Commit Type
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -64,16 +73,21 @@ security      -> fix:        (with security note)
 ## Workflow Integration
 
 ### Auto-commit on Status Change
+
 ```
 /orchestration/move TASK-003 qa --auto-commit
 ```
+
 Automatically commits when moving to QA status.
 
 ### Pre-commit Validation
+
 ```
 /orchestration/commit --validate
 ```
+
 Checks:
+
 - All tests pass
 - No linting errors
 - Task requirements met
@@ -82,25 +96,33 @@ Checks:
 ## Options
 
 ### Custom Message
+
 ```
 /orchestration/commit TASK-003 --message "Custom commit message"
 ```
+
 Override automatic message generation.
 
 ### Scope Detection
+
 ```
 /orchestration/commit --detect-scope
 ```
+
 Automatically detects scope from changed files:
+
 - `auth` for auth-related files
 - `api` for API changes
 - `ui` for frontend changes
 
 ### Breaking Changes
+
 ```
 /orchestration/commit --breaking
 ```
+
 Adds breaking change indicator:
+
 ```
 feat(api)!: restructure authentication endpoints
 
@@ -110,26 +132,33 @@ BREAKING CHANGE: Auth endpoints moved from /auth to /api/v2/auth
 ## Batch Operations
 
 ### Commit by Feature
+
 ```
 /orchestration/commit --feature authentication
 ```
+
 Groups all completed auth tasks into one commit.
 
 ### Commit by Status
+
 ```
 /orchestration/commit --status qa
 ```
+
 Commits all tasks currently in QA.
 
 ### Smart Grouping
+
 ```
 /orchestration/commit --smart-group
 ```
+
 Intelligently groups related tasks:
+
 ```
 Feature Group: Authentication (3 tasks)
 - TASK-001: Database schema
-- TASK-003: JWT implementation  
+- TASK-003: JWT implementation
 - TASK-005: Login endpoint
 
 Suggested commit: feat(auth): implement complete authentication system
@@ -138,16 +167,21 @@ Suggested commit: feat(auth): implement complete authentication system
 ## Worktree Support
 
 ### Worktree-Aware Commits
+
 ```
 /orchestration/commit --worktree
 ```
+
 Detects current worktree and commits only relevant tasks.
 
 ### Cross-Worktree Status
+
 ```
 /orchestration/commit --all-worktrees
 ```
+
 Shows commit status across all worktrees:
+
 ```
 Worktree Status:
 - feature/auth: 2 tasks ready to commit
@@ -158,6 +192,7 @@ Worktree Status:
 ## Validation Features
 
 ### Pre-commit Checks
+
 ```
 ## Pre-commit Validation
 ✓ All tests passing
@@ -169,6 +204,7 @@ Proceed with commit? [y/n]
 ```
 
 ### Task Alignment
+
 ```
 ## Task Alignment Check
 Changed files:
@@ -182,10 +218,13 @@ Warning: Changes outside task scope detected
 ## Integration Features
 
 ### Link to Task
+
 ```
 /orchestration/commit --link-task
 ```
+
 Adds task URL/reference to commit:
+
 ```
 feat(auth): implement JWT validation
 
@@ -194,10 +233,13 @@ Link: http://orchestration/03_15_2024/auth_system/tasks/TASK-003
 ```
 
 ### Update Status Tracker
+
 ```
 /orchestration/commit --update-tracker
 ```
+
 Updates TASK-STATUS-TRACKER.yaml with commit info:
+
 ```yaml
 git_tracking:
   TASK-003:
@@ -209,6 +251,7 @@ git_tracking:
 ## Examples
 
 ### Example 1: Simple Task Commit
+
 ```
 /orchestration/commit TASK-003
 
@@ -223,6 +266,7 @@ Task: TASK-003 (4.5 hours)
 ```
 
 ### Example 2: Batch Feature Commit
+
 ```
 /orchestration/commit --feature authentication --batch
 
@@ -237,6 +281,7 @@ Tasks: TASK-001, TASK-003, TASK-005 (12 hours total)
 ```
 
 ### Example 3: Fix with Test
+
 ```
 /orchestration/commit TASK-007
 
@@ -254,6 +299,7 @@ Task: TASK-007 (2 hours)
 ## Commit Templates
 
 ### Feature Template
+
 ```
 feat(<scope>): <task-title>
 
@@ -266,6 +312,7 @@ Status: <status-transition>
 ```
 
 ### Fix Template
+
 ```
 fix(<scope>): <issue-description>
 
@@ -288,7 +335,9 @@ Task: <task-id>
 ## Configuration
 
 ### Auto-commit Rules
+
 Set in orchestration config:
+
 ```yaml
 auto_commit:
   on_qa: true

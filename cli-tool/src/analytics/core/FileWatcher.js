@@ -1,6 +1,6 @@
-const chalk = require('chalk');
-const chokidar = require('chokidar');
-const path = require('path');
+const chalk = require("chalk");
+const chokidar = require("chokidar");
+const path = require("path");
 
 /**
  * FileWatcher - Handles file system watching and automatic data refresh
@@ -22,8 +22,16 @@ class FileWatcher {
    * @param {Function} processRefreshCallback - Callback to refresh process data
    * @param {Object} dataCache - DataCache instance for invalidation
    */
-  setupFileWatchers(claudeDir, dataRefreshCallback, processRefreshCallback, dataCache = null, conversationChangeCallback = null) {
-    console.log(chalk.blue('👀 Setting up file watchers for real-time updates...'));
+  setupFileWatchers(
+    claudeDir,
+    dataRefreshCallback,
+    processRefreshCallback,
+    dataCache = null,
+    conversationChangeCallback = null,
+  ) {
+    console.log(
+      chalk.blue("👀 Setting up file watchers for real-time updates..."),
+    );
 
     this.claudeDir = claudeDir;
     this.dataRefreshCallback = dataRefreshCallback;
@@ -34,7 +42,7 @@ class FileWatcher {
     this.setupConversationWatcher();
     this.setupProjectWatcher();
     this.setupPeriodicRefresh();
-    
+
     this.isActive = true;
   }
 
@@ -42,35 +50,35 @@ class FileWatcher {
    * Setup watcher for conversation files (.jsonl)
    */
   setupConversationWatcher() {
-    const conversationWatcher = chokidar.watch([
-      path.join(this.claudeDir, '**/*.jsonl')
-    ], {
-      persistent: true,
-      ignoreInitial: true,
-    });
+    const conversationWatcher = chokidar.watch(
+      [path.join(this.claudeDir, "**/*.jsonl")],
+      {
+        persistent: true,
+        ignoreInitial: true,
+      },
+    );
 
-    conversationWatcher.on('change', async (filePath) => {
-      
+    conversationWatcher.on("change", async (filePath) => {
       // Extract conversation ID from file path
       const conversationId = this.extractConversationId(filePath);
-      
+
       // Enhanced file activity detection for typing
       await this.handleFileActivity(conversationId, filePath);
-      
+
       // Invalidate cache for the changed file
       if (this.dataCache && filePath) {
         this.dataCache.invalidateFile(filePath);
       }
-      
+
       // Notify specific conversation change if callback exists
       if (this.conversationChangeCallback && conversationId) {
         await this.conversationChangeCallback(conversationId, filePath);
       }
-      
+
       await this.triggerDataRefresh();
     });
 
-    conversationWatcher.on('add', async () => {
+    conversationWatcher.on("add", async () => {
       await this.triggerDataRefresh();
     });
 
@@ -87,11 +95,11 @@ class FileWatcher {
       depth: 2, // Increased depth to catch subdirectories
     });
 
-    projectWatcher.on('addDir', async () => {
+    projectWatcher.on("addDir", async () => {
       await this.triggerDataRefresh();
     });
 
-    projectWatcher.on('change', async () => {
+    projectWatcher.on("change", async () => {
       await this.triggerDataRefresh();
     });
 
@@ -129,22 +137,22 @@ class FileWatcher {
       // Handle different path formats:
       // /Users/user/.claude/projects/PROJECT_NAME/conversation.jsonl -> PROJECT_NAME
       // /Users/user/.claude/CONVERSATION_ID.jsonl -> CONVERSATION_ID
-      
+
       const pathParts = filePath.split(path.sep);
       const fileName = pathParts[pathParts.length - 1];
-      
-      if (fileName === 'conversation.jsonl') {
+
+      if (fileName === "conversation.jsonl") {
         // Project-based conversation
         const projectName = pathParts[pathParts.length - 2];
         return projectName;
-      } else if (fileName.endsWith('.jsonl')) {
+      } else if (fileName.endsWith(".jsonl")) {
         // Direct conversation file
-        return fileName.replace('.jsonl', '');
+        return fileName.replace(".jsonl", "");
       }
-      
+
       return null;
     } catch (error) {
-      console.error(chalk.red('Error extracting conversation ID:'), error);
+      console.error(chalk.red("Error extracting conversation ID:"), error);
       return null;
     }
   }
@@ -157,7 +165,7 @@ class FileWatcher {
   async handleFileActivity(conversationId, filePath) {
     if (!conversationId) return;
 
-    const fs = require('fs');
+    const fs = require("fs");
     try {
       // Get file stats
       const stats = fs.statSync(filePath);
@@ -169,7 +177,7 @@ class FileWatcher {
       const previousActivity = this.fileActivity.get(conversationId) || {
         lastSize: 0,
         lastMtime: 0,
-        lastMessageCheck: 0
+        lastMessageCheck: 0,
       };
 
       // Check if this is just a file touch/modification without significant content change
@@ -181,7 +189,7 @@ class FileWatcher {
       this.fileActivity.set(conversationId, {
         lastSize: fileSize,
         lastMtime: mtime,
-        lastMessageCheck: now
+        lastMessageCheck: now,
       });
 
       // If file changed but we haven't checked for complete messages recently
@@ -201,7 +209,10 @@ class FileWatcher {
         this.typingTimeout.set(conversationId, typingTimeout);
       }
     } catch (error) {
-      console.error(chalk.red(`Error handling file activity for ${conversationId}:`), error);
+      console.error(
+        chalk.red(`Error handling file activity for ${conversationId}:`),
+        error,
+      );
     }
   }
 
@@ -213,7 +224,7 @@ class FileWatcher {
   async checkForTypingActivity(conversationId, filePath) {
     try {
       // Parse the conversation to see if new complete messages were added
-      const ConversationAnalyzer = require('./ConversationAnalyzer');
+      const ConversationAnalyzer = require("./ConversationAnalyzer");
       const analyzer = new ConversationAnalyzer();
       const messages = await analyzer.getParsedConversation(filePath);
 
@@ -225,20 +236,27 @@ class FileWatcher {
 
         // If the last message is very recent (< 5 seconds), it's probably a new complete message
         // If it's older, the file activity might indicate typing
-        if (messageAge > 5000 && lastMessage.role === 'assistant') {
+        if (messageAge > 5000 && lastMessage.role === "assistant") {
           // File activity after assistant message suggests user is typing
-          
+
           // Send typing notification if we have access to notification manager
           if (this.notificationManager) {
-            this.notificationManager.notifyConversationStateChange(conversationId, 'User typing...', {
-              detectionMethod: 'file_activity',
-              timestamp: new Date().toISOString()
-            });
+            this.notificationManager.notifyConversationStateChange(
+              conversationId,
+              "User typing...",
+              {
+                detectionMethod: "file_activity",
+                timestamp: new Date().toISOString(),
+              },
+            );
           }
         }
       }
     } catch (error) {
-      console.error(chalk.red(`Error checking typing activity for ${conversationId}:`), error);
+      console.error(
+        chalk.red(`Error checking typing activity for ${conversationId}:`),
+        error,
+      );
     }
   }
 
@@ -259,7 +277,7 @@ class FileWatcher {
         await this.dataRefreshCallback();
       }
     } catch (error) {
-      console.error(chalk.red('Error during data refresh:'), error.message);
+      console.error(chalk.red("Error during data refresh:"), error.message);
     }
   }
 
@@ -283,15 +301,15 @@ class FileWatcher {
    * Pause all watchers and intervals
    */
   pause() {
-    console.log(chalk.yellow('⏸️  Pausing file watchers...'));
-    
+    console.log(chalk.yellow("⏸️  Pausing file watchers..."));
+
     // Pause watchers (they will still exist but not trigger events)
-    this.watchers.forEach(watcher => {
+    this.watchers.forEach((watcher) => {
       if (watcher.unwatch) {
         // Temporarily remove all watched paths
         const watchedPaths = watcher.getWatched();
-        Object.keys(watchedPaths).forEach(dir => {
-          watchedPaths[dir].forEach(file => {
+        Object.keys(watchedPaths).forEach((dir) => {
+          watchedPaths[dir].forEach((file) => {
             watcher.unwatch(path.join(dir, file));
           });
         });
@@ -306,16 +324,16 @@ class FileWatcher {
    */
   resume() {
     if (!this.isActive && this.claudeDir) {
-      console.log(chalk.green('▶️  Resuming file watchers...'));
-      
+      console.log(chalk.green("▶️  Resuming file watchers..."));
+
       // Clear existing watchers
       this.stop();
-      
+
       // Restart watchers
       this.setupFileWatchers(
-        this.claudeDir, 
-        this.dataRefreshCallback, 
-        this.processRefreshCallback
+        this.claudeDir,
+        this.dataRefreshCallback,
+        this.processRefreshCallback,
       );
     }
   }
@@ -324,19 +342,22 @@ class FileWatcher {
    * Stop and cleanup all watchers and intervals
    */
   stop() {
-    console.log(chalk.red('🛑 Stopping file watchers...'));
+    console.log(chalk.red("🛑 Stopping file watchers..."));
 
     // Close all watchers
-    this.watchers.forEach(watcher => {
+    this.watchers.forEach((watcher) => {
       try {
         watcher.close();
       } catch (error) {
-        console.warn(chalk.yellow('Warning: Error closing watcher:'), error.message);
+        console.warn(
+          chalk.yellow("Warning: Error closing watcher:"),
+          error.message,
+        );
       }
     });
 
     // Clear all intervals
-    this.intervals.forEach(intervalId => {
+    this.intervals.forEach((intervalId) => {
       clearInterval(intervalId);
     });
 
@@ -355,7 +376,7 @@ class FileWatcher {
       isActive: this.isActive,
       watcherCount: this.watchers.length,
       intervalCount: this.intervals.length,
-      watchedDir: this.claudeDir
+      watchedDir: this.claudeDir,
     };
   }
 
@@ -373,12 +394,12 @@ class FileWatcher {
    */
   getWatchedPaths() {
     const watchedPaths = [];
-    
-    this.watchers.forEach(watcher => {
+
+    this.watchers.forEach((watcher) => {
       if (watcher.getWatched) {
         const watched = watcher.getWatched();
-        Object.keys(watched).forEach(dir => {
-          watched[dir].forEach(file => {
+        Object.keys(watched).forEach((dir) => {
+          watched[dir].forEach((file) => {
             watchedPaths.push(path.join(dir, file));
           });
         });
@@ -395,7 +416,7 @@ class FileWatcher {
   setDebounce(debounceMs = 200) {
     let debounceTimeout;
     const originalCallback = this.dataRefreshCallback;
-    
+
     this.dataRefreshCallback = async (...args) => {
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(async () => {

@@ -81,6 +81,7 @@
 **Description**: Restrictions on what authenticated users can do are not properly enforced.
 
 **Examples**:
+
 - Accessing other users' data by modifying URL parameter (`/user/123` → `/user/124`)
 - Elevation of privilege (acting as admin without being admin)
 - IDOR (Insecure Direct Object Reference)
@@ -112,6 +113,7 @@ def get_user_profile(user_id):
 ```
 
 **Mitigation**:
+
 - Deny by default
 - Implement access control checks on every request
 - Use centralized authorization (RBAC, ABAC)
@@ -125,6 +127,7 @@ def get_user_profile(user_id):
 **Description**: Failures related to cryptography that lead to exposure of sensitive data.
 
 **Examples**:
+
 - Transmitting data in cleartext (HTTP instead of HTTPS)
 - Using weak cryptographic algorithms (MD5, SHA1, DES)
 - Hardcoded encryption keys
@@ -155,6 +158,7 @@ def verify_password(password, hashed):
 ```
 
 **Mitigation**:
+
 - Use TLS 1.2+ for all data in transit
 - Use strong, modern encryption algorithms (AES-256, RSA-2048+)
 - Use bcrypt, scrypt, or Argon2 for password hashing
@@ -168,6 +172,7 @@ def verify_password(password, hashed):
 **Description**: User-supplied data is not validated, filtered, or sanitized.
 
 **Examples**:
+
 - SQL injection
 - NoSQL injection
 - OS command injection
@@ -237,6 +242,7 @@ def ping():
 ```
 
 **Mitigation**:
+
 - Use parameterized queries (prepared statements)
 - Use ORM frameworks
 - Input validation (allowlist preferred over blocklist)
@@ -250,11 +256,13 @@ def ping():
 **Description**: Missing or ineffective security design patterns.
 
 **Examples**:
+
 - No rate limiting on authentication (allows brute force)
 - No defense against automated attacks (bots)
 - Insufficient logging for security events
 
 **Mitigation**:
+
 - Threat modeling during design phase
 - Secure design patterns (rate limiting, circuit breakers)
 - Defense in depth
@@ -267,6 +275,7 @@ def ping():
 **Description**: Improperly configured security settings.
 
 **Examples**:
+
 - Default credentials not changed
 - Unnecessary features enabled (directory listing, debug mode)
 - Error messages revealing stack traces
@@ -333,11 +342,13 @@ server_tokens off;
 **Description**: Using components with known vulnerabilities.
 
 **Examples**:
+
 - Outdated libraries with known CVEs
 - Unsupported software versions
 - Not scanning dependencies for vulnerabilities
 
 **Mitigation**:
+
 - Inventory all dependencies
 - Monitor for CVEs (use Snyk, Dependabot, Renovate)
 - Update dependencies regularly
@@ -383,6 +394,7 @@ updates:
 **Description**: Weaknesses in authentication and session management.
 
 **Examples**:
+
 - Weak password requirements
 - No brute force protection
 - Session fixation
@@ -476,11 +488,13 @@ def validate_password(password):
 **Description**: Code and infrastructure that does not protect against integrity violations.
 
 **Examples**:
+
 - Unsigned or unverified software updates
 - Insecure CI/CD pipeline
 - Insecure deserialization
 
 **Mitigation**:
+
 - Code signing
 - Verify software signatures before installation
 - Use SRI (Subresource Integrity) for CDN resources
@@ -490,9 +504,11 @@ def validate_password(password):
 
 ```html
 <!-- With Subresource Integrity -->
-<script src="https://cdn.example.com/library.js"
-        integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
-        crossorigin="anonymous"></script>
+<script
+  src="https://cdn.example.com/library.js"
+  integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
+  crossorigin="anonymous"
+></script>
 ```
 
 ---
@@ -502,6 +518,7 @@ def validate_password(password):
 **Description**: Insufficient logging and monitoring.
 
 **Examples**:
+
 - Login attempts not logged
 - No alerting on suspicious activity
 - Logs not retained long enough
@@ -668,9 +685,9 @@ jobs:
       - name: Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: 'my-app'
-          path: '.'
-          format: 'HTML'
+          project: "my-app"
+          path: "."
+          format: "HTML"
 
       # SAST (Static Application Security Testing)
       - name: SonarCloud Scan
@@ -686,9 +703,9 @@ jobs:
       - name: Trivy container scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'myapp:${{ github.sha }}'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          image-ref: "myapp:${{ github.sha }}"
+          format: "sarif"
+          output: "trivy-results.sarif"
 
       # IaC scanning
       - name: Checkov IaC scan
@@ -718,13 +735,13 @@ repos:
     rev: 1.7.5
     hooks:
       - id: bandit
-        args: ['-r', 'src/']
+        args: ["-r", "src/"]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
       - id: check-added-large-files
-        args: ['--maxkb=500']
+        args: ["--maxkb=500"]
       - id: detect-private-key
       - id: check-yaml
       - id: check-json

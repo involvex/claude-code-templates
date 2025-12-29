@@ -12,6 +12,7 @@ Pysam is a Python module for reading, manipulating, and writing genomic datasets
 ## When to Use This Skill
 
 This skill should be used when:
+
 - Working with sequencing alignment files (BAM/CRAM)
 - Analyzing genetic variants (VCF/BCF)
 - Extracting reference sequences or gene regions
@@ -24,6 +25,7 @@ This skill should be used when:
 ## Quick Start
 
 ### Installation
+
 ```bash
 uv pip install pysam
 ```
@@ -31,6 +33,7 @@ uv pip install pysam
 ### Basic Examples
 
 **Read alignment file:**
+
 ```python
 import pysam
 
@@ -42,6 +45,7 @@ samfile.close()
 ```
 
 **Read variant file:**
+
 ```python
 # Open VCF file and iterate variants
 vcf = pysam.VariantFile("variants.vcf")
@@ -51,6 +55,7 @@ vcf.close()
 ```
 
 **Query reference sequence:**
+
 ```python
 # Open FASTA and extract sequence
 fasta = pysam.FastaFile("reference.fasta")
@@ -66,6 +71,7 @@ fasta.close()
 Use the `AlignmentFile` class to work with aligned sequencing reads. This is appropriate for analyzing mapping results, calculating coverage, extracting reads, or quality control.
 
 **Common operations:**
+
 - Open and read BAM/SAM/CRAM files
 - Fetch reads from specific genomic regions
 - Filter reads by mapping quality, flags, or other criteria
@@ -75,6 +81,7 @@ Use the `AlignmentFile` class to work with aligned sequencing reads. This is app
 - Access read sequences, quality scores, and alignment information
 
 **Reference:** See `references/alignment_files.md` for detailed documentation on:
+
 - Opening and reading alignment files
 - AlignedSegment attributes and methods
 - Region-based fetching with `fetch()`
@@ -88,6 +95,7 @@ Use the `AlignmentFile` class to work with aligned sequencing reads. This is app
 Use the `VariantFile` class to work with genetic variants from variant calling pipelines. This is appropriate for variant analysis, filtering, annotation, or population genetics.
 
 **Common operations:**
+
 - Read and write VCF/BCF files
 - Query variants in specific regions
 - Access variant information (position, alleles, quality)
@@ -97,6 +105,7 @@ Use the `VariantFile` class to work with genetic variants from variant calling p
 - Subset samples or regions
 
 **Reference:** See `references/variant_files.md` for detailed documentation on:
+
 - Opening and reading variant files
 - VariantRecord attributes and methods
 - Accessing INFO and FORMAT fields
@@ -110,6 +119,7 @@ Use the `VariantFile` class to work with genetic variants from variant calling p
 Use `FastaFile` for random access to reference sequences and `FastxFile` for reading raw sequencing data. This is appropriate for extracting gene sequences, validating variants against reference, or processing raw reads.
 
 **Common operations:**
+
 - Query reference sequences by genomic coordinates
 - Extract sequences for genes or regions of interest
 - Read FASTQ files with quality scores
@@ -119,6 +129,7 @@ Use `FastaFile` for random access to reference sequences and `FastxFile` for rea
 - Convert between FASTA and FASTQ formats
 
 **Reference:** See `references/sequence_files.md` for detailed documentation on:
+
 - FASTA file access and indexing
 - Extracting sequences by region
 - Handling reverse complement for genes
@@ -132,6 +143,7 @@ Use `FastaFile` for random access to reference sequences and `FastxFile` for rea
 Pysam excels at integrating multiple file types for comprehensive genomic analyses. Common workflows combine alignment files, variant files, and reference sequences.
 
 **Common workflows:**
+
 - Calculate coverage statistics for specific regions
 - Validate variants against aligned reads
 - Annotate variants with coverage information
@@ -141,6 +153,7 @@ Pysam excels at integrating multiple file types for comprehensive genomic analys
 - Quality control across multiple data types
 
 **Reference:** See `references/common_workflows.md` for detailed examples of:
+
 - Quality control workflows (BAM statistics, reference consistency)
 - Coverage analysis (per-base coverage, low coverage detection)
 - Variant analysis (annotation, filtering by read support)
@@ -154,11 +167,13 @@ Pysam excels at integrating multiple file types for comprehensive genomic analys
 ### Coordinate Systems
 
 **Critical:** Pysam uses **0-based, half-open** coordinates (Python convention):
+
 - Start positions are 0-based (first base is position 0)
 - End positions are exclusive (not included in the range)
 - Region 1000-2000 includes bases 1000-1999 (1000 bases total)
 
 **Exception:** Region strings in `fetch()` follow samtools convention (1-based):
+
 ```python
 samfile.fetch("chr1", 999, 2000)      # 0-based: positions 999-1999
 samfile.fetch("chr1:1000-2000")       # 1-based string: positions 1000-2000
@@ -169,6 +184,7 @@ samfile.fetch("chr1:1000-2000")       # 1-based string: positions 1000-2000
 ### Indexing Requirements
 
 Random access to specific genomic regions requires index files:
+
 - **BAM files**: Require `.bai` index (create with `pysam.index()`)
 - **CRAM files**: Require `.crai` index
 - **FASTA files**: Require `.fai` index (create with `pysam.faidx()`)
@@ -180,6 +196,7 @@ Without an index, use `fetch(until_eof=True)` for sequential reading.
 ### File Modes
 
 Specify format when opening files:
+
 - `"rb"` - Read BAM (binary)
 - `"r"` - Read SAM (text)
 - `"rc"` - Read CRAM
@@ -226,6 +243,7 @@ pysam.bcftools.view("-O", "z", "-o", "output.vcf.gz", "input.vcf")
 ```
 
 **Error handling:**
+
 ```python
 try:
     pysam.samtools.sort("-o", "output.bam", "input.bam")

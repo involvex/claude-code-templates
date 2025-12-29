@@ -23,6 +23,7 @@ def compute_word_count(text: str) -> int:
 ```
 
 **Requirements:**
+
 - Decorate with `@cocoindex.op.function()`
 - Type annotations required for all arguments and return value
 - Supports basic types, structs, tables, and numpy arrays
@@ -250,6 +251,7 @@ def expensive_computation(text: str) -> dict:
 ```
 
 **When to use:**
+
 - Functions that are computationally expensive
 - LLM API calls
 - Model inference
@@ -305,6 +307,7 @@ def custom_chunker(content: str, chunk_size: int) -> list[dict]:
 ```
 
 **Supported relationships:**
+
 - `ArgRelationship.CHUNKS_BASE_TEXT` - Output is chunks of input text
 - `ArgRelationship.EMBEDDING_ORIGIN_TEXT` - Output is embedding of input text
 - `ArgRelationship.RECTS_BASE_IMAGE` - Output is rectangles on input image
@@ -314,6 +317,7 @@ def custom_chunker(content: str, chunk_size: int) -> list[dict]:
 Functions can use these types for arguments and return values:
 
 ### Basic Types
+
 - `str` - Text
 - `int` - Integer (maps to Int64)
 - `float` - Float (maps to Float64)
@@ -322,24 +326,29 @@ Functions can use these types for arguments and return values:
 - `None` / `type(None)` - Null value
 
 ### Collection Types
+
 - `list[T]` - List of type T
 - `dict[str, T]` - Dictionary (becomes Struct)
 - `cocoindex.Json` - Arbitrary JSON
 
 ### Numpy Types
+
 - `NDArray[np.float32]` - Vector[Float32, N]
 - `NDArray[np.float64]` - Vector[Float64, N]
 - `NDArray[np.int32]` - Vector[Int32, N]
 - `NDArray[np.int64]` - Vector[Int64, N]
 
 ### CocoIndex Types
+
 - `cocoindex.Range` - Text range with location info
 - Dataclasses - Become Struct types
 
 ### Optional Types
+
 - `T | None` or `Optional[T]` - Optional value
 
 ### Table Types (Output only)
+
 Functions can return table-like data using dataclasses:
 
 ```python

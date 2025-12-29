@@ -28,6 +28,7 @@ Create Svelte component with best practices. When creating components:
    - TypeScript preference
 
 2. **Component Structure**:
+
    ```svelte
    <script lang="ts">
      // Imports
@@ -38,9 +39,9 @@ Create Svelte component with best practices. When creating components:
      // Effects
      // Functions
    </script>
-   
+
    <!-- Markup -->
-   
+
    <style>
      /* Scoped styles */
    </style>
@@ -72,6 +73,7 @@ Create Svelte component with best practices. When creating components:
 User: "Create a Modal component with customizable header, footer slots, and close functionality"
 
 Assistant will:
+
 - Create Modal.svelte with proper structure
 - Implement focus trap and keyboard handling
 - Add transition effects
