@@ -40,7 +40,7 @@ on:
     branches: [main]
 
 env:
-  NODE_VERSION: "18"
+  NODE_VERSION: '18'
   DOCKER_REGISTRY: ghcr.io
   K8S_NAMESPACE: production
 
@@ -67,7 +67,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: |
@@ -150,7 +150,7 @@ jobs:
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
         with:
-          version: "v1.28.0"
+          version: 'v1.28.0'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -659,18 +659,17 @@ prometheus:
       volumeClaimTemplate:
         spec:
           storageClassName: gp3
-          accessModes: ["ReadWriteOnce"]
+          accessModes: ['ReadWriteOnce']
           resources:
             requests:
               storage: 50Gi
 
     additionalScrapeConfigs:
-      - job_name: "kubernetes-pods"
+      - job_name: 'kubernetes-pods'
         kubernetes_sd_configs:
           - role: pod
         relabel_configs:
-          - source_labels:
-              [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
             action: keep
             regex: true
           - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
@@ -684,13 +683,13 @@ alertmanager:
       volumeClaimTemplate:
         spec:
           storageClassName: gp3
-          accessModes: ["ReadWriteOnce"]
+          accessModes: ['ReadWriteOnce']
           resources:
             requests:
               storage: 10Gi
 
 grafana:
-  adminPassword: "secure-password"
+  adminPassword: 'secure-password'
   persistence:
     enabled: true
     storageClassName: gp3
@@ -700,9 +699,9 @@ grafana:
     dashboardproviders.yaml:
       apiVersion: 1
       providers:
-        - name: "default"
+        - name: 'default'
           orgId: 1
-          folder: ""
+          folder: ''
           type: file
           disableDeletion: false
           editable: true
@@ -735,8 +734,8 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "High error rate detected"
-            description: "Error rate is {{ $value }} requests per second"
+            summary: 'High error rate detected'
+            description: 'Error rate is {{ $value }} requests per second'
 
         - alert: HighResponseTime
           expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 0.5
@@ -744,8 +743,8 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "High response time detected"
-            description: "95th percentile response time is {{ $value }} seconds"
+            summary: 'High response time detected'
+            description: '95th percentile response time is {{ $value }} seconds'
 
         - alert: PodCrashLooping
           expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
@@ -753,8 +752,8 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: "Pod is crash looping"
-            description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is restarting frequently"
+            summary: 'Pod is crash looping'
+            description: 'Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is restarting frequently'
 ```
 
 ### 5. Security and Compliance Implementation
@@ -855,7 +854,7 @@ spec:
     - match:
         - headers:
             canary:
-              exact: "true"
+              exact: 'true'
       route:
         - destination:
             host: myapp-service

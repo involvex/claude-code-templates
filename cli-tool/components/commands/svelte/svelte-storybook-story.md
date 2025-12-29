@@ -121,7 +121,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on creating stor
        (Story) => ({
          Component: Story,
          props: {
-           style: "background: #333; padding: 2rem;",
+           style: 'background: #333; padding: 2rem;',
          },
        }),
      ],

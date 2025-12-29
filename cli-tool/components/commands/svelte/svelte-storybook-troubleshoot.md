@@ -19,18 +19,18 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
    // .storybook/main.js
    export default {
      framework: {
-       name: "@storybook/sveltekit",
+       name: '@storybook/sveltekit',
        options: {
          builder: {
-           viteConfigPath: "./vite.config.js",
+           viteConfigPath: './vite.config.js',
          },
        },
      },
      viteFinal: async (config) => {
        config.resolve.alias = {
          ...config.resolve.alias,
-         $lib: path.resolve("./src/lib"),
-         $app: path.resolve("./.storybook/mocks/app"),
+         $lib: path.resolve('./src/lib'),
+         $app: path.resolve('./.storybook/mocks/app'),
        };
        return config;
      },
@@ -46,12 +46,12 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
 
    ```javascript
    // .storybook/mocks/app/stores.js
-   import { writable } from "svelte/store";
+   import { writable } from 'svelte/store';
 
    export const page = writable({
-     url: new URL("http://localhost:6006"),
+     url: new URL('http://localhost:6006'),
      params: {},
-     route: { id: "/" },
+     route: { id: '/' },
      data: {},
    });
 
@@ -65,9 +65,9 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
 
    ```javascript
    // .storybook/preview.js
-   import "../src/app.css";
-   import "../src/app.postcss";
-   import "../src/styles/global.css";
+   import '../src/app.css';
+   import '../src/app.postcss';
+   import '../src/styles/global.css';
    ```
 
    **Tailwind Not Working**:
@@ -77,10 +77,10 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
    export default {
      addons: [
        {
-         name: "@storybook/addon-postcss",
+         name: '@storybook/addon-postcss',
          options: {
            postcssLoaderOptions: {
-             implementation: require("postcss"),
+             implementation: require('postcss'),
            },
          },
        },
@@ -105,7 +105,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
 
    ```javascript
    // Use lazy loading for heavy components
-   const HeavyComponent = lazy(() => import("./HeavyComponent.svelte"));
+   const HeavyComponent = lazy(() => import('./HeavyComponent.svelte'));
    ```
 
 5. **Environment Variables**:
@@ -117,7 +117,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
    export default {
      env: (config) => ({
        ...config,
-       PUBLIC_API_URL: process.env.PUBLIC_API_URL || "http://localhost:3000",
+       PUBLIC_API_URL: process.env.PUBLIC_API_URL || 'http://localhost:3000',
      }),
    };
    ```
@@ -168,7 +168,7 @@ You are acting as the Svelte Storybook Specialist Agent focused on troubleshooti
 
    ```javascript
    // Ensure testing library is set up
-   import { within, userEvent, expect } from "@storybook/test";
+   import { within, userEvent, expect } from '@storybook/test';
    ```
 
    **Interaction Tests Failing**:

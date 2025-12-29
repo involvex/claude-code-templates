@@ -286,12 +286,12 @@
 **Physician:** [Name, credentials]  
 **Level:** [Intern, Resident, Attending]  
 **Date/Time:** [MM/DD/YYYY at HH:MM]  
-**Signature:** ********\_\_\_\_********
+**Signature:** **\*\*\*\***\_\_\_\_**\*\*\*\***
 
 **Co-signature (if applicable):**  
 **Attending:** [Name, credentials]  
 **Date/Time:** [MM/DD/YYYY at HH:MM]  
-**Signature:** ********\_\_\_\_********
+**Signature:** **\*\*\*\***\_\_\_\_**\*\*\*\***
 
 ---
 

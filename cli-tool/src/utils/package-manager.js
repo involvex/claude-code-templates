@@ -1,5 +1,5 @@
-const { spawn } = require("child_process");
-const chalk = require("chalk");
+const { spawn } = require('child_process');
+const chalk = require('chalk');
 
 /**
  * Package Manager Detection Utility
@@ -13,18 +13,18 @@ const chalk = require("chalk");
  */
 function getVersion(command) {
   return new Promise((resolve) => {
-    const child = spawn(command, ["--version"], {
-      stdio: ["ignore", "pipe", "ignore"],
-      shell: process.platform === "win32",
+    const child = spawn(command, ['--version'], {
+      stdio: ['ignore', 'pipe', 'ignore'],
+      shell: process.platform === 'win32',
     });
 
-    let output = "";
+    let output = '';
 
-    child.stdout.on("data", (data) => {
+    child.stdout.on('data', (data) => {
       output += data.toString();
     });
 
-    child.on("close", (code) => {
+    child.on('close', (code) => {
       if (code === 0) {
         resolve(output.trim());
       } else {
@@ -32,7 +32,7 @@ function getVersion(command) {
       }
     });
 
-    child.on("error", () => {
+    child.on('error', () => {
       resolve(null);
     });
 
@@ -49,17 +49,17 @@ function getVersion(command) {
  * @returns {Promise<Object|null>} Bun configuration or null
  */
 async function checkBun() {
-  const version = await getVersion("bun");
+  const version = await getVersion('bun');
 
   if (version) {
     return {
-      name: "bun",
-      installCmd: "bun",
-      addCmd: "bun add",
-      execCmd: "bunx",
-      runCmd: "bun run",
+      name: 'bun',
+      installCmd: 'bun',
+      addCmd: 'bun add',
+      execCmd: 'bunx',
+      runCmd: 'bun run',
       version: version,
-      displayName: "Bun",
+      displayName: 'Bun',
     };
   }
 
@@ -71,17 +71,17 @@ async function checkBun() {
  * @returns {Promise<Object|null>} npm configuration or null
  */
 async function checkNpm() {
-  const version = await getVersion("npm");
+  const version = await getVersion('npm');
 
   if (version) {
     return {
-      name: "npm",
-      installCmd: "npm",
-      addCmd: "npm install",
-      execCmd: "npx",
-      runCmd: "npm run",
+      name: 'npm',
+      installCmd: 'npm',
+      addCmd: 'npm install',
+      execCmd: 'npx',
+      runCmd: 'npm run',
       version: version,
-      displayName: "npm",
+      displayName: 'npm',
     };
   }
 
@@ -102,7 +102,7 @@ async function detectPackageManager(options = {}) {
   // If user prefers npm, use it directly
   if (preferNpm) {
     if (verbose) {
-      console.log(chalk.gray("User preference: npm"));
+      console.log(chalk.gray('User preference: npm'));
     }
 
     const npm = await checkNpm();
@@ -116,20 +116,20 @@ async function detectPackageManager(options = {}) {
 
   // Try Bun first (best performance)
   if (verbose) {
-    console.log(chalk.gray("Checking for Bun..."));
+    console.log(chalk.gray('Checking for Bun...'));
   }
 
   const bun = await checkBun();
   if (bun) {
     if (verbose) {
       console.log(chalk.green(`✓ Detected Bun ${bun.version}`));
-      console.log(chalk.blue("💨 Using Bun for faster performance"));
+      console.log(chalk.blue('💨 Using Bun for faster performance'));
     }
     return bun;
   }
 
   if (verbose) {
-    console.log(chalk.gray("Bun not found, falling back to npm..."));
+    console.log(chalk.gray('Bun not found, falling back to npm...'));
   }
 
   // Fallback to npm
@@ -143,9 +143,9 @@ async function detectPackageManager(options = {}) {
 
   // No package manager found - this should rarely happen
   throw new Error(
-    "No package manager found. Please install npm or Bun.\n" +
-      "npm: https://nodejs.org/\n" +
-      "Bun: https://bun.sh/",
+    'No package manager found. Please install npm or Bun.\n' +
+      'npm: https://nodejs.org/\n' +
+      'Bun: https://bun.sh/'
   );
 }
 
@@ -161,17 +161,17 @@ async function detectPackageManager(options = {}) {
 function getInstallCommand(pm, packageName, options = {}) {
   const { dev = false, global = false } = options;
 
-  if (pm.name === "bun") {
-    const args = ["add", packageName];
-    if (dev) args.push("--dev");
-    if (global) args.push("--global");
+  if (pm.name === 'bun') {
+    const args = ['add', packageName];
+    if (dev) args.push('--dev');
+    if (global) args.push('--global');
     return [pm.installCmd, ...args];
   }
 
   // npm
-  const args = ["install", packageName];
-  if (dev) args.push("--save-dev");
-  if (global) args.unshift("-g");
+  const args = ['install', packageName];
+  if (dev) args.push('--save-dev');
+  if (global) args.unshift('-g');
   return [pm.installCmd, ...args];
 }
 

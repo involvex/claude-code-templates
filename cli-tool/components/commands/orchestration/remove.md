@@ -96,10 +96,10 @@ current_status_summary:
 
 removal_log:
   - task_id: TASK-003
-    removed_at: "2024-03-15T16:00:00Z"
-    removed_by: "user"
-    reason: "Requirement changed"
-    final_status: "in_progress"
+    removed_at: '2024-03-15T16:00:00Z'
+    removed_by: 'user'
+    reason: 'Requirement changed'
+    final_status: 'in_progress'
 ```
 
 ### 3. Update Coordination Documents
@@ -285,13 +285,13 @@ All removals are logged:
 # .orchestration-audit.yaml
 removals:
   - task_id: TASK-003
-    removed_at: "2024-03-15T16:00:00Z"
-    removed_by: "user-id"
-    reason: "Requirement changed"
-    status_at_removal: "in_progress"
-    dependencies_affected: ["TASK-005", "TASK-007"]
-    commits_preserved: ["abc123", "def456"]
-    archived_to: ".removed/2024-03-15/TASK-003/"
+    removed_at: '2024-03-15T16:00:00Z'
+    removed_by: 'user-id'
+    reason: 'Requirement changed'
+    status_at_removal: 'in_progress'
+    dependencies_affected: ['TASK-005', 'TASK-007']
+    commits_preserved: ['abc123', 'def456']
+    archived_to: '.removed/2024-03-15/TASK-003/'
 ```
 
 ## Best Practices

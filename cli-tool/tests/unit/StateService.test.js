@@ -4,15 +4,12 @@
  */
 
 // Load the StateService class
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 // Load StateService from the actual file
-const StateServicePath = path.join(
-  __dirname,
-  "../../src/analytics-web/services/StateService.js",
-);
-const StateServiceCode = fs.readFileSync(StateServicePath, "utf8");
+const StateServicePath = path.join(__dirname, '../../src/analytics-web/services/StateService.js');
+const StateServiceCode = fs.readFileSync(StateServicePath, 'utf8');
 
 // Create a module-like environment
 const moduleExports = {};
@@ -22,15 +19,15 @@ const module = { exports: moduleExports };
 eval(StateServiceCode);
 const StateService = moduleExports.StateService || global.StateService;
 
-describe("StateService", () => {
+describe('StateService', () => {
   let stateService;
 
   beforeEach(() => {
     stateService = new StateService();
   });
 
-  describe("constructor", () => {
-    it("should initialize with default state", () => {
+  describe('constructor', () => {
+    it('should initialize with default state', () => {
       expect(stateService.state).toMatchObject({
         conversations: [],
         summary: {},
@@ -49,35 +46,35 @@ describe("StateService", () => {
     });
   });
 
-  describe("subscribe/unsubscribe", () => {
-    it("should add subscribers and return unsubscribe function", () => {
+  describe('subscribe/unsubscribe', () => {
+    it('should add subscribers and return unsubscribe function', () => {
       const mockCallback = jest.fn();
 
       const unsubscribe = stateService.subscribe(mockCallback);
 
       expect(stateService.subscribers.has(mockCallback)).toBe(true);
-      expect(typeof unsubscribe).toBe("function");
+      expect(typeof unsubscribe).toBe('function');
 
       // Test unsubscribe
       unsubscribe();
       expect(stateService.subscribers.has(mockCallback)).toBe(false);
     });
 
-    it("should notify subscribers when state changes", () => {
+    it('should notify subscribers when state changes', () => {
       const mockCallback = jest.fn();
       stateService.subscribe(mockCallback);
 
       const newState = { isLoading: true };
-      stateService.setState(newState, "test_action");
+      stateService.setState(newState, 'test_action');
 
       expect(mockCallback).toHaveBeenCalledWith(
         expect.objectContaining(newState),
-        "test_action",
-        newState,
+        'test_action',
+        newState
       );
     });
 
-    it("should handle multiple subscribers", () => {
+    it('should handle multiple subscribers', () => {
       const callback1 = jest.fn();
       const callback2 = jest.fn();
 
@@ -90,9 +87,9 @@ describe("StateService", () => {
       expect(callback2).toHaveBeenCalled();
     });
 
-    it("should handle subscriber errors gracefully", () => {
+    it('should handle subscriber errors gracefully', () => {
       const errorCallback = jest.fn().mockImplementation(() => {
-        throw new Error("Subscriber error");
+        throw new Error('Subscriber error');
       });
       const normalCallback = jest.fn();
 
@@ -107,58 +104,56 @@ describe("StateService", () => {
     });
   });
 
-  describe("getState and getStateProperty", () => {
-    it("should return current state", () => {
+  describe('getState and getStateProperty', () => {
+    it('should return current state', () => {
       const state = stateService.getState();
 
       expect(state).toEqual(stateService.state);
       expect(state).not.toBe(stateService.state); // Should be a copy
     });
 
-    it("should return specific state properties", () => {
-      stateService.state.conversations = [{ id: "test" }];
+    it('should return specific state properties', () => {
+      stateService.state.conversations = [{ id: 'test' }];
 
-      expect(stateService.getStateProperty("conversations")).toEqual([
-        { id: "test" },
-      ]);
-      expect(stateService.getStateProperty("nonexistent")).toBeUndefined();
+      expect(stateService.getStateProperty('conversations')).toEqual([{ id: 'test' }]);
+      expect(stateService.getStateProperty('nonexistent')).toBeUndefined();
     });
   });
 
-  describe("setState and setStateProperty", () => {
-    it("should update state and preserve existing properties", () => {
+  describe('setState and setStateProperty', () => {
+    it('should update state and preserve existing properties', () => {
       const initialState = stateService.getState();
-      const newData = { isLoading: true, conversations: [{ id: "test" }] };
+      const newData = { isLoading: true, conversations: [{ id: 'test' }] };
 
       stateService.setState(newData);
 
       const updatedState = stateService.getState();
       expect(updatedState.isLoading).toBe(true);
-      expect(updatedState.conversations).toEqual([{ id: "test" }]);
+      expect(updatedState.conversations).toEqual([{ id: 'test' }]);
       expect(updatedState.summary).toEqual(initialState.summary); // Preserved
       expect(updatedState.lastUpdate).toBeGreaterThan(0);
     });
 
-    it("should update specific properties", () => {
-      stateService.setStateProperty("isLoading", true, "start_loading");
+    it('should update specific properties', () => {
+      stateService.setStateProperty('isLoading', true, 'start_loading');
 
       expect(stateService.state.isLoading).toBe(true);
-      expect(stateService.stateHistory[0].action).toBe("start_loading");
+      expect(stateService.stateHistory[0].action).toBe('start_loading');
     });
 
-    it("should save state to history", () => {
+    it('should save state to history', () => {
       const initialHistorySize = stateService.stateHistory.length;
 
-      stateService.setState({ test: true }, "test_action");
+      stateService.setState({ test: true }, 'test_action');
 
       expect(stateService.stateHistory).toHaveLength(initialHistorySize + 1);
       expect(stateService.stateHistory[0]).toMatchObject({
-        action: "test_action",
+        action: 'test_action',
         timestamp: expect.any(Number),
       });
     });
 
-    it("should limit history size", () => {
+    it('should limit history size', () => {
       stateService.maxHistorySize = 3;
 
       // Add more entries than max size
@@ -167,14 +162,14 @@ describe("StateService", () => {
       }
 
       expect(stateService.stateHistory).toHaveLength(3);
-      expect(stateService.stateHistory[0].action).toBe("action_2"); // Oldest preserved
-      expect(stateService.stateHistory[2].action).toBe("action_4"); // Most recent
+      expect(stateService.stateHistory[0].action).toBe('action_2'); // Oldest preserved
+      expect(stateService.stateHistory[2].action).toBe('action_4'); // Most recent
     });
   });
 
-  describe("specific update methods", () => {
-    it("should update conversations", () => {
-      const conversations = [{ id: "conv1" }, { id: "conv2" }];
+  describe('specific update methods', () => {
+    it('should update conversations', () => {
+      const conversations = [{ id: 'conv1' }, { id: 'conv2' }];
       const mockSubscriber = jest.fn();
       stateService.subscribe(mockSubscriber);
 
@@ -183,20 +178,20 @@ describe("StateService", () => {
       expect(stateService.state.conversations).toEqual(conversations);
       expect(mockSubscriber).toHaveBeenCalledWith(
         expect.objectContaining({ conversations }),
-        "update_conversations",
-        { conversations },
+        'update_conversations',
+        { conversations }
       );
     });
 
-    it("should update conversation states", () => {
-      const states = { conv1: "active", conv2: "idle" };
+    it('should update conversation states', () => {
+      const states = { conv1: 'active', conv2: 'idle' };
 
       stateService.updateConversationStates(states);
 
       expect(stateService.state.conversationStates).toEqual(states);
     });
 
-    it("should update summary", () => {
+    it('should update summary', () => {
       const summary = { totalConversations: 5, activeConversations: 2 };
 
       stateService.updateSummary(summary);
@@ -204,23 +199,23 @@ describe("StateService", () => {
       expect(stateService.state.summary).toEqual(summary);
     });
 
-    it("should update chart data", () => {
-      const chartData = { labels: ["A", "B"], data: [1, 2] };
+    it('should update chart data', () => {
+      const chartData = { labels: ['A', 'B'], data: [1, 2] };
 
       stateService.updateChartData(chartData);
 
       expect(stateService.state.chartData).toEqual(chartData);
     });
 
-    it("should set selected conversation", () => {
-      const conversation = { id: "conv1", title: "Test Conversation" };
+    it('should set selected conversation', () => {
+      const conversation = { id: 'conv1', title: 'Test Conversation' };
 
       stateService.setSelectedConversation(conversation);
 
       expect(stateService.state.selectedConversation).toEqual(conversation);
     });
 
-    it("should set loading state", () => {
+    it('should set loading state', () => {
       stateService.setLoading(true);
       expect(stateService.state.isLoading).toBe(true);
 
@@ -228,8 +223,8 @@ describe("StateService", () => {
       expect(stateService.state.isLoading).toBe(false);
     });
 
-    it("should set and clear error state", () => {
-      const error = new Error("Test error");
+    it('should set and clear error state', () => {
+      const error = new Error('Test error');
 
       stateService.setError(error);
       expect(stateService.state.error).toBe(error);
@@ -238,13 +233,13 @@ describe("StateService", () => {
       expect(stateService.state.error).toBeNull();
     });
 
-    it("should handle string errors", () => {
-      stateService.setError("String error");
-      expect(stateService.state.error).toBe("String error");
+    it('should handle string errors', () => {
+      stateService.setError('String error');
+      expect(stateService.state.error).toBe('String error');
     });
 
-    it("should update system health", () => {
-      const health = { cpu: 45, memory: 60, status: "healthy" };
+    it('should update system health', () => {
+      const health = { cpu: 45, memory: 60, status: 'healthy' };
 
       stateService.updateSystemHealth(health);
 
@@ -252,91 +247,87 @@ describe("StateService", () => {
     });
   });
 
-  describe("notifyConversationStateChange", () => {
+  describe('notifyConversationStateChange', () => {
     beforeEach(() => {
       stateService.state.conversations = [
-        { id: "conv1", status: "idle" },
-        { id: "conv2", status: "active" },
+        { id: 'conv1', status: 'idle' },
+        { id: 'conv2', status: 'active' },
       ];
       stateService.state.conversationStates = {
-        conv1: "idle",
-        conv2: "active",
+        conv1: 'idle',
+        conv2: 'active',
       };
     });
 
-    it("should update conversation state and conversation status", () => {
-      stateService.notifyConversationStateChange("conv1", "active");
+    it('should update conversation state and conversation status', () => {
+      stateService.notifyConversationStateChange('conv1', 'active');
 
-      expect(stateService.state.conversationStates.conv1).toBe("active");
-      expect(stateService.state.conversations[0].status).toBe("active");
+      expect(stateService.state.conversationStates.conv1).toBe('active');
+      expect(stateService.state.conversations[0].status).toBe('active');
     });
 
-    it("should handle non-existent conversation gracefully", () => {
+    it('should handle non-existent conversation gracefully', () => {
       expect(() => {
-        stateService.notifyConversationStateChange("nonexistent", "active");
+        stateService.notifyConversationStateChange('nonexistent', 'active');
       }).not.toThrow();
 
-      expect(stateService.state.conversationStates.nonexistent).toBe("active");
+      expect(stateService.state.conversationStates.nonexistent).toBe('active');
     });
   });
 
-  describe("conversation queries", () => {
+  describe('conversation queries', () => {
     beforeEach(() => {
       stateService.state.conversations = [
-        { id: "conv1", status: "active", title: "Active Chat" },
-        { id: "conv2", status: "idle", title: "Idle Chat" },
-        { id: "conv3", status: "active", title: "Another Active" },
+        { id: 'conv1', status: 'active', title: 'Active Chat' },
+        { id: 'conv2', status: 'idle', title: 'Idle Chat' },
+        { id: 'conv3', status: 'active', title: 'Another Active' },
       ];
     });
 
-    it("should get conversation by ID", () => {
-      const conversation = stateService.getConversationById("conv2");
+    it('should get conversation by ID', () => {
+      const conversation = stateService.getConversationById('conv2');
 
       expect(conversation).toEqual({
-        id: "conv2",
-        status: "idle",
-        title: "Idle Chat",
+        id: 'conv2',
+        status: 'idle',
+        title: 'Idle Chat',
       });
     });
 
-    it("should return null for non-existent conversation", () => {
-      const conversation = stateService.getConversationById("nonexistent");
+    it('should return null for non-existent conversation', () => {
+      const conversation = stateService.getConversationById('nonexistent');
 
       expect(conversation).toBeNull();
     });
 
-    it("should get conversations by status", () => {
-      const activeConversations =
-        stateService.getConversationsByStatus("active");
+    it('should get conversations by status', () => {
+      const activeConversations = stateService.getConversationsByStatus('active');
 
       expect(activeConversations).toHaveLength(2);
-      expect(
-        activeConversations.every((conv) => conv.status === "active"),
-      ).toBe(true);
+      expect(activeConversations.every((conv) => conv.status === 'active')).toBe(true);
     });
 
-    it("should return empty array for non-matching status", () => {
-      const waitingConversations =
-        stateService.getConversationsByStatus("waiting");
+    it('should return empty array for non-matching status', () => {
+      const waitingConversations = stateService.getConversationsByStatus('waiting');
 
       expect(waitingConversations).toEqual([]);
     });
   });
 
-  describe("state history management", () => {
-    it("should return state history", () => {
-      stateService.setState({ test1: true }, "action1");
-      stateService.setState({ test2: true }, "action2");
+  describe('state history management', () => {
+    it('should return state history', () => {
+      stateService.setState({ test1: true }, 'action1');
+      stateService.setState({ test2: true }, 'action2');
 
       const history = stateService.getStateHistory();
 
       expect(history).toHaveLength(2);
-      expect(history[0].action).toBe("action1");
-      expect(history[1].action).toBe("action2");
+      expect(history[0].action).toBe('action1');
+      expect(history[1].action).toBe('action2');
       expect(history).not.toBe(stateService.stateHistory); // Should be a copy
     });
 
-    it("should clear state history", () => {
+    it('should clear state history', () => {
       stateService.setState({ test: true });
       expect(stateService.stateHistory.length).toBeGreaterThan(0);
 
@@ -346,13 +337,13 @@ describe("StateService", () => {
     });
   });
 
-  describe("resetState", () => {
-    it("should reset to initial state", () => {
+  describe('resetState', () => {
+    it('should reset to initial state', () => {
       // Modify state
       stateService.setState({
-        conversations: [{ id: "test" }],
+        conversations: [{ id: 'test' }],
         isLoading: true,
-        error: "Some error",
+        error: 'Some error',
       });
 
       // Reset
@@ -372,12 +363,12 @@ describe("StateService", () => {
     });
   });
 
-  describe("getStateStats", () => {
-    it("should return state statistics", () => {
+  describe('getStateStats', () => {
+    it('should return state statistics', () => {
       const mockSubscriber = jest.fn();
       stateService.subscribe(mockSubscriber);
       stateService.setState({ conversations: [1, 2, 3] });
-      stateService.setError("Test error");
+      stateService.setError('Test error');
 
       const stats = stateService.getStateStats();
 
@@ -391,7 +382,7 @@ describe("StateService", () => {
       });
     });
 
-    it("should handle empty state", () => {
+    it('should handle empty state', () => {
       const stats = stateService.getStateStats();
 
       expect(stats).toMatchObject({
@@ -405,8 +396,8 @@ describe("StateService", () => {
     });
   });
 
-  describe("error handling and edge cases", () => {
-    it("should handle null/undefined state updates", () => {
+  describe('error handling and edge cases', () => {
+    it('should handle null/undefined state updates', () => {
       expect(() => {
         stateService.setState(null);
       }).not.toThrow();
@@ -416,7 +407,7 @@ describe("StateService", () => {
       }).not.toThrow();
     });
 
-    it("should handle state updates with circular references", () => {
+    it('should handle state updates with circular references', () => {
       const circularObj = { test: true };
       circularObj.self = circularObj;
 
@@ -425,7 +416,7 @@ describe("StateService", () => {
       }).not.toThrow();
     });
 
-    it("should maintain state integrity during concurrent updates", () => {
+    it('should maintain state integrity during concurrent updates', () => {
       const promises = [];
 
       // Simulate concurrent state updates
@@ -433,7 +424,7 @@ describe("StateService", () => {
         promises.push(
           Promise.resolve().then(() => {
             stateService.setState({ counter: i });
-          }),
+          })
         );
       }
 

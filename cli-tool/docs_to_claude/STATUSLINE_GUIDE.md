@@ -368,14 +368,14 @@ echo "$MODEL • $DIR_NAME$BRANCH"
 ```javascript
 #!/usr/bin/env node
 
-const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
 // Read JSON from stdin
-let input = "";
-process.stdin.on("data", (chunk) => (input += chunk));
-process.stdin.on("end", () => {
+let input = '';
+process.stdin.on('data', (chunk) => (input += chunk));
+process.stdin.on('end', () => {
   try {
     const data = JSON.parse(input);
 
@@ -393,16 +393,15 @@ process.stdin.on("end", () => {
     // Performance metrics
     const avgResponseTime =
       cost.total_api_duration_ms / Math.max(1, cost.total_duration_ms / 10000);
-    const efficiency =
-      cost.total_lines_added / Math.max(0.01, cost.total_cost_usd * 100);
+    const efficiency = cost.total_lines_added / Math.max(0.01, cost.total_cost_usd * 100);
 
     // Git status (cached for performance)
-    let gitInfo = "";
+    let gitInfo = '';
     try {
-      if (fs.existsSync(".git/HEAD")) {
-        const headContent = fs.readFileSync(".git/HEAD", "utf8").trim();
-        if (headContent.startsWith("ref: refs/heads/")) {
-          const branch = headContent.replace("ref: refs/heads/", "");
+      if (fs.existsSync('.git/HEAD')) {
+        const headContent = fs.readFileSync('.git/HEAD', 'utf8').trim();
+        if (headContent.startsWith('ref: refs/heads/')) {
+          const branch = headContent.replace('ref: refs/heads/', '');
           gitInfo = ` \x1b[32m⭐ ${branch}\x1b[0m`;
         }
       }
@@ -419,7 +418,7 @@ process.stdin.on("end", () => {
       `\x1b[90m${avgResponseTime.toFixed(0)}ms avg\x1b[0m`,
     ];
 
-    console.log(parts.filter((p) => p.trim()).join(" "));
+    console.log(parts.filter((p) => p.trim()).join(' '));
   } catch (error) {
     console.log(`[Status Error] ${error.message}`);
   }

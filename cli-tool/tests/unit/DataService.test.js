@@ -4,15 +4,12 @@
  */
 
 // Load the DataService class
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 // Load DataService from the actual file
-const DataServicePath = path.join(
-  __dirname,
-  "../../src/analytics-web/services/DataService.js",
-);
-const DataServiceCode = fs.readFileSync(DataServicePath, "utf8");
+const DataServicePath = path.join(__dirname, '../../src/analytics-web/services/DataService.js');
+const DataServiceCode = fs.readFileSync(DataServicePath, 'utf8');
 
 // Create a module-like environment
 const moduleExports = {};
@@ -22,7 +19,7 @@ const module = { exports: moduleExports };
 eval(DataServiceCode);
 const DataService = moduleExports.DataService || global.DataService;
 
-describe("DataService", () => {
+describe('DataService', () => {
   let dataService;
   let mockWebSocketService;
   let mockFetch;
@@ -49,39 +46,30 @@ describe("DataService", () => {
     delete global.fetch;
   });
 
-  describe("constructor", () => {
-    it("should initialize with default values", () => {
+  describe('constructor', () => {
+    it('should initialize with default values', () => {
       const service = new DataService();
 
       expect(service.cache).toBeInstanceOf(Map);
       expect(service.eventListeners).toBeInstanceOf(Set);
-      expect(service.baseURL).toBe("");
+      expect(service.baseURL).toBe('');
       expect(service.realTimeEnabled).toBe(false);
     });
 
-    it("should setup WebSocket integration when provided", () => {
+    it('should setup WebSocket integration when provided', () => {
+      expect(mockWebSocketService.on).toHaveBeenCalledWith('data_refresh', expect.any(Function));
       expect(mockWebSocketService.on).toHaveBeenCalledWith(
-        "data_refresh",
-        expect.any(Function),
+        'conversation_state_change',
+        expect.any(Function)
       );
-      expect(mockWebSocketService.on).toHaveBeenCalledWith(
-        "conversation_state_change",
-        expect.any(Function),
-      );
-      expect(mockWebSocketService.on).toHaveBeenCalledWith(
-        "connected",
-        expect.any(Function),
-      );
-      expect(mockWebSocketService.on).toHaveBeenCalledWith(
-        "disconnected",
-        expect.any(Function),
-      );
+      expect(mockWebSocketService.on).toHaveBeenCalledWith('connected', expect.any(Function));
+      expect(mockWebSocketService.on).toHaveBeenCalledWith('disconnected', expect.any(Function));
     });
   });
 
-  describe("cachedFetch", () => {
-    const mockEndpoint = "/api/test";
-    const mockResponse = { data: "test" };
+  describe('cachedFetch', () => {
+    const mockEndpoint = '/api/test';
+    const mockResponse = { data: 'test' };
 
     beforeEach(() => {
       mockFetch.mockResolvedValue({
@@ -90,23 +78,21 @@ describe("DataService", () => {
       });
     });
 
-    it("should fetch data and cache it", async () => {
+    it('should fetch data and cache it', async () => {
       const result = await dataService.cachedFetch(mockEndpoint);
 
       expect(result).toEqual(mockResponse);
       expect(mockFetch).toHaveBeenCalledWith(
         mockEndpoint,
         expect.objectContaining({
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }),
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        })
       );
-      expect(
-        dataService.cache.has(`${mockEndpoint}_${JSON.stringify({})}`),
-      ).toBe(true);
+      expect(dataService.cache.has(`${mockEndpoint}_${JSON.stringify({})}`)).toBe(true);
     });
 
-    it("should return cached data when available and fresh", async () => {
+    it('should return cached data when available and fresh', async () => {
       // First call - cache miss
       await dataService.cachedFetch(mockEndpoint);
 
@@ -117,7 +103,7 @@ describe("DataService", () => {
       expect(mockFetch).toHaveBeenCalledTimes(1); // Only called once
     });
 
-    it("should refetch when cache is expired", async () => {
+    it('should refetch when cache is expired', async () => {
       // First call
       await dataService.cachedFetch(mockEndpoint, { cacheDuration: 100 });
 
@@ -130,68 +116,64 @@ describe("DataService", () => {
       expect(mockFetch).toHaveBeenCalledTimes(2);
     });
 
-    it("should handle fetch errors gracefully", async () => {
-      mockFetch.mockRejectedValue(new Error("Network error"));
+    it('should handle fetch errors gracefully', async () => {
+      mockFetch.mockRejectedValue(new Error('Network error'));
 
-      await expect(dataService.cachedFetch(mockEndpoint)).rejects.toThrow(
-        "Network error",
-      );
+      await expect(dataService.cachedFetch(mockEndpoint)).rejects.toThrow('Network error');
     });
 
-    it("should return stale cache on fetch error", async () => {
+    it('should return stale cache on fetch error', async () => {
       // First successful call
       await dataService.cachedFetch(mockEndpoint);
 
       // Simulate network error on second call
-      mockFetch.mockRejectedValue(new Error("Network error"));
+      mockFetch.mockRejectedValue(new Error('Network error'));
 
       const result = await dataService.cachedFetch(mockEndpoint);
 
       expect(result).toEqual(mockResponse); // Should return cached data
     });
 
-    it("should handle HTTP errors", async () => {
+    it('should handle HTTP errors', async () => {
       mockFetch.mockResolvedValue({
         ok: false,
         status: 404,
       });
 
       await expect(dataService.cachedFetch(mockEndpoint)).rejects.toThrow(
-        "HTTP error! status: 404",
+        'HTTP error! status: 404'
       );
     });
   });
 
-  describe("API methods", () => {
+  describe('API methods', () => {
     beforeEach(() => {
-      jest
-        .spyOn(dataService, "cachedFetch")
-        .mockResolvedValue({ data: "mock" });
+      jest.spyOn(dataService, 'cachedFetch').mockResolvedValue({ data: 'mock' });
     });
 
-    it("should call correct endpoint for getConversations", async () => {
+    it('should call correct endpoint for getConversations', async () => {
       await dataService.getConversations();
 
-      expect(dataService.cachedFetch).toHaveBeenCalledWith("/api/data");
+      expect(dataService.cachedFetch).toHaveBeenCalledWith('/api/data');
     });
 
-    it("should call correct endpoint for getConversationStates", async () => {
+    it('should call correct endpoint for getConversationStates', async () => {
       await dataService.getConversationStates();
 
       expect(dataService.cachedFetch).toHaveBeenCalledWith(
-        "/api/conversation-state",
-        expect.objectContaining({ cacheDuration: expect.any(Number) }),
+        '/api/conversation-state',
+        expect.objectContaining({ cacheDuration: expect.any(Number) })
       );
     });
 
-    it("should adjust cache duration based on real-time status", async () => {
+    it('should adjust cache duration based on real-time status', async () => {
       // With real-time enabled
       dataService.realTimeEnabled = true;
       await dataService.getConversationStates();
 
       expect(dataService.cachedFetch).toHaveBeenCalledWith(
-        "/api/conversation-state",
-        expect.objectContaining({ cacheDuration: 30000 }),
+        '/api/conversation-state',
+        expect.objectContaining({ cacheDuration: 30000 })
       );
 
       // With real-time disabled
@@ -199,59 +181,49 @@ describe("DataService", () => {
       await dataService.getConversationStates();
 
       expect(dataService.cachedFetch).toHaveBeenCalledWith(
-        "/api/conversation-state",
-        expect.objectContaining({ cacheDuration: 5000 }),
+        '/api/conversation-state',
+        expect.objectContaining({ cacheDuration: 5000 })
       );
     });
 
-    it("should call correct endpoints for other methods", async () => {
+    it('should call correct endpoints for other methods', async () => {
       await dataService.getChartData();
-      expect(dataService.cachedFetch).toHaveBeenCalledWith("/api/charts");
+      expect(dataService.cachedFetch).toHaveBeenCalledWith('/api/charts');
 
       await dataService.getSessionData();
-      expect(dataService.cachedFetch).toHaveBeenCalledWith("/api/session/data");
+      expect(dataService.cachedFetch).toHaveBeenCalledWith('/api/session/data');
 
       await dataService.getProjectStats();
-      expect(dataService.cachedFetch).toHaveBeenCalledWith(
-        "/api/session/projects",
-      );
+      expect(dataService.cachedFetch).toHaveBeenCalledWith('/api/session/projects');
 
       await dataService.getSystemHealth();
-      expect(dataService.cachedFetch).toHaveBeenCalledWith(
-        "/api/system/health",
-      );
+      expect(dataService.cachedFetch).toHaveBeenCalledWith('/api/system/health');
     });
   });
 
-  describe("WebSocket integration", () => {
-    it("should enable real-time when WebSocket connects", () => {
+  describe('WebSocket integration', () => {
+    it('should enable real-time when WebSocket connects', () => {
       expect(dataService.realTimeEnabled).toBe(false);
 
       // Simulate WebSocket connection
       const connectedHandler = mockWebSocketService.on.mock.calls.find(
-        (call) => call[0] === "connected",
+        (call) => call[0] === 'connected'
       )[1];
       connectedHandler();
 
       expect(dataService.realTimeEnabled).toBe(true);
-      expect(mockWebSocketService.subscribe).toHaveBeenCalledWith(
-        "data_updates",
-      );
-      expect(mockWebSocketService.subscribe).toHaveBeenCalledWith(
-        "conversation_updates",
-      );
-      expect(mockWebSocketService.subscribe).toHaveBeenCalledWith(
-        "system_updates",
-      );
+      expect(mockWebSocketService.subscribe).toHaveBeenCalledWith('data_updates');
+      expect(mockWebSocketService.subscribe).toHaveBeenCalledWith('conversation_updates');
+      expect(mockWebSocketService.subscribe).toHaveBeenCalledWith('system_updates');
     });
 
-    it("should disable real-time when WebSocket disconnects", () => {
+    it('should disable real-time when WebSocket disconnects', () => {
       dataService.realTimeEnabled = true;
-      jest.spyOn(dataService, "startFallbackPolling");
+      jest.spyOn(dataService, 'startFallbackPolling');
 
       // Simulate WebSocket disconnection
       const disconnectedHandler = mockWebSocketService.on.mock.calls.find(
-        (call) => call[0] === "disconnected",
+        (call) => call[0] === 'disconnected'
       )[1];
       disconnectedHandler();
 
@@ -259,52 +231,45 @@ describe("DataService", () => {
       expect(dataService.startFallbackPolling).toHaveBeenCalled();
     });
 
-    it("should handle real-time data refresh", () => {
-      jest.spyOn(dataService, "clearCacheEntry");
-      jest.spyOn(dataService, "notifyListeners");
+    it('should handle real-time data refresh', () => {
+      jest.spyOn(dataService, 'clearCacheEntry');
+      jest.spyOn(dataService, 'notifyListeners');
 
       const testData = { conversations: [], summary: {} };
 
       // Simulate data refresh event
       const dataRefreshHandler = mockWebSocketService.on.mock.calls.find(
-        (call) => call[0] === "data_refresh",
+        (call) => call[0] === 'data_refresh'
       )[1];
       dataRefreshHandler(testData);
 
-      expect(dataService.clearCacheEntry).toHaveBeenCalledWith("/api/data");
-      expect(dataService.clearCacheEntry).toHaveBeenCalledWith(
-        "/api/conversation-state",
-      );
-      expect(dataService.notifyListeners).toHaveBeenCalledWith(
-        "data_refresh",
-        testData,
-      );
+      expect(dataService.clearCacheEntry).toHaveBeenCalledWith('/api/data');
+      expect(dataService.clearCacheEntry).toHaveBeenCalledWith('/api/conversation-state');
+      expect(dataService.notifyListeners).toHaveBeenCalledWith('data_refresh', testData);
     });
 
-    it("should handle real-time state changes", () => {
-      jest.spyOn(dataService, "clearCacheEntry");
-      jest.spyOn(dataService, "notifyListeners");
+    it('should handle real-time state changes', () => {
+      jest.spyOn(dataService, 'clearCacheEntry');
+      jest.spyOn(dataService, 'notifyListeners');
 
-      const stateData = { conversationId: "conv_123", newState: "active" };
+      const stateData = { conversationId: 'conv_123', newState: 'active' };
 
       // Simulate state change event
       const stateChangeHandler = mockWebSocketService.on.mock.calls.find(
-        (call) => call[0] === "conversation_state_change",
+        (call) => call[0] === 'conversation_state_change'
       )[1];
       stateChangeHandler(stateData);
 
-      expect(dataService.clearCacheEntry).toHaveBeenCalledWith(
-        "/api/conversation-state",
-      );
+      expect(dataService.clearCacheEntry).toHaveBeenCalledWith('/api/conversation-state');
       expect(dataService.notifyListeners).toHaveBeenCalledWith(
-        "conversation_state_change",
-        stateData,
+        'conversation_state_change',
+        stateData
       );
     });
   });
 
-  describe("requestRefresh", () => {
-    it("should use WebSocket refresh when available", async () => {
+  describe('requestRefresh', () => {
+    it('should use WebSocket refresh when available', async () => {
       dataService.realTimeEnabled = true;
 
       const result = await dataService.requestRefresh();
@@ -313,9 +278,9 @@ describe("DataService", () => {
       expect(result).toBe(true);
     });
 
-    it("should fallback to cache clearing when WebSocket unavailable", async () => {
+    it('should fallback to cache clearing when WebSocket unavailable', async () => {
       dataService.realTimeEnabled = false;
-      jest.spyOn(dataService, "clearCache");
+      jest.spyOn(dataService, 'clearCache');
 
       const result = await dataService.requestRefresh();
 
@@ -323,12 +288,10 @@ describe("DataService", () => {
       expect(result).toBe(false);
     });
 
-    it("should handle WebSocket request errors", async () => {
+    it('should handle WebSocket request errors', async () => {
       dataService.realTimeEnabled = true;
-      mockWebSocketService.requestRefresh.mockRejectedValue(
-        new Error("WebSocket error"),
-      );
-      jest.spyOn(dataService, "clearCache");
+      mockWebSocketService.requestRefresh.mockRejectedValue(new Error('WebSocket error'));
+      jest.spyOn(dataService, 'clearCache');
 
       const result = await dataService.requestRefresh();
 
@@ -337,18 +300,18 @@ describe("DataService", () => {
     });
   });
 
-  describe("event listeners", () => {
-    it("should add and notify event listeners", () => {
+  describe('event listeners', () => {
+    it('should add and notify event listeners', () => {
       const mockCallback = jest.fn();
 
       dataService.addEventListener(mockCallback);
       expect(dataService.eventListeners.has(mockCallback)).toBe(true);
 
-      dataService.notifyListeners("test_event", "test_data");
-      expect(mockCallback).toHaveBeenCalledWith("test_event", "test_data");
+      dataService.notifyListeners('test_event', 'test_data');
+      expect(mockCallback).toHaveBeenCalledWith('test_event', 'test_data');
     });
 
-    it("should remove event listeners", () => {
+    it('should remove event listeners', () => {
       const mockCallback = jest.fn();
 
       dataService.addEventListener(mockCallback);
@@ -357,49 +320,49 @@ describe("DataService", () => {
       expect(dataService.eventListeners.has(mockCallback)).toBe(false);
     });
 
-    it("should handle listener errors gracefully", () => {
+    it('should handle listener errors gracefully', () => {
       const errorCallback = jest.fn().mockImplementation(() => {
-        throw new Error("Listener error");
+        throw new Error('Listener error');
       });
 
       dataService.addEventListener(errorCallback);
 
       expect(() => {
-        dataService.notifyListeners("test_event", "test_data");
+        dataService.notifyListeners('test_event', 'test_data');
       }).not.toThrow();
     });
   });
 
-  describe("cache management", () => {
-    it("should clear entire cache", () => {
-      dataService.cache.set("test_key", { data: "test" });
+  describe('cache management', () => {
+    it('should clear entire cache', () => {
+      dataService.cache.set('test_key', { data: 'test' });
 
       dataService.clearCache();
 
       expect(dataService.cache.size).toBe(0);
     });
 
-    it("should clear specific cache entries", () => {
-      dataService.cache.set("/api/data_{}", { data: "test1" });
-      dataService.cache.set("/api/other_{}", { data: "test2" });
+    it('should clear specific cache entries', () => {
+      dataService.cache.set('/api/data_{}', { data: 'test1' });
+      dataService.cache.set('/api/other_{}', { data: 'test2' });
 
-      dataService.clearCacheEntry("/api/data");
+      dataService.clearCacheEntry('/api/data');
 
-      expect(dataService.cache.has("/api/data_{}")).toBe(false);
-      expect(dataService.cache.has("/api/other_{}")).toBe(true);
+      expect(dataService.cache.has('/api/data_{}')).toBe(false);
+      expect(dataService.cache.has('/api/other_{}')).toBe(true);
     });
   });
 
-  describe("getCacheStats", () => {
-    it("should return cache statistics", () => {
-      dataService.cache.set("test1", { data: "test" });
-      dataService.cache.set("test2", { data: "test" });
+  describe('getCacheStats', () => {
+    it('should return cache statistics', () => {
+      dataService.cache.set('test1', { data: 'test' });
+      dataService.cache.set('test2', { data: 'test' });
 
       const stats = dataService.getCacheStats();
 
       expect(stats).toMatchObject({
         size: 2,
-        keys: expect.arrayContaining(["test1", "test2"]),
+        keys: expect.arrayContaining(['test1', 'test2']),
         listeners: 0,
         realTimeEnabled: expect.any(Boolean),
         webSocketConnected: true,
@@ -407,7 +370,7 @@ describe("DataService", () => {
     });
   });
 
-  describe("startPeriodicRefresh", () => {
+  describe('startPeriodicRefresh', () => {
     beforeEach(() => {
       jest.useFakeTimers();
     });
@@ -416,7 +379,7 @@ describe("DataService", () => {
       jest.useRealTimers();
     });
 
-    it("should skip polling when real-time is enabled", () => {
+    it('should skip polling when real-time is enabled', () => {
       dataService.realTimeEnabled = true;
 
       dataService.startPeriodicRefresh();
@@ -424,10 +387,10 @@ describe("DataService", () => {
       expect(dataService.refreshInterval).toBeUndefined();
     });
 
-    it("should start polling when real-time is disabled", () => {
+    it('should start polling when real-time is disabled', () => {
       dataService.realTimeEnabled = false;
-      jest.spyOn(dataService, "getConversations").mockResolvedValue({});
-      jest.spyOn(dataService, "getConversationStates").mockResolvedValue({});
+      jest.spyOn(dataService, 'getConversations').mockResolvedValue({});
+      jest.spyOn(dataService, 'getConversationStates').mockResolvedValue({});
 
       dataService.startPeriodicRefresh(1000);
 

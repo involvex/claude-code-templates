@@ -10,7 +10,7 @@ where:
 
 - h_0(t) is the baseline hazard function (unspecified)
 - β is the vector of coefficients
-- x_i is the covariate vector for individual _i_
+- x*i is the covariate vector for individual \_i*
 
 The key assumption is that the hazard ratio between two individuals is constant over time (proportional hazards).
 

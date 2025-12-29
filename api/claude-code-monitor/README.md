@@ -186,16 +186,16 @@ curl https://your-domain.vercel.app/api/claude-code-monitor
 
 Almacena todas las versiones detectadas.
 
-| Campo                           | Tipo      | Descripción                      |
-| ------------------------------- | --------- | -------------------------------- |
-| id                              | SERIAL    | ID único                         |
-| version                         | VARCHAR   | Número de versión (ej: "2.0.31") |
-| published_at                    | TIMESTAMP | Fecha de publicación             |
-| changelog_content               | TEXT      | Contenido completo del changelog |
-| npm_url                         | VARCHAR   | URL del paquete en NPM           |
-| github_url                      | VARCHAR   | URL del changelog en GitHub      |
-| discord_notified                | BOOLEAN   | Si ya se notificó a Discord      |
-| discord_notification_sent_at    | TIMESTAMP | Cuándo se envió la notificación  |
+| Campo                        | Tipo      | Descripción                      |
+| ---------------------------- | --------- | -------------------------------- |
+| id                           | SERIAL    | ID único                         |
+| version                      | VARCHAR   | Número de versión (ej: "2.0.31") |
+| published_at                 | TIMESTAMP | Fecha de publicación             |
+| changelog_content            | TEXT      | Contenido completo del changelog |
+| npm_url                      | VARCHAR   | URL del paquete en NPM           |
+| github_url                   | VARCHAR   | URL del changelog en GitHub      |
+| discord_notified             | BOOLEAN   | Si ya se notificó a Discord      |
+| discord_notification_sent_at | TIMESTAMP | Cuándo se envió la notificación  |
 
 ### `claude_code_changes`
 
@@ -228,14 +228,14 @@ Log de todas las notificaciones enviadas.
 
 Metadata del sistema de monitoreo.
 
-| Campo              | Tipo      | Descripción                      |
-| ------------------ | --------- | -------------------------------- |
-| id                 | SERIAL    | ID único (siempre 1)             |
-| last_check_at      | TIMESTAMP | Última verificación              |
-| last_version_found | VARCHAR   | Última versión encontrada        |
-| check_count        | INTEGER   | Número de verificaciones         |
-| error_count        | INTEGER   | Número de errores                |
-| last_error         | TEXT      | Último error (si hubo)           |
+| Campo              | Tipo      | Descripción               |
+| ------------------ | --------- | ------------------------- |
+| id                 | SERIAL    | ID único (siempre 1)      |
+| last_check_at      | TIMESTAMP | Última verificación       |
+| last_version_found | VARCHAR   | Última versión encontrada |
+| check_count        | INTEGER   | Número de verificaciones  |
+| error_count        | INTEGER   | Número de errores         |
+| last_error         | TEXT      | Último error (si hubo)    |
 
 ## 🧪 Testing
 

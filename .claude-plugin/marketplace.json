@@ -15,7 +15,7 @@
       "source": "./",
       "description": "Git workflow automation: feature, release, and hotfix commands with git specialists",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
       "keywords": ["git", "workflow", "automation"],
       "strict": false,
@@ -33,7 +33,7 @@
       "source": "./",
       "description": "Complete Supabase workflow with specialized commands, data engineering agents, and MCP integrations",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
       "keywords": ["supabase", "database", "postgresql", "data"],
       "strict": false,
@@ -59,7 +59,7 @@
       "source": "./",
       "description": "Complete Next.js and Vercel development toolkit with deployment automation and performance optimization",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
       "keywords": ["nextjs", "vercel", "react", "deployment", "performance"],
       "strict": false,
@@ -76,16 +76,14 @@
         "./cli-tool/components/agents/development-team/frontend-developer.md",
         "./cli-tool/components/agents/development-team/fullstack-developer.md"
       ],
-      "mcpServers": [
-        "./cli-tool/components/mcps/devtools/vercel-mcp.json"
-      ]
+      "mcpServers": ["./cli-tool/components/mcps/devtools/vercel-mcp.json"]
     },
     {
       "name": "testing-suite",
       "source": "./",
       "description": "Comprehensive testing toolkit with E2E, unit, integration, and visual testing automation",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
       "keywords": ["testing", "qa", "e2e", "automation", "quality"],
       "strict": false,
@@ -111,9 +109,15 @@
       "source": "./",
       "description": "Enterprise security toolkit with auditing, penetration testing, and compliance automation",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
-      "keywords": ["security", "audit", "compliance", "pentesting", "vulnerability"],
+      "keywords": [
+        "security",
+        "audit",
+        "compliance",
+        "pentesting",
+        "vulnerability"
+      ],
       "strict": false,
       "commands": [
         "./cli-tool/components/commands/security/security-audit.md",
@@ -133,7 +137,7 @@
       "source": "./",
       "description": "AI and Machine Learning development suite with data engineering and model deployment tools",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
       "keywords": ["ai", "ml", "machine-learning", "data-science", "nlp"],
       "strict": false,
@@ -144,16 +148,21 @@
         "./cli-tool/components/agents/data-ai/computer-vision-engineer.md",
         "./cli-tool/components/agents/data-ai/mlops-engineer.md"
       ]
-      
     },
     {
       "name": "devops-automation",
       "source": "./",
       "description": "DevOps automation suite with CI/CD, infrastructure management, and deployment orchestration",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
-      "keywords": ["devops", "cicd", "infrastructure", "deployment", "automation"],
+      "keywords": [
+        "devops",
+        "cicd",
+        "infrastructure",
+        "deployment",
+        "automation"
+      ],
       "strict": false,
       "commands": [
         "./cli-tool/components/commands/deployment/setup-ci-cd-pipeline.md",
@@ -178,9 +187,14 @@
       "source": "./",
       "description": "Automated documentation generation with API docs, technical writing, and content management",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
-      "keywords": ["documentation", "api-docs", "technical-writing", "markdown"],
+      "keywords": [
+        "documentation",
+        "api-docs",
+        "technical-writing",
+        "markdown"
+      ],
       "strict": false,
       "commands": [
         "./cli-tool/components/commands/documentation/generate-api-docs.md",
@@ -194,18 +208,22 @@
         "./cli-tool/components/agents/documentation/api-documentation-specialist.md",
         "./cli-tool/components/agents/documentation/docusaurus-expert.md"
       ],
-      "mcpServers": [
-        "./cli-tool/components/mcps/filesystem/filesystem.json"
-      ]
+      "mcpServers": ["./cli-tool/components/mcps/filesystem/filesystem.json"]
     },
     {
       "name": "performance-optimizer",
       "source": "./",
       "description": "Performance optimization suite with profiling, bundle analysis, and speed improvement tools",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
-      "keywords": ["performance", "optimization", "profiling", "speed", "bundle"],
+      "keywords": [
+        "performance",
+        "optimization",
+        "profiling",
+        "speed",
+        "bundle"
+      ],
       "strict": false,
       "commands": [
         "./cli-tool/components/commands/performance/optimize-bundle.md",
@@ -225,9 +243,15 @@
       "source": "./",
       "description": "Project management toolkit with sprint planning, task automation, and team collaboration tools",
       "version": "1.0.0",
-      "author": {"name": "Daniel Avila"},
+      "author": { "name": "Daniel Avila" },
       "license": "MIT",
-      "keywords": ["project-management", "agile", "scrum", "planning", "collaboration"],
+      "keywords": [
+        "project-management",
+        "agile",
+        "scrum",
+        "planning",
+        "collaboration"
+      ],
       "strict": false,
       "commands": [
         "./cli-tool/components/commands/project-management/sprint-planning.md",

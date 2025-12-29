@@ -13573,10 +13573,7 @@
       "subtype": "language",
       "category": "languages",
       "description": "Go project template",
-      "files": [
-        "README.md",
-        ".mcp.json"
-      ],
+      "files": ["README.md", ".mcp.json"],
       "installCommand": "npx claude-code-templates@latest --template=go --yes",
       "downloads": 0
     },
@@ -13646,10 +13643,7 @@
       "category": "frameworks",
       "language": "ruby",
       "description": "Rails-App with Ruby",
-      "files": [
-        ".claude/commands/authentication.md",
-        "CLAUDE.md"
-      ],
+      "files": [".claude/commands/authentication.md", "CLAUDE.md"],
       "installCommand": "npx claude-code-templates@latest --template=rails-app --yes",
       "downloads": 0
     },
@@ -13694,10 +13688,7 @@
       "subtype": "language",
       "category": "languages",
       "description": "Rust project template",
-      "files": [
-        "README.md",
-        ".mcp.json"
-      ],
+      "files": ["README.md", ".mcp.json"],
       "installCommand": "npx claude-code-templates@latest --template=rust --yes",
       "downloads": 0
     },
@@ -13724,13 +13715,7 @@
       "type": "plugin",
       "description": "AI and Machine Learning development suite with data engineering and model deployment tools",
       "version": "1.0.0",
-      "keywords": [
-        "ai",
-        "ml",
-        "machine-learning",
-        "data-science",
-        "nlp"
-      ],
+      "keywords": ["ai", "ml", "machine-learning", "data-science", "nlp"],
       "author": "Daniel Avila",
       "commands": 0,
       "agents": 5,
@@ -13777,10 +13762,7 @@
         "devops-infrastructure/kubernetes-specialist",
         "devops-infrastructure/infrastructure-engineer"
       ],
-      "mcpServersList": [
-        "devtools/github-integration",
-        "devtools/docker-mcp"
-      ],
+      "mcpServersList": ["devtools/github-integration", "devtools/docker-mcp"],
       "installCommand": "/plugin install devops-automation@claude-code-templates",
       "downloads": 0
     },
@@ -13812,9 +13794,7 @@
         "documentation/api-documentation-specialist",
         "documentation/docusaurus-expert"
       ],
-      "mcpServersList": [
-        "filesystem/filesystem"
-      ],
+      "mcpServersList": ["filesystem/filesystem"],
       "installCommand": "/plugin install documentation-generator@claude-code-templates",
       "downloads": 0
     },
@@ -13824,11 +13804,7 @@
       "type": "plugin",
       "description": "Git workflow automation: feature, release, and hotfix commands with git specialists",
       "version": "1.0.0",
-      "keywords": [
-        "git",
-        "workflow",
-        "automation"
-      ],
+      "keywords": ["git", "workflow", "automation"],
       "author": "Daniel Avila",
       "commands": 5,
       "agents": 1,
@@ -13840,9 +13816,7 @@
         "git/finish",
         "git/flow-status"
       ],
-      "agentsList": [
-        "git/git-flow-manager"
-      ],
+      "agentsList": ["git/git-flow-manager"],
       "mcpServersList": [],
       "installCommand": "/plugin install git-workflow@claude-code-templates",
       "downloads": 0
@@ -13853,13 +13827,7 @@
       "type": "plugin",
       "description": "Complete Next.js and Vercel development toolkit with deployment automation and performance optimization",
       "version": "1.0.0",
-      "keywords": [
-        "nextjs",
-        "vercel",
-        "react",
-        "deployment",
-        "performance"
-      ],
+      "keywords": ["nextjs", "vercel", "react", "deployment", "performance"],
       "author": "Daniel Avila",
       "commands": 7,
       "agents": 2,
@@ -13877,9 +13845,7 @@
         "development-team/frontend-developer",
         "development-team/fullstack-developer"
       ],
-      "mcpServersList": [
-        "devtools/vercel-mcp"
-      ],
+      "mcpServersList": ["devtools/vercel-mcp"],
       "installCommand": "/plugin install nextjs-vercel-pro@claude-code-templates",
       "downloads": 0
     },
@@ -13992,12 +13958,7 @@
       "type": "plugin",
       "description": "Complete Supabase workflow with specialized commands, data engineering agents, and MCP integrations",
       "version": "1.0.0",
-      "keywords": [
-        "supabase",
-        "database",
-        "postgresql",
-        "data"
-      ],
+      "keywords": ["supabase", "database", "postgresql", "data"],
       "author": "Daniel Avila",
       "commands": 5,
       "agents": 2,
@@ -14009,10 +13970,7 @@
         "database/supabase-performance-optimizer",
         "database/supabase-schema-sync"
       ],
-      "agentsList": [
-        "data-ai/data-engineer",
-        "data-ai/data-scientist"
-      ],
+      "agentsList": ["data-ai/data-engineer", "data-ai/data-scientist"],
       "mcpServersList": [
         "database/postgresql-integration",
         "database/mysql-integration",
@@ -14027,13 +13985,7 @@
       "type": "plugin",
       "description": "Comprehensive testing toolkit with E2E, unit, integration, and visual testing automation",
       "version": "1.0.0",
-      "keywords": [
-        "testing",
-        "qa",
-        "e2e",
-        "automation",
-        "quality"
-      ],
+      "keywords": ["testing", "qa", "e2e", "automation", "quality"],
       "author": "Daniel Avila",
       "commands": 7,
       "agents": 2,
@@ -14051,9 +14003,7 @@
         "development-tools/qa-automation-engineer",
         "development-tools/test-engineer"
       ],
-      "mcpServersList": [
-        "browser_automation/playwright-mcp"
-      ],
+      "mcpServersList": ["browser_automation/playwright-mcp"],
       "installCommand": "/plugin install testing-suite@claude-code-templates",
       "downloads": 0
     }
@@ -14079,11 +14029,7 @@
           "name": "Daniel Avila"
         },
         "license": "MIT",
-        "keywords": [
-          "git",
-          "workflow",
-          "automation"
-        ],
+        "keywords": ["git", "workflow", "automation"],
         "strict": false,
         "commands": [
           "./cli-tool/components/commands/git/feature.md",
@@ -14092,9 +14038,7 @@
           "./cli-tool/components/commands/git/finish.md",
           "./cli-tool/components/commands/git/flow-status.md"
         ],
-        "agents": [
-          "./cli-tool/components/agents/git/git-flow-manager.md"
-        ]
+        "agents": ["./cli-tool/components/agents/git/git-flow-manager.md"]
       },
       {
         "name": "supabase-toolkit",
@@ -14105,12 +14049,7 @@
           "name": "Daniel Avila"
         },
         "license": "MIT",
-        "keywords": [
-          "supabase",
-          "database",
-          "postgresql",
-          "data"
-        ],
+        "keywords": ["supabase", "database", "postgresql", "data"],
         "strict": false,
         "commands": [
           "./cli-tool/components/commands/database/supabase-backup-manager.md",
@@ -14138,13 +14077,7 @@
           "name": "Daniel Avila"
         },
         "license": "MIT",
-        "keywords": [
-          "nextjs",
-          "vercel",
-          "react",
-          "deployment",
-          "performance"
-        ],
+        "keywords": ["nextjs", "vercel", "react", "deployment", "performance"],
         "strict": false,
         "commands": [
           "./cli-tool/components/commands/nextjs-vercel/nextjs-scaffold.md",
@@ -14159,9 +14092,7 @@
           "./cli-tool/components/agents/development-team/frontend-developer.md",
           "./cli-tool/components/agents/development-team/fullstack-developer.md"
         ],
-        "mcpServers": [
-          "./cli-tool/components/mcps/devtools/vercel-mcp.json"
-        ]
+        "mcpServers": ["./cli-tool/components/mcps/devtools/vercel-mcp.json"]
       },
       {
         "name": "testing-suite",
@@ -14172,13 +14103,7 @@
           "name": "Daniel Avila"
         },
         "license": "MIT",
-        "keywords": [
-          "testing",
-          "qa",
-          "e2e",
-          "automation",
-          "quality"
-        ],
+        "keywords": ["testing", "qa", "e2e", "automation", "quality"],
         "strict": false,
         "commands": [
           "./cli-tool/components/commands/testing/generate-tests.md",
@@ -14236,13 +14161,7 @@
           "name": "Daniel Avila"
         },
         "license": "MIT",
-        "keywords": [
-          "ai",
-          "ml",
-          "machine-learning",
-          "data-science",
-          "nlp"
-        ],
+        "keywords": ["ai", "ml", "machine-learning", "data-science", "nlp"],
         "strict": false,
         "agents": [
           "./cli-tool/components/agents/data-ai/ai-engineer.md",
@@ -14315,9 +14234,7 @@
           "./cli-tool/components/agents/documentation/api-documentation-specialist.md",
           "./cli-tool/components/agents/documentation/docusaurus-expert.md"
         ],
-        "mcpServers": [
-          "./cli-tool/components/mcps/filesystem/filesystem.json"
-        ]
+        "mcpServers": ["./cli-tool/components/mcps/filesystem/filesystem.json"]
       },
       {
         "name": "performance-optimizer",
@@ -14485,14 +14402,7 @@
           "name": "Claude Code Templates Team"
         },
         "category": "mobile",
-        "keywords": [
-          "ios",
-          "swift",
-          "swiftui",
-          "uikit",
-          "core-data",
-          "xcode"
-        ],
+        "keywords": ["ios", "swift", "swiftui", "uikit", "core-data", "xcode"],
         "license": "MIT",
         "repository": "https://github.com/davila7/claude-code-templates"
       },
@@ -14521,14 +14431,7 @@
           "name": "Claude Code Templates Team"
         },
         "category": "design",
-        "keywords": [
-          "cli",
-          "terminal",
-          "ui",
-          "command-line",
-          "design",
-          "web"
-        ],
+        "keywords": ["cli", "terminal", "ui", "command-line", "design", "web"],
         "license": "MIT",
         "repository": "https://github.com/davila7/claude-code-templates"
       }

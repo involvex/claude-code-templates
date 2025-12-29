@@ -15,8 +15,8 @@ task_number: 3.5
 pr_number: 1234
 coordinator_session: team-leader
 enabled: true
-dependencies: ["Task 3.4"]
-additional_instructions: "Use JWT tokens, not sessions"
+dependencies: ['Task 3.4']
+additional_instructions: 'Use JWT tokens, not sessions'
 ---
 
 # Task: Implement Authentication
@@ -140,8 +140,8 @@ mv temp.md ".claude/multi-agent-swarm.local.md"
 ---
 iteration: 1
 max_iterations: 10
-completion_promise: "All tests passing and build successful"
-started_at: "2025-01-15T14:30:00Z"
+completion_promise: 'All tests passing and build successful'
+started_at: '2025-01-15T14:30:00Z'
 ---
 
 Fix all the linting errors in the project.

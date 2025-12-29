@@ -116,10 +116,10 @@ Si no hay nuevo mensaje del usuario → "User typing..."
 ### Logs Añadidos:
 
 ```javascript
-console.log("⚡ User message detected - Claude starting work immediately");
-console.log("🤖 Assistant message detected - state: ${intelligentState}");
-console.log("🔧 Tools detected: ${toolNames} - showing execution state");
-console.log("✍️ Potential user typing detected for ${conversationId}");
+console.log('⚡ User message detected - Claude starting work immediately');
+console.log('🤖 Assistant message detected - state: ${intelligentState}');
+console.log('🔧 Tools detected: ${toolNames} - showing execution state');
+console.log('✍️ Potential user typing detected for ${conversationId}');
 ```
 
 ### Monitoreo:

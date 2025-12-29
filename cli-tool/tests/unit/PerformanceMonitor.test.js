@@ -3,9 +3,9 @@
  * Tests performance monitoring and metrics collection
  */
 
-const PerformanceMonitor = require("../../src/analytics/utils/PerformanceMonitor");
+const PerformanceMonitor = require('../../src/analytics/utils/PerformanceMonitor');
 
-describe("PerformanceMonitor", () => {
+describe('PerformanceMonitor', () => {
   let performanceMonitor;
 
   beforeEach(() => {
@@ -22,8 +22,8 @@ describe("PerformanceMonitor", () => {
     }
   });
 
-  describe("constructor", () => {
-    it("should initialize with default options", () => {
+  describe('constructor', () => {
+    it('should initialize with default options', () => {
       const monitor = new PerformanceMonitor();
 
       expect(monitor.options.enabled).toBe(true);
@@ -34,7 +34,7 @@ describe("PerformanceMonitor", () => {
       expect(monitor.counters).toEqual({});
     });
 
-    it("should merge custom options", () => {
+    it('should merge custom options', () => {
       const customOptions = {
         enabled: false,
         logInterval: 5000,
@@ -49,9 +49,9 @@ describe("PerformanceMonitor", () => {
     });
   });
 
-  describe("timer operations", () => {
-    it("should start and end timers correctly", () => {
-      const timerName = "test_operation";
+  describe('timer operations', () => {
+    it('should start and end timers correctly', () => {
+      const timerName = 'test_operation';
 
       performanceMonitor.startTimer(timerName);
       expect(performanceMonitor.timers[timerName]).toBeDefined();
@@ -67,14 +67,14 @@ describe("PerformanceMonitor", () => {
       }, 10);
     });
 
-    it("should handle ending non-existent timer", () => {
-      const duration = performanceMonitor.endTimer("non_existent");
+    it('should handle ending non-existent timer', () => {
+      const duration = performanceMonitor.endTimer('non_existent');
       expect(duration).toBe(0);
     });
 
-    it("should record timer metadata", () => {
-      const timerName = "test_with_metadata";
-      const metadata = { userId: "123", action: "save" };
+    it('should record timer metadata', () => {
+      const timerName = 'test_with_metadata';
+      const metadata = { userId: '123', action: 'save' };
 
       performanceMonitor.startTimer(timerName);
       performanceMonitor.endTimer(timerName, metadata);
@@ -85,14 +85,14 @@ describe("PerformanceMonitor", () => {
 
       const lastMetric = performanceMetrics[performanceMetrics.length - 1];
       expect(lastMetric.operation).toBe(timerName);
-      expect(lastMetric.userId).toBe("123");
-      expect(lastMetric.action).toBe("save");
+      expect(lastMetric.userId).toBe('123');
+      expect(lastMetric.action).toBe('save');
     });
   });
 
-  describe("counter operations", () => {
-    it("should increment counters", () => {
-      const counterName = "test_counter";
+  describe('counter operations', () => {
+    it('should increment counters', () => {
+      const counterName = 'test_counter';
 
       performanceMonitor.incrementCounter(counterName);
       expect(performanceMonitor.counters[counterName]).toBe(1);
@@ -101,17 +101,17 @@ describe("PerformanceMonitor", () => {
       expect(performanceMonitor.counters[counterName]).toBe(6);
     });
 
-    it("should handle initial counter value", () => {
-      const counterName = "new_counter";
+    it('should handle initial counter value', () => {
+      const counterName = 'new_counter';
 
       performanceMonitor.incrementCounter(counterName, 10);
       expect(performanceMonitor.counters[counterName]).toBe(10);
     });
   });
 
-  describe("metric recording", () => {
-    it("should record metrics in categories", () => {
-      const category = "test_category";
+  describe('metric recording', () => {
+    it('should record metrics in categories', () => {
+      const category = 'test_category';
       const data = { value: 42, timestamp: Date.now() };
 
       performanceMonitor.recordMetric(category, data);
@@ -121,19 +121,19 @@ describe("PerformanceMonitor", () => {
       expect(performanceMonitor.metrics[category][0]).toMatchObject(data);
     });
 
-    it("should add timestamp if not provided", () => {
-      const category = "test_category";
+    it('should add timestamp if not provided', () => {
+      const category = 'test_category';
       const data = { value: 42 };
 
       performanceMonitor.recordMetric(category, data);
 
       const metric = performanceMonitor.metrics[category][0];
       expect(metric.timestamp).toBeDefined();
-      expect(typeof metric.timestamp).toBe("number");
+      expect(typeof metric.timestamp).toBe('number');
     });
 
-    it("should limit metric array size", () => {
-      const category = "test_category";
+    it('should limit metric array size', () => {
+      const category = 'test_category';
 
       // Add more than 1000 metrics
       for (let i = 0; i < 1005; i++) {
@@ -143,20 +143,20 @@ describe("PerformanceMonitor", () => {
       expect(performanceMonitor.metrics[category]).toHaveLength(1000);
     });
 
-    it("should skip recording when disabled", () => {
+    it('should skip recording when disabled', () => {
       performanceMonitor.options.enabled = false;
 
-      performanceMonitor.recordMetric("test", { value: 1 });
+      performanceMonitor.recordMetric('test', { value: 1 });
 
       expect(performanceMonitor.metrics.test).toBeUndefined();
     });
   });
 
-  describe("error recording", () => {
-    it("should record errors", () => {
-      const errorType = "validation_error";
-      const errorMessage = "Invalid input data";
-      const metadata = { field: "email" };
+  describe('error recording', () => {
+    it('should record errors', () => {
+      const errorType = 'validation_error';
+      const errorMessage = 'Invalid input data';
+      const metadata = { field: 'email' };
 
       performanceMonitor.recordError(errorType, errorMessage, metadata);
 
@@ -166,13 +166,13 @@ describe("PerformanceMonitor", () => {
       const error = performanceMonitor.metrics.errors[0];
       expect(error.type).toBe(errorType);
       expect(error.message).toBe(errorMessage);
-      expect(error.field).toBe("email");
+      expect(error.field).toBe('email');
     });
   });
 
-  describe("request recording", () => {
-    it("should record successful requests", () => {
-      const endpoint = "/api/data";
+  describe('request recording', () => {
+    it('should record successful requests', () => {
+      const endpoint = '/api/data';
       const duration = 150;
       const statusCode = 200;
 
@@ -189,8 +189,8 @@ describe("PerformanceMonitor", () => {
       expect(request.success).toBe(true);
     });
 
-    it("should record error requests", () => {
-      const endpoint = "/api/data";
+    it('should record error requests', () => {
+      const endpoint = '/api/data';
       const duration = 500;
       const statusCode = 500;
 
@@ -204,10 +204,10 @@ describe("PerformanceMonitor", () => {
     });
   });
 
-  describe("cache recording", () => {
-    it("should record cache operations", () => {
-      const operation = "hit";
-      const key = "user:123";
+  describe('cache recording', () => {
+    it('should record cache operations', () => {
+      const operation = 'hit';
+      const key = 'user:123';
       const duration = 5;
 
       performanceMonitor.recordCache(operation, key, duration);
@@ -222,10 +222,10 @@ describe("PerformanceMonitor", () => {
     });
   });
 
-  describe("WebSocket recording", () => {
-    it("should record WebSocket events", () => {
-      const event = "connection";
-      const data = { clientId: "client_123" };
+  describe('WebSocket recording', () => {
+    it('should record WebSocket events', () => {
+      const event = 'connection';
+      const data = { clientId: 'client_123' };
 
       performanceMonitor.recordWebSocket(event, data);
 
@@ -234,12 +234,12 @@ describe("PerformanceMonitor", () => {
 
       const wsMetric = performanceMonitor.metrics.websocket[0];
       expect(wsMetric.event).toBe(event);
-      expect(wsMetric.clientId).toBe("client_123");
+      expect(wsMetric.clientId).toBe('client_123');
     });
   });
 
-  describe("system metrics collection", () => {
-    it("should collect memory and CPU metrics", () => {
+  describe('system metrics collection', () => {
+    it('should collect memory and CPU metrics', () => {
       performanceMonitor.collectSystemMetrics();
 
       expect(performanceMonitor.metrics.memory).toHaveLength(1);
@@ -256,23 +256,23 @@ describe("PerformanceMonitor", () => {
     });
   });
 
-  describe("statistics calculation", () => {
+  describe('statistics calculation', () => {
     beforeEach(() => {
       // Add some test data
-      performanceMonitor.recordRequest("/api/test1", 100, 200);
-      performanceMonitor.recordRequest("/api/test2", 200, 404);
-      performanceMonitor.recordRequest("/api/test1", 150, 200);
+      performanceMonitor.recordRequest('/api/test1', 100, 200);
+      performanceMonitor.recordRequest('/api/test2', 200, 404);
+      performanceMonitor.recordRequest('/api/test1', 150, 200);
 
-      performanceMonitor.recordCache("hit", "key1", 5);
-      performanceMonitor.recordCache("miss", "key2", 10);
-      performanceMonitor.recordCache("hit", "key3", 3);
+      performanceMonitor.recordCache('hit', 'key1', 5);
+      performanceMonitor.recordCache('miss', 'key2', 10);
+      performanceMonitor.recordCache('hit', 'key3', 3);
 
-      performanceMonitor.recordError("test_error", "Test message");
+      performanceMonitor.recordError('test_error', 'Test message');
 
       performanceMonitor.collectSystemMetrics();
     });
 
-    it("should calculate request statistics", () => {
+    it('should calculate request statistics', () => {
       const stats = performanceMonitor.getStats();
 
       expect(stats.requests.total).toBe(3);
@@ -281,20 +281,20 @@ describe("PerformanceMonitor", () => {
       expect(stats.requests.averageResponseTime).toBe(150); // (100 + 200 + 150) / 3
     });
 
-    it("should calculate cache hit rate", () => {
+    it('should calculate cache hit rate', () => {
       const stats = performanceMonitor.getStats();
 
       expect(stats.cache.operations).toBe(3);
       expect(stats.cache.hitRate).toBe(66.67); // 2 hits out of 3 operations
     });
 
-    it("should include error count", () => {
+    it('should include error count', () => {
       const stats = performanceMonitor.getStats();
 
       expect(stats.errors.total).toBe(1);
     });
 
-    it("should include memory statistics", () => {
+    it('should include memory statistics', () => {
       const stats = performanceMonitor.getStats();
 
       expect(stats.memory.current).toBeDefined();
@@ -302,11 +302,11 @@ describe("PerformanceMonitor", () => {
       expect(stats.memory.peak).toBeDefined();
     });
 
-    it("should filter by timeframe", () => {
+    it('should filter by timeframe', () => {
       // Add old data (simulate by manually setting old timestamp)
       const oldTimestamp = Date.now() - 10 * 60 * 1000; // 10 minutes ago
       performanceMonitor.metrics.requests.push({
-        endpoint: "/api/old",
+        endpoint: '/api/old',
         duration: 999,
         timestamp: oldTimestamp,
       });
@@ -319,29 +319,29 @@ describe("PerformanceMonitor", () => {
     });
   });
 
-  describe("Express middleware", () => {
-    it("should create Express middleware function", () => {
+  describe('Express middleware', () => {
+    it('should create Express middleware function', () => {
       const middleware = performanceMonitor.createExpressMiddleware();
 
-      expect(typeof middleware).toBe("function");
+      expect(typeof middleware).toBe('function');
       expect(middleware.length).toBe(3); // (req, res, next)
     });
 
-    it("should track request performance", (done) => {
+    it('should track request performance', (done) => {
       const middleware = performanceMonitor.createExpressMiddleware();
 
       // Mock Express req, res, next
       const req = {
-        method: "GET",
-        url: "/api/test",
-        route: { path: "/api/test" },
-        get: jest.fn().mockReturnValue("test-agent"),
-        ip: "127.0.0.1",
+        method: 'GET',
+        url: '/api/test',
+        route: { path: '/api/test' },
+        get: jest.fn().mockReturnValue('test-agent'),
+        ip: '127.0.0.1',
       };
 
       const res = {
         on: jest.fn((event, callback) => {
-          if (event === "finish") {
+          if (event === 'finish') {
             // Simulate response finishing
             setTimeout(() => {
               res.statusCode = 200;
@@ -365,19 +365,19 @@ describe("PerformanceMonitor", () => {
     });
   });
 
-  describe("cleanup and memory management", () => {
-    it("should clean up old metrics", () => {
+  describe('cleanup and memory management', () => {
+    it('should clean up old metrics', () => {
       // Add metrics with old timestamps
       const oldTimestamp = Date.now() - 2 * 60 * 60 * 1000; // 2 hours ago
       performanceMonitor.metrics.requests = [
-        { endpoint: "/api/old", timestamp: oldTimestamp },
-        { endpoint: "/api/new", timestamp: Date.now() },
+        { endpoint: '/api/old', timestamp: oldTimestamp },
+        { endpoint: '/api/new', timestamp: Date.now() },
       ];
 
       performanceMonitor.cleanupOldMetrics();
 
       expect(performanceMonitor.metrics.requests).toHaveLength(1);
-      expect(performanceMonitor.metrics.requests[0].endpoint).toBe("/api/new");
+      expect(performanceMonitor.metrics.requests[0].endpoint).toBe('/api/new');
     });
   });
 });

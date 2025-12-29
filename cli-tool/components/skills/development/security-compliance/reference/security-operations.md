@@ -631,68 +631,68 @@ applied due to lack of automated patch management.
 
 ```yaml
 Detection Metrics:
-  - name: "Mean Time to Detect (MTTD)"
-    formula: "Time from incident occurrence to detection"
-    target: "<1 hour for critical incidents"
-    measurement: "Automated via SIEM"
+  - name: 'Mean Time to Detect (MTTD)'
+    formula: 'Time from incident occurrence to detection'
+    target: '<1 hour for critical incidents'
+    measurement: 'Automated via SIEM'
 
-  - name: "Alert Volume"
-    formula: "Total alerts per day/week/month"
-    target: "Trending down (improving signal-to-noise)"
-    measurement: "SIEM dashboard"
+  - name: 'Alert Volume'
+    formula: 'Total alerts per day/week/month'
+    target: 'Trending down (improving signal-to-noise)'
+    measurement: 'SIEM dashboard'
 
-  - name: "False Positive Rate"
-    formula: "(False positives / Total alerts) × 100"
-    target: "<20%"
-    measurement: "Track in ticketing system"
+  - name: 'False Positive Rate'
+    formula: '(False positives / Total alerts) × 100'
+    target: '<20%'
+    measurement: 'Track in ticketing system'
 
 Response Metrics:
-  - name: "Mean Time to Respond (MTTR)"
-    formula: "Time from detection to initial response"
-    target: "P0: <15 min, P1: <1 hour, P2: <4 hours"
-    measurement: "Ticket timestamps"
+  - name: 'Mean Time to Respond (MTTR)'
+    formula: 'Time from detection to initial response'
+    target: 'P0: <15 min, P1: <1 hour, P2: <4 hours'
+    measurement: 'Ticket timestamps'
 
-  - name: "Mean Time to Contain (MTTC)"
-    formula: "Time from detection to containment"
-    target: "P0: <1 hour, P1: <4 hours"
-    measurement: "Ticket timestamps"
+  - name: 'Mean Time to Contain (MTTC)'
+    formula: 'Time from detection to containment'
+    target: 'P0: <1 hour, P1: <4 hours'
+    measurement: 'Ticket timestamps'
 
-  - name: "Mean Time to Resolve (MTTR)"
-    formula: "Time from detection to incident closure"
-    target: "P0: <72 hours, P1: <7 days"
-    measurement: "Ticket timestamps"
+  - name: 'Mean Time to Resolve (MTTR)'
+    formula: 'Time from detection to incident closure'
+    target: 'P0: <72 hours, P1: <7 days'
+    measurement: 'Ticket timestamps'
 
 Effectiveness Metrics:
-  - name: "Incidents by Severity"
-    formula: "Count of P0/P1/P2/P3 incidents per month"
-    target: "Zero P0, minimal P1 incidents"
-    measurement: "Ticket reports"
+  - name: 'Incidents by Severity'
+    formula: 'Count of P0/P1/P2/P3 incidents per month'
+    target: 'Zero P0, minimal P1 incidents'
+    measurement: 'Ticket reports'
 
-  - name: "Repeat Incidents"
-    formula: "(Repeat incidents / Total incidents) × 100"
-    target: "<5%"
-    measurement: "Track root causes in tickets"
+  - name: 'Repeat Incidents'
+    formula: '(Repeat incidents / Total incidents) × 100'
+    target: '<5%'
+    measurement: 'Track root causes in tickets'
 
-  - name: "SLA Compliance"
-    formula: "(Incidents meeting SLA / Total incidents) × 100"
-    target: ">95%"
-    measurement: "Automated via ticketing system"
+  - name: 'SLA Compliance'
+    formula: '(Incidents meeting SLA / Total incidents) × 100'
+    target: '>95%'
+    measurement: 'Automated via ticketing system'
 
 Team Metrics:
-  - name: "Analyst Utilization"
-    formula: "Hours on incidents / Total work hours"
-    target: "60-80% (balance investigation and improvement)"
-    measurement: "Time tracking"
+  - name: 'Analyst Utilization'
+    formula: 'Hours on incidents / Total work hours'
+    target: '60-80% (balance investigation and improvement)'
+    measurement: 'Time tracking'
 
-  - name: "Training Completion"
-    formula: "(Analysts completing training / Total analysts) × 100"
-    target: "100% quarterly"
-    measurement: "LMS reporting"
+  - name: 'Training Completion'
+    formula: '(Analysts completing training / Total analysts) × 100'
+    target: '100% quarterly'
+    measurement: 'LMS reporting'
 
-  - name: "Threat Hunts Conducted"
-    formula: "Number of proactive threat hunts per month"
-    target: "Minimum 4 hunts per month"
-    measurement: "Track in project board"
+  - name: 'Threat Hunts Conducted'
+    formula: 'Number of proactive threat hunts per month'
+    target: 'Minimum 4 hunts per month'
+    measurement: 'Track in project board'
 ```
 
 ### Sample SOC Dashboard

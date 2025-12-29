@@ -4,10 +4,10 @@
  * Executes Claude Code prompts using Cloudflare Workers and Sandbox SDK
  */
 
-import { query, ClaudeAgentOptions } from "@anthropic-ai/claude-agent-sdk";
-import fetch from "node-fetch";
-import * as fs from "fs";
-import * as path from "path";
+import { query, ClaudeAgentOptions } from '@anthropic-ai/claude-agent-sdk';
+import fetch from 'node-fetch';
+import * as fs from 'fs';
+import * as path from 'path';
 
 interface ExecutionResult {
   success: boolean;
@@ -30,21 +30,18 @@ interface LauncherConfig {
 
 // ANSI color codes for terminal output
 const colors = {
-  reset: "\x1b[0m",
-  bright: "\x1b[1m",
-  dim: "\x1b[2m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan: "\x1b[36m",
+  reset: '\x1b[0m',
+  bright: '\x1b[1m',
+  dim: '\x1b[2m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
 };
 
-function log(
-  message: string,
-  level: "info" | "success" | "error" | "warning" = "info",
-) {
+function log(message: string, level: 'info' | 'success' | 'error' | 'warning' = 'info') {
   const timestamp = new Date().toLocaleTimeString();
   const prefix = {
     info: `${colors.blue}ℹ${colors.reset}`,
@@ -56,16 +53,14 @@ function log(
   console.log(`[${timestamp}] ${prefix} ${message}`);
 }
 
-function printSeparator(char: string = "=", length: number = 60) {
+function printSeparator(char: string = '=', length: number = 60) {
   console.log(char.repeat(length));
 }
 
 /**
  * Extract files from generated code (handles multiple code blocks)
  */
-function extractFilesFromCode(
-  code: string,
-): { path: string; content: string }[] {
+function extractFilesFromCode(code: string): { path: string; content: string }[] {
   const files: { path: string; content: string }[] = [];
 
   // Pattern to match code blocks with file names
@@ -85,14 +80,14 @@ function extractFilesFromCode(
   if (files.length === 0) {
     const codeBlockPattern = /```(\w+)\n([\s\S]*?)```/g;
     const languageExtensions: Record<string, string> = {
-      html: "index.html",
-      css: "styles.css",
-      javascript: "script.js",
-      js: "script.js",
-      typescript: "index.ts",
-      ts: "index.ts",
-      python: "main.py",
-      py: "main.py",
+      html: 'index.html',
+      css: 'styles.css',
+      javascript: 'script.js',
+      js: 'script.js',
+      typescript: 'index.ts',
+      ts: 'index.ts',
+      python: 'main.py',
+      py: 'main.py',
     };
 
     const detectedFiles = new Map<string, string>();
@@ -106,9 +101,9 @@ function extractFilesFromCode(
       let finalFilename = filename;
       let counter = 1;
       while (detectedFiles.has(finalFilename)) {
-        const parts = filename.split(".");
+        const parts = filename.split('.');
         const extension = parts.pop();
-        const base = parts.join(".");
+        const base = parts.join('.');
         finalFilename = `${base}${counter}.${extension}`;
         counter++;
       }
@@ -127,10 +122,7 @@ function extractFilesFromCode(
 /**
  * Save files to local directory
  */
-function saveFilesToDirectory(
-  files: { path: string; content: string }[],
-  baseDir: string,
-): void {
+function saveFilesToDirectory(files: { path: string; content: string }[], baseDir: string): void {
   if (files.length === 0) {
     return;
   }
@@ -150,30 +142,28 @@ function saveFilesToDirectory(
     }
 
     // Write file
-    fs.writeFileSync(fullPath, file.content, "utf-8");
-    log(`✓ ${file.path}`, "success");
+    fs.writeFileSync(fullPath, file.content, 'utf-8');
+    log(`✓ ${file.path}`, 'success');
   });
 
-  console.log("");
+  console.log('');
   console.log(
-    `${colors.green}✓${colors.reset} All files saved to: ${colors.cyan}${path.resolve(baseDir)}${colors.reset}`,
+    `${colors.green}✓${colors.reset} All files saved to: ${colors.cyan}${path.resolve(baseDir)}${colors.reset}`
   );
   printSeparator();
 }
 
-async function executeViaWorker(
-  config: LauncherConfig,
-): Promise<ExecutionResult> {
-  const workerUrl = config.workerUrl || "http://localhost:8787";
+async function executeViaWorker(config: LauncherConfig): Promise<ExecutionResult> {
+  const workerUrl = config.workerUrl || 'http://localhost:8787';
   const endpoint = `${workerUrl}/execute`;
 
   log(`Sending request to Cloudflare Worker: ${endpoint}`);
 
   try {
     const response = await fetch(endpoint, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         question: config.prompt,
@@ -193,25 +183,20 @@ async function executeViaWorker(
   }
 }
 
-async function executeDirectly(
-  config: LauncherConfig,
-): Promise<ExecutionResult> {
-  log("Executing with Claude Agent SDK...");
+async function executeDirectly(config: LauncherConfig): Promise<ExecutionResult> {
+  log('Executing with Claude Agent SDK...');
 
   // Extract agent names for context
-  const agents = config.componentsToInstall
-    ? extractAgents(config.componentsToInstall)
-    : [];
+  const agents = config.componentsToInstall ? extractAgents(config.componentsToInstall) : [];
 
   try {
-    log("Generating code with Claude Agent SDK...");
+    log('Generating code with Claude Agent SDK...');
     log(`Working directory: ${process.cwd()}`);
 
     // Detect if this is a web development request
-    const isWebRequest =
-      /html|css|javascript|webpage|website|form|ui|interface|frontend/i.test(
-        config.prompt,
-      );
+    const isWebRequest = /html|css|javascript|webpage|website|form|ui|interface|frontend/i.test(
+      config.prompt
+    );
 
     const promptContent = isWebRequest
       ? `Create a complete web application for: "${config.prompt}"
@@ -245,22 +230,19 @@ Requirements:
     // Using settingSources: ['project'] to automatically load agents from .claude/ directory
     // This is supported in SDK version ^0.1.23 and later
     const options: ClaudeAgentOptions = {
-      model: "claude-sonnet-4-5",
+      model: 'claude-sonnet-4-5',
       apiKey: config.anthropicApiKey,
-      systemPrompt: { type: "preset", preset: "claude_code" },
+      systemPrompt: { type: 'preset', preset: 'claude_code' },
       // Automatically load agents, settings, and configurations from .claude/ directory
-      settingSources: ["project"],
+      settingSources: ['project'],
     };
 
     if (agents.length > 0) {
-      log(
-        `Using agents from .claude/agents/ directory via settingSources`,
-        "success",
-      );
+      log(`Using agents from .claude/agents/ directory via settingSources`, 'success');
     }
 
     // Collect the full response
-    let generatedCode = "";
+    let generatedCode = '';
 
     try {
       for await (const message of query({ prompt: promptContent, options })) {
@@ -268,28 +250,26 @@ Requirements:
         // - 'system': Initialization info
         // - 'assistant': Individual API responses
         // - 'result': Final aggregated result (THIS is what we need!)
-        if (message.type === "result" && message.result) {
+        if (message.type === 'result' && message.result) {
           generatedCode = message.result;
-          log(`Received result (${message.result.length} chars)`, "success");
-        } else if (message.type === "text" && message.text) {
+          log(`Received result (${message.result.length} chars)`, 'success');
+        } else if (message.type === 'text' && message.text) {
           // Fallback for older SDK versions
           generatedCode += message.text;
         }
       }
     } catch (queryError) {
       const err = queryError as Error;
-      log(`Query error: ${err.message}`, "error");
-      log(`Stack: ${err.stack}`, "error");
+      log(`Query error: ${err.message}`, 'error');
+      log(`Stack: ${err.stack}`, 'error');
       throw new Error(`Claude Agent SDK query failed: ${err.message}`);
     }
 
     if (!generatedCode) {
-      throw new Error(
-        "Failed to generate code from Claude Agent SDK (empty response)",
-      );
+      throw new Error('Failed to generate code from Claude Agent SDK (empty response)');
     }
 
-    log("Code generated successfully", "success");
+    log('Code generated successfully', 'success');
 
     // Note: Direct execution would require local Python runtime
     // For now, we return the code for manual execution or deployment
@@ -297,8 +277,8 @@ Requirements:
       success: true,
       question: config.prompt,
       code: generatedCode,
-      output: "Code generated. Deploy to Cloudflare Worker to execute.",
-      error: "",
+      output: 'Code generated. Deploy to Cloudflare Worker to execute.',
+      error: '',
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -308,14 +288,14 @@ Requirements:
 
 function extractAgents(componentsString: string): string[] {
   const agents: string[] = [];
-  const parts = componentsString.split("--");
+  const parts = componentsString.split('--');
 
   for (const part of parts) {
     const trimmed = part.trim();
-    if (trimmed.startsWith("agent ")) {
+    if (trimmed.startsWith('agent ')) {
       const agentNames = trimmed.substring(6).trim();
       if (agentNames) {
-        agents.push(...agentNames.split(",").map((a) => a.trim()));
+        agents.push(...agentNames.split(',').map((a) => a.trim()));
       }
     }
   }
@@ -331,8 +311,8 @@ async function installAgents(agents: string[]): Promise<void> {
   log(`Installing ${agents.length} agent(s)...`);
 
   // Create .claude/agents directory
-  const claudeDir = path.join(process.cwd(), ".claude");
-  const agentsDir = path.join(claudeDir, "agents");
+  const claudeDir = path.join(process.cwd(), '.claude');
+  const agentsDir = path.join(claudeDir, 'agents');
 
   if (!fs.existsSync(agentsDir)) {
     fs.mkdirSync(agentsDir, { recursive: true });
@@ -340,7 +320,7 @@ async function installAgents(agents: string[]): Promise<void> {
 
   // Download each agent from GitHub
   const GITHUB_RAW_BASE =
-    "https://raw.githubusercontent.com/davila7/claude-code-templates/main/cli-tool/components/agents";
+    'https://raw.githubusercontent.com/davila7/claude-code-templates/main/cli-tool/components/agents';
 
   for (const agent of agents) {
     try {
@@ -353,48 +333,45 @@ async function installAgents(agents: string[]): Promise<void> {
       const response = await fetch(agentUrl);
 
       if (!response.ok) {
-        log(
-          `Failed to download agent ${agent}: ${response.statusText}`,
-          "warning",
-        );
+        log(`Failed to download agent ${agent}: ${response.statusText}`, 'warning');
         continue;
       }
 
       const agentContent = await response.text();
 
       // Save to .claude/agents/
-      const agentFileName = agent.replace(/\//g, "-") + ".md";
+      const agentFileName = agent.replace(/\//g, '-') + '.md';
       const agentPath = path.join(agentsDir, agentFileName);
 
-      fs.writeFileSync(agentPath, agentContent, "utf-8");
-      log(`Installed agent: ${agent}`, "success");
+      fs.writeFileSync(agentPath, agentContent, 'utf-8');
+      log(`Installed agent: ${agent}`, 'success');
     } catch (error) {
       log(
         `Error installing agent ${agent}: ${error instanceof Error ? error.message : String(error)}`,
-        "warning",
+        'warning'
       );
     }
   }
 
   // Create settings.json to reference the agents
-  const settingsPath = path.join(claudeDir, "settings.json");
+  const settingsPath = path.join(claudeDir, 'settings.json');
   const settings = {
     agents: agents.map((agent) => ({
-      name: agent.split("/").pop() || agent,
-      path: `.claude/agents/${agent.replace(/\//g, "-")}.md`,
+      name: agent.split('/').pop() || agent,
+      path: `.claude/agents/${agent.replace(/\//g, '-')}.md`,
     })),
   };
 
-  fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2), "utf-8");
-  log("Created .claude/settings.json", "success");
+  fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf-8');
+  log('Created .claude/settings.json', 'success');
 }
 
 function displayResults(result: ExecutionResult, targetDir?: string) {
-  console.log("");
+  console.log('');
 
   if (result.error) {
     console.log(`${colors.red}❌ Error:${colors.reset} ${result.error}`);
-    console.log("");
+    console.log('');
     return;
   }
 
@@ -410,17 +387,17 @@ function displayResults(result: ExecutionResult, targetDir?: string) {
     const baseDir = targetDir || process.cwd();
     const outputDir = path.join(baseDir, `cloudflare-${timestamp}`);
 
-    console.log("");
+    console.log('');
     printSeparator();
     log(`Downloading ${files.length} file(s)...`);
-    console.log("");
+    console.log('');
     saveFilesToDirectory(files, outputDir);
   }
 }
 
 async function checkWorkerAvailability(url: string): Promise<boolean> {
   try {
-    const response = await fetch(url, { method: "GET" });
+    const response = await fetch(url, { method: 'GET' });
     return response.ok || response.status === 405; // 405 is fine, means worker is up
   } catch {
     return false;
@@ -432,88 +409,74 @@ async function main() {
   const args = process.argv.slice(2);
 
   if (args.length < 1) {
-    console.log("Cloudflare Sandbox Launcher");
-    console.log("");
-    console.log("Usage:");
-    console.log(
-      "  node launcher.ts <prompt> [components] [anthropic_api_key] [worker_url]",
-    );
-    console.log("");
-    console.log("Examples:");
+    console.log('Cloudflare Sandbox Launcher');
+    console.log('');
+    console.log('Usage:');
+    console.log('  node launcher.ts <prompt> [components] [anthropic_api_key] [worker_url]');
+    console.log('');
+    console.log('Examples:');
     console.log('  node launcher.ts "Calculate factorial of 5"');
-    console.log(
-      '  node launcher.ts "Create a React app" "--agent frontend-developer" YOUR_KEY',
-    );
-    console.log(
-      '  node launcher.ts "Fibonacci" "" YOUR_KEY https://your-worker.workers.dev',
-    );
-    console.log("");
-    console.log("Environment Variables:");
-    console.log("  ANTHROPIC_API_KEY - Anthropic API key");
-    console.log("  CLOUDFLARE_WORKER_URL - Cloudflare Worker endpoint");
+    console.log('  node launcher.ts "Create a React app" "--agent frontend-developer" YOUR_KEY');
+    console.log('  node launcher.ts "Fibonacci" "" YOUR_KEY https://your-worker.workers.dev');
+    console.log('');
+    console.log('Environment Variables:');
+    console.log('  ANTHROPIC_API_KEY - Anthropic API key');
+    console.log('  CLOUDFLARE_WORKER_URL - Cloudflare Worker endpoint');
     process.exit(1);
   }
 
   const config: LauncherConfig = {
     prompt: args[0],
-    componentsToInstall: args[1] || "",
-    anthropicApiKey: args[2] || process.env.ANTHROPIC_API_KEY || "",
-    workerUrl:
-      args[3] || process.env.CLOUDFLARE_WORKER_URL || "http://localhost:8787",
+    componentsToInstall: args[1] || '',
+    anthropicApiKey: args[2] || process.env.ANTHROPIC_API_KEY || '',
+    workerUrl: args[3] || process.env.CLOUDFLARE_WORKER_URL || 'http://localhost:8787',
     targetDir: args[4] || process.cwd(),
     useLocalWorker: true,
   };
 
   if (!config.anthropicApiKey) {
-    log("Error: Anthropic API key is required", "error");
-    console.log(
-      "Provide via command line argument or ANTHROPIC_API_KEY environment variable",
-    );
+    log('Error: Anthropic API key is required', 'error');
+    console.log('Provide via command line argument or ANTHROPIC_API_KEY environment variable');
     process.exit(1);
   }
 
-  console.log("");
+  console.log('');
   printSeparator();
   console.log(`${colors.bright}☁️  CLOUDFLARE SANDBOX LAUNCHER${colors.reset}`);
   printSeparator();
-  console.log("");
+  console.log('');
 
-  log(
-    `Prompt: "${config.prompt.substring(0, 100)}${config.prompt.length > 100 ? "..." : ""}"`,
-  );
+  log(`Prompt: "${config.prompt.substring(0, 100)}${config.prompt.length > 100 ? '...' : ''}"`);
 
   if (config.componentsToInstall) {
     const agents = extractAgents(config.componentsToInstall);
     if (agents.length > 0) {
-      log(`Agents: ${agents.join(", ")}`);
+      log(`Agents: ${agents.join(', ')}`);
 
       // Install agents before execution
-      console.log("");
+      console.log('');
       await installAgents(agents);
     }
   }
 
-  console.log("");
+  console.log('');
 
   try {
     // Check if worker is available
-    log("Checking Cloudflare Worker availability...");
+    log('Checking Cloudflare Worker availability...');
     const workerAvailable = await checkWorkerAvailability(
-      config.workerUrl || "http://localhost:8787",
+      config.workerUrl || 'http://localhost:8787'
     );
 
     let result: ExecutionResult;
 
     if (workerAvailable) {
-      log("Cloudflare Worker is available", "success");
-      log("Executing via Cloudflare Sandbox...");
+      log('Cloudflare Worker is available', 'success');
+      log('Executing via Cloudflare Sandbox...');
       result = await executeViaWorker(config);
     } else {
-      log("Cloudflare Worker not available, using direct execution", "warning");
-      log(
-        "For full sandbox execution, deploy worker with: npx wrangler deploy",
-        "warning",
-      );
+      log('Cloudflare Worker not available, using direct execution', 'warning');
+      log('For full sandbox execution, deploy worker with: npx wrangler deploy', 'warning');
       result = await executeDirectly(config);
     }
 
@@ -523,39 +486,27 @@ async function main() {
       process.exit(1);
     }
   } catch (error) {
-    console.log("");
-    log(
-      `Execution failed: ${error instanceof Error ? error.message : String(error)}`,
-      "error",
-    );
-    console.log("");
+    console.log('');
+    log(`Execution failed: ${error instanceof Error ? error.message : String(error)}`, 'error');
+    console.log('');
 
-    log("Troubleshooting:", "info");
-    console.log("1. Ensure Cloudflare Worker is deployed: npx wrangler deploy");
-    console.log(
-      "2. Check API key is set: npx wrangler secret put ANTHROPIC_API_KEY",
-    );
-    console.log(
-      "3. Wait 2-3 minutes after first deployment for container provisioning",
-    );
-    console.log("4. Check container status: npx wrangler containers list");
-    console.log("5. For local testing: npm run dev");
+    log('Troubleshooting:', 'info');
+    console.log('1. Ensure Cloudflare Worker is deployed: npx wrangler deploy');
+    console.log('2. Check API key is set: npx wrangler secret put ANTHROPIC_API_KEY');
+    console.log('3. Wait 2-3 minutes after first deployment for container provisioning');
+    console.log('4. Check container status: npx wrangler containers list');
+    console.log('5. For local testing: npm run dev');
 
     process.exit(1);
   }
 }
 
-export {
-  executeViaWorker,
-  executeDirectly,
-  type LauncherConfig,
-  type ExecutionResult,
-};
+export { executeViaWorker, executeDirectly, type LauncherConfig, type ExecutionResult };
 
 // Run if executed directly (ES modules compatible)
 if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch((error) => {
-    console.error("Fatal error:", error);
+    console.error('Fatal error:', error);
     process.exit(1);
   });
 }

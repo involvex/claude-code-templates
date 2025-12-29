@@ -38,10 +38,7 @@ docs/blog/
       property="og:url"
       content="https://davila7.github.io/claude-code-templates/blog/[slug]/"
     />
-    <meta
-      property="og:title"
-      content="[Technology] and Claude Code Integration"
-    />
+    <meta property="og:title" content="[Technology] and Claude Code Integration" />
     <meta
       property="og:description"
       content="Learn how to integrate [Technology] with Claude Code..."
@@ -64,10 +61,7 @@ docs/blog/
       property="twitter:url"
       content="https://davila7.github.io/claude-code-templates/blog/[slug]/"
     />
-    <meta
-      property="twitter:title"
-      content="[Technology] and Claude Code Integration"
-    />
+    <meta property="twitter:title" content="[Technology] and Claude Code Integration" />
     <meta
       property="twitter:description"
       content="Learn how to integrate [Technology] with Claude Code..."
@@ -83,10 +77,7 @@ docs/blog/
       content="[Technology], Claude Code, MCP, [Domain], AI Development, Anthropic"
     />
     <meta name="author" content="Claude Code Templates" />
-    <link
-      rel="canonical"
-      href="https://davila7.github.io/claude-code-templates/blog/[slug]/"
-    />
+    <link rel="canonical" href="https://davila7.github.io/claude-code-templates/blog/[slug]/" />
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../../css/styles.css" />
@@ -187,8 +178,8 @@ docs/blog/
   <div class="container">
     <h1 class="article-title">How to use Claude Code with [Technology]</h1>
     <p class="article-subtitle">
-      Learn how to integrate [Technology] with Claude Code using MCP, Agents,
-      and Commands for faster [domain] development.
+      Learn how to integrate [Technology] with Claude Code using MCP, Agents, and Commands for
+      faster [domain] development.
     </p>
     <div class="article-meta-full">
       <time datetime="[YYYY-MM-DD]">[Month DD, YYYY]</time>
@@ -220,10 +211,7 @@ docs/blog/
 
 ```html
 <h2>[Technology] Stack for Claude Code</h2>
-<p>
-  Claude Code Templates offers [X] pre-built components for [Technology]
-  integration:
-</p>
+<p>Claude Code Templates offers [X] pre-built components for [Technology] integration:</p>
 ```
 
 ### 3. Component Tables
@@ -283,8 +271,8 @@ docs/blog/
     <tr>
       <td>🔌 <strong>[Technology] MCP Server</strong></td>
       <td>
-        Direct integration with [Technology] API through Model Context Protocol
-        for seamless Claude Code interaction.
+        Direct integration with [Technology] API through Model Context Protocol for seamless Claude
+        Code interaction.
       </td>
     </tr>
   </tbody>
@@ -296,16 +284,12 @@ docs/blog/
 ```html
 <h2>Browse all components on AITMPL.com</h2>
 <p>
-  Before installing, you can explore all available [Technology] components on
-  the official Claude Code Templates website:
+  Before installing, you can explore all available [Technology] components on the official Claude
+  Code Templates website:
 </p>
 <p>
   Visit
-  <strong
-    ><a href="https://aitmpl.com" target="_blank" rel="noopener"
-      >aitmpl.com</a
-    ></strong
-  >
+  <strong><a href="https://aitmpl.com" target="_blank" rel="noopener">aitmpl.com</a></strong>
   and search for "[technology]" to see:
 </p>
 <img
@@ -396,8 +380,7 @@ npx claude-code-templates@latest \
 ```html
 <h2>Where Components Are Installed</h2>
 <p>
-  The installation creates a standard Claude Code structure with components
-  organized as follows:
+  The installation creates a standard Claude Code structure with components organized as follows:
 </p>
 
 <pre><code class="language-bash">your-project/
@@ -413,8 +396,8 @@ npx claude-code-templates@latest \
 └── src/ # Your application code</code></pre>
 
 <p>
-  That's it! Claude Code will automatically detect all components and you can
-  start using them immediately.
+  That's it! Claude Code will automatically detect all components and you can start using them
+  immediately.
 </p>
 ```
 
@@ -424,9 +407,7 @@ npx claude-code-templates@latest \
 <div class="article-nav">
   <a href="../index.html" class="back-to-blog">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path
-        d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-      />
+      <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
     </svg>
     Back to Blog
   </a>

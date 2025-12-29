@@ -48,27 +48,27 @@ Based on the provided route path, analyze:
 
 ```javascript
 // Basic API route test template
-describe("API Route: /api/[route-path]", () => {
-  describe("GET requests", () => {
-    test("should return 200 for valid request", async () => {
-      const response = await fetch("/api/[route-path]");
+describe('API Route: /api/[route-path]', () => {
+  describe('GET requests', () => {
+    test('should return 200 for valid request', async () => {
+      const response = await fetch('/api/[route-path]');
       expect(response.status).toBe(200);
     });
 
-    test("should return valid JSON response", async () => {
-      const response = await fetch("/api/[route-path]");
+    test('should return valid JSON response', async () => {
+      const response = await fetch('/api/[route-path]');
       const data = await response.json();
       expect(data).toBeDefined();
-      expect(typeof data).toBe("object");
+      expect(typeof data).toBe('object');
     });
   });
 
-  describe("POST requests", () => {
-    test("should create resource with valid data", async () => {
-      const testData = { name: "Test", email: "test@example.com" };
-      const response = await fetch("/api/[route-path]", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+  describe('POST requests', () => {
+    test('should create resource with valid data', async () => {
+      const testData = { name: 'Test', email: 'test@example.com' };
+      const response = await fetch('/api/[route-path]', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(testData),
       });
 
@@ -77,11 +77,11 @@ describe("API Route: /api/[route-path]", () => {
       expect(result.name).toBe(testData.name);
     });
 
-    test("should reject invalid data", async () => {
-      const invalidData = { invalid: "field" };
-      const response = await fetch("/api/[route-path]", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+    test('should reject invalid data', async () => {
+      const invalidData = { invalid: 'field' };
+      const response = await fetch('/api/[route-path]', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(invalidData),
       });
 
@@ -94,23 +94,23 @@ describe("API Route: /api/[route-path]", () => {
 ### 2. Authentication Tests
 
 ```javascript
-describe("Authentication", () => {
-  test("should require authentication for protected routes", async () => {
-    const response = await fetch("/api/protected-route");
+describe('Authentication', () => {
+  test('should require authentication for protected routes', async () => {
+    const response = await fetch('/api/protected-route');
     expect(response.status).toBe(401);
   });
 
-  test("should allow authenticated requests", async () => {
-    const token = "valid-jwt-token";
-    const response = await fetch("/api/protected-route", {
+  test('should allow authenticated requests', async () => {
+    const token = 'valid-jwt-token';
+    const response = await fetch('/api/protected-route', {
       headers: { Authorization: `Bearer ${token}` },
     });
     expect(response.status).not.toBe(401);
   });
 
-  test("should validate JWT token format", async () => {
-    const invalidToken = "invalid-token";
-    const response = await fetch("/api/protected-route", {
+  test('should validate JWT token format', async () => {
+    const invalidToken = 'invalid-token';
+    const response = await fetch('/api/protected-route', {
       headers: { Authorization: `Bearer ${invalidToken}` },
     });
     expect(response.status).toBe(403);
@@ -121,12 +121,12 @@ describe("Authentication", () => {
 ### 3. Input Validation Tests
 
 ```javascript
-describe("Input Validation", () => {
+describe('Input Validation', () => {
   const validationTests = [
-    { field: "email", invalid: "not-an-email", valid: "test@example.com" },
-    { field: "phone", invalid: "123", valid: "+1234567890" },
-    { field: "age", invalid: -1, valid: 25 },
-    { field: "name", invalid: "", valid: "John Doe" },
+    { field: 'email', invalid: 'not-an-email', valid: 'test@example.com' },
+    { field: 'phone', invalid: '123', valid: '+1234567890' },
+    { field: 'age', invalid: -1, valid: 25 },
+    { field: 'name', invalid: '', valid: 'John Doe' },
   ];
 
   validationTests.forEach(({ field, invalid, valid }) => {
@@ -135,17 +135,17 @@ describe("Input Validation", () => {
       const validData = { [field]: valid };
 
       // Test invalid data
-      const invalidResponse = await fetch("/api/[route-path]", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const invalidResponse = await fetch('/api/[route-path]', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(invalidData),
       });
       expect(invalidResponse.status).toBe(400);
 
       // Test valid data
-      const validResponse = await fetch("/api/[route-path]", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const validResponse = await fetch('/api/[route-path]', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(validData),
       });
       expect(validResponse.status).not.toBe(400);
@@ -157,38 +157,36 @@ describe("Input Validation", () => {
 ### 4. Error Handling Tests
 
 ```javascript
-describe("Error Handling", () => {
-  test("should handle malformed JSON", async () => {
-    const response = await fetch("/api/[route-path]", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: "invalid-json",
+describe('Error Handling', () => {
+  test('should handle malformed JSON', async () => {
+    const response = await fetch('/api/[route-path]', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: 'invalid-json',
     });
     expect(response.status).toBe(400);
   });
 
-  test("should handle missing Content-Type header", async () => {
-    const response = await fetch("/api/[route-path]", {
-      method: "POST",
-      body: JSON.stringify({ test: "data" }),
+  test('should handle missing Content-Type header', async () => {
+    const response = await fetch('/api/[route-path]', {
+      method: 'POST',
+      body: JSON.stringify({ test: 'data' }),
     });
     expect(response.status).toBe(400);
   });
 
-  test("should handle request timeout", async () => {
+  test('should handle request timeout', async () => {
     // Mock slow endpoint
     jest.setTimeout(5000);
-    const response = await fetch("/api/slow-endpoint");
+    const response = await fetch('/api/slow-endpoint');
     // Test appropriate timeout handling
   }, 5000);
 
-  test("should handle database connection errors", async () => {
+  test('should handle database connection errors', async () => {
     // Mock database failure
-    const mockDbError = jest
-      .spyOn(db, "connect")
-      .mockRejectedValue(new Error("DB Error"));
+    const mockDbError = jest.spyOn(db, 'connect').mockRejectedValue(new Error('DB Error'));
 
-    const response = await fetch("/api/[route-path]");
+    const response = await fetch('/api/[route-path]');
     expect(response.status).toBe(500);
 
     mockDbError.mockRestore();
@@ -199,20 +197,18 @@ describe("Error Handling", () => {
 ### 5. Performance Tests
 
 ```javascript
-describe("Performance", () => {
-  test("should respond within acceptable time", async () => {
+describe('Performance', () => {
+  test('should respond within acceptable time', async () => {
     const startTime = Date.now();
-    const response = await fetch("/api/[route-path]");
+    const response = await fetch('/api/[route-path]');
     const endTime = Date.now();
 
     expect(response.status).toBe(200);
     expect(endTime - startTime).toBeLessThan(1000); // 1 second
   });
 
-  test("should handle concurrent requests", async () => {
-    const promises = Array.from({ length: 10 }, () =>
-      fetch("/api/[route-path]"),
-    );
+  test('should handle concurrent requests', async () => {
+    const promises = Array.from({ length: 10 }, () => fetch('/api/[route-path]'));
 
     const responses = await Promise.all(promises);
     responses.forEach((response) => {
@@ -220,10 +216,8 @@ describe("Performance", () => {
     });
   });
 
-  test("should implement rate limiting", async () => {
-    const requests = Array.from({ length: 100 }, () =>
-      fetch("/api/[route-path]"),
-    );
+  test('should implement rate limiting', async () => {
+    const requests = Array.from({ length: 100 }, () => fetch('/api/[route-path]'));
 
     const responses = await Promise.all(requests);
     const rateLimitedResponses = responses.filter((r) => r.status === 429);
@@ -354,23 +348,23 @@ http GET localhost:3000/api/[route-path] X-Custom-Header:value
 ```typescript
 // test/fixtures/apiTestData.ts
 export const validUserData = {
-  name: "John Doe",
-  email: "john@example.com",
+  name: 'John Doe',
+  email: 'john@example.com',
   age: 30,
-  role: "user",
+  role: 'user',
 };
 
 export const invalidUserData = {
-  name: "",
-  email: "invalid-email",
+  name: '',
+  email: 'invalid-email',
   age: -1,
-  role: "invalid-role",
+  role: 'invalid-role',
 };
 
 export const testHeaders = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-  "User-Agent": "API-Test-Suite/1.0",
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+  'User-Agent': 'API-Test-Suite/1.0',
 };
 ```
 
@@ -399,14 +393,10 @@ export function generateBulkTestData(count: number) {
 ```javascript
 // jest.config.js for API testing
 module.exports = {
-  testEnvironment: "node",
-  setupFilesAfterEnv: ["<rootDir>/test/setup.js"],
-  testMatch: ["**/__tests__/**/*.test.js", "**/?(*.)+(spec|test).js"],
-  collectCoverageFrom: [
-    "pages/api/**/*.{js,ts}",
-    "app/api/**/*.{js,ts}",
-    "!**/*.d.ts",
-  ],
+  testEnvironment: 'node',
+  setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
+  testMatch: ['**/__tests__/**/*.test.js', '**/?(*.)+(spec|test).js'],
+  collectCoverageFrom: ['pages/api/**/*.{js,ts}', 'app/api/**/*.{js,ts}', '!**/*.d.ts'],
   coverageThreshold: {
     global: {
       branches: 70,
@@ -422,8 +412,8 @@ module.exports = {
 
 ```javascript
 // test/setup.js
-import { createMocks } from "node-mocks-http";
-import { testDb } from "./testDatabase";
+import { createMocks } from 'node-mocks-http';
+import { testDb } from './testDatabase';
 
 // Global test setup
 beforeAll(async () => {
@@ -469,7 +459,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
       - run: npm ci
       - run: npm run test:api
       - name: Upload coverage

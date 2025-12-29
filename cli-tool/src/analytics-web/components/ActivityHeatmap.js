@@ -9,9 +9,9 @@ class ActivityHeatmap {
     this.activityData = null;
     this.tooltip = null;
     this.currentYear = new Date().getFullYear();
-    this.currentMetric = "messages"; // Default metric
+    this.currentMetric = 'messages'; // Default metric
 
-    console.log("🔥 ActivityHeatmap initialized");
+    console.log('🔥 ActivityHeatmap initialized');
   }
 
   /**
@@ -19,12 +19,12 @@ class ActivityHeatmap {
    */
   async initialize() {
     try {
-      console.log("🔥 Initializing ActivityHeatmap...");
+      console.log('🔥 Initializing ActivityHeatmap...');
       await this.render();
       await this.loadActivityData();
-      console.log("✅ ActivityHeatmap initialized successfully");
+      console.log('✅ ActivityHeatmap initialized successfully');
     } catch (error) {
-      console.error("❌ Failed to initialize ActivityHeatmap:", error);
+      console.error('❌ Failed to initialize ActivityHeatmap:', error);
       this.showErrorState();
     }
   }
@@ -46,7 +46,7 @@ class ActivityHeatmap {
       </div>
     `;
 
-    this.tooltip = document.getElementById("heatmap-tooltip");
+    this.tooltip = document.getElementById('heatmap-tooltip');
   }
 
   /**
@@ -54,13 +54,13 @@ class ActivityHeatmap {
    */
   async loadActivityData() {
     try {
-      console.log("🔥 Loading activity data...");
+      console.log('🔥 Loading activity data...');
 
       // Get complete activity data from backend (pre-processed with tools)
-      const response = await this.dataService.cachedFetch("/api/activity");
+      const response = await this.dataService.cachedFetch('/api/activity');
       if (response && response.dailyActivity) {
         console.log(
-          `🔥 Loaded pre-processed activity data: ${response.dailyActivity.length} active days`,
+          `🔥 Loaded pre-processed activity data: ${response.dailyActivity.length} active days`
         );
 
         // Use pre-processed data from backend instead of processing raw conversations
@@ -69,15 +69,14 @@ class ActivityHeatmap {
           dailyActivityMap.set(day.date, day);
         });
 
-        this.activityData =
-          this.processPrecomputedActivityData(dailyActivityMap);
+        this.activityData = this.processPrecomputedActivityData(dailyActivityMap);
         await this.renderHeatmap();
         this.updateTitle();
       } else {
-        throw new Error("No activity data available");
+        throw new Error('No activity data available');
       }
     } catch (error) {
-      console.error("❌ Error loading activity data:", error);
+      console.error('❌ Error loading activity data:', error);
       this.showErrorState();
     }
   }
@@ -86,9 +85,7 @@ class ActivityHeatmap {
    * Process pre-computed activity data from backend
    */
   processPrecomputedActivityData(dailyActivityMap) {
-    console.log(
-      `🔥 Processing ${dailyActivityMap.size} days of pre-computed data...`,
-    );
+    console.log(`🔥 Processing ${dailyActivityMap.size} days of pre-computed data...`);
 
     // Calculate thresholds based on current metric
     const metricCounts = Array.from(dailyActivityMap.values())
@@ -108,18 +105,14 @@ class ActivityHeatmap {
       totalMessages += activity.messages || 0;
     });
 
-    console.log(
-      `🔥 Pre-computed data stats: ${totalMessages} messages, ${totalTools} tools`,
-    );
-    console.log(
-      `🔥 Current metric (${this.currentMetric}): ${totalActivity} total`,
-    );
+    console.log(`🔥 Pre-computed data stats: ${totalMessages} messages, ${totalTools} tools`);
+    console.log(`🔥 Current metric (${this.currentMetric}): ${totalActivity} total`);
     console.log(`🔥 Dynamic thresholds:`, thresholds);
     console.log(
       `🔥 Sample ${this.currentMetric} counts:`,
       metricCounts.slice(0, 10),
-      "...",
-      metricCounts.slice(-10),
+      '...',
+      metricCounts.slice(-10)
     );
 
     return {
@@ -139,11 +132,9 @@ class ActivityHeatmap {
     oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
     const today = new Date();
 
+    console.log(`🔥 Processing ${conversations.length} conversations for activity data...`);
     console.log(
-      `🔥 Processing ${conversations.length} conversations for activity data...`,
-    );
-    console.log(
-      `🔥 Date range: ${oneYearAgo.toLocaleDateString()} to ${today.toLocaleDateString()}`,
+      `🔥 Date range: ${oneYearAgo.toLocaleDateString()} to ${today.toLocaleDateString()}`
     );
     console.log(`🔥 Cutoff timestamp: ${oneYearAgo.getTime()}`);
 
@@ -156,20 +147,16 @@ class ActivityHeatmap {
     console.log(`🔥 Sampling first 5 conversations:`);
     conversations.slice(0, 5).forEach((conv, i) => {
       console.log(
-        `  ${i + 1}: ${conv.filename} - lastModified: ${conv.lastModified} (${new Date(conv.lastModified).toLocaleDateString()})`,
+        `  ${i + 1}: ${conv.filename} - lastModified: ${conv.lastModified} (${new Date(conv.lastModified).toLocaleDateString()})`
       );
       console.log(
-        `      messages: ${conv.messageCount || 0}, tokens: ${conv.tokens || 0}, toolUsage: ${conv.toolUsage?.totalToolCalls || 0}`,
+        `      messages: ${conv.messageCount || 0}, tokens: ${conv.tokens || 0}, toolUsage: ${conv.toolUsage?.totalToolCalls || 0}`
       );
     });
 
     conversations.forEach((conversation, index) => {
       if (!conversation.lastModified) {
-        if (index < 5)
-          console.log(
-            `⚠️ Conversation ${index} has no lastModified:`,
-            conversation,
-          );
+        if (index < 5) console.log(`⚠️ Conversation ${index} has no lastModified:`, conversation);
         return;
       }
 
@@ -183,14 +170,14 @@ class ActivityHeatmap {
         beforeOneYearCount++;
         if (beforeOneYearCount <= 5) {
           console.log(
-            `⚠️ Excluding old conversation: ${date.toISOString()} (${conversation.filename})`,
+            `⚠️ Excluding old conversation: ${date.toISOString()} (${conversation.filename})`
           );
         }
         return;
       }
 
       validConversations++;
-      const dateKey = date.toISOString().split("T")[0]; // YYYY-MM-DD
+      const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD
 
       const current = dailyActivity.get(dateKey) || {
         conversations: 0,
@@ -208,11 +195,9 @@ class ActivityHeatmap {
     });
 
     console.log(`🔥 Valid conversations in last year: ${validConversations}`);
+    console.log(`🔥 Excluded conversations (older than 1 year): ${beforeOneYearCount}`);
     console.log(
-      `🔥 Excluded conversations (older than 1 year): ${beforeOneYearCount}`,
-    );
-    console.log(
-      `🔥 Complete date range in data: ${oldestDate?.toLocaleDateString()} to ${latestDate?.toLocaleDateString()}`,
+      `🔥 Complete date range in data: ${oldestDate?.toLocaleDateString()} to ${latestDate?.toLocaleDateString()}`
     );
     console.log(`🔥 One year ago cutoff: ${oneYearAgo.toLocaleDateString()}`);
 
@@ -245,20 +230,18 @@ class ActivityHeatmap {
     });
 
     console.log(
-      `🔥 Processed activity data: ${dailyActivity.size} active days, ${totalActivity} total ${this.currentMetric}`,
+      `🔥 Processed activity data: ${dailyActivity.size} active days, ${totalActivity} total ${this.currentMetric}`
     );
+    console.log(`🔥 Debug totals: ${totalMessages} messages, ${totalTools} tools`);
     console.log(
-      `🔥 Debug totals: ${totalMessages} messages, ${totalTools} tools`,
-    );
-    console.log(
-      `🔥 ${this.currentMetric} range: ${Math.min(...messageCounts)} to ${Math.max(...messageCounts)} ${this.currentMetric} per day`,
+      `🔥 ${this.currentMetric} range: ${Math.min(...messageCounts)} to ${Math.max(...messageCounts)} ${this.currentMetric} per day`
     );
     console.log(`🔥 Dynamic thresholds:`, thresholds);
     console.log(
       `🔥 Sample ${this.currentMetric} counts:`,
       messageCounts.slice(0, 10),
-      "...",
-      messageCounts.slice(-10),
+      '...',
+      messageCounts.slice(-10)
     );
 
     return {
@@ -317,10 +300,8 @@ class ActivityHeatmap {
     // Generate calendar structure
     const calendarData = this.generateCalendarData(dailyActivity);
 
-    const container = this.container.querySelector(
-      ".activity-heatmap-container",
-    );
-    const modeClass = this.currentMetric === "tools" ? "tools-mode" : "";
+    const container = this.container.querySelector('.activity-heatmap-container');
+    const modeClass = this.currentMetric === 'tools' ? 'tools-mode' : '';
     container.className = `activity-heatmap-container ${modeClass}`;
     container.innerHTML = `
       <div class="heatmap-header">
@@ -341,9 +322,9 @@ class ActivityHeatmap {
           ${calendarData.months
             .map(
               (month, index) =>
-                `<div class="heatmap-month" data-week-index="${index}">${month}</div>`,
+                `<div class="heatmap-month" data-week-index="${index}">${month}</div>`
             )
-            .join("")}
+            .join('')}
         </div>
         <div class="heatmap-weekdays">
           <div class="heatmap-weekday">Mon</div>
@@ -355,7 +336,7 @@ class ActivityHeatmap {
           <div class="heatmap-weekday"></div>
         </div>
         <div class="heatmap-weeks">
-          ${calendarData.weeks.map((week) => this.renderWeek(week, dailyActivity)).join("")}
+          ${calendarData.weeks.map((week) => this.renderWeek(week, dailyActivity)).join('')}
         </div>
       </div>
     `;
@@ -366,7 +347,7 @@ class ActivityHeatmap {
 
     // Re-position months on window resize
     this.resizeHandler = () => this.positionMonthLabels();
-    window.addEventListener("resize", this.resizeHandler);
+    window.addEventListener('resize', this.resizeHandler);
   }
 
   /**
@@ -374,20 +355,12 @@ class ActivityHeatmap {
    */
   positionMonthLabels() {
     setTimeout(() => {
-      const weeksContainer = this.container.querySelector(".heatmap-weeks");
-      const monthsContainer = this.container.querySelector(
-        "#heatmap-months-container",
-      );
-      const monthElements = monthsContainer?.querySelectorAll(".heatmap-month");
+      const weeksContainer = this.container.querySelector('.heatmap-weeks');
+      const monthsContainer = this.container.querySelector('#heatmap-months-container');
+      const monthElements = monthsContainer?.querySelectorAll('.heatmap-month');
       const weekElements = weeksContainer?.children;
 
-      if (
-        !weeksContainer ||
-        !monthsContainer ||
-        !monthElements ||
-        !weekElements
-      )
-        return;
+      if (!weeksContainer || !monthsContainer || !monthElements || !weekElements) return;
 
       // Calculate the actual width and position of each week column
       Array.from(monthElements).forEach((monthEl, index) => {
@@ -446,7 +419,7 @@ class ActivityHeatmap {
 
     for (let i = 0; i < weeks.length; i++) {
       const week = weeks[i];
-      let monthName = "";
+      let monthName = '';
 
       if (week && week.length > 0) {
         // Get the most representative day of the week (middle of week)
@@ -457,8 +430,8 @@ class ActivityHeatmap {
 
           // Show month name if it's the first occurrence or if month changed
           if (currentMonth !== lastDisplayedMonth) {
-            monthName = middleDay.toLocaleDateString("en-US", {
-              month: "short",
+            monthName = middleDay.toLocaleDateString('en-US', {
+              month: 'short',
             });
             lastDisplayedMonth = currentMonth;
           }
@@ -479,10 +452,10 @@ class ActivityHeatmap {
       .map((date) => {
         if (!date) return '<div class="heatmap-day empty"></div>';
 
-        const dateKey = date.toISOString().split("T")[0];
+        const dateKey = date.toISOString().split('T')[0];
         const activity = dailyActivity.get(dateKey);
         const level = this.getActivityLevel(activity);
-        const modeClass = this.currentMetric === "tools" ? "tools-mode" : "";
+        const modeClass = this.currentMetric === 'tools' ? 'tools-mode' : '';
 
         return `
         <div class="heatmap-day level-${level} ${modeClass}" 
@@ -491,7 +464,7 @@ class ActivityHeatmap {
         </div>
       `;
       })
-      .join("");
+      .join('');
 
     return `<div class="heatmap-week">${weekHtml}</div>`;
   }
@@ -529,12 +502,12 @@ class ActivityHeatmap {
    * Attach event listeners for tooltips and interactions
    */
   attachEventListeners() {
-    const days = this.container.querySelectorAll(".heatmap-day");
+    const days = this.container.querySelectorAll('.heatmap-day');
 
     days.forEach((day) => {
-      day.addEventListener("mouseenter", (e) => this.showTooltip(e));
-      day.addEventListener("mouseleave", () => this.hideTooltip());
-      day.addEventListener("mousemove", (e) => this.updateTooltipPosition(e));
+      day.addEventListener('mouseenter', (e) => this.showTooltip(e));
+      day.addEventListener('mouseleave', () => this.hideTooltip());
+      day.addEventListener('mousemove', (e) => this.updateTooltipPosition(e));
     });
   }
 
@@ -545,11 +518,11 @@ class ActivityHeatmap {
     // Remove existing listeners first to prevent duplicates
     this.removeSettingsListeners();
 
-    const settingsButton = document.querySelector(".heatmap-settings");
-    const dropdown = document.getElementById("heatmap-settings-dropdown");
-    const metricOptions = dropdown?.querySelectorAll(".heatmap-metric-option");
+    const settingsButton = document.querySelector('.heatmap-settings');
+    const dropdown = document.getElementById('heatmap-settings-dropdown');
+    const metricOptions = dropdown?.querySelectorAll('.heatmap-metric-option');
 
-    console.log("🔥 Attaching settings listeners:", {
+    console.log('🔥 Attaching settings listeners:', {
       settingsButton: !!settingsButton,
       dropdown: !!dropdown,
       metricOptions: metricOptions?.length || 0,
@@ -559,25 +532,19 @@ class ActivityHeatmap {
       // Store references to handlers for cleanup
       this.settingsClickHandler = (e) => {
         e.stopPropagation();
-        dropdown.classList.toggle("show");
-        console.log(
-          "🔥 Settings dropdown toggled:",
-          dropdown.classList.contains("show"),
-        );
+        dropdown.classList.toggle('show');
+        console.log('🔥 Settings dropdown toggled:', dropdown.classList.contains('show'));
       };
 
       this.documentClickHandler = (e) => {
-        if (
-          !settingsButton.contains(e.target) &&
-          !dropdown.contains(e.target)
-        ) {
-          dropdown.classList.remove("show");
+        if (!settingsButton.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove('show');
         }
       };
 
       // Add event listeners
-      settingsButton.addEventListener("click", this.settingsClickHandler);
-      document.addEventListener("click", this.documentClickHandler);
+      settingsButton.addEventListener('click', this.settingsClickHandler);
+      document.addEventListener('click', this.documentClickHandler);
     }
 
     // Handle metric selection
@@ -589,14 +556,14 @@ class ActivityHeatmap {
           this.changeMetric(metric);
 
           // Update active state
-          metricOptions.forEach((opt) => opt.classList.remove("active"));
-          e.target.classList.add("active");
+          metricOptions.forEach((opt) => opt.classList.remove('active'));
+          e.target.classList.add('active');
 
           // Close dropdown
-          dropdown.classList.remove("show");
+          dropdown.classList.remove('show');
         };
 
-        option.addEventListener("click", handler);
+        option.addEventListener('click', handler);
         this.metricHandlers.push({ element: option, handler });
       });
     }
@@ -606,19 +573,19 @@ class ActivityHeatmap {
    * Remove existing settings event listeners to prevent duplicates
    */
   removeSettingsListeners() {
-    const settingsButton = document.querySelector(".heatmap-settings");
+    const settingsButton = document.querySelector('.heatmap-settings');
 
     if (this.settingsClickHandler && settingsButton) {
-      settingsButton.removeEventListener("click", this.settingsClickHandler);
+      settingsButton.removeEventListener('click', this.settingsClickHandler);
     }
 
     if (this.documentClickHandler) {
-      document.removeEventListener("click", this.documentClickHandler);
+      document.removeEventListener('click', this.documentClickHandler);
     }
 
     if (this.metricHandlers) {
       this.metricHandlers.forEach(({ element, handler }) => {
-        element.removeEventListener("click", handler);
+        element.removeEventListener('click', handler);
       });
       this.metricHandlers = [];
     }
@@ -672,44 +639,40 @@ class ActivityHeatmap {
   showTooltip(event) {
     const day = event.target;
     const date = day.dataset.date;
-    const activity = JSON.parse(day.dataset.activity || "{}");
+    const activity = JSON.parse(day.dataset.activity || '{}');
 
     if (!date) return;
 
     // Fix timezone issue: parse date as local instead of UTC
-    const [year, month, dayNum] = date.split("-").map(Number);
+    const [year, month, dayNum] = date.split('-').map(Number);
     const dateObj = new Date(year, month - 1, dayNum); // month is 0-indexed
-    const formattedDate = dateObj.toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      year: "numeric",
+    const formattedDate = dateObj.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
     });
 
     const currentValue = activity[this.currentMetric] || 0;
-    const otherMetric =
-      this.currentMetric === "messages" ? "conversations" : "messages";
+    const otherMetric = this.currentMetric === 'messages' ? 'conversations' : 'messages';
     const otherValue = activity[otherMetric] || 0;
 
     let activityText = `No ${this.currentMetric}`;
     if (currentValue > 0) {
-      const suffix = currentValue === 1 ? "" : "s";
+      const suffix = currentValue === 1 ? '' : 's';
       activityText = `${currentValue} ${this.currentMetric.slice(0, -1)}${suffix}`;
 
       if (otherValue > 0) {
-        const otherSuffix = otherValue === 1 ? "" : "s";
-        const otherLabel =
-          otherMetric === "conversations" ? "conversation" : "message";
+        const otherSuffix = otherValue === 1 ? '' : 's';
+        const otherLabel = otherMetric === 'conversations' ? 'conversation' : 'message';
         activityText += ` • ${otherValue} ${otherLabel}${otherSuffix}`;
       }
     }
 
-    this.tooltip.querySelector(".heatmap-tooltip-date").textContent =
-      formattedDate;
-    this.tooltip.querySelector(".heatmap-tooltip-activity").textContent =
-      activityText;
+    this.tooltip.querySelector('.heatmap-tooltip-date').textContent = formattedDate;
+    this.tooltip.querySelector('.heatmap-tooltip-activity').textContent = activityText;
 
-    this.tooltip.classList.add("show");
+    this.tooltip.classList.add('show');
     this.updateTooltipPosition(event);
   }
 
@@ -717,7 +680,7 @@ class ActivityHeatmap {
    * Hide tooltip
    */
   hideTooltip() {
-    this.tooltip.classList.remove("show");
+    this.tooltip.classList.remove('show');
   }
 
   /**
@@ -750,15 +713,15 @@ class ActivityHeatmap {
     if (!this.activityData) return;
 
     const { totalActivity } = this.activityData;
-    const titleElement = document.getElementById("activity-total");
+    const titleElement = document.getElementById('activity-total');
 
     if (titleElement) {
       // Ensure totalActivity is a number
       const activityCount = totalActivity || 0;
 
-      if (this.currentMetric === "messages") {
+      if (this.currentMetric === 'messages') {
         titleElement.innerHTML = `${this.formatNumber(activityCount)} <span style="color: #ff7f50;">Claude Code</span> ${this.currentMetric} in the last year`;
-      } else if (this.currentMetric === "tools") {
+      } else if (this.currentMetric === 'tools') {
         titleElement.innerHTML = `${this.formatNumber(activityCount)} <span style="color: #ff7f50;">Claude Code</span> ${this.currentMetric} in the last year`;
       } else {
         titleElement.innerHTML = `${this.formatNumber(activityCount)} ${this.currentMetric} in the last year`;
@@ -771,12 +734,12 @@ class ActivityHeatmap {
    */
   formatNumber(num) {
     // Handle undefined, null, or non-numeric values
-    if (num == null || typeof num !== "number" || isNaN(num)) {
-      return "0";
+    if (num == null || typeof num !== 'number' || isNaN(num)) {
+      return '0';
     }
 
     if (num >= 1000) {
-      return (num / 1000).toFixed(1) + "k";
+      return (num / 1000).toFixed(1) + 'k';
     }
     return num.toLocaleString();
   }
@@ -785,9 +748,7 @@ class ActivityHeatmap {
    * Show error state
    */
   showErrorState() {
-    const container = this.container.querySelector(
-      ".activity-heatmap-container",
-    );
+    const container = this.container.querySelector('.activity-heatmap-container');
     container.innerHTML = `
       <div class="heatmap-empty-state">
         <div class="heatmap-empty-icon">📊</div>
@@ -802,21 +763,21 @@ class ActivityHeatmap {
    */
   async clearCacheAndRefresh() {
     try {
-      console.log("🔥 Clearing cache and refreshing heatmap data...");
+      console.log('🔥 Clearing cache and refreshing heatmap data...');
 
       // Clear frontend cache
       this.dataService.clearCache();
 
       // Clear backend cache
-      await fetch("/api/clear-cache", { method: "POST" });
+      await fetch('/api/clear-cache', { method: 'POST' });
 
       // Force reload activity data
       await this.loadActivityData();
       this.positionMonthLabels();
 
-      console.log("✅ Cache cleared and data refreshed");
+      console.log('✅ Cache cleared and data refreshed');
     } catch (error) {
-      console.error("❌ Error clearing cache:", error);
+      console.error('❌ Error clearing cache:', error);
     }
   }
 
@@ -824,7 +785,7 @@ class ActivityHeatmap {
    * Refresh the heatmap data
    */
   async refresh() {
-    console.log("🔥 Refreshing heatmap data...");
+    console.log('🔥 Refreshing heatmap data...');
     await this.loadActivityData();
     this.positionMonthLabels();
   }
@@ -839,13 +800,13 @@ class ActivityHeatmap {
 
     // Remove resize listener
     if (this.resizeHandler) {
-      window.removeEventListener("resize", this.resizeHandler);
+      window.removeEventListener('resize', this.resizeHandler);
     }
 
     // Remove settings listeners
     this.removeSettingsListeners();
 
-    console.log("🔥 ActivityHeatmap destroyed");
+    console.log('🔥 ActivityHeatmap destroyed');
   }
 }
 

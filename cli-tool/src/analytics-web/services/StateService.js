@@ -57,7 +57,7 @@ class StateService {
    * @param {Object} newState - New state object
    * @param {string} action - Action that caused the state change
    */
-  setState(newState, action = "setState") {
+  setState(newState, action = 'setState') {
     // Save current state to history
     this.saveStateToHistory(action);
 
@@ -109,7 +109,7 @@ class StateService {
       try {
         callback(this.state, action, changedState);
       } catch (error) {
-        console.error("Error in StateService subscriber:", error);
+        console.error('Error in StateService subscriber:', error);
       }
     });
   }
@@ -128,7 +128,7 @@ class StateService {
    * @param {Array} conversations - New conversations data
    */
   updateConversations(conversations) {
-    this.setState({ conversations }, "update_conversations");
+    this.setState({ conversations }, 'update_conversations');
   }
 
   /**
@@ -136,7 +136,7 @@ class StateService {
    * @param {Object} states - New conversation states
    */
   updateConversationStates(states) {
-    this.setState({ conversationStates: states }, "update_conversation_states");
+    this.setState({ conversationStates: states }, 'update_conversation_states');
   }
 
   /**
@@ -144,7 +144,7 @@ class StateService {
    * @param {Object} summary - New summary data
    */
   updateSummary(summary) {
-    this.setState({ summary }, "update_summary");
+    this.setState({ summary }, 'update_summary');
   }
 
   /**
@@ -152,7 +152,7 @@ class StateService {
    * @param {Object} chartData - New chart data
    */
   updateChartData(chartData) {
-    this.setState({ chartData }, "update_chart_data");
+    this.setState({ chartData }, 'update_chart_data');
   }
 
   /**
@@ -160,10 +160,7 @@ class StateService {
    * @param {Object} conversation - Selected conversation
    */
   setSelectedConversation(conversation) {
-    this.setState(
-      { selectedConversation: conversation },
-      "select_conversation",
-    );
+    this.setState({ selectedConversation: conversation }, 'select_conversation');
   }
 
   /**
@@ -171,7 +168,7 @@ class StateService {
    * @param {boolean} isLoading - Loading state
    */
   setLoading(isLoading) {
-    this.setState({ isLoading }, "set_loading");
+    this.setState({ isLoading }, 'set_loading');
   }
 
   /**
@@ -179,14 +176,14 @@ class StateService {
    * @param {Error|string} error - Error object or message
    */
   setError(error) {
-    this.setState({ error }, "set_error");
+    this.setState({ error }, 'set_error');
   }
 
   /**
    * Clear error state
    */
   clearError() {
-    this.setState({ error: null }, "clear_error");
+    this.setState({ error: null }, 'clear_error');
   }
 
   /**
@@ -194,7 +191,7 @@ class StateService {
    * @param {Object} health - System health data
    */
   updateSystemHealth(health) {
-    this.setState({ systemHealth: health }, "update_system_health");
+    this.setState({ systemHealth: health }, 'update_system_health');
   }
 
   /**
@@ -206,20 +203,14 @@ class StateService {
     const currentStates = { ...this.state.conversationStates };
     currentStates[conversationId] = newState;
 
-    this.setState(
-      { conversationStates: currentStates },
-      "conversation_state_change",
-    );
+    this.setState({ conversationStates: currentStates }, 'conversation_state_change');
 
     // Also update the conversation in the conversations array
     const updatedConversations = this.state.conversations.map((conv) =>
-      conv.id === conversationId ? { ...conv, status: newState } : conv,
+      conv.id === conversationId ? { ...conv, status: newState } : conv
     );
 
-    this.setState(
-      { conversations: updatedConversations },
-      "update_conversation_status",
-    );
+    this.setState({ conversations: updatedConversations }, 'update_conversation_status');
   }
 
   /**
@@ -228,10 +219,7 @@ class StateService {
    * @returns {Object|null} Conversation object or null if not found
    */
   getConversationById(conversationId) {
-    return (
-      this.state.conversations.find((conv) => conv.id === conversationId) ||
-      null
-    );
+    return this.state.conversations.find((conv) => conv.id === conversationId) || null;
   }
 
   /**
@@ -274,7 +262,7 @@ class StateService {
         error: null,
         lastUpdate: null,
       },
-      "reset_state",
+      'reset_state'
     );
   }
 
@@ -295,6 +283,6 @@ class StateService {
 }
 
 // Export for module use
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = StateService;
 }

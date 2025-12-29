@@ -732,7 +732,7 @@ if __name__ == '__main__':
     # Create application user
     - name: Create application user
       user:
-        name: "{{ app_user }}"
+        name: '{{ app_user }}'
         shell: /bin/bash
         create_home: yes
         system: no
@@ -741,7 +741,7 @@ if __name__ == '__main__':
     - name: Configure UFW
       ufw:
         rule: allow
-        port: "{{ item }}"
+        port: '{{ item }}'
         proto: tcp
       loop:
         - 22
@@ -756,18 +756,18 @@ if __name__ == '__main__':
     # Deploy application
     - name: Create application directory
       file:
-        path: "{{ app_path }}"
+        path: '{{ app_path }}'
         state: directory
-        owner: "{{ app_user }}"
-        group: "{{ app_user }}"
-        mode: "0755"
+        owner: '{{ app_user }}'
+        group: '{{ app_user }}'
+        mode: '0755'
 
     - name: Clone application repository
       git:
-        repo: "https://github.com/example/myapp.git"
-        dest: "{{ app_path }}"
+        repo: 'https://github.com/example/myapp.git'
+        dest: '{{ app_path }}'
         version: main
-      become_user: "{{ app_user }}"
+      become_user: '{{ app_user }}'
       notify: restart nginx
 
     # Configure Nginx
@@ -777,7 +777,7 @@ if __name__ == '__main__':
         dest: /etc/nginx/sites-available/myapp
         owner: root
         group: root
-        mode: "0644"
+        mode: '0644'
       notify: restart nginx
 
     - name: Enable Nginx site
@@ -796,10 +796,10 @@ if __name__ == '__main__':
     # Install application dependencies
     - name: Install Python dependencies
       pip:
-        requirements: "{{ app_path }}/requirements.txt"
-        virtualenv: "{{ app_path }}/venv"
+        requirements: '{{ app_path }}/requirements.txt'
+        virtualenv: '{{ app_path }}/venv'
         virtualenv_command: python3 -m venv
-      become_user: "{{ app_user }}"
+      become_user: '{{ app_user }}'
 
     # Configure systemd service
     - name: Deploy systemd service file
@@ -808,7 +808,7 @@ if __name__ == '__main__':
         dest: /etc/systemd/system/myapp.service
         owner: root
         group: root
-        mode: "0644"
+        mode: '0644'
       notify: restart myapp
 
     - name: Enable and start application service
@@ -927,12 +927,12 @@ kind: ClusterRole
 metadata:
   name: backup-operator
 rules:
-  - apiGroups: [""]
-    resources: ["pods", "secrets"]
-    verbs: ["get", "list", "create"]
-  - apiGroups: ["batch"]
-    resources: ["cronjobs", "jobs"]
-    verbs: ["get", "list", "create", "update", "delete"]
+  - apiGroups: ['']
+    resources: ['pods', 'secrets']
+    verbs: ['get', 'list', 'create']
+  - apiGroups: ['batch']
+    resources: ['cronjobs', 'jobs']
+    verbs: ['get', 'list', 'create', 'update', 'delete']
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -970,13 +970,13 @@ spec:
           image: myregistry/backup-operator:latest
           env:
             - name: WATCH_NAMESPACE
-              value: ""
+              value: ''
             - name: POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: "backup-operator"
+              value: 'backup-operator'
 ```
 
 ## CI/CD for Infrastructure
@@ -1031,11 +1031,11 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "terraform/**"
+      - 'terraform/**'
   push:
     branches: [main]
     paths:
-      - "terraform/**"
+      - 'terraform/**'
 
 env:
   TF_VERSION: 1.6.0
@@ -1147,7 +1147,7 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          text: "Terraform applied successfully"
+          text: 'Terraform applied successfully'
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
         if: always()
 ```

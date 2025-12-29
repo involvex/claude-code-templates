@@ -372,9 +372,9 @@ traceback.install()
 
 ```javascript
 // Get stack trace anywhere
-console.trace("Here");
+console.trace('Here');
 
 // Error with custom stack
-const err = new Error("Debug");
+const err = new Error('Debug');
 console.log(err.stack);
 ```

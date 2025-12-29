@@ -33,17 +33,17 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
          stores: {
            // Page store
            page: {
-             url: new URL("https://example.com/products/123"),
-             params: { id: "123" },
+             url: new URL('https://example.com/products/123'),
+             params: { id: '123' },
              route: {
-               id: "/products/[id]",
+               id: '/products/[id]',
              },
              status: 200,
              error: null,
              data: {
                product: {
-                 id: "123",
-                 name: "Sample Product",
+                 id: '123',
+                 name: 'Sample Product',
                  price: 99.99,
                },
              },
@@ -52,16 +52,16 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
            // Navigating store
            navigating: {
              from: {
-               params: { id: "122" },
-               route: { id: "/products/[id]" },
-               url: new URL("https://example.com/products/122"),
+               params: { id: '122' },
+               route: { id: '/products/[id]' },
+               url: new URL('https://example.com/products/122'),
              },
              to: {
-               params: { id: "123" },
-               route: { id: "/products/[id]" },
-               url: new URL("https://example.com/products/123"),
+               params: { id: '123' },
+               route: { id: '/products/[id]' },
+               url: new URL('https://example.com/products/123'),
              },
-             type: "link",
+             type: 'link',
              delta: 1,
            },
            // Updated store
@@ -115,11 +115,11 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
      sveltekit_experimental: {
        forms: {
          enhance: (form) => {
-           console.log("Form enhanced:", form);
+           console.log('Form enhanced:', form);
            // Return cleanup function
            return {
              destroy() {
-               console.log("Form enhancement cleaned up");
+               console.log('Form enhancement cleaned up');
              },
            };
          };
@@ -171,13 +171,13 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
            page: {
              data: {
                user: {
-                 id: "123",
-                 email: "user@example.com",
-                 role: "admin",
+                 id: '123',
+                 email: 'user@example.com',
+                 role: 'admin',
                },
                session: {
-                 token: "mock-jwt-token",
-                 expiresAt: "2024-12-31",
+                 token: 'mock-jwt-token',
+                 expiresAt: '2024-12-31',
                },
              },
            },
@@ -195,8 +195,8 @@ You are acting as the Svelte Storybook Specialist Agent focused on mocking Svelt
        sveltekit_experimental: {
          stores: {
            navigating: {
-             from: { url: new URL("https://example.com") },
-             to: { url: new URL("https://example.com/products") },
+             from: { url: new URL('https://example.com') },
+             to: { url: new URL('https://example.com/products') },
            },
          },
        },

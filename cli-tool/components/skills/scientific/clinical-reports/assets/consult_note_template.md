@@ -242,12 +242,12 @@ Example: "Please evaluate and manage acute kidney injury in setting of heart fai
 **Service:** [Consulting service]  
 **Date/Time:** [MM/DD/YYYY at HH:MM]  
 **Pager/Contact:** [Number]  
-**Signature:** ********\_\_\_\_********
+**Signature:** **\*\*\*\***\_\_\_\_**\*\*\*\***
 
 **Co-signature (if fellow or resident):**  
 **Attending:** [Name, credentials]  
 **Date/Time:** [MM/DD/YYYY at HH:MM]  
-**Signature:** ********\_\_\_\_********
+**Signature:** **\*\*\*\***\_\_\_\_**\*\*\*\***
 
 ---
 

@@ -62,8 +62,8 @@ Implement comprehensive CI/CD following best practices: $ARGUMENTS
          - name: Setup Node.js
            uses: actions/setup-node@v3
            with:
-             node-version: "18"
-             cache: "npm"
+             node-version: '18'
+             cache: 'npm'
          - run: npm ci
          - run: npm run test
          - run: npm run build
@@ -293,8 +293,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '18'
+          cache: 'npm'
       - run: npm ci
       - run: npm run lint
       - run: npm run test:coverage

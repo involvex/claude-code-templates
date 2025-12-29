@@ -9,6 +9,7 @@ This is a Node.js CLI tool for setting up Claude Code configurations and providi
 ## Development Commands
 
 ### Package Management
+
 - `npm install` - Install all dependencies
 - `npm install --save <package>` - Install a production dependency
 - `npm install --save-dev <package>` - Install a development dependency
@@ -17,12 +18,14 @@ This is a Node.js CLI tool for setting up Claude Code configurations and providi
 - `npm audit fix` - Fix security vulnerabilities
 
 ### Application Commands
+
 - `npm start` - Run the CLI tool
 - `npm run analytics:start` - Start the analytics dashboard server
 - `npm run analytics:test` - Run analytics-specific tests
 - `node src/analytics.js` - Direct analytics server startup
 
 ### Testing Commands
+
 - `npm test` - Run all tests with Jest
 - `npm run test:watch` - Run tests in watch mode
 - `npm run test:coverage` - Run tests with coverage report
@@ -33,11 +36,13 @@ This is a Node.js CLI tool for setting up Claude Code configurations and providi
 - `npm run test:all` - Run comprehensive test suite
 
 ### Code Quality Commands
+
 - `npm run lint` - Run ESLint (if configured)
 - `npm run format` - Format code (if configured)
 - `node --check src/analytics.js` - Check syntax
 
 ### Development Tools
+
 - `npm run dev:link` - Link package for local development
 - `npm run dev:unlink` - Unlink package
 - `npm version patch|minor|major` - Bump version
@@ -46,6 +51,7 @@ This is a Node.js CLI tool for setting up Claude Code configurations and providi
 ## Analytics Dashboard
 
 ### Quick Start
+
 ```bash
 # Start the analytics dashboard
 npm run analytics:start
@@ -55,6 +61,7 @@ npm run analytics:start
 ```
 
 ### Key Features
+
 - **Real-time Session Monitoring** - Live tracking of active Claude Code conversations
 - **Conversation State Detection** - "Claude working...", "User typing...", "Awaiting input..."
 - **Performance Analytics** - System health, memory usage, and performance metrics
@@ -63,7 +70,9 @@ npm run analytics:start
 - **Browser Notifications** - Desktop alerts for state changes
 
 ### Architecture
+
 The analytics dashboard follows a modular architecture with:
+
 - **Backend Modules**: StateCalculator, ProcessDetector, ConversationAnalyzer, FileWatcher, DataCache
 - **Frontend Components**: Dashboard, ConversationTable, Charts, Services
 - **Real-time Communication**: WebSocket server with notification management
@@ -73,6 +82,7 @@ The analytics dashboard follows a modular architecture with:
 ## Dashboard System (NEW v1.22.0)
 
 ### Unified Dashboard
+
 The unified dashboard provides a single interface to access all Claude Code dashboards with seamless navigation.
 
 ```bash
@@ -84,6 +94,7 @@ cct --dashboard
 ```
 
 **Features:**
+
 - **Single Entry Point**: Access all dashboards from one interface
 - **Live Dashboard Selector**: Switch between dashboards instantly
 - **Status Monitoring**: Real-time online/offline indicators
@@ -93,12 +104,14 @@ cct --dashboard
 ### Individual Dashboards
 
 All dashboards now support:
+
 - **Universal Navigation**: Persistent navigation bar across all dashboards
 - **Scope Switching**: Dynamic scope selector (User/Project/Local/All)
 - **Offline Detection**: Visual indicators for unavailable dashboards
 - **Configurable Ports**: Use `--host` and `--port` options
 
 #### Dashboard Ports
+
 ```
 Analytics:  3333  (--analytics)
 Chats:      3335  (--chats)
@@ -109,6 +122,7 @@ Unified:    3339  (--dashboard)
 ```
 
 ### Hooks Dashboard (NEW)
+
 Manage and monitor Claude Code automation hooks.
 
 ```bash
@@ -123,6 +137,7 @@ cct --hooks --host 0.0.0.0 --port 8080
 ```
 
 **Features:**
+
 - **Hook Inventory**: View all installed hooks across scopes
 - **Available Hooks**: Browse hooks from components library
 - **Scope Filtering**: Filter by user/project/local scope
@@ -131,6 +146,7 @@ cct --hooks --host 0.0.0.0 --port 8080
 - **Search & Filter**: Real-time search and multi-dimensional filtering
 
 **Hook Format Support**:
+
 - ✅ **New Format**: Array-based matchers with nested hooks
 - ✅ **Old Format**: Direct hook objects (backward compatible)
 
@@ -153,12 +169,14 @@ cct --agent frontend-dev --command lint --scope user
 ```
 
 **Scope Hierarchy**:
+
 1. **User** (`~/.claude/`) - Global, available in all projects (alias: `global`)
 2. **Project** (`./.claude/`) - Shared with team, committed to git (default)
 3. **Local** (`./.claude/settings.local.json`) - Machine-specific, git-ignored
 4. **Enterprise** (System-wide) - Settings/hooks only, requires admin
 
 **Dashboard Scope Switching**:
+
 - All dashboards include scope dropdown in navigation
 - Scope changes reload data dynamically without page refresh
 - Scope preserved when navigating between dashboards
@@ -169,6 +187,7 @@ cct --agent frontend-dev --command lint --scope user
 All dashboards now include a universal navigation bar:
 
 **Features:**
+
 - **Dashboard Links**: Quick navigation to all dashboards
 - **Active State**: Highlights current dashboard
 - **Offline Detection**: Shows red dot (●) on unavailable dashboards
@@ -177,6 +196,7 @@ All dashboards now include a universal navigation bar:
 - **Mobile Responsive**: Hamburger menu for small screens
 
 **Visual Indicators**:
+
 ```
 Online:  🔌 Plugins (Full color, clickable)
 Offline: 🔌 Plugins ● (Grayscale, dimmed, disabled)
@@ -199,6 +219,7 @@ npm run bun:install
 ```
 
 **How It Works**:
+
 1. Detects Bun availability at runtime
 2. Uses Bun for ~3x faster installs if available
 3. Automatically falls back to npm if Bun not installed
@@ -206,6 +227,7 @@ npm run bun:install
 5. No breaking changes for npm users
 
 **Usage**:
+
 ```javascript
 // Automatic in CLI internals
 const { detectPackageManager } = require('./utils/package-manager');
@@ -214,6 +236,7 @@ const pm = await detectPackageManager({ verbose: true });
 ```
 
 **Performance**:
+
 - Bun: ~2-3x faster than npm for cold installs
 - npm: Fallback maintains compatibility
 - Build commands: `bun run build || npm run build`
@@ -221,6 +244,7 @@ const pm = await detectPackageManager({ verbose: true });
 ## Technology Stack
 
 ### Core Technologies
+
 - **Node.js** - Runtime environment (v14.0.0+)
 - **Express.js** - Web server framework
 - **WebSocket** - Real-time communication (ws library)
@@ -228,12 +252,14 @@ const pm = await detectPackageManager({ verbose: true });
 - **Jest** - Testing framework
 
 ### Frontend Technologies
+
 - **Vanilla JavaScript** - No framework dependencies for maximum compatibility
 - **Chart.js** - Data visualization
 - **WebSocket Client** - Real-time updates
 - **CSS3** - Modern styling with responsive design
 
 ### Development Tools
+
 - **fs-extra** - Enhanced file system operations
 - **chalk** - Terminal string styling
 - **boxen** - Terminal boxes
@@ -241,6 +267,7 @@ const pm = await detectPackageManager({ verbose: true });
 - **inquirer** - Interactive command line prompts
 
 ### CLI Dependencies
+
 - **commander** - Command-line interface framework
 - **inquirer** - Interactive command line prompts
 - **ora** - Terminal spinners
@@ -248,6 +275,7 @@ const pm = await detectPackageManager({ verbose: true });
 - **open** - Cross-platform file opener
 
 ### Analytics Dependencies
+
 - **express** - Web server framework
 - **ws** - WebSocket library for real-time communication
 - **chokidar** - File system watcher
@@ -255,11 +283,13 @@ const pm = await detectPackageManager({ verbose: true });
 - **chalk** - Terminal string styling
 
 ### Testing Framework
+
 - **Jest** - JavaScript testing framework
 - **jest-watch-typeahead** - Interactive test watching
 - Comprehensive test coverage with unit, integration, and performance tests
 
 ### Code Quality Tools
+
 - **ESLint** - JavaScript linting (if configured)
 - **Prettier** - Code formatting (if configured)
 - **Node.js built-in** - Syntax checking with `node --check`
@@ -267,6 +297,7 @@ const pm = await detectPackageManager({ verbose: true });
 ## Project Structure Guidelines
 
 ### File Organization
+
 ```
 src/
 ├── index.js             # CLI entry point
@@ -299,6 +330,7 @@ tests/
 ```
 
 ### Naming Conventions
+
 - **Files/Modules**: Use PascalCase for classes (`StateCalculator.js`), camelCase for utilities
 - **Classes**: Use PascalCase (`StateCalculator`)
 - **Functions/Variables**: Use camelCase (`getUserData`)
@@ -308,6 +340,7 @@ tests/
 ## Node.js Guidelines
 
 ### Module Organization
+
 - Use CommonJS modules (`module.exports`, `require()`)
 - Organize related functionality into classes
 - Keep modules focused and single-purpose
@@ -315,6 +348,7 @@ tests/
 - Document public APIs with JSDoc comments
 
 ### Code Style
+
 - Use meaningful variable and function names
 - Keep functions focused and single-purpose
 - Use async/await for asynchronous operations
@@ -322,6 +356,7 @@ tests/
 - Use console logging with appropriate levels (chalk for styling)
 
 ### Best Practices
+
 - Use `fs-extra` for enhanced file operations
 - Prefer `path.join()` for cross-platform path handling
 - Use async/await instead of callbacks where possible
@@ -331,6 +366,7 @@ tests/
 ## Testing Standards
 
 ### Test Structure
+
 - Organize tests to mirror source code structure
 - Use descriptive test names that explain the behavior
 - Follow AAA pattern (Arrange, Act, Assert)
@@ -338,32 +374,32 @@ tests/
 - Group related tests in `describe` blocks
 
 ### Test Categories
+
 - **Unit Tests** - Test individual modules and functions in isolation
 - **Integration Tests** - Test module interactions and complete workflows
 - **Performance Tests** - Test system performance and memory usage
 - **E2E Tests** - Test complete user scenarios end-to-end
 
 ### Jest Configuration
+
 ```javascript
 // jest.config.js
 module.exports = {
   testEnvironment: 'node',
-  collectCoverageFrom: [
-    'src/**/*.js',
-    '!src/**/*.test.js'
-  ],
+  collectCoverageFrom: ['src/**/*.js', '!src/**/*.test.js'],
   coverageThreshold: {
     global: {
       branches: 70,
       functions: 70,
       lines: 70,
-      statements: 70
-    }
-  }
+      statements: 70,
+    },
+  },
 };
 ```
 
 ### Coverage Goals
+
 - Aim for 70%+ overall test coverage (80%+ for core modules)
 - Write unit tests for business logic
 - Use integration tests for module interactions
@@ -371,21 +407,24 @@ module.exports = {
 - Test error conditions and edge cases
 
 ### Test Examples
+
 ```javascript
 // Unit test example
 describe('StateCalculator', () => {
   let stateCalculator;
-  
+
   beforeEach(() => {
     stateCalculator = new StateCalculator();
   });
-  
+
   it('should detect active state for recent messages', () => {
-    const messages = [/* test data */];
+    const messages = [
+      /* test data */
+    ];
     const lastModified = new Date();
-    
+
     const state = stateCalculator.determineConversationState(messages, lastModified);
-    
+
     expect(state).toBe('active');
   });
 });
@@ -394,6 +433,7 @@ describe('StateCalculator', () => {
 ## Dependency Management
 
 ### Node.js Environment Setup
+
 ```bash
 # Ensure Node.js 14+ is installed
 node --version
@@ -409,6 +449,7 @@ npm link
 ```
 
 ### Package Management Best Practices
+
 - Use `package.json` for dependency management
 - Pin major versions to avoid breaking changes
 - Use `npm audit` to check for security vulnerabilities
@@ -417,16 +458,19 @@ npm link
 ## Analytics Modular Architecture
 
 ### Implementation Details
+
 The analytics dashboard has been refactored into a modular architecture in 4 phases:
 
 #### Phase 1: Backend Modularization
+
 - **StateCalculator** - Conversation state detection logic
 - **ProcessDetector** - Running process detection and correlation
 - **ConversationAnalyzer** - Message parsing and analysis
 - **FileWatcher** - Real-time file system monitoring
 - **DataCache** - Multi-level caching system
 
-#### Phase 2: Frontend Modularization  
+#### Phase 2: Frontend Modularization
+
 - **Dashboard** - Main component orchestration
 - **ConversationTable** - Interactive conversation display
 - **Charts** - Data visualization components
@@ -435,12 +479,14 @@ The analytics dashboard has been refactored into a modular architecture in 4 pha
 - **WebSocketService** - Real-time communication
 
 #### Phase 3: Real-time Communication
+
 - **WebSocketServer** - Server-side WebSocket management
 - **NotificationManager** - Event-driven notifications
 - **Real-time Updates** - Live conversation state changes
 - **Fallback Mechanisms** - Polling when WebSocket unavailable
 
 #### Phase 4: Testing & Performance
+
 - **Comprehensive Test Suite** - Unit, integration, and performance tests
 - **PerformanceMonitor** - System health and metrics tracking
 - **Memory Management** - Automatic cleanup and optimization
@@ -449,12 +495,14 @@ The analytics dashboard has been refactored into a modular architecture in 4 pha
 ## Security Guidelines
 
 ### Dependencies
+
 - Regularly update dependencies with `npm audit` and `npm update`
 - Use `npm audit` to check for known vulnerabilities
 - Pin major versions in package.json to avoid breaking changes
 - Use environment variables for sensitive configuration
 
 ### Code Security
+
 - Validate input data appropriately
 - Use environment variables for API keys and configuration
 - Implement proper error handling without exposing sensitive information
@@ -464,18 +512,21 @@ The analytics dashboard has been refactored into a modular architecture in 4 pha
 ## Development Workflow
 
 ### Before Starting
+
 1. Check Node.js version compatibility (14.0.0+)
 2. Run `npm install` to install dependencies
 3. Check syntax with `node --check src/analytics.js`
 4. Run initial tests with `npm test`
 
 ### During Development
+
 1. Use meaningful variable and function names
 2. Run tests frequently to catch issues early: `npm run test:watch`
 3. For frontend changes, let user handle analytics server startup - don't run `npm run analytics:start` automatically
 4. Use meaningful commit messages
 
 ### Before Committing
+
 1. Run full test suite: `npm test`
 2. Check syntax: `node --check src/analytics.js`
 3. Test analytics functionality: `npm run analytics:test`
@@ -489,33 +540,43 @@ The analytics dashboard has been refactored into a modular architecture in 4 pha
 This CLI tool manages a comprehensive component system for Claude Code configurations:
 
 #### 🤖 Agents (600+ specialists)
+
 AI specialists organized by domain expertise:
+
 - **Development**: `frontend-developer`, `fullstack-developer`, `devops-engineer`
 - **Security**: `security-auditor`, `penetration-tester`, `compliance-specialist`
 - **Data/AI**: `data-scientist`, `ml-engineer`, `nlp-engineer`
 - **Business**: `product-strategist`, `business-analyst`, `legal-advisor`
 
 #### ⚡ Commands (200+ automations)
+
 Custom slash commands for development workflows:
+
 - **Setup**: `/setup-ci-cd-pipeline`, `/setup-testing`, `/migrate-to-typescript`
 - **Performance**: `/optimize-bundle`, `/performance-audit`, `/add-caching`
 - **Testing**: `/generate-tests`, `/setup-e2e`, `/test-coverage`
 - **Documentation**: `/update-docs`, `/generate-api-docs`, `/create-guide`
 
 #### 🔌 MCPs (Model Context Protocol Integrations)
+
 External service connections:
+
 - **Databases**: `postgresql-integration`, `supabase`, `mysql-integration`
 - **Development**: `github-integration`, `context7`, `filesystem-access`
 - **Browser**: `playwright-mcp`, `browsermcp`, `browser-use-mcp-server`
 
 #### ⚙️ Settings
+
 Claude Code configuration files:
+
 - **Performance**: `performance-optimization`, `bash-timeouts`, `mcp-timeouts`
 - **Security**: `read-only-mode`, `deny-sensitive-files`, `allow-git-operations`
 - **Statuslines**: `context-monitor`, `git-branch-statusline`, `time-statusline`
 
 #### 🪝 Hooks
+
 Automation triggers for development workflows:
+
 - **Git**: `auto-git-add`, `smart-commit`, `pre-commit-validation`
 - **Notifications**: `discord-notifications`, `slack-notifications`, `telegram-notifications`
 - **Performance**: `performance-monitor`, `lint-on-save`, `test-runner`
@@ -523,6 +584,7 @@ Automation triggers for development workflows:
 ### Component Installation System
 
 #### CLI Installation Patterns
+
 ```bash
 # Install specific components
 npx claude-code-templates@latest --agent <name>
@@ -541,6 +603,7 @@ npx claude-code-templates@latest
 #### Special Component Features
 
 **Statusline System with Python Scripts**
+
 - Statuslines can reference external Python scripts
 - Files are downloaded automatically to `.claude/scripts/` relative to project
 - Example: `statusline/context-monitor` installs both JSON config and Python script
@@ -552,7 +615,7 @@ if (settingName.includes('statusline/')) {
   const pythonUrl = githubUrl.replace('.json', '.py');
   additionalFiles['.claude/scripts/' + pythonFileName] = {
     content: pythonContent,
-    executable: true
+    executable: true,
   };
 }
 ```
@@ -560,6 +623,7 @@ if (settingName.includes('statusline/')) {
 ### Component Generation System
 
 The `scripts/generate_components_json.py` script creates the component catalog:
+
 - Scans all component directories recursively
 - Excludes `.py` files from public listings (they remain as background dependencies)
 - Generates `docs/components.json` for the web interface at aitmpl.com
@@ -568,18 +632,22 @@ The `scripts/generate_components_json.py` script creates the component catalog:
 ## Important Implementation Notes
 
 ### Path Handling
+
 - **Relative Paths**: Always use relative paths like `.claude/scripts/` for project-local files
 - **Cross-platform**: Use `path.join()` for cross-platform compatibility
 - **No Hardcoding**: Never hardcode user home directories or absolute paths
 
 ### Context Monitor Implementation
+
 The statusline context monitor system demonstrates key architectural patterns:
+
 - **Component Download**: Automatic download of related files (Python scripts)
 - **Relative Installation**: Files installed relative to project, not globally
 - **Background Dependencies**: Python files excluded from public component listings
 - **Dynamic Loading**: Components loaded and executed dynamically by Claude Code
 
 ### Error Handling Patterns
+
 - Use try/catch blocks for async operations
 - Log errors with appropriate context using chalk for styling
 - Provide helpful error messages to users
@@ -589,6 +657,7 @@ The statusline context monitor system demonstrates key architectural patterns:
 ### Component Development Guidelines
 
 #### Adding New Components
+
 1. **Structure**: Follow existing directory patterns in `cli-tool/components/`
 2. **Naming**: Use descriptive, hyphenated names (`security-auditor.md`)
 3. **Documentation**: Include clear descriptions and usage examples
@@ -596,6 +665,7 @@ The statusline context monitor system demonstrates key architectural patterns:
 5. **Generation**: Run `python scripts/generate_components_json.py` to update catalog
 
 #### Modifying Existing Components
+
 1. **Backward Compatibility**: Ensure changes don't break existing installations
 2. **Version Management**: Consider version bumping for breaking changes
 3. **Testing**: Test component installation with `--setting`, `--agent`, etc.
@@ -604,10 +674,11 @@ The statusline context monitor system demonstrates key architectural patterns:
 ### Publishing Workflow
 
 #### Version Management
+
 ```bash
 # Bump version (automatically updates package.json)
 npm version patch   # 1.20.2 -> 1.20.3
-npm version minor   # 1.20.3 -> 1.21.0  
+npm version minor   # 1.20.3 -> 1.21.0
 npm version major   # 1.21.0 -> 2.0.0
 
 # Publish to npm
@@ -615,6 +686,7 @@ npm publish
 ```
 
 #### Pre-publish Checklist
+
 1. All tests passing (`npm test`)
 2. Component catalog updated (`python scripts/generate_components_json.py`)
 3. No hardcoded paths or sensitive information
@@ -622,6 +694,7 @@ npm publish
 5. Git commits include all relevant files
 
 ### Component Security
+
 - Never include hardcoded credentials or API keys in components
 - Validate all user inputs in components
 - Use relative paths (`.claude/scripts/`) instead of absolute paths
@@ -632,6 +705,7 @@ npm publish
 ### Overview
 
 The `/api` directory contains Vercel Serverless Functions that power critical infrastructure:
+
 - Component download tracking (Supabase)
 - Discord bot interactions
 - Claude Code changelog monitoring (Neon Database)
@@ -647,6 +721,7 @@ The `/api` directory contains Vercel Serverless Functions that power critical in
 **Method**: `POST`
 
 **Request Body**:
+
 ```json
 {
   "type": "agent|command|mcp|hook|setting|skill|template",
@@ -670,6 +745,7 @@ The `/api` directory contains Vercel Serverless Functions that power critical in
 **Method**: `POST`
 
 **Features**:
+
 - `/search` - Search components
 - `/info` - Component details
 - `/install` - Installation commands
@@ -685,6 +761,7 @@ The `/api` directory contains Vercel Serverless Functions that power critical in
 **Method**: `GET` (triggered by Vercel Cron every 4 hours)
 
 **Features**:
+
 - Fetches latest version from NPM
 - Parses CHANGELOG.md from GitHub
 - Classifies changes (features, fixes, improvements, breaking)
@@ -733,6 +810,7 @@ The `vercel.json` file in project root configures:
 ```
 
 **Important Notes**:
+
 - Serverless functions MUST be in `/api` root or use proper naming (`/api/folder/file.js`)
 - ES modules (`type: "module"`) are supported
 - Environment variables configured in Vercel Dashboard
@@ -792,6 +870,7 @@ api/
 #### Critical Tests
 
 The test suite validates:
+
 1. ✅ All endpoints respond (< 500 status)
 2. ✅ Download tracking accepts valid component types
 3. ✅ Invalid data returns 400 errors
@@ -800,6 +879,7 @@ The test suite validates:
 6. ✅ Correct HTTP method validation
 
 **Test Against Production**:
+
 ```bash
 # Test production endpoints
 API_BASE_URL=https://aitmpl.com npm run test:api
@@ -815,6 +895,7 @@ API_BASE_URL=https://staging.aitmpl.com npm run test:api
 **Cause**: Vercel Deployment Protection is enabled
 
 **Solution**:
+
 - Use production domain (`aitmpl.com`) instead of preview URLs
 - Or disable deployment protection for API routes
 
@@ -823,6 +904,7 @@ API_BASE_URL=https://staging.aitmpl.com npm run test:api
 **Cause**: Testing against local server that isn't running
 
 **Solution**:
+
 ```bash
 # Always test against production
 API_BASE_URL=https://aitmpl.com npm run test:api
@@ -833,6 +915,7 @@ API_BASE_URL=https://aitmpl.com npm run test:api
 **Symptoms**: No data in Supabase after component installations
 
 **Debug Steps**:
+
 1. Check Vercel function logs: `vercel logs aitmpl.com --follow`
 2. Verify environment variables are set
 3. Test endpoint manually:
@@ -848,6 +931,7 @@ API_BASE_URL=https://aitmpl.com npm run test:api
 **Cause**: Incorrect file structure or naming
 
 **Solution**:
+
 - Functions must be directly in `/api` (e.g., `/api/my-function.js`)
 - OR in named folders (e.g., `/api/my-folder/index.js` becomes `/api/my-folder`)
 - Use `export default async function handler(req, res) {}` for ES modules
@@ -877,6 +961,7 @@ vercel logs aitmpl.com --since 1h
 #### Database Queries
 
 **Supabase (Download Stats)**:
+
 ```sql
 -- Recent downloads
 SELECT type, name, COUNT(*) as downloads
@@ -888,6 +973,7 @@ LIMIT 20;
 ```
 
 **Neon (Claude Code Versions)**:
+
 ```sql
 -- Latest Claude Code versions
 SELECT version, published_at, discord_notified

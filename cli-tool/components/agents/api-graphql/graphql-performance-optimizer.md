@@ -90,7 +90,7 @@ const createLoaders = () => ({
     },
     {
       cacheKeyFn: (email) => email.toLowerCase(),
-    },
+    }
   ),
 });
 ```
@@ -99,8 +99,8 @@ const createLoaders = () => ({
 
 ```javascript
 // Implement query complexity limits
-const depthLimit = require("graphql-depth-limit");
-const costAnalysis = require("graphql-cost-analysis");
+const depthLimit = require('graphql-depth-limit');
+const costAnalysis = require('graphql-cost-analysis');
 
 const server = new ApolloServer({
   typeDefs,
@@ -129,10 +129,9 @@ const server = new ApolloServer({
   resolvers,
   plugins: [
     responseCachePlugin({
-      sessionId: (requestContext) =>
-        requestContext.request.http.headers.get("user-id"),
+      sessionId: (requestContext) => requestContext.request.http.headers.get('user-id'),
       shouldCacheResult: (requestContext, result) =>
-        !result.errors && requestContext.request.query.includes("cache"),
+        !result.errors && requestContext.request.query.includes('cache'),
     }),
   ],
 });
@@ -185,7 +184,7 @@ const resolvers = {
 function getRequestedFields(info) {
   const selections = info.fieldNodes[0].selectionSet.selections;
   return selections.reduce((fields, selection) => {
-    if (selection.kind === "Field") {
+    if (selection.kind === 'Field') {
       fields[selection.name.value] = true;
     }
     return fields;
@@ -207,7 +206,7 @@ const performancePlugin = {
 
         // Log slow queries
         if (metrics.executionTime > 1000) {
-          console.warn("Slow GraphQL Query:", {
+          console.warn('Slow GraphQL Query:', {
             query: request.query,
             variables: request.variables,
             executionTime: metrics.executionTime,
@@ -231,7 +230,7 @@ const performancePlugin = {
 
 ```javascript
 // Expose performance metrics endpoint
-app.get("/graphql/metrics", (req, res) => {
+app.get('/graphql/metrics', (req, res) => {
   res.json({
     averageExecutionTime: getAverageExecutionTime(),
     queryComplexityDistribution: getComplexityDistribution(),
@@ -317,16 +316,12 @@ app.get("/graphql/metrics", (req, res) => {
 const optimizedResolvers = {
   User: {
     // Batch user loading
-    posts: async (user, args, { loaders }) =>
-      loaders.postsByUserId.load(user.id),
+    posts: async (user, args, { loaders }) => loaders.postsByUserId.load(user.id),
 
     // Cache expensive computations
     analytics: async (user, args, { cache }) => {
       const cacheKey = `analytics:${user.id}:${args.period}`;
-      return (
-        cache.get(cacheKey) ||
-        cache.set(cacheKey, await calculateAnalytics(user, args))
-      );
+      return cache.get(cacheKey) || cache.set(cacheKey, await calculateAnalytics(user, args));
     },
   },
 };
@@ -366,11 +361,11 @@ const loadTest = async () => {
   ];
 
   await runLoadTest({
-    target: "http://localhost:4000/graphql",
+    target: 'http://localhost:4000/graphql',
     phases: [
-      { duration: "2m", arrivalRate: 10 },
-      { duration: "5m", arrivalRate: 50 },
-      { duration: "2m", arrivalRate: 10 },
+      { duration: '2m', arrivalRate: 10 },
+      { duration: '5m', arrivalRate: 50 },
+      { duration: '2m', arrivalRate: 10 },
     ],
     queries,
   });

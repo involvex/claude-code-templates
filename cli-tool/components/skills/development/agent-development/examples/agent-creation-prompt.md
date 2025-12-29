@@ -47,7 +47,7 @@ name: [identifier from JSON]
 description: [whenToUse from JSON]
 model: inherit
 color: [choose: blue/cyan/green/yellow/magenta/red]
-tools: ["Read", "Write", "Grep"] # Optional: restrict tools
+tools: ['Read', 'Write', 'Grep'] # Optional: restrict tools
 ---
 
 [systemPrompt from JSON]

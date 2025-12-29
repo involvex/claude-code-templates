@@ -114,16 +114,16 @@ spec:
 
   template:
     metadata:
-      name: "myapp-{{env}}"
+      name: 'myapp-{{env}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/myorg/myapp-gitops.git
         targetRevision: main
-        path: "kubernetes/overlays/{{env}}"
+        path: 'kubernetes/overlays/{{env}}'
       destination:
-        server: "{{cluster}}"
-        namespace: "{{env}}"
+        server: '{{cluster}}'
+        namespace: '{{env}}'
       syncPolicy:
         automated:
           prune: true
@@ -232,14 +232,14 @@ spec:
         url: http://flagger-loadtester/
         timeout: 5s
         metadata:
-          cmd: "hey -z 1m -q 10 -c 2 http://myapp-canary.production/"
+          cmd: 'hey -z 1m -q 10 -c 2 http://myapp-canary.production/'
 
       - name: smoke-test
         url: http://flagger-loadtester/
         timeout: 5s
         metadata:
           type: smoke
-          cmd: "curl -s http://myapp-canary.production/healthz | grep ok"
+          cmd: 'curl -s http://myapp-canary.production/healthz | grep ok'
 ```
 
 ### Blue/Green Deployment
@@ -316,7 +316,7 @@ See [templates.md](templates.md) for full GitHub Actions pipeline
 ```yaml
 variables:
   DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_CERTDIR: '/certs'
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 
 stages:

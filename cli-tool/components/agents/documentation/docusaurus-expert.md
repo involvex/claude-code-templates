@@ -134,11 +134,11 @@ npm run build 2>&1 | tee build.log
 // Proper sidebar structure
 module.exports = {
   tutorialSidebar: [
-    "intro",
+    'intro',
     {
-      type: "category",
-      label: "Getting Started",
-      items: ["installation", "configuration"],
+      type: 'category',
+      label: 'Getting Started',
+      items: ['installation', 'configuration'],
     },
   ],
 };
@@ -152,7 +152,7 @@ module.exports = {
   // Enable compression
   plugins: [
     // Optimize bundle size
-    "@docusaurus/plugin-ideal-image",
+    '@docusaurus/plugin-ideal-image',
   ],
   themeConfig: {
     // Improve loading

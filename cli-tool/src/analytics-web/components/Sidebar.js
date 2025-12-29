@@ -6,7 +6,7 @@ class Sidebar {
   constructor(container, onNavigate) {
     this.container = container;
     this.onNavigate = onNavigate;
-    this.currentPage = "dashboard";
+    this.currentPage = 'dashboard';
     this.isCollapsed = true; // Start collapsed for minimal design
     this.hoverTimeout = null;
 
@@ -26,7 +26,7 @@ class Sidebar {
    */
   render() {
     this.container.innerHTML = `
-      <nav class="sidebar ${this.isCollapsed ? "collapsed" : ""}">
+      <nav class="sidebar ${this.isCollapsed ? 'collapsed' : ''}">
         <div class="sidebar-header">
           <div class="logo">
             <div class="logo-icon">
@@ -40,7 +40,7 @@ class Sidebar {
         
         <div class="sidebar-content">
           <ul class="nav-menu">
-            <li class="nav-item ${this.currentPage === "dashboard" ? "active" : ""}" data-page="dashboard" title="Analytics Dashboard">
+            <li class="nav-item ${this.currentPage === 'dashboard' ? 'active' : ''}" data-page="dashboard" title="Analytics Dashboard">
               <a href="#" class="nav-link">
                 <div class="nav-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -69,26 +69,26 @@ class Sidebar {
    * Bind event listeners
    */
   bindEvents() {
-    const sidebar = this.container.querySelector(".sidebar");
+    const sidebar = this.container.querySelector('.sidebar');
 
     // Navigation items
-    const navItems = this.container.querySelectorAll(".nav-item");
+    const navItems = this.container.querySelectorAll('.nav-item');
     navItems.forEach((item) => {
-      item.addEventListener("click", (e) => {
+      item.addEventListener('click', (e) => {
         e.preventDefault();
-        const page = item.getAttribute("data-page");
+        const page = item.getAttribute('data-page');
         this.navigateToPage(page);
       });
     });
 
     // Hover to expand when collapsed
-    sidebar.addEventListener("mouseenter", () => {
+    sidebar.addEventListener('mouseenter', () => {
       if (this.isCollapsed) {
         this.expandOnHover();
       }
     });
 
-    sidebar.addEventListener("mouseleave", () => {
+    sidebar.addEventListener('mouseleave', () => {
       if (this.isCollapsed) {
         this.collapseOnLeave();
       }
@@ -101,9 +101,9 @@ class Sidebar {
    */
   setActivePage(page) {
     // Update active state visually
-    const navItems = this.container.querySelectorAll(".nav-item");
+    const navItems = this.container.querySelectorAll('.nav-item');
     navItems.forEach((item) => {
-      item.classList.toggle("active", item.getAttribute("data-page") === page);
+      item.classList.toggle('active', item.getAttribute('data-page') === page);
     });
 
     this.currentPage = page;
@@ -132,8 +132,8 @@ class Sidebar {
       clearTimeout(this.hoverTimeout);
     }
 
-    const sidebar = this.container.querySelector(".sidebar");
-    sidebar.classList.add("hover-expanded");
+    const sidebar = this.container.querySelector('.sidebar');
+    sidebar.classList.add('hover-expanded');
   }
 
   /**
@@ -141,8 +141,8 @@ class Sidebar {
    */
   collapseOnLeave() {
     this.hoverTimeout = setTimeout(() => {
-      const sidebar = this.container.querySelector(".sidebar");
-      sidebar.classList.remove("hover-expanded");
+      const sidebar = this.container.querySelector('.sidebar');
+      sidebar.classList.remove('hover-expanded');
     }, 200); // Small delay to prevent flickering
   }
 
@@ -152,7 +152,7 @@ class Sidebar {
    */
   getConnectionStatus() {
     // This would normally check actual connection status
-    return "connected";
+    return 'connected';
   }
 
   /**
@@ -160,15 +160,15 @@ class Sidebar {
    * @param {string} status - Connection status
    */
   updateConnectionStatus(status) {
-    const statusDot = this.container.querySelector(".status-dot");
-    const statusText = this.container.querySelector(".status-text");
+    const statusDot = this.container.querySelector('.status-dot');
+    const statusText = this.container.querySelector('.status-text');
 
     if (statusDot) {
       statusDot.className = `status-dot ${status}`;
     }
 
     if (statusText) {
-      statusText.textContent = status === "connected" ? "Live" : "Offline";
+      statusText.textContent = status === 'connected' ? 'Live' : 'Offline';
     }
   }
 
@@ -177,11 +177,11 @@ class Sidebar {
    */
   destroy() {
     // Clean up event listeners and DOM
-    this.container.innerHTML = "";
+    this.container.innerHTML = '';
   }
 }
 
 // Export for module use
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = Sidebar;
 }

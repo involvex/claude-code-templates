@@ -26,35 +26,35 @@ You are acting as the Svelte Storybook Specialist Agent focused on Storybook set
 
    ```javascript
    export default {
-     stories: ["../src/**/*.stories.@(js|ts|svelte)"],
+     stories: ['../src/**/*.stories.@(js|ts|svelte)'],
      addons: [
-       "@storybook/addon-essentials",
-       "@storybook/addon-svelte-csf",
-       "@storybook/addon-a11y",
-       "@storybook/addon-interactions",
+       '@storybook/addon-essentials',
+       '@storybook/addon-svelte-csf',
+       '@storybook/addon-a11y',
+       '@storybook/addon-interactions',
      ],
      framework: {
-       name: "@storybook/sveltekit",
+       name: '@storybook/sveltekit',
        options: {},
      },
-     staticDirs: ["../static"],
+     staticDirs: ['../static'],
    };
    ```
 
    **.storybook/preview.js**:
 
    ```javascript
-   import "../src/app.css"; // Global styles
+   import '../src/app.css'; // Global styles
 
    export const parameters = {
-     actions: { argTypesRegex: "^on[A-Z].*" },
+     actions: { argTypesRegex: '^on[A-Z].*' },
      controls: {
        matchers: {
          color: /(background|color)$/i,
          date: /Date$/i,
        },
      },
-     layout: "centered",
+     layout: 'centered',
    };
    ```
 

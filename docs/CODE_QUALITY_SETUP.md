@@ -15,6 +15,7 @@ This document outlines the comprehensive code quality and CI/CD enhancements add
 ### 1. **Linting & Formatting**
 
 #### ESLint Configuration
+
 - **File**: `.eslintrc.json` (root and cli-tool)
 - **Purpose**: JavaScript/TypeScript code linting with Node.js best practices
 - **Features**:
@@ -25,15 +26,12 @@ This document outlines the comprehensive code quality and CI/CD enhancements add
 
 ```json
 {
-  "extends": [
-    "eslint:recommended",
-    "plugin:node/recommended",
-    "prettier"
-  ]
+  "extends": ["eslint:recommended", "plugin:node/recommended", "prettier"]
 }
 ```
 
 #### Prettier Configuration
+
 - **File**: `.prettierrc.json` (root and cli-tool)
 - **Purpose**: Consistent code formatting across the project
 - **Settings**:
@@ -92,10 +90,12 @@ npm run test              # Run tests
 ### Automatic Quality Checks
 
 **Before every build** (`prebuild`):
+
 1. ✅ Format check
 2. ✅ Linting
 
 **Before every publish** (`prepublishOnly`):
+
 1. ✅ Format check
 2. ✅ Linting
 3. ✅ Build validation
@@ -111,10 +111,12 @@ This ensures that **no code gets published without passing quality checks**.
 ### Available Workflows (Disabled by Default)
 
 **Code Quality Workflow**: `.github/workflows/code-quality.yml.disabled`
+
 - Can be enabled by removing `.disabled` extension
 - Runs format/lint/build checks on PRs
 
 **Publish Workflow**: `.github/workflows/publish-package.yml.disabled`
+
 - Can be enabled by removing `.disabled` extension
 - Automated package publishing to GitHub Packages
 
@@ -219,11 +221,13 @@ npm publish           # Auto-runs prepublishOnly (validation + build)
 ### ESLint Rules
 
 **Enabled**:
+
 - `eslint:recommended` - Standard best practices
 - `plugin:node/recommended` - Node.js specific rules
 - `prettier` - Prevents conflicts with Prettier
 
 **Custom Rules**:
+
 - `no-console: off` - Allow console.log in CLI tool
 - `no-unused-vars: warn` - Warn instead of error
 - Ignore variables/args starting with `_`
@@ -231,14 +235,17 @@ npm publish           # Auto-runs prepublishOnly (validation + build)
 ### Prettier Overrides
 
 **JSON Files**:
+
 - 80 character line width (narrower for readability)
 
 **Markdown Files**:
+
 - `proseWrap: preserve` - Don't wrap lines
 
 ### Ignored Paths
 
 Both ESLint and Prettier ignore:
+
 - `node_modules/`
 - `dist/`, `build/`
 - `components/**` (preserve original formatting)
@@ -250,12 +257,14 @@ Both ESLint and Prettier ignore:
 ## 📊 Quality Metrics
 
 ### Before Enhancement
+
 - ❌ No formatting standards
 - ❌ No linting
 - ❌ No pre-publish validation
 - ❌ Manual code review only
 
 ### After Enhancement
+
 - ✅ Automated formatting (Prettier)
 - ✅ Automated linting (ESLint)
 - ✅ Pre-build validation (hooks)
@@ -268,18 +277,21 @@ Both ESLint and Prettier ignore:
 ## 🎯 Benefits
 
 ### For Developers
+
 1. **Consistency**: Same code style across entire project
 2. **Fast Feedback**: Issues caught locally before pushing
 3. **Auto-Fix**: Many issues fixed automatically
 4. **Clear Standards**: ESLint/Prettier configs define expectations
 
 ### For CI/CD
+
 1. **Quality Gates**: Nothing merges without passing checks
 2. **Automated Reviews**: PR comments with fix instructions
 3. **Security**: npm audit runs on every PR
 4. **Build Confidence**: Syntax validation before publish
 
 ### For Project
+
 1. **Maintainability**: Consistent code easier to maintain
 2. **Onboarding**: New contributors follow standards automatically
 3. **Professional**: Production-ready code quality
@@ -290,6 +302,7 @@ Both ESLint and Prettier ignore:
 ## 🔍 Testing the Setup
 
 ### Test Format Check
+
 ```bash
 # Check if files are formatted correctly
 npm run format:check
@@ -303,6 +316,7 @@ npm run format:check
 ```
 
 ### Test Linting
+
 ```bash
 # Check for linting errors
 npm run lint
@@ -316,6 +330,7 @@ npm run lint
 ```
 
 ### Test Pre-Build Hook
+
 ```bash
 # This should auto-run validation before building
 npm run build
@@ -325,6 +340,7 @@ npm run build
 ```
 
 ### Test Pre-Publish Hook
+
 ```bash
 # Simulate publish (dry run)
 npm publish --dry-run
@@ -340,7 +356,9 @@ npm publish --dry-run
 ## 🐛 Troubleshooting
 
 ### Issue: Linting fails with "Parsing error"
+
 **Solution**: Check that ESLint config is valid JSON and dependencies are installed:
+
 ```bash
 npm install
 # or
@@ -348,13 +366,17 @@ cd cli-tool && npm install
 ```
 
 ### Issue: Prettier format check fails
+
 **Solution**: Run format to fix all files:
+
 ```bash
 npm run format
 ```
 
 ### Issue: Pre-build hook prevents building
+
 **Solution**: Fix validation errors first:
+
 ```bash
 npm run validate
 # Fix reported issues
@@ -362,7 +384,9 @@ npm run build
 ```
 
 ### Issue: CI workflow fails but local works
+
 **Solution**: Ensure you're using the same Node version as CI (18.x):
+
 ```bash
 node --version  # Should be v18.x or higher
 ```
@@ -372,16 +396,19 @@ node --version  # Should be v18.x or higher
 ## 📚 Best Practices
 
 ### When Writing Code
+
 1. Run `npm run format` before committing
 2. Run `npm run lint:fix` to auto-fix issues
 3. Check `npm run validate` passes before pushing
 
 ### When Creating PRs
+
 1. Ensure CI passes before requesting review
 2. Address any auto-comments from workflows
 3. Run validation locally first
 
 ### When Publishing
+
 1. Let `prepublishOnly` hook handle validation
 2. Don't skip hooks with `--no-verify`
 3. Monitor npm audit warnings

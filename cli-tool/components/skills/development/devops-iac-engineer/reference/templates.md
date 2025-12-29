@@ -191,9 +191,9 @@ metadata:
   name: myapp-config
   namespace: myapp
 data:
-  APP_ENV: "production"
-  LOG_LEVEL: "info"
-  PORT: "8080"
+  APP_ENV: 'production'
+  LOG_LEVEL: 'info'
+  PORT: '8080'
 
 ---
 # Secret (use Sealed Secrets or External Secrets in production)
@@ -204,8 +204,8 @@ metadata:
   namespace: myapp
 type: Opaque
 stringData:
-  DATABASE_URL: "postgresql://user:pass@postgres:5432/myapp"
-  API_KEY: "your-api-key-here"
+  DATABASE_URL: 'postgresql://user:pass@postgres:5432/myapp'
+  API_KEY: 'your-api-key-here'
 
 ---
 # ServiceAccount
@@ -245,9 +245,9 @@ spec:
         app: myapp
         version: v1.0.0
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
-        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8080'
+        prometheus.io/path: '/metrics'
 
     spec:
       serviceAccountName: myapp
@@ -274,11 +274,11 @@ spec:
 
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: '256Mi'
+              cpu: '250m'
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: '512Mi'
+              cpu: '500m'
 
           livenessProbe:
             httpGet:
@@ -344,7 +344,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
 spec:
   tls:
     - hosts:
@@ -474,11 +474,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "terraform/**"
+      - 'terraform/**'
   pull_request:
     branches: [main]
     paths:
-      - "terraform/**"
+      - 'terraform/**'
 
 env:
   TF_VERSION: 1.6.0
@@ -738,8 +738,8 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: "High error rate detected"
-            description: "Error rate is {{ $value | humanizePercentage }}"
+            summary: 'High error rate detected'
+            description: 'Error rate is {{ $value | humanizePercentage }}'
 
         - alert: PodCrashLooping
           expr: |
@@ -748,8 +748,8 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "Pod {{ $labels.pod }} is crash looping"
-            description: "Pod has restarted {{ $value }} times in 15 minutes"
+            summary: 'Pod {{ $labels.pod }} is crash looping'
+            description: 'Pod has restarted {{ $value }} times in 15 minutes'
 
         - alert: HighMemoryUsage
           expr: |
@@ -759,8 +759,8 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "High memory usage"
-            description: "Memory usage is {{ $value | humanizePercentage }}"
+            summary: 'High memory usage'
+            description: 'Memory usage is {{ $value | humanizePercentage }}'
 ```
 
 ## Docker Templates

@@ -1,9 +1,9 @@
-const chalk = require("chalk");
-const fs = require("fs-extra");
-const path = require("path");
-const express = require("express");
-const open = require("open");
-const os = require("os");
+const chalk = require('chalk');
+const fs = require('fs-extra');
+const path = require('path');
+const express = require('express');
+const open = require('open');
+const os = require('os');
 
 class PluginDashboard {
   constructor(options = {}) {
@@ -12,8 +12,8 @@ class PluginDashboard {
     this.port = 3336;
     this.httpServer = null;
     this.homeDir = os.homedir();
-    this.claudeDir = path.join(this.homeDir, ".claude");
-    this.settingsFile = path.join(this.claudeDir, "settings.json");
+    this.claudeDir = path.join(this.homeDir, '.claude');
+    this.settingsFile = path.join(this.claudeDir, 'settings.json');
   }
 
   async initialize() {
@@ -41,7 +41,7 @@ class PluginDashboard {
       // Load permissions (agents, commands, hooks, MCPs)
       this.permissions = await this.loadPermissions();
     } catch (error) {
-      console.error(chalk.red("Error loading plugin data:"), error.message);
+      console.error(chalk.red('Error loading plugin data:'), error.message);
       throw error;
     }
   }
@@ -49,16 +49,13 @@ class PluginDashboard {
   async readSettings() {
     try {
       if (await fs.pathExists(this.settingsFile)) {
-        const content = await fs.readFile(this.settingsFile, "utf8");
+        const content = await fs.readFile(this.settingsFile, 'utf8');
         const settings = JSON.parse(content);
 
         // Extract enabled plugins from settings
         // Plugins are stored in settings.enabledPlugins as "plugin-name@marketplace-name": true
         this.enabledPlugins = new Set();
-        if (
-          settings.enabledPlugins &&
-          typeof settings.enabledPlugins === "object"
-        ) {
+        if (settings.enabledPlugins && typeof settings.enabledPlugins === 'object') {
           for (const [key, value] of Object.entries(settings.enabledPlugins)) {
             if (value === true) {
               this.enabledPlugins.add(key);
@@ -71,10 +68,7 @@ class PluginDashboard {
       this.enabledPlugins = new Set();
       return {};
     } catch (error) {
-      console.warn(
-        chalk.yellow("Warning: Could not read settings file"),
-        error.message,
-      );
+      console.warn(chalk.yellow('Warning: Could not read settings file'), error.message);
       this.enabledPlugins = new Set();
       return {};
     }
@@ -85,20 +79,14 @@ class PluginDashboard {
 
     try {
       // Read known_marketplaces.json from plugins directory
-      const knownMarketplacesFile = path.join(
-        this.claudeDir,
-        "plugins",
-        "known_marketplaces.json",
-      );
+      const knownMarketplacesFile = path.join(this.claudeDir, 'plugins', 'known_marketplaces.json');
 
       if (!(await fs.pathExists(knownMarketplacesFile))) {
-        console.warn(
-          chalk.yellow("Warning: known_marketplaces.json not found"),
-        );
+        console.warn(chalk.yellow('Warning: known_marketplaces.json not found'));
         return [];
       }
 
-      const content = await fs.readFile(knownMarketplacesFile, "utf8");
+      const content = await fs.readFile(knownMarketplacesFile, 'utf8');
       const knownMarketplacesData = JSON.parse(content);
 
       // Parse the marketplace configuration
@@ -107,12 +95,7 @@ class PluginDashboard {
         const marketplaceInfo = await this.loadMarketplaceDetails(name, config);
 
         // Check if marketplace is enabled (exists in the filesystem)
-        const marketplacePath = path.join(
-          this.claudeDir,
-          "plugins",
-          "marketplaces",
-          name,
-        );
+        const marketplacePath = path.join(this.claudeDir, 'plugins', 'marketplaces', name);
         const enabled = await fs.pathExists(marketplacePath);
 
         marketplaces.push({
@@ -128,10 +111,7 @@ class PluginDashboard {
 
       return marketplaces;
     } catch (error) {
-      console.warn(
-        chalk.yellow("Warning: Error loading marketplaces"),
-        error.message,
-      );
+      console.warn(chalk.yellow('Warning: Error loading marketplaces'), error.message);
       return [];
     }
   }
@@ -146,32 +126,19 @@ class PluginDashboard {
   async loadMarketplaceDetails(name, config) {
     try {
       // Try to read marketplace.json from the marketplace source
-      const marketplacePath = path.join(
-        this.claudeDir,
-        "plugins",
-        "marketplaces",
-        name,
-      );
-      const marketplaceJsonPath = path.join(
-        marketplacePath,
-        ".claude-plugin",
-        "marketplace.json",
-      );
+      const marketplacePath = path.join(this.claudeDir, 'plugins', 'marketplaces', name);
+      const marketplaceJsonPath = path.join(marketplacePath, '.claude-plugin', 'marketplace.json');
 
       if (await fs.pathExists(marketplaceJsonPath)) {
-        const content = await fs.readFile(marketplaceJsonPath, "utf8");
+        const content = await fs.readFile(marketplaceJsonPath, 'utf8');
         const marketplaceData = JSON.parse(content);
         return {
-          pluginCount: marketplaceData.plugins
-            ? marketplaceData.plugins.length
-            : 0,
+          pluginCount: marketplaceData.plugins ? marketplaceData.plugins.length : 0,
           marketplaceData,
         };
       }
     } catch (error) {
-      console.warn(
-        chalk.yellow(`Warning: Could not load marketplace details for ${name}`),
-      );
+      console.warn(chalk.yellow(`Warning: Could not load marketplace details for ${name}`));
     }
 
     return { pluginCount: 0 };
@@ -181,39 +148,29 @@ class PluginDashboard {
     // Handle nested source structure
     const source = config.source || config;
 
-    if (source.source === "github") return "GitHub";
-    if (source.source === "git") return "Git";
+    if (source.source === 'github') return 'GitHub';
+    if (source.source === 'git') return 'Git';
     // Support both 'local' and 'directory' for filesystem-based marketplaces
     // 'directory' is used by Claude Code, 'local' for legacy compatibility
-    if (source.source === "local" || source.source === "directory")
-      return "Local";
-    if (source.source === "url") return "URL";
-    return "Unknown";
+    if (source.source === 'local' || source.source === 'directory') return 'Local';
+    if (source.source === 'url') return 'URL';
+    return 'Unknown';
   }
 
   async loadInstalledPlugins() {
     const plugins = [];
-    const pluginsMarketplacesDir = path.join(
-      this.claudeDir,
-      "plugins",
-      "marketplaces",
-    );
+    const pluginsMarketplacesDir = path.join(this.claudeDir, 'plugins', 'marketplaces');
 
     try {
       if (!(await fs.pathExists(pluginsMarketplacesDir))) {
-        console.warn(
-          chalk.yellow("Warning: plugins/marketplaces directory not found"),
-        );
+        console.warn(chalk.yellow('Warning: plugins/marketplaces directory not found'));
         return [];
       }
 
       const marketplaceDirs = await fs.readdir(pluginsMarketplacesDir);
 
       for (const marketplaceDir of marketplaceDirs) {
-        const marketplacePath = path.join(
-          pluginsMarketplacesDir,
-          marketplaceDir,
-        );
+        const marketplacePath = path.join(pluginsMarketplacesDir, marketplaceDir);
         const stat = await fs.stat(marketplacePath);
 
         if (!stat.isDirectory()) continue;
@@ -221,15 +178,15 @@ class PluginDashboard {
         // Check if this is a marketplace directory (contains .claude-plugin/marketplace.json)
         const marketplaceJsonPath = path.join(
           marketplacePath,
-          ".claude-plugin",
-          "marketplace.json",
+          '.claude-plugin',
+          'marketplace.json'
         );
 
         if (await fs.pathExists(marketplaceJsonPath)) {
           // Load plugins from marketplace.json
           const marketplacePlugins = await this.loadPluginsFromMarketplace(
             marketplacePath,
-            marketplaceDir,
+            marketplaceDir
           );
           plugins.push(...marketplacePlugins);
           continue;
@@ -246,24 +203,18 @@ class PluginDashboard {
             if (!pluginStat.isDirectory()) continue;
 
             // Read plugin.json
-            const pluginJsonPath = path.join(
-              pluginPath,
-              ".claude-plugin",
-              "plugin.json",
-            );
+            const pluginJsonPath = path.join(pluginPath, '.claude-plugin', 'plugin.json');
 
             if (await fs.pathExists(pluginJsonPath)) {
-              const pluginJson = JSON.parse(
-                await fs.readFile(pluginJsonPath, "utf8"),
-              );
+              const pluginJson = JSON.parse(await fs.readFile(pluginJsonPath, 'utf8'));
 
               // Count components
               const components = await this.countPluginComponents(pluginPath);
 
               plugins.push({
                 name: pluginJson.name,
-                version: pluginJson.version || "1.0.0",
-                description: pluginJson.description || "No description",
+                version: pluginJson.version || '1.0.0',
+                description: pluginJson.description || 'No description',
                 marketplace: marketplaceDir,
                 path: pluginPath,
                 components,
@@ -273,20 +224,14 @@ class PluginDashboard {
               });
             }
           } catch (error) {
-            console.warn(
-              chalk.yellow(`Warning: Error loading plugin ${pluginDir}`),
-              error.message,
-            );
+            console.warn(chalk.yellow(`Warning: Error loading plugin ${pluginDir}`), error.message);
           }
         }
       }
 
       return plugins;
     } catch (error) {
-      console.warn(
-        chalk.yellow("Warning: Error loading plugins"),
-        error.message,
-      );
+      console.warn(chalk.yellow('Warning: Error loading plugins'), error.message);
       return [];
     }
   }
@@ -295,12 +240,8 @@ class PluginDashboard {
     const plugins = [];
 
     try {
-      const marketplaceJsonPath = path.join(
-        marketplacePath,
-        ".claude-plugin",
-        "marketplace.json",
-      );
-      const content = await fs.readFile(marketplaceJsonPath, "utf8");
+      const marketplaceJsonPath = path.join(marketplacePath, '.claude-plugin', 'marketplace.json');
+      const content = await fs.readFile(marketplaceJsonPath, 'utf8');
       const marketplaceData = JSON.parse(content);
 
       if (!marketplaceData.plugins || !Array.isArray(marketplaceData.plugins)) {
@@ -321,7 +262,7 @@ class PluginDashboard {
           // Marketplace aggregators use object format {source: "url", url: "..."} to reference external repos
           // Individual plugins use string paths like "./" or "./plugins/name"
           const pluginSourcePath =
-            typeof pluginDef.source === "string"
+            typeof pluginDef.source === 'string'
               ? path.join(marketplacePath, pluginDef.source)
               : marketplacePath;
 
@@ -339,22 +280,19 @@ class PluginDashboard {
             };
           }
           // Otherwise, try to count from source directory (claude-code-plugins style)
-          else if (typeof pluginDef.source === "string") {
+          else if (typeof pluginDef.source === 'string') {
             if (await fs.pathExists(pluginSourcePath)) {
               components = await this.countPluginComponents(pluginSourcePath);
             }
           }
 
           // Check if plugin is enabled in settings.json
-          const enabled = await this.isPluginEnabled(
-            pluginDef.name,
-            marketplaceName,
-          );
+          const enabled = await this.isPluginEnabled(pluginDef.name, marketplaceName);
 
           plugins.push({
             name: pluginDef.name,
-            version: pluginDef.version || "1.0.0",
-            description: pluginDef.description || "No description",
+            version: pluginDef.version || '1.0.0',
+            description: pluginDef.description || 'No description',
             marketplace: marketplaceName,
             path: pluginSourcePath,
             components,
@@ -368,16 +306,14 @@ class PluginDashboard {
         } catch (error) {
           console.warn(
             chalk.yellow(`Warning: Error processing plugin ${pluginDef.name}`),
-            error.message,
+            error.message
           );
         }
       }
     } catch (error) {
       console.warn(
-        chalk.yellow(
-          `Warning: Error loading plugins from marketplace ${marketplaceName}`,
-        ),
-        error.message,
+        chalk.yellow(`Warning: Error loading plugins from marketplace ${marketplaceName}`),
+        error.message
       );
     }
 
@@ -401,40 +337,36 @@ class PluginDashboard {
 
     try {
       // Count agents
-      const agentsDir = path.join(pluginPath, "agents");
+      const agentsDir = path.join(pluginPath, 'agents');
       if (await fs.pathExists(agentsDir)) {
         const agentFiles = await fs.readdir(agentsDir);
-        components.agents = agentFiles.filter((f) => f.endsWith(".md")).length;
+        components.agents = agentFiles.filter((f) => f.endsWith('.md')).length;
       }
 
       // Count commands
-      const commandsDir = path.join(pluginPath, "commands");
+      const commandsDir = path.join(pluginPath, 'commands');
       if (await fs.pathExists(commandsDir)) {
         const commandFiles = await fs.readdir(commandsDir);
-        components.commands = commandFiles.filter((f) =>
-          f.endsWith(".md"),
-        ).length;
+        components.commands = commandFiles.filter((f) => f.endsWith('.md')).length;
       }
 
       // Count hooks
-      const hooksFile = path.join(pluginPath, "hooks", "hooks.json");
+      const hooksFile = path.join(pluginPath, 'hooks', 'hooks.json');
       if (await fs.pathExists(hooksFile)) {
-        const hooksData = JSON.parse(await fs.readFile(hooksFile, "utf8"));
+        const hooksData = JSON.parse(await fs.readFile(hooksFile, 'utf8'));
         components.hooks = Object.values(hooksData.hooks || {}).flat().length;
       }
 
       // Count MCPs
-      const mcpFile = path.join(pluginPath, ".mcp.json");
+      const mcpFile = path.join(pluginPath, '.mcp.json');
       if (await fs.pathExists(mcpFile)) {
-        const mcpData = JSON.parse(await fs.readFile(mcpFile, "utf8"));
+        const mcpData = JSON.parse(await fs.readFile(mcpFile, 'utf8'));
         components.mcps = Object.keys(mcpData.mcpServers || {}).length;
       }
     } catch (error) {
       console.warn(
-        chalk.yellow(
-          `Warning: Error counting components for plugin at ${pluginPath}`,
-        ),
-        error.message,
+        chalk.yellow(`Warning: Error counting components for plugin at ${pluginPath}`),
+        error.message
       );
     }
 
@@ -471,10 +403,7 @@ class PluginDashboard {
 
       return permissions;
     } catch (error) {
-      console.warn(
-        chalk.yellow("Warning: Error loading permissions"),
-        error.message,
-      );
+      console.warn(chalk.yellow('Warning: Error loading permissions'), error.message);
       return permissions;
     }
   }
@@ -489,13 +418,13 @@ class PluginDashboard {
 
     try {
       // Load user-level agents
-      const userAgentsDir = path.join(this.claudeDir, "agents");
+      const userAgentsDir = path.join(this.claudeDir, 'agents');
       if (await fs.pathExists(userAgentsDir)) {
         const agentFiles = await fs.readdir(userAgentsDir);
-        for (const file of agentFiles.filter((f) => f.endsWith(".md"))) {
+        for (const file of agentFiles.filter((f) => f.endsWith('.md'))) {
           permissions.agents.push({
-            name: file.replace(".md", ""),
-            source: "User",
+            name: file.replace('.md', ''),
+            source: 'User',
             plugin: null,
             path: path.join(userAgentsDir, file),
           });
@@ -503,13 +432,13 @@ class PluginDashboard {
       }
 
       // Load user-level commands
-      const userCommandsDir = path.join(this.claudeDir, "commands");
+      const userCommandsDir = path.join(this.claudeDir, 'commands');
       if (await fs.pathExists(userCommandsDir)) {
         const commandFiles = await fs.readdir(userCommandsDir);
-        for (const file of commandFiles.filter((f) => f.endsWith(".md"))) {
+        for (const file of commandFiles.filter((f) => f.endsWith('.md'))) {
           permissions.commands.push({
-            name: file.replace(".md", ""),
-            source: "User",
+            name: file.replace('.md', ''),
+            source: 'User',
             plugin: null,
             path: path.join(userCommandsDir, file),
           });
@@ -517,15 +446,15 @@ class PluginDashboard {
       }
 
       // Load user-level hooks
-      const userHooksFile = path.join(this.claudeDir, "hooks", "hooks.json");
+      const userHooksFile = path.join(this.claudeDir, 'hooks', 'hooks.json');
       if (await fs.pathExists(userHooksFile)) {
-        const hooksData = JSON.parse(await fs.readFile(userHooksFile, "utf8"));
+        const hooksData = JSON.parse(await fs.readFile(userHooksFile, 'utf8'));
         for (const [event, hooks] of Object.entries(hooksData.hooks || {})) {
           for (const hook of hooks) {
             permissions.hooks.push({
               name: `${event} hook`,
               event,
-              source: "User",
+              source: 'User',
               plugin: null,
               config: hook,
             });
@@ -534,23 +463,20 @@ class PluginDashboard {
       }
 
       // Load user-level MCPs
-      const userMcpFile = path.join(this.claudeDir, ".mcp.json");
+      const userMcpFile = path.join(this.claudeDir, '.mcp.json');
       if (await fs.pathExists(userMcpFile)) {
-        const mcpData = JSON.parse(await fs.readFile(userMcpFile, "utf8"));
+        const mcpData = JSON.parse(await fs.readFile(userMcpFile, 'utf8'));
         for (const [name, config] of Object.entries(mcpData.mcpServers || {})) {
           permissions.mcps.push({
             name,
-            source: "User",
+            source: 'User',
             plugin: null,
             config,
           });
         }
       }
     } catch (error) {
-      console.warn(
-        chalk.yellow("Warning: Error loading user permissions"),
-        error.message,
-      );
+      console.warn(chalk.yellow('Warning: Error loading user permissions'), error.message);
     }
 
     return permissions;
@@ -566,13 +492,13 @@ class PluginDashboard {
 
     try {
       // Load plugin agents
-      const agentsDir = path.join(plugin.path, "agents");
+      const agentsDir = path.join(plugin.path, 'agents');
       if (await fs.pathExists(agentsDir)) {
         const agentFiles = await fs.readdir(agentsDir);
-        for (const file of agentFiles.filter((f) => f.endsWith(".md"))) {
+        for (const file of agentFiles.filter((f) => f.endsWith('.md'))) {
           permissions.agents.push({
-            name: file.replace(".md", ""),
-            source: "Plugin",
+            name: file.replace('.md', ''),
+            source: 'Plugin',
             plugin: plugin.name,
             path: path.join(agentsDir, file),
           });
@@ -580,13 +506,13 @@ class PluginDashboard {
       }
 
       // Load plugin commands
-      const commandsDir = path.join(plugin.path, "commands");
+      const commandsDir = path.join(plugin.path, 'commands');
       if (await fs.pathExists(commandsDir)) {
         const commandFiles = await fs.readdir(commandsDir);
-        for (const file of commandFiles.filter((f) => f.endsWith(".md"))) {
+        for (const file of commandFiles.filter((f) => f.endsWith('.md'))) {
           permissions.commands.push({
-            name: file.replace(".md", ""),
-            source: "Plugin",
+            name: file.replace('.md', ''),
+            source: 'Plugin',
             plugin: plugin.name,
             path: path.join(commandsDir, file),
           });
@@ -594,9 +520,9 @@ class PluginDashboard {
       }
 
       // Load plugin hooks
-      const hooksFile = path.join(plugin.path, "hooks", "hooks.json");
+      const hooksFile = path.join(plugin.path, 'hooks', 'hooks.json');
       if (await fs.pathExists(hooksFile)) {
-        const hooksData = JSON.parse(await fs.readFile(hooksFile, "utf8"));
+        const hooksData = JSON.parse(await fs.readFile(hooksFile, 'utf8'));
         for (const [event, matchers] of Object.entries(hooksData.hooks || {})) {
           // Handle both old format (direct array) and new format (array of matchers)
           if (Array.isArray(matchers)) {
@@ -605,10 +531,10 @@ class PluginDashboard {
               if (matcher.hooks && Array.isArray(matcher.hooks)) {
                 for (const hook of matcher.hooks) {
                   permissions.hooks.push({
-                    name: `${event} hook (${matcher.matcher || "*"})`,
+                    name: `${event} hook (${matcher.matcher || '*'})`,
                     event,
                     matcher: matcher.matcher,
-                    source: "Plugin",
+                    source: 'Plugin',
                     plugin: plugin.name,
                     config: hook,
                   });
@@ -618,7 +544,7 @@ class PluginDashboard {
                 permissions.hooks.push({
                   name: `${event} hook`,
                   event,
-                  source: "Plugin",
+                  source: 'Plugin',
                   plugin: plugin.name,
                   config: matcher,
                 });
@@ -629,13 +555,13 @@ class PluginDashboard {
       }
 
       // Load plugin MCPs
-      const mcpFile = path.join(plugin.path, ".mcp.json");
+      const mcpFile = path.join(plugin.path, '.mcp.json');
       if (await fs.pathExists(mcpFile)) {
-        const mcpData = JSON.parse(await fs.readFile(mcpFile, "utf8"));
+        const mcpData = JSON.parse(await fs.readFile(mcpFile, 'utf8'));
         for (const [name, config] of Object.entries(mcpData.mcpServers || {})) {
           permissions.mcps.push({
             name,
-            source: "Plugin",
+            source: 'Plugin',
             plugin: plugin.name,
             config,
           });
@@ -643,10 +569,8 @@ class PluginDashboard {
       }
     } catch (error) {
       console.warn(
-        chalk.yellow(
-          `Warning: Error loading plugin permissions for ${plugin.name}`,
-        ),
-        error.message,
+        chalk.yellow(`Warning: Error loading plugin permissions for ${plugin.name}`),
+        error.message
       );
     }
 
@@ -656,17 +580,11 @@ class PluginDashboard {
   setupWebServer() {
     // Add CORS middleware
     this.app.use((req, res, next) => {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, OPTIONS",
-      );
-      res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept",
-      );
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
-      if (req.method === "OPTIONS") {
+      if (req.method === 'OPTIONS') {
         res.sendStatus(200);
         return;
       }
@@ -675,13 +593,13 @@ class PluginDashboard {
     });
 
     // Serve shared navigation files
-    this.app.use("/shared", express.static(path.join(__dirname, "shared")));
+    this.app.use('/shared', express.static(path.join(__dirname, 'shared')));
 
     // Serve static files
-    this.app.use(express.static(path.join(__dirname, "plugin-dashboard-web")));
+    this.app.use(express.static(path.join(__dirname, 'plugin-dashboard-web')));
 
     // API endpoints - reload data on each request
-    this.app.get("/api/marketplaces", async (req, res) => {
+    this.app.get('/api/marketplaces', async (req, res) => {
       try {
         await this.loadPluginData();
         res.json({
@@ -690,12 +608,12 @@ class PluginDashboard {
           timestamp: new Date().toISOString(),
         });
       } catch (error) {
-        console.error("Error loading marketplaces:", error);
-        res.status(500).json({ error: "Failed to load marketplaces" });
+        console.error('Error loading marketplaces:', error);
+        res.status(500).json({ error: 'Failed to load marketplaces' });
       }
     });
 
-    this.app.get("/api/plugins", async (req, res) => {
+    this.app.get('/api/plugins', async (req, res) => {
       try {
         await this.loadPluginData();
         res.json({
@@ -704,12 +622,12 @@ class PluginDashboard {
           timestamp: new Date().toISOString(),
         });
       } catch (error) {
-        console.error("Error loading plugins:", error);
-        res.status(500).json({ error: "Failed to load plugins" });
+        console.error('Error loading plugins:', error);
+        res.status(500).json({ error: 'Failed to load plugins' });
       }
     });
 
-    this.app.get("/api/permissions", async (req, res) => {
+    this.app.get('/api/permissions', async (req, res) => {
       try {
         await this.loadPluginData();
         res.json({
@@ -723,12 +641,12 @@ class PluginDashboard {
           timestamp: new Date().toISOString(),
         });
       } catch (error) {
-        console.error("Error loading permissions:", error);
-        res.status(500).json({ error: "Failed to load permissions" });
+        console.error('Error loading permissions:', error);
+        res.status(500).json({ error: 'Failed to load permissions' });
       }
     });
 
-    this.app.get("/api/summary", async (req, res) => {
+    this.app.get('/api/summary', async (req, res) => {
       try {
         await this.loadPluginData();
         res.json({
@@ -748,25 +666,21 @@ class PluginDashboard {
           timestamp: new Date().toISOString(),
         });
       } catch (error) {
-        console.error("Error loading summary:", error);
-        res.status(500).json({ error: "Failed to load summary" });
+        console.error('Error loading summary:', error);
+        res.status(500).json({ error: 'Failed to load summary' });
       }
     });
 
     // Main route
-    this.app.get("/", (req, res) => {
-      res.sendFile(path.join(__dirname, "plugin-dashboard-web", "index.html"));
+    this.app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, 'plugin-dashboard-web', 'index.html'));
     });
   }
 
   async startServer() {
     return new Promise((resolve) => {
       this.httpServer = this.app.listen(this.port, async () => {
-        console.log(
-          chalk.green(
-            `🔌 Plugin dashboard started at http://localhost:${this.port}`,
-          ),
-        );
+        console.log(chalk.green(`🔌 Plugin dashboard started at http://localhost:${this.port}`));
         resolve();
       });
     });
@@ -774,14 +688,12 @@ class PluginDashboard {
 
   async openBrowser() {
     const url = `http://localhost:${this.port}`;
-    console.log(chalk.blue("🌐 Opening browser to Plugin Dashboard..."));
+    console.log(chalk.blue('🌐 Opening browser to Plugin Dashboard...'));
 
     try {
       await open(url);
     } catch (error) {
-      console.log(
-        chalk.yellow("Could not open browser automatically. Please visit:"),
-      );
+      console.log(chalk.yellow('Could not open browser automatically. Please visit:'));
       console.log(chalk.cyan(url));
     }
   }
@@ -790,12 +702,12 @@ class PluginDashboard {
     if (this.httpServer) {
       this.httpServer.close();
     }
-    console.log(chalk.yellow("Plugin dashboard stopped"));
+    console.log(chalk.yellow('Plugin dashboard stopped'));
   }
 }
 
 async function runPluginDashboard(options = {}) {
-  console.log(chalk.blue("🔌 Starting Claude Code Plugin Dashboard..."));
+  console.log(chalk.blue('🔌 Starting Claude Code Plugin Dashboard...'));
 
   const dashboard = new PluginDashboard(options);
 
@@ -804,13 +716,13 @@ async function runPluginDashboard(options = {}) {
     await dashboard.startServer();
     await dashboard.openBrowser();
 
-    console.log(chalk.green("✅ Plugin dashboard is running!"));
+    console.log(chalk.green('✅ Plugin dashboard is running!'));
     console.log(chalk.cyan(`🌐 Access at: http://localhost:${dashboard.port}`));
-    console.log(chalk.gray("Press Ctrl+C to stop the server"));
+    console.log(chalk.gray('Press Ctrl+C to stop the server'));
 
     // Handle graceful shutdown
-    process.on("SIGINT", () => {
-      console.log(chalk.yellow("\n🛑 Shutting down plugin dashboard..."));
+    process.on('SIGINT', () => {
+      console.log(chalk.yellow('\n🛑 Shutting down plugin dashboard...'));
       dashboard.stop();
       process.exit(0);
     });
@@ -818,10 +730,7 @@ async function runPluginDashboard(options = {}) {
     // Keep the process running
     await new Promise(() => {});
   } catch (error) {
-    console.error(
-      chalk.red("❌ Failed to start plugin dashboard:"),
-      error.message,
-    );
+    console.error(chalk.red('❌ Failed to start plugin dashboard:'), error.message);
     process.exit(1);
   }
 }

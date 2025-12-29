@@ -1,6 +1,6 @@
 ---
 name: seaborn
-description: "Statistical visualization. Scatter, box, violin, heatmaps, pair plots, regression, correlation matrices, KDE, faceted plots, for exploratory analysis and publication figures."
+description: 'Statistical visualization. Scatter, box, violin, heatmaps, pair plots, regression, correlation matrices, KDE, faceted plots, for exploratory analysis and publication figures.'
 ---
 
 # Seaborn Statistical Visualization

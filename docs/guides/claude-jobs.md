@@ -32,16 +32,18 @@ Script para encontrar trabajos relacionados con Claude Code y Anthropic Claude u
 ## ⚙️ Configuración
 
 1. **Copia el archivo de configuración**:
+
    ```bash
    cp .env.example .env
    ```
 
 2. **Agrega tus API keys en `.env`**:
+
    ```bash
    # Para mejores resultados
    RAPIDAPI_KEY=tu_clave_rapidapi
    SERPAPI_KEY=tu_clave_serpapi
-   
+
    # Opcional
    GITHUB_TOKEN=tu_token_github
    ```
@@ -62,7 +64,6 @@ python generate_claude_jobs.py
 1. **APIs Profesionales** (si están configuradas)
    - RapidAPI: Busca en LinkedIn, Indeed, Glassdoor, etc.
    - Google Jobs: Búsqueda semántica avanzada
-   
 2. **Scraping Tradicional** (fallback si no hay APIs)
    - GitHub Issues/Discussions
    - YCombinator Who's Hiring
@@ -127,11 +128,13 @@ Para ejecutar periódicamente:
 ## 🆘 Troubleshooting
 
 ### Sin resultados:
+
 - ✅ Verifica API keys en `.env`
 - ✅ Revisa límites de rate en las APIs
 - ✅ Claude Code es muy específico - resultados limitados son normales
 
 ### Errores de API:
+
 - ✅ Verifica saldo en RapidAPI/SerpAPI
 - ✅ Revisa formato de API keys
 - ✅ Usa VPN si hay restricciones geográficas
@@ -139,6 +142,7 @@ Para ejecutar periódicamente:
 ## 🔮 Futuro
 
 A medida que Claude Code se popularice (2025-2026):
+
 - Más trabajos específicos aparecerán
 - Términos de búsqueda se pueden expandir
 - APIs especializadas en AI jobs pueden surgir

@@ -3,583 +3,611 @@ console.log('index-events.js loaded successfully');
 
 // Global function to focus search input when clicking wrapper
 function focusSearchInput() {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.focus();
-    }
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.focus();
+  }
 }
 
 class IndexPageManager {
-    constructor() {
-        this.currentFilter = 'agents';
-        this.currentCategoryFilter = 'all';
-        this.currentSort = 'downloads'; // Default sort by downloads
-        this.templatesData = null;
-        this.componentsData = null;
-        this.availableCategories = {
-            agents: new Set(),
-            commands: new Set(),
-            mcps: new Set(),
-            settings: new Set(),
-            hooks: new Set(),
-            skills: new Set(),
-            templates: new Set(),
-            plugins: new Set()
-        };
-        
-        // Pagination settings
-        this.currentPage = 1;
-        this.itemsPerPage = 24; // 3x3 grid
-        this.totalPages = 1;
-        
-        // Framework icons mapping (from script.js)
-        this.FRAMEWORK_ICONS = {
-            // Languages
-            'common': 'devicon-gear-plain',
-            'javascript-typescript': 'devicon-javascript-plain',
-            'python': 'devicon-python-plain',
-            'ruby': 'devicon-ruby-plain',
-            'rust': 'devicon-rust-plain',
-            'go': 'devicon-go-plain',
-            
-            // JavaScript/TypeScript frameworks
-            'react': 'devicon-react-original',
-            'vue': 'devicon-vuejs-plain',
-            'angular': 'devicon-angularjs-plain',
-            'node': 'devicon-nodejs-plain',
-            
-            // Python frameworks
-            'django': 'devicon-django-plain',
-            'flask': 'devicon-flask-original',
-            'fastapi': 'devicon-fastapi-plain',
-            
-            // Ruby frameworks
-            'rails': 'devicon-rails-plain',
-            'sinatra': 'devicon-ruby-plain',
-            
-            // Default fallback
-            'default': 'devicon-devicon-plain'
-        };
-    }
+  constructor() {
+    this.currentFilter = 'agents';
+    this.currentCategoryFilter = 'all';
+    this.currentSort = 'downloads'; // Default sort by downloads
+    this.templatesData = null;
+    this.componentsData = null;
+    this.availableCategories = {
+      agents: new Set(),
+      commands: new Set(),
+      mcps: new Set(),
+      settings: new Set(),
+      hooks: new Set(),
+      skills: new Set(),
+      templates: new Set(),
+      plugins: new Set(),
+    };
 
-    async init() {
-        try {
-            // Setup event listeners first (they don't depend on data)
-            this.setupEventListeners();
+    // Pagination settings
+    this.currentPage = 1;
+    this.itemsPerPage = 24; // 3x3 grid
+    this.totalPages = 1;
 
-            // Show loading state
-            this.showLoadingState(true);
+    // Framework icons mapping (from script.js)
+    this.FRAMEWORK_ICONS = {
+      // Languages
+      common: 'devicon-gear-plain',
+      'javascript-typescript': 'devicon-javascript-plain',
+      python: 'devicon-python-plain',
+      ruby: 'devicon-ruby-plain',
+      rust: 'devicon-rust-plain',
+      go: 'devicon-go-plain',
 
-            // Load all components and templates at once
-            await this.loadComponentsData();
-            await this.loadTemplatesData();
+      // JavaScript/TypeScript frameworks
+      react: 'devicon-react-original',
+      vue: 'devicon-vuejs-plain',
+      angular: 'devicon-angularjs-plain',
+      node: 'devicon-nodejs-plain',
 
-            // Check if URL has a specific filter and update accordingly
-            const filterFromURL = this.getFilterFromURL();
-            if (filterFromURL && filterFromURL !== this.currentFilter) {
-                this.currentFilter = filterFromURL;
+      // Python frameworks
+      django: 'devicon-django-plain',
+      flask: 'devicon-flask-original',
+      fastapi: 'devicon-fastapi-plain',
 
-                // Update active filter chip
-                document.querySelectorAll('.component-type-filters .filter-chip').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                const activeBtn = document.querySelector(`.component-type-filters [data-filter="${filterFromURL}"]`);
-                if (activeBtn) {
-                    activeBtn.classList.add('active');
-                }
-            }
+      // Ruby frameworks
+      rails: 'devicon-rails-plain',
+      sinatra: 'devicon-ruby-plain',
 
-            // Update sort selector for initial filter
-            this.updateSortSelector();
+      // Default fallback
+      default: 'devicon-devicon-plain',
+    };
+  }
 
-            // Display components
-            this.displayCurrentFilter();
+  async init() {
+    try {
+      // Setup event listeners first (they don't depend on data)
+      this.setupEventListeners();
 
-            // Show category filters for the current filter
-            if (typeof showCategoryFilters === 'function') {
-                showCategoryFilters(this.currentFilter);
-            }
+      // Show loading state
+      this.showLoadingState(true);
 
-        } catch (error) {
-            console.error('Error initializing index page:', error);
-            this.showError('Failed to load data. Please refresh the page.');
-        } finally {
-            this.showLoadingState(false);
+      // Load all components and templates at once
+      await this.loadComponentsData();
+      await this.loadTemplatesData();
+
+      // Check if URL has a specific filter and update accordingly
+      const filterFromURL = this.getFilterFromURL();
+      if (filterFromURL && filterFromURL !== this.currentFilter) {
+        this.currentFilter = filterFromURL;
+
+        // Update active filter chip
+        document.querySelectorAll('.component-type-filters .filter-chip').forEach((btn) => {
+          btn.classList.remove('active');
+        });
+        const activeBtn = document.querySelector(
+          `.component-type-filters [data-filter="${filterFromURL}"]`
+        );
+        if (activeBtn) {
+          activeBtn.classList.add('active');
         }
+      }
+
+      // Update sort selector for initial filter
+      this.updateSortSelector();
+
+      // Display components
+      this.displayCurrentFilter();
+
+      // Show category filters for the current filter
+      if (typeof showCategoryFilters === 'function') {
+        showCategoryFilters(this.currentFilter);
+      }
+    } catch (error) {
+      console.error('Error initializing index page:', error);
+      this.showError('Failed to load data. Please refresh the page.');
+    } finally {
+      this.showLoadingState(false);
+    }
+  }
+
+  // Get filter from URL path
+  getFilterFromURL() {
+    const path = window.location.pathname;
+    const segments = path.split('/').filter((segment) => segment);
+
+    // Check if we're on GitHub Pages with subdirectory
+    // Handle both '/claude-code-templates/agents' and '/agents' cases
+    let filterSegment;
+    if (segments[0] === 'claude-code-templates' && segments.length > 1) {
+      filterSegment = segments[1];
+    } else if (segments.length > 0) {
+      filterSegment = segments[0];
     }
 
-    // Get filter from URL path
-    getFilterFromURL() {
-        const path = window.location.pathname;
-        const segments = path.split('/').filter(segment => segment);
+    // Check if first segment is a valid filter
+    const validFilters = [
+      'agents',
+      'commands',
+      'settings',
+      'hooks',
+      'mcps',
+      'skills',
+      'templates',
+      'plugins',
+    ];
 
-        // Check if we're on GitHub Pages with subdirectory
-        // Handle both '/claude-code-templates/agents' and '/agents' cases
-        let filterSegment;
-        if (segments[0] === 'claude-code-templates' && segments.length > 1) {
-            filterSegment = segments[1];
-        } else if (segments.length > 0) {
-            filterSegment = segments[0];
-        }
-
-        // Check if first segment is a valid filter
-        const validFilters = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills', 'templates', 'plugins'];
-
-        if (filterSegment && validFilters.includes(filterSegment)) {
-            return filterSegment;
-        }
-
-        // If no valid filter found and we're on root, default to agents
-        if (path === '/' || path === '' || path === '/claude-code-templates' || path === '/claude-code-templates/') {
-            return 'agents';
-        }
-
-        return 'agents'; // Default fallback
+    if (filterSegment && validFilters.includes(filterSegment)) {
+      return filterSegment;
     }
 
-    async loadTemplatesData() {
-        try {
-            // Templates are now loaded from components.json, not GitHub
-            this.templatesData = await window.dataLoader.loadTemplates();
-            
-            // Update display if templates were found
-            if (this.templatesData && Object.keys(this.templatesData).length > 0) {
-                this.displayCurrentFilter();
-            }
-        } catch (error) {
-            console.warn('Templates not available in components.json:', error);
-            // Continue without templates - this is not critical
-        }
+    // If no valid filter found and we're on root, default to agents
+    if (
+      path === '/' ||
+      path === '' ||
+      path === '/claude-code-templates' ||
+      path === '/claude-code-templates/'
+    ) {
+      return 'agents';
     }
 
-    async loadComponentsData() {
-        try {
-            // Load all components at once - the performance issue was mostly due to GitHub fetching
-            // Now that we only use components.json, we can load all data safely
-            this.componentsData = await window.dataLoader.loadAllComponents();
-            this.collectAvailableCategories();
-        } catch (error) {
-            console.error('Error loading components:', error);
-            // Use fallback data
-            this.componentsData = window.dataLoader.getFallbackComponentData();
-            this.collectAvailableCategories();
-        }
-    }
-    
-    // This method is no longer needed since we load all components at once
-    // Kept for backward compatibility but does nothing
-    async loadMoreComponentsInBackground() {
-        // No-op: All components are now loaded in the initial request
-        console.log('All components loaded in initial request - background loading not needed');
-    }
-    
-    // Check if data object is empty
-    isDataEmpty(data) {
-        return !data || ((!data.agents || data.agents.length === 0) &&
-                         (!data.commands || data.commands.length === 0) &&
-                         (!data.mcps || data.mcps.length === 0) &&
-                         (!data.settings || data.settings.length === 0) &&
-                         (!data.hooks || data.hooks.length === 0));
-    }
-    
-    // Show/hide loading state
-    showLoadingState(isLoading) {
-        const loadingElements = document.querySelectorAll('.loading-indicator, .loading-spinner');
-        const contentElements = document.querySelectorAll('#unifiedGrid, .filter-controls');
-        
-        loadingElements.forEach(el => {
-            el.style.display = isLoading ? 'flex' : 'none';
-        });
-        
-        contentElements.forEach(el => {
-            el.style.opacity = isLoading ? '0.7' : '1';
-        });
-    }
+    return 'agents'; // Default fallback
+  }
 
-    setupEventListeners() {
-        // Filter buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const filter = e.target.dataset.filter;
-                this.setFilter(filter);
-            });
-        });
+  async loadTemplatesData() {
+    try {
+      // Templates are now loaded from components.json, not GitHub
+      this.templatesData = await window.dataLoader.loadTemplates();
 
-        // Copy buttons
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('copy-btn')) {
-                const command = e.target.previousElementSibling.textContent;
-                this.copyToClipboard(command);
-            }
-        });
-        
-        // Card flip functionality for template cards
-        document.addEventListener('click', (e) => {
-            const card = e.target.closest('.template-card');
-            // Prevent flipping for "add new" cards or if a button is clicked
-            if (card && !card.classList.contains('add-template-card') && !e.target.closest('button')) {
-                console.log('Global template card clicked, toggling flip');
-                card.classList.toggle('flipped');
-            }
-        });
-        
-        // ESC key to close all flipped cards
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.template-card.flipped').forEach(card => {
-                    card.classList.remove('flipped');
-                });
-            }
-        });
-    }
-
-    setFilter(filter) {
-        this.currentFilter = filter;
-        this.currentPage = 1; // Reset to first page when changing filter
-        this.currentCategoryFilter = 'all'; // Reset category filter to show all items
-
-        // Update active button
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.filter === filter);
-        });
-
-        // Update sort selector options based on filter
-        this.updateSortSelector();
-
+      // Update display if templates were found
+      if (this.templatesData && Object.keys(this.templatesData).length > 0) {
         this.displayCurrentFilter();
-
-        // Show category filters for the new filter
-        if (typeof showCategoryFilters === 'function') {
-            showCategoryFilters(filter);
-        }
+      }
+    } catch (error) {
+      console.warn('Templates not available in components.json:', error);
+      // Continue without templates - this is not critical
     }
+  }
 
-    // Update sort selector based on current filter
-    updateSortSelector() {
-        const sortSelector = document.getElementById('sortSelector');
-        if (!sortSelector) return;
-
-        const currentValue = sortSelector.value;
-
-        if (this.currentFilter === 'agents') {
-            // Add "Verified" option for agents if it doesn't exist
-            const verifiedOption = Array.from(sortSelector.options).find(opt => opt.value === 'verified');
-            if (!verifiedOption) {
-                const option = document.createElement('option');
-                option.value = 'verified';
-                option.textContent = 'Verified First';
-                sortSelector.insertBefore(option, sortSelector.options[0]);
-            }
-        } else {
-            // Remove "Verified" option for other filters
-            const verifiedOption = Array.from(sortSelector.options).find(opt => opt.value === 'verified');
-            if (verifiedOption) {
-                verifiedOption.remove();
-                // Reset to downloads if verified was selected
-                if (currentValue === 'verified') {
-                    sortSelector.value = 'downloads';
-                    this.currentSort = 'downloads';
-                }
-            }
-        }
+  async loadComponentsData() {
+    try {
+      // Load all components at once - the performance issue was mostly due to GitHub fetching
+      // Now that we only use components.json, we can load all data safely
+      this.componentsData = await window.dataLoader.loadAllComponents();
+      this.collectAvailableCategories();
+    } catch (error) {
+      console.error('Error loading components:', error);
+      // Use fallback data
+      this.componentsData = window.dataLoader.getFallbackComponentData();
+      this.collectAvailableCategories();
     }
+  }
 
-    // Set category filter
-    setCategoryFilter(category) {
-        this.currentCategoryFilter = category;
-        this.currentPage = 1; // Reset to first page when changing category
-        
-        // Update category filter buttons
-        document.querySelectorAll('.category-filter-btn').forEach(btn => {
-            btn.classList.remove('active');
+  // This method is no longer needed since we load all components at once
+  // Kept for backward compatibility but does nothing
+  async loadMoreComponentsInBackground() {
+    // No-op: All components are now loaded in the initial request
+    console.log('All components loaded in initial request - background loading not needed');
+  }
+
+  // Check if data object is empty
+  isDataEmpty(data) {
+    return (
+      !data ||
+      ((!data.agents || data.agents.length === 0) &&
+        (!data.commands || data.commands.length === 0) &&
+        (!data.mcps || data.mcps.length === 0) &&
+        (!data.settings || data.settings.length === 0) &&
+        (!data.hooks || data.hooks.length === 0))
+    );
+  }
+
+  // Show/hide loading state
+  showLoadingState(isLoading) {
+    const loadingElements = document.querySelectorAll('.loading-indicator, .loading-spinner');
+    const contentElements = document.querySelectorAll('#unifiedGrid, .filter-controls');
+
+    loadingElements.forEach((el) => {
+      el.style.display = isLoading ? 'flex' : 'none';
+    });
+
+    contentElements.forEach((el) => {
+      el.style.opacity = isLoading ? '0.7' : '1';
+    });
+  }
+
+  setupEventListeners() {
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const filter = e.target.dataset.filter;
+        this.setFilter(filter);
+      });
+    });
+
+    // Copy buttons
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('copy-btn')) {
+        const command = e.target.previousElementSibling.textContent;
+        this.copyToClipboard(command);
+      }
+    });
+
+    // Card flip functionality for template cards
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.template-card');
+      // Prevent flipping for "add new" cards or if a button is clicked
+      if (card && !card.classList.contains('add-template-card') && !e.target.closest('button')) {
+        console.log('Global template card clicked, toggling flip');
+        card.classList.toggle('flipped');
+      }
+    });
+
+    // ESC key to close all flipped cards
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.template-card.flipped').forEach((card) => {
+          card.classList.remove('flipped');
         });
-        const targetBtn = document.querySelector(`[data-category="${category}"]`);
-        if (targetBtn) {
-            targetBtn.classList.add('active');
+      }
+    });
+  }
+
+  setFilter(filter) {
+    this.currentFilter = filter;
+    this.currentPage = 1; // Reset to first page when changing filter
+    this.currentCategoryFilter = 'all'; // Reset category filter to show all items
+
+    // Update active button
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+
+    // Update sort selector options based on filter
+    this.updateSortSelector();
+
+    this.displayCurrentFilter();
+
+    // Show category filters for the new filter
+    if (typeof showCategoryFilters === 'function') {
+      showCategoryFilters(filter);
+    }
+  }
+
+  // Update sort selector based on current filter
+  updateSortSelector() {
+    const sortSelector = document.getElementById('sortSelector');
+    if (!sortSelector) return;
+
+    const currentValue = sortSelector.value;
+
+    if (this.currentFilter === 'agents') {
+      // Add "Verified" option for agents if it doesn't exist
+      const verifiedOption = Array.from(sortSelector.options).find(
+        (opt) => opt.value === 'verified'
+      );
+      if (!verifiedOption) {
+        const option = document.createElement('option');
+        option.value = 'verified';
+        option.textContent = 'Verified First';
+        sortSelector.insertBefore(option, sortSelector.options[0]);
+      }
+    } else {
+      // Remove "Verified" option for other filters
+      const verifiedOption = Array.from(sortSelector.options).find(
+        (opt) => opt.value === 'verified'
+      );
+      if (verifiedOption) {
+        verifiedOption.remove();
+        // Reset to downloads if verified was selected
+        if (currentValue === 'verified') {
+          sortSelector.value = 'downloads';
+          this.currentSort = 'downloads';
         }
-        
-        // Regenerate the component display
-        this.displayCurrentFilter();
+      }
+    }
+  }
+
+  // Set category filter
+  setCategoryFilter(category) {
+    this.currentCategoryFilter = category;
+    this.currentPage = 1; // Reset to first page when changing category
+
+    // Update category filter buttons
+    document.querySelectorAll('.category-filter-btn').forEach((btn) => {
+      btn.classList.remove('active');
+    });
+    const targetBtn = document.querySelector(`[data-category="${category}"]`);
+    if (targetBtn) {
+      targetBtn.classList.add('active');
     }
 
-    // Update category sub-filters in the unified-filter-bar
-    updateCategorySubFilters() {
-        const unifiedFilterBar = document.querySelector('.unified-filter-bar');
-        if (!unifiedFilterBar) return;
-        
-        // Remove existing category filters
-        const existingCategoryFilters = unifiedFilterBar.querySelector('.category-filter-row');
-        if (existingCategoryFilters) {
-            existingCategoryFilters.remove();
-        }
-        
-        // Get categories for current filter type
-        const currentCategories = Array.from(this.availableCategories[this.currentFilter] || []).sort();
-        
-        if (currentCategories.length <= 1) {
-            // Don't show sub-filters if there's only one category or none
-            return;
-        }
-        
-        // Create category filter row
-        const categoryFilterRow = document.createElement('div');
-        categoryFilterRow.className = 'category-filter-row';
-        categoryFilterRow.innerHTML = `
+    // Regenerate the component display
+    this.displayCurrentFilter();
+  }
+
+  // Update category sub-filters in the unified-filter-bar
+  updateCategorySubFilters() {
+    const unifiedFilterBar = document.querySelector('.unified-filter-bar');
+    if (!unifiedFilterBar) return;
+
+    // Remove existing category filters
+    const existingCategoryFilters = unifiedFilterBar.querySelector('.category-filter-row');
+    if (existingCategoryFilters) {
+      existingCategoryFilters.remove();
+    }
+
+    // Get categories for current filter type
+    const currentCategories = Array.from(this.availableCategories[this.currentFilter] || []).sort();
+
+    if (currentCategories.length <= 1) {
+      // Don't show sub-filters if there's only one category or none
+      return;
+    }
+
+    // Create category filter row
+    const categoryFilterRow = document.createElement('div');
+    categoryFilterRow.className = 'category-filter-row';
+    categoryFilterRow.innerHTML = `
             <div class="category-filter-label">Categories:</div>
             <div class="category-filter-buttons">
                 <button class="category-filter-btn ${this.currentCategoryFilter === 'all' ? 'active' : ''}" 
                         data-category="all">
                     All
                 </button>
-                ${currentCategories.map(category => `
+                ${currentCategories
+                  .map(
+                    (category) => `
                     <button class="category-filter-btn ${this.currentCategoryFilter === category ? 'active' : ''}" 
                             data-category="${category}">
                         ${this.formatComponentName(category)}
                     </button>
-                `).join('')}
+                `
+                  )
+                  .join('')}
             </div>
         `;
-        
-        // Add click event listeners
-        categoryFilterRow.querySelectorAll('.category-filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.setCategoryFilter(btn.getAttribute('data-category'));
-            });
-        });
-        
-        // Append to unified filter bar
-        unifiedFilterBar.appendChild(categoryFilterRow);
+
+    // Add click event listeners
+    categoryFilterRow.querySelectorAll('.category-filter-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        this.setCategoryFilter(btn.getAttribute('data-category'));
+      });
+    });
+
+    // Append to unified filter bar
+    unifiedFilterBar.appendChild(categoryFilterRow);
+  }
+
+  // Get filtered components based on current filter and category filter
+  getFilteredComponents(type) {
+    if (!type) type = this.currentFilter;
+    if (type === 'templates') {
+      return [];
     }
 
-    // Get filtered components based on current filter and category filter
-    getFilteredComponents(type) {
-        if (!type) type = this.currentFilter;
-        if (type === 'templates') {
-            return [];
-        }
-        
-        let components = this.componentsData[type] || [];
-        
-        // Apply category filter if not 'all'
-        if (this.currentCategoryFilter !== 'all') {
-            components = components.filter(component => {
-                const category = component.category || 'general';
-                return category === this.currentCategoryFilter;
-            });
-        }
-        
-        // Apply sorting
-        components = this.sortComponents(components);
-        
-        return components;
-    }
-    
-    // Sort components based on current sort option
-    sortComponents(components) {
-        const sortedComponents = [...components]; // Create a copy to avoid mutating original
+    let components = this.componentsData[type] || [];
 
-        if (this.currentSort === 'downloads') {
-            // Sort by downloads (descending) - components with no downloads go to the end
-            sortedComponents.sort((a, b) => {
-                const downloadsA = a.downloads || 0;
-                const downloadsB = b.downloads || 0;
-                return downloadsB - downloadsA;
-            });
-        } else if (this.currentSort === 'alphabetical') {
-            // Sort alphabetically by name
-            sortedComponents.sort((a, b) => {
-                const nameA = (a.name || '').toLowerCase();
-                const nameB = (b.name || '').toLowerCase();
-                return nameA.localeCompare(nameB);
-            });
-        } else if (this.currentSort === 'verified') {
-            // Sort by verified status first (100% score), then by downloads
-            sortedComponents.sort((a, b) => {
-                // Check if component has 100% validation score
-                const aVerified = a.security && a.security.validated && a.security.score === 100 && a.security.valid;
-                const bVerified = b.security && b.security.validated && b.security.score === 100 && b.security.valid;
-
-                // Verified components come first
-                if (aVerified && !bVerified) return -1;
-                if (!aVerified && bVerified) return 1;
-
-                // If both verified or both not verified, sort by downloads
-                const downloadsA = a.downloads || 0;
-                const downloadsB = b.downloads || 0;
-                return downloadsB - downloadsA;
-            });
-        }
-
-        return sortedComponents;
-    }
-    
-    // Handle sort change from the dropdown
-    handleSortChange(sortValue) {
-        this.currentSort = sortValue;
-        this.currentPage = 1; // Reset to first page when changing sort
-        this.displayCurrentFilter();
+    // Apply category filter if not 'all'
+    if (this.currentCategoryFilter !== 'all') {
+      components = components.filter((component) => {
+        const category = component.category || 'general';
+        return category === this.currentCategoryFilter;
+      });
     }
 
-    // Collect available categories from loaded components
-    collectAvailableCategories() {
-        // Reset categories
-        this.availableCategories.agents.clear();
-        this.availableCategories.commands.clear();
-        this.availableCategories.mcps.clear();
-        this.availableCategories.settings.clear();
-        this.availableCategories.hooks.clear();
-        this.availableCategories.skills.clear();
-        this.availableCategories.templates.clear();
-        
-        // Collect categories from each component type
-        if (this.componentsData.agents && Array.isArray(this.componentsData.agents)) {
-            this.componentsData.agents.forEach(component => {
-                const category = component.category || 'general';
-                this.availableCategories.agents.add(category);
-            });
-        }
-        
-        if (this.componentsData.commands && Array.isArray(this.componentsData.commands)) {
-            this.componentsData.commands.forEach(component => {
-                const category = component.category || 'general';  
-                this.availableCategories.commands.add(category);
-            });
-        }
-        
-        if (this.componentsData.mcps && Array.isArray(this.componentsData.mcps)) {
-            this.componentsData.mcps.forEach(component => {
-                const category = component.category || 'general';
-                this.availableCategories.mcps.add(category);
-            });
-        }
-        
-        if (this.componentsData.settings && Array.isArray(this.componentsData.settings)) {
-            this.componentsData.settings.forEach(component => {
-                const category = component.category || 'general';
-                this.availableCategories.settings.add(category);
-            });
-        }
-        
-        if (this.componentsData.hooks && Array.isArray(this.componentsData.hooks)) {
-            this.componentsData.hooks.forEach(component => {
-                const category = component.category || 'general';
-                this.availableCategories.hooks.add(category);
-            });
-        }
+    // Apply sorting
+    components = this.sortComponents(components);
 
-        if (this.componentsData.skills && Array.isArray(this.componentsData.skills)) {
-            this.componentsData.skills.forEach(component => {
-                const category = component.category || 'general';
-                this.availableCategories.skills.add(category);
-            });
-        }
+    return components;
+  }
 
-        // Collect categories from templates (use language as category for language templates)
-        if (this.componentsData.templates && Array.isArray(this.componentsData.templates)) {
-            this.componentsData.templates.forEach(template => {
-                if (template.subtype === 'language') {
-                    this.availableCategories.templates.add(template.name);
-                } else if (template.subtype === 'framework' && template.language) {
-                    this.availableCategories.templates.add(template.language);
-                }
-            });
-        }
+  // Sort components based on current sort option
+  sortComponents(components) {
+    const sortedComponents = [...components]; // Create a copy to avoid mutating original
+
+    if (this.currentSort === 'downloads') {
+      // Sort by downloads (descending) - components with no downloads go to the end
+      sortedComponents.sort((a, b) => {
+        const downloadsA = a.downloads || 0;
+        const downloadsB = b.downloads || 0;
+        return downloadsB - downloadsA;
+      });
+    } else if (this.currentSort === 'alphabetical') {
+      // Sort alphabetically by name
+      sortedComponents.sort((a, b) => {
+        const nameA = (a.name || '').toLowerCase();
+        const nameB = (b.name || '').toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
+    } else if (this.currentSort === 'verified') {
+      // Sort by verified status first (100% score), then by downloads
+      sortedComponents.sort((a, b) => {
+        // Check if component has 100% validation score
+        const aVerified =
+          a.security && a.security.validated && a.security.score === 100 && a.security.valid;
+        const bVerified =
+          b.security && b.security.validated && b.security.score === 100 && b.security.valid;
+
+        // Verified components come first
+        if (aVerified && !bVerified) return -1;
+        if (!aVerified && bVerified) return 1;
+
+        // If both verified or both not verified, sort by downloads
+        const downloadsA = a.downloads || 0;
+        const downloadsB = b.downloads || 0;
+        return downloadsB - downloadsA;
+      });
     }
 
-    displayCurrentFilter() {
-        const grid = document.getElementById('unifiedGrid');
-        if (!grid) return;
+    return sortedComponents;
+  }
 
-        // Set proper grid class based on current filter
-        if (this.currentFilter === 'templates') {
-            grid.className = 'unified-grid templates-mode';
-        } else {
-            grid.className = 'unified-grid components-mode';
-        }
+  // Handle sort change from the dropdown
+  handleSortChange(sortValue) {
+    this.currentSort = sortValue;
+    this.currentPage = 1; // Reset to first page when changing sort
+    this.displayCurrentFilter();
+  }
 
-        // Update filter button counts
-        this.updateFilterCounts();
+  // Collect available categories from loaded components
+  collectAvailableCategories() {
+    // Reset categories
+    this.availableCategories.agents.clear();
+    this.availableCategories.commands.clear();
+    this.availableCategories.mcps.clear();
+    this.availableCategories.settings.clear();
+    this.availableCategories.hooks.clear();
+    this.availableCategories.skills.clear();
+    this.availableCategories.templates.clear();
 
-        switch (this.currentFilter) {
-            case 'templates':
-                this.displayTemplates(grid);
-                break;
-            case 'plugins':
-                this.displayPlugins(grid);
-                break;
-            case 'agents':
-            case 'commands':
-            case 'mcps':
-            case 'settings':
-            case 'hooks':
-            case 'skills':
-                this.displayComponents(grid, this.currentFilter);
-                break;
-            default:
-                grid.innerHTML = '<div class="error">Unknown filter</div>';
-        }
+    // Collect categories from each component type
+    if (this.componentsData.agents && Array.isArray(this.componentsData.agents)) {
+      this.componentsData.agents.forEach((component) => {
+        const category = component.category || 'general';
+        this.availableCategories.agents.add(category);
+      });
     }
 
-    displayTemplates(grid) {
-        if (!this.componentsData || !this.componentsData.templates) {
-            grid.innerHTML = '<div class="loading">Loading templates...</div>';
-            return;
-        }
-
-        // Update category sub-filters for templates
-        this.updateCategorySubFilters();
-
-        // Clear the grid
-        grid.innerHTML = '';
-        
-        // Add the "Add New Template" card first
-        const addTemplateCard = this.createAddTemplateCard();
-        grid.appendChild(addTemplateCard);
-        
-        // Filter templates based on category selection
-        let filteredTemplates = this.componentsData.templates;
-        if (this.currentCategoryFilter !== 'all') {
-            filteredTemplates = this.componentsData.templates.filter(template => {
-                if (template.subtype === 'language') {
-                    return template.name === this.currentCategoryFilter;
-                } else if (template.subtype === 'framework') {
-                    return template.language === this.currentCategoryFilter;
-                }
-                return false;
-            });
-        }
-        
-        // Apply sorting to templates
-        filteredTemplates = this.sortComponents(filteredTemplates);
-        
-        // Create template cards from the filtered list
-        filteredTemplates.forEach(template => {
-            const templateCard = this.createTemplateCardFromJSON(template);
-            grid.appendChild(templateCard);
-        });
+    if (this.componentsData.commands && Array.isArray(this.componentsData.commands)) {
+      this.componentsData.commands.forEach((component) => {
+        const category = component.category || 'general';
+        this.availableCategories.commands.add(category);
+      });
     }
 
-    displayPlugins(grid) {
-        if (!this.componentsData || !this.componentsData.plugins) {
-            grid.innerHTML = '<div class="loading">Loading plugins...</div>';
-            return;
+    if (this.componentsData.mcps && Array.isArray(this.componentsData.mcps)) {
+      this.componentsData.mcps.forEach((component) => {
+        const category = component.category || 'general';
+        this.availableCategories.mcps.add(category);
+      });
+    }
+
+    if (this.componentsData.settings && Array.isArray(this.componentsData.settings)) {
+      this.componentsData.settings.forEach((component) => {
+        const category = component.category || 'general';
+        this.availableCategories.settings.add(category);
+      });
+    }
+
+    if (this.componentsData.hooks && Array.isArray(this.componentsData.hooks)) {
+      this.componentsData.hooks.forEach((component) => {
+        const category = component.category || 'general';
+        this.availableCategories.hooks.add(category);
+      });
+    }
+
+    if (this.componentsData.skills && Array.isArray(this.componentsData.skills)) {
+      this.componentsData.skills.forEach((component) => {
+        const category = component.category || 'general';
+        this.availableCategories.skills.add(category);
+      });
+    }
+
+    // Collect categories from templates (use language as category for language templates)
+    if (this.componentsData.templates && Array.isArray(this.componentsData.templates)) {
+      this.componentsData.templates.forEach((template) => {
+        if (template.subtype === 'language') {
+          this.availableCategories.templates.add(template.name);
+        } else if (template.subtype === 'framework' && template.language) {
+          this.availableCategories.templates.add(template.language);
         }
+      });
+    }
+  }
 
-        // Clear the grid
-        grid.innerHTML = '';
+  displayCurrentFilter() {
+    const grid = document.getElementById('unifiedGrid');
+    if (!grid) return;
 
-        // Get plugins from loaded components data
-        const plugins = this.componentsData.plugins;
+    // Set proper grid class based on current filter
+    if (this.currentFilter === 'templates') {
+      grid.className = 'unified-grid templates-mode';
+    } else {
+      grid.className = 'unified-grid components-mode';
+    }
 
-        if (plugins.length === 0) {
-            grid.innerHTML = '<div class="no-data">No plugins available</div>';
-            return;
+    // Update filter button counts
+    this.updateFilterCounts();
+
+    switch (this.currentFilter) {
+      case 'templates':
+        this.displayTemplates(grid);
+        break;
+      case 'plugins':
+        this.displayPlugins(grid);
+        break;
+      case 'agents':
+      case 'commands':
+      case 'mcps':
+      case 'settings':
+      case 'hooks':
+      case 'skills':
+        this.displayComponents(grid, this.currentFilter);
+        break;
+      default:
+        grid.innerHTML = '<div class="error">Unknown filter</div>';
+    }
+  }
+
+  displayTemplates(grid) {
+    if (!this.componentsData || !this.componentsData.templates) {
+      grid.innerHTML = '<div class="loading">Loading templates...</div>';
+      return;
+    }
+
+    // Update category sub-filters for templates
+    this.updateCategorySubFilters();
+
+    // Clear the grid
+    grid.innerHTML = '';
+
+    // Add the "Add New Template" card first
+    const addTemplateCard = this.createAddTemplateCard();
+    grid.appendChild(addTemplateCard);
+
+    // Filter templates based on category selection
+    let filteredTemplates = this.componentsData.templates;
+    if (this.currentCategoryFilter !== 'all') {
+      filteredTemplates = this.componentsData.templates.filter((template) => {
+        if (template.subtype === 'language') {
+          return template.name === this.currentCategoryFilter;
+        } else if (template.subtype === 'framework') {
+          return template.language === this.currentCategoryFilter;
         }
+        return false;
+      });
+    }
 
-        // Add marketplace setup notice
-        const marketplaceNotice = document.createElement('div');
-        marketplaceNotice.className = 'plugin-marketplace-notice';
-        marketplaceNotice.innerHTML = `
+    // Apply sorting to templates
+    filteredTemplates = this.sortComponents(filteredTemplates);
+
+    // Create template cards from the filtered list
+    filteredTemplates.forEach((template) => {
+      const templateCard = this.createTemplateCardFromJSON(template);
+      grid.appendChild(templateCard);
+    });
+  }
+
+  displayPlugins(grid) {
+    if (!this.componentsData || !this.componentsData.plugins) {
+      grid.innerHTML = '<div class="loading">Loading plugins...</div>';
+      return;
+    }
+
+    // Clear the grid
+    grid.innerHTML = '';
+
+    // Get plugins from loaded components data
+    const plugins = this.componentsData.plugins;
+
+    if (plugins.length === 0) {
+      grid.innerHTML = '<div class="no-data">No plugins available</div>';
+      return;
+    }
+
+    // Add marketplace setup notice
+    const marketplaceNotice = document.createElement('div');
+    marketplaceNotice.className = 'plugin-marketplace-notice';
+    marketplaceNotice.innerHTML = `
             <div class="notice-icon">ℹ️</div>
             <div class="notice-content">
                 <h4>First Time Setup Required</h4>
@@ -595,23 +623,24 @@ class IndexPageManager {
                 <p class="notice-footer">After adding the marketplace, you can install any plugin below.</p>
             </div>
         `;
-        grid.appendChild(marketplaceNotice);
+    grid.appendChild(marketplaceNotice);
 
-        // Create plugin cards
-        plugins.forEach(plugin => {
-            const pluginCard = this.createPluginCard(plugin);
-            grid.appendChild(pluginCard);
-        });
-    }
+    // Create plugin cards
+    plugins.forEach((plugin) => {
+      const pluginCard = this.createPluginCard(plugin);
+      grid.appendChild(pluginCard);
+    });
+  }
 
-    createPluginCard(plugin) {
-        const card = document.createElement('div');
-        card.className = 'template-card plugin-card';
+  createPluginCard(plugin) {
+    const card = document.createElement('div');
+    card.className = 'template-card plugin-card';
 
-        // Count components
-        const totalComponents = (plugin.commands || 0) + (plugin.agents || 0) + (plugin.mcpServers || 0);
+    // Count components
+    const totalComponents =
+      (plugin.commands || 0) + (plugin.agents || 0) + (plugin.mcpServers || 0);
 
-        card.innerHTML = `
+    card.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">
                     <div class="plugin-content-wrapper">
@@ -657,108 +686,109 @@ class IndexPageManager {
             </div>
         `;
 
-        return card;
+    return card;
+  }
+
+  displayComponents(grid, type) {
+    if (!this.componentsData) {
+      grid.innerHTML = '<div class="loading">Loading components...</div>';
+      return;
     }
 
-    displayComponents(grid, type) {
-        if (!this.componentsData) {
-            grid.innerHTML = '<div class="loading">Loading components...</div>';
-            return;
-        }
+    // Update category sub-filters in the unified-filter-bar
+    this.updateCategorySubFilters();
 
-        // Update category sub-filters in the unified-filter-bar
-        this.updateCategorySubFilters();
-        
-        const allComponents = this.getFilteredComponents(type);
-        
-        // Calculate pagination
-        const totalItems = allComponents.length + 1; // +1 for "Add New" card
-        this.totalPages = Math.ceil(totalItems / this.itemsPerPage);
-        
-        // Get components for current page
-        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-        const endIndex = startIndex + this.itemsPerPage;
-        
-        let html = '';
-        let itemsToShow = [];
-        
-        // Add "Add New" card to the beginning
-        itemsToShow.push({ type: 'add-new', data: type });
-        
-        // Add components
-        allComponents.forEach(component => {
-            itemsToShow.push({ type: 'component', data: component });
-        });
-        
-        // Get items for current page
-        const pageItems = itemsToShow.slice(startIndex, endIndex);
-        
-        // Generate HTML for page items
-        pageItems.forEach(item => {
-            if (item.type === 'add-new') {
-                html += this.createAddComponentCard(item.data);
-            } else {
-                html += this.generateComponentCard(item.data);
-            }
-        });
-        
-        // Create pagination controls
-        const paginationHTML = this.createPaginationControls();
-        
-        grid.innerHTML = html || '<div class="no-data">No components available</div>';
-        
-        // Add pagination after the grid
-        this.updatePagination(paginationHTML);
+    const allComponents = this.getFilteredComponents(type);
+
+    // Calculate pagination
+    const totalItems = allComponents.length + 1; // +1 for "Add New" card
+    this.totalPages = Math.ceil(totalItems / this.itemsPerPage);
+
+    // Get components for current page
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+
+    let html = '';
+    let itemsToShow = [];
+
+    // Add "Add New" card to the beginning
+    itemsToShow.push({ type: 'add-new', data: type });
+
+    // Add components
+    allComponents.forEach((component) => {
+      itemsToShow.push({ type: 'component', data: component });
+    });
+
+    // Get items for current page
+    const pageItems = itemsToShow.slice(startIndex, endIndex);
+
+    // Generate HTML for page items
+    pageItems.forEach((item) => {
+      if (item.type === 'add-new') {
+        html += this.createAddComponentCard(item.data);
+      } else {
+        html += this.generateComponentCard(item.data);
+      }
+    });
+
+    // Create pagination controls
+    const paginationHTML = this.createPaginationControls();
+
+    grid.innerHTML = html || '<div class="no-data">No components available</div>';
+
+    // Add pagination after the grid
+    this.updatePagination(paginationHTML);
+  }
+
+  generateComponentCard(component) {
+    // Generate install command - remove .md extension from path
+    let componentPath = component.path || component.name;
+    // Remove .md or .json extensions from path
+    if (componentPath.endsWith('.md') || componentPath.endsWith('.json')) {
+      componentPath = componentPath.replace(/\.(md|json)$/, '');
     }
+    if (componentPath.endsWith('.json')) {
+      componentPath = componentPath.replace(/\.json$/, '');
+    }
+    const installCommand = `npx claude-code-templates@latest --${component.type}=${componentPath} --yes`;
 
+    const typeConfig = {
+      agent: { icon: '🤖', color: '#ff6b6b' },
+      command: { icon: '⚡', color: '#4ecdc4' },
+      mcp: { icon: '🔌', color: '#45b7d1' },
+      setting: { icon: '⚙️', color: '#9c88ff' },
+      hook: { icon: '🪝', color: '#ff8c42' },
+      skill: { icon: '🎨', color: '#f59e0b' },
+    };
 
-    generateComponentCard(component) {
-        // Generate install command - remove .md extension from path
-        let componentPath = component.path || component.name;
-        // Remove .md or .json extensions from path
-        if (componentPath.endsWith('.md') || componentPath.endsWith('.json')) {
-            componentPath = componentPath.replace(/\.(md|json)$/, '');
-        }
-        if (componentPath.endsWith('.json')) {
-            componentPath = componentPath.replace(/\.json$/, '');
-        }
-        const installCommand = `npx claude-code-templates@latest --${component.type}=${componentPath} --yes`;
-        
-        const typeConfig = {
-            agent: { icon: '🤖', color: '#ff6b6b' },
-            command: { icon: '⚡', color: '#4ecdc4' },
-            mcp: { icon: '🔌', color: '#45b7d1' },
-            setting: { icon: '⚙️', color: '#9c88ff' },
-            hook: { icon: '🪝', color: '#ff8c42' },
-            skill: { icon: '🎨', color: '#f59e0b' }
-        };
-        
-        const config = typeConfig[component.type];
-        
-        // Escape quotes and special characters for onclick attributes
-        const escapedType = component.type.replace(/'/g, "\\'");
-        const escapedName = (component.name || '').replace(/'/g, "\\'");
-        const escapedPath = (component.path || component.name || '').replace(/'/g, "\\'");
-        const escapedCategory = (component.category || 'general').replace(/'/g, "\\'");
-        const escapedCommand = installCommand.replace(/'/g, "\\'");
-        
-        // Create category label (use "General" if no category)
-        const categoryName = component.category || 'general';
-        const categoryLabel = `<div class="category-label">${this.formatComponentName(categoryName)}</div>`;
-        
-        // Create download badge if downloads data exists
-        const downloadBadge = component.downloads && component.downloads > 0 ?
-            `<div class="download-badge" title="${component.downloads} downloads">
+    const config = typeConfig[component.type];
+
+    // Escape quotes and special characters for onclick attributes
+    const escapedType = component.type.replace(/'/g, "\\'");
+    const escapedName = (component.name || '').replace(/'/g, "\\'");
+    const escapedPath = (component.path || component.name || '').replace(/'/g, "\\'");
+    const escapedCategory = (component.category || 'general').replace(/'/g, "\\'");
+    const escapedCommand = installCommand.replace(/'/g, "\\'");
+
+    // Create category label (use "General" if no category)
+    const categoryName = component.category || 'general';
+    const categoryLabel = `<div class="category-label">${this.formatComponentName(categoryName)}</div>`;
+
+    // Create download badge if downloads data exists
+    const downloadBadge =
+      component.downloads && component.downloads > 0
+        ? `<div class="download-badge" title="${component.downloads} downloads">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/>
                 </svg>
                 ${this.formatNumber(component.downloads)}
-            </div>` : '';
+            </div>`
+        : '';
 
-        // Create validation badge for agents with security data
-        const validationBadge = this.createValidationBadge(component.security);
+    // Create validation badge for agents with security data
+    const validationBadge = this.createValidationBadge(component.security);
 
-        return `
+    return `
             <div class="template-card" data-type="${component.type}">
                 <div class="card-inner">
                     <div class="card-front">
@@ -769,9 +799,10 @@ class IndexPageManager {
                             ${validationBadge}
                         </div>
                         <h3 class="template-title">${this.formatComponentName(component.name)}</h3>
-                        ${component.type === 'mcp' ? 
-                            `<p class="template-description">${this.truncateDescription(component.description || 'MCP integration for enhanced development workflow', 80)}</p>` : 
-                            `<p class="template-description">${this.getComponentDescription(component)}</p>`
+                        ${
+                          component.type === 'mcp'
+                            ? `<p class="template-description">${this.truncateDescription(component.description || 'MCP integration for enhanced development workflow', 80)}</p>`
+                            : `<p class="template-description">${this.getComponentDescription(component)}</p>`
                         }
                     </div>
                     <div class="card-back">
@@ -805,22 +836,22 @@ class IndexPageManager {
                 </div>
             </div>
         `;
-    }
+  }
 
-    copyToClipboard(text) {
-        // Use the global function from utils.js
-        if (typeof window.copyToClipboard === 'function') {
-            window.copyToClipboard(text);
-        } else {
-            copyToClipboard(text);
-        }
+  copyToClipboard(text) {
+    // Use the global function from utils.js
+    if (typeof window.copyToClipboard === 'function') {
+      window.copyToClipboard(text);
+    } else {
+      copyToClipboard(text);
     }
+  }
 
-    showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.textContent = message;
-        notification.className = `notification notification-${type}`;
-        notification.style.cssText = `
+  showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.className = `notification notification-${type}`;
+    notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
@@ -832,171 +863,176 @@ class IndexPageManager {
             font-family: system-ui, -apple-system, sans-serif;
             animation: slideIn 0.3s ease;
         `;
-        
-        document.body.appendChild(notification);
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 3000);
-    }
 
-    formatComponentName(name) {
-        return name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
+    document.body.appendChild(notification);
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 3000);
+  }
 
-    formatNumber(num) {
-        if (num >= 1000000) {
-            return (num / 1000000).toFixed(1) + 'M';
-        } else if (num >= 1000) {
-            return (num / 1000).toFixed(1) + 'K';
+  formatComponentName(name) {
+    return name
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  formatNumber(num) {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+  }
+
+  truncateDescription(description, maxLength = 80) {
+    if (!description) return '';
+    if (description.length <= maxLength) return description;
+    return description.substring(0, maxLength).trim() + '...';
+  }
+
+  getComponentDescription(component) {
+    let description = '';
+
+    if (component.description) {
+      description = component.description;
+    } else if (component.content) {
+      // Try to extract description from frontmatter
+      const descMatch = component.content.match(/description:\s*(.+?)(?:\n|$)/);
+      if (descMatch) {
+        description = descMatch[1].trim().replace(/^["']|["']$/g, '');
+      } else {
+        // Use first paragraph if no frontmatter description
+        const lines = component.content.split('\n');
+        const firstParagraph = lines.find(
+          (line) => line.trim() && !line.startsWith('---') && !line.startsWith('#')
+        );
+        if (firstParagraph) {
+          description = firstParagraph.trim();
         }
-        return num.toString();
+      }
     }
 
-    truncateDescription(description, maxLength = 80) {
-        if (!description) return '';
-        if (description.length <= maxLength) return description;
-        return description.substring(0, maxLength).trim() + '...';
+    if (!description) {
+      description = `A ${component.type} component for Claude Code.`;
     }
 
-    getComponentDescription(component) {
-        let description = '';
-
-        if (component.description) {
-            description = component.description;
-        } else if (component.content) {
-            // Try to extract description from frontmatter
-            const descMatch = component.content.match(/description:\s*(.+?)(?:\n|$)/);
-            if (descMatch) {
-                description = descMatch[1].trim().replace(/^["']|["']$/g, '');
-            } else {
-                // Use first paragraph if no frontmatter description
-                const lines = component.content.split('\n');
-                const firstParagraph = lines.find(line => line.trim() && !line.startsWith('---') && !line.startsWith('#'));
-                if (firstParagraph) {
-                    description = firstParagraph.trim();
-                }
-            }
-        }
-
-        if (!description) {
-            description = `A ${component.type} component for Claude Code.`;
-        }
-
-        // Truncate description to max 120 characters for proper card display
-        if (description.length > 120) {
-            description = description.substring(0, 117) + '...';
-        }
-
-        return description;
+    // Truncate description to max 120 characters for proper card display
+    if (description.length > 120) {
+      description = description.substring(0, 117) + '...';
     }
 
-    /**
-     * Create validation badge HTML - Only for perfect 100% score
-     */
-    createValidationBadge(validation) {
-        if (!validation || !validation.validated) return '';
+    return description;
+  }
 
-        const score = validation.score || 0;
-        const isValid = validation.valid;
+  /**
+   * Create validation badge HTML - Only for perfect 100% score
+   */
+  createValidationBadge(validation) {
+    if (!validation || !validation.validated) return '';
 
-        // ONLY show badge for perfect score (100%)
-        if (score === 100 && isValid) {
-            return `<div class="verified-checkmark" title="100% Validated - Perfect Security Score">
+    const score = validation.score || 0;
+    const isValid = validation.valid;
+
+    // ONLY show badge for perfect score (100%)
+    if (score === 100 && isValid) {
+      return `<div class="verified-checkmark" title="100% Validated - Perfect Security Score">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="#1DA1F2">
                     <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484zm-6.616-3.334l-4.334 6.5c-.145.217-.382.334-.625.334-.143 0-.288-.04-.416-.126l-.115-.094-2.415-2.415c-.293-.293-.293-.768 0-1.06s.768-.294 1.06 0l1.77 1.767 3.825-5.74c.23-.345.696-.436 1.04-.207.346.23.44.696.21 1.04z"/>
                 </svg>
             </div>`;
-        }
-
-        // Don't show anything for scores below 100
-        return '';
     }
 
-    // Update filter button counts
-    updateFilterCounts() {
-        // Get accurate total counts from data loader (includes full data counts)
-        const totalCounts = window.dataLoader.getTotalCounts();
-        if (!totalCounts) return;
+    // Don't show anything for scores below 100
+    return '';
+  }
 
-        // Update each filter button with accurate total count
-        const agentsBtn = document.querySelector('[data-filter="agents"]');
-        const commandsBtn = document.querySelector('[data-filter="commands"]');
-        const mcpsBtn = document.querySelector('[data-filter="mcps"]');
-        const settingsBtn = document.querySelector('[data-filter="settings"]');
-        const hooksBtn = document.querySelector('[data-filter="hooks"]');
-        const skillsBtn = document.querySelector('[data-filter="skills"]');
-        const templatesBtn = document.querySelector('[data-filter="templates"]');
+  // Update filter button counts
+  updateFilterCounts() {
+    // Get accurate total counts from data loader (includes full data counts)
+    const totalCounts = window.dataLoader.getTotalCounts();
+    if (!totalCounts) return;
 
-        if (agentsBtn) {
-            agentsBtn.innerHTML = `<span class="chip-icon">🤖</span>agents (${totalCounts.agents})`;
-        }
-        if (commandsBtn) {
-            commandsBtn.innerHTML = `<span class="chip-icon">⚡</span>commands (${totalCounts.commands})`;
-        }
-        if (mcpsBtn) {
-            mcpsBtn.innerHTML = `<span class="chip-icon">🔌</span>mcps (${totalCounts.mcps})`;
-        }
-        if (settingsBtn) {
-            settingsBtn.innerHTML = `<span class="chip-icon">⚙️</span>settings (${totalCounts.settings})`;
-        }
-        if (hooksBtn) {
-            hooksBtn.innerHTML = `<span class="chip-icon">🪝</span>hooks (${totalCounts.hooks})`;
-        }
-        if (skillsBtn) {
-            skillsBtn.innerHTML = `<span class="new-label">NEW</span><span class="chip-icon">🎨</span>skills (${totalCounts.skills})`;
-        }
-        if (templatesBtn) {
-            templatesBtn.innerHTML = `<span class="chip-icon">📦</span>templates (${totalCounts.templates})`;
-        }
+    // Update each filter button with accurate total count
+    const agentsBtn = document.querySelector('[data-filter="agents"]');
+    const commandsBtn = document.querySelector('[data-filter="commands"]');
+    const mcpsBtn = document.querySelector('[data-filter="mcps"]');
+    const settingsBtn = document.querySelector('[data-filter="settings"]');
+    const hooksBtn = document.querySelector('[data-filter="hooks"]');
+    const skillsBtn = document.querySelector('[data-filter="skills"]');
+    const templatesBtn = document.querySelector('[data-filter="templates"]');
+
+    if (agentsBtn) {
+      agentsBtn.innerHTML = `<span class="chip-icon">🤖</span>agents (${totalCounts.agents})`;
     }
+    if (commandsBtn) {
+      commandsBtn.innerHTML = `<span class="chip-icon">⚡</span>commands (${totalCounts.commands})`;
+    }
+    if (mcpsBtn) {
+      mcpsBtn.innerHTML = `<span class="chip-icon">🔌</span>mcps (${totalCounts.mcps})`;
+    }
+    if (settingsBtn) {
+      settingsBtn.innerHTML = `<span class="chip-icon">⚙️</span>settings (${totalCounts.settings})`;
+    }
+    if (hooksBtn) {
+      hooksBtn.innerHTML = `<span class="chip-icon">🪝</span>hooks (${totalCounts.hooks})`;
+    }
+    if (skillsBtn) {
+      skillsBtn.innerHTML = `<span class="new-label">NEW</span><span class="chip-icon">🎨</span>skills (${totalCounts.skills})`;
+    }
+    if (templatesBtn) {
+      templatesBtn.innerHTML = `<span class="chip-icon">📦</span>templates (${totalCounts.templates})`;
+    }
+  }
 
-    // Create Add Component card
-    createAddComponentCard(type) {
-        const typeConfig = {
-            agents: {
-                icon: '🤖',
-                name: 'Agent',
-                description: 'Create a new AI specialist agent',
-                color: '#ff6b6b'
-            },
-            commands: {
-                icon: '⚡',
-                name: 'Command',
-                description: 'Add a custom slash command',
-                color: '#4ecdc4'
-            },
-            mcps: {
-                icon: '🔌',
-                name: 'MCP',
-                description: 'Build a Model Context Protocol integration',
-                color: '#45b7d1'
-            },
-            settings: {
-                icon: '⚙️',
-                name: 'Setting',
-                description: 'Configure Claude Code behavior',
-                color: '#9c88ff'
-            },
-            hooks: {
-                icon: '🪝',
-                name: 'Hook',
-                description: 'Automate tool execution workflows',
-                color: '#ff8c42'
-            },
-            skills: {
-                icon: '🎨',
-                name: 'Skill',
-                description: 'Add modular capabilities with progressive disclosure',
-                color: '#f59e0b'
-            }
-        };
-        
-        const config = typeConfig[type];
-        if (!config) return '';
-        
-        return `
+  // Create Add Component card
+  createAddComponentCard(type) {
+    const typeConfig = {
+      agents: {
+        icon: '🤖',
+        name: 'Agent',
+        description: 'Create a new AI specialist agent',
+        color: '#ff6b6b',
+      },
+      commands: {
+        icon: '⚡',
+        name: 'Command',
+        description: 'Add a custom slash command',
+        color: '#4ecdc4',
+      },
+      mcps: {
+        icon: '🔌',
+        name: 'MCP',
+        description: 'Build a Model Context Protocol integration',
+        color: '#45b7d1',
+      },
+      settings: {
+        icon: '⚙️',
+        name: 'Setting',
+        description: 'Configure Claude Code behavior',
+        color: '#9c88ff',
+      },
+      hooks: {
+        icon: '🪝',
+        name: 'Hook',
+        description: 'Automate tool execution workflows',
+        color: '#ff8c42',
+      },
+      skills: {
+        icon: '🎨',
+        name: 'Skill',
+        description: 'Add modular capabilities with progressive disclosure',
+        color: '#f59e0b',
+      },
+    };
+
+    const config = typeConfig[type];
+    if (!config) return '';
+
+    return `
             <div class="template-card add-template-card add-component-card" onclick="showComponentContributeModal('${type}')">
                 <div class="card-inner">
                     <div class="card-front">
@@ -1011,32 +1047,32 @@ class IndexPageManager {
                 </div>
             </div>
         `;
-    }
+  }
 
-    showError(message) {
-        const grid = document.getElementById('unifiedGrid');
-        if (grid) {
-            grid.innerHTML = `
+  showError(message) {
+    const grid = document.getElementById('unifiedGrid');
+    if (grid) {
+      grid.innerHTML = `
                 <div class="error-message">
                     <h3>Error</h3>
                     <p>${message}</p>
                     <button onclick="location.reload()" class="btn-primary">Retry</button>
                 </div>
             `;
-        }
     }
+  }
 
-    // Get framework icon from mapping
-    getFrameworkIcon(framework) {
-        return this.FRAMEWORK_ICONS[framework] || this.FRAMEWORK_ICONS['default'];
-    }
+  // Get framework icon from mapping
+  getFrameworkIcon(framework) {
+    return this.FRAMEWORK_ICONS[framework] || this.FRAMEWORK_ICONS['default'];
+  }
 
-    // Create Add Template card
-    createAddTemplateCard() {
-        const card = document.createElement('div');
-        card.className = 'template-card add-template-card';
-        
-        card.innerHTML = `
+  // Create Add Template card
+  createAddTemplateCard() {
+    const card = document.createElement('div');
+    card.className = 'template-card add-template-card';
+
+    card.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">
                     <div class="framework-logo">
@@ -1049,29 +1085,28 @@ class IndexPageManager {
                 </div>
             </div>
         `;
-        
-        // Add click handler
-        card.addEventListener('click', () => {
-            showComponentContributeModal('templates');
-        });
-        
-        return card;
-    }
 
-    // Create template card from JSON structure
-    createTemplateCardFromJSON(template) {
-        const card = document.createElement('div');
-        card.className = 'template-card';
-        
-        // Determine the icon based on template name/type
-        const icon = this.getFrameworkIcon(template.name);
-        
-        // Create the display name
-        const displayName = template.subtype === 'framework' 
-            ? `${template.language}/${template.name}`
-            : template.name;
-            
-        card.innerHTML = `
+    // Add click handler
+    card.addEventListener('click', () => {
+      showComponentContributeModal('templates');
+    });
+
+    return card;
+  }
+
+  // Create template card from JSON structure
+  createTemplateCardFromJSON(template) {
+    const card = document.createElement('div');
+    card.className = 'template-card';
+
+    // Determine the icon based on template name/type
+    const icon = this.getFrameworkIcon(template.name);
+
+    // Create the display name
+    const displayName =
+      template.subtype === 'framework' ? `${template.language}/${template.name}` : template.name;
+
+    card.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">
                     <div class="framework-logo">
@@ -1096,22 +1131,23 @@ class IndexPageManager {
                 </div>
             </div>
         `;
-        
-        // Card flip is handled by global event listener in setupEventListeners
-        
-        return card;
-    }
 
-    // Create individual template card (legacy method, keep for compatibility)
-    createTemplateCard(languageKey, languageData, frameworkKey, frameworkData) {
-        const card = document.createElement('div');
-        card.className = `template-card ${languageData.comingSoon ? 'coming-soon' : ''}`;
-        
-        const displayName = frameworkKey === 'none' ? 
-            frameworkData.name : 
-            `${languageData.name.split('/')[0]}/${frameworkData.name}`;
-        
-        card.innerHTML = `
+    // Card flip is handled by global event listener in setupEventListeners
+
+    return card;
+  }
+
+  // Create individual template card (legacy method, keep for compatibility)
+  createTemplateCard(languageKey, languageData, frameworkKey, frameworkData) {
+    const card = document.createElement('div');
+    card.className = `template-card ${languageData.comingSoon ? 'coming-soon' : ''}`;
+
+    const displayName =
+      frameworkKey === 'none'
+        ? frameworkData.name
+        : `${languageData.name.split('/')[0]}/${frameworkData.name}`;
+
+    card.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">
                     ${languageData.comingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : ''}
@@ -1137,149 +1173,153 @@ class IndexPageManager {
                 </div>
             </div>
         `;
-        
-        // Add click handler for card flip (only if not coming soon)
-        if (!languageData.comingSoon) {
-            card.addEventListener('click', (e) => {
-                // Don't flip if clicking on buttons
-                if (!e.target.closest('button')) {
-                    card.classList.toggle('flipped');
-                }
-            });
+
+    // Add click handler for card flip (only if not coming soon)
+    if (!languageData.comingSoon) {
+      card.addEventListener('click', (e) => {
+        // Don't flip if clicking on buttons
+        if (!e.target.closest('button')) {
+          card.classList.toggle('flipped');
         }
-        
-        return card;
+      });
     }
 
-    // Fetch templates configuration from GitHub
-    async fetchTemplatesConfig() {
-        const GITHUB_CONFIG = {
-            owner: 'davila7',
-            repo: 'claude-code-templates',
-            branch: 'main',
-            templatesPath: 'cli-tool/src/templates.js'
-        };
-        
-        try {
-            const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.templatesPath}?t=${Date.now()}`;
-            const response = await fetch(url);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const templateFileContent = await response.text();
-            this.templatesData = this.parseTemplatesConfig(templateFileContent);
-            
-            return this.templatesData;
-        } catch (error) {
-            console.error('Error fetching templates:', error);
-            throw error;
-        }
+    return card;
+  }
+
+  // Fetch templates configuration from GitHub
+  async fetchTemplatesConfig() {
+    const GITHUB_CONFIG = {
+      owner: 'davila7',
+      repo: 'claude-code-templates',
+      branch: 'main',
+      templatesPath: 'cli-tool/src/templates.js',
+    };
+
+    try {
+      const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.templatesPath}?t=${Date.now()}`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const templateFileContent = await response.text();
+      this.templatesData = this.parseTemplatesConfig(templateFileContent);
+
+      return this.templatesData;
+    } catch (error) {
+      console.error('Error fetching templates:', error);
+      throw error;
+    }
+  }
+
+  // Parse templates configuration
+  parseTemplatesConfig(fileContent) {
+    try {
+      const configMatch = fileContent.match(/const TEMPLATES_CONFIG = ({[\s\S]*?});/);
+      if (!configMatch) {
+        throw new Error('TEMPLATES_CONFIG not found in file');
+      }
+
+      let configString = configMatch[1];
+      configString = configString.replace(/'/g, '"');
+      configString = configString.replace(/(\w+):/g, '"$1":');
+      configString = configString.replace(/,(\s*[}\]])/g, '$1');
+
+      return JSON.parse(configString);
+    } catch (error) {
+      console.error('Error parsing templates config:', error);
+      return null;
+    }
+  }
+
+  // Show contribute modal
+  showContributeModal() {
+    alert(
+      'Contribute modal would open here - this needs to be implemented with the full modal HTML from script.js'
+    );
+  }
+
+  // Create pagination controls
+  createPaginationControls() {
+    if (this.totalPages <= 1) return '';
+
+    let paginationHTML = '<div class="pagination-container">';
+    paginationHTML += '<div class="pagination">';
+
+    // Previous button
+    const prevDisabled = this.currentPage === 1 ? 'disabled' : '';
+    paginationHTML += `<button class="pagination-btn prev-btn ${prevDisabled}" onclick="goToPage(${this.currentPage - 1})" ${prevDisabled ? 'disabled' : ''}>`;
+    paginationHTML +=
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>';
+    paginationHTML += '</button>';
+
+    // Page numbers
+    const startPage = Math.max(1, this.currentPage - 2);
+    const endPage = Math.min(this.totalPages, this.currentPage + 2);
+
+    if (startPage > 1) {
+      paginationHTML += `<button class="pagination-btn page-btn" onclick="goToPage(1)">1</button>`;
+      if (startPage > 2) {
+        paginationHTML += '<span class="pagination-dots">...</span>';
+      }
     }
 
-    // Parse templates configuration
-    parseTemplatesConfig(fileContent) {
-        try {
-            const configMatch = fileContent.match(/const TEMPLATES_CONFIG = ({[\s\S]*?});/);
-            if (!configMatch) {
-                throw new Error('TEMPLATES_CONFIG not found in file');
-            }
-            
-            let configString = configMatch[1];
-            configString = configString.replace(/'/g, '"');
-            configString = configString.replace(/(\w+):/g, '"$1":');
-            configString = configString.replace(/,(\s*[}\]])/g, '$1');
-            
-            return JSON.parse(configString);
-        } catch (error) {
-            console.error('Error parsing templates config:', error);
-            return null;
-        }
+    for (let i = startPage; i <= endPage; i++) {
+      const activeClass = i === this.currentPage ? 'active' : '';
+      paginationHTML += `<button class="pagination-btn page-btn ${activeClass}" onclick="goToPage(${i})">${i}</button>`;
     }
 
-    // Show contribute modal
-    showContributeModal() {
-        alert('Contribute modal would open here - this needs to be implemented with the full modal HTML from script.js');
+    if (endPage < this.totalPages) {
+      if (endPage < this.totalPages - 1) {
+        paginationHTML += '<span class="pagination-dots">...</span>';
+      }
+      paginationHTML += `<button class="pagination-btn page-btn" onclick="goToPage(${this.totalPages})">${this.totalPages}</button>`;
     }
-    
-    // Create pagination controls
-    createPaginationControls() {
-        if (this.totalPages <= 1) return '';
-        
-        let paginationHTML = '<div class="pagination-container">';
-        paginationHTML += '<div class="pagination">';
-        
-        // Previous button
-        const prevDisabled = this.currentPage === 1 ? 'disabled' : '';
-        paginationHTML += `<button class="pagination-btn prev-btn ${prevDisabled}" onclick="goToPage(${this.currentPage - 1})" ${prevDisabled ? 'disabled' : ''}>`;
-        paginationHTML += '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>';
-        paginationHTML += '</button>';
-        
-        // Page numbers
-        const startPage = Math.max(1, this.currentPage - 2);
-        const endPage = Math.min(this.totalPages, this.currentPage + 2);
-        
-        if (startPage > 1) {
-            paginationHTML += `<button class="pagination-btn page-btn" onclick="goToPage(1)">1</button>`;
-            if (startPage > 2) {
-                paginationHTML += '<span class="pagination-dots">...</span>';
-            }
-        }
-        
-        for (let i = startPage; i <= endPage; i++) {
-            const activeClass = i === this.currentPage ? 'active' : '';
-            paginationHTML += `<button class="pagination-btn page-btn ${activeClass}" onclick="goToPage(${i})">${i}</button>`;
-        }
-        
-        if (endPage < this.totalPages) {
-            if (endPage < this.totalPages - 1) {
-                paginationHTML += '<span class="pagination-dots">...</span>';
-            }
-            paginationHTML += `<button class="pagination-btn page-btn" onclick="goToPage(${this.totalPages})">${this.totalPages}</button>`;
-        }
-        
-        // Next button
-        const nextDisabled = this.currentPage === this.totalPages ? 'disabled' : '';
-        paginationHTML += `<button class="pagination-btn next-btn ${nextDisabled}" onclick="goToPage(${this.currentPage + 1})" ${nextDisabled ? 'disabled' : ''}>`;
-        paginationHTML += '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6z"/></svg>';
-        paginationHTML += '</button>';
-        
-        paginationHTML += '</div>';
-        paginationHTML += `<div class="pagination-info">Page ${this.currentPage} of ${this.totalPages}</div>`;
-        paginationHTML += '</div>';
-        
-        return paginationHTML;
+
+    // Next button
+    const nextDisabled = this.currentPage === this.totalPages ? 'disabled' : '';
+    paginationHTML += `<button class="pagination-btn next-btn ${nextDisabled}" onclick="goToPage(${this.currentPage + 1})" ${nextDisabled ? 'disabled' : ''}>`;
+    paginationHTML +=
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6z"/></svg>';
+    paginationHTML += '</button>';
+
+    paginationHTML += '</div>';
+    paginationHTML += `<div class="pagination-info">Page ${this.currentPage} of ${this.totalPages}</div>`;
+    paginationHTML += '</div>';
+
+    return paginationHTML;
+  }
+
+  // Navigate to specific page
+  goToPage(page) {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) return;
+
+    this.currentPage = page;
+    this.displayCurrentFilter();
+
+    // Scroll to top of content grid
+    const contentGrid = document.getElementById('contentGrid');
+    if (contentGrid) {
+      contentGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    
-    // Navigate to specific page
-    goToPage(page) {
-        if (page < 1 || page > this.totalPages || page === this.currentPage) return;
-        
-        this.currentPage = page;
-        this.displayCurrentFilter();
-        
-        // Scroll to top of content grid
-        const contentGrid = document.getElementById('contentGrid');
-        if (contentGrid) {
-            contentGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+  }
+
+  // Update pagination controls
+  updatePagination(paginationHTML) {
+    // Remove any existing pagination containers from the entire document
+    const existingPaginations = document.querySelectorAll('.pagination-container');
+    existingPaginations.forEach((pagination) => pagination.remove());
+
+    // Add new pagination if needed
+    if (this.totalPages > 1 && paginationHTML) {
+      const contentGrid = document.getElementById('contentGrid');
+      if (contentGrid) {
+        contentGrid.insertAdjacentHTML('afterend', paginationHTML);
+      }
     }
-    
-    // Update pagination controls
-    updatePagination(paginationHTML) {
-        // Remove any existing pagination containers from the entire document
-        const existingPaginations = document.querySelectorAll('.pagination-container');
-        existingPaginations.forEach(pagination => pagination.remove());
-        
-        // Add new pagination if needed
-        if (this.totalPages > 1 && paginationHTML) {
-            const contentGrid = document.getElementById('contentGrid');
-            if (contentGrid) {
-                contentGrid.insertAdjacentHTML('afterend', paginationHTML);
-            }
-        }
-    }
+  }
 }
 
 // Global function for component details is now handled by modal-helpers.js
@@ -1288,232 +1328,243 @@ class IndexPageManager {
 
 // Global function for handling sort change (called from onchange)
 function handleSortChange(sortValue) {
-    if (window.indexManager) {
-        window.indexManager.handleSortChange(sortValue);
-    }
+  if (window.indexManager) {
+    window.indexManager.handleSortChange(sortValue);
+  }
 }
 
 // Global function for handling filter click with navigation
 function handleFilterClick(event, filter) {
-    event.preventDefault(); // Prevent default link navigation
+  event.preventDefault(); // Prevent default link navigation
 
-    // If plugins filter, scroll to plugins section
-    if (filter === 'plugins') {
-        const contentGrid = document.getElementById('contentGrid');
-        if (contentGrid) {
-            contentGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+  // If plugins filter, scroll to plugins section
+  if (filter === 'plugins') {
+    const contentGrid = document.getElementById('contentGrid');
+    if (contentGrid) {
+      contentGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  }
 
-    setUnifiedFilter(filter);
+  setUnifiedFilter(filter);
 }
 
 // Global function for setting filter (called from onclick)
 function setUnifiedFilter(filter) {
-    if (window.indexManager) {
-        window.indexManager.setFilter(filter);
-    }
-    
-    // Update filter buttons - remove active from ALL filter buttons
-    document.querySelectorAll('.component-type-filters .filter-chip').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    // Add active class only to the clicked filter button
-    const activeBtn = document.querySelector(`.component-type-filters [data-filter="${filter}"]`);
-    if (activeBtn) {
-        activeBtn.classList.add('active');
-    }
-    
-    console.log('Component type filter selected:', filter);
-    
-    // Update URL with filter parameter
-    if (typeof updateURLWithFilter === 'function') {
-        updateURLWithFilter(filter);
-    }
-    
-    // Show category filters for the selected component type
-    showCategoryFilters(filter);
+  if (window.indexManager) {
+    window.indexManager.setFilter(filter);
+  }
+
+  // Update filter buttons - remove active from ALL filter buttons
+  document.querySelectorAll('.component-type-filters .filter-chip').forEach((btn) => {
+    btn.classList.remove('active');
+  });
+
+  // Add active class only to the clicked filter button
+  const activeBtn = document.querySelector(`.component-type-filters [data-filter="${filter}"]`);
+  if (activeBtn) {
+    activeBtn.classList.add('active');
+  }
+
+  console.log('Component type filter selected:', filter);
+
+  // Update URL with filter parameter
+  if (typeof updateURLWithFilter === 'function') {
+    updateURLWithFilter(filter);
+  }
+
+  // Show category filters for the selected component type
+  showCategoryFilters(filter);
 }
 
 // Function to show category filters based on component type
 function showCategoryFilters(componentType) {
-    const categoryContainer = document.getElementById('componentCategories');
-    const categoryChips = document.getElementById('categoryChips');
-    
-    if (!categoryContainer || !categoryChips) return;
-    
-    // Get categories from actual component data
-    let categories = [];
-    
-    if (window.dataLoader) {
-        const dataLoader = window.dataLoader;
-        
-        console.log('DataLoader available, getting categories for:', componentType);
-        console.log('DataLoader componentsData:', dataLoader.componentsData);
-        
-        switch(componentType) {
-            case 'agents':
-                const agents = dataLoader.getComponentsByType('agent');
-                console.log('Agents data:', agents);
-                categories = getUniqueCategories(agents);
-                break;
-            case 'commands':
-                const commands = dataLoader.getComponentsByType('command');
-                console.log('Commands data:', commands);
-                categories = getUniqueCategories(commands);
-                break;
-            case 'settings':
-                try {
-                    categories = dataLoader.getSettingCategories ? dataLoader.getSettingCategories() : getUniqueCategories(dataLoader.getSettings());
-                } catch (e) {
-                    const settings = dataLoader.getComponentsByType('setting') || dataLoader.getSettings();
-                    categories = getUniqueCategories(settings);
-                }
-                break;
-            case 'hooks':
-                try {
-                    categories = dataLoader.getHookCategories ? dataLoader.getHookCategories() : getUniqueCategories(dataLoader.getHooks());
-                } catch (e) {
-                    const hooks = dataLoader.getComponentsByType('hook') || dataLoader.getHooks();
-                    categories = getUniqueCategories(hooks);
-                }
-                break;
-            case 'mcps':
-                const mcps = dataLoader.getComponentsByType('mcp');
-                console.log('MCPs data:', mcps);
-                categories = getUniqueCategories(mcps);
-                break;
-            case 'skills':
-                const skills = dataLoader.getComponentsByType('skill');
-                console.log('Skills data:', skills);
-                categories = getUniqueCategories(skills);
-                break;
-            case 'templates':
-                const templates = dataLoader.getComponentsByType('template');
-                console.log('Templates data:', templates);
-                categories = getUniqueCategories(templates);
-                break;
-            case 'plugins':
-                // Plugins don't have categories
-                categories = [];
-                break;
-            default:
-                categories = [];
+  const categoryContainer = document.getElementById('componentCategories');
+  const categoryChips = document.getElementById('categoryChips');
+
+  if (!categoryContainer || !categoryChips) return;
+
+  // Get categories from actual component data
+  let categories = [];
+
+  if (window.dataLoader) {
+    const dataLoader = window.dataLoader;
+
+    console.log('DataLoader available, getting categories for:', componentType);
+    console.log('DataLoader componentsData:', dataLoader.componentsData);
+
+    switch (componentType) {
+      case 'agents':
+        const agents = dataLoader.getComponentsByType('agent');
+        console.log('Agents data:', agents);
+        categories = getUniqueCategories(agents);
+        break;
+      case 'commands':
+        const commands = dataLoader.getComponentsByType('command');
+        console.log('Commands data:', commands);
+        categories = getUniqueCategories(commands);
+        break;
+      case 'settings':
+        try {
+          categories = dataLoader.getSettingCategories
+            ? dataLoader.getSettingCategories()
+            : getUniqueCategories(dataLoader.getSettings());
+        } catch (e) {
+          const settings = dataLoader.getComponentsByType('setting') || dataLoader.getSettings();
+          categories = getUniqueCategories(settings);
         }
-        
-        console.log('Found categories for', componentType, ':', categories);
-    } else {
-        console.log('DataLoader not available yet');
+        break;
+      case 'hooks':
+        try {
+          categories = dataLoader.getHookCategories
+            ? dataLoader.getHookCategories()
+            : getUniqueCategories(dataLoader.getHooks());
+        } catch (e) {
+          const hooks = dataLoader.getComponentsByType('hook') || dataLoader.getHooks();
+          categories = getUniqueCategories(hooks);
+        }
+        break;
+      case 'mcps':
+        const mcps = dataLoader.getComponentsByType('mcp');
+        console.log('MCPs data:', mcps);
+        categories = getUniqueCategories(mcps);
+        break;
+      case 'skills':
+        const skills = dataLoader.getComponentsByType('skill');
+        console.log('Skills data:', skills);
+        categories = getUniqueCategories(skills);
+        break;
+      case 'templates':
+        const templates = dataLoader.getComponentsByType('template');
+        console.log('Templates data:', templates);
+        categories = getUniqueCategories(templates);
+        break;
+      case 'plugins':
+        // Plugins don't have categories
+        categories = [];
+        break;
+      default:
+        categories = [];
     }
-    
-    // Add "All" option at the beginning
-    if (categories.length > 0) {
-        categories.unshift('All');
-    }
-    
-    if (categories.length > 0) {
-        categoryChips.innerHTML = categories.map((category, index) => {
-            const displayName = formatCategoryName(category);
-            // Only the first item (All) should be active by default
-            const isActive = index === 0 ? 'active' : '';
-            return `
+
+    console.log('Found categories for', componentType, ':', categories);
+  } else {
+    console.log('DataLoader not available yet');
+  }
+
+  // Add "All" option at the beginning
+  if (categories.length > 0) {
+    categories.unshift('All');
+  }
+
+  if (categories.length > 0) {
+    categoryChips.innerHTML = categories
+      .map((category, index) => {
+        const displayName = formatCategoryName(category);
+        // Only the first item (All) should be active by default
+        const isActive = index === 0 ? 'active' : '';
+        return `
                 <button class="filter-chip ${isActive}" data-category="${category.toLowerCase()}" onclick="setCategoryFilter('${category.toLowerCase()}')">
                     ${displayName}
                 </button>
             `;
-        }).join('');
-        
-        categoryContainer.style.display = 'block';
-    } else {
-        categoryContainer.style.display = 'none';
-    }
+      })
+      .join('');
+
+    categoryContainer.style.display = 'block';
+  } else {
+    categoryContainer.style.display = 'none';
+  }
 }
 
 // Helper function to extract unique categories from component data
 function getUniqueCategories(components) {
-    if (!components || !Array.isArray(components)) return [];
-    
-    const categories = new Set();
-    components.forEach(component => {
-        if (component.category && component.category.trim() !== '') {
-            categories.add(component.category);
-        }
-    });
-    
-    return Array.from(categories).sort();
+  if (!components || !Array.isArray(components)) return [];
+
+  const categories = new Set();
+  components.forEach((component) => {
+    if (component.category && component.category.trim() !== '') {
+      categories.add(component.category);
+    }
+  });
+
+  return Array.from(categories).sort();
 }
 
 // Helper function to format category names for display
 function formatCategoryName(category) {
-    if (category === 'All') return 'All';
-    
-    // Convert category names to proper case
-    return category
-        .split(/[-_\s]+/)
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
+  if (category === 'All') return 'All';
+
+  // Convert category names to proper case
+  return category
+    .split(/[-_\s]+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 }
 
 // Function to handle category filter selection
 // Enhanced setCategoryFilter function that handles both old and new category systems
 window.setCategoryFilter = function setCategoryFilter(category) {
-    console.log('setCategoryFilter called with:', category);
-    
-    // Handle the new category chips in #categoryChips
-    const categoryButtons = document.querySelectorAll('#categoryChips button.filter-chip');
-    if (categoryButtons.length > 0) {
-        console.log('Found new category buttons:', categoryButtons.length);
-        
-        categoryButtons.forEach((btn, index) => {
-            console.log(`Button ${index}:`, btn.getAttribute('data-category'), 'has active:', btn.classList.contains('active'));
-            btn.classList.remove('active');
-        });
-        
-        // Add active class only to the clicked button
-        const activeBtn = document.querySelector(`#categoryChips button[data-category="${category}"]`);
-        console.log('Target button found:', activeBtn);
-        
-        if (activeBtn) {
-            activeBtn.classList.add('active');
-            console.log('Added active class to:', category);
-        }
+  console.log('setCategoryFilter called with:', category);
+
+  // Handle the new category chips in #categoryChips
+  const categoryButtons = document.querySelectorAll('#categoryChips button.filter-chip');
+  if (categoryButtons.length > 0) {
+    console.log('Found new category buttons:', categoryButtons.length);
+
+    categoryButtons.forEach((btn, index) => {
+      console.log(
+        `Button ${index}:`,
+        btn.getAttribute('data-category'),
+        'has active:',
+        btn.classList.contains('active')
+      );
+      btn.classList.remove('active');
+    });
+
+    // Add active class only to the clicked button
+    const activeBtn = document.querySelector(`#categoryChips button[data-category="${category}"]`);
+    console.log('Target button found:', activeBtn);
+
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      console.log('Added active class to:', category);
     }
-    
-    // Also call the existing IndexManager setCategoryFilter method for actual filtering
-    if (window.indexManager && window.indexManager.setCategoryFilter) {
-        console.log('Calling IndexManager setCategoryFilter with:', category);
-        window.indexManager.setCategoryFilter(category);
-    }
-    
-    // Force re-render of the current filter to apply category filtering
-    if (window.indexManager && window.indexManager.displayCurrentFilter) {
-        console.log('Re-displaying current filter to apply category filter');
-        window.indexManager.displayCurrentFilter();
-    }
-}
+  }
+
+  // Also call the existing IndexManager setCategoryFilter method for actual filtering
+  if (window.indexManager && window.indexManager.setCategoryFilter) {
+    console.log('Calling IndexManager setCategoryFilter with:', category);
+    window.indexManager.setCategoryFilter(category);
+  }
+
+  // Force re-render of the current filter to apply category filtering
+  if (window.indexManager && window.indexManager.displayCurrentFilter) {
+    console.log('Re-displaying current filter to apply category filter');
+    window.indexManager.displayCurrentFilter();
+  }
+};
 
 // Test function to debug category filters
-window.testCategoryFilter = function() {
-    console.log('=== Category Filter Debug ===');
-    const categoryChips = document.getElementById('categoryChips');
-    console.log('Category chips container:', categoryChips);
-    
-    if (categoryChips) {
-        const buttons = categoryChips.querySelectorAll('button.filter-chip');
-        console.log('Found buttons:', buttons.length);
-        
-        buttons.forEach((btn, index) => {
-            console.log(`Button ${index}:`, {
-                category: btn.getAttribute('data-category'),
-                hasActive: btn.classList.contains('active'),
-                onclick: btn.getAttribute('onclick')
-            });
-        });
-    }
-    
-    console.log('setCategoryFilter function exists:', typeof window.setCategoryFilter);
-}
+window.testCategoryFilter = function () {
+  console.log('=== Category Filter Debug ===');
+  const categoryChips = document.getElementById('categoryChips');
+  console.log('Category chips container:', categoryChips);
+
+  if (categoryChips) {
+    const buttons = categoryChips.querySelectorAll('button.filter-chip');
+    console.log('Found buttons:', buttons.length);
+
+    buttons.forEach((btn, index) => {
+      console.log(`Button ${index}:`, {
+        category: btn.getAttribute('data-category'),
+        hasActive: btn.classList.contains('active'),
+        onclick: btn.getAttribute('onclick'),
+      });
+    });
+  }
+
+  console.log('setCategoryFilter function exists:', typeof window.setCategoryFilter);
+};
 
 // Global helper functions for template cards
 // function showInstallationFiles(languageKey, frameworkKey, displayName) {
@@ -1524,20 +1575,20 @@ window.testCategoryFilter = function() {
 
 // Global function for template details
 function showTemplateDetails(templateId, templateName, subtype) {
-    if (!window.indexManager || !window.indexManager.componentsData) {
-        console.error('IndexManager or components data not available');
-        return;
-    }
-    
-    // Find the template in the data
-    const template = window.indexManager.componentsData.templates.find(t => t.id === templateId);
-    if (!template) {
-        console.error('Template not found:', templateId);
-        return;
-    }
-    
-    // Create modal to show template files
-    const modalHTML = `
+  if (!window.indexManager || !window.indexManager.componentsData) {
+    console.error('IndexManager or components data not available');
+    return;
+  }
+
+  // Find the template in the data
+  const template = window.indexManager.componentsData.templates.find((t) => t.id === templateId);
+  if (!template) {
+    console.error('Template not found:', templateId);
+    return;
+  }
+
+  // Create modal to show template files
+  const modalHTML = `
         <div class="modal-overlay" onclick="closeComponentModal()">
             <div class="modal-content component-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
@@ -1564,16 +1615,24 @@ function showTemplateDetails(templateId, templateName, subtype) {
 
                         <div class="component-content">
                             <h4>📁 Template Files (${template.files ? template.files.length : 0} files)</h4>
-                            ${template.files && template.files.length > 0 ? `
+                            ${
+                              template.files && template.files.length > 0
+                                ? `
                                 <div class="template-files-list">
-                                    ${template.files.map(file => `
+                                    ${template.files
+                                      .map(
+                                        (file) => `
                                         <div class="template-file-item">
                                             <span class="file-icon">📄</span>
                                             <span class="file-name">${file}</span>
                                         </div>
-                                    `).join('')}
+                                    `
+                                      )
+                                      .join('')}
                                 </div>
-                            ` : '<p>No files listed for this template.</p>'}
+                            `
+                                : '<p>No files listed for this template.</p>'
+                            }
                         </div>
                     </div>
                 </div>
@@ -1588,15 +1647,15 @@ function showTemplateDetails(templateId, templateName, subtype) {
             </div>
         </div>
     `;
-    
-    // Remove existing modal if present
-    const existingModal = document.querySelector('.modal-overlay');
-    if (existingModal) {
-        existingModal.remove();
-    }
-    
-    // Add modal to body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Remove existing modal if present
+  const existingModal = document.querySelector('.modal-overlay');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
 // Global function for setting category filter (called from onclick)
@@ -1604,58 +1663,65 @@ function showTemplateDetails(templateId, templateName, subtype) {
 
 // Show component contribute modal (copied from script.js)
 function showComponentContributeModal(type) {
-    const typeConfig = {
-        agents: { 
-            name: 'Agent', 
-            description: 'AI specialist that handles specific development tasks',
-            example: 'python-testing-specialist',
-            structure: '- Agent metadata (name, description, color)\n- Core expertise areas\n- When to use guidelines\n- Code examples and patterns'
-        },
-        commands: { 
-            name: 'Command', 
-            description: 'Custom slash command for Claude Code',
-            example: 'optimize-bundle',
-            structure: '- Command description and usage\n- Task breakdown\n- Process steps\n- Best practices and examples'
-        },
-        mcps: { 
-            name: 'MCP', 
-            description: 'Model Context Protocol integration',
-            example: 'redis-integration',
-            structure: '- MCP server configuration\n- Connection parameters\n- Environment variables\n- Usage examples'
-        },
-        settings: { 
-            name: 'Setting', 
-            description: 'Claude Code configuration setting',
-            example: 'custom-model-config',
-            structure: '- Setting description\n- Configuration options\n- Environment variables\n- Usage examples and best practices'
-        },
-        hooks: { 
-            name: 'Hook', 
-            description: 'Automation hook for tool execution',
-            example: 'format-on-save',
-            structure: '- Hook description and trigger\n- Command to execute\n- PreToolUse or PostToolUse configuration\n- Error handling and examples'
-        },
-        templates: {
-            name: 'Template',
-            description: 'Project template with language or framework setup',
-            example: 'python or django-app',
-            structure: 'For Languages: Create folder with base files\nFor Frameworks: Add to examples/ subfolder with specific setup'
-        },
-        skills: {
-            name: 'Skill',
-            description: 'Interactive skill for specialized tasks',
-            example: 'data-visualization-skill',
-            structure: '- Skill description and purpose\n- Interactive prompts and parameters\n- Input/output specifications\n- Usage examples and best practices'
-        }
-    };
+  const typeConfig = {
+    agents: {
+      name: 'Agent',
+      description: 'AI specialist that handles specific development tasks',
+      example: 'python-testing-specialist',
+      structure:
+        '- Agent metadata (name, description, color)\n- Core expertise areas\n- When to use guidelines\n- Code examples and patterns',
+    },
+    commands: {
+      name: 'Command',
+      description: 'Custom slash command for Claude Code',
+      example: 'optimize-bundle',
+      structure:
+        '- Command description and usage\n- Task breakdown\n- Process steps\n- Best practices and examples',
+    },
+    mcps: {
+      name: 'MCP',
+      description: 'Model Context Protocol integration',
+      example: 'redis-integration',
+      structure:
+        '- MCP server configuration\n- Connection parameters\n- Environment variables\n- Usage examples',
+    },
+    settings: {
+      name: 'Setting',
+      description: 'Claude Code configuration setting',
+      example: 'custom-model-config',
+      structure:
+        '- Setting description\n- Configuration options\n- Environment variables\n- Usage examples and best practices',
+    },
+    hooks: {
+      name: 'Hook',
+      description: 'Automation hook for tool execution',
+      example: 'format-on-save',
+      structure:
+        '- Hook description and trigger\n- Command to execute\n- PreToolUse or PostToolUse configuration\n- Error handling and examples',
+    },
+    templates: {
+      name: 'Template',
+      description: 'Project template with language or framework setup',
+      example: 'python or django-app',
+      structure:
+        'For Languages: Create folder with base files\nFor Frameworks: Add to examples/ subfolder with specific setup',
+    },
+    skills: {
+      name: 'Skill',
+      description: 'Interactive skill for specialized tasks',
+      example: 'data-visualization-skill',
+      structure:
+        '- Skill description and purpose\n- Interactive prompts and parameters\n- Input/output specifications\n- Usage examples and best practices',
+    },
+  };
 
-    const config = typeConfig[type];
-    
-    let modalHTML = '';
-    
-    if (type === 'templates') {
-        // Special modal for templates
-        modalHTML = `
+  const config = typeConfig[type];
+
+  let modalHTML = '';
+
+  if (type === 'templates') {
+    // Special modal for templates
+    modalHTML = `
             <div class="modal-overlay" onclick="closeComponentModal()">
                 <div class="modal-content contribute-modal" onclick="event.stopPropagation()">
                     <div class="modal-header">
@@ -1821,9 +1887,9 @@ function showComponentContributeModal(type) {
                 </div>
             </div>
         `;
-    } else {
-        // Default modal for other component types
-        modalHTML = `
+  } else {
+    // Default modal for other component types
+    modalHTML = `
             <div class="modal-overlay" onclick="closeComponentModal()">
                 <div class="modal-content contribute-modal" onclick="event.stopPropagation()">
                     <div class="modal-header">
@@ -1846,7 +1912,7 @@ function showComponentContributeModal(type) {
                                         <pre>${config.structure}</pre>
                                     </div>
                                     <div class="step-command">
-                                        <strong>Example path:</strong> <code>cli-tool/components/${type}/&lt;category&gt;/${config.example}.${(type === 'mcps' || type === 'settings' || type === 'hooks') ? 'json' : 'md'}</code>
+                                        <strong>Example path:</strong> <code>cli-tool/components/${type}/&lt;category&gt;/${config.example}.${type === 'mcps' || type === 'settings' || type === 'hooks' ? 'json' : 'md'}</code>
                                     </div>
                                 </div>
                             </div>
@@ -1882,8 +1948,8 @@ function showComponentContributeModal(type) {
                                     <h4>Submit Pull Request</h4>
                                     <p>Submit your contribution with proper documentation (replace &lt;category&gt; with your actual category folder):</p>
                                     <div class="step-command">
-                                        <code>git add cli-tool/components/${type}/&lt;category&gt;/${config.example}.${(type === 'mcps' || type === 'settings' || type === 'hooks') ? 'json' : 'md'}</code>
-                                        <button class="copy-btn" onclick="copyToClipboard('git add cli-tool/components/${type}/<category>/${config.example}.${(type === 'mcps' || type === 'settings' || type === 'hooks') ? 'json' : 'md'}')">Copy</button>
+                                        <code>git add cli-tool/components/${type}/&lt;category&gt;/${config.example}.${type === 'mcps' || type === 'settings' || type === 'hooks' ? 'json' : 'md'}</code>
+                                        <button class="copy-btn" onclick="copyToClipboard('git add cli-tool/components/${type}/<category>/${config.example}.${type === 'mcps' || type === 'settings' || type === 'hooks' ? 'json' : 'md'}')">Copy</button>
                                     </div>
                                     <div class="step-command">
                                         <code>git commit -m "feat: Add ${config.example} ${config.name.toLowerCase()}"</code>
@@ -1903,180 +1969,180 @@ function showComponentContributeModal(type) {
                 </div>
             </div>
         `;
+  }
+
+  // Remove existing modal if present
+  const existingModal = document.querySelector('.modal-overlay');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Add event listener for ESC key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      closeComponentModal();
+      document.removeEventListener('keydown', handleEscape);
     }
-    
-    // Remove existing modal if present
-    const existingModal = document.querySelector('.modal-overlay');
-    if (existingModal) {
-        existingModal.remove();
-    }
-    
-    // Add modal to body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Add event listener for ESC key
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            closeComponentModal();
-            document.removeEventListener('keydown', handleEscape);
-        }
-    };
-    document.addEventListener('keydown', handleEscape);
+  };
+  document.addEventListener('keydown', handleEscape);
 }
 
 // Global functions for templates functionality
 function showInstallationFiles(languageKey, frameworkKey, displayName) {
-    alert(`Installation files for ${displayName} would be shown here`);
+  alert(`Installation files for ${displayName} would be shown here`);
 }
 
 // Close modal (from script.js)
 function closeModal() {
-    const modal = document.querySelector('.modal');
-    if (modal) {
-        modal.remove();
-    }
+  const modal = document.querySelector('.modal');
+  if (modal) {
+    modal.remove();
+  }
 }
 
 // Close component modal
 function closeComponentModal() {
-    const modalOverlay = document.querySelector('.modal-overlay');
-    if (modalOverlay) {
-        modalOverlay.remove();
-    }
+  const modalOverlay = document.querySelector('.modal-overlay');
+  if (modalOverlay) {
+    modalOverlay.remove();
+  }
 }
 
 // Global pagination function (called from onclick)
 function goToPage(page) {
-    if (window.indexManager) {
-        window.indexManager.goToPage(page);
-    }
+  if (window.indexManager) {
+    window.indexManager.goToPage(page);
+  }
 }
 
 // Clean component name by removing extensions and formatting
 function getCleanComponentName(name) {
-    if (!name) {
-        return 'Unknown Component';
-    }
-    
-    let cleanName = name;
-    
-    // Remove .md extension if present
-    if (cleanName.endsWith('.md')) {
-        cleanName = cleanName.slice(0, -3);
-    }
-    
-    // Remove .json extension if present
-    if (cleanName.endsWith('.json')) {
-        cleanName = cleanName.slice(0, -5);
-    }
-    
-    // Convert kebab-case or snake_case to Title Case
-    cleanName = cleanName
-        .replace(/[-_]/g, ' ')
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
-        
-    return cleanName;
+  if (!name) {
+    return 'Unknown Component';
+  }
+
+  let cleanName = name;
+
+  // Remove .md extension if present
+  if (cleanName.endsWith('.md')) {
+    cleanName = cleanName.slice(0, -3);
+  }
+
+  // Remove .json extension if present
+  if (cleanName.endsWith('.json')) {
+    cleanName = cleanName.slice(0, -5);
+  }
+
+  // Convert kebab-case or snake_case to Title Case
+  cleanName = cleanName
+    .replace(/[-_]/g, ' ')
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+
+  return cleanName;
 }
 
 // Handle Add to Cart button click
 function handleAddToCart(name, path, type, category, buttonElement) {
-    // Prevent event propagation to avoid card flip
-    if (window.event) {
-        window.event.stopPropagation();
-    }
-    
-    // Clean the component name for better display
-    const cleanName = getCleanComponentName(name);
-    
-    const item = {
-        name: cleanName,
-        path: path,
-        category: category,
-        description: `${cleanName} - ${category}`
-    };
-    
-    // Add to cart using the cart manager
-    const success = addToCart(item, type);
-    
-    if (success) {
-        // Update button state
-        buttonElement.classList.add('added');
-        buttonElement.innerHTML = `
+  // Prevent event propagation to avoid card flip
+  if (window.event) {
+    window.event.stopPropagation();
+  }
+
+  // Clean the component name for better display
+  const cleanName = getCleanComponentName(name);
+
+  const item = {
+    name: cleanName,
+    path: path,
+    category: category,
+    description: `${cleanName} - ${category}`,
+  };
+
+  // Add to cart using the cart manager
+  const success = addToCart(item, type);
+
+  if (success) {
+    // Update button state
+    buttonElement.classList.add('added');
+    buttonElement.innerHTML = `
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"/>
             </svg>
             Added to Stack
         `;
-        
-        // Show a brief animation
-        buttonElement.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            buttonElement.style.transform = 'scale(1)';
-        }, 150);
-        
-        // Show notification (the cart manager already handles this, but we can add extra visual feedback)
-        console.log(`✅ ${name} added to stack successfully!`);
-    }
+
+    // Show a brief animation
+    buttonElement.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      buttonElement.style.transform = 'scale(1)';
+    }, 150);
+
+    // Show notification (the cart manager already handles this, but we can add extra visual feedback)
+    console.log(`✅ ${name} added to stack successfully!`);
+  }
 }
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    window.indexManager = new IndexPageManager();
-    window.indexManager.init();
+  window.indexManager = new IndexPageManager();
+  window.indexManager.init();
 
-    // Focus search input on page load and setup terminal cursor
-    setTimeout(() => {
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.focus();
-            setupTerminalCursor();
-        }
-    }, 300); // Small delay to ensure DOM is fully loaded
+  // Focus search input on page load and setup terminal cursor
+  setTimeout(() => {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.focus();
+      setupTerminalCursor();
+    }
+  }, 300); // Small delay to ensure DOM is fully loaded
 });
 
 // Terminal cursor functionality
 function setupTerminalCursor() {
-    const searchInput = document.getElementById('searchInput');
-    const cursor = document.getElementById('terminalCursor');
-    
-    if (!searchInput || !cursor) return;
-    
-    function updateCursorPosition() {
-        const promptWidth = 26; // Width of ">" prompt + extra space
-        
-        // If input has text, position cursor at the end of the text
-        if (searchInput.value.length > 0) {
-            // Create a temporary span to measure text width
-            const temp = document.createElement('span');
-            temp.style.visibility = 'hidden';
-            temp.style.position = 'absolute';
-            temp.style.whiteSpace = 'pre';
-            temp.style.font = window.getComputedStyle(searchInput).font;
-            temp.textContent = searchInput.value;
-            
-            document.body.appendChild(temp);
-            const textWidth = temp.getBoundingClientRect().width;
-            document.body.removeChild(temp);
-            
-            cursor.style.left = `${promptWidth + textWidth + 2}px`;
-        } else {
-            // If input is empty, position cursor right after the prompt with space
-            cursor.style.left = `${promptWidth}px`;
-        }
+  const searchInput = document.getElementById('searchInput');
+  const cursor = document.getElementById('terminalCursor');
+
+  if (!searchInput || !cursor) return;
+
+  function updateCursorPosition() {
+    const promptWidth = 26; // Width of ">" prompt + extra space
+
+    // If input has text, position cursor at the end of the text
+    if (searchInput.value.length > 0) {
+      // Create a temporary span to measure text width
+      const temp = document.createElement('span');
+      temp.style.visibility = 'hidden';
+      temp.style.position = 'absolute';
+      temp.style.whiteSpace = 'pre';
+      temp.style.font = window.getComputedStyle(searchInput).font;
+      temp.textContent = searchInput.value;
+
+      document.body.appendChild(temp);
+      const textWidth = temp.getBoundingClientRect().width;
+      document.body.removeChild(temp);
+
+      cursor.style.left = `${promptWidth + textWidth + 2}px`;
+    } else {
+      // If input is empty, position cursor right after the prompt with space
+      cursor.style.left = `${promptWidth}px`;
     }
-    
-    // Update cursor position on input
-    searchInput.addEventListener('input', updateCursorPosition);
-    searchInput.addEventListener('focus', () => {
-        cursor.style.display = 'block';
-        updateCursorPosition();
-    });
-    searchInput.addEventListener('blur', () => {
-        cursor.style.display = 'none';
-    });
-    
-    // Initial position
+  }
+
+  // Update cursor position on input
+  searchInput.addEventListener('input', updateCursorPosition);
+  searchInput.addEventListener('focus', () => {
+    cursor.style.display = 'block';
     updateCursorPosition();
+  });
+  searchInput.addEventListener('blur', () => {
+    cursor.style.display = 'none';
+  });
+
+  // Initial position
+  updateCursorPosition();
 }

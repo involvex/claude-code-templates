@@ -28,10 +28,10 @@ Hydration failed because the initial UI does not match what was rendered on the 
   Math.random();
 } // Random differs
 {
-  typeof window !== "undefined";
+  typeof window !== 'undefined';
 } // Condition differs
 {
-  localStorage.getItem("key");
+  localStorage.getItem('key');
 } // No localStorage on server
 ```
 
@@ -47,7 +47,7 @@ useEffect(() => {
 
 if (!mounted) return null; // Or return skeleton
 
-return <div>{localStorage.getItem("theme")}</div>;
+return <div>{localStorage.getItem('theme')}</div>;
 ```
 
 ```jsx
@@ -57,7 +57,7 @@ return <div>{localStorage.getItem("theme")}</div>;
 
 ```jsx
 // Use 'use client' directive in Next.js App Router
-"use client";
+'use client';
 
 export default function ClientComponent() {
   // Client-only code here
@@ -220,7 +220,7 @@ useEffect(() => {
     .then((res) => res.json())
     .then(setData)
     .catch((err) => {
-      if (err.name !== "AbortError") {
+      if (err.name !== 'AbortError') {
         setError(err);
       }
     });
@@ -295,7 +295,7 @@ Warning: Encountered two children with the same key "123".
 // Debug - find duplicates
 const keys = items.map((i) => i.id);
 const duplicates = keys.filter((k, i) => keys.indexOf(k) !== i);
-console.log("Duplicates:", duplicates);
+console.log('Duplicates:', duplicates);
 
 // Fix - combine fields for uniqueness
 {
@@ -507,7 +507,7 @@ grep -r "import.*Component" src/
 
 ```jsx
 // Lazy load to break circular dependency
-const Component = dynamic(() => import("./Component"), { ssr: false });
+const Component = dynamic(() => import('./Component'), { ssr: false });
 
 // Or restructure imports
 // Move shared code to separate file
@@ -547,10 +547,10 @@ module.exports = {
 
 ```jsx
 // Use dynamic import with ssr: false
-const Component = dynamic(() => import("./ServerComponent"), { ssr: false });
+const Component = dynamic(() => import('./ServerComponent'), { ssr: false });
 
 // Or check environment
-if (typeof window === "undefined") {
+if (typeof window === 'undefined') {
   // Server-only code
 }
 ```

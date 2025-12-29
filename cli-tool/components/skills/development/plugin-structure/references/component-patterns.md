@@ -113,11 +113,7 @@ commands/
 
 ```json
 {
-  "commands": [
-    "./commands/ci",
-    "./commands/deployment",
-    "./commands/management"
-  ]
+  "commands": ["./commands/ci", "./commands/deployment", "./commands/management"]
 }
 ```
 

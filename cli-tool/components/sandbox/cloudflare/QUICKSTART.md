@@ -256,10 +256,10 @@ curl -X POST https://your-worker.workers.dev/execute \
 
 ```javascript
 // Frontend integration
-const response = await fetch("https://your-worker.workers.dev/execute", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ question: "Calculate factorial of 5" }),
+const response = await fetch('https://your-worker.workers.dev/execute', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ question: 'Calculate factorial of 5' }),
 });
 
 const result = await response.json();

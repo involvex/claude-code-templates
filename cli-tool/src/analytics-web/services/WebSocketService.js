@@ -30,13 +30,13 @@ class WebSocketService {
    */
   connect(url = null) {
     if (this.isConnected) {
-      console.log("🔌 WebSocket already connected");
+      console.log('🔌 WebSocket already connected');
       return Promise.resolve();
     }
 
     // Auto-detect WebSocket URL if not provided
     if (!url) {
-      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const host = window.location.host;
       this.url = `${protocol}//${host}/ws`;
     } else {
@@ -68,7 +68,7 @@ class WebSocketService {
           }
         };
       } catch (error) {
-        console.error("❌ Failed to create WebSocket connection:", error);
+        console.error('❌ Failed to create WebSocket connection:', error);
         reject(error);
       }
     });
@@ -79,7 +79,7 @@ class WebSocketService {
    * @param {Event} event - Open event
    */
   handleOpen(event) {
-    console.log("✅ WebSocket connected");
+    console.log('✅ WebSocket connected');
     this.isConnected = true;
     this.reconnectAttempts = 0;
 
@@ -93,7 +93,7 @@ class WebSocketService {
     this.resubscribeToChannels();
 
     // Emit connection event
-    this.emit("connected", { event });
+    this.emit('connected', { event });
   }
 
   /**
@@ -103,36 +103,36 @@ class WebSocketService {
   handleMessage(event) {
     try {
       const data = JSON.parse(event.data);
-      console.log("📨 WebSocket message received:", data.type);
+      console.log('📨 WebSocket message received:', data.type);
 
       // Handle different message types
       switch (data.type) {
-        case "connection":
+        case 'connection':
           this.handleConnectionMessage(data);
           break;
-        case "pong":
+        case 'pong':
           this.handlePong(data);
           break;
-        case "conversation_state_change":
+        case 'conversation_state_change':
           this.handleConversationStateChange(data);
           break;
-        case "data_refresh":
+        case 'data_refresh':
           this.handleDataRefresh(data);
           break;
-        case "new_message":
+        case 'new_message':
           this.handleNewMessage(data);
           break;
-        case "system_status":
+        case 'system_status':
           this.handleSystemStatus(data);
           break;
-        case "file_change":
+        case 'file_change':
           this.handleFileChange(data);
           break;
-        case "process_change":
+        case 'process_change':
           this.handleProcessChange(data);
           break;
-        case "subscription_confirmed":
-        case "unsubscription_confirmed":
+        case 'subscription_confirmed':
+        case 'unsubscription_confirmed':
           this.handleSubscriptionConfirmation(data);
           break;
         default:
@@ -140,11 +140,11 @@ class WebSocketService {
           if (data.messageId && this.pendingMessages.has(data.messageId)) {
             this.handleMessageResponse(data);
           } else {
-            this.emit("message", data);
+            this.emit('message', data);
           }
       }
     } catch (error) {
-      console.error("❌ Error parsing WebSocket message:", error);
+      console.error('❌ Error parsing WebSocket message:', error);
     }
   }
 
@@ -153,12 +153,12 @@ class WebSocketService {
    * @param {CloseEvent} event - Close event
    */
   handleClose(event) {
-    console.info("ℹ️ WebSocket disconnected (polling mode active)");
+    console.info('ℹ️ WebSocket disconnected (polling mode active)');
     this.isConnected = false;
     this.stopHeartbeat();
 
     // Emit disconnection event
-    this.emit("disconnected", { event });
+    this.emit('disconnected', { event });
 
     // Auto-reconnect if enabled
     if (this.autoReconnect && event.code !== 1000) {
@@ -172,8 +172,8 @@ class WebSocketService {
    * @param {Event} event - Error event
    */
   handleError(event) {
-    console.warn("⚠️ WebSocket connection failed (using polling mode instead)");
-    this.emit("error", { event });
+    console.warn('⚠️ WebSocket connection failed (using polling mode instead)');
+    this.emit('error', { event });
   }
 
   /**
@@ -181,9 +181,9 @@ class WebSocketService {
    * @param {Object} data - Message data
    */
   handleConnectionMessage(data) {
-    console.log("🎉 WebSocket connection established:", data.data.clientId);
+    console.log('🎉 WebSocket connection established:', data.data.clientId);
     this.clientId = data.data.clientId;
-    this.emit("connection_established", data.data);
+    this.emit('connection_established', data.data);
   }
 
   /**
@@ -192,9 +192,9 @@ class WebSocketService {
    */
   handleConversationStateChange(data) {
     console.log(
-      `🔄 Conversation state changed: ${data.data.conversationId} → ${data.data.newState}`,
+      `🔄 Conversation state changed: ${data.data.conversationId} → ${data.data.newState}`
     );
-    this.emit("conversation_state_change", data.data);
+    this.emit('conversation_state_change', data.data);
   }
 
   /**
@@ -202,8 +202,8 @@ class WebSocketService {
    * @param {Object} data - Message data
    */
   handleDataRefresh(data) {
-    console.log("📊 Data refresh received");
-    this.emit("data_refresh", data.data);
+    console.log('📊 Data refresh received');
+    this.emit('data_refresh', data.data);
   }
 
   /**
@@ -211,10 +211,8 @@ class WebSocketService {
    * @param {Object} data - Message data
    */
   handleNewMessage(data) {
-    console.log(
-      `📨 New message received for conversation: ${data.data.conversationId}`,
-    );
-    this.emit("new_message", data.data);
+    console.log(`📨 New message received for conversation: ${data.data.conversationId}`);
+    this.emit('new_message', data.data);
   }
 
   /**
@@ -222,8 +220,8 @@ class WebSocketService {
    * @param {Object} data - Message data
    */
   handleSystemStatus(data) {
-    console.log("ℹ️ System status update:", data.data);
-    this.emit("system_status", data.data);
+    console.log('ℹ️ System status update:', data.data);
+    this.emit('system_status', data.data);
   }
 
   /**
@@ -231,8 +229,8 @@ class WebSocketService {
    * @param {Object} data - Message data
    */
   handleFileChange(data) {
-    console.log("📁 File change detected:", data.data);
-    this.emit("file_change", data.data);
+    console.log('📁 File change detected:', data.data);
+    this.emit('file_change', data.data);
   }
 
   /**
@@ -240,8 +238,8 @@ class WebSocketService {
    * @param {Object} data - Message data
    */
   handleProcessChange(data) {
-    console.log("⚡ Process change detected:", data.data);
-    this.emit("process_change", data.data);
+    console.log('⚡ Process change detected:', data.data);
+    this.emit('process_change', data.data);
   }
 
   /**
@@ -250,7 +248,7 @@ class WebSocketService {
    */
   handleSubscriptionConfirmation(data) {
     console.log(`📡 Subscription ${data.type}:`, data.data.channel);
-    this.emit("subscription_change", data.data);
+    this.emit('subscription_change', data.data);
   }
 
   /**
@@ -288,7 +286,7 @@ class WebSocketService {
     if (!this.isConnected) {
       // Queue message for later
       this.messageQueue.push({ message, expectResponse });
-      console.log("📦 Message queued (not connected):", message.type);
+      console.log('📦 Message queued (not connected):', message.type);
       return Promise.resolve();
     }
 
@@ -306,7 +304,7 @@ class WebSocketService {
         setTimeout(() => {
           if (this.pendingMessages.has(messageWithId.messageId)) {
             this.pendingMessages.delete(messageWithId.messageId);
-            reject(new Error("WebSocket message timeout"));
+            reject(new Error('WebSocket message timeout'));
           }
         }, 10000); // 10 second timeout
 
@@ -325,7 +323,7 @@ class WebSocketService {
   subscribe(channel) {
     this.subscriptions.add(channel);
     return this.send({
-      type: "subscribe",
+      type: 'subscribe',
       channel,
     });
   }
@@ -337,7 +335,7 @@ class WebSocketService {
   unsubscribe(channel) {
     this.subscriptions.delete(channel);
     return this.send({
-      type: "unsubscribe",
+      type: 'unsubscribe',
       channel,
     });
   }
@@ -347,7 +345,7 @@ class WebSocketService {
    */
   requestRefresh() {
     return this.send({
-      type: "refresh_request",
+      type: 'refresh_request',
     });
   }
 
@@ -356,7 +354,7 @@ class WebSocketService {
    */
   ping() {
     return this.send({
-      type: "ping",
+      type: 'ping',
     });
   }
 
@@ -396,10 +394,7 @@ class WebSocketService {
         try {
           callback(data);
         } catch (error) {
-          console.error(
-            `Error in WebSocket event listener for ${event}:`,
-            error,
-          );
+          console.error(`Error in WebSocket event listener for ${event}:`, error);
         }
       });
     }
@@ -421,7 +416,7 @@ class WebSocketService {
   resubscribeToChannels() {
     this.subscriptions.forEach((channel) => {
       this.send({
-        type: "subscribe",
+        type: 'subscribe',
         channel,
       });
     });
@@ -437,7 +432,7 @@ class WebSocketService {
 
         // Set timeout for pong response
         this.heartbeatTimeout = setTimeout(() => {
-          console.warn("💔 Heartbeat timeout - closing connection");
+          console.warn('💔 Heartbeat timeout - closing connection');
           this.ws.close();
         }, 5000); // 5 second timeout for pong
       }
@@ -463,18 +458,18 @@ class WebSocketService {
    */
   scheduleReconnect() {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error("❌ Max reconnection attempts reached");
-      this.emit("max_reconnects_reached");
+      console.error('❌ Max reconnection attempts reached');
+      this.emit('max_reconnects_reached');
       return;
     }
 
     const delay = Math.min(
       this.reconnectDelay * Math.pow(2, this.reconnectAttempts),
-      this.maxReconnectDelay,
+      this.maxReconnectDelay
     );
 
     console.log(
-      `🔄 Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts + 1}/${this.maxReconnectAttempts})`,
+      `🔄 Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts + 1}/${this.maxReconnectAttempts})`
     );
 
     setTimeout(() => {
@@ -499,7 +494,7 @@ class WebSocketService {
   disconnect() {
     this.autoReconnect = false;
     if (this.ws) {
-      this.ws.close(1000, "Client disconnect");
+      this.ws.close(1000, 'Client disconnect');
     }
   }
 
@@ -533,11 +528,11 @@ class WebSocketService {
    */
   clearMessageQueue() {
     this.messageQueue = [];
-    console.log("🗑️ Message queue cleared");
+    console.log('🗑️ Message queue cleared');
   }
 }
 
 // Export for module use
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = WebSocketService;
 }

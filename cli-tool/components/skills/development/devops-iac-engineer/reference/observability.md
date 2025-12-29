@@ -29,20 +29,20 @@
 ```yaml
 # Common SLIs
 availability:
-  definition: "Percentage of successful requests"
-  measurement: "(successful_requests / total_requests) * 100"
+  definition: 'Percentage of successful requests'
+  measurement: '(successful_requests / total_requests) * 100'
 
 latency:
-  definition: "Time to process request"
-  measurement: "p95 response time < 200ms"
+  definition: 'Time to process request'
+  measurement: 'p95 response time < 200ms'
 
 error_rate:
-  definition: "Percentage of failed requests"
-  measurement: "(failed_requests / total_requests) * 100"
+  definition: 'Percentage of failed requests'
+  measurement: '(failed_requests / total_requests) * 100'
 
 throughput:
-  definition: "Requests processed per second"
-  measurement: "requests_per_second"
+  definition: 'Requests processed per second'
+  measurement: 'requests_per_second'
 ```
 
 ### Service Level Objectives (SLOs)
@@ -57,11 +57,11 @@ availability_slo:
   error_budget: 0.1% (43 minutes per month)
 
 latency_slo:
-  target: "95% of requests < 200ms"
+  target: '95% of requests < 200ms'
   measurement_window: 7 days
 
 error_rate_slo:
-  target: "< 0.1%"
+  target: '< 0.1%'
   measurement_window: 24 hours
 ```
 
@@ -90,8 +90,8 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: "production"
-    environment: "prod"
+    cluster: 'production'
+    environment: 'prod'
 
 # Alert manager configuration
 alerting:
@@ -102,17 +102,17 @@ alerting:
 
 # Load rules
 rule_files:
-  - "/etc/prometheus/rules/*.yml"
+  - '/etc/prometheus/rules/*.yml'
 
 # Scrape configurations
 scrape_configs:
   # Prometheus self-monitoring
-  - job_name: "prometheus"
+  - job_name: 'prometheus'
     static_configs:
-      - targets: ["localhost:9090"]
+      - targets: ['localhost:9090']
 
   # Kubernetes pods
-  - job_name: "kubernetes-pods"
+  - job_name: 'kubernetes-pods'
     kubernetes_sd_configs:
       - role: pod
     relabel_configs:
@@ -123,8 +123,7 @@ scrape_configs:
         action: replace
         target_label: __metrics_path__
         regex: (.+)
-      - source_labels:
-          [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
         action: replace
         regex: ([^:]+)(?::\d+)?;(\d+)
         replacement: $1:$2
@@ -139,7 +138,7 @@ scrape_configs:
         target_label: kubernetes_pod_name
 
   # Node exporter
-  - job_name: "node-exporter"
+  - job_name: 'node-exporter'
     kubernetes_sd_configs:
       - role: node
     relabel_configs:
@@ -164,9 +163,9 @@ groups:
           severity: critical
           team: backend
         annotations:
-          summary: "High error rate detected"
-          description: "Error rate is {{ $value | humanizePercentage }} for {{ $labels.job }}"
-          runbook: "https://wiki.example.com/runbooks/high-error-rate"
+          summary: 'High error rate detected'
+          description: 'Error rate is {{ $value | humanizePercentage }} for {{ $labels.job }}'
+          runbook: 'https://wiki.example.com/runbooks/high-error-rate'
 
       # High latency
       - alert: HighLatency
@@ -177,8 +176,8 @@ groups:
           severity: warning
           team: backend
         annotations:
-          summary: "High latency detected"
-          description: "P95 latency is {{ $value | humanizeDuration }} for {{ $labels.job }}"
+          summary: 'High latency detected'
+          description: 'P95 latency is {{ $value | humanizeDuration }} for {{ $labels.job }}'
 
       # Low availability
       - alert: ServiceDown
@@ -188,8 +187,8 @@ groups:
           severity: critical
           team: sre
         annotations:
-          summary: "Service is down"
-          description: "{{ $labels.job }} has been down for more than 2 minutes"
+          summary: 'Service is down'
+          description: '{{ $labels.job }} has been down for more than 2 minutes'
 
   - name: kubernetes_alerts
     interval: 30s
@@ -202,8 +201,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Pod crash looping"
-          description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping"
+          summary: 'Pod crash looping'
+          description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping'
 
       # High memory usage
       - alert: HighMemoryUsage
@@ -213,8 +212,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High memory usage"
-          description: "Container {{ $labels.container }} in pod {{ $labels.pod }} is using {{ $value | humanizePercentage }} of memory"
+          summary: 'High memory usage'
+          description: 'Container {{ $labels.container }} in pod {{ $labels.pod }} is using {{ $value | humanizePercentage }} of memory'
 
       # Node disk space
       - alert: NodeDiskSpaceLow
@@ -224,8 +223,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Node disk space low"
-          description: "Node {{ $labels.node }} has less than 10% disk space available"
+          summary: 'Node disk space low'
+          description: 'Node {{ $labels.node }} has less than 10% disk space available'
 ```
 
 ## Structured Logging
@@ -261,14 +260,14 @@ groups:
 ### Logging Configuration (Node.js Example)
 
 ```javascript
-const winston = require("winston");
+const winston = require('winston');
 
 const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || "info",
+  level: process.env.LOG_LEVEL || 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.json(),
+    winston.format.json()
   ),
   defaultMeta: {
     service: process.env.SERVICE_NAME,
@@ -278,42 +277,42 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.Console(),
     new winston.transports.File({
-      filename: "error.log",
-      level: "error",
+      filename: 'error.log',
+      level: 'error',
     }),
     new winston.transports.File({
-      filename: "combined.log",
+      filename: 'combined.log',
     }),
   ],
 });
 
 // Usage with correlation ID
 app.use((req, res, next) => {
-  req.id = req.headers["x-request-id"] || uuidv4();
+  req.id = req.headers['x-request-id'] || uuidv4();
   req.logger = logger.child({
     request_id: req.id,
-    trace_id: req.headers["x-trace-id"],
+    trace_id: req.headers['x-trace-id'],
   });
   next();
 });
 
-app.post("/api/orders", async (req, res) => {
-  req.logger.info("Creating order", {
+app.post('/api/orders', async (req, res) => {
+  req.logger.info('Creating order', {
     customer_id: req.body.customer_id,
   });
 
   try {
     const order = await createOrder(req.body);
-    req.logger.info("Order created successfully", {
+    req.logger.info('Order created successfully', {
       order_id: order.id,
     });
     res.json(order);
   } catch (error) {
-    req.logger.error("Failed to create order", {
+    req.logger.error('Failed to create order', {
       error: error.message,
       stack: error.stack,
     });
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 ```

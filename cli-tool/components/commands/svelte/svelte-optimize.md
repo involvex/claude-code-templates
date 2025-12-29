@@ -19,7 +19,7 @@ You are acting as the Svelte Development Agent focused on performance optimizati
 
    ```javascript
    // Dynamic imports
-   const HeavyComponent = await import("./HeavyComponent.svelte");
+   const HeavyComponent = await import('./HeavyComponent.svelte');
 
    // Route-based splitting
    export const prerender = false;
@@ -66,11 +66,11 @@ You are acting as the Svelte Development Agent focused on performance optimizati
    // Optimize data loading
    export async function load({ fetch, setHeaders }) {
      setHeaders({
-       "cache-control": "public, max-age=3600",
+       'cache-control': 'public, max-age=3600',
      });
 
      return {
-       data: await fetch("/api/data"),
+       data: await fetch('/api/data'),
      };
    }
    ```

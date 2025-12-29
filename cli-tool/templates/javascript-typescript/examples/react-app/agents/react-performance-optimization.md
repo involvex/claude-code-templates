@@ -100,7 +100,7 @@ const MyComponent = React.memo(
       prevProps.user.id === nextProps.user.id &&
       prevProps.settings.theme === nextProps.settings.theme
     );
-  },
+  }
 );
 ```
 
@@ -110,9 +110,7 @@ const MyComponent = React.memo(
 const OptimizedParent = ({ items, filter }) => {
   // Memoize expensive calculations
   const filteredItems = useMemo(() => {
-    return items.filter((item) =>
-      item.name.toLowerCase().includes(filter.toLowerCase()),
-    );
+    return items.filter((item) => item.name.toLowerCase().includes(filter.toLowerCase()));
   }, [items, filter]);
 
   // Memoize event handlers to prevent child re-renders
@@ -122,9 +120,7 @@ const OptimizedParent = ({ items, filter }) => {
   }, []); // Dependencies array - be careful here!
 
   const handleItemUpdate = useCallback((itemId, newData) => {
-    setItems((prev) =>
-      prev.map((item) => (item.id === itemId ? { ...item, ...newData } : item)),
-    );
+    setItems((prev) => prev.map((item) => (item.id === itemId ? { ...item, ...newData } : item)));
   }, []); // Empty deps because we use functional update
 
   return (
@@ -145,7 +141,7 @@ const OptimizedParent = ({ items, filter }) => {
 ### Virtual Scrolling for Large Lists
 
 ```javascript
-import { FixedSizeList as List } from "react-window";
+import { FixedSizeList as List } from 'react-window';
 
 const VirtualizedList = ({ items }) => {
   const Row = ({ index, style }) => (
@@ -167,7 +163,7 @@ const VirtualizedList = ({ items }) => {
 };
 
 // Alternative: react-virtualized for more complex scenarios
-import { AutoSizer, List } from "react-virtualized";
+import { AutoSizer, List } from 'react-virtualized';
 
 const VirtualizedAutoSizedList = ({ items }) => {
   const rowRenderer = ({ key, index, style }) => (
@@ -198,12 +194,12 @@ const VirtualizedAutoSizedList = ({ items }) => {
 ### Code Splitting with React.lazy
 
 ```javascript
-import { Suspense, lazy } from "react";
+import { Suspense, lazy } from 'react';
 
 // Route-based code splitting
-const HomePage = lazy(() => import("./pages/HomePage"));
-const AboutPage = lazy(() => import("./pages/AboutPage"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 const App = () => (
   <Router>
@@ -218,7 +214,7 @@ const App = () => (
 );
 
 // Component-based code splitting
-const LazyModal = lazy(() => import("./components/Modal"));
+const LazyModal = lazy(() => import('./components/Modal'));
 
 const ParentComponent = () => {
   const [showModal, setShowModal] = useState(false);
@@ -241,7 +237,7 @@ const ParentComponent = () => {
 ```javascript
 // Load heavy libraries only when needed
 const loadChartLibrary = async () => {
-  const { Chart } = await import("chart.js/auto");
+  const { Chart } = await import('chart.js/auto');
   return Chart;
 };
 
@@ -253,9 +249,9 @@ const ChartComponent = ({ data }) => {
     loadChartLibrary().then((ChartClass) => {
       setChart(
         new ChartClass(canvasRef.current, {
-          type: "bar",
+          type: 'bar',
           data: data,
-        }),
+        })
       );
     });
   }, [data]);
@@ -266,7 +262,7 @@ const ChartComponent = ({ data }) => {
 // Conditional polyfill loading
 const loadPolyfills = async () => {
   if (!window.IntersectionObserver) {
-    await import("intersection-observer");
+    await import('intersection-observer');
   }
 };
 ```
@@ -275,19 +271,19 @@ const loadPolyfills = async () => {
 
 ```javascript
 // Instead of importing entire library
-import * as _ from "lodash"; // BAD - imports entire lodash
+import * as _ from 'lodash'; // BAD - imports entire lodash
 
 // Import only what you need
-import debounce from "lodash/debounce"; // GOOD
-import { debounce } from "lodash"; // GOOD with tree shaking
+import debounce from 'lodash/debounce'; // GOOD
+import { debounce } from 'lodash'; // GOOD with tree shaking
 
 // Or use alternatives
-import { debounce } from "lodash-es"; // ES modules version
+import { debounce } from 'lodash-es'; // ES modules version
 
 // Configure webpack for better tree shaking
 // webpack.config.js
 module.exports = {
-  mode: "production",
+  mode: 'production',
   optimization: {
     usedExports: true,
     sideEffects: false, // Only if your code has no side effects
@@ -306,7 +302,7 @@ const ComponentWithCleanup = () => {
     const handleScroll = () => {
       /* ... */
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
     // Timers
     const interval = setInterval(() => {
@@ -320,7 +316,7 @@ const ComponentWithCleanup = () => {
 
     // Cleanup function
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
       clearInterval(interval);
       subscription.unsubscribe();
     };
@@ -340,8 +336,8 @@ const DataFetcher = ({ url }) => {
       .then((response) => response.json())
       .then(setData)
       .catch((error) => {
-        if (error.name !== "AbortError") {
-          console.error("Fetch error:", error);
+        if (error.name !== 'AbortError') {
+          console.error('Fetch error:', error);
         }
       });
 
@@ -366,9 +362,7 @@ const useMemoryLeak = (componentName) => {
         const diff = final - initial;
         if (diff > 1000000) {
           // 1MB threshold
-          console.warn(
-            `Potential memory leak in ${componentName}: ${diff} bytes`,
-          );
+          console.warn(`Potential memory leak in ${componentName}: ${diff} bytes`);
         }
       }
     };
@@ -399,10 +393,10 @@ const ComponentWithCache = ({ element }) => {
 const CriticalImageComponent = ({ src, alt }) => {
   useEffect(() => {
     // Preload the image
-    const link = document.createElement("link");
-    link.rel = "preload";
+    const link = document.createElement('link');
+    link.rel = 'preload';
     link.href = src;
-    link.as = "image";
+    link.as = 'image';
     document.head.appendChild(link);
 
     return () => document.head.removeChild(link);
@@ -455,7 +449,7 @@ const processLargeDataset = (data) => {
 import {
   unstable_scheduleCallback as scheduleCallback,
   unstable_LowPriority as LowPriority,
-} from "scheduler";
+} from 'scheduler';
 
 const NonUrgentComponent = ({ data }) => {
   const [processedData, setProcessedData] = useState(null);
@@ -479,16 +473,16 @@ const ImageWithPlaceholder = ({ src, alt, width, height }) => {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div style={{ width, height, position: "relative" }}>
+    <div style={{ width, height, position: 'relative' }}>
       {!loaded && (
         <div
           style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#f0f0f0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#f0f0f0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           Loading...
@@ -498,10 +492,10 @@ const ImageWithPlaceholder = ({ src, alt, width, height }) => {
         src={src}
         alt={alt}
         style={{
-          width: "100%",
-          height: "100%",
+          width: '100%',
+          height: '100%',
           opacity: loaded ? 1 : 0,
-          transition: "opacity 0.3s",
+          transition: 'opacity 0.3s',
         }}
         onLoad={() => setLoaded(true)}
       />
@@ -517,7 +511,7 @@ const ImageWithPlaceholder = ({ src, alt, width, height }) => {
 ```javascript
 const usePerformanceObserver = (type) => {
   useEffect(() => {
-    if ("PerformanceObserver" in window) {
+    if ('PerformanceObserver' in window) {
       const observer = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
           console.log(`${type}:`, entry);
@@ -538,9 +532,9 @@ const usePerformanceObserver = (type) => {
 
 // Usage in components
 const App = () => {
-  usePerformanceObserver("largest-contentful-paint");
-  usePerformanceObserver("first-input");
-  usePerformanceObserver("layout-shift");
+  usePerformanceObserver('largest-contentful-paint');
+  usePerformanceObserver('first-input');
+  usePerformanceObserver('layout-shift');
 
   return <div>App content</div>;
 };

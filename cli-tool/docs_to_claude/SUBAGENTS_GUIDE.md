@@ -405,9 +405,9 @@ You are a test automation expert and software quality specialist.
 ### Test Structure
 
 ```javascript
-describe("ComponentName", () => {
-  describe("when condition", () => {
-    it("should behavior expectation", () => {
+describe('ComponentName', () => {
+  describe('when condition', () => {
+    it('should behavior expectation', () => {
       // Arrange
       // Act
       // Assert
@@ -426,7 +426,7 @@ describe("ComponentName", () => {
 ```javascript
 // ✅ Specific
 expect(response.status).toBe(200);
-expect(response.data.user.name).toBe("John Doe");
+expect(response.data.user.name).toBe('John Doe');
 
 // ❌ Generic
 expect(response).toBeTruthy();

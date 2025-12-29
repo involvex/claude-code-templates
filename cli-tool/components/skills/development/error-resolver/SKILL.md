@@ -164,45 +164,45 @@ mkdir -p .claude/error-solutions
 
 ```yaml
 # .claude/error-solutions/[error-signature].yaml
-id: "nodejs-module-not-found-express"
-created: "2024-01-15T10:30:00Z"
-updated: "2024-01-20T14:22:00Z"
+id: 'nodejs-module-not-found-express'
+created: '2024-01-15T10:30:00Z'
+updated: '2024-01-20T14:22:00Z'
 
 error:
-  type: "dependency"
-  category: "ModuleNotFound"
-  language: "nodejs"
+  type: 'dependency'
+  category: 'ModuleNotFound'
+  language: 'nodejs'
   pattern: "Cannot find module 'express'"
-  context: "npm project, missing dependency"
+  context: 'npm project, missing dependency'
 
 diagnosis:
-  root_cause: "Package not installed or node_modules corrupted"
+  root_cause: 'Package not installed or node_modules corrupted'
   factors:
-    - "Missing npm install after git clone"
-    - "Corrupted node_modules directory"
-    - "Package not in package.json"
+    - 'Missing npm install after git clone'
+    - 'Corrupted node_modules directory'
+    - 'Package not in package.json'
 
 solution:
   immediate:
-    - "Run: npm install express"
+    - 'Run: npm install express'
   proper:
-    - "Check package.json has express listed"
-    - "Run: rm -rf node_modules && npm install"
+    - 'Check package.json has express listed'
+    - 'Run: rm -rf node_modules && npm install'
   code_change: null
 
 verification:
-  - "Run the application again"
-  - "Check express is in node_modules"
+  - 'Run the application again'
+  - 'Check express is in node_modules'
 
 prevention:
-  - "Add npm install to project setup docs"
-  - "Use npm ci in CI/CD pipelines"
+  - 'Add npm install to project setup docs'
+  - 'Use npm ci in CI/CD pipelines'
 
 metadata:
   occurrences: 5
-  last_resolved: "2024-01-20T14:22:00Z"
+  last_resolved: '2024-01-20T14:22:00Z'
   success_rate: 1.0
-  tags: ["nodejs", "npm", "dependency"]
+  tags: ['nodejs', 'npm', 'dependency']
 ```
 
 ### Replay Lookup

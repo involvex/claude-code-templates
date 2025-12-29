@@ -34,7 +34,7 @@ description: Comprehensive Next.js migration assistant for Pages Router to App R
 ```typescript
 // Migration analysis tool
 interface MigrationAnalysis {
-  currentStructure: "pages" | "app" | "hybrid";
+  currentStructure: 'pages' | 'app' | 'hybrid';
   pagesCount: number;
   apiRoutesCount: number;
   customApp: boolean;
@@ -46,7 +46,7 @@ interface MigrationAnalysis {
 
 const analyzeMigrationComplexity = (): MigrationAnalysis => {
   return {
-    currentStructure: "pages", // Detected from file structure
+    currentStructure: 'pages', // Detected from file structure
     pagesCount: 0, // Count .js/.tsx files in pages/
     apiRoutesCount: 0, // Count files in pages/api/
     customApp: false, // Check for pages/_app
@@ -157,26 +157,26 @@ echo "✅ App Router structure created"
 interface PageMigration {
   source: string;
   destination: string;
-  type: "page" | "api" | "dynamic" | "nested";
+  type: 'page' | 'api' | 'dynamic' | 'nested';
   hasGetServerSideProps: boolean;
   hasGetStaticProps: boolean;
   hasGetStaticPaths: boolean;
 }
 
 const migratePage = async (pagePath: string): Promise<string> => {
-  const pageContent = readFileSync(pagePath, "utf-8");
+  const pageContent = readFileSync(pagePath, 'utf-8');
 
   // Extract page component
   const componentMatch = pageContent.match(/export default function (\w+)/);
-  const componentName = componentMatch?.[1] || "Page";
+  const componentName = componentMatch?.[1] || 'Page';
 
   // Check for data fetching methods
-  const hasGetServerSideProps = pageContent.includes("getServerSideProps");
-  const hasGetStaticProps = pageContent.includes("getStaticProps");
-  const hasGetStaticPaths = pageContent.includes("getStaticPaths");
+  const hasGetServerSideProps = pageContent.includes('getServerSideProps');
+  const hasGetStaticProps = pageContent.includes('getStaticProps');
+  const hasGetStaticPaths = pageContent.includes('getStaticPaths');
 
   // Convert to App Router format
-  let appRouterCode = "";
+  let appRouterCode = '';
 
   // Add metadata if page has Head component
   if (pageContent.includes("from 'next/head'")) {
@@ -199,11 +199,9 @@ const migratePage = async (pagePath: string): Promise<string> => {
 
 const convertGetServerSideProps = (content: string): string => {
   // Extract getServerSideProps logic and convert to Server Component
-  const gsspMatch = content.match(
-    /export async function getServerSideProps[\s\S]*?(?=export|$)/,
-  );
+  const gsspMatch = content.match(/export async function getServerSideProps[\s\S]*?(?=export|$)/);
 
-  if (!gsspMatch) return "";
+  if (!gsspMatch) return '';
 
   return `
 // Server Component with direct data fetching
@@ -229,11 +227,11 @@ export const metadata: Metadata = {
 const convertPageComponent = (content: string): string => {
   // Convert page component to App Router format
   return content
-    .replace(/import Head from \'next\/head\'/g, "")
-    .replace(/<Head>[\s\S]*?<\/Head>/g, "")
-    .replace(/export async function getServerSideProps[\s\S]*?(?=export)/g, "")
-    .replace(/export async function getStaticProps[\s\S]*?(?=export)/g, "")
-    .replace(/export async function getStaticPaths[\s\S]*?(?=export)/g, "");
+    .replace(/import Head from \'next\/head\'/g, '')
+    .replace(/<Head>[\s\S]*?<\/Head>/g, '')
+    .replace(/export async function getServerSideProps[\s\S]*?(?=export)/g, '')
+    .replace(/export async function getStaticProps[\s\S]*?(?=export)/g, '')
+    .replace(/export async function getStaticPaths[\s\S]*?(?=export)/g, '');
 };
 ```
 
@@ -242,19 +240,16 @@ const convertPageComponent = (content: string): string => {
 ```typescript
 // API route migration
 const migrateApiRoute = (apiPath: string): string => {
-  const apiContent = readFileSync(apiPath, "utf-8");
+  const apiContent = readFileSync(apiPath, 'utf-8');
 
   // Convert to App Router API format
   let newApiContent = `import { NextRequest, NextResponse } from 'next/server'\n\n`;
 
   // Extract handler functions
-  const methods = ["GET", "POST", "PUT", "DELETE", "PATCH"];
+  const methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
 
   methods.forEach((method) => {
-    const handlerRegex = new RegExp(
-      `if.*req\\.method.*===.*['"]${method}['"]`,
-      "i",
-    );
+    const handlerRegex = new RegExp(`if.*req\\.method.*===.*['"]${method}['"]`, 'i');
 
     if (apiContent.match(handlerRegex)) {
       newApiContent += `
@@ -382,21 +377,19 @@ echo "⚠️  Please review and add proper type annotations"
 // Class to function component converter
 const convertClassComponent = (componentCode: string): string => {
   // Extract class component parts
-  const classMatch = componentCode.match(
-    /class (\w+) extends (?:React\.)?Component/,
-  );
-  const componentName = classMatch?.[1] || "Component";
+  const classMatch = componentCode.match(/class (\w+) extends (?:React\.)?Component/);
+  const componentName = classMatch?.[1] || 'Component';
 
   // Extract state
   const stateMatch = componentCode.match(/state\s*=\s*{([^}]+)}/);
-  const initialState = stateMatch?.[1] || "";
+  const initialState = stateMatch?.[1] || '';
 
   // Extract lifecycle methods
   const lifecycleMethods = extractLifecycleMethods(componentCode);
 
   // Extract render method
   const renderMatch = componentCode.match(/render\(\)\s*{([\s\S]*?)(?=^\s*})/m);
-  const renderContent = renderMatch?.[1] || "";
+  const renderContent = renderMatch?.[1] || '';
 
   // Generate function component
   let functionComponent = `import React, { useState, useEffect } from 'react';\n\n`;
@@ -441,8 +434,8 @@ const convertClassComponent = (componentCode: string): string => {
   // Add render return
   functionComponent += `\n  return (\n`;
   functionComponent += renderContent
-    .replace(/this\.state\./g, "")
-    .replace(/this\.props\./g, "props.");
+    .replace(/this\.state\./g, '')
+    .replace(/this\.props\./g, 'props.');
   functionComponent += `  );\n`;
   functionComponent += `};\n\n`;
   functionComponent += `export default ${componentName};`;
@@ -452,9 +445,9 @@ const convertClassComponent = (componentCode: string): string => {
 
 const extractLifecycleMethods = (code: string) => {
   return {
-    componentDidMount: extractMethod(code, "componentDidMount"),
-    componentDidUpdate: extractMethod(code, "componentDidUpdate"),
-    componentWillUnmount: extractMethod(code, "componentWillUnmount"),
+    componentDidMount: extractMethod(code, 'componentDidMount'),
+    componentDidUpdate: extractMethod(code, 'componentDidUpdate'),
+    componentWillUnmount: extractMethod(code, 'componentWillUnmount'),
   };
 };
 
@@ -466,7 +459,7 @@ const extractMethod = (code: string, methodName: string): string | null => {
 
 const parseState = (stateString: string) => {
   // Simple state parser - would need more robust implementation
-  return [{ name: "example", value: "null" }];
+  return [{ name: 'example', value: 'null' }];
 };
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -729,13 +722,13 @@ interface MigrationReport {
 interface MigratedFile {
   original: string;
   migrated: string;
-  status: "success" | "warning" | "error";
+  status: 'success' | 'warning' | 'error';
   notes: string[];
 }
 
 interface Issue {
   file: string;
-  type: "error" | "warning";
+  type: 'error' | 'warning';
   message: string;
   solution?: string;
 }
@@ -756,10 +749,10 @@ const generateMigrationReport = (): MigrationReport => {
     },
     issues: [],
     recommendations: [
-      "Test all functionality thoroughly",
-      "Update any hardcoded imports",
-      "Review and optimize bundle splitting",
-      "Update documentation and README",
+      'Test all functionality thoroughly',
+      'Update any hardcoded imports',
+      'Review and optimize bundle splitting',
+      'Update documentation and README',
     ],
   };
 };

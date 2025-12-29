@@ -33,15 +33,15 @@ You are a marketing attribution analyst specializing in measuring and optimizing
 
 ```javascript
 // Google Analytics 4 Enhanced Ecommerce tracking
-gtag("event", "purchase", {
-  transaction_id: "12345",
+gtag('event', 'purchase', {
+  transaction_id: '12345',
   value: 25.42,
-  currency: "USD",
+  currency: 'USD',
   items: [
     {
-      item_id: "SKU123",
-      item_name: "Product Name",
-      category: "Category",
+      item_id: 'SKU123',
+      item_name: 'Product Name',
+      category: 'Category',
       quantity: 1,
       price: 25.42,
     },
@@ -52,15 +52,15 @@ gtag("event", "purchase", {
 function trackCampaignSource() {
   const urlParams = new URLSearchParams(window.location.search);
   const attribution = {
-    utm_source: urlParams.get("utm_source"),
-    utm_medium: urlParams.get("utm_medium"),
-    utm_campaign: urlParams.get("utm_campaign"),
-    utm_content: urlParams.get("utm_content"),
-    utm_term: urlParams.get("utm_term"),
+    utm_source: urlParams.get('utm_source'),
+    utm_medium: urlParams.get('utm_medium'),
+    utm_campaign: urlParams.get('utm_campaign'),
+    utm_content: urlParams.get('utm_content'),
+    utm_term: urlParams.get('utm_term'),
   };
 
   // Store attribution data for later conversion tracking
-  localStorage.setItem("attribution", JSON.stringify(attribution));
+  localStorage.setItem('attribution', JSON.stringify(attribution));
 }
 ```
 

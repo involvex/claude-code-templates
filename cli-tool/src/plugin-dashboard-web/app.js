@@ -9,11 +9,11 @@ class PluginDashboard {
 
     this.state = {
       selectedMarketplace: null,
-      pluginStatusFilter: "all",
-      marketplaceStatusFilter: "all",
-      searchQuery: "",
-      sortBy: "status",
-      viewMode: "grid",
+      pluginStatusFilter: 'all',
+      marketplaceStatusFilter: 'all',
+      searchQuery: '',
+      sortBy: 'status',
+      viewMode: 'grid',
       sidebarCollapsed: false,
     };
   }
@@ -27,75 +27,75 @@ class PluginDashboard {
 
   setupEventListeners() {
     // Sidebar toggle
-    const sidebarToggle = document.getElementById("sidebarToggle");
+    const sidebarToggle = document.getElementById('sidebarToggle');
     if (sidebarToggle) {
-      sidebarToggle.addEventListener("click", () => this.toggleSidebar());
+      sidebarToggle.addEventListener('click', () => this.toggleSidebar());
     }
 
     // Refresh button
-    const refreshBtn = document.getElementById("refreshBtn");
+    const refreshBtn = document.getElementById('refreshBtn');
     if (refreshBtn) {
-      refreshBtn.addEventListener("click", () => this.refreshData());
+      refreshBtn.addEventListener('click', () => this.refreshData());
     }
 
     // Marketplace filter buttons in sidebar
-    document.querySelectorAll(".marketplace-filter-btn").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
+    document.querySelectorAll('.marketplace-filter-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
         const filter = e.target.dataset.filter;
         this.setMarketplaceStatusFilter(filter);
       });
     });
 
     // Plugin status filter chips
-    document.querySelectorAll(".filter-chip").forEach((chip) => {
-      chip.addEventListener("click", (e) => {
+    document.querySelectorAll('.filter-chip').forEach((chip) => {
+      chip.addEventListener('click', (e) => {
         const filter = e.currentTarget.dataset.filter;
         this.setPluginStatusFilter(filter);
       });
     });
 
     // Search input
-    const searchInput = document.getElementById("pluginSearch");
+    const searchInput = document.getElementById('pluginSearch');
     if (searchInput) {
-      searchInput.addEventListener("input", (e) => {
+      searchInput.addEventListener('input', (e) => {
         this.state.searchQuery = e.target.value.toLowerCase().trim();
         this.renderPlugins();
       });
     }
 
     // Sort select
-    const sortSelect = document.getElementById("sortSelect");
+    const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
-      sortSelect.addEventListener("change", (e) => {
+      sortSelect.addEventListener('change', (e) => {
         this.state.sortBy = e.target.value;
         this.renderPlugins();
       });
     }
 
     // View mode toggle
-    document.querySelectorAll(".view-btn").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
+    document.querySelectorAll('.view-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
         const view = e.currentTarget.dataset.view;
         this.setViewMode(view);
       });
     });
 
     // Clear filters button
-    const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     if (clearFiltersBtn) {
-      clearFiltersBtn.addEventListener("click", () => this.clearAllFilters());
+      clearFiltersBtn.addEventListener('click', () => this.clearAllFilters());
     }
 
     // Modal close handlers
-    const modalCloseBtn = document.getElementById("modalCloseBtn");
-    const modalOverlay = document.getElementById("pluginModal");
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalOverlay = document.getElementById('pluginModal');
 
     if (modalCloseBtn) {
-      modalCloseBtn.addEventListener("click", () => this.closeModal());
+      modalCloseBtn.addEventListener('click', () => this.closeModal());
     }
 
     if (modalOverlay) {
-      modalOverlay.addEventListener("click", (e) => {
+      modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) {
           this.closeModal();
         }
@@ -103,11 +103,11 @@ class PluginDashboard {
     }
 
     // Keyboard shortcuts
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
         this.closeModal();
       }
-      if (e.key === "/" && e.target.tagName !== "INPUT") {
+      if (e.key === '/' && e.target.tagName !== 'INPUT') {
         e.preventDefault();
         searchInput?.focus();
       }
@@ -117,9 +117,9 @@ class PluginDashboard {
   async loadData() {
     try {
       const [marketplacesRes, pluginsRes, summaryRes] = await Promise.all([
-        fetch("/api/marketplaces"),
-        fetch("/api/plugins"),
-        fetch("/api/summary"),
+        fetch('/api/marketplaces'),
+        fetch('/api/plugins'),
+        fetch('/api/summary'),
       ]);
 
       const [marketplacesData, pluginsData, summaryData] = await Promise.all([
@@ -134,8 +134,8 @@ class PluginDashboard {
 
       this.renderAll();
     } catch (error) {
-      console.error("Error loading data:", error);
-      this.showError("Failed to load dashboard data");
+      console.error('Error loading data:', error);
+      this.showError('Failed to load dashboard data');
     }
   }
 
@@ -150,17 +150,16 @@ class PluginDashboard {
     const totalPlugins = this.data.plugins.length;
     const enabledPlugins = this.data.plugins.filter((p) => p.enabled).length;
 
-    document.getElementById("sidebarTotalPlugins").textContent = totalPlugins;
-    document.getElementById("sidebarEnabledPlugins").textContent =
-      enabledPlugins;
+    document.getElementById('sidebarTotalPlugins').textContent = totalPlugins;
+    document.getElementById('sidebarEnabledPlugins').textContent = enabledPlugins;
   }
 
   getFilteredMarketplaces() {
     let filtered = [...this.data.marketplaces];
 
-    if (this.state.marketplaceStatusFilter === "enabled") {
+    if (this.state.marketplaceStatusFilter === 'enabled') {
       filtered = filtered.filter((m) => m.enabled);
-    } else if (this.state.marketplaceStatusFilter === "disabled") {
+    } else if (this.state.marketplaceStatusFilter === 'disabled') {
       filtered = filtered.filter((m) => !m.enabled);
     }
 
@@ -168,13 +167,12 @@ class PluginDashboard {
   }
 
   renderMarketplaces() {
-    const nav = document.getElementById("marketplaceNav");
+    const nav = document.getElementById('marketplaceNav');
     if (!nav) return;
 
     const marketplaces = this.getFilteredMarketplaces();
 
-    document.getElementById("marketplaceCount").textContent =
-      marketplaces.length;
+    document.getElementById('marketplaceCount').textContent = marketplaces.length;
 
     if (marketplaces.length === 0) {
       nav.innerHTML = `
@@ -186,8 +184,7 @@ class PluginDashboard {
     }
 
     // Add "All Plugins" option
-    const allPluginsActive =
-      this.state.selectedMarketplace === null ? "active" : "";
+    const allPluginsActive = this.state.selectedMarketplace === null ? 'active' : '';
     let html = `
       <button class="marketplace-item ${allPluginsActive}" data-marketplace="all">
         <span class="marketplace-icon">🧩</span>
@@ -201,9 +198,8 @@ class PluginDashboard {
     // Add individual marketplaces
     html += marketplaces
       .map((marketplace) => {
-        const isActive =
-          this.state.selectedMarketplace === marketplace.name ? "active" : "";
-        const statusClass = marketplace.enabled ? "enabled" : "disabled";
+        const isActive = this.state.selectedMarketplace === marketplace.name ? 'active' : '';
+        const statusClass = marketplace.enabled ? 'enabled' : 'disabled';
         const icon = this.getMarketplaceIcon(marketplace.type);
 
         return `
@@ -221,15 +217,15 @@ class PluginDashboard {
         </button>
       `;
       })
-      .join("");
+      .join('');
 
     nav.innerHTML = html;
 
     // Add click handlers
-    nav.querySelectorAll(".marketplace-item").forEach((item) => {
-      item.addEventListener("click", (e) => {
+    nav.querySelectorAll('.marketplace-item').forEach((item) => {
+      item.addEventListener('click', (e) => {
         const marketplace = e.currentTarget.dataset.marketplace;
-        this.selectMarketplace(marketplace === "all" ? null : marketplace);
+        this.selectMarketplace(marketplace === 'all' ? null : marketplace);
       });
     });
   }
@@ -242,29 +238,27 @@ class PluginDashboard {
   }
 
   updatePageTitle() {
-    const nameEl = document.getElementById("currentMarketplaceName");
-    const iconEl = document.getElementById("currentMarketplaceIcon");
+    const nameEl = document.getElementById('currentMarketplaceName');
+    const iconEl = document.getElementById('currentMarketplaceIcon');
 
     if (this.state.selectedMarketplace) {
       const marketplace = this.data.marketplaces.find(
-        (m) => m.name === this.state.selectedMarketplace,
+        (m) => m.name === this.state.selectedMarketplace
       );
       nameEl.textContent = this.state.selectedMarketplace;
-      iconEl.textContent = marketplace
-        ? this.getMarketplaceIcon(marketplace.type)
-        : "📦";
+      iconEl.textContent = marketplace ? this.getMarketplaceIcon(marketplace.type) : '📦';
     } else {
-      nameEl.textContent = "All Plugins";
-      iconEl.textContent = "🧩";
+      nameEl.textContent = 'All Plugins';
+      iconEl.textContent = '🧩';
     }
   }
 
   getMarketplaceIcon(type) {
     const icons = {
-      GitHub: "🐙",
-      Git: "📁",
-      Local: "💻",
-      default: "📦",
+      GitHub: '🐙',
+      Git: '📁',
+      Local: '💻',
+      default: '📦',
     };
     return icons[type] || icons.default;
   }
@@ -272,8 +266,8 @@ class PluginDashboard {
   setMarketplaceStatusFilter(filter) {
     this.state.marketplaceStatusFilter = filter;
 
-    document.querySelectorAll(".marketplace-filter-btn").forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.filter === filter);
+    document.querySelectorAll('.marketplace-filter-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.filter === filter);
     });
 
     this.renderMarketplaces();
@@ -282,8 +276,8 @@ class PluginDashboard {
   setPluginStatusFilter(filter) {
     this.state.pluginStatusFilter = filter;
 
-    document.querySelectorAll(".filter-chip").forEach((chip) => {
-      chip.classList.toggle("active", chip.dataset.filter === filter);
+    document.querySelectorAll('.filter-chip').forEach((chip) => {
+      chip.classList.toggle('active', chip.dataset.filter === filter);
     });
 
     this.renderPlugins();
@@ -294,15 +288,13 @@ class PluginDashboard {
 
     // Filter by marketplace
     if (this.state.selectedMarketplace) {
-      filtered = filtered.filter(
-        (p) => p.marketplace === this.state.selectedMarketplace,
-      );
+      filtered = filtered.filter((p) => p.marketplace === this.state.selectedMarketplace);
     }
 
     // Filter by status
-    if (this.state.pluginStatusFilter === "enabled") {
+    if (this.state.pluginStatusFilter === 'enabled') {
       filtered = filtered.filter((p) => p.enabled);
-    } else if (this.state.pluginStatusFilter === "disabled") {
+    } else if (this.state.pluginStatusFilter === 'disabled') {
       filtered = filtered.filter((p) => !p.enabled);
     }
 
@@ -329,23 +321,17 @@ class PluginDashboard {
     const sorted = [...plugins];
 
     switch (this.state.sortBy) {
-      case "name":
+      case 'name':
         sorted.sort((a, b) => a.name.localeCompare(b.name));
         break;
-      case "components":
+      case 'components':
         sorted.sort((a, b) => {
-          const aTotal = Object.values(a.components).reduce(
-            (sum, val) => sum + val,
-            0,
-          );
-          const bTotal = Object.values(b.components).reduce(
-            (sum, val) => sum + val,
-            0,
-          );
+          const aTotal = Object.values(a.components).reduce((sum, val) => sum + val, 0);
+          const bTotal = Object.values(b.components).reduce((sum, val) => sum + val, 0);
           return bTotal - aTotal;
         });
         break;
-      case "status":
+      case 'status':
         sorted.sort((a, b) => {
           if (a.enabled === b.enabled) return a.name.localeCompare(b.name);
           return a.enabled ? -1 : 1;
@@ -361,18 +347,16 @@ class PluginDashboard {
     const enabled = allPlugins.filter((p) => p.enabled).length;
     const disabled = allPlugins.filter((p) => !p.enabled).length;
 
-    document.getElementById("countAll").textContent = allPlugins.length;
-    document.getElementById("countEnabled").textContent = enabled;
-    document.getElementById("countDisabled").textContent = disabled;
+    document.getElementById('countAll').textContent = allPlugins.length;
+    document.getElementById('countEnabled').textContent = enabled;
+    document.getElementById('countDisabled').textContent = disabled;
   }
 
   getFilteredPluginsBase() {
     let filtered = [...this.data.plugins];
 
     if (this.state.selectedMarketplace) {
-      filtered = filtered.filter(
-        (p) => p.marketplace === this.state.selectedMarketplace,
-      );
+      filtered = filtered.filter((p) => p.marketplace === this.state.selectedMarketplace);
     }
 
     if (this.state.searchQuery) {
@@ -391,9 +375,9 @@ class PluginDashboard {
   }
 
   renderPlugins() {
-    const container = document.getElementById("pluginsContainer");
-    const emptyState = document.getElementById("emptyState");
-    const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+    const container = document.getElementById('pluginsContainer');
+    const emptyState = document.getElementById('emptyState');
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
 
     if (!container) return;
 
@@ -401,42 +385,37 @@ class PluginDashboard {
     this.updateFilterCounts();
 
     if (plugins.length === 0) {
-      container.innerHTML = "";
-      emptyState.style.display = "flex";
+      container.innerHTML = '';
+      emptyState.style.display = 'flex';
 
       const hasFilters =
         this.state.selectedMarketplace ||
-        this.state.pluginStatusFilter !== "all" ||
+        this.state.pluginStatusFilter !== 'all' ||
         this.state.searchQuery;
 
-      clearFiltersBtn.style.display = hasFilters ? "inline-block" : "none";
+      clearFiltersBtn.style.display = hasFilters ? 'inline-block' : 'none';
 
-      document.getElementById("emptyDescription").textContent = hasFilters
-        ? "Try adjusting your filters or search terms"
-        : "No plugins available in this marketplace";
+      document.getElementById('emptyDescription').textContent = hasFilters
+        ? 'Try adjusting your filters or search terms'
+        : 'No plugins available in this marketplace';
 
       return;
     }
 
-    emptyState.style.display = "none";
+    emptyState.style.display = 'none';
 
-    const viewClass =
-      this.state.viewMode === "list" ? "plugins-list" : "plugins-grid";
+    const viewClass = this.state.viewMode === 'list' ? 'plugins-list' : 'plugins-grid';
     container.className = `plugins-container ${viewClass}`;
 
-    if (this.state.viewMode === "grid") {
-      container.innerHTML = plugins
-        .map((plugin) => this.renderPluginCard(plugin))
-        .join("");
+    if (this.state.viewMode === 'grid') {
+      container.innerHTML = plugins.map((plugin) => this.renderPluginCard(plugin)).join('');
     } else {
-      container.innerHTML = plugins
-        .map((plugin) => this.renderPluginListItem(plugin))
-        .join("");
+      container.innerHTML = plugins.map((plugin) => this.renderPluginListItem(plugin)).join('');
     }
 
     // Add click handlers to cards
-    container.querySelectorAll("[data-plugin]").forEach((card) => {
-      card.addEventListener("click", () => {
+    container.querySelectorAll('[data-plugin]').forEach((card) => {
+      card.addEventListener('click', () => {
         const pluginName = card.dataset.plugin;
         this.showPluginDetails(pluginName);
       });
@@ -444,11 +423,8 @@ class PluginDashboard {
   }
 
   renderPluginCard(plugin) {
-    const statusClass = plugin.enabled ? "enabled" : "disabled";
-    const totalComponents = Object.values(plugin.components).reduce(
-      (sum, val) => sum + val,
-      0,
-    );
+    const statusClass = plugin.enabled ? 'enabled' : 'disabled';
+    const totalComponents = Object.values(plugin.components).reduce((sum, val) => sum + val, 0);
 
     return `
       <article class="plugin-card ${statusClass}" data-plugin="${this.escapeHtml(plugin.name)}">
@@ -481,18 +457,15 @@ class PluginDashboard {
 
         <div class="plugin-card-footer">
           <span class="plugin-card-marketplace">${this.escapeHtml(plugin.marketplace)}</span>
-          <span class="plugin-card-total">${totalComponents} component${totalComponents !== 1 ? "s" : ""}</span>
+          <span class="plugin-card-total">${totalComponents} component${totalComponents !== 1 ? 's' : ''}</span>
         </div>
       </article>
     `;
   }
 
   renderPluginListItem(plugin) {
-    const statusClass = plugin.enabled ? "enabled" : "disabled";
-    const totalComponents = Object.values(plugin.components).reduce(
-      (sum, val) => sum + val,
-      0,
-    );
+    const statusClass = plugin.enabled ? 'enabled' : 'disabled';
+    const totalComponents = Object.values(plugin.components).reduce((sum, val) => sum + val, 0);
 
     return `
       <article class="plugin-list-item ${statusClass}" data-plugin="${this.escapeHtml(plugin.name)}">
@@ -540,19 +513,17 @@ class PluginDashboard {
     const plugin = this.data.plugins.find((p) => p.name === pluginName);
     if (!plugin) return;
 
-    document.getElementById("modalPluginName").textContent = plugin.name;
-    document.getElementById("modalPluginVersion").textContent =
-      `v${plugin.version}`;
+    document.getElementById('modalPluginName').textContent = plugin.name;
+    document.getElementById('modalPluginVersion').textContent = `v${plugin.version}`;
 
-    const statusBadge = document.getElementById("modalPluginStatus");
-    statusBadge.textContent = plugin.enabled ? "Enabled" : "Disabled";
-    statusBadge.className = `modal-badge status-badge ${plugin.enabled ? "enabled" : "disabled"}`;
+    const statusBadge = document.getElementById('modalPluginStatus');
+    statusBadge.textContent = plugin.enabled ? 'Enabled' : 'Disabled';
+    statusBadge.className = `modal-badge status-badge ${plugin.enabled ? 'enabled' : 'disabled'}`;
 
-    document.getElementById("modalPluginDescription").textContent =
-      plugin.description;
+    document.getElementById('modalPluginDescription').textContent = plugin.description;
 
     // Components
-    document.getElementById("modalComponents").innerHTML = `
+    document.getElementById('modalComponents').innerHTML = `
       <div class="modal-component-card">
         <div class="modal-component-icon">🤖</div>
         <div class="modal-component-count">${plugin.components.agents || 0}</div>
@@ -576,56 +547,53 @@ class PluginDashboard {
     `;
 
     // Details
-    document.getElementById("modalMarketplace").textContent =
-      plugin.marketplace;
+    document.getElementById('modalMarketplace').textContent = plugin.marketplace;
 
     // Conditional fields
-    const authorCard = document.getElementById("modalAuthorCard");
+    const authorCard = document.getElementById('modalAuthorCard');
     if (plugin.author) {
-      authorCard.style.display = "flex";
-      document.getElementById("modalAuthor").textContent =
-        typeof plugin.author === "object" ? plugin.author.name : plugin.author;
+      authorCard.style.display = 'flex';
+      document.getElementById('modalAuthor').textContent =
+        typeof plugin.author === 'object' ? plugin.author.name : plugin.author;
     } else {
-      authorCard.style.display = "none";
+      authorCard.style.display = 'none';
     }
 
-    const categoryCard = document.getElementById("modalCategoryCard");
+    const categoryCard = document.getElementById('modalCategoryCard');
     if (plugin.category) {
-      categoryCard.style.display = "flex";
-      document.getElementById("modalCategory").textContent = plugin.category;
+      categoryCard.style.display = 'flex';
+      document.getElementById('modalCategory').textContent = plugin.category;
     } else {
-      categoryCard.style.display = "none";
+      categoryCard.style.display = 'none';
     }
 
-    const licenseCard = document.getElementById("modalLicenseCard");
+    const licenseCard = document.getElementById('modalLicenseCard');
     if (plugin.license) {
-      licenseCard.style.display = "flex";
-      document.getElementById("modalLicense").textContent =
-        typeof plugin.license === "object"
-          ? plugin.license.type
-          : plugin.license;
+      licenseCard.style.display = 'flex';
+      document.getElementById('modalLicense').textContent =
+        typeof plugin.license === 'object' ? plugin.license.type : plugin.license;
     } else {
-      licenseCard.style.display = "none";
+      licenseCard.style.display = 'none';
     }
 
     // Keywords
-    const keywordsSection = document.getElementById("modalKeywordsSection");
+    const keywordsSection = document.getElementById('modalKeywordsSection');
     if (plugin.keywords && plugin.keywords.length > 0) {
-      keywordsSection.style.display = "block";
-      document.getElementById("modalKeywords").innerHTML = plugin.keywords
+      keywordsSection.style.display = 'block';
+      document.getElementById('modalKeywords').innerHTML = plugin.keywords
         .map((kw) => `<span class="keyword-tag">${this.escapeHtml(kw)}</span>`)
-        .join("");
+        .join('');
     } else {
-      keywordsSection.style.display = "none";
+      keywordsSection.style.display = 'none';
     }
 
     // Homepage
-    const homepageSection = document.getElementById("modalHomepageSection");
+    const homepageSection = document.getElementById('modalHomepageSection');
     if (plugin.homepage) {
-      homepageSection.style.display = "block";
-      document.getElementById("modalHomepage").href = plugin.homepage;
+      homepageSection.style.display = 'block';
+      document.getElementById('modalHomepage').href = plugin.homepage;
     } else {
-      homepageSection.style.display = "none";
+      homepageSection.style.display = 'none';
     }
 
     // Render plugin actions and update command references
@@ -633,14 +601,14 @@ class PluginDashboard {
     this.updateCommandReferences(plugin);
 
     // Show modal
-    document.getElementById("pluginModal").classList.add("active");
-    document.body.style.overflow = "hidden";
+    document.getElementById('pluginModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   // ==================== PLUGIN ACTIONS & COMMANDS ====================
 
   renderPluginActions(plugin) {
-    const actionsContainer = document.getElementById("modalActions");
+    const actionsContainer = document.getElementById('modalActions');
     if (!actionsContainer) return;
 
     const pluginIdentifier = `${plugin.name}@${plugin.marketplace}`;
@@ -651,38 +619,38 @@ class PluginDashboard {
     if (!plugin.enabled) {
       // Plugin is disabled or not installed - show install button
       buttons.push({
-        label: "Install Plugin",
-        icon: "📥",
-        class: "install-btn",
-        command: "install",
+        label: 'Install Plugin',
+        icon: '📥',
+        class: 'install-btn',
+        command: 'install',
       });
     } else {
       // Plugin is enabled - show disable and uninstall buttons
       buttons.push({
-        label: "Disable Plugin",
-        icon: "⏸️",
-        class: "disable-btn",
-        command: "disable",
+        label: 'Disable Plugin',
+        icon: '⏸️',
+        class: 'disable-btn',
+        command: 'disable',
       });
     }
 
     // Always show uninstall if enabled
     if (plugin.enabled) {
       buttons.push({
-        label: "Uninstall Plugin",
-        icon: "🗑️",
-        class: "uninstall-btn",
-        command: "uninstall",
+        label: 'Uninstall Plugin',
+        icon: '🗑️',
+        class: 'uninstall-btn',
+        command: 'uninstall',
       });
     }
 
     // If disabled but installed, show enable button
     if (!plugin.enabled && this.isPluginInstalled(plugin)) {
       buttons.unshift({
-        label: "Enable Plugin",
-        icon: "✅",
-        class: "enable-btn",
-        command: "enable",
+        label: 'Enable Plugin',
+        icon: '✅',
+        class: 'enable-btn',
+        command: 'enable',
       });
     }
 
@@ -693,9 +661,9 @@ class PluginDashboard {
         <span class="action-icon">${btn.icon}</span>
         ${btn.label}
       </button>
-    `,
+    `
       )
-      .join("");
+      .join('');
   }
 
   isPluginInstalled(plugin) {
@@ -711,13 +679,10 @@ class PluginDashboard {
   updateCommandReferences(plugin) {
     const pluginIdentifier = `${plugin.name}@${plugin.marketplace}`;
 
-    document.getElementById("installCommand").textContent =
-      `/plugin install ${pluginIdentifier}`;
-    document.getElementById("enableCommand").textContent =
-      `/plugin enable ${pluginIdentifier}`;
-    document.getElementById("disableCommand").textContent =
-      `/plugin disable ${pluginIdentifier}`;
-    document.getElementById("uninstallCommand").textContent =
+    document.getElementById('installCommand').textContent = `/plugin install ${pluginIdentifier}`;
+    document.getElementById('enableCommand').textContent = `/plugin enable ${pluginIdentifier}`;
+    document.getElementById('disableCommand').textContent = `/plugin disable ${pluginIdentifier}`;
+    document.getElementById('uninstallCommand').textContent =
       `/plugin uninstall ${pluginIdentifier}`;
 
     // Store current plugin for command copying
@@ -745,10 +710,10 @@ class PluginDashboard {
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          console.log("Command copied to clipboard:", text);
+          console.log('Command copied to clipboard:', text);
         })
         .catch((err) => {
-          console.error("Failed to copy:", err);
+          console.error('Failed to copy:', err);
           this.fallbackCopy(text);
         });
     } else {
@@ -757,79 +722,79 @@ class PluginDashboard {
   }
 
   fallbackCopy(text) {
-    const textarea = document.createElement("textarea");
+    const textarea = document.createElement('textarea');
     textarea.value = text;
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
     document.body.appendChild(textarea);
     textarea.select();
 
     try {
-      document.execCommand("copy");
-      console.log("Command copied to clipboard (fallback):", text);
+      document.execCommand('copy');
+      console.log('Command copied to clipboard (fallback):', text);
     } catch (err) {
-      console.error("Fallback copy failed:", err);
+      console.error('Fallback copy failed:', err);
     }
 
     document.body.removeChild(textarea);
   }
 
   showToast(message) {
-    const toast = document.getElementById("commandToast");
+    const toast = document.getElementById('commandToast');
     if (!toast) return;
 
-    toast.querySelector(".toast-message").textContent = message;
-    toast.classList.add("show");
+    toast.querySelector('.toast-message').textContent = message;
+    toast.classList.add('show');
 
     setTimeout(() => {
-      toast.classList.remove("show");
+      toast.classList.remove('show');
     }, 3000);
   }
 
   closeModal() {
-    document.getElementById("pluginModal").classList.remove("active");
-    document.body.style.overflow = "";
+    document.getElementById('pluginModal').classList.remove('active');
+    document.body.style.overflow = '';
   }
 
   setViewMode(mode) {
     this.state.viewMode = mode;
 
-    document.querySelectorAll(".view-btn").forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.view === mode);
+    document.querySelectorAll('.view-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.view === mode);
     });
 
     this.renderPlugins();
-    localStorage.setItem("pluginDashboardViewMode", mode);
+    localStorage.setItem('pluginDashboardViewMode', mode);
   }
 
   toggleSidebar() {
     this.state.sidebarCollapsed = !this.state.sidebarCollapsed;
-    const sidebar = document.getElementById("sidebar");
-    sidebar.classList.toggle("collapsed", this.state.sidebarCollapsed);
-    localStorage.setItem("sidebarCollapsed", this.state.sidebarCollapsed);
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('collapsed', this.state.sidebarCollapsed);
+    localStorage.setItem('sidebarCollapsed', this.state.sidebarCollapsed);
   }
 
   restoreViewPreferences() {
-    const savedViewMode = localStorage.getItem("pluginDashboardViewMode");
+    const savedViewMode = localStorage.getItem('pluginDashboardViewMode');
     if (savedViewMode) {
       this.setViewMode(savedViewMode);
     }
 
-    const savedSidebarState = localStorage.getItem("sidebarCollapsed");
-    if (savedSidebarState === "true") {
+    const savedSidebarState = localStorage.getItem('sidebarCollapsed');
+    if (savedSidebarState === 'true') {
       this.toggleSidebar();
     }
   }
 
   clearAllFilters() {
     this.state.selectedMarketplace = null;
-    this.state.pluginStatusFilter = "all";
-    this.state.searchQuery = "";
+    this.state.pluginStatusFilter = 'all';
+    this.state.searchQuery = '';
 
-    document.getElementById("pluginSearch").value = "";
+    document.getElementById('pluginSearch').value = '';
 
-    document.querySelectorAll(".filter-chip").forEach((chip) => {
-      chip.classList.toggle("active", chip.dataset.filter === "all");
+    document.querySelectorAll('.filter-chip').forEach((chip) => {
+      chip.classList.toggle('active', chip.dataset.filter === 'all');
     });
 
     this.renderMarketplaces();
@@ -838,8 +803,8 @@ class PluginDashboard {
   }
 
   escapeHtml(text) {
-    if (typeof text !== "string") return "";
-    const div = document.createElement("div");
+    if (typeof text !== 'string') return '';
+    const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
@@ -850,7 +815,7 @@ class PluginDashboard {
 }
 
 // Initialize dashboard
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   window.dashboard = new PluginDashboard();
   window.dashboard.init();
 });

@@ -47,7 +47,7 @@ Example Implementation:
 ```yaml
 RPO (Recovery Point Objective):
   Definition: Maximum acceptable data loss (time)
-  Question: "How much data can we afford to lose?"
+  Question: 'How much data can we afford to lose?'
 
   Examples:
     Critical databases: RPO = 15 minutes (need transaction log backups)
@@ -56,7 +56,7 @@ RPO (Recovery Point Objective):
 
 RTO (Recovery Time Objective):
   Definition: Maximum acceptable downtime (time)
-  Question: "How quickly must we recover?"
+  Question: 'How quickly must we recover?'
 
   Examples:
     E-commerce site: RTO = 1 hour (hot standby, fast recovery)
@@ -911,9 +911,9 @@ Resources:
           - Sid: Enable IAM User Permissions
             Effect: Allow
             Principal:
-              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
-            Action: "kms:*"
-            Resource: "*"
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: 'kms:*'
+            Resource: '*'
 
   BackupPlan:
     Type: AWS::Backup::BackupPlan
@@ -923,7 +923,7 @@ Resources:
         BackupPlanRule:
           - RuleName: DailyBackup
             TargetBackupVault: !Ref BackupVault
-            ScheduleExpression: "cron(0 2 * * ? *)" # 2 AM daily
+            ScheduleExpression: 'cron(0 2 * * ? *)' # 2 AM daily
             StartWindowMinutes: 60
             CompletionWindowMinutes: 120
             Lifecycle:
@@ -938,8 +938,8 @@ Resources:
         SelectionName: ProductionResources
         IamRoleArn: !GetAtt BackupRole.Arn
         Resources:
-          - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
-          - !Sub "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:db:*"
+          - !Sub 'arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*'
+          - !Sub 'arn:aws:rds:${AWS::Region}:${AWS::AccountId}:db:*'
         ListOfTags:
           - ConditionType: STRINGEQUALS
             ConditionKey: Environment

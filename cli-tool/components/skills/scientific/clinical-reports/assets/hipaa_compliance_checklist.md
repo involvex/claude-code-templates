@@ -363,9 +363,9 @@ Notification must include:
 
 ## Final Compliance Verification
 
-**Reviewed by:** ********\_\_\_\_********  
-**Date:** ********\_\_\_\_********  
-**Signature:** ********\_\_\_\_********
+**Reviewed by:** **\*\*\*\***\_\_\_\_**\*\*\*\***  
+**Date:** **\*\*\*\***\_\_\_\_**\*\*\*\***  
+**Signature:** **\*\*\*\***\_\_\_\_**\*\*\*\***
 
 **Compliance Status:** [ ] Compliant [ ] Needs revision [ ] Not compliant
 
@@ -380,7 +380,7 @@ Notification must include:
 2. [Action]
 
 **Re-review required:** [ ] Yes [ ] No  
-**Re-review date:** ********\_\_\_\_********
+**Re-review date:** **\*\*\*\***\_\_\_\_**\*\*\*\***
 
 ---
 

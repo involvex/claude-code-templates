@@ -107,14 +107,14 @@ DATABASE_URL=postgres://localhost:5432/myapp
 
 ```typescript
 // app/api/geo/route.ts
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
-  const country = request.geo?.country || "Unknown";
-  const city = request.geo?.city || "Unknown";
-  const ip = request.headers.get("x-forwarded-for") || "Unknown";
+  const country = request.geo?.country || 'Unknown';
+  const city = request.geo?.city || 'Unknown';
+  const ip = request.headers.get('x-forwarded-for') || 'Unknown';
 
   // Personalize content based on location
   const currency = getCurrencyByCountry(country);
@@ -131,22 +131,22 @@ export async function GET(request: NextRequest) {
     }),
     {
       headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "s-maxage=300, stale-while-revalidate=86400",
+        'Content-Type': 'application/json',
+        'Cache-Control': 's-maxage=300, stale-while-revalidate=86400',
       },
-    },
+    }
   );
 }
 
 function getCurrencyByCountry(country: string): string {
   const currencies: Record<string, string> = {
-    US: "USD",
-    GB: "GBP",
-    DE: "EUR",
-    JP: "JPY",
-    CA: "CAD",
+    US: 'USD',
+    GB: 'GBP',
+    DE: 'EUR',
+    JP: 'JPY',
+    CA: 'CAD',
   };
-  return currencies[country] || "USD";
+  return currencies[country] || 'USD';
 }
 ```
 
@@ -154,31 +154,31 @@ function getCurrencyByCountry(country: string): string {
 
 ```typescript
 // middleware.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // A/B testing based on geography
   const country = request.geo?.country;
   const response = NextResponse.next();
 
-  if (country === "US") {
-    response.cookies.set("variant", "us-optimized");
-  } else if (country === "GB") {
-    response.cookies.set("variant", "uk-optimized");
+  if (country === 'US') {
+    response.cookies.set('variant', 'us-optimized');
+  } else if (country === 'GB') {
+    response.cookies.set('variant', 'uk-optimized');
   } else {
-    response.cookies.set("variant", "default");
+    response.cookies.set('variant', 'default');
   }
 
   // Add security headers
-  response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
   return response;
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
 ```
 
@@ -191,14 +191,14 @@ export const config = {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["example.com", "cdn.example.com"],
-    formats: ["image/webp", "image/avif"],
+    domains: ['example.com', 'cdn.example.com'],
+    formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000, // 1 year
   },
   experimental: {
-    optimizePackageImports: ["@heroicons/react", "lodash"],
+    optimizePackageImports: ['@heroicons/react', 'lodash'],
   },
 };
 ```
@@ -250,8 +250,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -303,9 +303,9 @@ export default function RootLayout({
 // utils/performance.ts
 export function trackWebVitals({ id, name, value, delta, rating }: any) {
   // Send to analytics service
-  fetch("/api/vitals", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  fetch('/api/vitals', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       id,
       name,

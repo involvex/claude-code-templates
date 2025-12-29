@@ -19,7 +19,7 @@ export function parseVersionChangelog(changelog, version) {
       version: cleanVersion,
       content: null,
       changes: [],
-      error: 'Version not found in changelog'
+      error: 'Version not found in changelog',
     };
   }
 
@@ -31,9 +31,7 @@ export function parseVersionChangelog(changelog, version) {
   const remainingChangelog = changelog.substring(startIndex + match[0].length);
   const nextMatch = remainingChangelog.match(nextVersionRegex);
 
-  const endIndex = nextMatch
-    ? startIndex + match[0].length + nextMatch.index
-    : changelog.length;
+  const endIndex = nextMatch ? startIndex + match[0].length + nextMatch.index : changelog.length;
 
   // Extraer contenido de esta versión
   const versionContent = changelog.substring(startIndex, endIndex).trim();
@@ -45,7 +43,7 @@ export function parseVersionChangelog(changelog, version) {
     version: cleanVersion,
     content: versionContent,
     changes,
-    changeCount: changes.length
+    changeCount: changes.length,
   };
 }
 
@@ -89,7 +87,7 @@ function parseChanges(content) {
         type: changeType,
         description,
         category: currentCategory || detectCategory(description),
-        raw: line
+        raw: line,
       });
     }
   }
@@ -175,24 +173,24 @@ function detectCategory(description) {
 
   const categories = {
     'Plugin System': ['plugin', 'plugins', 'marketplace'],
-    'CLI': ['cli', 'command', 'terminal', 'bash'],
-    'Performance': ['performance', 'speed', 'faster', 'optimize', 'cache'],
+    CLI: ['cli', 'command', 'terminal', 'bash'],
+    Performance: ['performance', 'speed', 'faster', 'optimize', 'cache'],
     'UI/UX': ['ui', 'ux', 'interface', 'display', 'output'],
-    'API': ['api', 'endpoint', 'rest', 'graphql'],
-    'Models': ['model', 'sonnet', 'opus', 'haiku', 'claude'],
-    'MCP': ['mcp', 'model context protocol'],
-    'Agents': ['agent', 'subagent', 'explore'],
-    'Settings': ['setting', 'config', 'configuration'],
-    'Hooks': ['hook', 'trigger', 'event'],
-    'Security': ['security', 'auth', 'authentication', 'permission'],
-    'Documentation': ['docs', 'documentation', 'readme'],
-    'Windows': ['windows', 'win32'],
-    'macOS': ['macos', 'darwin', 'mac'],
-    'Linux': ['linux', 'unix']
+    API: ['api', 'endpoint', 'rest', 'graphql'],
+    Models: ['model', 'sonnet', 'opus', 'haiku', 'claude'],
+    MCP: ['mcp', 'model context protocol'],
+    Agents: ['agent', 'subagent', 'explore'],
+    Settings: ['setting', 'config', 'configuration'],
+    Hooks: ['hook', 'trigger', 'event'],
+    Security: ['security', 'auth', 'authentication', 'permission'],
+    Documentation: ['docs', 'documentation', 'readme'],
+    Windows: ['windows', 'win32'],
+    macOS: ['macos', 'darwin', 'mac'],
+    Linux: ['linux', 'unix'],
   };
 
   for (const [category, keywords] of Object.entries(categories)) {
-    if (keywords.some(keyword => lower.includes(keyword))) {
+    if (keywords.some((keyword) => lower.includes(keyword))) {
       return category;
     }
   }
@@ -210,11 +208,11 @@ export function generateSummary(changes) {
     total: changes.length,
     byType: {},
     byCategory: {},
-    highlights: []
+    highlights: [],
   };
 
   // Contar por tipo
-  changes.forEach(change => {
+  changes.forEach((change) => {
     summary.byType[change.type] = (summary.byType[change.type] || 0) + 1;
 
     if (change.category) {
@@ -242,11 +240,11 @@ export function formatForDiscord(changes, maxLength = 1024) {
     fixes: [],
     improvements: [],
     breaking: [],
-    other: []
+    other: [],
   };
 
   // Agrupar cambios
-  changes.forEach(change => {
+  changes.forEach((change) => {
     switch (change.type) {
       case 'feature':
         grouped.features.push(change.description);
@@ -269,7 +267,7 @@ export function formatForDiscord(changes, maxLength = 1024) {
 
   // Truncar si es necesario
   const truncate = (items, max) => {
-    const text = items.map(item => `• ${item}`).join('\n');
+    const text = items.map((item) => `• ${item}`).join('\n');
     if (text.length > max) {
       const truncated = text.substring(0, max - 20);
       const lastNewline = truncated.lastIndexOf('\n');
@@ -283,6 +281,6 @@ export function formatForDiscord(changes, maxLength = 1024) {
     fixes: truncate(grouped.fixes, maxLength),
     improvements: truncate(grouped.improvements, maxLength),
     breaking: truncate(grouped.breaking, maxLength),
-    other: truncate(grouped.other, maxLength)
+    other: truncate(grouped.other, maxLength),
   };
 }

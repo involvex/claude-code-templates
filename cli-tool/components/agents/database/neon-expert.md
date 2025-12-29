@@ -26,7 +26,7 @@ npm install @neondatabase/serverless
 ### Basic Connection Test
 
 ```typescript
-import { neon } from "@neondatabase/serverless";
+import { neon } from '@neondatabase/serverless';
 const sql = neon(process.env.DATABASE_URL!);
 const result = await sql`SELECT NOW()`;
 ```
@@ -106,7 +106,7 @@ Avoid incorrect package names like `neon-serverless` or `pg-neon`.
 Use environment variables for database connection strings:
 
 ```javascript
-import { neon } from "@neondatabase/serverless";
+import { neon } from '@neondatabase/serverless';
 const sql = neon(process.env.DATABASE_URL);
 ```
 
@@ -114,7 +114,7 @@ Never hardcode credentials:
 
 ```javascript
 // Don't do this
-const sql = neon("postgres://username:password@host.neon.tech/neondb");
+const sql = neon('postgres://username:password@host.neon.tech/neondb');
 ```
 
 ## Parameter Interpolation
@@ -129,7 +129,7 @@ Don't concatenate strings directly (SQL injection risk):
 
 ```javascript
 // Don't do this
-const [post] = await sql("SELECT * FROM posts WHERE id = " + postId);
+const [post] = await sql('SELECT * FROM posts WHERE id = ' + postId);
 ```
 
 ## WebSocket Environments
@@ -137,8 +137,8 @@ const [post] = await sql("SELECT * FROM posts WHERE id = " + postId);
 Configure WebSocket support for Node.js v21 and earlier:
 
 ```javascript
-import { Pool, neonConfig } from "@neondatabase/serverless";
-import ws from "ws";
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import ws from 'ws';
 
 // Configure WebSocket support for Node.js
 neonConfig.webSocketConstructor = ws;
@@ -156,7 +156,7 @@ export default async (req, ctx) => {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
   try {
-    const { rows } = await pool.query("SELECT * FROM users");
+    const { rows } = await pool.query('SELECT * FROM users');
     return new Response(JSON.stringify(rows));
   } finally {
     // Close connection before response completes
@@ -202,19 +202,14 @@ const [result1, result2] = await sql.transaction([
 // Using Client for interactive transactions
 const client = await pool.connect();
 try {
-  await client.query("BEGIN");
+  await client.query('BEGIN');
   const {
     rows: [{ id }],
-  } = await client.query("INSERT INTO users(name) VALUES($1) RETURNING id", [
-    name,
-  ]);
-  await client.query("INSERT INTO profiles(user_id, bio) VALUES($1, $2)", [
-    id,
-    bio,
-  ]);
-  await client.query("COMMIT");
+  } = await client.query('INSERT INTO users(name) VALUES($1) RETURNING id', [name]);
+  await client.query('INSERT INTO profiles(user_id, bio) VALUES($1, $2)', [id, bio]);
+  await client.query('COMMIT');
 } catch (err) {
-  await client.query("ROLLBACK");
+  await client.query('ROLLBACK');
   throw err;
 } finally {
   client.release();
@@ -230,8 +225,8 @@ Apply environment-specific optimizations for best performance:
 ```javascript
 // For Vercel Edge Functions, specify nearest region
 export const config = {
-  runtime: "edge",
-  regions: ["iad1"], // Region nearest to your Neon DB
+  runtime: 'edge',
+  regions: ['iad1'], // Region nearest to your Neon DB
 };
 
 // For Cloudflare Workers, consider using Hyperdrive instead
@@ -245,8 +240,8 @@ Implement proper error handling for database operations:
 ```javascript
 // Pool error handling
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-pool.on("error", (err) => {
-  console.error("Unexpected error on idle client", err);
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
   process.exit(-1);
 });
 
@@ -254,11 +249,11 @@ pool.on("error", (err) => {
 try {
   const [post] = await sql`SELECT * FROM posts WHERE id = ${postId}`;
   if (!post) {
-    return new Response("Not found", { status: 404 });
+    return new Response('Not found', { status: 404 });
   }
 } catch (err) {
-  console.error("Database query failed:", err);
-  return new Response("Server error", { status: 500 });
+  console.error('Database query failed:', err);
+  return new Response('Server error', { status: 500 });
 }
 ```
 
@@ -268,8 +263,8 @@ Properly integrate with query builders and ORM libraries:
 
 ```javascript
 // Kysely integration
-import { Pool } from "@neondatabase/serverless";
-import { Kysely, PostgresDialect } from "kysely";
+import { Pool } from '@neondatabase/serverless';
+import { Kysely, PostgresDialect } from 'kysely';
 
 const dialect = new PostgresDialect({
   pool: new Pool({ connectionString: process.env.DATABASE_URL }),
@@ -326,15 +321,15 @@ When connecting to Neon specifically:
 
 ```typescript
 // src/db.ts
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
-import { config } from "dotenv";
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
+import { config } from 'dotenv';
 
 // Load environment variables
-config({ path: ".env" });
+config({ path: '.env' });
 
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is not defined");
+  throw new Error('DATABASE_URL is not defined');
 }
 
 // Create Neon SQL client - specific to Neon
@@ -373,25 +368,17 @@ When defining schemas for Neon:
 
 ```typescript
 // src/schema.ts
-import {
-  pgTable,
-  serial,
-  text,
-  integer,
-  timestamp,
-  jsonb,
-  pgEnum,
-} from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, timestamp, jsonb, pgEnum } from 'drizzle-orm/pg-core';
 
 // Example of Postgres-specific enum with Neon
-export const userRoleEnum = pgEnum("user_role", ["admin", "user", "guest"]);
+export const userRoleEnum = pgEnum('user_role', ['admin', 'user', 'guest']);
 
-export const usersTable = pgTable("users", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  role: userRoleEnum("role").default("user"),
-  metadata: jsonb("metadata"), // Postgres JSONB supported by Neon
+export const usersTable = pgTable('users', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  role: userRoleEnum('role').default('user'),
+  metadata: jsonb('metadata'), // Postgres JSONB supported by Neon
   // Other columns
 });
 
@@ -406,15 +393,15 @@ Neon-specific configuration in `drizzle.config.ts`:
 
 ```typescript
 // drizzle.config.ts
-import { config } from "dotenv";
-import { defineConfig } from "drizzle-kit";
+import { config } from 'dotenv';
+import { defineConfig } from 'drizzle-kit';
 
-config({ path: ".env" });
+config({ path: '.env' });
 
 export default defineConfig({
-  schema: "./src/schema.ts",
-  out: "./migrations",
-  dialect: "postgresql", // Neon uses Postgres dialect
+  schema: './src/schema.ts',
+  out: './migrations',
+  dialect: 'postgresql', // Neon uses Postgres dialect
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },
@@ -436,9 +423,9 @@ Optimize for Neon's serverless environment:
 
 ```typescript
 // Example of optimized query for Neon
-import { db } from "../db";
-import { sql } from "drizzle-orm";
-import { usersTable } from "../schema";
+import { db } from '../db';
+import { sql } from 'drizzle-orm';
+import { usersTable } from '../schema';
 
 export async function batchInsertUsers(users: NewUser[]) {
   // More efficient than multiple individual inserts on Neon
@@ -450,7 +437,7 @@ export const getUsersByRolePrepared = db
   .select()
   .from(usersTable)
   .where(sql`${usersTable.role} = $1`)
-  .prepare("get_users_by_role");
+  .prepare('get_users_by_role');
 
 // Usage: getUsersByRolePrepared.execute(['admin'])
 ```
@@ -460,8 +447,8 @@ export const getUsersByRolePrepared = db
 Neon supports transactions through Drizzle:
 
 ```typescript
-import { db } from "../db";
-import { usersTable, postsTable } from "../schema";
+import { db } from '../db';
+import { usersTable, postsTable } from '../schema';
 
 export async function createUserWithPosts(user: NewUser, posts: NewPost[]) {
   return await db.transaction(async (tx) => {
@@ -472,7 +459,7 @@ export async function createUserWithPosts(user: NewUser, posts: NewPost[]) {
         posts.map((post) => ({
           ...post,
           userId: newUser.id,
-        })),
+        }))
       );
     }
 
@@ -487,15 +474,15 @@ Neon supports database branching for development and testing:
 
 ```typescript
 // Using different Neon branches with environment variables
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 
 // For multi-branch setup
 const getBranchUrl = () => {
   const env = process.env.NODE_ENV;
-  if (env === "development") {
+  if (env === 'development') {
     return process.env.DEV_DATABASE_URL;
-  } else if (env === "test") {
+  } else if (env === 'test') {
     return process.env.TEST_DATABASE_URL;
   }
   return process.env.DATABASE_URL;
@@ -510,18 +497,16 @@ export const db = drizzle({ client: sql });
 Handle Neon-specific connection issues:
 
 ```typescript
-import { db } from "../db";
-import { usersTable } from "../schema";
+import { db } from '../db';
+import { usersTable } from '../schema';
 
-export async function safeNeonOperation<T>(
-  operation: () => Promise<T>,
-): Promise<T> {
+export async function safeNeonOperation<T>(operation: () => Promise<T>): Promise<T> {
   try {
     return await operation();
   } catch (error: any) {
     // Handle Neon-specific error codes
-    if (error.message?.includes("connection pool timeout")) {
-      console.error("Neon connection pool timeout");
+    if (error.message?.includes('connection pool timeout')) {
+      console.error('Neon connection pool timeout');
       // Handle appropriately
     }
 
@@ -532,9 +517,7 @@ export async function safeNeonOperation<T>(
 
 // Usage
 export async function getUserSafely(id: number) {
-  return safeNeonOperation(() =>
-    db.select().from(usersTable).where(eq(usersTable.id, id)),
-  );
+  return safeNeonOperation(() => db.select().from(usersTable).where(eq(usersTable.id, id)));
 }
 ```
 
@@ -590,7 +573,7 @@ This document provides comprehensive guidelines for implementing authentication 
 - Example:
 
   ```tsx
-  import { SignIn } from "@stackframe/stack";
+  import { SignIn } from '@stackframe/stack';
   export default function Page() {
     return <SignIn />;
   }
@@ -608,11 +591,11 @@ This document provides comprehensive guidelines for implementing authentication 
 - Example:
 
   ```tsx
-  "use client";
-  import { useUser } from "@stackframe/stack";
+  'use client';
+  import { useUser } from '@stackframe/stack';
   export function MyComponent() {
     const user = useUser();
-    return <div>{user ? `Hello, ${user.displayName}` : "Not logged in"}</div>;
+    return <div>{user ? `Hello, ${user.displayName}` : 'Not logged in'}</div>;
   }
   ```
 
@@ -622,10 +605,10 @@ This document provides comprehensive guidelines for implementing authentication 
 - Example:
 
   ```tsx
-  import { stackServerApp } from "@/stack";
+  import { stackServerApp } from '@/stack';
   export default async function ServerComponent() {
     const user = await stackServerApp.getUser();
-    return <div>{user ? `Hello, ${user.displayName}` : "Not logged in"}</div>;
+    return <div>{user ? `Hello, ${user.displayName}` : 'Not logged in'}</div>;
   }
   ```
 
@@ -641,11 +624,11 @@ This document provides comprehensive guidelines for implementing authentication 
   export async function middleware(request: NextRequest) {
     const user = await stackServerApp.getUser();
     if (!user) {
-      return NextResponse.redirect(new URL("/handler/sign-in", request.url));
+      return NextResponse.redirect(new URL('/handler/sign-in', request.url));
     }
     return NextResponse.next();
   }
-  export const config = { matcher: "/protected/:path*" };
+  export const config = { matcher: '/protected/:path*' };
   ```
 
 ## Neon Auth Database Integration
@@ -817,15 +800,15 @@ type CurrentUser = {
 ### Frontend Component
 
 ```tsx
-"use client";
-import { useUser, useStackApp, UserButton } from "@stackframe/stack";
+'use client';
+import { useUser, useStackApp, UserButton } from '@stackframe/stack';
 export default function ProfilePage() {
-  const user = useUser({ or: "redirect" });
+  const user = useUser({ or: 'redirect' });
   const app = useStackApp();
   return (
     <div>
       <UserButton />
-      <h1>Welcome, {user.displayName || "User"}</h1>
+      <h1>Welcome, {user.displayName || 'User'}</h1>
       <p>Email: {user.primaryEmail}</p>
       <button onClick={() => user.signOut()}>Sign Out</button>
     </div>

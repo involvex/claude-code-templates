@@ -27,10 +27,10 @@ class SessionTimer {
       this.startAutoUpdate();
       this.isInitialized = true;
 
-      console.log("📊 SessionTimer component initialized");
+      console.log('📊 SessionTimer component initialized');
     } catch (error) {
-      console.error("Error initializing SessionTimer:", error);
-      this.showError("Failed to initialize session timer");
+      console.error('Error initializing SessionTimer:', error);
+      this.showError('Failed to initialize session timer');
     }
   }
 
@@ -81,8 +81,8 @@ class SessionTimer {
       this.sessionData = await this.dataService.getSessionData();
       this.updateDisplay();
     } catch (error) {
-      console.error("Error loading session data:", error);
-      this.showError("Failed to load session data");
+      console.error('Error loading session data:', error);
+      this.showError('Failed to load session data');
     }
   }
 
@@ -90,9 +90,7 @@ class SessionTimer {
    * Refresh session data manually
    */
   async refreshSessionData() {
-    const refreshBtn = this.container.querySelector(
-      ".session-refresh-btn button",
-    );
+    const refreshBtn = this.container.querySelector('.session-refresh-btn button');
     if (refreshBtn) {
       refreshBtn.disabled = true;
       refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -114,18 +112,18 @@ class SessionTimer {
   updateDisplay() {
     if (!this.sessionData) return;
 
-    const loadingState = this.container.querySelector(".session-loading-state");
-    const sessionDisplay = this.container.querySelector(".session-display");
-    const warningsContainer = this.container.querySelector(".session-warnings");
+    const loadingState = this.container.querySelector('.session-loading-state');
+    const sessionDisplay = this.container.querySelector('.session-display');
+    const warningsContainer = this.container.querySelector('.session-warnings');
 
     // Update title with plan name
-    const titleElement = this.container.querySelector(".session-timer-title");
+    const titleElement = this.container.querySelector('.session-timer-title');
     if (titleElement && this.sessionData.limits) {
       titleElement.textContent = `Current Session - ${this.sessionData.limits.name}`;
     }
 
-    if (loadingState) loadingState.style.display = "none";
-    if (sessionDisplay) sessionDisplay.style.display = "block";
+    if (loadingState) loadingState.style.display = 'none';
+    if (sessionDisplay) sessionDisplay.style.display = 'block';
 
     // Update session display
     this.renderSessionInfo(sessionDisplay);
@@ -139,11 +137,11 @@ class SessionTimer {
    */
   async loadClaudeSessionInfo() {
     try {
-      const response = await fetch("/api/claude/session");
-      if (!response.ok) throw new Error("Failed to fetch session info");
+      const response = await fetch('/api/claude/session');
+      if (!response.ok) throw new Error('Failed to fetch session info');
       return await response.json();
     } catch (error) {
-      console.error("Error loading Claude session info:", error);
+      console.error('Error loading Claude session info:', error);
       return null;
     }
   }
@@ -172,25 +170,24 @@ class SessionTimer {
 
     // Calculate progress colors based on usage
     const timeProgressPercentage = Math.round(
-      ((this.SESSION_DURATION - timer.timeRemaining) / this.SESSION_DURATION) *
-        100,
+      ((this.SESSION_DURATION - timer.timeRemaining) / this.SESSION_DURATION) * 100
     );
 
     const getProgressColor = (percentage) => {
-      if (percentage < 50) return "#3fb950";
-      if (percentage < 80) return "#f97316";
-      return "#f85149";
+      if (percentage < 50) return '#3fb950';
+      if (percentage < 80) return '#f97316';
+      return '#f85149';
     };
 
     // For messages, use a relative progress based on typical usage patterns
     // Since Claude uses dynamic limits, we'll show relative activity level
     const messageActivityLevel = Math.min(
       100,
-      (timer.messagesUsed / (timer.messagesEstimate || 45)) * 100,
+      (timer.messagesUsed / (timer.messagesEstimate || 45)) * 100
     );
     const messageProgressColor = timer.messagesEstimate
       ? getProgressColor(messageActivityLevel)
-      : "#3fb950";
+      : '#3fb950';
     const timeProgressColor = getProgressColor(timeProgressPercentage);
 
     // Format time remaining with better UX
@@ -216,7 +213,7 @@ class SessionTimer {
             <div class="session-timer-time-value">${
               claudeSessionInfo && claudeSessionInfo.hasSession
                 ? claudeSessionInfo.estimatedTimeRemaining.isExpired
-                  ? "Expired"
+                  ? 'Expired'
                   : claudeSessionInfo.estimatedTimeRemaining.formatted
                 : formatTimeRemaining(timer.timeRemaining)
             }</div>
@@ -228,7 +225,7 @@ class SessionTimer {
               <div class="session-timer-progress-header">
                 <span class="session-timer-progress-label">Messages</span>
                 <span class="session-timer-progress-value">
-                  ${timer.messagesUsed}${timer.messagesEstimate ? `/${timer.messagesEstimate} est.` : ""}
+                  ${timer.messagesUsed}${timer.messagesEstimate ? `/${timer.messagesEstimate} est.` : ''}
                   <span class="session-timer-info-icon" data-tooltip="message-info" title="Message calculation info">
                     ℹ️
                   </span>
@@ -245,7 +242,7 @@ class SessionTimer {
                 <small>Short: ${timer.usageDetails.shortMessages}, Long: ${timer.usageDetails.longMessages}</small>
               </div>
               `
-                  : ""
+                  : ''
               }
             </div>
             
@@ -266,17 +263,16 @@ class SessionTimer {
                              100,
                              (claudeSessionInfo.sessionDuration.ms /
                                claudeSessionInfo.sessionLimit.ms) *
-                               100,
+                               100
                            )
                          : timeProgressPercentage
                      }%; background-color: ${
                        claudeSessionInfo && claudeSessionInfo.hasSession
                          ? claudeSessionInfo.estimatedTimeRemaining.isExpired
-                           ? "#f85149"
-                           : claudeSessionInfo.estimatedTimeRemaining.ms <
-                               600000
-                             ? "#f97316"
-                             : "#3fb950"
+                           ? '#f85149'
+                           : claudeSessionInfo.estimatedTimeRemaining.ms < 600000
+                             ? '#f97316'
+                             : '#3fb950'
                          : timeProgressColor
                      };"></div>
               </div>
@@ -299,7 +295,7 @@ class SessionTimer {
    */
   addPopover(container) {
     // Check if popover already exists
-    const existingPopover = document.getElementById("message-info-tooltip");
+    const existingPopover = document.getElementById('message-info-tooltip');
     if (existingPopover) {
       // Don't recreate if it already exists, just return
       return;
@@ -307,7 +303,7 @@ class SessionTimer {
 
     // Create popover HTML
     const popoverHTML = `
-      <div class="session-timer-tooltip" id="message-info-tooltip" style="display: ${this.isTooltipVisible ? "block" : "none"};">
+      <div class="session-timer-tooltip" id="message-info-tooltip" style="display: ${this.isTooltipVisible ? 'block' : 'none'};">
         <div class="session-timer-tooltip-content">
           <h4>Claude Pro Plan Usage</h4>
           <p>Shows user messages (prompts) sent in this session. Claude Pro doesn't have fixed message limits - usage is based on message complexity, conversation length, and current capacity.</p>
@@ -323,21 +319,21 @@ class SessionTimer {
     `;
 
     // Add popover to document body for better positioning
-    document.body.insertAdjacentHTML("beforeend", popoverHTML);
+    document.body.insertAdjacentHTML('beforeend', popoverHTML);
   }
 
   /**
    * Setup popover event listeners
    */
   setupPopoverEvents(container) {
-    const infoIcon = container.querySelector(".session-timer-info-icon");
-    const tooltip = document.getElementById("message-info-tooltip");
+    const infoIcon = container.querySelector('.session-timer-info-icon');
+    const tooltip = document.getElementById('message-info-tooltip');
 
     if (infoIcon && tooltip) {
       // Remove existing listeners to prevent duplicates
       const existingClickHandler = infoIcon.clickHandler;
       if (existingClickHandler) {
-        infoIcon.removeEventListener("click", existingClickHandler);
+        infoIcon.removeEventListener('click', existingClickHandler);
       }
 
       // Create new click handler
@@ -356,11 +352,11 @@ class SessionTimer {
       infoIcon.clickHandler = clickHandler;
 
       // Add click listener
-      infoIcon.addEventListener("click", clickHandler);
+      infoIcon.addEventListener('click', clickHandler);
 
       // Setup document click listener only once
       if (!this.documentClickSetup) {
-        document.addEventListener("click", (e) => {
+        document.addEventListener('click', (e) => {
           if (
             this.isTooltipVisible &&
             !tooltip.contains(e.target) &&
@@ -374,7 +370,7 @@ class SessionTimer {
       }
 
       // Prevent tooltip from closing when clicking inside it
-      tooltip.addEventListener("click", (e) => {
+      tooltip.addEventListener('click', (e) => {
         e.stopPropagation();
       });
     }
@@ -385,7 +381,7 @@ class SessionTimer {
    */
   showTooltip(tooltip, trigger) {
     const rect = trigger.getBoundingClientRect();
-    tooltip.style.display = "block";
+    tooltip.style.display = 'block';
     const tooltipRect = tooltip.getBoundingClientRect();
 
     // Position tooltip below the icon
@@ -397,7 +393,7 @@ class SessionTimer {
     const tooltipLeft = parseInt(tooltip.style.left);
 
     if (tooltipLeft < 10) {
-      tooltip.style.left = "10px";
+      tooltip.style.left = '10px';
     } else if (tooltipLeft + tooltipRect.width > viewportWidth - 10) {
       tooltip.style.left = `${viewportWidth - tooltipRect.width - 10}px`;
     }
@@ -418,7 +414,7 @@ class SessionTimer {
    * Hide tooltip
    */
   hideTooltip(tooltip) {
-    tooltip.style.display = "none";
+    tooltip.style.display = 'none';
     this.isTooltipVisible = false;
   }
 
@@ -426,24 +422,17 @@ class SessionTimer {
    * Render warnings if any
    */
   renderWarnings(container) {
-    if (
-      !this.sessionData ||
-      !this.sessionData.warnings ||
-      this.sessionData.warnings.length === 0
-    ) {
-      container.innerHTML = "";
+    if (!this.sessionData || !this.sessionData.warnings || this.sessionData.warnings.length === 0) {
+      container.innerHTML = '';
       return;
     }
 
     const warnings = this.sessionData.warnings
-      .filter(
-        (warning) =>
-          warning.type.includes("session") || warning.type.includes("monthly"),
-      )
+      .filter((warning) => warning.type.includes('session') || warning.type.includes('monthly'))
       .slice(0, 3); // Show max 3 warnings
 
     if (warnings.length === 0) {
-      container.innerHTML = "";
+      container.innerHTML = '';
       return;
     }
 
@@ -453,11 +442,11 @@ class SessionTimer {
       <div class="session-warning ${warning.level}">
         <i class="fas ${this.getWarningIcon(warning.level)}"></i>
         <span>${warning.message}</span>
-        ${warning.timeRemaining ? `<small>Time remaining: ${this.formatTimeRemaining(warning.timeRemaining)}</small>` : ""}
+        ${warning.timeRemaining ? `<small>Time remaining: ${this.formatTimeRemaining(warning.timeRemaining)}</small>` : ''}
       </div>
-    `,
+    `
       )
-      .join("");
+      .join('');
 
     container.innerHTML = `<div class="warnings-list">${warningHtml}</div>`;
   }
@@ -475,11 +464,11 @@ class SessionTimer {
    */
   getPlanBadgeClass(planType) {
     const classes = {
-      premium: "plan-premium",
-      standard: "plan-standard",
-      pro: "plan-pro",
+      premium: 'plan-premium',
+      standard: 'plan-standard',
+      pro: 'plan-pro',
     };
-    return classes[planType] || "plan-standard";
+    return classes[planType] || 'plan-standard';
   }
 
   /**
@@ -487,18 +476,18 @@ class SessionTimer {
    */
   getWarningIcon(level) {
     const icons = {
-      error: "fa-exclamation-triangle",
-      warning: "fa-exclamation-circle",
-      info: "fa-info-circle",
+      error: 'fa-exclamation-triangle',
+      warning: 'fa-exclamation-circle',
+      info: 'fa-info-circle',
     };
-    return icons[level] || "fa-info-circle";
+    return icons[level] || 'fa-info-circle';
   }
 
   /**
    * Format time remaining for display
    */
   formatTimeRemaining(milliseconds) {
-    if (milliseconds <= 0) return "0m";
+    if (milliseconds <= 0) return '0m';
 
     const hours = Math.floor(milliseconds / (60 * 60 * 1000));
     const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
@@ -514,10 +503,10 @@ class SessionTimer {
    */
   formatNumber(num) {
     if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + "M";
+      return (num / 1000000).toFixed(1) + 'M';
     }
     if (num >= 1000) {
-      return (num / 1000).toFixed(1) + "K";
+      return (num / 1000).toFixed(1) + 'K';
     }
     return num.toString();
   }
@@ -526,12 +515,12 @@ class SessionTimer {
    * Show error message
    */
   showError(message) {
-    const loadingState = this.container.querySelector(".session-loading-state");
-    const sessionDisplay = this.container.querySelector(".session-display");
+    const loadingState = this.container.querySelector('.session-loading-state');
+    const sessionDisplay = this.container.querySelector('.session-display');
 
-    if (loadingState) loadingState.style.display = "none";
+    if (loadingState) loadingState.style.display = 'none';
     if (sessionDisplay) {
-      sessionDisplay.style.display = "block";
+      sessionDisplay.style.display = 'block';
       sessionDisplay.innerHTML = `
         <div class="session-timer-error">
           <div class="session-timer-error-text">${message}</div>
@@ -565,7 +554,7 @@ class SessionTimer {
    * Handle real-time updates
    */
   handleRealtimeUpdate(data) {
-    if (data.type === "session_update" && data.sessionData) {
+    if (data.type === 'session_update' && data.sessionData) {
       this.sessionData = data.sessionData;
       this.updateDisplay();
     }
@@ -575,16 +564,16 @@ class SessionTimer {
    * Toggle accordion open/closed
    */
   toggleAccordion() {
-    const content = this.container.querySelector("#session-timer-content");
-    const chevron = this.container.querySelector(".session-timer-chevron");
+    const content = this.container.querySelector('#session-timer-content');
+    const chevron = this.container.querySelector('.session-timer-chevron');
 
     if (this.isExpanded) {
-      content.style.display = "none";
-      chevron.textContent = "▶";
+      content.style.display = 'none';
+      chevron.textContent = '▶';
       this.isExpanded = false;
     } else {
-      content.style.display = "block";
-      chevron.textContent = "▼";
+      content.style.display = 'block';
+      chevron.textContent = '▼';
       this.isExpanded = true;
     }
   }
@@ -593,33 +582,31 @@ class SessionTimer {
    * Update header status display
    */
   updateHeaderStatus(timer, claudeSessionInfo) {
-    const statusDot = this.container.querySelector(".session-timer-status-dot");
-    const statusText = this.container.querySelector(
-      ".session-timer-status-text",
-    );
+    const statusDot = this.container.querySelector('.session-timer-status-dot');
+    const statusText = this.container.querySelector('.session-timer-status-text');
 
     // If we have Claude session info, prioritize that
     if (claudeSessionInfo && claudeSessionInfo.hasSession) {
       if (claudeSessionInfo.estimatedTimeRemaining.isExpired) {
-        statusDot.className = "session-timer-status-dot expired";
-        statusText.textContent = "Session Expired";
+        statusDot.className = 'session-timer-status-dot expired';
+        statusText.textContent = 'Session Expired';
       } else if (claudeSessionInfo.estimatedTimeRemaining.ms < 600000) {
         // < 10 minutes
-        statusDot.className = "session-timer-status-dot warning";
-        statusText.textContent = "Ending Soon";
+        statusDot.className = 'session-timer-status-dot warning';
+        statusText.textContent = 'Ending Soon';
       } else {
-        statusDot.className = "session-timer-status-dot active";
-        statusText.textContent = "Active";
+        statusDot.className = 'session-timer-status-dot active';
+        statusText.textContent = 'Active';
       }
     } else if (!timer.hasActiveSession) {
-      statusDot.className = "session-timer-status-dot inactive";
-      statusText.textContent = "Inactive";
+      statusDot.className = 'session-timer-status-dot inactive';
+      statusText.textContent = 'Inactive';
     } else if (timer.timeRemaining < 600000) {
-      statusDot.className = "session-timer-status-dot warning";
-      statusText.textContent = "Ending Soon";
+      statusDot.className = 'session-timer-status-dot warning';
+      statusText.textContent = 'Ending Soon';
     } else {
-      statusDot.className = "session-timer-status-dot active";
-      statusText.textContent = "Active";
+      statusDot.className = 'session-timer-status-dot active';
+      statusText.textContent = 'Active';
     }
   }
 
@@ -636,11 +623,11 @@ class SessionTimer {
 }
 
 // Export for module systems
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = SessionTimer;
 }
 
 // Global registration for browser
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   window.SessionTimer = SessionTimer;
 }

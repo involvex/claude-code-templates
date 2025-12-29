@@ -65,8 +65,8 @@ lighthouse http://localhost:3000 \
 
 ```javascript
 // next.config.js - Enable bundle analysis
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
 });
 
 module.exports = withBundleAnalyzer({
@@ -75,12 +75,12 @@ module.exports = withBundleAnalyzer({
     // Bundle analysis optimizations
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
-        chunks: "all",
+        chunks: 'all',
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
-            name: "vendors",
-            chunks: "all",
+            name: 'vendors',
+            chunks: 'all',
           },
         },
       };
@@ -114,11 +114,11 @@ npm ls --depth=0 | grep -E "UNMET|invalid"
 // lib/analytics.ts
 export function reportWebVitals({ id, name, label, value }: any) {
   // Send to analytics service
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     // Client-side reporting
-    fetch("/api/analytics/web-vitals", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch('/api/analytics/web-vitals', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id,
         name,
@@ -132,15 +132,11 @@ export function reportWebVitals({ id, name, label, value }: any) {
 }
 
 // Track specific metrics
-export function trackMetric(
-  name: string,
-  value: number,
-  labels?: Record<string, string>,
-) {
+export function trackMetric(name: string, value: number, labels?: Record<string, string>) {
   reportWebVitals({
     id: `${name}-${Date.now()}`,
     name,
-    label: "custom",
+    label: 'custom',
     value,
     ...labels,
   });
@@ -148,21 +144,21 @@ export function trackMetric(
 
 // Performance observer for custom metrics
 export function initPerformanceObserver() {
-  if (typeof window === "undefined") return;
+  if (typeof window === 'undefined') return;
 
   // Largest Contentful Paint
   new PerformanceObserver((entryList) => {
     for (const entry of entryList.getEntries()) {
-      trackMetric("LCP", entry.startTime);
+      trackMetric('LCP', entry.startTime);
     }
-  }).observe({ entryTypes: ["largest-contentful-paint"] });
+  }).observe({ entryTypes: ['largest-contentful-paint'] });
 
   // First Input Delay
   new PerformanceObserver((entryList) => {
     for (const entry of entryList.getEntries()) {
-      trackMetric("FID", entry.processingStart - entry.startTime);
+      trackMetric('FID', entry.processingStart - entry.startTime);
     }
-  }).observe({ entryTypes: ["first-input"] });
+  }).observe({ entryTypes: ['first-input'] });
 
   // Cumulative Layout Shift
   new PerformanceObserver((entryList) => {
@@ -172,8 +168,8 @@ export function initPerformanceObserver() {
         clsValue += entry.value;
       }
     }
-    trackMetric("CLS", clsValue);
-  }).observe({ entryTypes: ["layout-shift"] });
+    trackMetric('CLS', clsValue);
+  }).observe({ entryTypes: ['layout-shift'] });
 }
 ```
 
@@ -181,7 +177,7 @@ export function initPerformanceObserver() {
 
 ```typescript
 // middleware.ts - Performance monitoring
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const start = Date.now();
@@ -189,8 +185,8 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   // Add performance headers
-  response.headers.set("X-Response-Time", `${Date.now() - start}ms`);
-  response.headers.set("X-Timestamp", new Date().toISOString());
+  response.headers.set('X-Response-Time', `${Date.now() - start}ms`);
+  response.headers.set('X-Timestamp', new Date().toISOString());
 
   return response;
 }
@@ -205,48 +201,48 @@ export function middleware(request: NextRequest) {
 const loadingPerformanceAudit = {
   // First Contentful Paint (FCP)
   fcp: {
-    target: "< 1.8s",
-    current: "?", // From Lighthouse
+    target: '< 1.8s',
+    current: '?', // From Lighthouse
     optimizations: [
-      "Optimize critical rendering path",
-      "Inline critical CSS",
-      "Preload key resources",
-      "Minimize render-blocking resources",
+      'Optimize critical rendering path',
+      'Inline critical CSS',
+      'Preload key resources',
+      'Minimize render-blocking resources',
     ],
   },
 
   // Largest Contentful Paint (LCP)
   lcp: {
-    target: "< 2.5s",
-    current: "?", // From Lighthouse
+    target: '< 2.5s',
+    current: '?', // From Lighthouse
     optimizations: [
-      "Optimize images (Next.js Image component)",
-      "Preload LCP element",
-      "Optimize server response time",
-      "Use CDN for static assets",
+      'Optimize images (Next.js Image component)',
+      'Preload LCP element',
+      'Optimize server response time',
+      'Use CDN for static assets',
     ],
   },
 
   // Time to Interactive (TTI)
   tti: {
-    target: "< 3.8s",
-    current: "?", // From Lighthouse
+    target: '< 3.8s',
+    current: '?', // From Lighthouse
     optimizations: [
-      "Reduce JavaScript bundle size",
-      "Code splitting",
-      "Remove unused code",
-      "Optimize third-party scripts",
+      'Reduce JavaScript bundle size',
+      'Code splitting',
+      'Remove unused code',
+      'Optimize third-party scripts',
     ],
   },
 
   // Speed Index
   speedIndex: {
-    target: "< 3.4s",
-    current: "?", // From Lighthouse
+    target: '< 3.4s',
+    current: '?', // From Lighthouse
     optimizations: [
-      "Optimize above-the-fold content",
-      "Progressive image loading",
-      "Critical resource prioritization",
+      'Optimize above-the-fold content',
+      'Progressive image loading',
+      'Critical resource prioritization',
     ],
   },
 };
@@ -259,37 +255,37 @@ const loadingPerformanceAudit = {
 const runtimePerformanceAudit = {
   // First Input Delay (FID)
   fid: {
-    target: "< 100ms",
-    current: "?",
+    target: '< 100ms',
+    current: '?',
     optimizations: [
-      "Reduce JavaScript execution time",
-      "Break up long tasks",
-      "Use web workers for heavy computation",
-      "Optimize event handlers",
+      'Reduce JavaScript execution time',
+      'Break up long tasks',
+      'Use web workers for heavy computation',
+      'Optimize event handlers',
     ],
   },
 
   // Cumulative Layout Shift (CLS)
   cls: {
-    target: "< 0.1",
-    current: "?",
+    target: '< 0.1',
+    current: '?',
     optimizations: [
-      "Set dimensions for media elements",
-      "Reserve space for ads/embeds",
-      "Avoid dynamic content insertion",
-      "Use CSS transforms for animations",
+      'Set dimensions for media elements',
+      'Reserve space for ads/embeds',
+      'Avoid dynamic content insertion',
+      'Use CSS transforms for animations',
     ],
   },
 
   // Total Blocking Time (TBT)
   tbt: {
-    target: "< 200ms",
-    current: "?",
+    target: '< 200ms',
+    current: '?',
     optimizations: [
-      "Code splitting",
-      "Remove unused polyfills",
-      "Optimize third-party code",
-      "Use setTimeout for heavy operations",
+      'Code splitting',
+      'Remove unused polyfills',
+      'Optimize third-party code',
+      'Use setTimeout for heavy operations',
     ],
   },
 };
@@ -300,20 +296,20 @@ const runtimePerformanceAudit = {
 ```javascript
 // Bundle analysis report
 const bundleAnalysis = {
-  totalSize: "?", // From webpack-bundle-analyzer
-  firstLoadJS: "?", // Critical for performance
+  totalSize: '?', // From webpack-bundle-analyzer
+  firstLoadJS: '?', // Critical for performance
   chunks: {
-    main: "?",
-    framework: "?",
-    vendor: "?",
-    pages: "?",
+    main: '?',
+    framework: '?',
+    vendor: '?',
+    pages: '?',
   },
 
   recommendations: [
     // Dynamic imports for code splitting
     {
-      type: "Dynamic Import",
-      description: "Use dynamic imports for non-critical components",
+      type: 'Dynamic Import',
+      description: 'Use dynamic imports for non-critical components',
       example: `
         const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
           loading: () => <Loading />,
@@ -324,8 +320,8 @@ const bundleAnalysis = {
 
     // Tree shaking optimization
     {
-      type: "Tree Shaking",
-      description: "Import only needed functions from libraries",
+      type: 'Tree Shaking',
+      description: 'Import only needed functions from libraries',
       example: `
         // ❌ Imports entire library
         import * as _ from 'lodash';
@@ -337,8 +333,8 @@ const bundleAnalysis = {
 
     // Bundle splitting
     {
-      type: "Bundle Splitting",
-      description: "Optimize webpack chunk splitting",
+      type: 'Bundle Splitting',
+      description: 'Optimize webpack chunk splitting',
       example: `
         module.exports = {
           webpack: (config, { isServer }) => {
@@ -368,12 +364,12 @@ const bundleAnalysis = {
 // Image optimization analysis
 const imageOptimization = {
   // Next.js Image component usage
-  nextImageUsage: "Analyze usage of next/image vs <img>",
+  nextImageUsage: 'Analyze usage of next/image vs <img>',
 
   recommendations: [
     {
-      priority: "High",
-      description: "Replace <img> tags with Next.js Image component",
+      priority: 'High',
+      description: 'Replace <img> tags with Next.js Image component',
       implementation: `
         import Image from 'next/image';
         
@@ -393,8 +389,8 @@ const imageOptimization = {
       `,
     },
     {
-      priority: "Medium",
-      description: "Implement responsive images with sizes prop",
+      priority: 'Medium',
+      description: 'Implement responsive images with sizes prop',
       implementation: `
         <Image
           src="/hero.jpg"
@@ -406,8 +402,8 @@ const imageOptimization = {
       `,
     },
     {
-      priority: "Low",
-      description: "Configure custom image loader for CDN",
+      priority: 'Low',
+      description: 'Configure custom image loader for CDN',
       implementation: `
         // next.config.js
         module.exports = {
@@ -441,20 +437,19 @@ const imageOptimization = {
 const cssOptimization = {
   recommendations: [
     {
-      type: "Critical CSS",
-      description: "Inline critical CSS for faster initial render",
-      implementation: "Use styled-jsx or CSS-in-JS for critical styles",
+      type: 'Critical CSS',
+      description: 'Inline critical CSS for faster initial render',
+      implementation: 'Use styled-jsx or CSS-in-JS for critical styles',
     },
     {
-      type: "CSS Modules",
-      description: "Use CSS Modules to avoid global namespace pollution",
-      implementation:
-        'Import styles as modules: import styles from "./Component.module.css"',
+      type: 'CSS Modules',
+      description: 'Use CSS Modules to avoid global namespace pollution',
+      implementation: 'Import styles as modules: import styles from "./Component.module.css"',
     },
     {
-      type: "Tailwind Purging",
-      description: "Ensure unused Tailwind classes are purged",
-      implementation: "Configure purge in tailwind.config.js",
+      type: 'Tailwind Purging',
+      description: 'Ensure unused Tailwind classes are purged',
+      implementation: 'Configure purge in tailwind.config.js',
     },
   ],
 };
@@ -467,9 +462,9 @@ const cssOptimization = {
 const jsOptimization = {
   recommendations: [
     {
-      priority: "High",
-      type: "Code Splitting",
-      description: "Implement route-based and component-based code splitting",
+      priority: 'High',
+      type: 'Code Splitting',
+      description: 'Implement route-based and component-based code splitting',
       example: `
         // Route-based splitting (automatic with Next.js pages)
         
@@ -484,9 +479,9 @@ const jsOptimization = {
       `,
     },
     {
-      priority: "Medium",
-      type: "Tree Shaking",
-      description: "Ensure unused code is eliminated",
+      priority: 'Medium',
+      type: 'Tree Shaking',
+      description: 'Ensure unused code is eliminated',
       example: `
         // ❌ Imports entire library
         import moment from 'moment';
@@ -499,9 +494,9 @@ const jsOptimization = {
       `,
     },
     {
-      priority: "Medium",
-      type: "Polyfill Optimization",
-      description: "Reduce polyfill size by targeting modern browsers",
+      priority: 'Medium',
+      type: 'Polyfill Optimization',
+      description: 'Reduce polyfill size by targeting modern browsers',
       example: `
         // next.config.js
         module.exports = {
@@ -564,7 +559,7 @@ module.exports = {
   performance: {
     maxAssetSize: 250000, // 250KB
     maxEntrypointSize: 400000, // 400KB
-    hints: process.env.NODE_ENV === "production" ? "error" : "warning",
+    hints: process.env.NODE_ENV === 'production' ? 'error' : 'warning',
   },
 };
 ```
@@ -585,7 +580,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci

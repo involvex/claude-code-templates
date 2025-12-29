@@ -155,7 +155,7 @@ Restrict agent to specific tools.
 **Format:** Array of tool names
 
 ```yaml
-tools: ["Read", "Write", "Grep", "Bash"]
+tools: ['Read', 'Write', 'Grep', 'Bash']
 ```
 
 **Default:** If omitted, agent has access to all tools

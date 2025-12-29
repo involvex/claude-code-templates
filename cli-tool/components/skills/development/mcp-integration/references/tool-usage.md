@@ -52,7 +52,7 @@ Specify MCP tools in command frontmatter:
 ```markdown
 ---
 description: Create a new Asana task
-allowed-tools: ["mcp__plugin_asana_asana__asana_create_task"]
+allowed-tools: ['mcp__plugin_asana_asana__asana_create_task']
 ---
 
 # Create Task Command
@@ -70,9 +70,9 @@ To create a task:
 ---
 allowed-tools:
   [
-    "mcp__plugin_asana_asana__asana_create_task",
-    "mcp__plugin_asana_asana__asana_search_tasks",
-    "mcp__plugin_asana_asana__asana_get_project",
+    'mcp__plugin_asana_asana__asana_create_task',
+    'mcp__plugin_asana_asana__asana_search_tasks',
+    'mcp__plugin_asana_asana__asana_get_project',
   ]
 ---
 ```
@@ -81,7 +81,7 @@ allowed-tools:
 
 ```markdown
 ---
-allowed-tools: ["mcp__plugin_asana_asana__*"]
+allowed-tools: ['mcp__plugin_asana_asana__*']
 ---
 ```
 
@@ -95,10 +95,7 @@ allowed-tools: ["mcp__plugin_asana_asana__*"]
 ---
 description: Search and create Asana tasks
 allowed-tools:
-  [
-    "mcp__plugin_asana_asana__asana_search_tasks",
-    "mcp__plugin_asana_asana__asana_create_task",
-  ]
+  ['mcp__plugin_asana_asana__asana_search_tasks', 'mcp__plugin_asana_asana__asana_create_task']
 ---
 
 # Asana Task Management
@@ -491,10 +488,10 @@ Steps:
 ---
 allowed-tools:
   [
-    "mcp__plugin_api_server__create_item",
-    "mcp__plugin_api_server__read_item",
-    "mcp__plugin_api_server__update_item",
-    "mcp__plugin_api_server__delete_item",
+    'mcp__plugin_api_server__create_item',
+    'mcp__plugin_api_server__read_item',
+    'mcp__plugin_api_server__update_item',
+    'mcp__plugin_api_server__delete_item',
   ]
 ---
 

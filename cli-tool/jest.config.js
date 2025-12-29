@@ -4,26 +4,22 @@
  */
 module.exports = {
   // Test environment
-  testEnvironment: "node",
+  testEnvironment: 'node',
 
   // Test file patterns
-  testMatch: [
-    "**/tests/**/*.test.js",
-    "**/tests/**/*.spec.js",
-    "**/__tests__/**/*.js",
-  ],
+  testMatch: ['**/tests/**/*.test.js', '**/tests/**/*.spec.js', '**/__tests__/**/*.js'],
 
   // Coverage configuration
   collectCoverage: true,
-  coverageDirectory: "coverage",
-  coverageReporters: ["text", "lcov", "html"],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
   collectCoverageFrom: [
-    "src/analytics/**/*.js",
-    "src/analytics-web/**/*.js",
-    "!src/analytics.log",
-    "!src/analytics-web/index.html*",
-    "!**/node_modules/**",
-    "!**/coverage/**",
+    'src/analytics/**/*.js',
+    'src/analytics-web/**/*.js',
+    '!src/analytics.log',
+    '!src/analytics-web/index.html*',
+    '!**/node_modules/**',
+    '!**/coverage/**',
   ],
 
   // Coverage thresholds
@@ -34,7 +30,7 @@ module.exports = {
       lines: 70,
       statements: 70,
     },
-    "./src/analytics/core/": {
+    './src/analytics/core/': {
       branches: 80,
       functions: 80,
       lines: 80,
@@ -43,10 +39,10 @@ module.exports = {
   },
 
   // Setup files
-  setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
 
   // Module paths
-  roots: ["<rootDir>/src", "<rootDir>/tests"],
+  roots: ['<rootDir>/src', '<rootDir>/tests'],
 
   // Transform files
   transform: {},
@@ -65,16 +61,13 @@ module.exports = {
 
   // Module name mapping for frontend tests
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/analytics-web/$1",
-    "^@analytics/(.*)$": "<rootDir>/src/analytics/$1",
+    '^@/(.*)$': '<rootDir>/src/analytics-web/$1',
+    '^@analytics/(.*)$': '<rootDir>/src/analytics/$1',
   },
 
   // Ignore patterns
-  testPathIgnorePatterns: ["/node_modules/", "/coverage/", "/dist/"],
+  testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/dist/'],
 
   // Watch plugins
-  watchPlugins: [
-    "jest-watch-typeahead/filename",
-    "jest-watch-typeahead/testname",
-  ],
+  watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
 };

@@ -57,39 +57,39 @@ cp solution-template.yaml .claude/error-solutions/<error-signature>.yaml
 2. Fill in the details:
 
 ```yaml
-id: "nodejs-module-not-found-express"
-created: "2024-01-15T10:30:00Z"
+id: 'nodejs-module-not-found-express'
+created: '2024-01-15T10:30:00Z'
 
 error:
-  type: "dependency"
-  category: "ModuleNotFound"
-  language: "nodejs"
+  type: 'dependency'
+  category: 'ModuleNotFound'
+  language: 'nodejs'
   pattern: "Cannot find module 'express'"
-  context: "Starting Node.js server"
+  context: 'Starting Node.js server'
 
 diagnosis:
-  root_cause: "Express package not installed"
+  root_cause: 'Express package not installed'
   factors:
-    - "npm install not run after git clone"
-    - "package.json missing express"
+    - 'npm install not run after git clone'
+    - 'package.json missing express'
 
 solution:
   immediate:
-    - "Run: npm install express"
+    - 'Run: npm install express'
   proper:
-    - "Add express to package.json if missing"
-    - "Run: npm install"
+    - 'Add express to package.json if missing'
+    - 'Run: npm install'
 
 verification:
-  - "Run: node server.js"
-  - "Check server starts without error"
+  - 'Run: node server.js'
+  - 'Check server starts without error'
 
 prevention:
-  - "Document npm install in README"
-  - "Use npm ci in CI/CD"
+  - 'Document npm install in README'
+  - 'Use npm ci in CI/CD'
 
 metadata:
-  tags: ["nodejs", "npm", "dependency"]
+  tags: ['nodejs', 'npm', 'dependency']
 ```
 
 ## Error Signature Generation
@@ -148,7 +148,7 @@ error:
   pattern: "Cannot find module '{module}'" # Matches!
 
 # Check context
-context: "Starting Node.js server" # Same context!
+context: 'Starting Node.js server' # Same context!
 ```
 
 ### 4. Apply Solution
@@ -160,7 +160,7 @@ Follow the steps in `solution.immediate` or `solution.proper`.
 ```yaml
 metadata:
   occurrences: 6 # Increment
-  last_resolved: "2024-01-20T14:30:00Z" # Update
+  last_resolved: '2024-01-20T14:30:00Z' # Update
 ```
 
 ## Best Practices
@@ -181,23 +181,23 @@ metadata:
 
    ```yaml
    commands:
-     - "npm install express"
-     - "npm ls express" # Verify installation
+     - 'npm install express'
+     - 'npm ls express' # Verify installation
    ```
 
 3. **Document Verification**
 
    ```yaml
    verification:
-     - "Server starts without error"
-     - "GET /api/health returns 200"
+     - 'Server starts without error'
+     - 'GET /api/health returns 200'
    ```
 
 4. **Add Prevention**
    ```yaml
    prevention:
-     - "Add postinstall check script"
-     - "Document setup in README"
+     - 'Add postinstall check script'
+     - 'Document setup in README'
    ```
 
 ### Organizing Solutions
@@ -252,33 +252,33 @@ When using the error-resolver skill:
 ### Simple: Missing Dependency
 
 ```yaml
-id: "nodejs-module-not-found-express"
+id: 'nodejs-module-not-found-express'
 error:
-  type: "dependency"
+  type: 'dependency'
   pattern: "Cannot find module 'express'"
 solution:
   immediate:
-    - "npm install express"
+    - 'npm install express'
 ```
 
 ### Complex: Race Condition
 
 ```yaml
-id: "react-state-update-unmounted"
+id: 'react-state-update-unmounted'
 error:
-  type: "runtime"
+  type: 'runtime'
   pattern: "Can't perform a React state update on an unmounted component"
-  context: "Async operation completing after component unmount"
+  context: 'Async operation completing after component unmount'
 diagnosis:
-  root_cause: "useEffect cleanup not cancelling async operations"
+  root_cause: 'useEffect cleanup not cancelling async operations'
   factors:
-    - "fetch() or setTimeout() completing after unmount"
-    - "No cleanup function in useEffect"
+    - 'fetch() or setTimeout() completing after unmount'
+    - 'No cleanup function in useEffect'
 solution:
   proper:
-    - "Add cleanup function to useEffect"
-    - "Use AbortController for fetch"
-    - "Track mounted state with ref"
+    - 'Add cleanup function to useEffect'
+    - 'Use AbortController for fetch'
+    - 'Track mounted state with ref'
   code_change: |
     useEffect(() => {
       const controller = new AbortController()
@@ -292,22 +292,22 @@ solution:
 ### Environment-Specific: Docker
 
 ```yaml
-id: "docker-permission-denied-volume"
+id: 'docker-permission-denied-volume'
 error:
-  type: "permission"
+  type: 'permission'
   pattern: "permission denied: '/app/data'"
-  context: "Docker container cannot write to mounted volume"
+  context: 'Docker container cannot write to mounted volume'
 diagnosis:
   root_cause: "Container user doesn't have write permission to host directory"
   factors:
-    - "Container runs as non-root user"
-    - "Host directory owned by different user"
+    - 'Container runs as non-root user'
+    - 'Host directory owned by different user'
 solution:
   immediate:
-    - "chmod 777 /host/path" # Quick but not secure
+    - 'chmod 777 /host/path' # Quick but not secure
   proper:
-    - "Match container user ID to host user"
-    - "Use named volume instead of bind mount"
+    - 'Match container user ID to host user'
+    - 'Use named volume instead of bind mount'
   commands:
-    - "chown -R 1000:1000 /host/path"
+    - 'chown -R 1000:1000 /host/path'
 ```

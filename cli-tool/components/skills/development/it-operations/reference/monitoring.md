@@ -39,7 +39,7 @@ Comprehensive guide to implementing observability, metrics collection, alerting 
 2. High Cardinality Data:
   - Enable filtering by user_id, region, version, etc.
   - Support arbitrary dimensional queries
-  - Example: "Show me errors for user_id=123 in us-west-2 for version 2.3.1"
+  - Example: 'Show me errors for user_id=123 in us-west-2 for version 2.3.1'
 
 3. Context and Correlation:
   - Link metrics, logs, and traces together
@@ -117,19 +117,19 @@ Examples:
 ```yaml
 ERROR:
   When: Failures requiring immediate attention
-  Example: "Database connection failed after 3 retries"
+  Example: 'Database connection failed after 3 retries'
 
 WARN:
   When: Unexpected but handled situations
-  Example: "API rate limit approaching (85% of quota)"
+  Example: 'API rate limit approaching (85% of quota)'
 
 INFO:
   When: Important business events
-  Example: "User 12345 completed checkout for $150.00"
+  Example: 'User 12345 completed checkout for $150.00'
 
 DEBUG:
   When: Detailed diagnostic information
-  Example: "Loaded configuration from /etc/app/config.yaml"
+  Example: 'Loaded configuration from /etc/app/config.yaml'
 ```
 
 **Structured Logging Format**:
@@ -432,20 +432,20 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: "production"
-    region: "us-east-1"
+    cluster: 'production'
+    region: 'us-east-1'
 
 scrape_configs:
-  - job_name: "api-servers"
+  - job_name: 'api-servers'
     static_configs:
       - targets:
-          - "api-1.example.com:8080"
-          - "api-2.example.com:8080"
-          - "api-3.example.com:8080"
-    metrics_path: "/metrics"
+          - 'api-1.example.com:8080'
+          - 'api-2.example.com:8080'
+          - 'api-3.example.com:8080'
+    metrics_path: '/metrics'
     scrape_interval: 10s
 
-  - job_name: "kubernetes-pods"
+  - job_name: 'kubernetes-pods'
     kubernetes_sd_configs:
       - role: pod
     relabel_configs:
@@ -456,8 +456,7 @@ scrape_configs:
         action: replace
         target_label: __metrics_path__
         regex: (.+)
-      - source_labels:
-          [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
         action: replace
         regex: ([^:]+)(?::\d+)?;(\d+)
         replacement: $1:$2
@@ -556,10 +555,10 @@ groups:
           severity: critical
           team: backend
         annotations:
-          summary: "High error rate on {{ $labels.service }}"
-          description: "Error rate is {{ $value | humanizePercentage }} on {{ $labels.service }}"
-          runbook: "https://wiki.example.com/runbooks/high-error-rate"
-          dashboard: "https://grafana.example.com/d/api-dashboard"
+          summary: 'High error rate on {{ $labels.service }}'
+          description: 'Error rate is {{ $value | humanizePercentage }} on {{ $labels.service }}'
+          runbook: 'https://wiki.example.com/runbooks/high-error-rate'
+          dashboard: 'https://grafana.example.com/d/api-dashboard'
 
       # High latency (p95)
       - alert: HighLatency
@@ -572,8 +571,8 @@ groups:
           severity: warning
           team: backend
         annotations:
-          summary: "High p95 latency on {{ $labels.service }}"
-          description: "p95 latency is {{ $value }}s on {{ $labels.service }}"
+          summary: 'High p95 latency on {{ $labels.service }}'
+          description: 'p95 latency is {{ $value }}s on {{ $labels.service }}'
 
       # Saturation (CPU)
       - alert: HighCPUUsage
@@ -584,8 +583,8 @@ groups:
           severity: warning
           team: infrastructure
         annotations:
-          summary: "High CPU usage on {{ $labels.instance }}"
-          description: "CPU usage is {{ $value | humanize }}% on {{ $labels.instance }}"
+          summary: 'High CPU usage on {{ $labels.instance }}'
+          description: 'CPU usage is {{ $value | humanize }}% on {{ $labels.instance }}'
 
       # Disk space prediction
       - alert: DiskWillFillIn4Hours
@@ -596,8 +595,8 @@ groups:
           severity: critical
           team: infrastructure
         annotations:
-          summary: "Disk will fill on {{ $labels.instance }}"
-          description: "Filesystem {{ $labels.mountpoint }} will fill in approximately 4 hours"
+          summary: 'Disk will fill on {{ $labels.instance }}'
+          description: 'Filesystem {{ $labels.mountpoint }} will fill in approximately 4 hours'
 
       # Service down
       - alert: ServiceDown
@@ -607,8 +606,8 @@ groups:
           severity: critical
           team: infrastructure
         annotations:
-          summary: "Service {{ $labels.job }} is down"
-          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes"
+          summary: 'Service {{ $labels.job }} is down'
+          description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes'
 
       # Certificate expiration
       - alert: CertificateExpiringSoon
@@ -619,8 +618,8 @@ groups:
           severity: warning
           team: infrastructure
         annotations:
-          summary: "SSL certificate expiring soon"
-          description: "Certificate for {{ $labels.instance }} expires in {{ $value | humanize }} days"
+          summary: 'SSL certificate expiring soon'
+          description: 'Certificate for {{ $labels.instance }} expires in {{ $value | humanize }} days'
 ```
 
 ### PagerDuty Integration
@@ -629,11 +628,11 @@ groups:
 # alertmanager.yml
 global:
   resolve_timeout: 5m
-  pagerduty_url: "https://events.pagerduty.com/v2/enqueue"
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
 
 route:
-  receiver: "default-receiver"
-  group_by: ["alertname", "cluster", "service"]
+  receiver: 'default-receiver'
+  group_by: ['alertname', 'cluster', 'service']
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 4h
@@ -660,40 +659,40 @@ route:
           receiver: pagerduty-infrastructure
 
 receivers:
-  - name: "default-receiver"
+  - name: 'default-receiver'
     slack_configs:
-      - api_url: "https://hooks.slack.com/services/XXX"
-        channel: "#alerts"
-        title: "{{ .GroupLabels.alertname }}"
-        text: "{{ range .Alerts }}{{ .Annotations.description }}{{ end }}"
+      - api_url: 'https://hooks.slack.com/services/XXX'
+        channel: '#alerts'
+        title: '{{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
 
-  - name: "pagerduty-critical"
+  - name: 'pagerduty-critical'
     pagerduty_configs:
-      - service_key: "YOUR_PAGERDUTY_KEY"
-        description: "{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}"
+      - service_key: 'YOUR_PAGERDUTY_KEY'
+        description: '{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
         details:
-          firing: "{{ .Alerts.Firing | len }}"
-          resolved: "{{ .Alerts.Resolved | len }}"
-          num_alerts: "{{ .Alerts | len }}"
+          firing: '{{ .Alerts.Firing | len }}'
+          resolved: '{{ .Alerts.Resolved | len }}'
+          num_alerts: '{{ .Alerts | len }}'
         links:
-          - href: "{{ .CommonAnnotations.runbook }}"
-            text: "Runbook"
-          - href: "{{ .CommonAnnotations.dashboard }}"
-            text: "Dashboard"
+          - href: '{{ .CommonAnnotations.runbook }}'
+            text: 'Runbook'
+          - href: '{{ .CommonAnnotations.dashboard }}'
+            text: 'Dashboard'
 
-  - name: "slack-warnings"
+  - name: 'slack-warnings'
     slack_configs:
-      - api_url: "https://hooks.slack.com/services/YYY"
-        channel: "#alerts-warnings"
-        color: "warning"
+      - api_url: 'https://hooks.slack.com/services/YYY'
+        channel: '#alerts-warnings'
+        color: 'warning'
 
 inhibit_rules:
   # Inhibit warning if critical is firing
   - source_match:
-      severity: "critical"
+      severity: 'critical'
     target_match:
-      severity: "warning"
-    equal: ["alertname", "service", "instance"]
+      severity: 'warning'
+    equal: ['alertname', 'service', 'instance']
 ```
 
 ## Dashboard Design
@@ -1017,8 +1016,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Critical SLO burn rate"
-          description: "At current rate, 30-day error budget will be exhausted in 2 days"
+          summary: 'Critical SLO burn rate'
+          description: 'At current rate, 30-day error budget will be exhausted in 2 days'
 
       - alert: AvailabilitySLOBurnRateWarning
         expr: |
@@ -1031,8 +1030,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Elevated SLO burn rate"
-          description: "Error budget consumption is higher than expected"
+          summary: 'Elevated SLO burn rate'
+          description: 'Error budget consumption is higher than expected'
 
       # Error budget exhausted
       - alert: ErrorBudgetExhausted
@@ -1041,8 +1040,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Error budget exhausted"
-          description: "30-day error budget is exhausted. Freeze non-critical changes."
+          summary: 'Error budget exhausted'
+          description: '30-day error budget is exhausted. Freeze non-critical changes.'
 ```
 
 ### SLO Dashboard Example
@@ -1196,37 +1195,37 @@ Cloud Services             │    (Storage &   │
 ### Complete Monitoring Stack (Docker Compose)
 
 ```yaml
-version: "3.8"
+version: '3.8'
 
 services:
   prometheus:
     image: prom/prometheus:latest
     ports:
-      - "9090:9090"
+      - '9090:9090'
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./alerts.yml:/etc/prometheus/alerts.yml
       - prometheus-data:/prometheus
     command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention.time=30d"
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
     restart: unless-stopped
 
   alertmanager:
     image: prom/alertmanager:latest
     ports:
-      - "9093:9093"
+      - '9093:9093'
     volumes:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
     command:
-      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
     restart: unless-stopped
 
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
@@ -1240,11 +1239,11 @@ services:
   node-exporter:
     image: prom/node-exporter:latest
     ports:
-      - "9100:9100"
+      - '9100:9100'
     command:
-      - "--path.procfs=/host/proc"
-      - "--path.sysfs=/host/sys"
-      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -1254,7 +1253,7 @@ services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -1265,7 +1264,7 @@ services:
   loki:
     image: grafana/loki:latest
     ports:
-      - "3100:3100"
+      - '3100:3100'
     command: -config.file=/etc/loki/local-config.yaml
     restart: unless-stopped
 

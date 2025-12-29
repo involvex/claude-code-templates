@@ -190,7 +190,7 @@ const pool = new Pool({
 // Always release connections
 const client = await pool.connect();
 try {
-  await client.query("...");
+  await client.query('...');
 } finally {
   client.release(); // Important!
 }
@@ -415,7 +415,7 @@ async function withRetry(fn, maxRetries = 3) {
     try {
       return await fn();
     } catch (error) {
-      if (error.code === "40P01" && i < maxRetries - 1) {
+      if (error.code === '40P01' && i < maxRetries - 1) {
         // Deadlock
         await sleep(100 * (i + 1));
         continue;
@@ -460,9 +460,9 @@ MongoError: E11000 duplicate key error collection: db.users index: email_1
 ```javascript
 // Upsert
 await User.findOneAndUpdate(
-  { email: "test@example.com" },
-  { $set: { name: "Test" } },
-  { upsert: true },
+  { email: 'test@example.com' },
+  { $set: { name: 'Test' } },
+  { upsert: true }
 );
 
 // Or handle error
@@ -494,15 +494,15 @@ MongooseError: Operation `users.find()` buffering timed out after 10000ms
 ```javascript
 // Wait for connection
 await mongoose.connect(uri);
-console.log("Connected to MongoDB");
+console.log('Connected to MongoDB');
 
 // Then start server
 app.listen(3000);
 
 // Add connection events
-mongoose.connection.on("error", console.error);
-mongoose.connection.on("disconnected", () => {
-  console.log("MongoDB disconnected");
+mongoose.connection.on('error', console.error);
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected');
 });
 ```
 

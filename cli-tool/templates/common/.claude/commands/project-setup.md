@@ -296,12 +296,12 @@ CMD ["npm", "start"]
 
 ```yaml
 # docker-compose.yml
-version: "3.8"
+version: '3.8'
 services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=development
     volumes:

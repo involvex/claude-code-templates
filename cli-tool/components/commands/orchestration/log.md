@@ -244,14 +244,14 @@ Creates summary in daily note:
 ```yaml
 obsidian_template:
   daily_note:
-    heading: "## Work Log - {time}"
+    heading: '## Work Log - {time}'
     include_stats: true
     add_tags: true
     link_tasks: true
 
   project_note:
     create_if_missing: true
-    append_to_section: "## Task Progress"
+    append_to_section: '## Task Progress'
     include_commits: true
 ```
 
@@ -261,7 +261,7 @@ obsidian_template:
 linear_template:
   include_time: true
   update_status: true
-  add_labels: ["from-orchestration"]
+  add_labels: ['from-orchestration']
 ```
 
 ## Interactive Mode
@@ -358,13 +358,13 @@ Enter project name: Security Audit
 
 ```yaml
 log_defaults:
-  no_connection: "ask" # ask|obsidian-daily|skip
-  multi_connection: "ask" # ask|all|first
+  no_connection: 'ask' # ask|obsidian-daily|skip
+  multi_connection: 'ask' # ask|all|first
 
   obsidian:
-    default_location: "daily" # daily|project|custom
-    project_folder: "Projects"
-    daily_folder: "Daily Notes"
+    default_location: 'daily' # daily|project|custom
+    project_folder: 'Projects'
+    daily_folder: 'Daily Notes'
 
   linear:
     auto_update_status: true

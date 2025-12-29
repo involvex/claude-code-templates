@@ -72,27 +72,29 @@ npx claude-code-templates@latest --mcp database/postgresql-integration --yes
 
 ## What You Get
 
-| Component | Description | Examples |
-|-----------|-------------|----------|
-| **🤖 Agents** | AI specialists for specific domains | Security auditor, React performance optimizer, database architect |
-| **⚡ Commands** | Custom slash commands | `/generate-tests`, `/optimize-bundle`, `/check-security` |
-| **🔌 MCPs** | External service integrations | GitHub, PostgreSQL, Stripe, AWS, OpenAI |
-| **⚙️ Settings** | Claude Code configurations | Timeouts, memory settings, output styles |
-| **🪝 Hooks** | Automation triggers | Pre-commit validation, post-completion actions |
-| **🎨 Skills** | Reusable capabilities with progressive disclosure | PDF processing, Excel automation, custom workflows |
+| Component       | Description                                       | Examples                                                          |
+| --------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
+| **🤖 Agents**   | AI specialists for specific domains               | Security auditor, React performance optimizer, database architect |
+| **⚡ Commands** | Custom slash commands                             | `/generate-tests`, `/optimize-bundle`, `/check-security`          |
+| **🔌 MCPs**     | External service integrations                     | GitHub, PostgreSQL, Stripe, AWS, OpenAI                           |
+| **⚙️ Settings** | Claude Code configurations                        | Timeouts, memory settings, output styles                          |
+| **🪝 Hooks**    | Automation triggers                               | Pre-commit validation, post-completion actions                    |
+| **🎨 Skills**   | Reusable capabilities with progressive disclosure | PDF processing, Excel automation, custom workflows                |
 
 ## 🛠️ Additional Tools
 
 Beyond the template catalog, Claude Code Templates includes powerful development tools:
 
 ### 📊 Claude Code Analytics
+
 Monitor your AI-powered development sessions in real-time with live state detection and performance metrics.
 
 ```bash
 npx claude-code-templates@latest --analytics
 ```
 
-### 💬 Conversation Monitor  
+### 💬 Conversation Monitor
+
 Mobile-optimized interface to view Claude responses in real-time with secure remote access.
 
 ```bash
@@ -104,6 +106,7 @@ npx claude-code-templates@latest --chats --tunnel
 ```
 
 ### 🔍 Health Check
+
 Comprehensive diagnostics to ensure your Claude Code installation is optimized.
 
 ```bash
@@ -111,6 +114,7 @@ npx claude-code-templates@latest --health-check
 ```
 
 ### 🔌 Plugin Dashboard
+
 View marketplaces, installed plugins, and manage permissions from a unified interface.
 
 ```bash
@@ -132,19 +136,23 @@ We welcome contributions! **[Browse existing templates](https://aitmpl.com)** to
 This collection includes components from multiple sources:
 
 **Scientific Skills:**
+
 - **[K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills)** by K-Dense Inc. - MIT License (139 scientific skills for biology, chemistry, medicine, and computational research)
 
 **Official Anthropic:**
+
 - **[anthropics/skills](https://github.com/anthropics/skills)** - Official Anthropic skills (21 skills)
 - **[anthropics/claude-code](https://github.com/anthropics/claude-code)** - Development guides and examples (10 skills)
 
 **Community Skills & Agents:**
+
 - **[obra/superpowers](https://github.com/obra/superpowers)** by Jesse Obra - MIT License (14 workflow skills)
 - **[alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills)** by Alireza Rezvani - MIT License (36 professional role skills)
 - **[wshobson/agents](https://github.com/wshobson/agents)** by wshobson - MIT License (48 agents)
 - **NerdyChefsAI Skills** - Community contribution - MIT License (specialized enterprise skills)
 
 **Commands & Tools:**
+
 - **[awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)** by hesreallyhim - CC0 1.0 Universal (21 commands)
 - **[awesome-claude-skills](https://github.com/mehdi-lamrani/awesome-claude-skills)** - Apache 2.0 (community skills)
 - **move-code-quality-skill** - MIT License
@@ -165,6 +173,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **🐛 Issues**: [GitHub Issues](https://github.com/involvex/claude-code-templates/issues)
 
 ## Stargazers over time
+
 [![Stargazers over time](https://starchart.cc/involvex/claude-code-templates.svg?variant=adaptive)](https://starchart.cc/involvex/claude-code-templates)
 
 ---

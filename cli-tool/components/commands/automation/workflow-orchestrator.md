@@ -234,7 +234,7 @@ class WorkflowOrchestrator {
       id: task.id,
       name: task.name,
       startTime: Date.now(),
-      status: "running",
+      status: 'running',
     };
 
     execution.tasks[task.id] = taskExecution;
@@ -252,7 +252,7 @@ class WorkflowOrchestrator {
 
       taskExecution.endTime = Date.now();
       taskExecution.duration = taskExecution.endTime - taskExecution.startTime;
-      taskExecution.status = "completed";
+      taskExecution.status = 'completed';
       taskExecution.result = result;
 
       this.completed.add(task.id);
@@ -267,7 +267,7 @@ class WorkflowOrchestrator {
     } catch (error) {
       taskExecution.endTime = Date.now();
       taskExecution.duration = taskExecution.endTime - taskExecution.startTime;
-      taskExecution.status = "failed";
+      taskExecution.status = 'failed';
       taskExecution.error = error.message;
 
       this.failed.add(task.id);
@@ -284,15 +284,15 @@ class WorkflowOrchestrator {
 
   async runTaskByType(task) {
     switch (task.type) {
-      case "shell":
+      case 'shell':
         return await this.executeShellTask(task);
-      case "http":
+      case 'http':
         return await this.executeHttpTask(task);
-      case "docker":
+      case 'docker':
         return await this.executeDockerTask(task);
-      case "javascript":
+      case 'javascript':
         return await this.executeJavaScriptTask(task);
-      case "python":
+      case 'python':
         return await this.executePythonTask(task);
       default:
         throw new Error(`Unknown task type: ${task.type}`);
@@ -434,7 +434,7 @@ class WorkflowMonitor {
   recordExecution(execution) {
     this.metrics.totalRuns++;
 
-    if (execution.status === "completed") {
+    if (execution.status === 'completed') {
       this.metrics.successfulRuns++;
     } else {
       this.metrics.failedRuns++;
@@ -442,8 +442,7 @@ class WorkflowMonitor {
 
     // Update average duration
     const totalDuration =
-      this.metrics.averageDuration * (this.metrics.totalRuns - 1) +
-      execution.duration;
+      this.metrics.averageDuration * (this.metrics.totalRuns - 1) + execution.duration;
     this.metrics.averageDuration = totalDuration / this.metrics.totalRuns;
 
     // Record task metrics
@@ -459,7 +458,7 @@ class WorkflowMonitor {
       const taskMetrics = this.metrics.taskMetrics.get(taskId);
       taskMetrics.runs++;
 
-      if (task.status === "failed") {
+      if (task.status === 'failed') {
         taskMetrics.failures++;
       }
 
@@ -470,14 +469,13 @@ class WorkflowMonitor {
   }
 
   getHealthReport() {
-    const successRate =
-      (this.metrics.successfulRuns / this.metrics.totalRuns) * 100;
+    const successRate = (this.metrics.successfulRuns / this.metrics.totalRuns) * 100;
 
     return {
       overall: {
-        successRate: successRate.toFixed(2) + "%",
+        successRate: successRate.toFixed(2) + '%',
         totalRuns: this.metrics.totalRuns,
-        averageDuration: (this.metrics.averageDuration / 1000).toFixed(2) + "s",
+        averageDuration: (this.metrics.averageDuration / 1000).toFixed(2) + 's',
       },
       tasks: this.getTaskHealthReport(),
     };
@@ -547,14 +545,14 @@ workflow generate --type "ci-cd" --output ci-workflow.json
 ### Slack Integration
 
 ```javascript
-async function sendSlackNotification(message, channel = "#deployments") {
+async function sendSlackNotification(message, channel = '#deployments') {
   const webhook = process.env.SLACK_WEBHOOK_URL;
 
   await axios.post(webhook, {
     channel: channel,
     text: message,
-    username: "Workflow Orchestrator",
-    icon_emoji: ":gear:",
+    username: 'Workflow Orchestrator',
+    icon_emoji: ':gear:',
   });
 }
 ```

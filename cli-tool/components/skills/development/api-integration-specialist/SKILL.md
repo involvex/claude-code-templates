@@ -41,7 +41,7 @@ const oauth = new OAuth2Client({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   redirectUri: process.env.REDIRECT_URI,
-  scopes: ["read:users", "write:data"],
+  scopes: ['read:users', 'write:data'],
 });
 
 // Get authorization URL
@@ -58,9 +58,9 @@ const tokens = await oauth.exchangeCode(code);
 ```javascript
 async function makeRequest(endpoint, options = {}) {
   const defaultHeaders = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${apiKey}`,
-    "User-Agent": "MyApp/1.0.0",
+    'User-Agent': 'MyApp/1.0.0',
   };
 
   const response = await fetch(`${baseURL}${endpoint}`, {
@@ -183,39 +183,23 @@ async function rateLimitedRequest(endpoint, options) {
 
 ```javascript
 function verifyWebhookSignature(payload, signature, secret) {
-  const expectedSignature = crypto
-    .createHmac("sha256", secret)
-    .update(payload)
-    .digest("hex");
+  const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
 
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expectedSignature),
-  );
+  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
 }
 
-app.post(
-  "/webhooks/stripe",
-  express.raw({ type: "application/json" }),
-  (req, res) => {
-    const signature = req.headers["stripe-signature"];
+app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), (req, res) => {
+  const signature = req.headers['stripe-signature'];
 
-    if (
-      !verifyWebhookSignature(
-        req.body,
-        signature,
-        process.env.STRIPE_WEBHOOK_SECRET,
-      )
-    ) {
-      return res.status(401).send("Invalid signature");
-    }
+  if (!verifyWebhookSignature(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET)) {
+    return res.status(401).send('Invalid signature');
+  }
 
-    const event = JSON.parse(req.body);
-    handleWebhookEvent(event);
+  const event = JSON.parse(req.body);
+  handleWebhookEvent(event);
 
-    res.status(200).send("Received");
-  },
-);
+  res.status(200).send('Received');
+});
 ```
 
 ## Integration Patterns
@@ -235,7 +219,7 @@ class ServiceAPIClient {
       method,
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       timeout: this.timeout,
     };
@@ -244,28 +228,26 @@ class ServiceAPIClient {
       options.body = JSON.stringify(data);
     }
 
-    const response = await retryWithBackoff(() =>
-      fetch(`${this.baseURL}${endpoint}`, options),
-    );
+    const response = await retryWithBackoff(() => fetch(`${this.baseURL}${endpoint}`, options));
 
     return response.json();
   }
 
   // Resource methods
   async getResource(id) {
-    return this.request("GET", `/resources/${id}`);
+    return this.request('GET', `/resources/${id}`);
   }
 
   async createResource(data) {
-    return this.request("POST", "/resources", data);
+    return this.request('POST', '/resources', data);
   }
 
   async updateResource(id, data) {
-    return this.request("PUT", `/resources/${id}`, data);
+    return this.request('PUT', `/resources/${id}`, data);
   }
 
   async deleteResource(id) {
-    return this.request("DELETE", `/resources/${id}`);
+    return this.request('DELETE', `/resources/${id}`);
   }
 }
 ```
@@ -282,7 +264,7 @@ async function* fetchAllPages(endpoint, pageSize = 100) {
       ...(cursor && { cursor }),
     });
 
-    const response = await apiClient.request("GET", `${endpoint}?${params}`);
+    const response = await apiClient.request('GET', `${endpoint}?${params}`);
 
     yield response.data;
 
@@ -291,7 +273,7 @@ async function* fetchAllPages(endpoint, pageSize = 100) {
 }
 
 // Usage
-for await (const page of fetchAllPages("/users")) {
+for await (const page of fetchAllPages('/users')) {
   processUsers(page);
 }
 ```
@@ -335,9 +317,9 @@ for await (const page of fetchAllPages("/users")) {
 ### Stripe Payment Processing
 
 ```javascript
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-async function createPaymentIntent(amount, currency = "usd") {
+async function createPaymentIntent(amount, currency = 'usd') {
   return await stripe.paymentIntents.create({
     amount,
     currency,
@@ -349,7 +331,7 @@ async function createPaymentIntent(amount, currency = "usd") {
 ### SendGrid Email Sending
 
 ```javascript
-const sgMail = require("@sendgrid/mail");
+const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function sendEmail(to, subject, html) {
@@ -365,10 +347,7 @@ async function sendEmail(to, subject, html) {
 ### Twilio SMS
 
 ```javascript
-const twilio = require("twilio")(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN,
-);
+const twilio = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 async function sendSMS(to, body) {
   await twilio.messages.create({

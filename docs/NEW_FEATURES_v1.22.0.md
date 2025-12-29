@@ -9,9 +9,11 @@ This release introduces a comprehensive dashboard system with unified navigation
 ## 1. 🎛️ Unified Dashboard (`--dashboard`)
 
 ### What It Does
+
 Provides a single interface to access ALL Claude Code dashboards without restarting.
 
 ### Usage
+
 ```bash
 # Launch unified dashboard (opens to analytics by default)
 cct --dashboard
@@ -20,6 +22,7 @@ cct --dashboard
 ```
 
 ### Features
+
 - **Dashboard Selector**: Dropdown to switch between all dashboards
 - **Status Indicators**: Real-time online/offline status for each dashboard
 - **Seamless Navigation**: Switch dashboards without page reloads
@@ -27,6 +30,7 @@ cct --dashboard
 - **Error Handling**: Clear messages when dashboards aren't running
 
 ### Example Workflow
+
 ```bash
 # Terminal 1: Start multiple dashboards
 cct --hooks &
@@ -47,9 +51,11 @@ cct --dashboard
 ## 2. 📍 Scope System (`--scope`)
 
 ### What It Does
+
 Control where components are installed: user-global, project-shared, or local-only.
 
 ### Usage
+
 ```bash
 # Install to user scope (available in all projects)
 cct --agent security-auditor --scope user
@@ -66,15 +72,17 @@ cct --agent frontend-dev --command lint --mcp github --scope user
 
 ### Scope Hierarchy
 
-| Scope | Location | Git | Use Case |
-|-------|----------|-----|----------|
-| **User** | `~/.claude/` | N/A | Personal tools, available everywhere |
-| **Project** | `./.claude/` | Committed | Team-shared configurations |
-| **Local** | `./.claude/*.local.json` | Ignored | Machine-specific settings |
-| **Enterprise** | System-wide | N/A | Organization-wide (admin only) |
+| Scope          | Location                 | Git       | Use Case                             |
+| -------------- | ------------------------ | --------- | ------------------------------------ |
+| **User**       | `~/.claude/`             | N/A       | Personal tools, available everywhere |
+| **Project**    | `./.claude/`             | Committed | Team-shared configurations           |
+| **Local**      | `./.claude/*.local.json` | Ignored   | Machine-specific settings            |
+| **Enterprise** | System-wide              | N/A       | Organization-wide (admin only)       |
 
 ### Dashboard Scope Switching
+
 All dashboards now include a scope dropdown:
+
 1. Select scope from dropdown (User/Project/Local/All)
 2. Data reloads automatically for that scope
 3. Scope preserved when navigating between dashboards
@@ -85,9 +93,11 @@ All dashboards now include a scope dropdown:
 ## 3. 🪝 Hooks Dashboard (`--hooks`)
 
 ### What It Does
+
 View, manage, and monitor all Claude Code automation hooks across scopes.
 
 ### Usage
+
 ```bash
 # Launch hooks dashboard
 cct --hooks
@@ -100,6 +110,7 @@ cct --hooks --host 0.0.0.0 --port 8080
 ```
 
 ### Features
+
 - **Hook Inventory**: View all installed hooks
 - **Available Hooks**: Browse hooks from components library
 - **Scope Filtering**: Filter by user/project/local
@@ -108,16 +119,16 @@ cct --hooks --host 0.0.0.0 --port 8080
 - **Installation**: Copy commands to install hooks
 
 ### Supported Hook Formats
+
 ✅ **New Array-Based Format**:
+
 ```json
 {
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "*.js",
-        "hooks": [
-          { "type": "bash", "command": "eslint" }
-        ]
+        "hooks": [{ "type": "bash", "command": "eslint" }]
       }
     ]
   }
@@ -125,12 +136,11 @@ cct --hooks --host 0.0.0.0 --port 8080
 ```
 
 ✅ **Old Direct Format** (backward compatible):
+
 ```json
 {
   "hooks": {
-    "PreToolUse": [
-      { "type": "bash", "command": "eslint" }
-    ]
+    "PreToolUse": [{ "type": "bash", "command": "eslint" }]
   }
 }
 ```
@@ -140,9 +150,11 @@ cct --hooks --host 0.0.0.0 --port 8080
 ## 4. 🧭 Universal Navigation
 
 ### What It Does
+
 Adds persistent navigation bar to all dashboards with offline detection.
 
 ### Features
+
 - **Dashboard Links**: 📊 Analytics | 💬 Chats | 🔌 Plugins | 🎯 Skills | 🪝 Hooks
 - **Active State**: Orange underline on current dashboard
 - **Offline Detection**: Red dot (●) on unavailable dashboards
@@ -151,6 +163,7 @@ Adds persistent navigation bar to all dashboards with offline detection.
 - **Mobile Responsive**: Hamburger menu for small screens
 
 ### Visual Indicators
+
 ```
 🔌 Plugins         (Online, clickable)
 🔌 Plugins ●       (Offline, shows alert)
@@ -159,6 +172,7 @@ Adds persistent navigation bar to all dashboards with offline detection.
 ```
 
 ### How It Works
+
 - Automatically checks dashboard availability on load
 - HEAD requests with 2-second timeout
 - Prevents navigation to offline dashboards
@@ -169,9 +183,11 @@ Adds persistent navigation bar to all dashboards with offline detection.
 ## 5. ⚡ Bun Integration
 
 ### What It Does
+
 Automatic package manager detection with intelligent fallback.
 
 ### Usage
+
 ```bash
 # Check detected package manager
 npm run pm:detect
@@ -184,6 +200,7 @@ npm run bun:install
 ```
 
 ### How It Works
+
 1. Detects Bun at runtime
 2. Uses Bun if available (~3x faster)
 3. Falls back to npm automatically
@@ -191,11 +208,13 @@ npm run bun:install
 5. No breaking changes
 
 ### Performance Benefits
+
 - **Bun**: 2-3x faster npm installs
 - **npm**: Full compatibility maintained
 - **Vercel**: Build command tries Bun first: `bun run build || npm run build`
 
 ### Automatic in CLI
+
 ```javascript
 // CLI automatically detects and uses best package manager
 const pm = await detectPackageManager();
@@ -207,9 +226,11 @@ const pm = await detectPackageManager();
 ## 6. 🔧 Configurable Server Options
 
 ### What It Does
+
 Customize dashboard host and port for any use case.
 
 ### Usage
+
 ```bash
 # Custom host for network access
 cct --hooks --host 0.0.0.0
@@ -222,6 +243,7 @@ cct --dashboard --host 0.0.0.0 --port 3000
 ```
 
 ### Use Cases
+
 - **Development**: Custom ports to avoid conflicts
 - **Network Access**: Host on 0.0.0.0 for team access
 - **Production**: Specific ports for deployment
@@ -232,6 +254,7 @@ cct --dashboard --host 0.0.0.0 --port 3000
 ## 🚀 Quick Start Guide
 
 ### Scenario 1: Personal Development Setup
+
 ```bash
 # Install your favorite tools globally
 cct --agent frontend-dev --scope user
@@ -245,6 +268,7 @@ cct --dashboard
 ```
 
 ### Scenario 2: Team Project Setup
+
 ```bash
 # Install project-wide tools
 cct --agent code-reviewer --scope project
@@ -255,6 +279,7 @@ git commit .claude/  # Commit configurations
 ```
 
 ### Scenario 3: Machine-Specific Settings
+
 ```bash
 # Install local-only preferences
 cct --setting performance-mode --scope local
@@ -264,6 +289,7 @@ cct --setting performance-mode --scope local
 ```
 
 ### Scenario 4: Multi-Dashboard Workflow
+
 ```bash
 # Terminal 1: Start dashboards
 cct --hooks &
@@ -280,20 +306,21 @@ cct --dashboard
 
 ## 📊 Dashboard Port Reference
 
-| Dashboard | Port | Command | Description |
-|-----------|------|---------|-------------|
-| Analytics | 3333 | `--analytics` | Session monitoring & metrics |
-| Chats | 3335 | `--chats` | Mobile-first chat interface |
-| Plugins | 3336 | `--plugins` | Plugin management |
-| Skills | 3337 | `--skills-manager` | Skills browser |
-| Hooks | 3338 | `--hooks` | Automation hooks |
-| **Unified** | **3339** | `--dashboard` | **All-in-one interface** |
+| Dashboard   | Port     | Command            | Description                  |
+| ----------- | -------- | ------------------ | ---------------------------- |
+| Analytics   | 3333     | `--analytics`      | Session monitoring & metrics |
+| Chats       | 3335     | `--chats`          | Mobile-first chat interface  |
+| Plugins     | 3336     | `--plugins`        | Plugin management            |
+| Skills      | 3337     | `--skills-manager` | Skills browser               |
+| Hooks       | 3338     | `--hooks`          | Automation hooks             |
+| **Unified** | **3339** | `--dashboard`      | **All-in-one interface**     |
 
 ---
 
 ## 🐛 Bug Fixes
 
 ### Plugin Permissions Iteration Error
+
 **Fixed**: "sugar hooks is not iterable" error
 
 **Problem**: Plugin dashboard couldn't parse new array-based hook format
@@ -301,11 +328,13 @@ cct --dashboard
 **Solution**: Updated to handle both old and new hook formats with backward compatibility
 
 ### Navigation Routing Errors
+
 **Fixed**: Clicking navigation links led to error pages
 
 **Problem**: No detection of dashboard availability
 
 **Solution**:
+
 - Added offline detection with visual indicators
 - Click prevention with helpful alerts
 - Grayscale + red dot for offline dashboards
@@ -315,6 +344,7 @@ cct --dashboard
 ## 📚 Documentation Updates
 
 All new features are documented in:
+
 - ✅ `CLAUDE.md` - Complete technical documentation
 - ✅ `NAVIGATION_FIXES.md` - Bug fixes and testing guide
 - ✅ `NEW_FEATURES_v1.22.0.md` - This file!
@@ -324,6 +354,7 @@ All new features are documented in:
 ## 🧪 Testing Guide
 
 ### Test 1: Scope Installation
+
 ```bash
 # Install to different scopes
 cct --agent test-agent --scope user
@@ -337,6 +368,7 @@ cct --agent test-agent --scope local
 ```
 
 ### Test 2: Dashboard Navigation
+
 ```bash
 # Start single dashboard
 cct --hooks
@@ -349,6 +381,7 @@ cct --hooks
 ```
 
 ### Test 3: Unified Dashboard
+
 ```bash
 # Start dashboards
 cct --hooks &
@@ -364,6 +397,7 @@ cct --dashboard
 ```
 
 ### Test 4: Bun Integration
+
 ```bash
 # Check detection
 npm run pm:detect
@@ -383,12 +417,14 @@ cct --agent test --verbose
 **No Breaking Changes!** All existing functionality preserved.
 
 **New Capabilities:**
+
 1. Add `--scope` to your installation commands
 2. Use `--dashboard` for unified interface
 3. Navigate between dashboards without restarting
 4. Bun works automatically if installed
 
 **Recommended Actions:**
+
 ```bash
 # 1. Update to latest
 npm install -g claude-code-templates@latest
@@ -409,6 +445,7 @@ cct --agent team-agent --scope project  # If shared
 ## 🔮 What's Next
 
 Future improvements being considered:
+
 - [ ] WebSocket for real-time dashboard status
 - [ ] Auto-refresh dashboard availability
 - [ ] "Start Dashboard" buttons for offline dashboards

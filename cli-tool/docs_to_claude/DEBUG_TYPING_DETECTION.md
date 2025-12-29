@@ -22,7 +22,7 @@ this.checkForTypingActivity(conversationId, filePath);
 
 ```javascript
 // Lógica temporal basada en tiempo transcurrido
-return "User typing...";
+return 'User typing...';
 ```
 
 ## 🧪 Test de Debug
@@ -52,7 +52,7 @@ En consola del navegador, ejecuta:
 
 ```javascript
 // Ver estado actual del conversation banner
-document.querySelector("#state-text").textContent;
+document.querySelector('#state-text').textContent;
 
 // Ver timeouts activos
 window.app.components.agents.typingTimeouts.size;
@@ -91,12 +91,10 @@ window.app.components.agents.lastMessageTime;
 Agregué logs específicos:
 
 ```javascript
-console.log("⏱️ Setting 30s timeout for typing detection: ${conversationId}");
-console.log("⏰ 30s timeout triggered for ${conversationId}");
-console.log(
-  "🔍 Checking typing for ${conversationId}: ${timeSinceLastMessage}s",
-);
-console.log("✍️ FRONTEND: Setting User typing state for ${conversationId}");
+console.log('⏱️ Setting 30s timeout for typing detection: ${conversationId}');
+console.log('⏰ 30s timeout triggered for ${conversationId}');
+console.log('🔍 Checking typing for ${conversationId}: ${timeSinceLastMessage}s');
+console.log('✍️ FRONTEND: Setting User typing state for ${conversationId}');
 ```
 
 ## ▶️ Próximos Pasos

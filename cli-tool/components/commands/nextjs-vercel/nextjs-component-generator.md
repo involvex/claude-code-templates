@@ -318,12 +318,12 @@ export default Layout;
 export interface BaseComponentProps {
   children?: React.ReactNode;
   className?: string;
-  "data-testid"?: string;
+  'data-testid'?: string;
 }
 
 export interface ButtonProps extends BaseComponentProps {
-  variant?: "primary" | "secondary" | "outline";
-  size?: "sm" | "md" | "lg";
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
   onClick?: () => void;
@@ -398,24 +398,24 @@ describe('ComponentName', () => {
 
 ```typescript
 // ComponentName.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react";
-import ComponentName from "./ComponentName";
+import type { Meta, StoryObj } from '@storybook/react';
+import ComponentName from './ComponentName';
 
 const meta: Meta<typeof ComponentName> = {
-  title: "Components/ComponentName",
+  title: 'Components/ComponentName',
   component: ComponentName,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
     docs: {
       description: {
-        component: "A reusable component built for Next.js applications.",
+        component: 'A reusable component built for Next.js applications.',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
-    onClick: { action: "clicked" },
-    className: { control: "text" },
+    onClick: { action: 'clicked' },
+    className: { control: 'text' },
   },
 };
 
@@ -424,21 +424,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: "Default Component",
+    children: 'Default Component',
   },
 };
 
 export const WithCustomClass: Story = {
   args: {
-    children: "Custom Styled",
-    className: "custom-style",
+    children: 'Custom Styled',
+    className: 'custom-style',
   },
 };
 
 export const Interactive: Story = {
   args: {
-    children: "Click me",
-    onClick: () => alert("Component clicked!"),
+    children: 'Click me',
+    onClick: () => alert('Component clicked!'),
   },
 };
 ```
@@ -447,8 +447,8 @@ export const Interactive: Story = {
 
 ```typescript
 // index.ts
-export { default } from "./ComponentName";
-export type { ComponentNameProps } from "./ComponentName";
+export { default } from './ComponentName';
+export type { ComponentNameProps } from './ComponentName';
 ```
 
 ## Framework-Specific Optimizations

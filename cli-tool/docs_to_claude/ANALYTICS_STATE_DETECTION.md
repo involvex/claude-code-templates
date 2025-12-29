@@ -30,14 +30,14 @@ For each conversation, the system:
    const timeDiff = (now - new Date(conversation.lastModified)) / (1000 * 60); // minutes
 
    if (timeDiff < 5) {
-     state = "Recently active";
+     state = 'Recently active';
    } else if (timeDiff < 60) {
-     state = "Idle";
+     state = 'Idle';
    } else if (timeDiff < 1440) {
      // 24 hours
-     state = "Inactive";
+     state = 'Inactive';
    } else {
-     state = "Old";
+     state = 'Old';
    }
    ```
 
@@ -78,28 +78,28 @@ The frontend maps backend states to display labels and CSS classes:
 ```javascript
 // Label mapping
 const stateLabels = {
-  "Claude Code working...": "Working",
-  "Awaiting user input...": "Awaiting input",
-  "User typing...": "Typing",
-  "Awaiting response...": "Awaiting response",
-  "Recently active": "Recent",
-  Idle: "Idle",
-  Inactive: "Inactive",
-  Old: "Old",
-  unknown: "Unknown",
+  'Claude Code working...': 'Working',
+  'Awaiting user input...': 'Awaiting input',
+  'User typing...': 'Typing',
+  'Awaiting response...': 'Awaiting response',
+  'Recently active': 'Recent',
+  Idle: 'Idle',
+  Inactive: 'Inactive',
+  Old: 'Old',
+  unknown: 'Unknown',
 };
 
 // CSS class mapping
 const stateClasses = {
-  "Claude Code working...": "status-active",
-  "Awaiting user input...": "status-waiting",
-  "User typing...": "status-typing",
-  "Awaiting response...": "status-pending",
-  "Recently active": "status-recent",
-  Idle: "status-idle",
-  Inactive: "status-inactive",
-  Old: "status-old",
-  unknown: "status-unknown",
+  'Claude Code working...': 'status-active',
+  'Awaiting user input...': 'status-waiting',
+  'User typing...': 'status-typing',
+  'Awaiting response...': 'status-pending',
+  'Recently active': 'status-recent',
+  Idle: 'status-idle',
+  Inactive: 'status-inactive',
+  Old: 'status-old',
+  unknown: 'status-unknown',
 };
 ```
 

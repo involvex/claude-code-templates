@@ -24,12 +24,12 @@ Plugin is active in standard mode.
 enabled: true
 strict_mode: false
 max_file_size: 1000000
-allowed_extensions: [".js", ".ts", ".tsx"]
+allowed_extensions: ['.js', '.ts', '.tsx']
 enable_logging: true
 notification_level: info
 retry_attempts: 3
 timeout_seconds: 60
-custom_path: "/path/to/data"
+custom_path: '/path/to/data'
 ---
 
 # My Plugin Advanced Configuration
@@ -58,8 +58,8 @@ task_number: 4.2
 pr_number: 5678
 coordinator_session: team-leader
 enabled: true
-dependencies: ["Task 3.5", "Task 4.1"]
-additional_instructions: "Use PostgreSQL, not MySQL"
+dependencies: ['Task 3.5', 'Task 4.1']
+additional_instructions: 'Use PostgreSQL, not MySQL'
 ---
 
 # Task Assignment: Database Schema Implementation

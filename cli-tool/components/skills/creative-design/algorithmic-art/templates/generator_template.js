@@ -201,7 +201,7 @@ function vectorFromAngle(angle, magnitude = 1) {
 // ============================================================================
 
 function exportImage() {
-  saveCanvas("generative-art-" + params.seed, "png");
+  saveCanvas('generative-art-' + params.seed, 'png');
 }
 
 // ============================================================================

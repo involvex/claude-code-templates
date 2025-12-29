@@ -14,7 +14,7 @@ async function getLatestNPMVersion() {
   return {
     version: response.data.version,
     publishedAt: response.data.time?.modified || new Date().toISOString(),
-    npmUrl: `https://www.npmjs.com/package/${NPM_PACKAGE}/v/${response.data.version}`
+    npmUrl: `https://www.npmjs.com/package/${NPM_PACKAGE}/v/${response.data.version}`,
   };
 }
 
@@ -30,13 +30,13 @@ async function sendToDiscord(versionData, parsed, formatted, summary) {
     title: `🚀 Claude Code ${versionData.version} Released`,
     description: `A new version of Claude Code is available with **${summary.total} changes**!`,
     url: versionData.githubUrl,
-    color: 0x8B5CF6, // Purple
+    color: 0x8b5cf6, // Purple
     fields: [],
     footer: {
       text: 'Claude Code Changelog Monitor',
-      icon_url: 'https://avatars.githubusercontent.com/u/100788936?s=200&v=4'
+      icon_url: 'https://avatars.githubusercontent.com/u/100788936?s=200&v=4',
     },
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   // Breaking changes
@@ -44,7 +44,7 @@ async function sendToDiscord(versionData, parsed, formatted, summary) {
     embed.fields.push({
       name: '⚠️ Breaking Changes',
       value: formatted.breaking,
-      inline: false
+      inline: false,
     });
   }
 
@@ -53,7 +53,7 @@ async function sendToDiscord(versionData, parsed, formatted, summary) {
     embed.fields.push({
       name: '✨ New Features',
       value: formatted.features,
-      inline: false
+      inline: false,
     });
   }
 
@@ -62,7 +62,7 @@ async function sendToDiscord(versionData, parsed, formatted, summary) {
     embed.fields.push({
       name: '⚡ Improvements',
       value: formatted.improvements,
-      inline: false
+      inline: false,
     });
   }
 
@@ -71,7 +71,7 @@ async function sendToDiscord(versionData, parsed, formatted, summary) {
     embed.fields.push({
       name: '🐛 Bug Fixes',
       value: formatted.fixes,
-      inline: false
+      inline: false,
     });
   }
 
@@ -79,20 +79,20 @@ async function sendToDiscord(versionData, parsed, formatted, summary) {
   embed.fields.push({
     name: '📦 Installation',
     value: `\`\`\`bash\nnpm install -g @anthropic-ai/claude-code@${versionData.version}\n\`\`\``,
-    inline: false
+    inline: false,
   });
 
   // Links
   embed.fields.push({
     name: '🔗 Links',
     value: `[NPM Package](${versionData.npmUrl}) • [Full Changelog](${versionData.githubUrl})`,
-    inline: false
+    inline: false,
   });
 
   const payload = {
     username: 'Claude Code Monitor',
     avatar_url: 'https://raw.githubusercontent.com/anthropics/claude-code/main/assets/icon.png',
-    embeds: [embed]
+    embeds: [embed],
   };
 
   const response = await axios.post(webhookUrl, payload);
@@ -138,7 +138,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         status: 'already_processed',
         version: latestVersion.version,
-        message: 'Version already notified to Discord'
+        message: 'Version already notified to Discord',
       });
     }
 
@@ -169,7 +169,7 @@ export default async function handler(req, res) {
       publishedAt: latestVersion.publishedAt,
       npmUrl: latestVersion.npmUrl,
       githubUrl,
-      changelogContent: fullChangelog.substring(0, 50000)
+      changelogContent: fullChangelog.substring(0, 50000),
     };
 
     let versionId;
@@ -267,14 +267,13 @@ export default async function handler(req, res) {
       versionId,
       changes: {
         total: summary.total,
-        byType: summary.byType
+        byType: summary.byType,
       },
       discord: {
         sent: true,
-        status: discordResult.status
-      }
+        status: discordResult.status,
+      },
     });
-
   } catch (error) {
     console.error('❌ Error:', error);
 
@@ -296,7 +295,7 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error: 'Internal server error',
       message: error.message,
-      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined,
     });
   }
 }

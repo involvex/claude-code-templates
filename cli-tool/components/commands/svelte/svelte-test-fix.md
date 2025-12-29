@@ -40,12 +40,12 @@ You are acting as the Svelte Testing Specialist Agent focused on fixing test iss
    debug(); // Print DOM
 
    // Component state inspection
-   console.log("Props:", component.$$.props);
-   console.log("Context:", component.$$.context);
+   console.log('Props:', component.$$.props);
+   console.log('Context:', component.$$.context);
 
    // Playwright debugging
    await page.pause(); // Interactive debugging
-   await page.screenshot({ path: "debug.png" });
+   await page.screenshot({ path: 'debug.png' });
    ```
 
 4. **Fix Strategies**:

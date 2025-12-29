@@ -40,33 +40,33 @@ You are a NoSQL database specialist with expertise in document stores, key-value
 const userSchema = {
   validator: {
     $jsonSchema: {
-      bsonType: "object",
-      required: ["email", "profile", "createdAt"],
+      bsonType: 'object',
+      required: ['email', 'profile', 'createdAt'],
       properties: {
-        _id: { bsonType: "objectId" },
+        _id: { bsonType: 'objectId' },
         email: {
-          bsonType: "string",
-          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+          bsonType: 'string',
+          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
         },
         profile: {
-          bsonType: "object",
-          required: ["firstName", "lastName"],
+          bsonType: 'object',
+          required: ['firstName', 'lastName'],
           properties: {
-            firstName: { bsonType: "string", maxLength: 50 },
-            lastName: { bsonType: "string", maxLength: 50 },
-            avatar: { bsonType: "string" },
-            bio: { bsonType: "string", maxLength: 500 },
+            firstName: { bsonType: 'string', maxLength: 50 },
+            lastName: { bsonType: 'string', maxLength: 50 },
+            avatar: { bsonType: 'string' },
+            bio: { bsonType: 'string', maxLength: 500 },
             preferences: {
-              bsonType: "object",
+              bsonType: 'object',
               properties: {
-                theme: { enum: ["light", "dark", "auto"] },
-                language: { bsonType: "string", maxLength: 5 },
+                theme: { enum: ['light', 'dark', 'auto'] },
+                language: { bsonType: 'string', maxLength: 5 },
                 notifications: {
-                  bsonType: "object",
+                  bsonType: 'object',
                   properties: {
-                    email: { bsonType: "bool" },
-                    push: { bsonType: "bool" },
-                    sms: { bsonType: "bool" },
+                    email: { bsonType: 'bool' },
+                    push: { bsonType: 'bool' },
+                    sms: { bsonType: 'bool' },
                   },
                 },
               },
@@ -75,45 +75,45 @@ const userSchema = {
         },
         // Embedded addresses for quick access
         addresses: {
-          bsonType: "array",
+          bsonType: 'array',
           maxItems: 5,
           items: {
-            bsonType: "object",
-            required: ["type", "street", "city", "country"],
+            bsonType: 'object',
+            required: ['type', 'street', 'city', 'country'],
             properties: {
-              type: { enum: ["home", "work", "billing", "shipping"] },
-              street: { bsonType: "string" },
-              city: { bsonType: "string" },
-              state: { bsonType: "string" },
-              postalCode: { bsonType: "string" },
-              country: { bsonType: "string", maxLength: 2 },
-              isDefault: { bsonType: "bool" },
+              type: { enum: ['home', 'work', 'billing', 'shipping'] },
+              street: { bsonType: 'string' },
+              city: { bsonType: 'string' },
+              state: { bsonType: 'string' },
+              postalCode: { bsonType: 'string' },
+              country: { bsonType: 'string', maxLength: 2 },
+              isDefault: { bsonType: 'bool' },
             },
           },
         },
         // Reference to orders (avoid embedding large arrays)
-        orderCount: { bsonType: "int", minimum: 0 },
-        lastOrderDate: { bsonType: "date" },
-        totalSpent: { bsonType: "decimal" },
-        status: { enum: ["active", "inactive", "suspended"] },
+        orderCount: { bsonType: 'int', minimum: 0 },
+        lastOrderDate: { bsonType: 'date' },
+        totalSpent: { bsonType: 'decimal' },
+        status: { enum: ['active', 'inactive', 'suspended'] },
         tags: {
-          bsonType: "array",
-          items: { bsonType: "string" },
+          bsonType: 'array',
+          items: { bsonType: 'string' },
         },
-        createdAt: { bsonType: "date" },
-        updatedAt: { bsonType: "date" },
+        createdAt: { bsonType: 'date' },
+        updatedAt: { bsonType: 'date' },
       },
     },
   },
 };
 
 // Create collection with schema validation
-db.createCollection("users", userSchema);
+db.createCollection('users', userSchema);
 
 // Compound indexes for common query patterns
 db.users.createIndex({ email: 1 }, { unique: true });
 db.users.createIndex({ status: 1, createdAt: -1 });
-db.users.createIndex({ "profile.preferences.language": 1, status: 1 });
+db.users.createIndex({ 'profile.preferences.language': 1, status: 1 });
 db.users.createIndex({ tags: 1, totalSpent: -1 });
 ```
 
@@ -126,7 +126,7 @@ const userAnalyticsPipeline = [
   // Match active users from last 6 months
   {
     $match: {
-      status: "active",
+      status: 'active',
       createdAt: { $gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000) },
     },
   },
@@ -135,31 +135,31 @@ const userAnalyticsPipeline = [
   {
     $addFields: {
       registrationMonth: {
-        $dateToString: { format: "%Y-%m", date: "$createdAt" },
+        $dateToString: { format: '%Y-%m', date: '$createdAt' },
       },
-      hasMultipleAddresses: { $gt: [{ $size: "$addresses" }, 1] },
-      isHighValueCustomer: { $gte: ["$totalSpent", 1000] },
+      hasMultipleAddresses: { $gt: [{ $size: '$addresses' }, 1] },
+      isHighValueCustomer: { $gte: ['$totalSpent', 1000] },
     },
   },
 
   // Group by registration month
   {
     $group: {
-      _id: "$registrationMonth",
+      _id: '$registrationMonth',
       totalUsers: { $sum: 1 },
       highValueUsers: {
-        $sum: { $cond: ["$isHighValueCustomer", 1, 0] },
+        $sum: { $cond: ['$isHighValueCustomer', 1, 0] },
       },
-      avgSpent: { $avg: "$totalSpent" },
+      avgSpent: { $avg: '$totalSpent' },
       usersWithMultipleAddresses: {
-        $sum: { $cond: ["$hasMultipleAddresses", 1, 0] },
+        $sum: { $cond: ['$hasMultipleAddresses', 1, 0] },
       },
       topSpenders: {
         $push: {
           $cond: [
-            { $gte: ["$totalSpent", 500] },
-            { userId: "$_id", spent: "$totalSpent", email: "$email" },
-            "$$REMOVE",
+            { $gte: ['$totalSpent', 500] },
+            { userId: '$_id', spent: '$totalSpent', email: '$email' },
+            '$$REMOVE',
           ],
         },
       },
@@ -173,22 +173,17 @@ const userAnalyticsPipeline = [
   {
     $addFields: {
       highValuePercentage: {
-        $multiply: [{ $divide: ["$highValueUsers", "$totalUsers"] }, 100],
+        $multiply: [{ $divide: ['$highValueUsers', '$totalUsers'] }, 100],
       },
       multiAddressPercentage: {
-        $multiply: [
-          { $divide: ["$usersWithMultipleAddresses", "$totalUsers"] },
-          100,
-        ],
+        $multiply: [{ $divide: ['$usersWithMultipleAddresses', '$totalUsers'] }, 100],
       },
     },
   },
 ];
 
 // Execute aggregation with explain for performance analysis
-const results = db.users
-  .aggregate(userAnalyticsPipeline)
-  .explain("executionStats");
+const results = db.users.aggregate(userAnalyticsPipeline).explain('executionStats');
 
 // Transaction support for multi-document operations
 const session = db.getMongo().startSession();
@@ -199,22 +194,22 @@ try {
   db.users.updateOne(
     { _id: userId },
     {
-      $set: { "profile.lastName": "NewLastName", updatedAt: new Date() },
+      $set: { 'profile.lastName': 'NewLastName', updatedAt: new Date() },
       $inc: { version: 1 },
     },
-    { session: session },
+    { session: session }
   );
 
   // Create audit log entry
   db.auditLog.insertOne(
     {
       userId: userId,
-      action: "profile_update",
-      changes: { lastName: "NewLastName" },
+      action: 'profile_update',
+      changes: { lastName: 'NewLastName' },
       timestamp: new Date(),
       sessionId: session.getSessionId(),
     },
-    { session: session },
+    { session: session }
   );
 
   session.commitTransaction();
@@ -616,25 +611,25 @@ class DynamoDBManager:
 db.users.createIndex(
   { status: 1, lastLoginDate: -1, totalSpent: -1 },
   {
-    name: "user_analytics_idx",
+    name: 'user_analytics_idx',
     background: true,
-    partialFilterExpression: { status: "active" },
-  },
+    partialFilterExpression: { status: 'active' },
+  }
 );
 
 // 2. Aggregation pipeline optimization
 db.orders.aggregate(
   [
     // Move $match as early as possible
-    { $match: { createdAt: { $gte: ISODate("2024-01-01") } } },
+    { $match: { createdAt: { $gte: ISODate('2024-01-01') } } },
 
     // Use $project to reduce document size early
     { $project: { customerId: 1, total: 1, items: 1 } },
 
     // Optimize grouping operations
-    { $group: { _id: "$customerId", totalSpent: { $sum: "$total" } } },
+    { $group: { _id: '$customerId', totalSpent: { $sum: '$total' } } },
   ],
-  { allowDiskUse: true },
+  { allowDiskUse: true }
 );
 
 // 3. Connection pooling optimization

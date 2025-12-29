@@ -2,9 +2,9 @@
  * PerformanceMonitor - Monitors and tracks system performance
  * Phase 4: Performance monitoring and optimization
  */
-const fs = require("fs-extra");
-const path = require("path");
-const chalk = require("chalk");
+const fs = require('fs-extra');
+const path = require('path');
+const chalk = require('chalk');
 
 class PerformanceMonitor {
   constructor(options = {}) {
@@ -39,7 +39,7 @@ class PerformanceMonitor {
    * Start performance monitoring
    */
   startMonitoring() {
-    console.log(chalk.blue("📊 Starting performance monitoring..."));
+    console.log(chalk.blue('📊 Starting performance monitoring...'));
 
     // Start periodic logging
     this.logInterval = setInterval(() => {
@@ -61,7 +61,7 @@ class PerformanceMonitor {
       this.logInterval = null;
     }
 
-    console.log(chalk.yellow("📊 Performance monitoring stopped"));
+    console.log(chalk.yellow('📊 Performance monitoring stopped'));
   }
 
   /**
@@ -69,23 +69,23 @@ class PerformanceMonitor {
    */
   setupProcessMonitoring() {
     // Monitor memory usage
-    process.on("warning", (warning) => {
-      this.recordError("process_warning", warning.message, {
+    process.on('warning', (warning) => {
+      this.recordError('process_warning', warning.message, {
         name: warning.name,
         code: warning.code,
       });
     });
 
     // Monitor uncaught exceptions
-    process.on("uncaughtException", (error) => {
-      this.recordError("uncaught_exception", error.message, {
+    process.on('uncaughtException', (error) => {
+      this.recordError('uncaught_exception', error.message, {
         stack: error.stack,
       });
     });
 
     // Monitor unhandled rejections
-    process.on("unhandledRejection", (reason, promise) => {
-      this.recordError("unhandled_rejection", reason.toString(), {
+    process.on('unhandledRejection', (reason, promise) => {
+      this.recordError('unhandled_rejection', reason.toString(), {
         promise: promise.toString(),
       });
     });
@@ -117,7 +117,7 @@ class PerformanceMonitor {
     const endTime = process.hrtime.bigint();
     const duration = Number(endTime - timer.start) / 1000000; // Convert to milliseconds
 
-    this.recordMetric("performance", {
+    this.recordMetric('performance', {
       operation: name,
       duration,
       timestamp: Date.now(),
@@ -167,7 +167,7 @@ class PerformanceMonitor {
    * @param {Object} metadata - Additional metadata
    */
   recordError(type, message, metadata = {}) {
-    this.recordMetric("errors", {
+    this.recordMetric('errors', {
       type,
       message,
       ...metadata,
@@ -184,7 +184,7 @@ class PerformanceMonitor {
    * @param {Object} metadata - Additional metadata
    */
   recordRequest(endpoint, duration, statusCode, metadata = {}) {
-    this.recordMetric("requests", {
+    this.recordMetric('requests', {
       endpoint,
       duration,
       statusCode,
@@ -192,9 +192,9 @@ class PerformanceMonitor {
       ...metadata,
     });
 
-    this.incrementCounter("total_requests");
+    this.incrementCounter('total_requests');
     if (statusCode >= 400) {
-      this.incrementCounter("error_requests");
+      this.incrementCounter('error_requests');
     }
   }
 
@@ -205,7 +205,7 @@ class PerformanceMonitor {
    * @param {number} duration - Operation duration
    */
   recordCache(operation, key, duration = 0) {
-    this.recordMetric("cache", {
+    this.recordMetric('cache', {
       operation,
       key,
       duration,
@@ -220,7 +220,7 @@ class PerformanceMonitor {
    * @param {Object} data - Event data
    */
   recordWebSocket(event, data = {}) {
-    this.recordMetric("websocket", {
+    this.recordMetric('websocket', {
       event,
       ...data,
     });
@@ -235,7 +235,7 @@ class PerformanceMonitor {
     const memUsage = process.memoryUsage();
     const cpuUsage = process.cpuUsage();
 
-    this.recordMetric("memory", {
+    this.recordMetric('memory', {
       rss: memUsage.rss,
       heapUsed: memUsage.heapUsed,
       heapTotal: memUsage.heapTotal,
@@ -243,7 +243,7 @@ class PerformanceMonitor {
       arrayBuffers: memUsage.arrayBuffers,
     });
 
-    this.recordMetric("cpu", {
+    this.recordMetric('cpu', {
       user: cpuUsage.user,
       system: cpuUsage.system,
     });
@@ -251,8 +251,8 @@ class PerformanceMonitor {
     // Check memory threshold
     if (memUsage.heapUsed > this.options.memoryThreshold) {
       this.recordError(
-        "memory_threshold",
-        `Memory usage exceeded threshold: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`,
+        'memory_threshold',
+        `Memory usage exceeded threshold: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`
       );
     }
   }
@@ -266,8 +266,7 @@ class PerformanceMonitor {
     // Default 5 minutes
     const cutoff = Date.now() - timeframe;
 
-    const filterRecent = (metrics) =>
-      metrics.filter((metric) => metric.timestamp > cutoff);
+    const filterRecent = (metrics) => metrics.filter((metric) => metric.timestamp > cutoff);
 
     const recentRequests = filterRecent(this.metrics.requests || []);
     const recentErrors = filterRecent(this.metrics.errors || []);
@@ -280,25 +279,22 @@ class PerformanceMonitor {
         total: recentRequests.length,
         successful: recentRequests.filter((r) => r.success).length,
         errors: recentRequests.filter((r) => !r.success).length,
-        averageResponseTime: this.calculateAverage(recentRequests, "duration"),
-        endpointStats: this.groupBy(recentRequests, "endpoint"),
+        averageResponseTime: this.calculateAverage(recentRequests, 'duration'),
+        endpointStats: this.groupBy(recentRequests, 'endpoint'),
       },
       errors: {
         total: recentErrors.length,
-        byType: this.groupBy(recentErrors, "type"),
+        byType: this.groupBy(recentErrors, 'type'),
       },
       memory: {
-        current:
-          recentMemory.length > 0
-            ? recentMemory[recentMemory.length - 1]
-            : null,
+        current: recentMemory.length > 0 ? recentMemory[recentMemory.length - 1] : null,
         average: this.calculateAverageMemory(recentMemory),
         peak: this.calculatePeakMemory(recentMemory),
       },
       cache: {
         operations: recentCache.length,
         hitRate: this.calculateCacheHitRate(recentCache),
-        operationStats: this.groupBy(recentCache, "operation"),
+        operationStats: this.groupBy(recentCache, 'operation'),
       },
       counters: { ...this.counters },
       activeTimers: Object.keys(this.timers).length,
@@ -325,9 +321,9 @@ class PerformanceMonitor {
   calculateAverageMemory(memoryMetrics) {
     if (memoryMetrics.length === 0) return null;
 
-    const avgRss = this.calculateAverage(memoryMetrics, "rss");
-    const avgHeapUsed = this.calculateAverage(memoryMetrics, "heapUsed");
-    const avgHeapTotal = this.calculateAverage(memoryMetrics, "heapTotal");
+    const avgRss = this.calculateAverage(memoryMetrics, 'rss');
+    const avgHeapUsed = this.calculateAverage(memoryMetrics, 'heapUsed');
+    const avgHeapTotal = this.calculateAverage(memoryMetrics, 'heapTotal');
 
     return { rss: avgRss, heapUsed: avgHeapUsed, heapTotal: avgHeapTotal };
   }
@@ -352,8 +348,8 @@ class PerformanceMonitor {
    * @returns {number} Cache hit rate percentage
    */
   calculateCacheHitRate(cacheMetrics) {
-    const hits = cacheMetrics.filter((m) => m.operation === "hit").length;
-    const misses = cacheMetrics.filter((m) => m.operation === "miss").length;
+    const hits = cacheMetrics.filter((m) => m.operation === 'hit').length;
+    const misses = cacheMetrics.filter((m) => m.operation === 'miss').length;
     const total = hits + misses;
 
     return total > 0 ? Math.round((hits / total) * 100 * 100) / 100 : 0;
@@ -367,7 +363,7 @@ class PerformanceMonitor {
    */
   groupBy(items, field) {
     return items.reduce((acc, item) => {
-      const key = item[field] || "unknown";
+      const key = item[field] || 'unknown';
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
@@ -380,9 +376,7 @@ class PerformanceMonitor {
     const cutoff = Date.now() - this.options.metricsRetention;
 
     Object.keys(this.metrics).forEach((category) => {
-      this.metrics[category] = this.metrics[category].filter(
-        (metric) => metric.timestamp > cutoff,
-      );
+      this.metrics[category] = this.metrics[category].filter((metric) => metric.timestamp > cutoff);
     });
   }
 
@@ -392,20 +386,16 @@ class PerformanceMonitor {
   logPerformanceReport() {
     const stats = this.getStats();
 
-    console.log(chalk.cyan("\n📊 Performance Report:"));
+    console.log(chalk.cyan('\n📊 Performance Report:'));
     console.log(chalk.gray(`Uptime: ${Math.round(stats.uptime / 1000)}s`));
 
     if (stats.requests.total > 0) {
       console.log(
         chalk.green(
-          `Requests: ${stats.requests.total} (${stats.requests.successful} success, ${stats.requests.errors} errors)`,
-        ),
+          `Requests: ${stats.requests.total} (${stats.requests.successful} success, ${stats.requests.errors} errors)`
+        )
       );
-      console.log(
-        chalk.blue(
-          `Avg Response Time: ${stats.requests.averageResponseTime}ms`,
-        ),
-      );
+      console.log(chalk.blue(`Avg Response Time: ${stats.requests.averageResponseTime}ms`));
     }
 
     if (stats.memory.current) {
@@ -415,9 +405,7 @@ class PerformanceMonitor {
 
     if (stats.cache.operations > 0) {
       console.log(
-        chalk.magenta(
-          `Cache: ${stats.cache.hitRate}% hit rate (${stats.cache.operations} ops)`,
-        ),
+        chalk.magenta(`Cache: ${stats.cache.hitRate}% hit rate (${stats.cache.operations} ops)`)
       );
     }
 
@@ -450,7 +438,7 @@ class PerformanceMonitor {
     return (req, res, next) => {
       const start = Date.now();
 
-      res.on("finish", () => {
+      res.on('finish', () => {
         const duration = Date.now() - start;
         this.recordRequest(
           `${req.method} ${req.route?.path || req.url}`,
@@ -458,9 +446,9 @@ class PerformanceMonitor {
           res.statusCode,
           {
             method: req.method,
-            userAgent: req.get("User-Agent"),
+            userAgent: req.get('User-Agent'),
             ip: req.ip,
-          },
+          }
         );
       });
 

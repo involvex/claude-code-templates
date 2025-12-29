@@ -9,6 +9,7 @@ Secure remote access to your Claude Code tools from anywhere.
 ## Launch Commands
 
 ### With Chats
+
 ```bash
 npx claude-code-templates@latest --chats --tunnel
 ```
@@ -25,6 +26,7 @@ npx claude-code-templates@latest --chats --tunnel
 ### Common Issues
 
 **Tunnel won't start:**
+
 ```bash
 # Check internet connection
 ping cloudflare.com

@@ -465,11 +465,11 @@ Use this agent for:
 
 ```javascript
 // Secure input handling
-import DOMPurify from "dompurify";
+import DOMPurify from 'dompurify';
 
 const sanitizeInput = (userInput) => {
   return DOMPurify.sanitize(userInput, {
-    ALLOWED_TAGS: ["b", "i", "em", "strong"],
+    ALLOWED_TAGS: ['b', 'i', 'em', 'strong'],
     ALLOWED_ATTR: [],
   });
 };

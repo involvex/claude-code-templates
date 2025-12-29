@@ -224,9 +224,9 @@ spec:
             - containerPort: 3000
           env:
             - name: ENVIRONMENT
-              value: "blue"
+              value: 'blue'
             - name: VERSION
-              value: "v1.0.0"
+              value: 'v1.0.0'
           livenessProbe:
             httpGet:
               path: /health
@@ -241,11 +241,11 @@ spec:
             periodSeconds: 5
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: '128Mi'
+              cpu: '100m'
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: '512Mi'
+              cpu: '500m'
 
 ---
 # green-deployment.yaml
@@ -275,9 +275,9 @@ spec:
             - containerPort: 3000
           env:
             - name: ENVIRONMENT
-              value: "green"
+              value: 'green'
             - name: VERSION
-              value: "v1.1.0"
+              value: 'v1.1.0'
           livenessProbe:
             httpGet:
               path: /health
@@ -292,11 +292,11 @@ spec:
             periodSeconds: 5
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: '128Mi'
+              cpu: '100m'
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: '512Mi'
+              cpu: '500m'
 ```
 
 ### 3. **Deployment Automation Scripts**
@@ -707,10 +707,10 @@ kind: Ingress
 metadata:
   name: app-ingress
   annotations:
-    nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-weight: "10" # 10% to canary
-    nginx.ingress.kubernetes.io/canary-by-header: "X-Canary"
-    nginx.ingress.kubernetes.io/canary-by-header-value: "true"
+    nginx.ingress.kubernetes.io/canary: 'true'
+    nginx.ingress.kubernetes.io/canary-weight: '10' # 10% to canary
+    nginx.ingress.kubernetes.io/canary-by-header: 'X-Canary'
+    nginx.ingress.kubernetes.io/canary-by-header-value: 'true'
 spec:
   rules:
     - host: api.example.com
@@ -807,8 +807,8 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: "Blue-green environment {{ $labels.environment }} is down"
-            description: "Environment {{ $labels.environment }} has been down for more than 1 minute"
+            summary: 'Blue-green environment {{ $labels.environment }} is down'
+            description: 'Environment {{ $labels.environment }} has been down for more than 1 minute'
 
         - alert: BlueGreenHighErrorRate
           expr: rate(http_requests_total{job="myapp", status=~"5.."}[5m]) > 0.1
@@ -816,8 +816,8 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "High error rate detected during blue-green deployment"
-            description: "Error rate is {{ $value }} errors per second"
+            summary: 'High error rate detected during blue-green deployment'
+            description: 'Error rate is {{ $value }} errors per second'
 
         - alert: BlueGreenDeploymentStuck
           expr: time() - kube_deployment_status_observed_generation{deployment=~"app-blue|app-green"} > 600
@@ -825,7 +825,7 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "Blue-green deployment appears stuck"
+            summary: 'Blue-green deployment appears stuck'
             description: "Deployment {{ $labels.deployment }} hasn't updated in over 10 minutes"
 ```
 

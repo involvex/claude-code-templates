@@ -71,7 +71,7 @@ Use this skill when:
 async function handleAccessRequest(userId, email) {
   // Verify identity
   const verified = await verifyIdentity(email);
-  if (!verified) throw new Error("Identity verification failed");
+  if (!verified) throw new Error('Identity verification failed');
 
   // Collect all personal data
   const userData = await collectUserData(userId);
@@ -82,15 +82,15 @@ async function handleAccessRequest(userId, email) {
     activityLogs: userData.activities,
     preferences: userData.settings,
     thirdPartySharing: userData.dataSharing,
-    retentionPeriod: "2 years from last activity",
-    dataProtectionOfficer: "dpo@company.com",
+    retentionPeriod: '2 years from last activity',
+    dataProtectionOfficer: 'dpo@company.com',
   };
 
   // Generate downloadable report
   const pdf = await generatePDFReport(report);
 
   // Log request for compliance
-  await logAccessRequest(userId, "completed");
+  await logAccessRequest(userId, 'completed');
 
   return pdf;
 }
@@ -109,13 +109,13 @@ async function handleAccessRequest(userId, email) {
 async function handleDeletionRequest(userId, email) {
   // Verify identity
   const verified = await verifyIdentity(email);
-  if (!verified) throw new Error("Identity verification failed");
+  if (!verified) throw new Error('Identity verification failed');
 
   // Check for legal obligations to retain
   const mustRetain = await checkRetentionRequirements(userId);
   if (mustRetain.required) {
     return {
-      status: "partial_deletion",
+      status: 'partial_deletion',
       retained: mustRetain.data,
       reason: mustRetain.legalBasis,
       retentionPeriod: mustRetain.period,
@@ -134,9 +134,9 @@ async function handleDeletionRequest(userId, email) {
 
   // Confirm deletion
   await sendDeletionConfirmation(email);
-  await logDeletionRequest(userId, "completed");
+  await logDeletionRequest(userId, 'completed');
 
-  return { status: "deleted", timestamp: new Date() };
+  return { status: 'deleted', timestamp: new Date() };
 }
 ```
 
@@ -152,7 +152,7 @@ async function handleDeletionRequest(userId, email) {
 **Export Handler:**
 
 ```javascript
-async function handlePortabilityRequest(userId, format = "json") {
+async function handlePortabilityRequest(userId, format = 'json') {
   const userData = await collectUserData(userId);
 
   // Structure in machine-readable format
@@ -168,9 +168,9 @@ async function handlePortabilityRequest(userId, format = "json") {
   };
 
   // Support multiple formats
-  if (format === "csv") {
+  if (format === 'csv') {
     return convertToCSV(portableData);
-  } else if (format === "xml") {
+  } else if (format === 'xml') {
     return convertToXML(portableData);
   }
 
@@ -192,13 +192,13 @@ async function handlePortabilityRequest(userId, format = "json") {
 ```javascript
 async function handleObjectionRequest(userId, processingType) {
   switch (processingType) {
-    case "direct_marketing":
+    case 'direct_marketing':
       // Must stop immediately
       await disableMarketing(userId);
-      await updateConsent(userId, "marketing", false);
+      await updateConsent(userId, 'marketing', false);
       break;
 
-    case "legitimate_interest":
+    case 'legitimate_interest':
       // Assess if we have compelling grounds
       const assessment = await assessLegitimateInterest(userId);
       if (!assessment.compelling) {
@@ -206,16 +206,16 @@ async function handleObjectionRequest(userId, processingType) {
       }
       return assessment;
 
-    case "profiling":
+    case 'profiling':
       await disableProfiling(userId);
-      await updateConsent(userId, "profiling", false);
+      await updateConsent(userId, 'profiling', false);
       break;
 
     default:
-      throw new Error("Invalid processing type");
+      throw new Error('Invalid processing type');
   }
 
-  await logObjectionRequest(userId, processingType, "granted");
+  await logObjectionRequest(userId, processingType, 'granted');
 }
 ```
 
@@ -265,17 +265,17 @@ async function handleObjectionRequest(userId, processingType) {
 
 ```javascript
 const consentRecord = {
-  userId: "user123",
+  userId: 'user123',
   timestamp: new Date().toISOString(),
-  consentVersion: "2.0",
+  consentVersion: '2.0',
   purposes: {
     essential: { granted: true, required: true },
-    analytics: { granted: true, purpose: "Website improvement" },
-    marketing: { granted: false, purpose: "Personalized advertising" },
+    analytics: { granted: true, purpose: 'Website improvement' },
+    marketing: { granted: false, purpose: 'Personalized advertising' },
   },
-  ipAddress: "192.168.1.1", // For proof
-  userAgent: "Mozilla/5.0...", // For context
-  method: "explicit_opt_in", // or 'implicit', 'presumed'
+  ipAddress: '192.168.1.1', // For proof
+  userAgent: 'Mozilla/5.0...', // For context
+  method: 'explicit_opt_in', // or 'implicit', 'presumed'
 };
 
 await saveConsentRecord(consentRecord);
@@ -287,8 +287,8 @@ await saveConsentRecord(consentRecord);
 <div id="cookie-banner" role="dialog" aria-labelledby="cookie-title">
   <h2 id="cookie-title">Cookie Preferences</h2>
   <p>
-    We use cookies to enhance your experience. Choose which cookies you allow us
-    to use. You can change your preferences at any time.
+    We use cookies to enhance your experience. Choose which cookies you allow us to use. You can
+    change your preferences at any time.
   </p>
 
   <button onclick="acceptAll()">Accept All</button>
@@ -349,21 +349,21 @@ const userRegistration = {
 ```javascript
 // Document and enforce purpose
 const dataProcessingPurpose = {
-  email: ["account_authentication", "order_confirmations", "password_reset"],
+  email: ['account_authentication', 'order_confirmations', 'password_reset'],
   phoneNumber: [
-    "order_delivery_notifications",
+    'order_delivery_notifications',
     // NOT: 'marketing_calls' (requires separate consent)
   ],
   purchaseHistory: [
-    "order_fulfillment",
-    "customer_support",
+    'order_fulfillment',
+    'customer_support',
     // NOT: 'targeted_advertising' (requires separate consent)
   ],
 };
 
 async function processData(data, purpose) {
   if (!isAllowedPurpose(data.type, purpose)) {
-    throw new Error("Purpose not authorized for this data");
+    throw new Error('Purpose not authorized for this data');
   }
   // Proceed with processing
 }
@@ -378,14 +378,14 @@ async function processData(data, purpose) {
 ```javascript
 const retentionPolicy = {
   userAccounts: {
-    active: "indefinite",
-    inactive: "2 years",
-    deleted: "30 days grace period",
+    active: 'indefinite',
+    inactive: '2 years',
+    deleted: '30 days grace period',
   },
-  orderRecords: "7 years", // Legal requirement
-  supportTickets: "3 years",
-  analytics: "26 months",
-  marketingData: "1 year or until consent withdrawn",
+  orderRecords: '7 years', // Legal requirement
+  supportTickets: '3 years',
+  analytics: '26 months',
+  marketingData: '1 year or until consent withdrawn',
 };
 
 // Automated data deletion
@@ -395,26 +395,23 @@ async function enforceRetentionPolicy() {
   // Delete inactive accounts
   await User.deleteMany({
     lastActive: { $lt: subYears(now, 2) },
-    status: "inactive",
+    status: 'inactive',
   });
 
   // Anonymize old analytics
   await Analytics.updateMany(
     { createdAt: { $lt: subMonths(now, 26) } },
-    { $unset: { userId: 1, ipAddress: 1 } },
+    { $unset: { userId: 1, ipAddress: 1 } }
   );
 
   // Delete expired marketing consent
   await MarketingConsent.deleteMany({
-    $or: [
-      { expiresAt: { $lt: now } },
-      { withdrawnAt: { $lt: subDays(now, 30) } },
-    ],
+    $or: [{ expiresAt: { $lt: now } }, { withdrawnAt: { $lt: subDays(now, 30) } }],
   });
 }
 
 // Schedule daily
-cron.schedule("0 2 * * *", enforceRetentionPolicy);
+cron.schedule('0 2 * * *', enforceRetentionPolicy);
 ```
 
 ## Data Protection Impact Assessment (DPIA)

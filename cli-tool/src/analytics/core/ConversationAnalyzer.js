@@ -1,6 +1,6 @@
-const chalk = require("chalk");
-const fs = require("fs-extra");
-const path = require("path");
+const chalk = require('chalk');
+const fs = require('fs-extra');
+const path = require('path');
 
 /**
  * ConversationAnalyzer - Handles conversation data loading, parsing, and analysis
@@ -26,7 +26,7 @@ class ConversationAnalyzer {
    * @returns {Promise<Object>} Complete analyzed data
    */
   async loadInitialData(stateCalculator, processDetector) {
-    console.log(chalk.yellow("📊 Analyzing Claude Code data..."));
+    console.log(chalk.yellow('📊 Analyzing Claude Code data...'));
 
     try {
       // Load conversation files
@@ -41,7 +41,7 @@ class ConversationAnalyzer {
       const enrichmentResult = await processDetector.enrichWithRunningProcesses(
         this.data.conversations,
         this.claudeDir,
-        stateCalculator,
+        stateCalculator
       );
       this.data.conversations = enrichmentResult.conversations;
       this.data.orphanProcesses = enrichmentResult.orphanProcesses;
@@ -52,16 +52,14 @@ class ConversationAnalyzer {
       // Update realtime stats
       this.updateRealtimeStats();
 
-      console.log(chalk.green("✅ Data analysis complete"));
+      console.log(chalk.green('✅ Data analysis complete'));
       console.log(
-        chalk.gray(
-          `Found ${conversations.length} conversations across ${projects.length} projects`,
-        ),
+        chalk.gray(`Found ${conversations.length} conversations across ${projects.length} projects`)
       );
 
       return this.data;
     } catch (error) {
-      console.error(chalk.red("Error loading Claude data:"), error.message);
+      console.error(chalk.red('Error loading Claude data:'), error.message);
       throw error;
     }
   }
@@ -88,7 +86,7 @@ class ConversationAnalyzer {
             // Recursively search subdirectories
             const subFiles = await findJsonlFiles(itemPath);
             files.push(...subFiles);
-          } else if (item.endsWith(".jsonl")) {
+          } else if (item.endsWith('.jsonl')) {
             files.push(itemPath);
           }
         }
@@ -98,7 +96,7 @@ class ConversationAnalyzer {
 
       const jsonlFiles = await findJsonlFiles(this.claudeDir);
       console.log(
-        `🔥 ConversationAnalyzer found ${jsonlFiles.length} JSONL files in ${this.claudeDir}`,
+        `🔥 ConversationAnalyzer found ${jsonlFiles.length} JSONL files in ${this.claudeDir}`
       );
 
       for (const filePath of jsonlFiles) {
@@ -113,27 +111,17 @@ class ConversationAnalyzer {
           const parsedMessages = await this.getParsedConversation(filePath);
 
           // Calculate real token usage and extract model info with caching
-          const tokenUsage = await this.getCachedTokenUsage(
-            filePath,
-            parsedMessages,
-          );
-          const modelInfo = await this.getCachedModelInfo(
-            filePath,
-            parsedMessages,
-          );
+          const tokenUsage = await this.getCachedTokenUsage(filePath, parsedMessages);
+          const modelInfo = await this.getCachedModelInfo(filePath, parsedMessages);
 
           // Calculate tool usage data with caching
-          const toolUsage = await this.getCachedToolUsage(
-            filePath,
-            parsedMessages,
-          );
+          const toolUsage = await this.getCachedToolUsage(filePath, parsedMessages);
 
-          const projectFromConversation =
-            await this.extractProjectFromConversation(filePath);
+          const projectFromConversation = await this.extractProjectFromConversation(filePath);
           const finalProject = projectFromConversation || projectFromPath;
 
           const conversation = {
-            id: filename.replace(".jsonl", ""),
+            id: filename.replace('.jsonl', ''),
             filename: filename,
             filePath: filePath,
             messageCount: parsedMessages.length,
@@ -148,35 +136,24 @@ class ConversationAnalyzer {
             modelInfo: modelInfo,
             toolUsage: toolUsage,
             project: finalProject,
-            status: stateCalculator.determineConversationStatus(
-              parsedMessages,
-              stats.mtime,
-            ),
+            status: stateCalculator.determineConversationStatus(parsedMessages, stats.mtime),
             conversationState: stateCalculator.determineConversationState(
               parsedMessages,
-              stats.mtime,
+              stats.mtime
             ),
-            statusSquares: await this.getCachedStatusSquares(
-              filePath,
-              parsedMessages,
-            ),
+            statusSquares: await this.getCachedStatusSquares(filePath, parsedMessages),
             // parsedMessages removed to prevent memory leak - available via cache when needed
           };
 
           conversations.push(conversation);
         } catch (error) {
-          console.warn(
-            chalk.yellow(
-              `Warning: Could not parse ${filename}:`,
-              error.message,
-            ),
-          );
+          console.warn(chalk.yellow(`Warning: Could not parse ${filename}:`, error.message));
         }
       }
 
       return conversations.sort((a, b) => b.lastModified - a.lastModified);
     } catch (error) {
-      console.error(chalk.red("Error loading conversations:"), error.message);
+      console.error(chalk.red('Error loading conversations:'), error.message);
       return [];
     }
   }
@@ -195,7 +172,7 @@ class ConversationAnalyzer {
         const filePath = path.join(this.claudeDir, file);
         const stats = await fs.stat(filePath);
 
-        if (stats.isDirectory() && !file.startsWith(".")) {
+        if (stats.isDirectory() && !file.startsWith('.')) {
           const projectPath = filePath;
           const todoFiles = await this.findTodoFiles(projectPath);
 
@@ -213,7 +190,7 @@ class ConversationAnalyzer {
 
       return projects.sort((a, b) => b.lastActivity - a.lastActivity);
     } catch (error) {
-      console.error(chalk.red("Error loading projects:"), error.message);
+      console.error(chalk.red('Error loading projects:'), error.message);
       return [];
     }
   }
@@ -227,7 +204,7 @@ class ConversationAnalyzer {
     if (this.dataCache) {
       return await this.dataCache.getFileContent(filepath);
     }
-    return await fs.readFile(filepath, "utf8");
+    return await fs.readFile(filepath, 'utf8');
   }
 
   /**
@@ -253,10 +230,10 @@ class ConversationAnalyzer {
     }
 
     // Fallback to direct parsing with tool correlation
-    const content = await fs.readFile(filepath, "utf8");
+    const content = await fs.readFile(filepath, 'utf8');
     const lines = content
       .trim()
-      .split("\n")
+      .split('\n')
       .filter((line) => line.trim());
 
     return this.parseAndCorrelateToolMessages(lines);
@@ -275,17 +252,14 @@ class ConversationAnalyzer {
     for (const line of lines) {
       try {
         const item = JSON.parse(line);
-        if (
-          item.message &&
-          (item.type === "assistant" || item.type === "user")
-        ) {
+        if (item.message && (item.type === 'assistant' || item.type === 'user')) {
           entries.push(item);
 
           // Track tool_use entries by their ID
-          if (item.type === "assistant" && item.message.content) {
+          if (item.type === 'assistant' && item.message.content) {
             const toolUseBlock = Array.isArray(item.message.content)
-              ? item.message.content.find((c) => c.type === "tool_use")
-              : item.message.content.type === "tool_use"
+              ? item.message.content.find((c) => c.type === 'tool_use')
+              : item.message.content.type === 'tool_use'
                 ? item.message.content
                 : null;
 
@@ -303,11 +277,11 @@ class ConversationAnalyzer {
     const processedMessages = [];
 
     for (const item of entries) {
-      if (item.type === "user" && item.message.content) {
+      if (item.type === 'user' && item.message.content) {
         // Check if this is a tool_result entry
         const toolResultBlock = Array.isArray(item.message.content)
-          ? item.message.content.find((c) => c.type === "tool_result")
-          : item.message.content.type === "tool_result"
+          ? item.message.content.find((c) => c.type === 'tool_result')
+          : item.message.content.type === 'tool_result'
             ? item.message.content
             : null;
 
@@ -337,9 +311,7 @@ class ConversationAnalyzer {
       }
       const parsed = {
         id: item.message.id || item.uuid || null,
-        role:
-          item.message.role ||
-          (item.type === "assistant" ? "assistant" : "user"),
+        role: item.message.role || (item.type === 'assistant' ? 'assistant' : 'user'),
         timestamp: new Date(item.timestamp),
         content: item.message.content,
         model: item.message.model || null,
@@ -432,8 +404,7 @@ class ConversationAnalyzer {
       if (message.usage) {
         totalInputTokens += message.usage.input_tokens || 0;
         totalOutputTokens += message.usage.output_tokens || 0;
-        totalCacheCreationTokens +=
-          message.usage.cache_creation_input_tokens || 0;
+        totalCacheCreationTokens += message.usage.cache_creation_input_tokens || 0;
         totalCacheReadTokens += message.usage.cache_read_input_tokens || 0;
         messagesWithUsage++;
       }
@@ -474,10 +445,9 @@ class ConversationAnalyzer {
 
     return {
       models: Array.from(models),
-      primaryModel: lastModel || models.values().next().value || "Unknown",
+      primaryModel: lastModel || models.values().next().value || 'Unknown',
       serviceTiers: Array.from(serviceTiers),
-      currentServiceTier:
-        lastServiceTier || serviceTiers.values().next().value || "Unknown",
+      currentServiceTier: lastServiceTier || serviceTiers.values().next().value || 'Unknown',
       hasMultipleModels: models.size > 1,
     };
   }
@@ -490,8 +460,8 @@ class ConversationAnalyzer {
   async extractProjectFromPath(filePath) {
     // Extract project name from file path like:
     // /Users/user/.claude/projects/-Users-user-Projects-MyProject/conversation.jsonl
-    const pathParts = filePath.split("/");
-    const projectIndex = pathParts.findIndex((part) => part === "projects");
+    const pathParts = filePath.split('/');
+    const projectIndex = pathParts.findIndex((part) => part === 'projects');
 
     if (projectIndex !== -1 && projectIndex + 1 < pathParts.length) {
       const projectDir = pathParts[projectIndex + 1];
@@ -499,10 +469,10 @@ class ConversationAnalyzer {
       // Try to read the settings.json file for this project
       try {
         const projectPath = path.join(path.dirname(filePath)); // Directory containing the conversation file
-        const settingsPath = path.join(projectPath, "settings.json");
+        const settingsPath = path.join(projectPath, 'settings.json');
 
         if (await fs.pathExists(settingsPath)) {
-          const settingsContent = await fs.readFile(settingsPath, "utf8");
+          const settingsContent = await fs.readFile(settingsPath, 'utf8');
           const settings = JSON.parse(settingsContent);
 
           if (settings.projectName) {
@@ -519,8 +489,8 @@ class ConversationAnalyzer {
         console.warn(
           chalk.yellow(
             `Warning: Could not read settings.json for project ${projectDir}:`,
-            error.message,
-          ),
+            error.message
+          )
         );
       }
 
@@ -543,7 +513,7 @@ class ConversationAnalyzer {
       const content = await this.getFileContent(filePath);
       const lines = content
         .trim()
-        .split("\n")
+        .split('\n')
         .filter((line) => line.trim());
 
       for (const line of lines.slice(0, 10)) {
@@ -570,12 +540,12 @@ class ConversationAnalyzer {
       console.warn(
         chalk.yellow(
           `Warning: Could not extract project from conversation ${filePath}:`,
-          error.message,
-        ),
+          error.message
+        )
       );
     }
 
-    return "Unknown";
+    return 'Unknown';
   }
 
   /**
@@ -589,24 +559,22 @@ class ConversationAnalyzer {
     let totalToolCalls = 0;
 
     parsedMessages.forEach((message) => {
-      if (message.role === "assistant" && message.content) {
+      if (message.role === 'assistant' && message.content) {
         const content = message.content;
         const timestamp = message.timestamp;
 
         // Handle string content with tool indicators
-        if (typeof content === "string") {
+        if (typeof content === 'string') {
           const toolMatches = content.match(/\[Tool:\s*([^\]]+)\]/g);
           if (toolMatches) {
             toolMatches.forEach((match) => {
-              const toolName = match
-                .replace(/\[Tool:\s*([^\]]+)\]/, "$1")
-                .trim();
+              const toolName = match.replace(/\[Tool:\s*([^\]]+)\]/, '$1').trim();
               toolStats[toolName] = (toolStats[toolName] || 0) + 1;
               totalToolCalls++;
               toolTimeline.push({
                 tool: toolName,
                 timestamp: timestamp,
-                type: "usage",
+                type: 'usage',
               });
             });
           }
@@ -615,14 +583,14 @@ class ConversationAnalyzer {
         // Handle array content with tool_use blocks
         if (Array.isArray(content)) {
           content.forEach((block) => {
-            if (block.type === "tool_use") {
-              const toolName = block.name || "Unknown Tool";
+            if (block.type === 'tool_use') {
+              const toolName = block.name || 'Unknown Tool';
               toolStats[toolName] = (toolStats[toolName] || 0) + 1;
               totalToolCalls++;
               toolTimeline.push({
                 tool: toolName,
                 timestamp: timestamp,
-                type: "usage",
+                type: 'usage',
                 parameters: block.input || {},
               });
             }
@@ -633,9 +601,7 @@ class ConversationAnalyzer {
 
     return {
       toolStats,
-      toolTimeline: toolTimeline.sort(
-        (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
-      ),
+      toolTimeline: toolTimeline.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)),
       totalToolCalls,
       uniqueTools: Object.keys(toolStats).length,
     };
@@ -652,68 +618,65 @@ class ConversationAnalyzer {
     }
 
     // Sort messages by timestamp and take last 10 for status squares
-    const sortedMessages = messages.sort(
-      (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
-    );
+    const sortedMessages = messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
     const recentMessages = sortedMessages.slice(-10);
 
     return recentMessages.map((message, index) => {
-      const messageNum =
-        sortedMessages.length - recentMessages.length + index + 1;
+      const messageNum = sortedMessages.length - recentMessages.length + index + 1;
 
       // Determine status based on message content and role
-      if (message.role === "user") {
+      if (message.role === 'user') {
         return {
-          type: "pending",
+          type: 'pending',
           tooltip: `Message #${messageNum}: User input`,
         };
-      } else if (message.role === "assistant") {
+      } else if (message.role === 'assistant') {
         // Check if the message contains tool usage or errors
-        const content = message.content || "";
+        const content = message.content || '';
 
-        if (typeof content === "string") {
-          if (content.includes("[Tool:") || content.includes("tool_use")) {
+        if (typeof content === 'string') {
+          if (content.includes('[Tool:') || content.includes('tool_use')) {
             return {
-              type: "tool",
+              type: 'tool',
               tooltip: `Message #${messageNum}: Tool execution`,
             };
           } else if (
-            content.includes("error") ||
-            content.includes("Error") ||
-            content.includes("failed")
+            content.includes('error') ||
+            content.includes('Error') ||
+            content.includes('failed')
           ) {
             return {
-              type: "error",
+              type: 'error',
               tooltip: `Message #${messageNum}: Error in response`,
             };
           } else {
             return {
-              type: "success",
+              type: 'success',
               tooltip: `Message #${messageNum}: Successful response`,
             };
           }
         } else if (Array.isArray(content)) {
           // Check for tool_use blocks in array content
-          const hasToolUse = content.some((block) => block.type === "tool_use");
+          const hasToolUse = content.some((block) => block.type === 'tool_use');
           const hasError = content.some(
             (block) =>
-              block.type === "text" &&
-              (block.text?.includes("error") || block.text?.includes("Error")),
+              block.type === 'text' &&
+              (block.text?.includes('error') || block.text?.includes('Error'))
           );
 
           if (hasError) {
             return {
-              type: "error",
+              type: 'error',
               tooltip: `Message #${messageNum}: Error in response`,
             };
           } else if (hasToolUse) {
             return {
-              type: "tool",
+              type: 'tool',
               tooltip: `Message #${messageNum}: Tool execution`,
             };
           } else {
             return {
-              type: "success",
+              type: 'success',
               tooltip: `Message #${messageNum}: Successful response`,
             };
           }
@@ -721,7 +684,7 @@ class ConversationAnalyzer {
       }
 
       return {
-        type: "pending",
+        type: 'pending',
         tooltip: `Message #${messageNum}: Unknown status`,
       };
     });
@@ -737,9 +700,9 @@ class ConversationAnalyzer {
     if (this.dataCache) {
       const dependencies = conversations.map((conv) => conv.filePath);
       return await this.dataCache.getCachedComputation(
-        "summary",
+        'summary',
         () => this.computeSummary(conversations, projects),
-        dependencies,
+        dependencies
       );
     }
     return this.computeSummary(conversations, projects);
@@ -752,26 +715,17 @@ class ConversationAnalyzer {
    * @returns {Promise<Object>} Summary statistics
    */
   async computeSummary(conversations, projects) {
-    const totalTokens = conversations.reduce(
-      (sum, conv) => sum + conv.tokens,
-      0,
-    );
+    const totalTokens = conversations.reduce((sum, conv) => sum + conv.tokens, 0);
     const totalConversations = conversations.length;
-    const activeConversations = conversations.filter(
-      (c) => c.status === "active",
-    ).length;
-    const activeProjects = projects.filter((p) => p.status === "active").length;
+    const activeConversations = conversations.filter((c) => c.status === 'active').length;
+    const activeProjects = projects.filter((p) => p.status === 'active').length;
 
     const avgTokensPerConversation =
       totalConversations > 0 ? Math.round(totalTokens / totalConversations) : 0;
-    const totalFileSize = conversations.reduce(
-      (sum, conv) => sum + conv.fileSize,
-      0,
-    );
+    const totalFileSize = conversations.reduce((sum, conv) => sum + conv.fileSize, 0);
 
     // Calculate real Claude sessions (5-hour periods)
-    const claudeSessionsResult =
-      await this.calculateClaudeSessions(conversations);
+    const claudeSessionsResult = await this.calculateClaudeSessions(conversations);
     const claudeSessions = claudeSessionsResult?.total || 0;
 
     return {
@@ -782,13 +736,12 @@ class ConversationAnalyzer {
       avgTokensPerConversation,
       totalFileSize: this.formatBytes(totalFileSize),
       dataSize: this.formatBytes(totalFileSize), // Alias for original dashboard compatibility
-      lastActivity:
-        conversations.length > 0 ? conversations[0].lastModified : null,
+      lastActivity: conversations.length > 0 ? conversations[0].lastModified : null,
       claudeSessions,
       claudeSessionsDetail:
         claudeSessions > 0
-          ? `${claudeSessions} session${claudeSessions > 1 ? "s" : ""}`
-          : "no sessions",
+          ? `${claudeSessions} session${claudeSessions > 1 ? 's' : ''}`
+          : 'no sessions',
       claudeSessionsFullData: claudeSessionsResult, // Keep full session data for detailed analysis
     };
   }
@@ -802,9 +755,9 @@ class ConversationAnalyzer {
     if (this.dataCache) {
       const dependencies = conversations.map((conv) => conv.filePath);
       return await this.dataCache.getCachedComputation(
-        "sessions",
+        'sessions',
         () => this.computeClaudeSessions(conversations),
-        dependencies,
+        dependencies
       );
     }
     return this.computeClaudeSessions(conversations);
@@ -825,17 +778,13 @@ class ConversationAnalyzer {
         const content = await this.getFileContent(conv.filePath);
         const lines = content
           .trim()
-          .split("\n")
+          .split('\n')
           .filter((line) => line.trim());
 
         lines.forEach((line) => {
           try {
             const item = JSON.parse(line);
-            if (
-              item.timestamp &&
-              item.message &&
-              item.message.role === "user"
-            ) {
+            if (item.timestamp && item.message && item.message.role === 'user') {
               // Only count user messages as session starters
               allMessages.push({
                 timestamp: new Date(item.timestamp),
@@ -875,9 +824,7 @@ class ConversationAnalyzer {
         currentSession.messageCount++;
         currentSession.conversations.add(message.conversationId);
         // Update session end if this message extends beyond current session
-        const potentialEnd = new Date(
-          message.timestamp.getTime() + 5 * 60 * 60 * 1000,
-        );
+        const potentialEnd = new Date(message.timestamp.getTime() + 5 * 60 * 60 * 1000);
         if (potentialEnd > currentSession.end) {
           currentSession.end = potentialEnd;
         }
@@ -903,9 +850,7 @@ class ConversationAnalyzer {
     const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const thisWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-    const currentMonthSessions = sessions.filter(
-      (s) => s.start >= currentMonth,
-    ).length;
+    const currentMonthSessions = sessions.filter((s) => s.start >= currentMonth).length;
     const thisWeekSessions = sessions.filter((s) => s.start >= thisWeek).length;
 
     return {
@@ -940,9 +885,7 @@ class ConversationAnalyzer {
   async findTodoFiles(projectPath) {
     try {
       const files = await fs.readdir(projectPath);
-      return files.filter(
-        (file) => file.includes("todo") || file.includes("TODO"),
-      );
+      return files.filter((file) => file.includes('todo') || file.includes('TODO'));
     } catch {
       return [];
     }
@@ -958,9 +901,9 @@ class ConversationAnalyzer {
     const timeDiff = now - lastActivity;
     const hoursAgo = timeDiff / (1000 * 60 * 60);
 
-    if (hoursAgo < 1) return "active";
-    if (hoursAgo < 24) return "recent";
-    return "inactive";
+    if (hoursAgo < 1) return 'active';
+    if (hoursAgo < 24) return 'recent';
+    return 'inactive';
   }
 
   /**
@@ -969,13 +912,8 @@ class ConversationAnalyzer {
   updateRealtimeStats() {
     this.data.realtimeStats = {
       totalConversations: this.data.conversations.length,
-      totalTokens: this.data.conversations.reduce(
-        (sum, conv) => sum + conv.tokens,
-        0,
-      ),
-      activeProjects: this.data.activeProjects.filter(
-        (p) => p.status === "active",
-      ).length,
+      totalTokens: this.data.conversations.reduce((sum, conv) => sum + conv.tokens, 0),
+      activeProjects: this.data.activeProjects.filter((p) => p.status === 'active').length,
       lastActivity: this.data.summary.lastActivity,
     };
   }
@@ -986,11 +924,11 @@ class ConversationAnalyzer {
    * @returns {string} Formatted byte string
    */
   formatBytes(bytes) {
-    if (bytes === 0) return "0 Bytes";
+    if (bytes === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
   /**

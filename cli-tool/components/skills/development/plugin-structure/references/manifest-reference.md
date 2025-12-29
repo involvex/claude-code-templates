@@ -542,14 +542,7 @@ Full configuration with all features:
     "url": "https://github.com/company/devops-plugin.git"
   },
   "license": "Apache-2.0",
-  "keywords": [
-    "devops",
-    "ci-cd",
-    "automation",
-    "kubernetes",
-    "docker",
-    "deployment"
-  ],
+  "keywords": ["devops", "ci-cd", "automation", "kubernetes", "docker", "deployment"],
   "commands": ["./commands", "./admin-commands"],
   "agents": "./specialized-agents",
   "hooks": "./config/hooks.json",

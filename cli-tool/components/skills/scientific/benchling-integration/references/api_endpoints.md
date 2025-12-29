@@ -894,20 +894,17 @@ curl -X GET \
 // Example error handling
 async function fetchSequence(id) {
   try {
-    const response = await fetch(
-      `https://tenant.benchling.com/api/v2/dna-sequences/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
+    const response = await fetch(`https://tenant.benchling.com/api/v2/dna-sequences/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
       },
-    );
+    });
 
     if (!response.ok) {
       if (response.status === 429) {
         // Rate limit - retry with backoff
-        const retryAfter = response.headers.get("Retry-After");
+        const retryAfter = response.headers.get('Retry-After');
         await sleep(retryAfter * 1000);
         return fetchSequence(id);
       } else if (response.status === 404) {
@@ -919,7 +916,7 @@ async function fetchSequence(id) {
 
     return await response.json();
   } catch (error) {
-    console.error("Request failed:", error);
+    console.error('Request failed:', error);
     throw error;
   }
 }
@@ -933,16 +930,16 @@ async function getAllSequences() {
   let nextToken = null;
 
   do {
-    const url = new URL("https://tenant.benchling.com/api/v2/dna-sequences");
+    const url = new URL('https://tenant.benchling.com/api/v2/dna-sequences');
     if (nextToken) {
-      url.searchParams.set("nextToken", nextToken);
+      url.searchParams.set('nextToken', nextToken);
     }
-    url.searchParams.set("pageSize", "100");
+    url.searchParams.set('pageSize', '100');
 
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "application/json",
+        Accept: 'application/json',
       },
     });
 

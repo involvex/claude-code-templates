@@ -438,12 +438,12 @@ Reduces storage requirements while preserving data integrity.
 
 ```yaml
 archive:
-  auto_archive_after: "30 days"
-  analysis_depth: "standard"
+  auto_archive_after: '30 days'
+  analysis_depth: 'standard'
   preserve_git_history: true
   create_visualizations: true
-  retention_period: "2 years"
-  compression_level: "medium"
+  retention_period: '2 years'
+  compression_level: 'medium'
 ```
 
 ## Recovery Options

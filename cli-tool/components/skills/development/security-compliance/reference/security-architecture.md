@@ -739,15 +739,15 @@ decrypted_data = cipher.decrypt(encrypted_data)
 
 ```yaml
 policy:
-  name: "Prevent PII Exfiltration"
-  description: "Block transfer of SSNs via email or cloud storage"
+  name: 'Prevent PII Exfiltration'
+  description: 'Block transfer of SSNs via email or cloud storage'
 
   content_detection:
     - type: pattern
       pattern: '\d{3}-\d{2}-\d{4}' # SSN pattern
       confidence: high
     - type: keyword
-      keywords: ["SSN", "Social Security Number"]
+      keywords: ['SSN', 'Social Security Number']
       proximity: 50 # characters
 
   actions:
@@ -768,9 +768,9 @@ policy:
       - allow_with_justification
 
   exceptions:
-    - group: "HR Department"
+    - group: 'HR Department'
       action: allow_with_audit
-    - application: "Payroll System"
+    - application: 'Payroll System'
       action: allow
 ```
 
@@ -831,36 +831,36 @@ Tier 3 (Less Secure, Avoid):
 ```yaml
 # Example: Enterprise application RBAC
 roles:
-  - name: "Admin"
+  - name: 'Admin'
     permissions:
-      - "users:read"
-      - "users:write"
-      - "users:delete"
-      - "settings:write"
-      - "audit_logs:read"
+      - 'users:read'
+      - 'users:write'
+      - 'users:delete'
+      - 'settings:write'
+      - 'audit_logs:read'
 
-  - name: "Manager"
+  - name: 'Manager'
     permissions:
-      - "users:read"
-      - "users:write"
-      - "reports:read"
-      - "reports:write"
+      - 'users:read'
+      - 'users:write'
+      - 'reports:read'
+      - 'reports:write'
 
-  - name: "User"
+  - name: 'User'
     permissions:
-      - "users:read_self"
-      - "reports:read"
+      - 'users:read_self'
+      - 'reports:read'
 
 # User assignment
 users:
-  - email: "admin@company.com"
-    roles: ["Admin"]
+  - email: 'admin@company.com'
+    roles: ['Admin']
 
-  - email: "manager@company.com"
-    roles: ["Manager"]
+  - email: 'manager@company.com'
+    roles: ['Manager']
 
-  - email: "employee@company.com"
-    roles: ["User"]
+  - email: 'employee@company.com'
+    roles: ['User']
 ```
 
 **Attribute-Based Access Control (ABAC)**:

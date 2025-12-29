@@ -307,9 +307,9 @@ Tests-first force edge case discovery before implementing. Tests-after verify yo
 **RED**
 
 ```typescript
-test("rejects empty email", async () => {
-  const result = await submitForm({ email: "" });
-  expect(result.error).toBe("Email required");
+test('rejects empty email', async () => {
+  const result = await submitForm({ email: '' });
+  expect(result.error).toBe('Email required');
 });
 ```
 
@@ -325,7 +325,7 @@ FAIL: expected 'Email required', got undefined
 ```typescript
 function submitForm(data: FormData) {
   if (!data.email?.trim()) {
-    return { error: "Email required" };
+    return { error: 'Email required' };
   }
   // ...
 }

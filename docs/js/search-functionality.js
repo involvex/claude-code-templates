@@ -8,473 +8,508 @@ let searchTimeout = null;
  * Toggle search bar visibility
  */
 function toggleSearch() {
-    const container = document.getElementById('searchBarContainer');
-    const input = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchToggleBtn');
-    const categoryLabels = document.querySelectorAll('.category-filter-label');
-    
-    if (searchActive) {
-        // Hide search and show category sections
-        container.style.display = 'none';
-        searchActive = false;
-        searchBtn.classList.remove('active');
-        clearSearch();
-        
-        // Show category filter labels/sections
-        categoryLabels.forEach(label => {
-            label.style.display = '';
-        });
-    } else {
-        // Show search and hide category sections
-        container.style.display = 'block';
-        searchActive = true;
-        searchBtn.classList.add('active');
-        input.focus();
-        
-        // Hide category filter labels/sections only (keep filter buttons visible)
-        categoryLabels.forEach(label => {
-            label.style.display = 'none';
-        });
-        
-        // Ensure components are loaded
-        if (Object.keys(allComponents).length === 0) {
-            loadComponentsForSearch();
-        }
+  const container = document.getElementById('searchBarContainer');
+  const input = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchToggleBtn');
+  const categoryLabels = document.querySelectorAll('.category-filter-label');
+
+  if (searchActive) {
+    // Hide search and show category sections
+    container.style.display = 'none';
+    searchActive = false;
+    searchBtn.classList.remove('active');
+    clearSearch();
+
+    // Show category filter labels/sections
+    categoryLabels.forEach((label) => {
+      label.style.display = '';
+    });
+  } else {
+    // Show search and hide category sections
+    container.style.display = 'block';
+    searchActive = true;
+    searchBtn.classList.add('active');
+    input.focus();
+
+    // Hide category filter labels/sections only (keep filter buttons visible)
+    categoryLabels.forEach((label) => {
+      label.style.display = 'none';
+    });
+
+    // Ensure components are loaded
+    if (Object.keys(allComponents).length === 0) {
+      loadComponentsForSearch();
     }
+  }
 }
 
 /**
  * Handle search input - now only shows/hides clear button, doesn't trigger search
  */
 function handleSearchInput(event) {
-    const query = event.target.value;
-    const clearBtn = document.getElementById('clearSearchBtn');
-    
-    // Show/hide clear button
-    if (query.length > 0) {
-        clearBtn.style.display = 'flex';
-    } else {
-        clearBtn.style.display = 'none';
-        // If input is empty, restore previous view
-        restorePreviousView();
-    }
+  const query = event.target.value;
+  const clearBtn = document.getElementById('clearSearchBtn');
+
+  // Show/hide clear button
+  if (query.length > 0) {
+    clearBtn.style.display = 'flex';
+  } else {
+    clearBtn.style.display = 'none';
+    // If input is empty, restore previous view
+    restorePreviousView();
+  }
 }
 
 /**
  * Handle keyboard shortcuts in search
  */
 function handleSearchKeydown(event) {
-    if (event.key === 'Escape') {
-        clearSearch();
-    } else if (event.key === 'Enter') {
-        event.preventDefault();
-        const query = event.target.value.trim();
-        if (query.length >= 3) {
-            performSearch(query);
-        } else if (query.length === 0) {
-            restorePreviousView();
-        }
+  if (event.key === 'Escape') {
+    clearSearch();
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    const query = event.target.value.trim();
+    if (query.length >= 3) {
+      performSearch(query);
+    } else if (query.length === 0) {
+      restorePreviousView();
     }
+  }
 }
 
 /**
  * Clear search and reset view
  */
 function clearSearch() {
-    const input = document.getElementById('searchInput');
-    const clearBtn = document.getElementById('clearSearchBtn');
-    
-    input.value = '';
-    clearBtn.style.display = 'none';
-    
-    // Clear search timeout
-    if (searchTimeout) {
-        clearTimeout(searchTimeout);
-        searchTimeout = null;
-    }
-    
-    // Clear URL parameter
-    updateURLWithSearch('');
-    
-    // Restore previous view
-    restorePreviousView();
-    
-    searchResults = [];
+  const input = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('clearSearchBtn');
+
+  input.value = '';
+  clearBtn.style.display = 'none';
+
+  // Clear search timeout
+  if (searchTimeout) {
+    clearTimeout(searchTimeout);
+    searchTimeout = null;
+  }
+
+  // Clear URL parameter
+  updateURLWithSearch('');
+
+  // Restore previous view
+  restorePreviousView();
+
+  searchResults = [];
 }
 
 /**
  * Restore the previous view (before search was active)
  */
 function restorePreviousView() {
-    const resultsInfo = document.getElementById('searchResultsInfo');
-    resultsInfo.style.display = 'none';
-    
-    // Show filters again
-    showFilters();
-    
-    // Reset to current filter view
-    const activeFilter = document.querySelector('.component-type-filters .filter-chip.active');
-    if (activeFilter) {
-        const filterType = activeFilter.getAttribute('data-filter');
-        if (window.indexManager) {
-            window.indexManager.displayCurrentFilter();
-        }
-    } else {
-        // Fallback to agents if no active filter found
-        if (window.indexManager) {
-            window.indexManager.setFilter('agents');
-        }
+  const resultsInfo = document.getElementById('searchResultsInfo');
+  resultsInfo.style.display = 'none';
+
+  // Show filters again
+  showFilters();
+
+  // Reset to current filter view
+  const activeFilter = document.querySelector('.component-type-filters .filter-chip.active');
+  if (activeFilter) {
+    const filterType = activeFilter.getAttribute('data-filter');
+    if (window.indexManager) {
+      window.indexManager.displayCurrentFilter();
     }
+  } else {
+    // Fallback to agents if no active filter found
+    if (window.indexManager) {
+      window.indexManager.setFilter('agents');
+    }
+  }
 }
 
 /**
  * Load all components for search functionality
  */
 async function loadComponentsForSearch() {
-    try {
-        // Check if dataLoader is available and use it
-        if (window.dataLoader) {
-            console.log('Using DataLoader for search components...');
-            const data = await window.dataLoader.loadAllComponents();
-            
-            if (data) {
-                // Process each category for search
-                const categories = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills'];
+  try {
+    // Check if dataLoader is available and use it
+    if (window.dataLoader) {
+      console.log('Using DataLoader for search components...');
+      const data = await window.dataLoader.loadAllComponents();
 
-                for (const category of categories) {
-                    if (data[category] && Array.isArray(data[category])) {
-                        // Process components to make them search-friendly
-                        allComponents[category] = data[category].map(component => ({
-                            ...component,
-                            // Normalize fields for better searching
-                            title: component.name || component.title || 'Untitled',
-                            displayName: (component.name || component.title || '').replace(/[-_]/g, ' '),
-                            category: category,
-                            searchableText: [
-                                component.name || component.title,
-                                component.description,
-                                component.category,
-                                ...(component.tags || []),
-                                component.keywords || '',
-                                component.path || ''
-                            ].filter(Boolean).join(' ').toLowerCase(),
-                            
-                            // Ensure tags exist
-                            tags: component.tags || [component.category].filter(Boolean)
-                        }));
-                    }
-                }
-                
-                console.log('Search data loaded successfully via DataLoader:', Object.keys(allComponents));
-                return;
-            }
-        }
-        
-        // Fallback: direct fetch if DataLoader not available
-        console.log('DataLoader not available, using direct fetch...');
-        const response = await fetch('components.json');
-        if (response.ok) {
-            const data = await response.json();
+      if (data) {
+        // Process each category for search
+        const categories = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills'];
 
-            // Process each category for search
-            const categories = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills'];
+        for (const category of categories) {
+          if (data[category] && Array.isArray(data[category])) {
+            // Process components to make them search-friendly
+            allComponents[category] = data[category].map((component) => ({
+              ...component,
+              // Normalize fields for better searching
+              title: component.name || component.title || 'Untitled',
+              displayName: (component.name || component.title || '').replace(/[-_]/g, ' '),
+              category: category,
+              searchableText: [
+                component.name || component.title,
+                component.description,
+                component.category,
+                ...(component.tags || []),
+                component.keywords || '',
+                component.path || '',
+              ]
+                .filter(Boolean)
+                .join(' ')
+                .toLowerCase(),
 
-            for (const category of categories) {
-                if (data[category] && Array.isArray(data[category])) {
-                    // Process components to make them search-friendly
-                    allComponents[category] = data[category].map(component => ({
-                        ...component,
-                        // Normalize fields for better searching
-                        title: component.name || component.title || 'Untitled',
-                        displayName: (component.name || component.title || '').replace(/[-_]/g, ' '),
-                        category: category,
-                        searchableText: [
-                            component.name || component.title,
-                            component.description,
-                            component.category,
-                            ...(component.tags || []),
-                            component.keywords || '',
-                            component.path || ''
-                        ].filter(Boolean).join(' ').toLowerCase(),
-                        
-                        // Ensure tags exist
-                        tags: component.tags || [component.category].filter(Boolean)
-                    }));
-                }
-            }
-            
-            console.log('Search data loaded successfully via direct fetch:', Object.keys(allComponents));
-        } else {
-            console.error('Failed to load components.json');
+              // Ensure tags exist
+              tags: component.tags || [component.category].filter(Boolean),
+            }));
+          }
         }
-    } catch (error) {
-        console.error('Error loading components for search:', error);
-        
-        // Fallback: try to use cached data if available
-        if (window.getSearchData) {
-            const categories = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills'];
-            for (const category of categories) {
-                const data = window.getSearchData(category);
-                if (data && data.length > 0) {
-                    allComponents[category] = data;
-                }
-            }
-        }
+
+        console.log('Search data loaded successfully via DataLoader:', Object.keys(allComponents));
+        return;
+      }
     }
+
+    // Fallback: direct fetch if DataLoader not available
+    console.log('DataLoader not available, using direct fetch...');
+    const response = await fetch('components.json');
+    if (response.ok) {
+      const data = await response.json();
+
+      // Process each category for search
+      const categories = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills'];
+
+      for (const category of categories) {
+        if (data[category] && Array.isArray(data[category])) {
+          // Process components to make them search-friendly
+          allComponents[category] = data[category].map((component) => ({
+            ...component,
+            // Normalize fields for better searching
+            title: component.name || component.title || 'Untitled',
+            displayName: (component.name || component.title || '').replace(/[-_]/g, ' '),
+            category: category,
+            searchableText: [
+              component.name || component.title,
+              component.description,
+              component.category,
+              ...(component.tags || []),
+              component.keywords || '',
+              component.path || '',
+            ]
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase(),
+
+            // Ensure tags exist
+            tags: component.tags || [component.category].filter(Boolean),
+          }));
+        }
+      }
+
+      console.log('Search data loaded successfully via direct fetch:', Object.keys(allComponents));
+    } else {
+      console.error('Failed to load components.json');
+    }
+  } catch (error) {
+    console.error('Error loading components for search:', error);
+
+    // Fallback: try to use cached data if available
+    if (window.getSearchData) {
+      const categories = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills'];
+      for (const category of categories) {
+        const data = window.getSearchData(category);
+        if (data && data.length > 0) {
+          allComponents[category] = data;
+        }
+      }
+    }
+  }
 }
 
 /**
  * Update URL with search parameter
  */
 function updateURLWithSearch(query) {
-    const url = new URL(window.location);
-    if (query && query.length >= 3) {
-        url.searchParams.set('search', encodeURIComponent(query));
-    } else {
-        url.searchParams.delete('search');
-    }
-    window.history.replaceState({}, '', url);
+  const url = new URL(window.location);
+  if (query && query.length >= 3) {
+    url.searchParams.set('search', encodeURIComponent(query));
+  } else {
+    url.searchParams.delete('search');
+  }
+  window.history.replaceState({}, '', url);
 }
 
 /**
  * Get search query from URL parameters
  */
 function getSearchQueryFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('search') ? decodeURIComponent(params.get('search')) : null;
+  const params = new URLSearchParams(window.location.search);
+  return params.get('search') ? decodeURIComponent(params.get('search')) : null;
 }
 
 /**
  * Update URL with filter using path-based routing
  */
 function updateURLWithFilter(filter) {
-    const currentSearch = window.location.search; // Preserve search parameters
-    
-    // Get the base path for GitHub Pages deployment
-    const getBasePath = () => {
-        const path = window.location.pathname;
-        if (path.startsWith('/claude-code-templates')) {
-            return '/claude-code-templates';
-        }
-        return '';
-    };
-    
-    const basePath = getBasePath();
-    const newPath = `${basePath}/${filter}${currentSearch}`;
-    
-    window.history.pushState({}, '', newPath);
+  const currentSearch = window.location.search; // Preserve search parameters
+
+  // Get the base path for GitHub Pages deployment
+  const getBasePath = () => {
+    const path = window.location.pathname;
+    if (path.startsWith('/claude-code-templates')) {
+      return '/claude-code-templates';
+    }
+    return '';
+  };
+
+  const basePath = getBasePath();
+
+  // Build the new path properly
+  let newPath;
+  if (currentSearch && currentSearch.length > 0) {
+    // If there are search parameters, preserve them
+    newPath = `${basePath}/${filter}${currentSearch}`;
+  } else {
+    // No search parameters, just the filter path
+    newPath = `${basePath}/${filter}`;
+  }
+
+  console.log('Updating URL with filter:', filter);
+  console.log('Current search:', currentSearch);
+  console.log('Base path:', basePath);
+  console.log('New path:', newPath);
+
+  window.history.pushState({}, '', newPath);
 }
 
 /**
  * Get filter from URL path
  */
 function getFilterFromURL() {
-    const path = window.location.pathname;
-    const segments = path.split('/').filter(segment => segment);
+  const path = window.location.pathname;
+  const segments = path.split('/').filter((segment) => segment);
 
-    // Check if we're on GitHub Pages with subdirectory
-    // Handle both '/claude-code-templates/agents' and '/agents' cases
-    let filterSegment;
-    if (segments[0] === 'claude-code-templates' && segments.length > 1) {
-        filterSegment = segments[1];
-    } else if (segments.length > 0) {
-        filterSegment = segments[0];
-    }
+  // Check if we're on GitHub Pages with subdirectory
+  // Handle both '/claude-code-templates/agents' and '/agents' cases
+  let filterSegment;
+  if (segments[0] === 'claude-code-templates' && segments.length > 1) {
+    filterSegment = segments[1];
+  } else if (segments.length > 0) {
+    filterSegment = segments[0];
+  }
 
-    // Check if first segment is a valid filter
-    const validFilters = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills', 'templates', 'plugins'];
+  // Check if first segment is a valid filter
+  const validFilters = [
+    'agents',
+    'commands',
+    'settings',
+    'hooks',
+    'mcps',
+    'skills',
+    'templates',
+    'plugins',
+  ];
 
-    if (filterSegment && validFilters.includes(filterSegment)) {
-        return filterSegment;
-    }
+  if (filterSegment && validFilters.includes(filterSegment)) {
+    return filterSegment;
+  }
 
-    // If no valid filter found and we're on root, default to agents
-    if (path === '/' || path === '' || path === '/claude-code-templates' || path === '/claude-code-templates/') {
-        return 'agents';
-    }
+  // If no valid filter found and we're on root, default to agents
+  if (
+    path === '/' ||
+    path === '' ||
+    path === '/claude-code-templates' ||
+    path === '/claude-code-templates/'
+  ) {
+    return 'agents';
+  }
 
-    return 'agents'; // Default fallback
+  return 'agents'; // Default fallback
 }
 
 /**
  * Perform search across all loaded components
  */
 function performSearch(query) {
-    if (!query || query.length < 3) {
-        updateSearchResults([]);
-        showFilters(); // Show filters when no search
-        updateURLWithSearch(''); // Clear URL parameter
-        return;
-    }
-    
-    // Update URL with search query
-    updateURLWithSearch(query);
-    
-    // Hide filters during search
-    hideFilters();
-    
-    const normalizedQuery = query.toLowerCase().trim();
-    const results = [];
-    const categoryMatches = new Set();
-    
-    // Search across all categories except templates
-    Object.keys(allComponents).forEach(category => {
-        if (category === 'templates') return; // Skip templates
-        
-        const components = allComponents[category];
-        if (!components || !Array.isArray(components)) return;
-        
-        components.forEach(component => {
-            const matchScore = calculateMatchScore(component, normalizedQuery, category);
-            
-            if (matchScore > 0) {
-                results.push({
-                    ...component,
-                    category: category,
-                    matchScore: matchScore,
-                    matchType: getMatchType(component, normalizedQuery, category)
-                });
-                categoryMatches.add(category);
-            }
+  if (!query || query.length < 3) {
+    updateSearchResults([]);
+    showFilters(); // Show filters when no search
+    updateURLWithSearch(''); // Clear URL parameter
+    return;
+  }
+
+  // Update URL with search query
+  updateURLWithSearch(query);
+
+  // Hide filters during search
+  hideFilters();
+
+  const normalizedQuery = query.toLowerCase().trim();
+  const results = [];
+  const categoryMatches = new Set();
+
+  // Search across all categories except templates
+  Object.keys(allComponents).forEach((category) => {
+    if (category === 'templates') return; // Skip templates
+
+    const components = allComponents[category];
+    if (!components || !Array.isArray(components)) return;
+
+    components.forEach((component) => {
+      const matchScore = calculateMatchScore(component, normalizedQuery, category);
+
+      if (matchScore > 0) {
+        results.push({
+          ...component,
+          category: category,
+          matchScore: matchScore,
+          matchType: getMatchType(component, normalizedQuery, category),
         });
+        categoryMatches.add(category);
+      }
     });
-    
-    // Sort by match score (highest first)
-    results.sort((a, b) => b.matchScore - a.matchScore);
-    
-    searchResults = results;
-    updateSearchResults(results, categoryMatches);
-    displaySearchResults(results);
+  });
+
+  // Sort by match score (highest first)
+  results.sort((a, b) => b.matchScore - a.matchScore);
+
+  searchResults = results;
+  updateSearchResults(results, categoryMatches);
+  displaySearchResults(results);
 }
 
 /**
  * Calculate match score for a component
  */
 function calculateMatchScore(component, query, category) {
-    let score = 0;
-    
-    // Category name match (highest priority)
-    if (category.includes(query)) {
-        score += 100;
+  let score = 0;
+
+  // Category name match (highest priority)
+  if (category.includes(query)) {
+    score += 100;
+  }
+
+  // Component name/title match
+  const name = (component.name || component.title || '').toLowerCase();
+  if (name.includes(query)) {
+    score += name.startsWith(query) ? 80 : 60;
+  }
+
+  // Description match
+  const description = (component.description || '').toLowerCase();
+  if (description.includes(query)) {
+    score += 30;
+  }
+
+  // Tags match
+  if (component.tags && Array.isArray(component.tags)) {
+    const tagMatch = component.tags.some((tag) => tag.toLowerCase().includes(query));
+    if (tagMatch) {
+      score += 40;
     }
-    
-    // Component name/title match
-    const name = (component.name || component.title || '').toLowerCase();
-    if (name.includes(query)) {
-        score += name.startsWith(query) ? 80 : 60;
+  }
+
+  // Keywords match (for settings/hooks)
+  if (component.keywords) {
+    const keywordMatch = component.keywords.toLowerCase().includes(query);
+    if (keywordMatch) {
+      score += 25;
     }
-    
-    // Description match
-    const description = (component.description || '').toLowerCase();
-    if (description.includes(query)) {
-        score += 30;
+  }
+
+  // Path match (for file-based components)
+  if (component.path) {
+    const pathMatch = component.path.toLowerCase().includes(query);
+    if (pathMatch) {
+      score += 15;
     }
-    
-    // Tags match
-    if (component.tags && Array.isArray(component.tags)) {
-        const tagMatch = component.tags.some(tag => 
-            tag.toLowerCase().includes(query)
-        );
-        if (tagMatch) {
-            score += 40;
-        }
-    }
-    
-    // Keywords match (for settings/hooks)
-    if (component.keywords) {
-        const keywordMatch = component.keywords.toLowerCase().includes(query);
-        if (keywordMatch) {
-            score += 25;
-        }
-    }
-    
-    // Path match (for file-based components)
-    if (component.path) {
-        const pathMatch = component.path.toLowerCase().includes(query);
-        if (pathMatch) {
-            score += 15;
-        }
-    }
-    
-    return score;
+  }
+
+  return score;
 }
 
 /**
  * Get match type for display
  */
 function getMatchType(component, query, category) {
-    const name = (component.name || component.title || '').toLowerCase();
-    const description = (component.description || '').toLowerCase();
-    
-    if (category.includes(query)) return 'category';
-    if (name.includes(query)) return 'name';
-    if (description.includes(query)) return 'description';
-    if (component.tags && component.tags.some(tag => tag.toLowerCase().includes(query))) return 'tag';
-    if (component.keywords && component.keywords.toLowerCase().includes(query)) return 'keyword';
-    if (component.path && component.path.toLowerCase().includes(query)) return 'path';
-    
-    return 'other';
+  const name = (component.name || component.title || '').toLowerCase();
+  const description = (component.description || '').toLowerCase();
+
+  if (category.includes(query)) return 'category';
+  if (name.includes(query)) return 'name';
+  if (description.includes(query)) return 'description';
+  if (component.tags && component.tags.some((tag) => tag.toLowerCase().includes(query)))
+    return 'tag';
+  if (component.keywords && component.keywords.toLowerCase().includes(query)) return 'keyword';
+  if (component.path && component.path.toLowerCase().includes(query)) return 'path';
+
+  return 'other';
 }
 
 /**
  * Update search results info display
  */
 function updateSearchResults(results, categoryMatches = new Set()) {
-    const resultsInfo = document.getElementById('searchResultsInfo');
-    const resultsCount = document.getElementById('resultsCount');
-    const filterTags = document.getElementById('searchFilterTags');
-    
-    if (results.length === 0) {
-        resultsInfo.style.display = 'none';
-        return;
-    }
-    
-    resultsInfo.style.display = 'block';
-    
-    // Update count with terminal-style format
-    const count = results.length;
-    resultsCount.textContent = `Found(${count} result${count !== 1 ? 's' : ''})`;
-    
-    // Update category tags
-    if (categoryMatches.size > 0) {
-        const categoryIcons = {
-            agents: '🤖',
-            commands: '⚡',
-            settings: '⚙️',
-            hooks: '🪝',
-            mcps: '🔌',
-            skills: '🎨'
-        };
-        
-        const tags = Array.from(categoryMatches).map(category => {
-            const icon = categoryIcons[category] || '';
-            const name = category.charAt(0).toUpperCase() + category.slice(1);
-            return `<span class="search-category-tag">${icon} ${name}</span>`;
-        }).join('');
-        
-        filterTags.innerHTML = tags;
-    } else {
-        filterTags.innerHTML = '';
-    }
+  const resultsInfo = document.getElementById('searchResultsInfo');
+  const resultsCount = document.getElementById('resultsCount');
+  const filterTags = document.getElementById('searchFilterTags');
+
+  if (results.length === 0) {
+    resultsInfo.style.display = 'none';
+    return;
+  }
+
+  resultsInfo.style.display = 'block';
+
+  // Update count with terminal-style format
+  const count = results.length;
+  resultsCount.textContent = `Found(${count} result${count !== 1 ? 's' : ''})`;
+
+  // Update category tags
+  if (categoryMatches.size > 0) {
+    const categoryIcons = {
+      agents: '🤖',
+      commands: '⚡',
+      settings: '⚙️',
+      hooks: '🪝',
+      mcps: '🔌',
+      skills: '🎨',
+    };
+
+    const tags = Array.from(categoryMatches)
+      .map((category) => {
+        const icon = categoryIcons[category] || '';
+        const name = category.charAt(0).toUpperCase() + category.slice(1);
+        return `<span class="search-category-tag">${icon} ${name}</span>`;
+      })
+      .join('');
+
+    filterTags.innerHTML = tags;
+  } else {
+    filterTags.innerHTML = '';
+  }
 }
 
 /**
  * Display search results in the grid
  */
 function displaySearchResults(results) {
-    const unifiedGrid = document.getElementById('unifiedGrid');
-    
-    if (!unifiedGrid) {
-        console.error('Unified grid not found');
-        return;
-    }
-    
-    // Clear current content
-    unifiedGrid.innerHTML = '';
-    
-    if (results.length === 0) {
-        // Show no results message
-        unifiedGrid.innerHTML = `
+  const unifiedGrid = document.getElementById('unifiedGrid');
+
+  if (!unifiedGrid) {
+    console.error('Unified grid not found');
+    return;
+  }
+
+  // Clear current content
+  unifiedGrid.innerHTML = '';
+
+  if (results.length === 0) {
+    // Show no results message
+    unifiedGrid.innerHTML = `
             <div class="no-search-results">
                 <div class="no-results-icon">🔍</div>
                 <h3>No components found</h3>
@@ -486,29 +521,29 @@ function displaySearchResults(results) {
                 </ul>
             </div>
         `;
-        return;
-    }
-    
-    // Group results by category for better organization
-    const groupedResults = {};
-    results.forEach(result => {
-        if (!groupedResults[result.category]) {
-            groupedResults[result.category] = [];
-        }
-        groupedResults[result.category].push(result);
-    });
-    
-    // Render grouped results in specific order
-    let html = '';
-    const categoryOrder = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills'];
+    return;
+  }
 
-    categoryOrder.forEach(category => {
-        if (!groupedResults[category]) return;
-        const categoryResults = groupedResults[category];
-        const categoryIcon = getCategoryIcon(category);
-        const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
-        
-        html += `
+  // Group results by category for better organization
+  const groupedResults = {};
+  results.forEach((result) => {
+    if (!groupedResults[result.category]) {
+      groupedResults[result.category] = [];
+    }
+    groupedResults[result.category].push(result);
+  });
+
+  // Render grouped results in specific order
+  let html = '';
+  const categoryOrder = ['agents', 'commands', 'settings', 'hooks', 'mcps', 'skills'];
+
+  categoryOrder.forEach((category) => {
+    if (!groupedResults[category]) return;
+    const categoryResults = groupedResults[category];
+    const categoryIcon = getCategoryIcon(category);
+    const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+
+    html += `
             <div class="search-category-section">
                 <h3 class="search-category-header">
                     <span class="category-icon">${categoryIcon}</span>
@@ -516,79 +551,81 @@ function displaySearchResults(results) {
                 </h3>
                 <div class="search-category-grid">
         `;
-        
-        categoryResults.forEach(component => {
-            html += generateComponentCard(component, category);
-        });
-        
-        html += `
+
+    categoryResults.forEach((component) => {
+      html += generateComponentCard(component, category);
+    });
+
+    html += `
                 </div>
             </div>
         `;
-    });
-    
-    unifiedGrid.innerHTML = html;
+  });
+
+  unifiedGrid.innerHTML = html;
 }
 
 /**
  * Get category icon
  */
 function getCategoryIcon(category) {
-    const icons = {
-        agents: '🤖',
-        commands: '⚡',
-        settings: '⚙️',
-        hooks: '🪝',
-        mcps: '🔌',
-        skills: '🎨'
-    };
-    return icons[category] || '📦';
+  const icons = {
+    agents: '🤖',
+    commands: '⚡',
+    settings: '⚙️',
+    hooks: '🪝',
+    mcps: '🔌',
+    skills: '🎨',
+  };
+  return icons[category] || '📦';
 }
 
 /**
  * Generate component card HTML (matching existing template-card format)
  */
 function generateComponentCard(component, category) {
-    // Generate install command - remove .md extension from path
-    let componentPath = component.path || component.name;
-    // Remove .md or .json extensions from path
-    if (componentPath.endsWith('.md') || componentPath.endsWith('.json')) {
-        componentPath = componentPath.replace(/\.(md|json)$/, '');
-    }
-    const installCommand = `npx claude-code-templates@latest --${component.type}=${componentPath} --yes`;
-    
-    const typeConfig = {
-        agent: { icon: '🤖', color: '#ff6b6b' },
-        command: { icon: '⚡', color: '#4ecdc4' },
-        mcp: { icon: '🔌', color: '#45b7d1' },
-        setting: { icon: '⚙️', color: '#9c88ff' },
-        hook: { icon: '🪝', color: '#ff8c42' },
-        skill: { icon: '🎨', color: '#f59e0b' }
-    };
-    
-    const config = typeConfig[component.type];
-    
-    // Escape quotes and special characters for onclick attributes
-    const escapedType = component.type.replace(/'/g, "\\'");
-    const escapedName = (component.name || '').replace(/'/g, "\\'");
-    const escapedPath = (component.path || component.name || '').replace(/'/g, "\\'");
-    const escapedCategory = (component.category || 'general').replace(/'/g, "\\'");
-    const escapedCommand = installCommand.replace(/'/g, "\\'");
-    
-    // Create category label (use "General" if no category)
-    const categoryName = component.category || 'general';
-    const categoryLabel = `<div class="category-label">${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</div>`;
-    
-    // Format component name
-    const formattedName = (component.name || '').split(/[-_]/).map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-    
-    // Get description
-    const description = component.description || 'Component for enhanced development workflow';
-    const truncatedDescription = description.length > 80 ? description.substring(0, 80) + '...' : description;
-    
-    return `
+  // Generate install command - remove .md extension from path
+  let componentPath = component.path || component.name;
+  // Remove .md or .json extensions from path
+  if (componentPath.endsWith('.md') || componentPath.endsWith('.json')) {
+    componentPath = componentPath.replace(/\.(md|json)$/, '');
+  }
+  const installCommand = `npx claude-code-templates@latest --${component.type}=${componentPath} --yes`;
+
+  const typeConfig = {
+    agent: { icon: '🤖', color: '#ff6b6b' },
+    command: { icon: '⚡', color: '#4ecdc4' },
+    mcp: { icon: '🔌', color: '#45b7d1' },
+    setting: { icon: '⚙️', color: '#9c88ff' },
+    hook: { icon: '🪝', color: '#ff8c42' },
+    skill: { icon: '🎨', color: '#f59e0b' },
+  };
+
+  const config = typeConfig[component.type];
+
+  // Escape quotes and special characters for onclick attributes
+  const escapedType = component.type.replace(/'/g, "\\'");
+  const escapedName = (component.name || '').replace(/'/g, "\\'");
+  const escapedPath = (component.path || component.name || '').replace(/'/g, "\\'");
+  const escapedCategory = (component.category || 'general').replace(/'/g, "\\'");
+  const escapedCommand = installCommand.replace(/'/g, "\\'");
+
+  // Create category label (use "General" if no category)
+  const categoryName = component.category || 'general';
+  const categoryLabel = `<div class="category-label">${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</div>`;
+
+  // Format component name
+  const formattedName = (component.name || '')
+    .split(/[-_]/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  // Get description
+  const description = component.description || 'Component for enhanced development workflow';
+  const truncatedDescription =
+    description.length > 80 ? description.substring(0, 80) + '...' : description;
+
+  return `
         <div class="template-card" data-type="${component.type}">
             <div class="card-inner">
                 <div class="card-front">
@@ -636,29 +673,29 @@ function generateComponentCard(component, category) {
  * Generate installation command for component
  */
 function generateInstallCommand(component, category) {
-    let name = component.name || component.path || component.title;
-    let categoryParam = category.slice(0, -1); // Remove 's' from category name
-    
-    // Handle special cases for category parameters
-    if (category === 'settings' || category === 'hooks') {
-        // Use the path if available for settings and hooks
-        if (component.path) {
-            name = component.path.replace(/\.(json|md)$/, ''); // Remove file extension
-        }
-        categoryParam = category.slice(0, -1); // 'setting' or 'hook'
+  let name = component.name || component.path || component.title;
+  let categoryParam = category.slice(0, -1); // Remove 's' from category name
+
+  // Handle special cases for category parameters
+  if (category === 'settings' || category === 'hooks') {
+    // Use the path if available for settings and hooks
+    if (component.path) {
+      name = component.path.replace(/\.(json|md)$/, ''); // Remove file extension
     }
-    
-    return `npx claude-code-templates@latest --${categoryParam}=${name} --yes`;
+    categoryParam = category.slice(0, -1); // 'setting' or 'hook'
+  }
+
+  return `npx claude-code-templates@latest --${categoryParam}=${name} --yes`;
 }
 
 /**
  * Show all components except templates
  */
 function showAllComponents() {
-    // This function should integrate with existing filter logic
-    if (typeof setUnifiedFilter === 'function') {
-        setUnifiedFilter('agents'); // Default to agents
-    }
+  // This function should integrate with existing filter logic
+  if (typeof setUnifiedFilter === 'function') {
+    setUnifiedFilter('agents'); // Default to agents
+  }
 }
 
 // Search result cards now use the global click handler from index-events.js
@@ -668,85 +705,88 @@ function showAllComponents() {
  * Initialize filter from URL parameters on page load
  */
 function initializeFilterFromURL() {
-    const urlFilter = getFilterFromURL();
-    console.log('Initializing filter from URL:', urlFilter);
-    
-    if (urlFilter && typeof setUnifiedFilter === 'function') {
-        setUnifiedFilter(urlFilter);
-    }
+  const urlFilter = getFilterFromURL();
+  console.log('Initializing filter from URL:', urlFilter);
+
+  if (urlFilter && typeof setUnifiedFilter === 'function') {
+    setUnifiedFilter(urlFilter);
+  }
 }
 
 /**
  * Initialize search from URL parameters on page load
  */
 function initializeSearchFromURL() {
-    const urlQuery = getSearchQueryFromURL();
-    if (urlQuery) {
-        console.log('Initializing search from URL:', urlQuery);
-        
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.value = urlQuery;
-            
-            // Show search interface
-            const resultsInfo = document.getElementById('searchResultsInfo');
-            if (resultsInfo) {
-                resultsInfo.style.display = 'block';
+  const urlQuery = getSearchQueryFromURL();
+  if (urlQuery) {
+    console.log('Initializing search from URL:', urlQuery);
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.value = urlQuery;
+
+      // Show search interface
+      const resultsInfo = document.getElementById('searchResultsInfo');
+      if (resultsInfo) {
+        resultsInfo.style.display = 'block';
+      }
+
+      // Show clear button
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) {
+        clearBtn.style.display = 'flex';
+      }
+
+      // Ensure components are loaded before searching
+      let attempts = 0;
+      const maxAttempts = 25; // 5 seconds total (200ms * 25)
+
+      const trySearch = () => {
+        attempts++;
+        console.log(
+          `Attempt ${attempts} to perform search. Components loaded:`,
+          Object.keys(allComponents).length > 0
+        );
+
+        if (Object.keys(allComponents).length > 0) {
+          console.log('Components ready, performing search...');
+          performSearch(urlQuery);
+        } else if (attempts < maxAttempts) {
+          // If components not loaded, wait and try again
+          setTimeout(trySearch, 200);
+        } else {
+          console.error('Failed to load components for URL search after maximum attempts');
+          // Force load components and try one more time
+          loadComponentsForSearch().then(() => {
+            if (Object.keys(allComponents).length > 0) {
+              performSearch(urlQuery);
             }
-            
-            // Show clear button
-            const clearBtn = document.getElementById('clearSearchBtn');
-            if (clearBtn) {
-                clearBtn.style.display = 'flex';
-            }
-            
-            // Ensure components are loaded before searching
-            let attempts = 0;
-            const maxAttempts = 25; // 5 seconds total (200ms * 25)
-            
-            const trySearch = () => {
-                attempts++;
-                console.log(`Attempt ${attempts} to perform search. Components loaded:`, Object.keys(allComponents).length > 0);
-                
-                if (Object.keys(allComponents).length > 0) {
-                    console.log('Components ready, performing search...');
-                    performSearch(urlQuery);
-                } else if (attempts < maxAttempts) {
-                    // If components not loaded, wait and try again
-                    setTimeout(trySearch, 200);
-                } else {
-                    console.error('Failed to load components for URL search after maximum attempts');
-                    // Force load components and try one more time
-                    loadComponentsForSearch().then(() => {
-                        if (Object.keys(allComponents).length > 0) {
-                            performSearch(urlQuery);
-                        }
-                    });
-                }
-            };
-            
-            // Start trying to search
-            trySearch();
+          });
         }
+      };
+
+      // Start trying to search
+      trySearch();
     }
+  }
 }
 
 // Initialize search functionality when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Load components for search
-    loadComponentsForSearch();
-    
-    // Initialize filter from URL if present
-    initializeFilterFromURL();
-    
-    // Initialize search from URL if present
-    initializeSearchFromURL();
-    
-    // Add CSS for search functionality if not already present
-    if (!document.getElementById('search-styles')) {
-        const searchStyles = document.createElement('style');
-        searchStyles.id = 'search-styles';
-        searchStyles.textContent = `
+document.addEventListener('DOMContentLoaded', function () {
+  // Load components for search
+  loadComponentsForSearch();
+
+  // Initialize filter from URL if present
+  initializeFilterFromURL();
+
+  // Initialize search from URL if present
+  initializeSearchFromURL();
+
+  // Add CSS for search functionality if not already present
+  if (!document.getElementById('search-styles')) {
+    const searchStyles = document.createElement('style');
+    searchStyles.id = 'search-styles';
+    searchStyles.textContent = `
             .search-btn.active {
                 background-color: var(--accent-color, #00d4aa) !important;
                 color: var(--bg-color, #0a0e0f) !important;
@@ -1150,38 +1190,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         `;
-        document.head.appendChild(searchStyles);
-    }
+    document.head.appendChild(searchStyles);
+  }
 });
 
 /**
  * Hide filter elements during search
  */
 function hideFilters() {
-    const filterGroup = document.querySelector('.filter-group');
-    const componentCategories = document.getElementById('componentCategories');
-    
-    if (filterGroup) {
-        filterGroup.style.display = 'none';
-    }
-    
-    if (componentCategories) {
-        componentCategories.style.display = 'none';
-    }
+  const filterGroup = document.querySelector('.filter-group');
+  const componentCategories = document.getElementById('componentCategories');
+
+  if (filterGroup) {
+    filterGroup.style.display = 'none';
+  }
+
+  if (componentCategories) {
+    componentCategories.style.display = 'none';
+  }
 }
 
 /**
  * Show filter elements when search is cleared
  */
 function showFilters() {
-    const filterGroup = document.querySelector('.filter-group');
-    const componentCategories = document.getElementById('componentCategories');
-    
-    if (filterGroup) {
-        filterGroup.style.display = 'flex';
-    }
-    
-    if (componentCategories) {
-        componentCategories.style.display = 'block';
-    }
+  const filterGroup = document.querySelector('.filter-group');
+  const componentCategories = document.getElementById('componentCategories');
+
+  if (filterGroup) {
+    filterGroup.style.display = 'flex';
+  }
+
+  if (componentCategories) {
+    componentCategories.style.display = 'block';
+  }
 }

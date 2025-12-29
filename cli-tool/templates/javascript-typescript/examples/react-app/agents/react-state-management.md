@@ -62,11 +62,7 @@ const CartProvider = ({ children }) => {
     setCart((prev) => [...prev, item]);
   }, []);
 
-  return (
-    <CartContext.Provider value={{ cart, addItem }}>
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={{ cart, addItem }}>{children}</CartContext.Provider>;
 };
 ```
 
@@ -114,7 +110,7 @@ const CartProvider = ({ children }) => {
       cart,
       addItem: (item) => setCart((prev) => [...prev, item]),
     }),
-    [cart],
+    [cart]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
@@ -126,13 +122,13 @@ const CartProvider = ({ children }) => {
 ```javascript
 // Instead of nested objects
 const badState = {
-  users: [{ id: 1, name: "John", posts: [{ id: 1, title: "Post 1" }] }],
+  users: [{ id: 1, name: 'John', posts: [{ id: 1, title: 'Post 1' }] }],
 };
 
 // Use normalized structure
 const goodState = {
-  users: { 1: { id: 1, name: "John", postIds: [1] } },
-  posts: { 1: { id: 1, title: "Post 1", userId: 1 } },
+  users: { 1: { id: 1, name: 'John', postIds: [1] } },
+  posts: { 1: { id: 1, title: 'Post 1', userId: 1 } },
 };
 ```
 
@@ -175,34 +171,34 @@ const useAsyncData = (fetchFn, deps = []) => {
 ### State Machines with XState
 
 ```javascript
-import { createMachine, assign } from "xstate";
+import { createMachine, assign } from 'xstate';
 
 const fetchMachine = createMachine({
-  id: "fetch",
-  initial: "idle",
+  id: 'fetch',
+  initial: 'idle',
   context: { data: null, error: null },
   states: {
     idle: {
-      on: { FETCH: "loading" },
+      on: { FETCH: 'loading' },
     },
     loading: {
       invoke: {
-        src: "fetchData",
+        src: 'fetchData',
         onDone: {
-          target: "success",
+          target: 'success',
           actions: assign({ data: (_, event) => event.data }),
         },
         onError: {
-          target: "failure",
+          target: 'failure',
           actions: assign({ error: (_, event) => event.data }),
         },
       },
     },
     success: {
-      on: { FETCH: "loading" },
+      on: { FETCH: 'loading' },
     },
     failure: {
-      on: { RETRY: "loading" },
+      on: { RETRY: 'loading' },
     },
   },
 });
@@ -213,15 +209,15 @@ const fetchMachine = createMachine({
 ### Redux Toolkit Patterns
 
 ```javascript
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const fetchUser = createAsyncThunk("user/fetchById", async (userId) => {
+const fetchUser = createAsyncThunk('user/fetchById', async (userId) => {
   const response = await fetch(`/api/users/${userId}`);
   return response.json();
 });
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState: { entities: {}, loading: false },
   reducers: {
     userUpdated: (state, action) => {
@@ -244,27 +240,26 @@ const userSlice = createSlice({
 ### Zustand Patterns
 
 ```javascript
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 const useStore = create(
   devtools(
     persist(
       (set, get) => ({
         cart: [],
-        addItem: (item) =>
-          set((state) => ({ cart: [...state.cart, item] }), false, "addItem"),
+        addItem: (item) => set((state) => ({ cart: [...state.cart, item] }), false, 'addItem'),
         removeItem: (id) =>
           set(
             (state) => ({ cart: state.cart.filter((item) => item.id !== id) }),
             false,
-            "removeItem",
+            'removeItem'
           ),
         total: () => get().cart.reduce((sum, item) => sum + item.price, 0),
       }),
-      { name: "cart-storage" },
-    ),
-  ),
+      { name: 'cart-storage' }
+    )
+  )
 );
 ```
 

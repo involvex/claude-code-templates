@@ -79,7 +79,7 @@
 - [ ] **Hospitalization (initial or prolonged)** - Dates: [MM/DD/YYYY to MM/DD/YYYY]
 - [ ] **Persistent or significant disability/incapacity**
 - [ ] **Congenital anomaly/birth defect**
-- [ ] **Medically important event** - Explanation: ********\_********
+- [ ] **Medically important event** - Explanation: **\*\*\*\***\_**\*\*\*\***
 
 **Hospitalization Details (if applicable):**
 
@@ -137,7 +137,7 @@ _Note: Severity is not the same as seriousness_
 **Relationship to Concomitant Medications:**
 
 - [ ] Not Related [ ] Unlikely [ ] Possibly [ ] Probably [ ] Definitely
-- Suspected medication(s): **********\_**********
+- Suspected medication(s): ****\*\*****\_****\*\*****
 
 **Rationale for Causality Assessment:**
 [Detailed explanation of causality determination, including temporal relationship, biological plausibility, dechallenge/rechallenge if applicable, alternative explanations]
@@ -176,8 +176,8 @@ _Note: Severity is not the same as seriousness_
 **Treatments Given for This Event:**
 
 1. **[Medication/Procedure]**
-   - Dose/Details: ********\_********
-   - Route: ********\_********
+   - Dose/Details: **\*\*\*\***\_**\*\*\*\***
+   - Route: **\*\*\*\***\_**\*\*\*\***
    - Start Date: [MM/DD/YYYY]
    - Stop Date: [MM/DD/YYYY] OR [ ] Ongoing
    - Response: [ ] Effective [ ] Partially effective [ ] Not effective
@@ -189,9 +189,9 @@ _Note: Severity is not the same as seriousness_
 - [ ] IV fluids
 - [ ] Oxygen therapy
 - [ ] Mechanical ventilation
-- [ ] Surgical intervention - Procedure: ******\_\_******
+- [ ] Surgical intervention - Procedure: **\*\***\_\_**\*\***
 - [ ] ICU care
-- [ ] Other: ******\_\_******
+- [ ] Other: **\*\***\_\_**\*\***
 
 ---
 
@@ -287,7 +287,7 @@ The investigator assessed this event as [causality] related to study drug becaus
 - [ ] Consultant reports
 - [ ] Medical records
 - [ ] Dechallenge/rechallenge information
-- [ ] Other: ******\_\_******
+- [ ] Other: **\*\***\_\_**\*\***
 
 **Expected Date for Follow-up Report:** [MM/DD/YYYY]
 
@@ -307,7 +307,7 @@ The investigator assessed this event as [causality] related to study drug becaus
 
 - Reported to IRB: [ ] Yes [ ] No [ ] Not required
 - Date reported: [MM/DD/YYYY]
-- IRB determination: ******\_\_\_******
+- IRB determination: **\*\***\_\_\_**\*\***
 
 ---
 
@@ -317,7 +317,7 @@ The investigator assessed this event as [causality] related to study drug becaus
 
 **Name:** [Principal Investigator name]  
 **Title:** [MD, credentials]  
-**Signature:** ********\_\_\_\_********  
+**Signature:** **\*\*\*\***\_\_\_\_**\*\*\*\***  
 **Date:** [MM/DD/YYYY]
 
 **I certify that this report is accurate and complete to the best of my knowledge.**
@@ -328,7 +328,7 @@ The investigator assessed this event as [causality] related to study drug becaus
 
 **Name:** [Name]  
 **Title:** [Medical Monitor, Safety Officer]  
-**Signature:** ********\_\_\_\_********  
+**Signature:** **\*\*\*\***\_\_\_\_**\*\*\*\***  
 **Date:** [MM/DD/YYYY]
 
 ---
@@ -342,7 +342,7 @@ The investigator assessed this event as [causality] related to study drug becaus
 - [ ] Death certificate (if applicable)
 - [ ] Autopsy report (if applicable)
 - [ ] Consultant notes
-- [ ] Other: ******\_\_******
+- [ ] Other: **\*\***\_\_**\*\***
 
 ---
 

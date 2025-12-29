@@ -52,10 +52,7 @@ Content must be robust enough to work with current and future technologies.
 
 ```html
 <!-- Informative image -->
-<img
-  src="/products/shoes.jpg"
-  alt="Red Nike Air Max running shoes with white swoosh"
-/>
+<img src="/products/shoes.jpg" alt="Red Nike Air Max running shoes with white swoosh" />
 
 <!-- Decorative image -->
 <img src="/decorative-pattern.svg" alt="" role="presentation" />
@@ -183,18 +180,13 @@ Content must be robust enough to work with current and future technologies.
 <button onclick="handleClick()">Click me</button>
 
 <!-- If div required, make it accessible -->
-<div
-  role="button"
-  tabindex="0"
-  onclick="handleClick()"
-  onkeydown="handleKeyPress(event)"
->
+<div role="button" tabindex="0" onclick="handleClick()" onkeydown="handleKeyPress(event)">
   Click me
 </div>
 
 <script>
   function handleKeyPress(event) {
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       handleClick();
     }
@@ -264,12 +256,7 @@ Content must be robust enough to work with current and future technologies.
 **✅ Solution:**
 
 ```html
-<div
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modal-title"
-  aria-describedby="modal-desc"
->
+<div role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
   <h2 id="modal-title">Confirm Action</h2>
   <p id="modal-desc">Are you sure you want to delete this item?</p>
 
@@ -282,7 +269,7 @@ Content must be robust enough to work with current and future technologies.
   function openModal() {
     const modal = document.querySelector('[role="dialog"]');
     const focusableElements = modal.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
 
     // Store previous focus
@@ -292,7 +279,7 @@ Content must be robust enough to work with current and future technologies.
     focusableElements[0].focus();
 
     // Trap focus
-    modal.addEventListener("keydown", trapFocus);
+    modal.addEventListener('keydown', trapFocus);
   }
 
   function closeModal() {
@@ -301,12 +288,12 @@ Content must be robust enough to work with current and future technologies.
   }
 
   function trapFocus(event) {
-    if (event.key !== "Tab") return;
+    if (event.key !== 'Tab') return;
 
     const focusableElements = Array.from(
       modal.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      ),
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
     );
 
     const firstElement = focusableElements[0];
@@ -407,12 +394,8 @@ Content must be robust enough to work with current and future technologies.
 
 ```html
 <div class="accordion">
-  <button aria-expanded="false" aria-controls="panel-1" id="accordion-1">
-    Section 1
-  </button>
-  <div id="panel-1" role="region" aria-labelledby="accordion-1" hidden>
-    Panel content
-  </div>
+  <button aria-expanded="false" aria-controls="panel-1" id="accordion-1">Section 1</button>
+  <div id="panel-1" role="region" aria-labelledby="accordion-1" hidden>Panel content</div>
 </div>
 ```
 
@@ -420,24 +403,14 @@ Content must be robust enough to work with current and future technologies.
 
 ```html
 <div role="tablist" aria-label="Content sections">
-  <button role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1">
-    Tab 1
-  </button>
-  <button
-    role="tab"
-    aria-selected="false"
-    aria-controls="panel-2"
-    id="tab-2"
-    tabindex="-1"
-  >
+  <button role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1">Tab 1</button>
+  <button role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2" tabindex="-1">
     Tab 2
   </button>
 </div>
 
 <div role="tabpanel" id="panel-1" aria-labelledby="tab-1">Panel 1 content</div>
-<div role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
-  Panel 2 content
-</div>
+<div role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>Panel 2 content</div>
 ```
 
 ## Testing Checklist

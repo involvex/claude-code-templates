@@ -2,31 +2,31 @@
  * AgentAnalyzer - Analyzes Claude Code specialized agent usage patterns
  * Extracts agent invocation data, usage frequency, and workflow patterns
  */
-const chalk = require("chalk");
-const fs = require("fs-extra");
-const path = require("path");
+const chalk = require('chalk');
+const fs = require('fs-extra');
+const path = require('path');
 
 class AgentAnalyzer {
   constructor() {
     // Known Claude Code specialized agents
     this.AGENT_TYPES = {
-      "general-purpose": {
-        name: "General Purpose",
-        description: "Multi-step tasks and research",
-        color: "#3fb950",
-        icon: "🔧",
+      'general-purpose': {
+        name: 'General Purpose',
+        description: 'Multi-step tasks and research',
+        color: '#3fb950',
+        icon: '🔧',
       },
-      "claude-code-best-practices": {
-        name: "Claude Code Best Practices",
-        description: "Workflow optimization and setup guidance",
-        color: "#f97316",
-        icon: "⚡",
+      'claude-code-best-practices': {
+        name: 'Claude Code Best Practices',
+        description: 'Workflow optimization and setup guidance',
+        color: '#f97316',
+        icon: '⚡',
       },
-      "docusaurus-expert": {
-        name: "Docusaurus Expert",
-        description: "Documentation site management",
-        color: "#0969da",
-        icon: "📚",
+      'docusaurus-expert': {
+        name: 'Docusaurus Expert',
+        description: 'Documentation site management',
+        color: '#0969da',
+        icon: '📚',
       },
     };
   }
@@ -54,50 +54,35 @@ class AgentAnalyzer {
 
       messages.forEach((message) => {
         // Skip if outside date range
-        if (
-          dateRange &&
-          !this.isWithinDateRange(message.timestamp, dateRange)
-        ) {
+        if (dateRange && !this.isWithinDateRange(message.timestamp, dateRange)) {
           return;
         }
 
         // Look for Task tool usage with subagent_type
         // Handle both direct message structure and nested message structure
-        const messageContent = message.message
-          ? message.message.content
-          : message.content;
-        const messageRole = message.message
-          ? message.message.role
-          : message.role;
+        const messageContent = message.message ? message.message.content : message.content;
+        const messageRole = message.message ? message.message.role : message.role;
 
-        if (
-          messageRole === "assistant" &&
-          messageContent &&
-          Array.isArray(messageContent)
-        ) {
+        if (messageRole === 'assistant' && messageContent && Array.isArray(messageContent)) {
           messageContent.forEach((content) => {
             if (
-              content.type === "tool_use" &&
-              content.name === "Task" &&
+              content.type === 'tool_use' &&
+              content.name === 'Task' &&
               content.input &&
               content.input.subagent_type
             ) {
               const agentType = content.input.subagent_type;
               const timestamp = new Date(message.timestamp);
-              const prompt =
-                content.input.prompt ||
-                content.input.description ||
-                "No description";
+              const prompt = content.input.prompt || content.input.description || 'No description';
 
               // Initialize agent stats
               if (!agentStats[agentType]) {
                 agentStats[agentType] = {
                   type: agentType,
                   name: this.AGENT_TYPES[agentType]?.name || agentType,
-                  description:
-                    this.AGENT_TYPES[agentType]?.description || "Custom agent",
-                  color: this.AGENT_TYPES[agentType]?.color || "#8b5cf6",
-                  icon: this.AGENT_TYPES[agentType]?.icon || "🤖",
+                  description: this.AGENT_TYPES[agentType]?.description || 'Custom agent',
+                  color: this.AGENT_TYPES[agentType]?.color || '#8b5cf6',
+                  icon: this.AGENT_TYPES[agentType]?.icon || '🤖',
                   totalInvocations: 0,
                   uniqueConversations: new Set(),
                   firstUsed: timestamp,
@@ -128,7 +113,7 @@ class AgentAnalyzer {
               stats.hourlyDistribution[hour]++;
 
               // Track daily usage
-              const dateKey = timestamp.toISOString().split("T")[0];
+              const dateKey = timestamp.toISOString().split('T')[0];
               stats.dailyUsage[dateKey] = (stats.dailyUsage[dateKey] || 0) + 1;
 
               // Add to timeline
@@ -136,8 +121,7 @@ class AgentAnalyzer {
                 timestamp: timestamp,
                 agentType: agentType,
                 agentName: stats.name,
-                prompt:
-                  prompt.substring(0, 100) + (prompt.length > 100 ? "..." : ""),
+                prompt: prompt.substring(0, 100) + (prompt.length > 100 ? '...' : ''),
                 conversationId: conversation.id,
                 color: stats.color,
                 icon: stats.icon,
@@ -169,9 +153,7 @@ class AgentAnalyzer {
     return {
       totalAgentInvocations,
       totalAgentTypes: Object.keys(agentStats).length,
-      agentStats: Object.values(agentStats).sort(
-        (a, b) => b.totalInvocations - a.totalInvocations,
-      ),
+      agentStats: Object.values(agentStats).sort((a, b) => b.totalInvocations - a.totalInvocations),
       agentTimeline,
       workflowPatterns,
       popularHours: this.calculatePopularHours(agentStats),
@@ -196,15 +178,10 @@ class AgentAnalyzer {
       const currentTime = new Date(event.timestamp);
 
       // Start new workflow if gap is too large or first event
-      if (
-        !lastTimestamp ||
-        currentTime - lastTimestamp > SESSION_GAP_MINUTES * 60 * 1000
-      ) {
+      if (!lastTimestamp || currentTime - lastTimestamp > SESSION_GAP_MINUTES * 60 * 1000) {
         // Save previous workflow if it had multiple agents
         if (currentWorkflow.length > 1) {
-          const workflowKey = currentWorkflow
-            .map((e) => e.agentType)
-            .join(" → ");
+          const workflowKey = currentWorkflow.map((e) => e.agentType).join(' → ');
           workflows[workflowKey] = (workflows[workflowKey] || 0) + 1;
         }
 
@@ -218,7 +195,7 @@ class AgentAnalyzer {
 
     // Don't forget the last workflow
     if (currentWorkflow.length > 1) {
-      const workflowKey = currentWorkflow.map((e) => e.agentType).join(" → ");
+      const workflowKey = currentWorkflow.map((e) => e.agentType).join(' → ');
       workflows[workflowKey] = (workflows[workflowKey] || 0) + 1;
     }
 
@@ -246,7 +223,7 @@ class AgentAnalyzer {
     return hourlyTotals.map((count, hour) => ({
       hour,
       count,
-      label: `${hour.toString().padStart(2, "0")}:00`,
+      label: `${hour.toString().padStart(2, '0')}:00`,
     }));
   }
 
@@ -282,20 +259,12 @@ class AgentAnalyzer {
     const agents = Object.values(agentStats);
     if (agents.length === 0) return {};
 
-    const totalInvocations = agents.reduce(
-      (sum, agent) => sum + agent.totalInvocations,
-      0,
-    );
-    const totalConversations = agents.reduce(
-      (sum, agent) => sum + agent.uniqueConversations,
-      0,
-    );
+    const totalInvocations = agents.reduce((sum, agent) => sum + agent.totalInvocations, 0);
+    const totalConversations = agents.reduce((sum, agent) => sum + agent.uniqueConversations, 0);
 
     return {
       averageInvocationsPerAgent: (totalInvocations / agents.length).toFixed(1),
-      averageConversationsPerAgent: (
-        totalConversations / agents.length
-      ).toFixed(1),
+      averageConversationsPerAgent: (totalConversations / agents.length).toFixed(1),
       mostUsedAgent: agents[0],
       agentDiversity: agents.length,
       adoptionRate: (
@@ -316,10 +285,10 @@ class AgentAnalyzer {
         return null;
       }
 
-      const content = await fs.readFile(filePath, "utf8");
+      const content = await fs.readFile(filePath, 'utf8');
       const lines = content
         .trim()
-        .split("\n")
+        .split('\n')
         .filter((line) => line.trim());
 
       return lines
@@ -332,7 +301,7 @@ class AgentAnalyzer {
 
             // Basic validation - must start with { and end with }
             const trimmed = line.trim();
-            if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) {
+            if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) {
               return null;
             }
 
@@ -341,7 +310,7 @@ class AgentAnalyzer {
             // Only log significant parsing errors to avoid spam from occasional corrupted lines
             if (index < 10 || index % 100 === 0) {
               console.warn(
-                `Skipping corrupted JSONL line ${index + 1} in ${path.basename(filePath)}`,
+                `Skipping corrupted JSONL line ${index + 1} in ${path.basename(filePath)}`
               );
             }
             return null;
@@ -364,12 +333,8 @@ class AgentAnalyzer {
     if (!dateRange || (!dateRange.startDate && !dateRange.endDate)) return true;
 
     const messageDate = new Date(timestamp);
-    const startDate = dateRange.startDate
-      ? new Date(dateRange.startDate)
-      : new Date(0);
-    const endDate = dateRange.endDate
-      ? new Date(dateRange.endDate)
-      : new Date();
+    const startDate = dateRange.startDate ? new Date(dateRange.startDate) : new Date(0);
+    const endDate = dateRange.endDate ? new Date(dateRange.endDate) : new Date();
 
     return messageDate >= startDate && messageDate <= endDate;
   }
@@ -380,8 +345,7 @@ class AgentAnalyzer {
    * @returns {Object} Summary data
    */
   generateSummary(analysisResult) {
-    const { totalAgentInvocations, totalAgentTypes, agentStats, efficiency } =
-      analysisResult;
+    const { totalAgentInvocations, totalAgentTypes, agentStats, efficiency } = analysisResult;
 
     return {
       totalInvocations: totalAgentInvocations,
@@ -392,7 +356,7 @@ class AgentAnalyzer {
       summary:
         totalAgentInvocations > 0
           ? `${totalAgentInvocations} agent invocations across ${totalAgentTypes} different agents`
-          : "No agent usage detected",
+          : 'No agent usage detected',
     };
   }
 }

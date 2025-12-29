@@ -1,6 +1,6 @@
-const { exec } = require("child_process");
-const fs = require("fs-extra");
-const path = require("path");
+const { exec } = require('child_process');
+const fs = require('fs-extra');
+const path = require('path');
 
 /**
  * ProcessDetector - Handles Claude CLI process detection and conversation matching
@@ -23,10 +23,7 @@ class ProcessDetector {
   async detectRunningClaudeProcesses() {
     // Check cache first
     const now = Date.now();
-    if (
-      this.processCache.data &&
-      now - this.processCache.timestamp < this.processCache.ttl
-    ) {
+    if (this.processCache.data && now - this.processCache.timestamp < this.processCache.ttl) {
       return this.processCache.data;
     }
 
@@ -40,40 +37,40 @@ class ProcessDetector {
             return;
           }
 
-          console.log("🔍 Raw Claude processes output:", stdout); // Debug output
+          console.log('🔍 Raw Claude processes output:', stdout); // Debug output
 
           const processes = stdout
-            .split("\n")
+            .split('\n')
             .filter((line) => line.trim())
             .filter((line) => {
               // More flexible Claude CLI process detection
-              const fullCommand = line.split(/\s+/).slice(10).join(" ");
+              const fullCommand = line.split(/\s+/).slice(10).join(' ');
               const isClaudeProcess =
-                fullCommand.includes("claude") &&
-                !fullCommand.includes("chrome_crashpad_handler") &&
-                !fullCommand.includes("create-claude-config") &&
-                !fullCommand.includes("chats-mobile") &&
-                !fullCommand.includes("analytics") &&
+                fullCommand.includes('claude') &&
+                !fullCommand.includes('chrome_crashpad_handler') &&
+                !fullCommand.includes('create-claude-config') &&
+                !fullCommand.includes('chats-mobile') &&
+                !fullCommand.includes('analytics') &&
                 // Allow various Claude CLI invocations
-                (fullCommand.trim() === "claude" ||
-                  fullCommand.includes("claude --") ||
-                  fullCommand.includes("claude ") ||
-                  fullCommand.includes("/claude") ||
-                  fullCommand.includes("bin/claude"));
+                (fullCommand.trim() === 'claude' ||
+                  fullCommand.includes('claude --') ||
+                  fullCommand.includes('claude ') ||
+                  fullCommand.includes('/claude') ||
+                  fullCommand.includes('bin/claude'));
 
               if (isClaudeProcess) {
-                console.log("✅ Found Claude process:", fullCommand);
+                console.log('✅ Found Claude process:', fullCommand);
               }
 
               return isClaudeProcess;
             })
             .map((line) => {
               const parts = line.split(/\s+/);
-              const fullCommand = parts.slice(10).join(" ");
+              const fullCommand = parts.slice(10).join(' ');
 
               // Extract useful information from command
               const cwdMatch = fullCommand.match(/--cwd[=\s]+([^\s]+)/);
-              let workingDir = cwdMatch ? cwdMatch[1] : "unknown";
+              let workingDir = cwdMatch ? cwdMatch[1] : 'unknown';
 
               // Skip pwdx for now since it doesn't exist on macOS
 
@@ -82,7 +79,7 @@ class ProcessDetector {
                 command: fullCommand,
                 workingDir: workingDir,
                 startTime: new Date(), // For now we use current time
-                status: "running",
+                status: 'running',
                 user: parts[0],
               };
             });
@@ -95,7 +92,7 @@ class ProcessDetector {
           };
 
           resolve(processes);
-        },
+        }
       );
     });
   }
@@ -118,7 +115,7 @@ class ProcessDetector {
         let matchingProcess = runningProcesses.find(
           (process) =>
             process.workingDir.includes(conversation.project) ||
-            process.command.includes(conversation.project),
+            process.command.includes(conversation.project)
         );
 
         // Fallback: if no direct match and workingDir is unknown,
@@ -126,11 +123,11 @@ class ProcessDetector {
         if (
           !matchingProcess &&
           runningProcesses.length > 0 &&
-          runningProcesses[0].workingDir === "unknown"
+          runningProcesses[0].workingDir === 'unknown'
         ) {
           // Find the most recently modified conversation
           const sortedConversations = [...conversations].sort(
-            (a, b) => new Date(b.lastModified) - new Date(a.lastModified),
+            (a, b) => new Date(b.lastModified) - new Date(a.lastModified)
           );
 
           if (conversation === sortedConversations[0]) {
@@ -148,27 +145,26 @@ class ProcessDetector {
           };
 
           // Only change status if not already marked as active by existing logic
-          if (conversation.status !== "active") {
-            conversation.status = "active";
-            conversation.statusReason = "running_process";
+          if (conversation.status !== 'active') {
+            conversation.status = 'active';
+            conversation.statusReason = 'running_process';
           }
 
           // Recalculate conversation state with process information
           const conversationFile = path.join(claudeDir, conversation.fileName);
           try {
-            const content = await fs.readFile(conversationFile, "utf8");
+            const content = await fs.readFile(conversationFile, 'utf8');
             const parsedMessages = content
-              .split("\n")
+              .split('\n')
               .filter((line) => line.trim())
               .map((line) => JSON.parse(line));
 
             const stats = await fs.stat(conversationFile);
-            conversation.conversationState =
-              stateCalculator.determineConversationState(
-                parsedMessages,
-                stats.mtime,
-                conversation.runningProcess,
-              );
+            conversation.conversationState = stateCalculator.determineConversationState(
+              parsedMessages,
+              stats.mtime,
+              conversation.runningProcess
+            );
           } catch (error) {
             // If we can't read the file, keep the existing state
           }
@@ -201,10 +197,7 @@ class ProcessDetector {
    */
   getCachedProcesses() {
     const now = Date.now();
-    if (
-      this.processCache.data &&
-      now - this.processCache.timestamp < this.processCache.ttl
-    ) {
+    if (this.processCache.data && now - this.processCache.timestamp < this.processCache.ttl) {
       return this.processCache.data;
     }
     return [];
@@ -238,10 +231,8 @@ class ProcessDetector {
     const processes = await this.detectRunningClaudeProcesses();
     return {
       total: processes.length,
-      withKnownWorkingDir: processes.filter((p) => p.workingDir !== "unknown")
-        .length,
-      withUnknownWorkingDir: processes.filter((p) => p.workingDir === "unknown")
-        .length,
+      withKnownWorkingDir: processes.filter((p) => p.workingDir !== 'unknown').length,
+      withUnknownWorkingDir: processes.filter((p) => p.workingDir === 'unknown').length,
       processes: processes,
     };
   }
@@ -255,20 +246,14 @@ class ProcessDetector {
   matchProcessToConversation(process, conversations) {
     // Direct match by working directory or project name
     let match = conversations.find(
-      (conv) =>
-        process.workingDir.includes(conv.project) ||
-        process.command.includes(conv.project),
+      (conv) => process.workingDir.includes(conv.project) || process.command.includes(conv.project)
     );
 
     // Fallback for unknown working directories
-    if (
-      !match &&
-      process.workingDir === "unknown" &&
-      conversations.length > 0
-    ) {
+    if (!match && process.workingDir === 'unknown' && conversations.length > 0) {
       // Match to most recently modified conversation
       const sorted = [...conversations].sort(
-        (a, b) => new Date(b.lastModified) - new Date(a.lastModified),
+        (a, b) => new Date(b.lastModified) - new Date(a.lastModified)
       );
       match = sorted[0];
     }

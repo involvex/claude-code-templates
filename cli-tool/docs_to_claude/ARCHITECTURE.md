@@ -67,15 +67,8 @@ Responsible for determining conversation states based on message analysis and pr
 
 ```javascript
 const stateCalculator = new StateCalculator();
-const state = stateCalculator.determineConversationState(
-  messages,
-  lastModified,
-  runningProcess,
-);
-const quickState = stateCalculator.quickStateCalculation(
-  conversation,
-  processes,
-);
+const state = stateCalculator.determineConversationState(messages, lastModified, runningProcess);
+const quickState = stateCalculator.quickStateCalculation(conversation, processes);
 ```
 
 #### ProcessDetector.js
@@ -97,7 +90,7 @@ const processes = await detector.getRunningClaudeProcesses();
 const enriched = await detector.enrichWithRunningProcesses(
   conversations,
   claudeDir,
-  stateCalculator,
+  stateCalculator
 );
 ```
 
@@ -117,10 +110,7 @@ Handles conversation file parsing, analysis, and data extraction.
 ```javascript
 const analyzer = new ConversationAnalyzer(claudeDir, dataCache);
 const data = await analyzer.loadInitialData(stateCalculator, processDetector);
-const conversations = await analyzer.analyzeConversations(
-  files,
-  stateCalculator,
-);
+const conversations = await analyzer.analyzeConversations(files, stateCalculator);
 ```
 
 #### FileWatcher.js
@@ -138,12 +128,7 @@ Provides real-time file system monitoring with efficient change detection.
 
 ```javascript
 const watcher = new FileWatcher();
-watcher.setupFileWatchers(
-  claudeDir,
-  dataRefreshCallback,
-  processRefreshCallback,
-  dataCache,
-);
+watcher.setupFileWatchers(claudeDir, dataRefreshCallback, processRefreshCallback, dataCache);
 watcher.pause(); // Pause monitoring
 watcher.resume(); // Resume monitoring
 ```
@@ -249,8 +234,8 @@ Comprehensive performance tracking and system health monitoring.
 
 ```javascript
 const monitor = new PerformanceMonitor(options);
-monitor.startTimer("operation");
-monitor.endTimer("operation", metadata);
+monitor.startTimer('operation');
+monitor.endTimer('operation', metadata);
 monitor.recordRequest(endpoint, duration, statusCode);
 const stats = monitor.getStats(timeframe);
 const middleware = monitor.createExpressMiddleware();
@@ -324,7 +309,7 @@ const stateService = new StateService();
 stateService.subscribe(callback);
 stateService.setState(newState, action);
 stateService.updateConversations(conversations);
-const conversations = stateService.getConversationsByStatus("active");
+const conversations = stateService.getConversationsByStatus('active');
 ```
 
 #### DataService.js
@@ -367,8 +352,8 @@ Real-time communication service with automatic reconnection.
 ```javascript
 const wsService = new WebSocketService();
 await wsService.connect();
-wsService.subscribe("data_updates");
-wsService.on("conversation_state_change", handler);
+wsService.subscribe('data_updates');
+wsService.on('conversation_state_change', handler);
 wsService.requestRefresh();
 ```
 

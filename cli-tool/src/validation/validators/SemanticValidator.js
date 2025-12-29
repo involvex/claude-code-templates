@@ -1,4 +1,4 @@
-const BaseValidator = require("../BaseValidator");
+const BaseValidator = require('../BaseValidator');
 
 /**
  * SemanticValidator - Validates component content for security threats
@@ -21,71 +21,66 @@ class SemanticValidator extends BaseValidator {
       {
         pattern:
           /ignore\s+(all\s+)?(previous|prior|earlier|above)\s+(instructions?|prompts?|rules?|commands?)/gi,
-        code: "SEM_E001",
-        message:
-          "Jailbreak pattern detected: Attempt to ignore previous instructions",
-        severity: "critical",
+        code: 'SEM_E001',
+        message: 'Jailbreak pattern detected: Attempt to ignore previous instructions',
+        severity: 'critical',
       },
       {
         pattern:
           /(system\s+prompt|developer\s+instructions?|hidden\s+prompt|internal\s+instructions?)/gi,
-        code: "SEM_E002",
-        message:
-          "Prompt injection detected: Reference to system/developer instructions",
-        severity: "critical",
+        code: 'SEM_E002',
+        message: 'Prompt injection detected: Reference to system/developer instructions',
+        severity: 'critical',
       },
       {
         pattern: /you\s+are\s+now\s+(a|an)\s+/gi,
-        code: "SEM_E003",
-        message: "Role manipulation detected: Attempt to redefine AI role",
-        severity: "high",
+        code: 'SEM_E003',
+        message: 'Role manipulation detected: Attempt to redefine AI role',
+        severity: 'high',
       },
       {
         pattern: /execute\s+the\s+following\s+(code|command|script)/gi,
-        code: "SEM_E004",
-        message: "Command execution attempt detected",
-        severity: "critical",
+        code: 'SEM_E004',
+        message: 'Command execution attempt detected',
+        severity: 'critical',
       },
       {
         pattern:
           /\b(fetch|retrieve|get|extract|obtain|steal|harvest|capture|collect)\s+(the\s+)?(user['']?s?\s+)?(auth\s+)?(token|key|password|credential|secret|api[\s_-]?key)/gi,
-        code: "SEM_E005",
-        message: "Credential harvesting pattern detected",
-        severity: "critical",
+        code: 'SEM_E005',
+        message: 'Credential harvesting pattern detected',
+        severity: 'critical',
       },
       {
-        pattern:
-          /(open|spawn|exec|run)\s+(a\s+)?(shell|terminal|bash|cmd|powershell)/gi,
-        code: "SEM_E006",
-        message: "Shell access attempt detected",
-        severity: "critical",
+        pattern: /(open|spawn|exec|run)\s+(a\s+)?(shell|terminal|bash|cmd|powershell)/gi,
+        code: 'SEM_E006',
+        message: 'Shell access attempt detected',
+        severity: 'critical',
       },
       {
         pattern:
           /(disable|bypass|override|skip)\s+(security|safety|filter|protection|validation)/gi,
-        code: "SEM_E007",
-        message: "Security bypass attempt detected",
-        severity: "critical",
+        code: 'SEM_E007',
+        message: 'Security bypass attempt detected',
+        severity: 'critical',
       },
       {
         pattern: /always\s+(obey|follow|comply\s+with|execute)\s+the\s+user/gi,
-        code: "SEM_E008",
-        message: "Unconditional obedience instruction detected",
-        severity: "high",
+        code: 'SEM_E008',
+        message: 'Unconditional obedience instruction detected',
+        severity: 'high',
       },
       {
-        pattern:
-          /(forget|disregard|remove)\s+(everything|all\s+previous|prior\s+context)/gi,
-        code: "SEM_E009",
-        message: "Context manipulation attempt detected",
-        severity: "high",
+        pattern: /(forget|disregard|remove)\s+(everything|all\s+previous|prior\s+context)/gi,
+        code: 'SEM_E009',
+        message: 'Context manipulation attempt detected',
+        severity: 'high',
       },
       {
-        pattern:
-          /modify\s+your\s+(own\s+)?(code|behavior|instructions?|rules?)/gi,
-        code: "SEM_E010",
-        message: "Self-modification request detected",
-        severity: "high",
+        pattern: /modify\s+your\s+(own\s+)?(code|behavior|instructions?|rules?)/gi,
+        code: 'SEM_E010',
+        message: 'Self-modification request detected',
+        severity: 'high',
       },
     ];
 
@@ -93,27 +88,27 @@ class SemanticValidator extends BaseValidator {
     this.SUSPICIOUS_PATTERNS = [
       {
         pattern: /\bpretend\s+(you\s+are|to\s+be)\b/gi,
-        code: "SEM_W001",
-        message: "Suspicious instruction: Role pretending detected",
-        severity: "medium",
+        code: 'SEM_W001',
+        message: 'Suspicious instruction: Role pretending detected',
+        severity: 'medium',
       },
       {
         pattern: /\b(jailbreak|DAN|ChatGPT\s+Developer\s+Mode)\b/gi,
-        code: "SEM_W002",
-        message: "Known jailbreak terminology detected",
-        severity: "medium",
+        code: 'SEM_W002',
+        message: 'Known jailbreak terminology detected',
+        severity: 'medium',
       },
       {
         pattern: /output\s+raw\s+(code|text|data)/gi,
-        code: "SEM_W003",
-        message: "Raw output request (potential data exfiltration)",
-        severity: "low",
+        code: 'SEM_W003',
+        message: 'Raw output request (potential data exfiltration)',
+        severity: 'low',
       },
       {
         pattern: /(repeat|echo)\s+after\s+me/gi,
-        code: "SEM_W004",
-        message: "Repetition instruction (potential prompt leakage)",
-        severity: "low",
+        code: 'SEM_W004',
+        message: 'Repetition instruction (potential prompt leakage)',
+        severity: 'low',
       },
     ];
 
@@ -121,21 +116,21 @@ class SemanticValidator extends BaseValidator {
     this.SENSITIVE_DATA_PATTERNS = [
       {
         pattern: /(?:password|passwd|pwd)\s*[:=]\s*[^\s]+/gi,
-        code: "SEM_E011",
-        message: "Hardcoded password detected",
-        severity: "critical",
+        code: 'SEM_E011',
+        message: 'Hardcoded password detected',
+        severity: 'critical',
       },
       {
         pattern: /(?:api[_-]?key|apikey)\s*[:=]\s*['"]?[a-zA-Z0-9]{20,}['"]?/gi,
-        code: "SEM_E012",
-        message: "Hardcoded API key detected",
-        severity: "critical",
+        code: 'SEM_E012',
+        message: 'Hardcoded API key detected',
+        severity: 'critical',
       },
       {
         pattern: /(?:secret|token)\s*[:=]\s*['"]?[a-zA-Z0-9]{20,}['"]?/gi,
-        code: "SEM_E013",
-        message: "Hardcoded secret/token detected",
-        severity: "critical",
+        code: 'SEM_E013',
+        message: 'Hardcoded secret/token detected',
+        severity: 'critical',
       },
     ];
   }
@@ -157,7 +152,7 @@ class SemanticValidator extends BaseValidator {
     const { strict = false } = options;
 
     if (!content) {
-      this.addError("SEM_E001", "Component content is empty or missing", {
+      this.addError('SEM_E001', 'Component content is empty or missing', {
         path,
       });
       return this.getResults();
@@ -176,9 +171,9 @@ class SemanticValidator extends BaseValidator {
     this.checkHtmlInjection(content, path);
 
     // 5. Context-specific validation based on component type
-    if (type === "agent") {
+    if (type === 'agent') {
       this.validateAgentContent(content, path);
-    } else if (type === "command") {
+    } else if (type === 'command') {
       this.validateCommandContent(content, path);
     }
 
@@ -189,8 +184,7 @@ class SemanticValidator extends BaseValidator {
    * Check for dangerous patterns
    */
   checkDangerousPatterns(content, path) {
-    for (const { pattern, code, message, severity } of this
-      .DANGEROUS_PATTERNS) {
+    for (const { pattern, code, message, severity } of this.DANGEROUS_PATTERNS) {
       const matches = content.matchAll(pattern);
       const matchArray = Array.from(matches);
 
@@ -222,8 +216,7 @@ class SemanticValidator extends BaseValidator {
    * Check for suspicious patterns
    */
   checkSuspiciousPatterns(content, path, strict) {
-    for (const { pattern, code, message, severity } of this
-      .SUSPICIOUS_PATTERNS) {
+    for (const { pattern, code, message, severity } of this.SUSPICIOUS_PATTERNS) {
       const matches = content.matchAll(pattern);
       const matchArray = Array.from(matches);
 
@@ -242,7 +235,7 @@ class SemanticValidator extends BaseValidator {
         });
 
         if (strict) {
-          this.addError(code, message + " (strict mode)", {
+          this.addError(code, message + ' (strict mode)', {
             path,
             severity,
             matches: contexts.length,
@@ -264,8 +257,7 @@ class SemanticValidator extends BaseValidator {
    * Check for sensitive data (passwords, API keys, etc.)
    */
   checkSensitiveData(content, path) {
-    for (const { pattern, code, message, severity } of this
-      .SENSITIVE_DATA_PATTERNS) {
+    for (const { pattern, code, message, severity } of this.SENSITIVE_DATA_PATTERNS) {
       const matches = content.matchAll(pattern);
       const matchArray = Array.from(matches);
 
@@ -273,12 +265,12 @@ class SemanticValidator extends BaseValidator {
         const contexts = matchArray.map((m) => {
           const lineInfo = this.getLineFromIndex(content, m.index);
           return {
-            text: m[0].replace(/[:=].*/, ":=<REDACTED>"), // Redact the value
+            text: m[0].replace(/[:=].*/, ':=<REDACTED>'), // Redact the value
             index: m.index,
             line: lineInfo.line,
             column: lineInfo.column,
             position: lineInfo.position,
-            lineText: lineInfo.lineText.replace(/[:=].*/, ":=<REDACTED>"), // Redact in line text too
+            lineText: lineInfo.lineText.replace(/[:=].*/, ':=<REDACTED>'), // Redact in line text too
           };
         });
 
@@ -298,29 +290,29 @@ class SemanticValidator extends BaseValidator {
   checkHtmlInjection(content, path) {
     const dangerousTags = [
       {
-        tag: "<script",
-        code: "SEM_E014",
-        message: "<script> tag detected (XSS risk)",
+        tag: '<script',
+        code: 'SEM_E014',
+        message: '<script> tag detected (XSS risk)',
       },
       {
-        tag: "<iframe",
-        code: "SEM_E015",
-        message: "<iframe> tag detected (injection risk)",
+        tag: '<iframe',
+        code: 'SEM_E015',
+        message: '<iframe> tag detected (injection risk)',
       },
       {
-        tag: "javascript:",
-        code: "SEM_E016",
-        message: "javascript: protocol detected (XSS risk)",
+        tag: 'javascript:',
+        code: 'SEM_E016',
+        message: 'javascript: protocol detected (XSS risk)',
       },
       {
-        tag: "onclick=",
-        code: "SEM_E017",
-        message: "Inline event handler detected (XSS risk)",
+        tag: 'onclick=',
+        code: 'SEM_E017',
+        message: 'Inline event handler detected (XSS risk)',
       },
       {
-        tag: "onerror=",
-        code: "SEM_E018",
-        message: "onerror handler detected (XSS risk)",
+        tag: 'onerror=',
+        code: 'SEM_E018',
+        message: 'onerror handler detected (XSS risk)',
       },
     ];
 
@@ -332,7 +324,7 @@ class SemanticValidator extends BaseValidator {
 
         this.addError(code, message, {
           path,
-          severity: "critical",
+          severity: 'critical',
           line: lineInfo.line,
           column: lineInfo.column,
           position: lineInfo.position,
@@ -371,7 +363,7 @@ class SemanticValidator extends BaseValidator {
         const firstMatch = matchArray[0];
         const lineInfo = this.getLineFromIndex(content, firstMatch.index);
 
-        this.addWarning("SEM_W005", warning, {
+        this.addWarning('SEM_W005', warning, {
           path,
           line: lineInfo.line,
           column: lineInfo.column,
@@ -390,15 +382,15 @@ class SemanticValidator extends BaseValidator {
     const dangerousCommands = [
       {
         pattern: /rm\s+-rf\s+\//gi,
-        message: "Dangerous command: rm -rf /",
+        message: 'Dangerous command: rm -rf /',
       },
       {
         pattern: /:(){ :|:& };:/gi,
-        message: "Fork bomb detected",
+        message: 'Fork bomb detected',
       },
       {
         pattern: /dd\s+if=.*of=\/dev\/(sd|hd)/gi,
-        message: "Dangerous disk operation detected",
+        message: 'Dangerous disk operation detected',
       },
     ];
 
@@ -410,9 +402,9 @@ class SemanticValidator extends BaseValidator {
         const firstMatch = matchArray[0];
         const lineInfo = this.getLineFromIndex(content, firstMatch.index);
 
-        this.addError("SEM_E019", message, {
+        this.addError('SEM_E019', message, {
           path,
-          severity: "critical",
+          severity: 'critical',
           line: lineInfo.line,
           column: lineInfo.column,
           position: lineInfo.position,
@@ -434,9 +426,7 @@ class SemanticValidator extends BaseValidator {
     const end = Math.min(content.length, index + contextLength);
     const context = content.substring(start, end);
 
-    return (
-      (start > 0 ? "..." : "") + context + (end < content.length ? "..." : "")
-    );
+    return (start > 0 ? '...' : '') + context + (end < content.length ? '...' : '');
   }
 
   /**
@@ -447,25 +437,17 @@ class SemanticValidator extends BaseValidator {
   async generateSecurityReport(component) {
     const result = await this.validate(component);
 
-    const criticalIssues = result.errors.filter(
-      (e) => e.metadata.severity === "critical",
-    );
-    const highIssues = result.errors.filter(
-      (e) => e.metadata.severity === "high",
-    );
-    const mediumIssues = result.warnings.filter(
-      (w) => w.metadata.severity === "medium",
-    );
-    const lowIssues = result.warnings.filter(
-      (w) => w.metadata.severity === "low",
-    );
+    const criticalIssues = result.errors.filter((e) => e.metadata.severity === 'critical');
+    const highIssues = result.errors.filter((e) => e.metadata.severity === 'high');
+    const mediumIssues = result.warnings.filter((w) => w.metadata.severity === 'medium');
+    const lowIssues = result.warnings.filter((w) => w.metadata.severity === 'low');
 
     return {
       safe: result.valid && result.warningCount === 0,
       riskLevel: this.calculateRiskLevel(
         criticalIssues.length,
         highIssues.length,
-        mediumIssues.length,
+        mediumIssues.length
       ),
       summary: {
         critical: criticalIssues.length,
@@ -487,10 +469,10 @@ class SemanticValidator extends BaseValidator {
    * Calculate overall risk level
    */
   calculateRiskLevel(critical, high, medium) {
-    if (critical > 0) return "CRITICAL";
-    if (high > 0) return "HIGH";
-    if (medium > 0) return "MEDIUM";
-    return "LOW";
+    if (critical > 0) return 'CRITICAL';
+    if (high > 0) return 'HIGH';
+    if (medium > 0) return 'MEDIUM';
+    return 'LOW';
   }
 }
 

@@ -28,7 +28,7 @@ enabled: true
 setting1: value1
 setting2: value2
 numeric_setting: 42
-list_setting: ["item1", "item2"]
+list_setting: ['item1', 'item2']
 ---
 
 # Additional Context
@@ -106,7 +106,7 @@ Commands can read settings files to customize behavior:
 ```markdown
 ---
 description: Process data with plugin
-allowed-tools: ["Read", "Bash"]
+allowed-tools: ['Read', 'Bash']
 ---
 
 # Process Command
@@ -220,7 +220,7 @@ task_number: 3.5
 pr_number: 1234
 coordinator_session: team-leader
 enabled: true
-dependencies: ["Task 3.4"]
+dependencies: ['Task 3.4']
 ---
 
 # Task Assignment
@@ -252,7 +252,7 @@ tmux send-keys -t "$COORDINATOR" "Agent $AGENT_NAME completed task" Enter
 ---
 validation_level: strict
 max_file_size: 1000000
-allowed_extensions: [".js", ".ts", ".tsx"]
+allowed_extensions: ['.js', '.ts', '.tsx']
 enable_logging: true
 ---
 
@@ -451,7 +451,7 @@ task_number: 3.5
 pr_number: 1234
 coordinator_session: team-leader
 enabled: true
-dependencies: ["Task 3.4"]
+dependencies: ['Task 3.4']
 additional_instructions: Use JWT tokens, not sessions
 ---
 
@@ -476,7 +476,7 @@ Coordinate with auth-agent on shared types.
 ---
 iteration: 1
 max_iterations: 10
-completion_promise: "All tests passing and build successful"
+completion_promise: 'All tests passing and build successful'
 ---
 
 Fix all the linting errors in the project.

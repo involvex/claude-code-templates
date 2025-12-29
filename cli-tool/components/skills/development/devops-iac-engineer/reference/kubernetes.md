@@ -51,9 +51,9 @@ spec:
         app: myapp
         version: v1.0.0
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
-        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8080'
+        prometheus.io/path: '/metrics'
 
     spec:
       # Security context at pod level
@@ -71,7 +71,7 @@ spec:
       initContainers:
         - name: init-config
           image: busybox:1.36
-          command: ["sh", "-c", "echo Initializing... && sleep 2"]
+          command: ['sh', '-c', 'echo Initializing... && sleep 2']
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
@@ -88,11 +88,11 @@ spec:
           # Resource limits and requests
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: '256Mi'
+              cpu: '250m'
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: '512Mi'
+              cpu: '500m'
 
           # Container security
           securityContext:
@@ -135,9 +135,9 @@ spec:
           # Environment variables
           env:
             - name: ENV
-              value: "production"
+              value: 'production'
             - name: LOG_LEVEL
-              value: "info"
+              value: 'info'
             - name: POD_NAME
               valueFrom:
                 fieldRef:
@@ -210,9 +210,9 @@ spec:
 
       # Tolerations for node taints
       tolerations:
-        - key: "node-role.kubernetes.io/spot"
-          operator: "Exists"
-          effect: "NoSchedule"
+        - key: 'node-role.kubernetes.io/spot'
+          operator: 'Exists'
+          effect: 'NoSchedule'
 ```
 
 ### Service Configuration
@@ -226,7 +226,7 @@ metadata:
   labels:
     app: myapp
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-type: 'nlb'
 spec:
   type: LoadBalancer
   selector:
@@ -274,10 +274,10 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rate-limit: "100"
-    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/rate-limit: '100'
+    nginx.ingress.kubernetes.io/proxy-body-size: '10m'
 spec:
   tls:
     - hosts:
@@ -309,8 +309,8 @@ metadata:
   namespace: production
 data:
   # Simple key-value pairs
-  app.env: "production"
-  log.level: "info"
+  app.env: 'production'
+  log.level: 'info'
 
   # Multi-line configuration files
   application.yaml: |
@@ -426,11 +426,11 @@ spec:
 
           resources:
             requests:
-              memory: "1Gi"
-              cpu: "500m"
+              memory: '1Gi'
+              cpu: '500m'
             limits:
-              memory: "2Gi"
-              cpu: "1000m"
+              memory: '2Gi'
+              cpu: '1000m'
 
           livenessProbe:
             exec:
@@ -458,7 +458,7 @@ spec:
     - metadata:
         name: data
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ['ReadWriteOnce']
         storageClassName: gp3
         resources:
           requests:
@@ -508,7 +508,7 @@ spec:
           name: http_requests_per_second
         target:
           type: AverageValue
-          averageValue: "1000"
+          averageValue: '1000'
 
   behavior:
     scaleDown:
@@ -544,7 +544,7 @@ spec:
     name: myapp
 
   updatePolicy:
-    updateMode: "Auto" # "Off", "Initial", "Recreate", or "Auto"
+    updateMode: 'Auto' # "Off", "Initial", "Recreate", or "Auto"
 
   resourcePolicy:
     containerPolicies:
@@ -578,12 +578,12 @@ metadata:
   name: myapp-role
   namespace: production
 rules:
-  - apiGroups: [""]
-    resources: ["configmaps", "secrets"]
-    verbs: ["get", "list"]
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get", "list", "watch"]
+  - apiGroups: ['']
+    resources: ['configmaps', 'secrets']
+    verbs: ['get', 'list']
+  - apiGroups: ['']
+    resources: ['pods']
+    verbs: ['get', 'list', 'watch']
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -609,12 +609,12 @@ kind: ClusterRole
 metadata:
   name: pod-reader
 rules:
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: [""]
-    resources: ["nodes"]
-    verbs: ["get", "list"]
+  - apiGroups: ['']
+    resources: ['pods']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['']
+    resources: ['nodes']
+    verbs: ['get', 'list']
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -729,8 +729,8 @@ spec:
       containers:
         - name: migrate
           image: myapp:1.0.0
-          command: ["/app/migrate"]
-          args: ["--direction", "up"]
+          command: ['/app/migrate']
+          args: ['--direction', 'up']
 
           env:
             - name: DATABASE_URL
@@ -741,11 +741,11 @@ spec:
 
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: '256Mi'
+              cpu: '250m'
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: '512Mi'
+              cpu: '500m'
 ```
 
 ### CronJob for Scheduled Tasks
@@ -757,8 +757,8 @@ metadata:
   name: backup-database
   namespace: production
 spec:
-  schedule: "0 2 * * *" # Daily at 2 AM
-  timeZone: "America/New_York"
+  schedule: '0 2 * * *' # Daily at 2 AM
+  timeZone: 'America/New_York'
   concurrencyPolicy: Forbid # Don't allow concurrent runs
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
@@ -827,7 +827,7 @@ name: myapp
 description: A Helm chart for MyApp
 type: application
 version: 1.0.0
-appVersion: "1.0.0"
+appVersion: '1.0.0'
 keywords:
   - myapp
   - web
@@ -836,7 +836,7 @@ maintainers:
     email: devops@example.com
 dependencies:
   - name: postgresql
-    version: "12.x.x"
+    version: '12.x.x'
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 ```
@@ -849,18 +849,18 @@ replicaCount: 3
 image:
   repository: myapp
   pullPolicy: IfNotPresent
-  tag: "" # Defaults to chart appVersion
+  tag: '' # Defaults to chart appVersion
 
 imagePullSecrets: []
 
 serviceAccount:
   create: true
   annotations: {}
-  name: ""
+  name: ''
 
 podAnnotations:
-  prometheus.io/scrape: "true"
-  prometheus.io/port: "8080"
+  prometheus.io/scrape: 'true'
+  prometheus.io/port: '8080'
 
 podSecurityContext:
   runAsNonRoot: true

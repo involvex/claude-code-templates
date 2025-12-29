@@ -58,9 +58,7 @@ Use this skill when:
 <title>Ultimate Guide to React Hooks - Learn useEffect & useState</title>
 
 <!-- Bad: Too long, keyword stuffing, generic -->
-<title>
-  React Hooks Guide React Hooks Tutorial React Hooks Examples Learn React
-</title>
+<title>React Hooks Guide React Hooks Tutorial React Hooks Examples Learn React</title>
 ```
 
 **Best Practices:**

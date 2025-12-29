@@ -1,7 +1,7 @@
-const BaseValidator = require("../BaseValidator");
-const crypto = require("crypto");
-const fs = require("fs-extra");
-const path = require("path");
+const BaseValidator = require('../BaseValidator');
+const crypto = require('crypto');
+const fs = require('fs-extra');
+const path = require('path');
 
 /**
  * IntegrityValidator - Validates component integrity and versioning
@@ -18,7 +18,7 @@ class IntegrityValidator extends BaseValidator {
     super();
 
     // Path to store component hashes (relative to project)
-    this.HASH_REGISTRY_PATH = ".claude/security/component-hashes.json";
+    this.HASH_REGISTRY_PATH = '.claude/security/component-hashes.json';
   }
 
   /**
@@ -40,7 +40,7 @@ class IntegrityValidator extends BaseValidator {
     const { updateRegistry = false, expectedHash = null } = options;
 
     if (!content) {
-      this.addError("INT_E001", "Component content is empty or missing", {
+      this.addError('INT_E001', 'Component content is empty or missing', {
         path: filePath,
       });
       return this.getResults();
@@ -48,9 +48,9 @@ class IntegrityValidator extends BaseValidator {
 
     // 1. Generate SHA256 hash
     const hash = this.generateHash(content);
-    this.addInfo("INT_I001", `Generated SHA256 hash`, {
+    this.addInfo('INT_I001', `Generated SHA256 hash`, {
       path: filePath,
-      hash: hash.substring(0, 16) + "...",
+      hash: hash.substring(0, 16) + '...',
       fullHash: hash,
     });
 
@@ -67,13 +67,9 @@ class IntegrityValidator extends BaseValidator {
     if (version) {
       this.validateVersion(version, filePath);
     } else {
-      this.addInfo(
-        "INT_I009",
-        "No version in component (metadata in marketplace.json)",
-        {
-          path: filePath,
-        },
-      );
+      this.addInfo('INT_I009', 'No version in component (metadata in marketplace.json)', {
+        path: filePath,
+      });
     }
 
     // 5. Update registry if requested
@@ -95,7 +91,7 @@ class IntegrityValidator extends BaseValidator {
    * @returns {string} SHA256 hash in hex format
    */
   generateHash(content) {
-    return crypto.createHash("sha256").update(content, "utf8").digest("hex");
+    return crypto.createHash('sha256').update(content, 'utf8').digest('hex');
   }
 
   /**
@@ -106,19 +102,15 @@ class IntegrityValidator extends BaseValidator {
    */
   verifyHash(actualHash, expectedHash, filePath) {
     if (actualHash !== expectedHash) {
-      this.addError(
-        "INT_E002",
-        "Hash mismatch: Component content has been modified",
-        {
-          path: filePath,
-          expected: expectedHash.substring(0, 16) + "...",
-          actual: actualHash.substring(0, 16) + "...",
-          fullExpected: expectedHash,
-          fullActual: actualHash,
-        },
-      );
+      this.addError('INT_E002', 'Hash mismatch: Component content has been modified', {
+        path: filePath,
+        expected: expectedHash.substring(0, 16) + '...',
+        actual: actualHash.substring(0, 16) + '...',
+        fullExpected: expectedHash,
+        fullActual: actualHash,
+      });
     } else {
-      this.addInfo("INT_I002", "Hash verification passed", { path: filePath });
+      this.addInfo('INT_I002', 'Hash verification passed', { path: filePath });
     }
   }
 
@@ -139,18 +131,14 @@ class IntegrityValidator extends BaseValidator {
 
         // Check if hash has changed
         if (stored.hash !== currentHash) {
-          this.addWarning(
-            "INT_W001",
-            "Component hash has changed since last validation",
-            {
-              path: filePath,
-              previousHash: stored.hash.substring(0, 16) + "...",
-              currentHash: currentHash.substring(0, 16) + "...",
-              lastValidated: stored.timestamp,
-            },
-          );
+          this.addWarning('INT_W001', 'Component hash has changed since last validation', {
+            path: filePath,
+            previousHash: stored.hash.substring(0, 16) + '...',
+            currentHash: currentHash.substring(0, 16) + '...',
+            lastValidated: stored.timestamp,
+          });
         } else {
-          this.addInfo("INT_I003", "Hash matches registry", {
+          this.addInfo('INT_I003', 'Hash matches registry', {
             path: filePath,
             lastValidated: stored.timestamp,
           });
@@ -158,20 +146,20 @@ class IntegrityValidator extends BaseValidator {
 
         // Check version changes
         if (version && stored.version && stored.version !== version) {
-          this.addInfo("INT_I004", "Version updated", {
+          this.addInfo('INT_I004', 'Version updated', {
             path: filePath,
             previousVersion: stored.version,
             currentVersion: version,
           });
         }
       } else {
-        this.addInfo("INT_I005", "Component not in registry (new component)", {
+        this.addInfo('INT_I005', 'Component not in registry (new component)', {
           path: filePath,
         });
       }
     } catch (error) {
       // Registry doesn't exist or couldn't be read - this is OK for new setups
-      this.addInfo("INT_I006", "Hash registry not found (first run)", {
+      this.addInfo('INT_I006', 'Hash registry not found (first run)', {
         path: filePath,
       });
     }
@@ -189,16 +177,16 @@ class IntegrityValidator extends BaseValidator {
 
     if (!semverPattern.test(version) && !simplePattern.test(version)) {
       this.addWarning(
-        "INT_W003",
+        'INT_W003',
         `Version format "${version}" doesn't follow semantic versioning (X.Y.Z)`,
         {
           path: filePath,
           version,
-          recommendation: "Use semantic versioning (e.g., 1.0.0)",
-        },
+          recommendation: 'Use semantic versioning (e.g., 1.0.0)',
+        }
       );
     } else {
-      this.addInfo("INT_I007", `Valid version: ${version}`, {
+      this.addInfo('INT_I007', `Valid version: ${version}`, {
         path: filePath,
         version,
       });
@@ -220,23 +208,22 @@ class IntegrityValidator extends BaseValidator {
       registry[normalizedPath] = {
         hash,
         type,
-        version: version || "unversioned",
+        version: version || 'unversioned',
         timestamp: new Date().toISOString(),
         path: filePath,
       };
 
       await this.saveHashRegistry(registry);
 
-      this.addInfo("INT_I008", "Hash registry updated", {
+      this.addInfo('INT_I008', 'Hash registry updated', {
         path: filePath,
-        hash: hash.substring(0, 16) + "...",
+        hash: hash.substring(0, 16) + '...',
       });
     } catch (error) {
-      this.addWarning(
-        "INT_W004",
-        `Failed to update hash registry: ${error.message}`,
-        { path: filePath, error: error.message },
-      );
+      this.addWarning('INT_W004', `Failed to update hash registry: ${error.message}`, {
+        path: filePath,
+        error: error.message,
+      });
     }
   }
 

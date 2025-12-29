@@ -208,11 +208,11 @@ git_tracking:
     confidence: 0.95
     evidence:
       - commit: abc123
-        message: "feat(auth): implement JWT"
-        date: "2024-03-13"
+        message: 'feat(auth): implement JWT'
+        date: '2024-03-13'
       - commit: def456
-        message: "test(auth): add tests"
-        date: "2024-03-14"
+        message: 'test(auth): add tests'
+        date: '2024-03-14'
 ```
 
 ### Generate Commit Report
@@ -322,9 +322,9 @@ sync_config:
   require_tests: true
   trust_git_over_tracker: true
   patterns:
-    - implementation: "feat|feature"
-    - testing: "test|spec"
-    - completion: "done|complete|finish"
+    - implementation: 'feat|feature'
+    - testing: 'test|spec'
+    - completion: 'done|complete|finish'
 ```
 
 ## Notes

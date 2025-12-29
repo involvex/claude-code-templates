@@ -146,8 +146,8 @@ Error: Sandbox execution exceeded 30 second timeout
    ```typescript
    // In wrangler.toml, ensure Durable Objects are configured
    [[durable_objects.bindings]];
-   name = "Sandbox";
-   class_name = "Sandbox";
+   name = 'Sandbox';
+   class_name = 'Sandbox';
    ```
 
 2. **Optimize code generation**:
@@ -317,7 +317,7 @@ ANTHROPIC_API_KEY=your_key
 
 ```typescript
 // In src/index.ts
-const result = await sandbox.exec("python /tmp/code.py", {
+const result = await sandbox.exec('python /tmp/code.py', {
   timeout: 60000, // 60 seconds
 });
 ```
@@ -372,7 +372,7 @@ Use recursion. Include only the function, no tests.`;
 
 ```typescript
 // Faster than exec for Python
-import { getCodeInterpreter } from "@cloudflare/sandbox";
+import { getCodeInterpreter } from '@cloudflare/sandbox';
 const interpreter = getCodeInterpreter(env.Sandbox, userId);
 const result = await interpreter.notebook.execCell(pythonCode);
 ```
@@ -401,7 +401,7 @@ return new Response(
       });
       controller.close();
     },
-  }),
+  })
 );
 ```
 

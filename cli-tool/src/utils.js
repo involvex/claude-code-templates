@@ -1,16 +1,16 @@
-const fs = require("fs-extra");
-const path = require("path");
+const fs = require('fs-extra');
+const path = require('path');
 
 async function detectProject(targetDir) {
   const detectedLanguages = [];
   const detectedFrameworks = [];
 
   // Check for package.json (JavaScript/TypeScript)
-  const packageJsonPath = path.join(targetDir, "package.json");
+  const packageJsonPath = path.join(targetDir, 'package.json');
   if (await fs.pathExists(packageJsonPath)) {
     try {
       const packageJson = await fs.readJson(packageJsonPath);
-      detectedLanguages.push("javascript-typescript");
+      detectedLanguages.push('javascript-typescript');
 
       // Detect frameworks
       const dependencies = {
@@ -18,91 +18,88 @@ async function detectProject(targetDir) {
         ...packageJson.devDependencies,
       };
 
-      if (dependencies.react || dependencies["@types/react"]) {
-        detectedFrameworks.push("react");
+      if (dependencies.react || dependencies['@types/react']) {
+        detectedFrameworks.push('react');
       }
-      if (dependencies.vue || dependencies["@vue/cli"]) {
-        detectedFrameworks.push("vue");
+      if (dependencies.vue || dependencies['@vue/cli']) {
+        detectedFrameworks.push('vue');
       }
-      if (dependencies["@angular/core"]) {
-        detectedFrameworks.push("angular");
+      if (dependencies['@angular/core']) {
+        detectedFrameworks.push('angular');
       }
       if (dependencies.express || dependencies.fastify || dependencies.koa) {
-        detectedFrameworks.push("node");
+        detectedFrameworks.push('node');
       }
     } catch (error) {
-      console.warn("Could not parse package.json");
+      console.warn('Could not parse package.json');
     }
   }
 
   // Check for Python files
-  const pythonFiles = await findFilesByExtension(targetDir, [".py"]);
+  const pythonFiles = await findFilesByExtension(targetDir, ['.py']);
   if (pythonFiles.length > 0) {
-    detectedLanguages.push("python");
+    detectedLanguages.push('python');
 
     // Check for Python frameworks
-    const requirementsPath = path.join(targetDir, "requirements.txt");
-    const pipfilePath = path.join(targetDir, "Pipfile");
-    const pyprojectPath = path.join(targetDir, "pyproject.toml");
+    const requirementsPath = path.join(targetDir, 'requirements.txt');
+    const pipfilePath = path.join(targetDir, 'Pipfile');
+    const pyprojectPath = path.join(targetDir, 'pyproject.toml');
 
     if (await fs.pathExists(requirementsPath)) {
-      const requirements = await fs.readFile(requirementsPath, "utf-8");
-      if (requirements.includes("django")) detectedFrameworks.push("django");
-      if (requirements.includes("flask")) detectedFrameworks.push("flask");
-      if (requirements.includes("fastapi")) detectedFrameworks.push("fastapi");
+      const requirements = await fs.readFile(requirementsPath, 'utf-8');
+      if (requirements.includes('django')) detectedFrameworks.push('django');
+      if (requirements.includes('flask')) detectedFrameworks.push('flask');
+      if (requirements.includes('fastapi')) detectedFrameworks.push('fastapi');
     }
 
     // Check for Django settings
-    if ((await findFilesByPattern(targetDir, "settings.py").length) > 0) {
-      detectedFrameworks.push("django");
+    if ((await findFilesByPattern(targetDir, 'settings.py').length) > 0) {
+      detectedFrameworks.push('django');
     }
 
     // Check for Flask app
-    if ((await findFilesByPattern(targetDir, "app.py").length) > 0) {
-      detectedFrameworks.push("flask");
+    if ((await findFilesByPattern(targetDir, 'app.py').length) > 0) {
+      detectedFrameworks.push('flask');
     }
   }
 
   // Check for Ruby files
-  const rubyFiles = await findFilesByExtension(targetDir, [".rb"]);
-  const gemfilePath = path.join(targetDir, "Gemfile");
-  const gemfileLockPath = path.join(targetDir, "Gemfile.lock");
+  const rubyFiles = await findFilesByExtension(targetDir, ['.rb']);
+  const gemfilePath = path.join(targetDir, 'Gemfile');
+  const gemfileLockPath = path.join(targetDir, 'Gemfile.lock');
 
   if (rubyFiles.length > 0 || (await fs.pathExists(gemfilePath))) {
-    detectedLanguages.push("ruby");
+    detectedLanguages.push('ruby');
 
     // Check for Ruby frameworks
     if (await fs.pathExists(gemfilePath)) {
       try {
-        const gemfile = await fs.readFile(gemfilePath, "utf-8");
-        if (gemfile.includes("rails")) {
-          detectedFrameworks.push("rails");
+        const gemfile = await fs.readFile(gemfilePath, 'utf-8');
+        if (gemfile.includes('rails')) {
+          detectedFrameworks.push('rails');
         }
-        if (gemfile.includes("sinatra")) {
-          detectedFrameworks.push("sinatra");
+        if (gemfile.includes('sinatra')) {
+          detectedFrameworks.push('sinatra');
         }
       } catch (error) {
-        console.warn("Could not parse Gemfile");
+        console.warn('Could not parse Gemfile');
       }
     }
 
     // Check for Rails application structure
-    const railsAppPath = path.join(targetDir, "config", "application.rb");
-    const railsRoutesPath = path.join(targetDir, "config", "routes.rb");
-    if (
-      (await fs.pathExists(railsAppPath)) ||
-      (await fs.pathExists(railsRoutesPath))
-    ) {
-      detectedFrameworks.push("rails");
+    const railsAppPath = path.join(targetDir, 'config', 'application.rb');
+    const railsRoutesPath = path.join(targetDir, 'config', 'routes.rb');
+    if ((await fs.pathExists(railsAppPath)) || (await fs.pathExists(railsRoutesPath))) {
+      detectedFrameworks.push('rails');
     }
 
     // Check for Rakefile (common in Rails and Ruby projects)
-    const rakefilePath = path.join(targetDir, "Rakefile");
+    const rakefilePath = path.join(targetDir, 'Rakefile');
     if (await fs.pathExists(rakefilePath)) {
       try {
-        const rakefile = await fs.readFile(rakefilePath, "utf-8");
-        if (rakefile.includes("Rails.application.load_tasks")) {
-          detectedFrameworks.push("rails");
+        const rakefile = await fs.readFile(rakefilePath, 'utf-8');
+        if (rakefile.includes('Rails.application.load_tasks')) {
+          detectedFrameworks.push('rails');
         }
       } catch (error) {
         // Ignore parsing errors
@@ -111,17 +108,17 @@ async function detectProject(targetDir) {
   }
 
   // Check for Rust files
-  const rustFiles = await findFilesByExtension(targetDir, [".rs"]);
-  const cargoPath = path.join(targetDir, "Cargo.toml");
+  const rustFiles = await findFilesByExtension(targetDir, ['.rs']);
+  const cargoPath = path.join(targetDir, 'Cargo.toml');
   if (rustFiles.length > 0 || (await fs.pathExists(cargoPath))) {
-    detectedLanguages.push("rust");
+    detectedLanguages.push('rust');
   }
 
   // Check for Go files
-  const goFiles = await findFilesByExtension(targetDir, [".go"]);
-  const goModPath = path.join(targetDir, "go.mod");
+  const goFiles = await findFilesByExtension(targetDir, ['.go']);
+  const goModPath = path.join(targetDir, 'go.mod');
   if (goFiles.length > 0 || (await fs.pathExists(goModPath))) {
-    detectedLanguages.push("go");
+    detectedLanguages.push('go');
   }
 
   return {
@@ -145,11 +142,7 @@ async function findFilesByExtension(dir, extensions, maxDepth = 2) {
       for (const entry of entries) {
         const fullPath = path.join(currentDir, entry.name);
 
-        if (
-          entry.isDirectory() &&
-          !entry.name.startsWith(".") &&
-          entry.name !== "node_modules"
-        ) {
+        if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
           await searchDir(fullPath, currentDepth + 1);
         } else if (entry.isFile()) {
           const ext = path.extname(entry.name);
@@ -179,11 +172,7 @@ async function findFilesByPattern(dir, pattern, maxDepth = 2) {
       for (const entry of entries) {
         const fullPath = path.join(currentDir, entry.name);
 
-        if (
-          entry.isDirectory() &&
-          !entry.name.startsWith(".") &&
-          entry.name !== "node_modules"
-        ) {
+        if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
           await searchDir(fullPath, currentDepth + 1);
         } else if (entry.isFile() && entry.name.includes(pattern)) {
           files.push(fullPath);
@@ -200,33 +189,33 @@ async function findFilesByPattern(dir, pattern, maxDepth = 2) {
 
 async function getProjectSummary(targetDir) {
   const summary = {
-    hasGit: await fs.pathExists(path.join(targetDir, ".git")),
-    hasNodeModules: await fs.pathExists(path.join(targetDir, "node_modules")),
+    hasGit: await fs.pathExists(path.join(targetDir, '.git')),
+    hasNodeModules: await fs.pathExists(path.join(targetDir, 'node_modules')),
     hasVenv:
-      (await fs.pathExists(path.join(targetDir, "venv"))) ||
-      (await fs.pathExists(path.join(targetDir, ".venv"))),
-    hasBundle: await fs.pathExists(path.join(targetDir, "vendor", "bundle")),
+      (await fs.pathExists(path.join(targetDir, 'venv'))) ||
+      (await fs.pathExists(path.join(targetDir, '.venv'))),
+    hasBundle: await fs.pathExists(path.join(targetDir, 'vendor', 'bundle')),
     configFiles: [],
   };
 
   // Check for common config files
   const configFiles = [
-    "package.json",
-    "tsconfig.json",
-    "webpack.config.js",
-    "vite.config.js",
-    "requirements.txt",
-    "setup.py",
-    "pyproject.toml",
-    "Pipfile",
-    "Gemfile",
-    "Gemfile.lock",
-    "Rakefile",
-    "config.ru",
-    "Cargo.toml",
-    "go.mod",
-    ".gitignore",
-    "README.md",
+    'package.json',
+    'tsconfig.json',
+    'webpack.config.js',
+    'vite.config.js',
+    'requirements.txt',
+    'setup.py',
+    'pyproject.toml',
+    'Pipfile',
+    'Gemfile',
+    'Gemfile.lock',
+    'Rakefile',
+    'config.ru',
+    'Cargo.toml',
+    'go.mod',
+    '.gitignore',
+    'README.md',
   ];
 
   for (const configFile of configFiles) {

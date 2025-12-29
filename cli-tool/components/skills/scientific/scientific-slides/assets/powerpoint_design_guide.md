@@ -46,22 +46,22 @@ const pptx = new PptxGenJS();
 
 // Add title slide
 const slide1 = pptx.addSlide();
-slide1.addText("Your Title", {
+slide1.addText('Your Title', {
   x: 1,
   y: 2,
   w: 8,
   h: 1,
   fontSize: 44,
   bold: true,
-  align: "center",
+  align: 'center',
 });
 
 // Add content slide with figure
 const slide2 = pptx.addSlide();
-slide2.addText("Results", { x: 0.5, y: 0.5, fontSize: 32 });
-slide2.addImage({ path: "figure.png", x: 1, y: 1.5, w: 8, h: 4 });
+slide2.addText('Results', { x: 0.5, y: 0.5, fontSize: 32 });
+slide2.addImage({ path: 'figure.png', x: 1, y: 1.5, w: 8, h: 4 });
 
-pptx.writeFile({ fileName: "presentation.pptx" });
+pptx.writeFile({ fileName: 'presentation.pptx' });
 ```
 
 #### 2. Template-Based Creation
@@ -299,16 +299,16 @@ See full palette options in pptx skill SKILL.md (lines 76-94).
 // Define design constants with MODERN colors (not defaults)
 const DESIGN = {
   colors: {
-    primary: "0A9396", // Teal (modern, engaging)
-    accent: "EE6C4D", // Coral (attention-grabbing)
-    text: "2C2C2C", // Charcoal (readable)
-    background: "FFFFFF", // White (clean)
+    primary: '0A9396', // Teal (modern, engaging)
+    accent: 'EE6C4D', // Coral (attention-grabbing)
+    text: '2C2C2C', // Charcoal (readable)
+    background: 'FFFFFF', // White (clean)
   },
   fonts: {
-    title: { size: 40, bold: true, face: "Arial" },
-    heading: { size: 28, bold: true, face: "Arial" },
-    body: { size: 24, face: "Arial" },
-    caption: { size: 16, face: "Arial" },
+    title: { size: 40, bold: true, face: 'Arial' },
+    heading: { size: 28, bold: true, face: 'Arial' },
+    body: { size: 24, face: 'Arial' },
+    caption: { size: 16, face: 'Arial' },
   },
   layout: {
     margin: 0.5,
@@ -332,8 +332,8 @@ function addTitleSlide(pptx, title, subtitle, author) {
     h: 1,
     fontSize: 44,
     bold: true,
-    color: "FFFFFF",
-    align: "center",
+    color: 'FFFFFF',
+    align: 'center',
   });
 
   slide.addText(subtitle, {
@@ -342,8 +342,8 @@ function addTitleSlide(pptx, title, subtitle, author) {
     w: 8,
     h: 0.5,
     fontSize: 24,
-    color: "FFFFFF",
-    align: "center",
+    color: 'FFFFFF',
+    align: 'center',
   });
 
   slide.addText(author, {
@@ -352,8 +352,8 @@ function addTitleSlide(pptx, title, subtitle, author) {
     w: 8,
     h: 0.4,
     fontSize: 18,
-    color: "FFFFFF",
-    align: "center",
+    color: 'FFFFFF',
+    align: 'center',
   });
 
   return slide;
@@ -388,33 +388,33 @@ function addContentSlide(pptx, title, bullets) {
 
 ```javascript
 const pptx = new PptxGenJS();
-pptx.layout = "LAYOUT_16x9";
+pptx.layout = 'LAYOUT_16x9';
 
 // Title slide with background image or color block
 const titleSlide = pptx.addSlide();
 titleSlide.background = { color: DESIGN.colors.primary }; // Bold color background
 addTitleSlide(
   pptx,
-  "Research Title",
-  "Subtitle or Conference Name",
-  "Your Name • Institution • Date",
+  'Research Title',
+  'Subtitle or Conference Name',
+  'Your Name • Institution • Date'
 );
 
 // Introduction with image/icon
 const introSlide = pptx.addSlide();
 introSlide.addImage({
-  path: "concept_image.png", // Visual representation of concept
+  path: 'concept_image.png', // Visual representation of concept
   x: 5,
   y: 1.5,
   w: 4,
   h: 3,
 });
-introSlide.addText("Background", { x: 0.5, y: 0.5, fontSize: 36, bold: true });
+introSlide.addText('Background', { x: 0.5, y: 0.5, fontSize: 36, bold: true });
 introSlide.addText(
   [
-    "Key context point 1 (AuthorA, 2023)",
-    "Key context point 2 (AuthorB, 2022)",
-    "Research gap identified (AuthorC, 2021)",
+    'Key context point 1 (AuthorA, 2023)',
+    'Key context point 2 (AuthorB, 2022)',
+    'Research gap identified (AuthorC, 2021)',
   ],
   {
     x: 0.5,
@@ -423,26 +423,26 @@ introSlide.addText(
     h: 2,
     fontSize: 24,
     bullet: true,
-  },
+  }
 );
 
 // Results slide - FIGURE DOMINATES
 const resultsSlide = pptx.addSlide();
-resultsSlide.addText("Main Finding", {
+resultsSlide.addText('Main Finding', {
   x: 0.5,
   y: 0.5,
   fontSize: 32,
   bold: true,
 });
 resultsSlide.addImage({
-  path: "results_figure.png", // Large, clear figure
+  path: 'results_figure.png', // Large, clear figure
   x: 0.5,
   y: 1.5,
   w: 9,
   h: 4, // Nearly full slide
 });
 // Minimal text annotation only
-resultsSlide.addText("34% improvement (p < 0.001)", {
+resultsSlide.addText('34% improvement (p < 0.001)', {
   x: 7,
   y: 1,
   fontSize: 20,
@@ -451,7 +451,7 @@ resultsSlide.addText("34% improvement (p < 0.001)", {
 });
 
 // Save
-pptx.writeFile({ fileName: "presentation.pptx" });
+pptx.writeFile({ fileName: 'presentation.pptx' });
 ```
 
 **Key Changes from Dry Presentations:**
@@ -470,7 +470,7 @@ pptx.writeFile({ fileName: "presentation.pptx" });
 // Render equation as PNG first (using LaTeX or online tool)
 // Then add to slide
 slide.addImage({
-  path: "equation.png",
+  path: 'equation.png',
   x: 2,
   y: 3,
   w: 6,
@@ -484,22 +484,22 @@ slide.addImage({
 slide.addTable(
   [
     [
-      { text: "Method", options: { bold: true } },
-      { text: "Accuracy", options: { bold: true } },
-      { text: "Time (s)", options: { bold: true } },
+      { text: 'Method', options: { bold: true } },
+      { text: 'Accuracy', options: { bold: true } },
+      { text: 'Time (s)', options: { bold: true } },
     ],
-    ["Method A", "0.85", "10"],
-    ["Method B", "0.92", "25"],
-    ["Method C", "0.88", "15"],
+    ['Method A', '0.85', '10'],
+    ['Method B', '0.92', '25'],
+    ['Method C', '0.88', '15'],
   ],
   {
     x: 2,
     y: 2,
     w: 6,
     fontSize: 20,
-    border: { pt: 1, color: "888888" },
-    fill: { color: "F5F5F5" },
-  },
+    border: { pt: 1, color: '888888' },
+    fill: { color: 'F5F5F5' },
+  }
 );
 ```
 
@@ -511,13 +511,13 @@ slide.addChart(
   pptx.ChartType.bar,
   [
     {
-      name: "Control",
-      labels: ["Metric 1", "Metric 2", "Metric 3"],
+      name: 'Control',
+      labels: ['Metric 1', 'Metric 2', 'Metric 3'],
       values: [45, 67, 82],
     },
     {
-      name: "Treatment",
-      labels: ["Metric 1", "Metric 2", "Metric 3"],
+      name: 'Treatment',
+      labels: ['Metric 1', 'Metric 2', 'Metric 3'],
       values: [52, 78, 91],
     },
   ],
@@ -530,7 +530,7 @@ slide.addChart(
     showTitle: false,
     showLegend: true,
     fontSize: 18,
-  },
+  }
 );
 ```
 

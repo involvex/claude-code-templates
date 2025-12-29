@@ -1,5 +1,5 @@
-const BaseValidator = require("../BaseValidator");
-const url = require("url");
+const BaseValidator = require('../BaseValidator');
+const url = require('url');
 
 /**
  * ReferenceValidator - Validates external references and URLs
@@ -30,18 +30,12 @@ class ReferenceValidator extends BaseValidator {
     ];
 
     // Dangerous protocols
-    this.BLOCKED_PROTOCOLS = [
-      "file:",
-      "ftp:",
-      "data:",
-      "javascript:",
-      "vbscript:",
-    ];
+    this.BLOCKED_PROTOCOLS = ['file:', 'ftp:', 'data:', 'javascript:', 'vbscript:'];
 
     // Allowed protocols (whitelist approach)
     this.ALLOWED_PROTOCOLS = [
-      "https:",
-      "http:", // Will generate warning, but not error
+      'https:',
+      'http:', // Will generate warning, but not error
     ];
   }
 
@@ -62,7 +56,7 @@ class ReferenceValidator extends BaseValidator {
     const { checkAccessibility = false, strictHttps = false } = options;
 
     if (!content) {
-      this.addError("REF_E001", "Component content is empty or missing", {
+      this.addError('REF_E001', 'Component content is empty or missing', {
         path,
       });
       return this.getResults();
@@ -82,14 +76,10 @@ class ReferenceValidator extends BaseValidator {
 
     // 4. Check URL accessibility (optional)
     if (checkAccessibility && urls.length > 0) {
-      this.addInfo(
-        "REF_I001",
-        `Skipping URL accessibility check (${urls.length} URLs found)`,
-        {
-          path,
-          note: "Enable with checkAccessibility option in production",
-        },
-      );
+      this.addInfo('REF_I001', `Skipping URL accessibility check (${urls.length} URLs found)`, {
+        path,
+        note: 'Enable with checkAccessibility option in production',
+      });
     }
 
     return this.getResults();
@@ -111,7 +101,7 @@ class ReferenceValidator extends BaseValidator {
       urls.push({
         text: match[1],
         url: match[2],
-        type: "markdown",
+        type: 'markdown',
         index: match.index,
       });
     }
@@ -124,7 +114,7 @@ class ReferenceValidator extends BaseValidator {
         urls.push({
           text: match[0],
           url: match[0],
-          type: "plain",
+          type: 'plain',
           index: match.index,
         });
       }
@@ -147,21 +137,17 @@ class ReferenceValidator extends BaseValidator {
 
       // 1. Protocol validation
       if (this.BLOCKED_PROTOCOLS.includes(parsedUrl.protocol)) {
-        this.addError(
-          "REF_E002",
-          `Blocked protocol detected: ${parsedUrl.protocol}`,
-          {
-            path,
-            url: urlString,
-            protocol: parsedUrl.protocol,
-            context: text,
-          },
-        );
+        this.addError('REF_E002', `Blocked protocol detected: ${parsedUrl.protocol}`, {
+          path,
+          url: urlString,
+          protocol: parsedUrl.protocol,
+          context: text,
+        });
         return;
       }
 
       if (!this.ALLOWED_PROTOCOLS.includes(parsedUrl.protocol)) {
-        this.addWarning("REF_W001", `Unknown protocol: ${parsedUrl.protocol}`, {
+        this.addWarning('REF_W001', `Unknown protocol: ${parsedUrl.protocol}`, {
           path,
           url: urlString,
           protocol: parsedUrl.protocol,
@@ -169,48 +155,36 @@ class ReferenceValidator extends BaseValidator {
       }
 
       // 2. HTTP vs HTTPS
-      if (parsedUrl.protocol === "http:") {
+      if (parsedUrl.protocol === 'http:') {
         if (strictHttps) {
-          this.addError(
-            "REF_E003",
-            "HTTP protocol not allowed (HTTPS required)",
-            {
-              path,
-              url: urlString,
-              suggestion: urlString.replace("http://", "https://"),
-            },
-          );
+          this.addError('REF_E003', 'HTTP protocol not allowed (HTTPS required)', {
+            path,
+            url: urlString,
+            suggestion: urlString.replace('http://', 'https://'),
+          });
         } else {
-          this.addWarning(
-            "REF_W002",
-            "HTTP protocol detected (HTTPS recommended)",
-            {
-              path,
-              url: urlString,
-              suggestion: urlString.replace("http://", "https://"),
-            },
-          );
+          this.addWarning('REF_W002', 'HTTP protocol detected (HTTPS recommended)', {
+            path,
+            url: urlString,
+            suggestion: urlString.replace('http://', 'https://'),
+          });
         }
       }
 
       // 3. Private IP detection
       if (parsedUrl.hostname) {
         if (this.isPrivateIp(parsedUrl.hostname)) {
-          this.addError(
-            "REF_E004",
-            "Private IP address detected (potential SSRF risk)",
-            {
-              path,
-              url: urlString,
-              hostname: parsedUrl.hostname,
-              severity: "critical",
-            },
-          );
+          this.addError('REF_E004', 'Private IP address detected (potential SSRF risk)', {
+            path,
+            url: urlString,
+            hostname: parsedUrl.hostname,
+            severity: 'critical',
+          });
         }
 
         // 4. Localhost detection
         if (this.isLocalhost(parsedUrl.hostname)) {
-          this.addWarning("REF_W003", "Localhost reference detected", {
+          this.addWarning('REF_W003', 'Localhost reference detected', {
             path,
             url: urlString,
             hostname: parsedUrl.hostname,
@@ -220,7 +194,7 @@ class ReferenceValidator extends BaseValidator {
 
       // 5. Suspicious TLDs
       if (this.isSuspiciousTld(parsedUrl.hostname)) {
-        this.addWarning("REF_W004", "Suspicious or uncommon TLD detected", {
+        this.addWarning('REF_W004', 'Suspicious or uncommon TLD detected', {
           path,
           url: urlString,
           hostname: parsedUrl.hostname,
@@ -228,7 +202,7 @@ class ReferenceValidator extends BaseValidator {
       }
     } catch (error) {
       // Invalid URL format
-      this.addWarning("REF_W005", `Invalid URL format: ${error.message}`, {
+      this.addWarning('REF_W005', `Invalid URL format: ${error.message}`, {
         path,
         url: urlString,
         error: error.message,
@@ -241,16 +215,15 @@ class ReferenceValidator extends BaseValidator {
    */
   checkMarkdownLinks(content, path, strictHttps) {
     // Look for markdown links with dangerous protocols
-    const dangerousLinkPattern =
-      /\[([^\]]+)\]\((javascript:|data:|file:|vbscript:)[^)]*\)/gi;
+    const dangerousLinkPattern = /\[([^\]]+)\]\((javascript:|data:|file:|vbscript:)[^)]*\)/gi;
     const matches = content.matchAll(dangerousLinkPattern);
 
     for (const match of matches) {
-      this.addError("REF_E005", "Dangerous protocol in markdown link", {
+      this.addError('REF_E005', 'Dangerous protocol in markdown link', {
         path,
         link: match[0],
         protocol: match[2],
-        severity: "critical",
+        severity: 'critical',
       });
     }
   }
@@ -267,28 +240,24 @@ class ReferenceValidator extends BaseValidator {
       const src = match[2];
 
       // Check for data URIs (can be very large)
-      if (src.startsWith("data:")) {
+      if (src.startsWith('data:')) {
         const dataUriSize = src.length;
         if (dataUriSize > 10000) {
           this.addWarning(
-            "REF_W006",
+            'REF_W006',
             `Large data URI in image (${(dataUriSize / 1024).toFixed(2)}KB)`,
             {
               path,
               size: dataUriSize,
-              recommendation: "Use external image hosting instead",
-            },
+              recommendation: 'Use external image hosting instead',
+            }
           );
         }
       }
 
       // Validate image URL if it's a remote URL
-      if (src.startsWith("http")) {
-        this.validateUrl(
-          { url: src, text: match[1], type: "image" },
-          path,
-          false,
-        );
+      if (src.startsWith('http')) {
+        this.validateUrl({ url: src, text: match[1], type: 'image' }, path, false);
       }
     }
   }
@@ -308,7 +277,7 @@ class ReferenceValidator extends BaseValidator {
    * @returns {boolean}
    */
   isLocalhost(hostname) {
-    return ["localhost", "127.0.0.1", "::1"].includes(hostname.toLowerCase());
+    return ['localhost', '127.0.0.1', '::1'].includes(hostname.toLowerCase());
   }
 
   /**
@@ -320,14 +289,14 @@ class ReferenceValidator extends BaseValidator {
     if (!hostname) return false;
 
     const suspiciousTlds = [
-      ".tk",
-      ".ml",
-      ".ga",
-      ".cf",
-      ".gq", // Free TLDs often used for spam
-      ".zip",
-      ".mov", // Confusing TLDs
-      ".xyz", // Sometimes used maliciously
+      '.tk',
+      '.ml',
+      '.ga',
+      '.cf',
+      '.gq', // Free TLDs often used for spam
+      '.zip',
+      '.mov', // Confusing TLDs
+      '.xyz', // Sometimes used maliciously
     ];
 
     return suspiciousTlds.some((tld) => hostname.toLowerCase().endsWith(tld));
@@ -342,18 +311,15 @@ class ReferenceValidator extends BaseValidator {
     const result = await this.validate(component);
 
     const urls = this.extractUrls(component.content);
-    const httpsUrls = urls.filter((u) => u.url.startsWith("https://"));
-    const httpUrls = urls.filter((u) => u.url.startsWith("http://"));
+    const httpsUrls = urls.filter((u) => u.url.startsWith('https://'));
+    const httpUrls = urls.filter((u) => u.url.startsWith('http://'));
 
     return {
       safe: result.valid,
       totalUrls: urls.length,
       httpsCount: httpsUrls.length,
       httpCount: httpUrls.length,
-      httpsPercentage:
-        urls.length > 0
-          ? ((httpsUrls.length / urls.length) * 100).toFixed(1)
-          : 0,
+      httpsPercentage: urls.length > 0 ? ((httpsUrls.length / urls.length) * 100).toFixed(1) : 0,
       issues: {
         errors: result.errors,
         warnings: result.warnings,

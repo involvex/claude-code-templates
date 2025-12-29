@@ -229,12 +229,12 @@ name: Component Security Validation
 on:
   pull_request:
     paths:
-      - "cli-tool/components/**"
+      - 'cli-tool/components/**'
   push:
     branches:
       - main
     paths:
-      - "cli-tool/components/**"
+      - 'cli-tool/components/**'
 
 jobs:
   validate:
@@ -243,7 +243,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Install dependencies
         working-directory: cli-tool
@@ -528,7 +528,7 @@ class CustomValidator extends BaseValidator {
   async validate(component) {
     // Your validation logic
     if (issue) {
-      this.addError("CUSTOM_E001", "Description", metadata);
+      this.addError('CUSTOM_E001', 'Description', metadata);
     }
     return this.getResults();
   }

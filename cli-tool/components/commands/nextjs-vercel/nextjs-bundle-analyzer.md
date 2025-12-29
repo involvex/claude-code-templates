@@ -39,56 +39,51 @@ npm install --save-dev cross-env
 
 ```javascript
 // next.config.js
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Your existing config
   experimental: {
-    optimizePackageImports: [
-      "lucide-react",
-      "@heroicons/react",
-      "date-fns",
-      "lodash",
-    ],
+    optimizePackageImports: ['lucide-react', '@heroicons/react', 'date-fns', 'lodash'],
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Bundle analysis optimizations
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
-        chunks: "all",
+        chunks: 'all',
         cacheGroups: {
           default: false,
           vendors: false,
           // Vendor chunk for common libraries
           vendor: {
-            name: "vendors",
-            chunks: "all",
+            name: 'vendors',
+            chunks: 'all',
             test: /node_modules/,
             priority: 20,
           },
           // Common chunk for shared code
           common: {
-            name: "commons",
+            name: 'commons',
             minChunks: 2,
-            chunks: "all",
+            chunks: 'all',
             priority: 10,
             reuseExistingChunk: true,
             enforce: true,
           },
           // UI libraries chunk
           ui: {
-            name: "ui-libs",
-            chunks: "all",
+            name: 'ui-libs',
+            chunks: 'all',
             test: /node_modules\/(react|react-dom|@radix-ui|@headlessui)/,
             priority: 15,
           },
           // Utility libraries chunk
           utils: {
-            name: "utils",
-            chunks: "all",
+            name: 'utils',
+            chunks: 'all',
             test: /node_modules\/(lodash|date-fns|clsx|classnames)/,
             priority: 15,
           },
@@ -223,26 +218,26 @@ const ChartComponent = dynamic(
 ```javascript
 // Optimize lodash imports
 // ❌ Imports entire lodash library
-import _ from "lodash";
+import _ from 'lodash';
 
 // ✅ Import only needed functions
-import { debounce, throttle } from "lodash";
+import { debounce, throttle } from 'lodash';
 
 // ✅ Even better - use tree-shaking friendly alternatives
-import debounce from "lodash/debounce";
-import throttle from "lodash/throttle";
+import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 ```
 
 ```javascript
 // Date library optimization
 // ❌ Moment.js (large bundle)
-import moment from "moment";
+import moment from 'moment';
 
 // ✅ date-fns (tree-shakable)
-import { format, parseISO } from "date-fns";
+import { format, parseISO } from 'date-fns';
 
 // ✅ Day.js (smaller alternative)
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 ```
 
 ### 3. Next.js Specific Optimizations
@@ -253,11 +248,11 @@ const nextConfig = {
   // Optimize package imports
   experimental: {
     optimizePackageImports: [
-      "react-icons",
-      "@heroicons/react",
-      "lucide-react",
-      "date-fns",
-      "lodash",
+      'react-icons',
+      '@heroicons/react',
+      'lucide-react',
+      'date-fns',
+      'lodash',
     ],
   },
 
@@ -268,7 +263,7 @@ const nextConfig = {
 
   // Minimize client-side JavaScript
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    removeConsole: process.env.NODE_ENV === 'production',
   },
 
   // Webpack optimizations
@@ -279,12 +274,12 @@ const nextConfig = {
 
       // Enable compression
       config.plugins.push(
-        new (require("compression-webpack-plugin"))({
-          algorithm: "gzip",
+        new (require('compression-webpack-plugin'))({
+          algorithm: 'gzip',
           test: /\.(js|css|html|svg)$/,
           threshold: 8192,
           minRatio: 0.8,
-        }),
+        })
       );
     }
     return config;
@@ -326,12 +321,12 @@ Analyze bundle size impact on:
 ```javascript
 // Simulate network conditions for testing
 const networkConditions = {
-  "Fast 3G": {
+  'Fast 3G': {
     downloadThroughput: 1500,
     uploadThroughput: 750,
     latency: 562.5,
   },
-  "Slow 3G": { downloadThroughput: 500, uploadThroughput: 500, latency: 2000 },
+  'Slow 3G': { downloadThroughput: 500, uploadThroughput: 500, latency: 2000 },
   Offline: { downloadThroughput: 0, uploadThroughput: 0, latency: 0 },
 };
 ```
@@ -342,17 +337,17 @@ const networkConditions = {
 // Preload critical chunks
 useEffect(() => {
   // Preload likely next page
-  router.prefetch("/dashboard");
+  router.prefetch('/dashboard');
 
   // Preload critical components
-  import("./CriticalComponent");
+  import('./CriticalComponent');
 }, []);
 
 // Lazy load non-critical features
 const LazyFeature = lazy(() =>
-  import("./LazyFeature").then((module) => ({
+  import('./LazyFeature').then((module) => ({
     default: module.LazyFeature,
-  })),
+  }))
 );
 ```
 
@@ -395,7 +390,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
       - run: npm ci
       - run: npm run build
       - uses: nextjs-bundle-analysis/bundle-analyzer@v1
@@ -411,7 +406,7 @@ module.exports = {
   performance: {
     maxAssetSize: 250000, // 250KB
     maxEntrypointSize: 350000, // 350KB
-    hints: "error",
+    hints: 'error',
   },
 };
 ```

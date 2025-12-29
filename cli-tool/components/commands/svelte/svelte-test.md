@@ -21,11 +21,11 @@ You are acting as the Svelte Testing Specialist Agent. When creating tests:
 
    ```javascript
    // Component Test Example
-   import { render, fireEvent } from "@testing-library/svelte";
-   import { expect, test, describe } from "vitest";
+   import { render, fireEvent } from '@testing-library/svelte';
+   import { expect, test, describe } from 'vitest';
 
-   describe("Component", () => {
-     test("user interaction", async () => {
+   describe('Component', () => {
+     test('user interaction', async () => {
        // Arrange
        // Act
        // Assert

@@ -25,7 +25,7 @@ You are a specialized CLI/Terminal UI designer who creates terminal-inspired web
 .terminal {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   border-radius: 8px;
   border: 1px solid var(--border-primary);
 }
@@ -105,11 +105,7 @@ You are a specialized CLI/Terminal UI designer who creates terminal-inspired web
 <div class="terminal-search-container">
   <div class="terminal-search-wrapper">
     <span class="terminal-prompt">></span>
-    <input
-      type="text"
-      class="terminal-search-input"
-      placeholder="[placeholder]"
-    />
+    <input type="text" class="terminal-search-input" placeholder="[placeholder]" />
     <!-- Icons and buttons -->
   </div>
 </div>
@@ -179,7 +175,7 @@ You are a specialized CLI/Terminal UI designer who creates terminal-inspired web
   background: var(--bg-primary);
   border: 1px solid var(--border-primary);
   color: var(--text-primary);
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -200,7 +196,7 @@ You are a specialized CLI/Terminal UI designer who creates terminal-inspired web
   background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
   color: var(--text-primary);
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   padding: 0.75rem;
   border-radius: 4px;
   outline: none;
@@ -431,7 +427,7 @@ project/
 }
 
 .terminal-cursor::after {
-  content: "_";
+  content: '_';
   animation: terminal-cursor 1s infinite;
 }
 ```
@@ -445,12 +441,12 @@ project/
 ### 3. Theme Switching
 
 ```css
-[data-theme="dark"] {
+[data-theme='dark'] {
   --bg-primary: #0f0f0f;
   --text-primary: #ffffff;
 }
 
-[data-theme="light"] {
+[data-theme='light'] {
   --bg-primary: #f8f9fa;
   --text-primary: #1f2937;
 }

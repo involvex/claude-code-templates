@@ -38,21 +38,21 @@ For these cases, use the **AskUserQuestion tool** within command execution rathe
 {
   questions: [
     {
-      question: "Which authentication method should we use?",
-      header: "Auth method", // Short label (max 12 chars)
+      question: 'Which authentication method should we use?',
+      header: 'Auth method', // Short label (max 12 chars)
       multiSelect: false, // true for multiple selection
       options: [
         {
-          label: "OAuth 2.0",
-          description: "Industry standard, supports multiple providers",
+          label: 'OAuth 2.0',
+          description: 'Industry standard, supports multiple providers',
         },
         {
-          label: "JWT",
-          description: "Stateless, good for APIs",
+          label: 'JWT',
+          description: 'Stateless, good for APIs',
         },
         {
-          label: "Session",
-          description: "Traditional, server-side state",
+          label: 'Session',
+          description: 'Traditional, server-side state',
         },
       ],
     },

@@ -6,15 +6,13 @@ class HeaderComponent {
   constructor(container, options = {}) {
     this.container = container;
     this.options = {
-      title: options.title || "Claude Code Analytics Dashboard",
-      subtitle:
-        options.subtitle ||
-        "Real-time monitoring and analytics for Claude Code sessions",
+      title: options.title || 'Claude Code Analytics Dashboard',
+      subtitle: options.subtitle || 'Real-time monitoring and analytics for Claude Code sessions',
       showVersionBadge: options.showVersionBadge !== false,
       showLastUpdate: options.showLastUpdate !== false,
       showThemeSwitch: options.showThemeSwitch !== false,
       showGitHubLink: options.showGitHubLink !== false,
-      version: options.version || "v1.13.2", // Default fallback
+      version: options.version || 'v1.13.2', // Default fallback
       customActions: options.customActions || [],
       dataService: options.dataService || null, // DataService for dynamic version loading
       ...options,
@@ -37,7 +35,7 @@ class HeaderComponent {
               <span class="session-timer-status-dot active" id="session-status-dot"></span>
               <h1 class="page-title">
                 ${this.options.title}
-                ${this.options.showVersionBadge ? `<span class="version-badge" id="version-badge">${this.actualVersion}</span>` : ""}
+                ${this.options.showVersionBadge ? `<span class="version-badge" id="version-badge">${this.actualVersion}</span>` : ''}
               </h1>
             </div>
             <div class="page-subtitle">
@@ -51,7 +49,7 @@ class HeaderComponent {
                 <span id="last-update-header-text">Never</span>
               </div>
             `
-                : ""
+                : ''
             }
           </div>
           <div class="header-right">
@@ -68,7 +66,7 @@ class HeaderComponent {
                 </div>
               </div>
             `
-                : ""
+                : ''
             }
             ${
               this.options.showGitHubLink
@@ -78,7 +76,7 @@ class HeaderComponent {
                 Star on GitHub
               </a>
             `
-                : ""
+                : ''
             }
             ${this.renderCustomActions()}
           </div>
@@ -105,23 +103,20 @@ class HeaderComponent {
    * Render custom actions in header
    */
   renderCustomActions() {
-    if (
-      !this.options.customActions ||
-      this.options.customActions.length === 0
-    ) {
-      return "";
+    if (!this.options.customActions || this.options.customActions.length === 0) {
+      return '';
     }
 
     return this.options.customActions
       .map(
         (action) => `
       <button class="header-action-btn" id="${action.id}" title="${action.title || action.label}">
-        ${action.icon ? `<span class="btn-icon">${action.icon}</span>` : ""}
+        ${action.icon ? `<span class="btn-icon">${action.icon}</span>` : ''}
         ${action.label}
       </button>
-    `,
+    `
       )
-      .join("");
+      .join('');
   }
 
   /**
@@ -130,9 +125,9 @@ class HeaderComponent {
   bindEvents() {
     // Theme toggle
     if (this.options.showThemeSwitch) {
-      const themeSwitch = this.container.querySelector("#header-theme-switch");
+      const themeSwitch = this.container.querySelector('#header-theme-switch');
       if (themeSwitch) {
-        themeSwitch.addEventListener("click", () => this.toggleTheme());
+        themeSwitch.addEventListener('click', () => this.toggleTheme());
       }
     }
 
@@ -140,7 +135,7 @@ class HeaderComponent {
     this.options.customActions.forEach((action) => {
       const btn = this.container.querySelector(`#${action.id}`);
       if (btn && action.handler) {
-        btn.addEventListener("click", action.handler);
+        btn.addEventListener('click', action.handler);
       }
     });
   }
@@ -151,21 +146,19 @@ class HeaderComponent {
   initializeTheme() {
     if (!this.options.showThemeSwitch) return;
 
-    const savedTheme = localStorage.getItem("claude-analytics-theme") || "dark";
+    const savedTheme = localStorage.getItem('claude-analytics-theme') || 'dark';
     const body = document.body;
-    const headerThumb = this.container.querySelector(
-      "#header-theme-switch-thumb",
-    );
-    const headerIcon = headerThumb?.querySelector(".theme-switch-icon");
+    const headerThumb = this.container.querySelector('#header-theme-switch-thumb');
+    const headerIcon = headerThumb?.querySelector('.theme-switch-icon');
 
-    body.setAttribute("data-theme", savedTheme);
+    body.setAttribute('data-theme', savedTheme);
     if (headerThumb && headerIcon) {
-      if (savedTheme === "light") {
-        headerThumb.classList.add("light");
-        headerIcon.textContent = "☀️";
+      if (savedTheme === 'light') {
+        headerThumb.classList.add('light');
+        headerIcon.textContent = '☀️';
       } else {
-        headerThumb.classList.remove("light");
-        headerIcon.textContent = "🌙";
+        headerThumb.classList.remove('light');
+        headerIcon.textContent = '🌙';
       }
     }
   }
@@ -175,33 +168,31 @@ class HeaderComponent {
    */
   toggleTheme() {
     const body = document.body;
-    const headerThumb = this.container.querySelector(
-      "#header-theme-switch-thumb",
-    );
-    const headerIcon = headerThumb?.querySelector(".theme-switch-icon");
+    const headerThumb = this.container.querySelector('#header-theme-switch-thumb');
+    const headerIcon = headerThumb?.querySelector('.theme-switch-icon');
 
     // Also sync with global theme switch if exists
-    const globalThumb = document.getElementById("themeSwitchThumb");
-    const globalIcon = globalThumb?.querySelector(".theme-switch-icon");
+    const globalThumb = document.getElementById('themeSwitchThumb');
+    const globalIcon = globalThumb?.querySelector('.theme-switch-icon');
 
-    const isLight = body.getAttribute("data-theme") === "light";
-    const newTheme = isLight ? "dark" : "light";
+    const isLight = body.getAttribute('data-theme') === 'light';
+    const newTheme = isLight ? 'dark' : 'light';
 
-    body.setAttribute("data-theme", newTheme);
+    body.setAttribute('data-theme', newTheme);
 
     // Update header theme switch
     if (headerThumb && headerIcon) {
-      headerThumb.classList.toggle("light", newTheme === "light");
-      headerIcon.textContent = newTheme === "light" ? "☀️" : "🌙";
+      headerThumb.classList.toggle('light', newTheme === 'light');
+      headerIcon.textContent = newTheme === 'light' ? '☀️' : '🌙';
     }
 
     // Sync with global theme switch
     if (globalThumb && globalIcon) {
-      globalThumb.classList.toggle("light", newTheme === "light");
-      globalIcon.textContent = newTheme === "light" ? "☀️" : "🌙";
+      globalThumb.classList.toggle('light', newTheme === 'light');
+      globalIcon.textContent = newTheme === 'light' ? '☀️' : '🌙';
     }
 
-    localStorage.setItem("claude-analytics-theme", newTheme);
+    localStorage.setItem('claude-analytics-theme', newTheme);
   }
 
   /**
@@ -211,9 +202,7 @@ class HeaderComponent {
     if (!this.options.showLastUpdate) return;
 
     const currentTime = new Date().toLocaleTimeString();
-    const lastUpdateText = this.container.querySelector(
-      "#last-update-header-text",
-    );
+    const lastUpdateText = this.container.querySelector('#last-update-header-text');
 
     if (lastUpdateText) {
       lastUpdateText.textContent = currentTime;
@@ -259,7 +248,7 @@ class HeaderComponent {
         this.updateVersionBadge();
       }
     } catch (error) {
-      console.error("Error loading version:", error);
+      console.error('Error loading version:', error);
     }
   }
 
@@ -267,7 +256,7 @@ class HeaderComponent {
    * Update version badge in the DOM
    */
   updateVersionBadge() {
-    const versionBadge = this.container.querySelector("#version-badge");
+    const versionBadge = this.container.querySelector('#version-badge');
     if (versionBadge) {
       versionBadge.textContent = this.actualVersion;
     }
@@ -279,11 +268,11 @@ class HeaderComponent {
    */
   updateTitle(title) {
     this.options.title = title;
-    const titleElement = this.container.querySelector(".page-title");
+    const titleElement = this.container.querySelector('.page-title');
     if (titleElement) {
       titleElement.innerHTML = `
         ${title}
-        ${this.options.showVersionBadge ? `<span class="version-badge" id="version-badge">${this.actualVersion}</span>` : ""}
+        ${this.options.showVersionBadge ? `<span class="version-badge" id="version-badge">${this.actualVersion}</span>` : ''}
       `;
     }
   }
@@ -294,7 +283,7 @@ class HeaderComponent {
    */
   updateSubtitle(subtitle) {
     this.options.subtitle = subtitle;
-    const subtitleElement = this.container.querySelector(".page-subtitle");
+    const subtitleElement = this.container.querySelector('.page-subtitle');
     if (subtitleElement) {
       subtitleElement.textContent = subtitle;
     }
@@ -305,9 +294,9 @@ class HeaderComponent {
    * @param {boolean} active - Whether status should be active
    */
   updateStatusDot(active) {
-    const statusDot = this.container.querySelector("#session-status-dot");
+    const statusDot = this.container.querySelector('#session-status-dot');
     if (statusDot) {
-      statusDot.classList.toggle("active", active);
+      statusDot.classList.toggle('active', active);
     }
   }
 
@@ -316,7 +305,7 @@ class HeaderComponent {
    * @returns {string} Current theme ('light' or 'dark')
    */
   getCurrentTheme() {
-    return document.body.getAttribute("data-theme") || "dark";
+    return document.body.getAttribute('data-theme') || 'dark';
   }
 
   /**
@@ -324,11 +313,11 @@ class HeaderComponent {
    */
   destroy() {
     this.stopUpdateInterval();
-    this.container.innerHTML = "";
+    this.container.innerHTML = '';
   }
 }
 
 // Export for module use
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = HeaderComponent;
 }

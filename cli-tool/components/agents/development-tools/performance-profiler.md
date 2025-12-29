@@ -32,18 +32,18 @@ You are a performance profiler specializing in application performance analysis,
 
 ```javascript
 // performance-profiler/node-profiler.js
-const fs = require("fs");
-const path = require("path");
-const { performance, PerformanceObserver } = require("perf_hooks");
-const v8Profiler = require("v8-profiler-next");
-const memwatch = require("@airbnb/node-memwatch");
+const fs = require('fs');
+const path = require('path');
+const { performance, PerformanceObserver } = require('perf_hooks');
+const v8Profiler = require('v8-profiler-next');
+const memwatch = require('@airbnb/node-memwatch');
 
 class NodePerformanceProfiler {
   constructor(options = {}) {
     this.options = {
       cpuSamplingInterval: 1000,
       memoryThreshold: 50 * 1024 * 1024, // 50MB
-      reportDirectory: "./performance-reports",
+      reportDirectory: './performance-reports',
       ...options,
     };
 
@@ -62,7 +62,7 @@ class NodePerformanceProfiler {
     // HTTP request performance
     const httpObserver = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
-        if (entry.entryType === "measure") {
+        if (entry.entryType === 'measure') {
           this.metrics.httpRequests.push({
             name: entry.name,
             duration: entry.duration,
@@ -72,31 +72,29 @@ class NodePerformanceProfiler {
         }
       });
     });
-    httpObserver.observe({ entryTypes: ["measure"] });
+    httpObserver.observe({ entryTypes: ['measure'] });
 
     // Function performance
     const functionObserver = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
         if (entry.duration > 100) {
           // Log slow functions (>100ms)
-          console.warn(
-            `Slow function detected: ${entry.name} took ${entry.duration.toFixed(2)}ms`,
-          );
+          console.warn(`Slow function detected: ${entry.name} took ${entry.duration.toFixed(2)}ms`);
         }
       });
     });
-    functionObserver.observe({ entryTypes: ["function"] });
+    functionObserver.observe({ entryTypes: ['function'] });
   }
 
   setupMemoryMonitoring() {
     // Memory leak detection
-    memwatch.on("leak", (info) => {
-      console.error("Memory leak detected:", info);
+    memwatch.on('leak', (info) => {
+      console.error('Memory leak detected:', info);
       this.generateMemorySnapshot();
     });
 
     // Garbage collection monitoring
-    memwatch.on("stats", (stats) => {
+    memwatch.on('stats', (stats) => {
       this.metrics.memoryUsage.push({
         ...stats,
         timestamp: new Date().toISOString(),
@@ -108,19 +106,19 @@ class NodePerformanceProfiler {
   }
 
   startCPUProfiling(duration = 30000) {
-    console.log("Starting CPU profiling...");
-    v8Profiler.startProfiling("CPU_PROFILE", true);
+    console.log('Starting CPU profiling...');
+    v8Profiler.startProfiling('CPU_PROFILE', true);
 
     setTimeout(() => {
-      const profile = v8Profiler.stopProfiling("CPU_PROFILE");
+      const profile = v8Profiler.stopProfiling('CPU_PROFILE');
       const reportPath = path.join(
         this.options.reportDirectory,
-        `cpu-profile-${Date.now()}.cpuprofile`,
+        `cpu-profile-${Date.now()}.cpuprofile`
       );
 
       profile.export((error, result) => {
         if (error) {
-          console.error("CPU profile export error:", error);
+          console.error('CPU profile export error:', error);
           return;
         }
 
@@ -139,7 +137,7 @@ class NodePerformanceProfiler {
     function traverseNodes(node, depth = 0) {
       if (node.hitCount > 0) {
         hotFunctions.push({
-          functionName: node.callFrame.functionName || "anonymous",
+          functionName: node.callFrame.functionName || 'anonymous',
           url: node.callFrame.url,
           lineNumber: node.callFrame.lineNumber,
           hitCount: node.hitCount,
@@ -155,22 +153,18 @@ class NodePerformanceProfiler {
     traverseNodes(profile.head);
 
     // Sort by hit count and self time
-    hotFunctions.sort(
-      (a, b) => b.hitCount * b.selfTime - a.hitCount * a.selfTime,
-    );
+    hotFunctions.sort((a, b) => b.hitCount * b.selfTime - a.hitCount * a.selfTime);
 
-    console.log("\nTop CPU consuming functions:");
+    console.log('\nTop CPU consuming functions:');
     hotFunctions.slice(0, 10).forEach((func, index) => {
-      console.log(
-        `${index + 1}. ${func.functionName} (${func.hitCount} hits, ${func.selfTime}ms)`,
-      );
+      console.log(`${index + 1}. ${func.functionName} (${func.hitCount} hits, ${func.selfTime}ms)`);
     });
 
     return hotFunctions;
   }
 
   measureEventLoopDelay() {
-    const { monitorEventLoopDelay } = require("perf_hooks");
+    const { monitorEventLoopDelay } = require('perf_hooks');
     const histogram = monitorEventLoopDelay({ resolution: 20 });
 
     histogram.enable();
@@ -200,12 +194,12 @@ class NodePerformanceProfiler {
     const snapshot = v8Profiler.takeSnapshot();
     const reportPath = path.join(
       this.options.reportDirectory,
-      `memory-snapshot-${Date.now()}.heapsnapshot`,
+      `memory-snapshot-${Date.now()}.heapsnapshot`
     );
 
     snapshot.export((error, result) => {
       if (error) {
-        console.error("Memory snapshot export error:", error);
+        console.error('Memory snapshot export error:', error);
         return;
       }
 
@@ -252,37 +246,29 @@ class NodePerformanceProfiler {
 
     const reportPath = path.join(
       this.options.reportDirectory,
-      `performance-report-${Date.now()}.json`,
+      `performance-report-${Date.now()}.json`
     );
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
-    console.log("\nPerformance Report Generated:");
+    console.log('\nPerformance Report Generated:');
     console.log(`- Report saved to: ${reportPath}`);
     console.log(
-      `- Average memory usage: ${(report.summary.averageMemoryUsage / 1024 / 1024).toFixed(2)} MB`,
+      `- Average memory usage: ${(report.summary.averageMemoryUsage / 1024 / 1024).toFixed(2)} MB`
     );
-    console.log(
-      `- Average response time: ${report.summary.averageResponseTime.toFixed(2)} ms`,
-    );
+    console.log(`- Average response time: ${report.summary.averageResponseTime.toFixed(2)} ms`);
 
     return report;
   }
 
   calculateAverageMemory() {
     if (this.metrics.memoryUsage.length === 0) return 0;
-    const sum = this.metrics.memoryUsage.reduce(
-      (acc, usage) => acc + usage.heapUsed,
-      0,
-    );
+    const sum = this.metrics.memoryUsage.reduce((acc, usage) => acc + usage.heapUsed, 0);
     return sum / this.metrics.memoryUsage.length;
   }
 
   calculateAverageResponseTime() {
     if (this.metrics.httpRequests.length === 0) return 0;
-    const sum = this.metrics.httpRequests.reduce(
-      (acc, req) => acc + req.duration,
-      0,
-    );
+    const sum = this.metrics.httpRequests.reduce((acc, req) => acc + req.duration, 0);
     return sum / this.metrics.httpRequests.length;
   }
 
@@ -297,12 +283,11 @@ class NodePerformanceProfiler {
     if (this.metrics.memoryUsage.length < 2) return null;
 
     const first = this.metrics.memoryUsage[0].heapUsed;
-    const last =
-      this.metrics.memoryUsage[this.metrics.memoryUsage.length - 1].heapUsed;
+    const last = this.metrics.memoryUsage[this.metrics.memoryUsage.length - 1].heapUsed;
     const trend = ((last - first) / first) * 100;
 
     return {
-      trend: trend > 0 ? "increasing" : "decreasing",
+      trend: trend > 0 ? 'increasing' : 'decreasing',
       percentage: Math.abs(trend).toFixed(2),
       concerning: Math.abs(trend) > 20,
     };
@@ -315,11 +300,10 @@ class NodePerformanceProfiler {
     const avgMemory = this.calculateAverageMemory();
     if (avgMemory > this.options.memoryThreshold) {
       recommendations.push({
-        category: "memory",
-        severity: "high",
-        issue: "High memory usage detected",
-        recommendation:
-          "Consider implementing memory pooling or reducing object creation",
+        category: 'memory',
+        severity: 'high',
+        issue: 'High memory usage detected',
+        recommendation: 'Consider implementing memory pooling or reducing object creation',
       });
     }
 
@@ -327,10 +311,10 @@ class NodePerformanceProfiler {
     const avgResponseTime = this.calculateAverageResponseTime();
     if (avgResponseTime > 500) {
       recommendations.push({
-        category: "performance",
-        severity: "medium",
-        issue: "Slow average response time",
-        recommendation: "Optimize database queries and add caching layers",
+        category: 'performance',
+        severity: 'medium',
+        issue: 'Slow average response time',
+        recommendation: 'Optimize database queries and add caching layers',
       });
     }
 
@@ -339,11 +323,10 @@ class NodePerformanceProfiler {
     const highDelays = recentDelays.filter((delay) => delay.mean > 10);
     if (highDelays.length > 5) {
       recommendations.push({
-        category: "concurrency",
-        severity: "high",
-        issue: "Frequent event loop delays",
-        recommendation:
-          "Review blocking operations and consider worker threads",
+        category: 'concurrency',
+        severity: 'high',
+        issue: 'Frequent event loop delays',
+        recommendation: 'Review blocking operations and consider worker threads',
       });
     }
 
@@ -353,7 +336,7 @@ class NodePerformanceProfiler {
 
 // Usage example
 const profiler = new NodePerformanceProfiler({
-  reportDirectory: "./performance-reports",
+  reportDirectory: './performance-reports',
 });
 
 // Start comprehensive monitoring
@@ -361,11 +344,8 @@ profiler.measureEventLoopDelay();
 profiler.startCPUProfiling(60000); // 60 second CPU profile
 
 // Instrument critical functions
-const originalFunction = require("./your-module").criticalFunction;
-const instrumentedFunction = profiler.instrumentFunction(
-  originalFunction,
-  "criticalFunction",
-);
+const originalFunction = require('./your-module').criticalFunction;
+const instrumentedFunction = profiler.instrumentFunction(originalFunction, 'criticalFunction');
 
 module.exports = { NodePerformanceProfiler };
 ```
@@ -387,7 +367,7 @@ class FrontendPerformanceProfiler {
   }
 
   initialize() {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     this.measureCoreWebVitals();
     this.observeResourceTimings();
@@ -405,7 +385,7 @@ class FrontendPerformanceProfiler {
         element: lastEntry.element,
         timestamp: new Date().toISOString(),
       };
-    }).observe({ entryTypes: ["largest-contentful-paint"] });
+    }).observe({ entryTypes: ['largest-contentful-paint'] });
 
     // First Input Delay (FID)
     new PerformanceObserver((list) => {
@@ -414,7 +394,7 @@ class FrontendPerformanceProfiler {
         value: firstInput.processingStart - firstInput.startTime,
         timestamp: new Date().toISOString(),
       };
-    }).observe({ entryTypes: ["first-input"] });
+    }).observe({ entryTypes: ['first-input'] });
 
     // Cumulative Layout Shift (CLS)
     let clsValue = 0;
@@ -428,21 +408,19 @@ class FrontendPerformanceProfiler {
         value: clsValue,
         timestamp: new Date().toISOString(),
       };
-    }).observe({ entryTypes: ["layout-shift"] });
+    }).observe({ entryTypes: ['layout-shift'] });
 
     // First Contentful Paint (FCP)
     new PerformanceObserver((list) => {
       const entries = list.getEntries();
-      const fcp = entries.find(
-        (entry) => entry.name === "first-contentful-paint",
-      );
+      const fcp = entries.find((entry) => entry.name === 'first-contentful-paint');
       if (fcp) {
         this.metrics.coreWebVitals.fcp = {
           value: fcp.startTime,
           timestamp: new Date().toISOString(),
         };
       }
-    }).observe({ entryTypes: ["paint"] });
+    }).observe({ entryTypes: ['paint'] });
   }
 
   observeResourceTimings() {
@@ -461,7 +439,7 @@ class FrontendPerformanceProfiler {
           timestamp: new Date().toISOString(),
         });
       });
-    }).observe({ entryTypes: ["resource"] });
+    }).observe({ entryTypes: ['resource'] });
   }
 
   observeUserTimings() {
@@ -475,7 +453,7 @@ class FrontendPerformanceProfiler {
           timestamp: new Date().toISOString(),
         });
       });
-    }).observe({ entryTypes: ["mark", "measure"] });
+    }).observe({ entryTypes: ['mark', 'measure'] });
   }
 
   measureNavigationTiming() {
@@ -483,8 +461,7 @@ class FrontendPerformanceProfiler {
       const timing = window.performance.timing;
       this.metrics.navigationTiming = {
         pageLoadTime: timing.loadEventEnd - timing.navigationStart,
-        domContentLoadedTime:
-          timing.domContentLoadedEventEnd - timing.navigationStart,
+        domContentLoadedTime: timing.domContentLoadedEventEnd - timing.navigationStart,
         domInteractiveTime: timing.domInteractive - timing.navigationStart,
         dnsLookupTime: timing.domainLookupEnd - timing.domainLookupStart,
         tcpConnectionTime: timing.connectEnd - timing.connectStart,
@@ -509,10 +486,8 @@ class FrontendPerformanceProfiler {
   }
 
   analyzeBundleSize() {
-    const scripts = Array.from(document.querySelectorAll("script[src]"));
-    const stylesheets = Array.from(
-      document.querySelectorAll('link[rel="stylesheet"]'),
-    );
+    const scripts = Array.from(document.querySelectorAll('script[src]'));
+    const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
 
     const analysis = {
       scripts: scripts.map((script) => ({
@@ -530,15 +505,15 @@ class FrontendPerformanceProfiler {
     // Generate recommendations
     if (scripts.length > 10) {
       analysis.recommendations.push({
-        type: "bundle-optimization",
-        message: "Consider bundling and minifying JavaScript files",
+        type: 'bundle-optimization',
+        message: 'Consider bundling and minifying JavaScript files',
       });
     }
 
     scripts.forEach((script) => {
       if (!script.async && !script.defer) {
         analysis.recommendations.push({
-          type: "script-loading",
+          type: 'script-loading',
           message: `Consider adding async/defer to: ${script.src}`,
         });
       }
@@ -560,7 +535,7 @@ class FrontendPerformanceProfiler {
         count: this.metrics.resourceTimings.length,
         totalSize: this.metrics.resourceTimings.reduce(
           (sum, resource) => sum + (resource.size || 0),
-          0,
+          0
         ),
         slowResources: this.metrics.resourceTimings
           .filter((resource) => resource.duration > 1000)
@@ -569,7 +544,7 @@ class FrontendPerformanceProfiler {
       recommendations: this.generateOptimizationRecommendations(),
     };
 
-    console.log("Frontend Performance Report:", report);
+    console.log('Frontend Performance Report:', report);
     return report;
   }
 
@@ -580,13 +555,13 @@ class FrontendPerformanceProfiler {
     // LCP recommendations
     if (vitals.lcp && vitals.lcp.value > 2500) {
       recommendations.push({
-        metric: "LCP",
-        issue: "Slow Largest Contentful Paint",
+        metric: 'LCP',
+        issue: 'Slow Largest Contentful Paint',
         recommendations: [
-          "Optimize server response times",
-          "Remove render-blocking resources",
-          "Optimize images and use modern formats",
-          "Consider lazy loading for below-fold content",
+          'Optimize server response times',
+          'Remove render-blocking resources',
+          'Optimize images and use modern formats',
+          'Consider lazy loading for below-fold content',
         ],
       });
     }
@@ -594,13 +569,13 @@ class FrontendPerformanceProfiler {
     // FID recommendations
     if (vitals.fid && vitals.fid.value > 100) {
       recommendations.push({
-        metric: "FID",
-        issue: "High First Input Delay",
+        metric: 'FID',
+        issue: 'High First Input Delay',
         recommendations: [
-          "Reduce JavaScript execution time",
-          "Break up long tasks",
-          "Use web workers for heavy computations",
-          "Remove unused JavaScript",
+          'Reduce JavaScript execution time',
+          'Break up long tasks',
+          'Use web workers for heavy computations',
+          'Remove unused JavaScript',
         ],
       });
     }
@@ -608,13 +583,13 @@ class FrontendPerformanceProfiler {
     // CLS recommendations
     if (vitals.cls && vitals.cls.value > 0.1) {
       recommendations.push({
-        metric: "CLS",
-        issue: "High Cumulative Layout Shift",
+        metric: 'CLS',
+        issue: 'High Cumulative Layout Shift',
         recommendations: [
-          "Include size attributes on images and videos",
-          "Reserve space for ad slots",
-          "Avoid inserting content above existing content",
-          "Use CSS transform animations instead of layout changes",
+          'Include size attributes on images and videos',
+          'Reserve space for ad slots',
+          'Avoid inserting content above existing content',
+          'Use CSS transform animations instead of layout changes',
         ],
       });
     }
@@ -627,7 +602,7 @@ class FrontendPerformanceProfiler {
 const frontendProfiler = new FrontendPerformanceProfiler();
 
 // Generate report after page load
-window.addEventListener("load", () => {
+window.addEventListener('load', () => {
   setTimeout(() => {
     frontendProfiler.generatePerformanceReport();
   }, 2000);

@@ -17,12 +17,12 @@ metadata:
   name: app-config
   namespace: example-app
 data:
-  APP_ENV: "production"
-  LOG_LEVEL: "info"
-  PORT: "8080"
-  DATABASE_HOST: "postgres.example-app.svc.cluster.local"
-  DATABASE_PORT: "5432"
-  DATABASE_NAME: "appdb"
+  APP_ENV: 'production'
+  LOG_LEVEL: 'info'
+  PORT: '8080'
+  DATABASE_HOST: 'postgres.example-app.svc.cluster.local'
+  DATABASE_PORT: '5432'
+  DATABASE_NAME: 'appdb'
 
 ---
 apiVersion: v1
@@ -32,8 +32,8 @@ metadata:
   namespace: example-app
 type: Opaque
 stringData:
-  DATABASE_PASSWORD: "changeme-use-sealed-secrets"
-  API_KEY: "changeme-use-external-secrets"
+  DATABASE_PASSWORD: 'changeme-use-sealed-secrets'
+  API_KEY: 'changeme-use-external-secrets'
 
 ---
 apiVersion: v1
@@ -72,9 +72,9 @@ spec:
         tier: frontend
         version: v1.0.0
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
-        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8080'
+        prometheus.io/path: '/metrics'
 
     spec:
       serviceAccountName: app
@@ -102,11 +102,11 @@ spec:
 
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: '256Mi'
+              cpu: '250m'
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: '512Mi'
+              cpu: '500m'
 
           livenessProbe:
             httpGet:
@@ -173,8 +173,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/rate-limit: '100'
 spec:
   tls:
     - hosts:

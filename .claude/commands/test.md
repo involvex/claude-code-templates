@@ -22,6 +22,7 @@ This command helps you run Python tests effectively with proper configuration an
 ## Example Commands
 
 ### pytest (recommended)
+
 ```bash
 # Run all tests
 pytest
@@ -40,6 +41,7 @@ pytest -k "test_user"
 ```
 
 ### unittest
+
 ```bash
 # Run all tests
 python -m unittest discover
@@ -52,6 +54,7 @@ python -m unittest -v
 ```
 
 ### Django tests
+
 ```bash
 # Run all Django tests
 python manage.py test

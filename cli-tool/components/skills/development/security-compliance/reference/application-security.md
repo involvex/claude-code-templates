@@ -375,16 +375,16 @@ server_tokens off;
 ```yaml
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     open-pull-requests-limit: 10
     reviewers:
-      - "security-team"
+      - 'security-team'
     labels:
-      - "dependencies"
-      - "security"
+      - 'dependencies'
+      - 'security'
 ```
 
 ---
@@ -685,9 +685,9 @@ jobs:
       - name: Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: "my-app"
-          path: "."
-          format: "HTML"
+          project: 'my-app'
+          path: '.'
+          format: 'HTML'
 
       # SAST (Static Application Security Testing)
       - name: SonarCloud Scan
@@ -703,9 +703,9 @@ jobs:
       - name: Trivy container scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "myapp:${{ github.sha }}"
-          format: "sarif"
-          output: "trivy-results.sarif"
+          image-ref: 'myapp:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
 
       # IaC scanning
       - name: Checkov IaC scan
@@ -735,13 +735,13 @@ repos:
     rev: 1.7.5
     hooks:
       - id: bandit
-        args: ["-r", "src/"]
+        args: ['-r', 'src/']
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
       - id: check-added-large-files
-        args: ["--maxkb=500"]
+        args: ['--maxkb=500']
       - id: detect-private-key
       - id: check-yaml
       - id: check-json

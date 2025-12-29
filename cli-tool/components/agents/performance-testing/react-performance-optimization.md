@@ -53,7 +53,7 @@ const ExpensiveComponent = React.memo(({ data, onUpdate }) => {
 ### Code Splitting with React.lazy
 
 ```javascript
-const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 const App = () => (
   <Router>

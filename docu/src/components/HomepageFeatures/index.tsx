@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react';
+import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
@@ -17,8 +17,8 @@ const FeatureList: FeatureItem[] = [
     command: 'npm install -g claude-code-templates',
     description: (
       <>
-        Install the CLI tool globally and get started with Claude Code templates 
-        in seconds. No complex configuration required.
+        Install the CLI tool globally and get started with Claude Code templates in seconds. No
+        complex configuration required.
       </>
     ),
   },
@@ -27,8 +27,8 @@ const FeatureList: FeatureItem[] = [
     icon: '🔧',
     description: (
       <>
-        Templates for React, Vue, Angular, Django, FastAPI, Rails, and more. 
-        Each includes optimized <code>CLAUDE.md</code> configurations and best practices.
+        Templates for React, Vue, Angular, Django, FastAPI, Rails, and more. Each includes optimized{' '}
+        <code>CLAUDE.md</code> configurations and best practices.
       </>
     ),
   },
@@ -38,22 +38,22 @@ const FeatureList: FeatureItem[] = [
     command: 'claude-code-templates --analytics',
     description: (
       <>
-        Monitor your Claude Code usage with our comprehensive analytics dashboard. 
-        Track sessions, token usage, and performance metrics in real-time.
+        Monitor your Claude Code usage with our comprehensive analytics dashboard. Track sessions,
+        token usage, and performance metrics in real-time.
       </>
     ),
   },
 ];
 
-function Feature({title, icon, description, command}: FeatureItem) {
+function Feature({ title, icon, description, command }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className={styles.featureCard}>
-        <div className={styles.featureIcon}>
-          {icon}
-        </div>
+        <div className={styles.featureIcon}>{icon}</div>
         <div className={styles.featureContent}>
-          <Heading as="h3" className={styles.featureTitle}>{title}</Heading>
+          <Heading as="h3" className={styles.featureTitle}>
+            {title}
+          </Heading>
           <p className={styles.featureDescription}>{description}</p>
           {command && (
             <div className={styles.terminalCommand}>

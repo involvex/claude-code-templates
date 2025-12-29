@@ -273,20 +273,18 @@ async function searchUniProt(query) {
 }
 
 // Usage
-searchUniProt("insulin AND organism_id:9606").then((results) =>
-  console.log(results),
-);
+searchUniProt('insulin AND organism_id:9606').then((results) => console.log(results));
 ```
 
 ### Example 2: Get Protein Entry
 
 ```javascript
-async function getProtein(accession, format = "json") {
+async function getProtein(accession, format = 'json') {
   const url = `https://rest.uniprot.org/uniprotkb/${accession}.${format}`;
 
   const response = await fetch(url);
 
-  if (format === "json") {
+  if (format === 'json') {
     return await response.json();
   } else {
     return await response.text();
@@ -294,7 +292,7 @@ async function getProtein(accession, format = "json") {
 }
 
 // Usage
-getProtein("P01308", "fasta").then((sequence) => console.log(sequence));
+getProtein('P01308', 'fasta').then((sequence) => console.log(sequence));
 ```
 
 ### Example 3: ID Mapping
@@ -302,15 +300,15 @@ getProtein("P01308", "fasta").then((sequence) => console.log(sequence));
 ```javascript
 async function mapIds(ids, fromDb, toDb) {
   // Submit job
-  const submitUrl = "https://rest.uniprot.org/idmapping/run";
+  const submitUrl = 'https://rest.uniprot.org/idmapping/run';
   const formData = new URLSearchParams({
     from: fromDb,
     to: toDb,
-    ids: ids.join(","),
+    ids: ids.join(','),
   });
 
   const submitResponse = await fetch(submitUrl, {
-    method: "POST",
+    method: 'POST',
     body: formData,
   });
   const { jobId } = await submitResponse.json();
@@ -321,7 +319,7 @@ async function mapIds(ids, fromDb, toDb) {
     const statusResponse = await fetch(statusUrl);
     const status = await statusResponse.json();
 
-    if ("results" in status || "failedIds" in status) {
+    if ('results' in status || 'failedIds' in status) {
       break;
     }
 
@@ -335,9 +333,7 @@ async function mapIds(ids, fromDb, toDb) {
 }
 
 // Usage
-mapIds(["P01308", "P04637"], "UniProtKB_AC-ID", "PDB").then((mapping) =>
-  console.log(mapping),
-);
+mapIds(['P01308', 'P04637'], 'UniProtKB_AC-ID', 'PDB').then((mapping) => console.log(mapping));
 ```
 
 ## Advanced Examples

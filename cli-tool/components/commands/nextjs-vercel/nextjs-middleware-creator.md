@@ -45,11 +45,11 @@ lib/middleware/              # Middleware utilities
 
 ```typescript
 // middleware.ts
-import { NextRequest, NextResponse } from "next/server";
-import { authMiddleware } from "./lib/middleware/auth";
-import { rateLimitMiddleware } from "./lib/middleware/rateLimit";
-import { securityMiddleware } from "./lib/middleware/security";
-import { redirectMiddleware } from "./lib/middleware/redirects";
+import { NextRequest, NextResponse } from 'next/server';
+import { authMiddleware } from './lib/middleware/auth';
+import { rateLimitMiddleware } from './lib/middleware/rateLimit';
+import { securityMiddleware } from './lib/middleware/security';
+import { redirectMiddleware } from './lib/middleware/redirects';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -80,14 +80,14 @@ export async function middleware(request: NextRequest) {
 }
 
 function isProtectedRoute(pathname: string): boolean {
-  const protectedPaths = ["/dashboard", "/admin", "/api/protected"];
+  const protectedPaths = ['/dashboard', '/admin', '/api/protected'];
   return protectedPaths.some((path) => pathname.startsWith(path));
 }
 
 export const config = {
   matcher: [
     // Match all request paths except static files and images
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
 ```
@@ -98,19 +98,17 @@ export const config = {
 
 ```typescript
 // lib/middleware/auth.ts
-import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
+import { NextRequest, NextResponse } from 'next/server';
+import { jwtVerify } from 'jose';
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "your-secret-key",
-);
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key');
 
 export async function authMiddleware(request: NextRequest) {
   try {
     // Get token from cookies or Authorization header
     const token =
-      request.cookies.get("auth-token")?.value ||
-      request.headers.get("authorization")?.replace("Bearer ", "");
+      request.cookies.get('auth-token')?.value ||
+      request.headers.get('authorization')?.replace('Bearer ', '');
 
     if (!token) {
       return redirectToLogin(request);
@@ -121,29 +119,29 @@ export async function authMiddleware(request: NextRequest) {
 
     // Add user info to headers for downstream use
     const response = NextResponse.next();
-    response.headers.set("x-user-id", payload.sub as string);
-    response.headers.set("x-user-role", payload.role as string);
+    response.headers.set('x-user-id', payload.sub as string);
+    response.headers.set('x-user-role', payload.role as string);
 
     return response;
   } catch (error) {
-    console.error("Auth middleware error:", error);
+    console.error('Auth middleware error:', error);
     return redirectToLogin(request);
   }
 }
 
 function redirectToLogin(request: NextRequest) {
-  const loginUrl = new URL("/login", request.url);
-  loginUrl.searchParams.set("callbackUrl", request.url);
+  const loginUrl = new URL('/login', request.url);
+  loginUrl.searchParams.set('callbackUrl', request.url);
   return NextResponse.redirect(loginUrl);
 }
 
 // Role-based access control
 export function requireRole(allowedRoles: string[]) {
   return async function roleMiddleware(request: NextRequest) {
-    const userRole = request.headers.get("x-user-role");
+    const userRole = request.headers.get('x-user-role');
 
     if (!userRole || !allowedRoles.includes(userRole)) {
-      return new NextResponse("Forbidden", { status: 403 });
+      return new NextResponse('Forbidden', { status: 403 });
     }
 
     return NextResponse.next();
@@ -155,7 +153,7 @@ export function requireRole(allowedRoles: string[]) {
 
 ```typescript
 // lib/middleware/rateLimit.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 // Simple in-memory store (use Redis in production)
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
@@ -173,11 +171,9 @@ const defaultConfig: RateLimitConfig = {
 
 export async function rateLimitMiddleware(
   request: NextRequest,
-  config: RateLimitConfig = defaultConfig,
+  config: RateLimitConfig = defaultConfig
 ) {
-  const key = config.keyGenerator
-    ? config.keyGenerator(request)
-    : getClientIP(request);
+  const key = config.keyGenerator ? config.keyGenerator(request) : getClientIP(request);
 
   const now = Date.now();
   const clientData = requestCounts.get(key);
@@ -198,13 +194,13 @@ export async function rateLimitMiddleware(
   if (clientData.count > config.maxRequests) {
     const resetTime = Math.ceil((clientData.resetTime - now) / 1000);
 
-    return new NextResponse("Rate limit exceeded", {
+    return new NextResponse('Rate limit exceeded', {
       status: 429,
       headers: {
-        "X-RateLimit-Limit": config.maxRequests.toString(),
-        "X-RateLimit-Remaining": "0",
-        "X-RateLimit-Reset": resetTime.toString(),
-        "Retry-After": resetTime.toString(),
+        'X-RateLimit-Limit': config.maxRequests.toString(),
+        'X-RateLimit-Remaining': '0',
+        'X-RateLimit-Reset': resetTime.toString(),
+        'Retry-After': resetTime.toString(),
       },
     });
   }
@@ -214,10 +210,10 @@ export async function rateLimitMiddleware(
 
 function getClientIP(request: NextRequest): string {
   return (
-    request.headers.get("x-forwarded-for") ||
-    request.headers.get("x-real-ip") ||
+    request.headers.get('x-forwarded-for') ||
+    request.headers.get('x-real-ip') ||
     request.ip ||
-    "unknown"
+    'unknown'
   );
 }
 
@@ -234,7 +230,7 @@ export const apiRateLimit = (request: NextRequest) =>
 
 ```typescript
 // lib/middleware/security.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function securityMiddleware(request: NextRequest) {
   const response = NextResponse.next();
@@ -242,25 +238,25 @@ export async function securityMiddleware(request: NextRequest) {
   // Security headers
   const securityHeaders = {
     // XSS Protection
-    "X-XSS-Protection": "1; mode=block",
+    'X-XSS-Protection': '1; mode=block',
 
     // Content Type Options
-    "X-Content-Type-Options": "nosniff",
+    'X-Content-Type-Options': 'nosniff',
 
     // Frame Options
-    "X-Frame-Options": "DENY",
+    'X-Frame-Options': 'DENY',
 
     // HSTS
-    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
 
     // Referrer Policy
-    "Referrer-Policy": "strict-origin-when-cross-origin",
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
 
     // Permissions Policy
-    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
 
     // Content Security Policy
-    "Content-Security-Policy": generateCSP(),
+    'Content-Security-Policy': generateCSP(),
   };
 
   // Apply security headers
@@ -282,7 +278,7 @@ function generateCSP(): string {
     "frame-ancestors 'none'",
   ];
 
-  return csp.join("; ");
+  return csp.join('; ');
 }
 ```
 
@@ -290,7 +286,7 @@ function generateCSP(): string {
 
 ```typescript
 // lib/middleware/cors.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 interface CorsOptions {
   origin: string | string[] | boolean;
@@ -301,8 +297,8 @@ interface CorsOptions {
 
 const defaultCorsOptions: CorsOptions = {
   origin: true, // Allow all origins in development
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true,
 };
 
@@ -311,31 +307,25 @@ export function corsMiddleware(options: Partial<CorsOptions> = {}) {
 
   return function cors(request: NextRequest) {
     const response = NextResponse.next();
-    const origin = request.headers.get("origin");
+    const origin = request.headers.get('origin');
 
     // Handle preflight requests
-    if (request.method === "OPTIONS") {
+    if (request.method === 'OPTIONS') {
       return handlePreflight(request, config);
     }
 
     // Set CORS headers
     if (shouldAllowOrigin(origin, config.origin)) {
-      response.headers.set("Access-Control-Allow-Origin", origin || "*");
+      response.headers.set('Access-Control-Allow-Origin', origin || '*');
     }
 
     if (config.credentials) {
-      response.headers.set("Access-Control-Allow-Credentials", "true");
+      response.headers.set('Access-Control-Allow-Credentials', 'true');
     }
 
-    response.headers.set(
-      "Access-Control-Allow-Methods",
-      config.methods.join(", "),
-    );
+    response.headers.set('Access-Control-Allow-Methods', config.methods.join(', '));
 
-    response.headers.set(
-      "Access-Control-Allow-Headers",
-      config.allowedHeaders.join(", "),
-    );
+    response.headers.set('Access-Control-Allow-Headers', config.allowedHeaders.join(', '));
 
     return response;
   };
@@ -343,31 +333,31 @@ export function corsMiddleware(options: Partial<CorsOptions> = {}) {
 
 function handlePreflight(request: NextRequest, config: CorsOptions) {
   const headers = new Headers();
-  const origin = request.headers.get("origin");
+  const origin = request.headers.get('origin');
 
   if (shouldAllowOrigin(origin, config.origin)) {
-    headers.set("Access-Control-Allow-Origin", origin || "*");
+    headers.set('Access-Control-Allow-Origin', origin || '*');
   }
 
   if (config.credentials) {
-    headers.set("Access-Control-Allow-Credentials", "true");
+    headers.set('Access-Control-Allow-Credentials', 'true');
   }
 
-  headers.set("Access-Control-Allow-Methods", config.methods.join(", "));
-  headers.set("Access-Control-Allow-Headers", config.allowedHeaders.join(", "));
-  headers.set("Access-Control-Max-Age", "86400"); // 24 hours
+  headers.set('Access-Control-Allow-Methods', config.methods.join(', '));
+  headers.set('Access-Control-Allow-Headers', config.allowedHeaders.join(', '));
+  headers.set('Access-Control-Max-Age', '86400'); // 24 hours
 
   return new NextResponse(null, { status: 200, headers });
 }
 
 function shouldAllowOrigin(
   origin: string | null,
-  allowedOrigin: string | string[] | boolean,
+  allowedOrigin: string | string[] | boolean
 ): boolean {
   if (allowedOrigin === true) return true;
   if (allowedOrigin === false) return false;
-  if (typeof allowedOrigin === "string") return origin === allowedOrigin;
-  if (Array.isArray(allowedOrigin)) return allowedOrigin.includes(origin || "");
+  if (typeof allowedOrigin === 'string') return origin === allowedOrigin;
+  if (Array.isArray(allowedOrigin)) return allowedOrigin.includes(origin || '');
   return false;
 }
 ```
@@ -376,7 +366,7 @@ function shouldAllowOrigin(
 
 ```typescript
 // lib/middleware/redirects.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 interface RedirectRule {
   source: string | RegExp;
@@ -388,36 +378,36 @@ interface RedirectRule {
 const redirectRules: RedirectRule[] = [
   // Legacy URL redirects
   {
-    source: "/old-page",
-    destination: "/new-page",
+    source: '/old-page',
+    destination: '/new-page',
     permanent: true,
   },
 
   // Dynamic redirects
   {
     source: /^\/user\/(.+)$/,
-    destination: "/profile/$1",
+    destination: '/profile/$1',
     permanent: false,
   },
 
   // Conditional redirects
   {
-    source: "/admin",
-    destination: "/admin/dashboard",
+    source: '/admin',
+    destination: '/admin/dashboard',
     conditions: (request) => {
-      const userRole = request.headers.get("x-user-role");
-      return userRole === "admin";
+      const userRole = request.headers.get('x-user-role');
+      return userRole === 'admin';
     },
   },
 
   // Maintenance mode
   {
     source: /.*/,
-    destination: "/maintenance",
+    destination: '/maintenance',
     conditions: (request) => {
       return (
-        process.env.MAINTENANCE_MODE === "true" &&
-        !request.nextUrl.pathname.startsWith("/maintenance")
+        process.env.MAINTENANCE_MODE === 'true' &&
+        !request.nextUrl.pathname.startsWith('/maintenance')
       );
     },
   },
@@ -440,16 +430,10 @@ export async function redirectMiddleware(request: NextRequest) {
   return null; // No redirect needed
 }
 
-function shouldApplyRule(
-  rule: RedirectRule,
-  pathname: string,
-  request: NextRequest,
-): boolean {
+function shouldApplyRule(rule: RedirectRule, pathname: string, request: NextRequest): boolean {
   // Check pattern match
   const matches =
-    typeof rule.source === "string"
-      ? pathname === rule.source
-      : rule.source.test(pathname);
+    typeof rule.source === 'string' ? pathname === rule.source : rule.source.test(pathname);
 
   if (!matches) return false;
 
@@ -474,7 +458,7 @@ function resolveDestination(destination: string, pathname: string): string {
 
 ```typescript
 // lib/middleware/abTest.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 interface ABTest {
   name: string;
@@ -485,15 +469,15 @@ interface ABTest {
 
 const activeTests: ABTest[] = [
   {
-    name: "homepage-design",
-    variants: ["control", "variant-a", "variant-b"],
+    name: 'homepage-design',
+    variants: ['control', 'variant-a', 'variant-b'],
     traffic: 50,
   },
   {
-    name: "checkout-flow",
-    variants: ["old-checkout", "new-checkout"],
+    name: 'checkout-flow',
+    variants: ['old-checkout', 'new-checkout'],
     traffic: 100,
-    condition: (req) => req.nextUrl.pathname.startsWith("/checkout"),
+    condition: (req) => req.nextUrl.pathname.startsWith('/checkout'),
   },
 ];
 
@@ -531,9 +515,7 @@ export function abTestMiddleware(request: NextRequest) {
 function getUserId(request: NextRequest): string {
   // Get user ID from cookie, or generate anonymous ID
   return (
-    request.cookies.get("user-id")?.value ||
-    request.headers.get("x-forwarded-for") ||
-    "anonymous"
+    request.cookies.get('user-id')?.value || request.headers.get('x-forwarded-for') || 'anonymous'
   );
 }
 
@@ -554,11 +536,11 @@ function hashString(str: string): number {
 
 ```typescript
 // lib/middleware/compose.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 type MiddlewareFunction = (
   request: NextRequest,
-  response?: NextResponse,
+  response?: NextResponse
 ) => NextResponse | Promise<NextResponse> | null;
 
 export function composeMiddleware(...middlewares: MiddlewareFunction[]) {
@@ -592,7 +574,7 @@ export function composeMiddleware(...middlewares: MiddlewareFunction[]) {
 
 ```typescript
 // lib/middleware/featureFlags.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 interface FeatureFlag {
   name: string;
@@ -604,14 +586,14 @@ interface FeatureFlag {
 
 const featureFlags: FeatureFlag[] = [
   {
-    name: "new-dashboard",
+    name: 'new-dashboard',
     enabled: true,
     percentage: 25,
   },
   {
-    name: "premium-features",
+    name: 'premium-features',
     enabled: true,
-    userGroups: ["premium", "admin"],
+    userGroups: ['premium', 'admin'],
   },
 ];
 
@@ -637,7 +619,7 @@ export function featureFlagMiddleware(request: NextRequest) {
 
     // Check user groups
     if (flag.userGroups) {
-      const userRole = request.headers.get("x-user-role");
+      const userRole = request.headers.get('x-user-role');
       if (!userRole || !flag.userGroups.includes(userRole)) {
         activeFlags[flag.name] = false;
         continue;
@@ -648,7 +630,7 @@ export function featureFlagMiddleware(request: NextRequest) {
   }
 
   // Set feature flags in headers
-  response.headers.set("x-feature-flags", JSON.stringify(activeFlags));
+  response.headers.set('x-feature-flags', JSON.stringify(activeFlags));
 
   return response;
 }
@@ -660,24 +642,24 @@ export function featureFlagMiddleware(request: NextRequest) {
 
 ```typescript
 // __tests__/middleware.test.ts
-import { NextRequest } from "next/server";
-import { middleware } from "../middleware";
+import { NextRequest } from 'next/server';
+import { middleware } from '../middleware';
 
-describe("Middleware", () => {
-  it("should add security headers", async () => {
-    const request = new NextRequest("http://localhost:3000/");
+describe('Middleware', () => {
+  it('should add security headers', async () => {
+    const request = new NextRequest('http://localhost:3000/');
     const response = await middleware(request);
 
-    expect(response.headers.get("X-Frame-Options")).toBe("DENY");
-    expect(response.headers.get("X-Content-Type-Options")).toBe("nosniff");
+    expect(response.headers.get('X-Frame-Options')).toBe('DENY');
+    expect(response.headers.get('X-Content-Type-Options')).toBe('nosniff');
   });
 
-  it("should redirect unauthenticated users from protected routes", async () => {
-    const request = new NextRequest("http://localhost:3000/dashboard");
+  it('should redirect unauthenticated users from protected routes', async () => {
+    const request = new NextRequest('http://localhost:3000/dashboard');
     const response = await middleware(request);
 
     expect(response.status).toBe(302);
-    expect(response.headers.get("location")).toContain("/login");
+    expect(response.headers.get('location')).toContain('/login');
   });
 });
 ```
@@ -686,12 +668,12 @@ describe("Middleware", () => {
 
 ```typescript
 // __tests__/middleware.integration.test.ts
-describe("Middleware Integration", () => {
-  it("should handle complete authentication flow", async () => {
+describe('Middleware Integration', () => {
+  it('should handle complete authentication flow', async () => {
     // Test login -> dashboard -> logout flow
   });
 
-  it("should respect rate limiting", async () => {
+  it('should respect rate limiting', async () => {
     // Test multiple requests hitting rate limit
   });
 });
@@ -709,7 +691,7 @@ export function monitoringMiddleware(request: NextRequest) {
   return new Response(JSON.stringify({}), {
     status: 200,
     headers: {
-      "x-response-time": `${Date.now() - start}ms`,
+      'x-response-time': `${Date.now() - start}ms`,
     },
   });
 }
@@ -719,16 +701,13 @@ export function monitoringMiddleware(request: NextRequest) {
 
 ```typescript
 // lib/middleware/errorHandler.ts
-export function errorHandlerMiddleware(
-  error: Error,
-  request: NextRequest,
-): NextResponse {
-  console.error("Middleware error:", error);
+export function errorHandlerMiddleware(error: Error, request: NextRequest): NextResponse {
+  console.error('Middleware error:', error);
 
   // Log to monitoring service
   // logError(error, request);
 
-  return new NextResponse("Internal Server Error", { status: 500 });
+  return new NextResponse('Internal Server Error', { status: 500 });
 }
 ```
 

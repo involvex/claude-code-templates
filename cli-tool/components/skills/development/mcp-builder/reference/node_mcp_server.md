@@ -11,25 +11,25 @@ This document provides Node/TypeScript-specific best practices and examples for 
 ### Key Imports
 
 ```typescript
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
-import axios, { AxiosError } from "axios";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
+import axios, { AxiosError } from 'axios';
 ```
 
 ### Server Initialization
 
 ```typescript
 const server = new McpServer({
-  name: "service-mcp-server",
-  version: "1.0.0",
+  name: 'service-mcp-server',
+  version: '1.0.0',
 });
 ```
 
 ### Tool Registration Pattern
 
 ```typescript
-server.registerTool("tool_name", { ...config }, async (params) => {
+server.registerTool('tool_name', { ...config }, async (params) => {
   // Implementation
 });
 ```
@@ -103,12 +103,12 @@ Tools are registered using the `registerTool` method with the following requirem
 - Type all parameters and return values explicitly
 
 ```typescript
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
 
 const server = new McpServer({
-  name: "example-mcp",
-  version: "1.0.0",
+  name: 'example-mcp',
+  version: '1.0.0',
 });
 
 // Zod schema for input validation
@@ -116,28 +116,15 @@ const UserSearchInputSchema = z
   .object({
     query: z
       .string()
-      .min(2, "Query must be at least 2 characters")
-      .max(200, "Query must not exceed 200 characters")
-      .describe("Search string to match against names/emails"),
-    limit: z
-      .number()
-      .int()
-      .min(1)
-      .max(100)
-      .default(20)
-      .describe("Maximum results to return"),
-    offset: z
-      .number()
-      .int()
-      .min(0)
-      .default(0)
-      .describe("Number of results to skip for pagination"),
+      .min(2, 'Query must be at least 2 characters')
+      .max(200, 'Query must not exceed 200 characters')
+      .describe('Search string to match against names/emails'),
+    limit: z.number().int().min(1).max(100).default(20).describe('Maximum results to return'),
+    offset: z.number().int().min(0).default(0).describe('Number of results to skip for pagination'),
     response_format: z
       .nativeEnum(ResponseFormat)
       .default(ResponseFormat.MARKDOWN)
-      .describe(
-        "Output format: 'markdown' for human-readable or 'json' for machine-readable",
-      ),
+      .describe("Output format: 'markdown' for human-readable or 'json' for machine-readable"),
   })
   .strict();
 
@@ -145,9 +132,9 @@ const UserSearchInputSchema = z
 type UserSearchInput = z.infer<typeof UserSearchInputSchema>;
 
 server.registerTool(
-  "example_search_users",
+  'example_search_users',
   {
-    title: "Search Example Users",
+    title: 'Search Example Users',
     description: `Search for users in the Example system by name, email, or team.
 
 This tool searches across all user profiles in the Example platform, supporting partial matches and various search filters. It does NOT create or modify users, only searches existing ones.
@@ -197,7 +184,7 @@ Error Handling:
     try {
       // Input validation is handled by Zod schema
       // Make API request using validated parameters
-      const data = await makeApiRequest<any>("users/search", "GET", undefined, {
+      const data = await makeApiRequest<any>('users/search', 'GET', undefined, {
         q: params.query,
         limit: params.limit,
         offset: params.offset,
@@ -210,7 +197,7 @@ Error Handling:
         return {
           content: [
             {
-              type: "text",
+              type: 'text',
               text: `No users found matching '${params.query}'`,
             },
           ],
@@ -222,12 +209,9 @@ Error Handling:
 
       if (params.response_format === ResponseFormat.MARKDOWN) {
         // Human-readable markdown format
-        const lines: string[] = [
-          `# User Search Results: '${params.query}'`,
-          "",
-        ];
+        const lines: string[] = [`# User Search Results: '${params.query}'`, ''];
         lines.push(`Found ${total} users (showing ${users.length})`);
-        lines.push("");
+        lines.push('');
 
         for (const user of users) {
           lines.push(`## ${user.name} (${user.id})`);
@@ -235,10 +219,10 @@ Error Handling:
           if (user.team) {
             lines.push(`- **Team**: ${user.team}`);
           }
-          lines.push("");
+          lines.push('');
         }
 
-        result = lines.join("\n");
+        result = lines.join('\n');
       } else {
         // Machine-readable JSON format
         const response: any = {
@@ -266,7 +250,7 @@ Error Handling:
       return {
         content: [
           {
-            type: "text",
+            type: 'text',
             text: result,
           },
         ],
@@ -275,13 +259,13 @@ Error Handling:
       return {
         content: [
           {
-            type: "text",
+            type: 'text',
             text: handleApiError(error),
           },
         ],
       };
     }
-  },
+  }
 );
 ```
 
@@ -290,52 +274,38 @@ Error Handling:
 Zod provides runtime type validation:
 
 ```typescript
-import { z } from "zod";
+import { z } from 'zod';
 
 // Basic schema with validation
 const CreateUserSchema = z
   .object({
-    name: z
-      .string()
-      .min(1, "Name is required")
-      .max(100, "Name must not exceed 100 characters"),
-    email: z.string().email("Invalid email format"),
+    name: z.string().min(1, 'Name is required').max(100, 'Name must not exceed 100 characters'),
+    email: z.string().email('Invalid email format'),
     age: z
       .number()
-      .int("Age must be a whole number")
-      .min(0, "Age cannot be negative")
-      .max(150, "Age cannot be greater than 150"),
+      .int('Age must be a whole number')
+      .min(0, 'Age cannot be negative')
+      .max(150, 'Age cannot be greater than 150'),
   })
   .strict(); // Use .strict() to forbid extra fields
 
 // Enums
 enum ResponseFormat {
-  MARKDOWN = "markdown",
-  JSON = "json",
+  MARKDOWN = 'markdown',
+  JSON = 'json',
 }
 
 const SearchSchema = z.object({
   response_format: z
     .nativeEnum(ResponseFormat)
     .default(ResponseFormat.MARKDOWN)
-    .describe("Output format"),
+    .describe('Output format'),
 });
 
 // Optional fields with defaults
 const PaginationSchema = z.object({
-  limit: z
-    .number()
-    .int()
-    .min(1)
-    .max(100)
-    .default(20)
-    .describe("Maximum results to return"),
-  offset: z
-    .number()
-    .int()
-    .min(0)
-    .default(0)
-    .describe("Number of results to skip"),
+  limit: z.number().int().min(1).max(100).default(20).describe('Maximum results to return'),
+  offset: z.number().int().min(0).default(0).describe('Number of results to skip'),
 });
 ```
 
@@ -345,8 +315,8 @@ Support multiple output formats for flexibility:
 
 ```typescript
 enum ResponseFormat {
-  MARKDOWN = "markdown",
-  JSON = "json",
+  MARKDOWN = 'markdown',
+  JSON = 'json',
 }
 
 const inputSchema = z.object({
@@ -354,9 +324,7 @@ const inputSchema = z.object({
   response_format: z
     .nativeEnum(ResponseFormat)
     .default(ResponseFormat.MARKDOWN)
-    .describe(
-      "Output format: 'markdown' for human-readable or 'json' for machine-readable",
-    ),
+    .describe("Output format: 'markdown' for human-readable or 'json' for machine-readable"),
 });
 ```
 
@@ -434,23 +402,23 @@ async function searchTool(params: SearchInput) {
 Provide clear, actionable error messages:
 
 ```typescript
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError } from 'axios';
 
 function handleApiError(error: unknown): string {
   if (error instanceof AxiosError) {
     if (error.response) {
       switch (error.response.status) {
         case 404:
-          return "Error: Resource not found. Please check the ID is correct.";
+          return 'Error: Resource not found. Please check the ID is correct.';
         case 403:
           return "Error: Permission denied. You don't have access to this resource.";
         case 429:
-          return "Error: Rate limit exceeded. Please wait before making more requests.";
+          return 'Error: Rate limit exceeded. Please wait before making more requests.';
         default:
           return `Error: API request failed with status ${error.response.status}`;
       }
-    } else if (error.code === "ECONNABORTED") {
-      return "Error: Request timed out. Please try again.";
+    } else if (error.code === 'ECONNABORTED') {
+      return 'Error: Request timed out. Please try again.';
     }
   }
   return `Error: Unexpected error occurred: ${error instanceof Error ? error.message : String(error)}`;
@@ -465,9 +433,9 @@ Extract common functionality into reusable functions:
 // Shared API request function
 async function makeApiRequest<T>(
   endpoint: string,
-  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
   data?: any,
-  params?: any,
+  params?: any
 ): Promise<T> {
   try {
     const response = await axios({
@@ -477,8 +445,8 @@ async function makeApiRequest<T>(
       params,
       timeout: 30000,
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
     });
     return response.data;
@@ -501,9 +469,7 @@ async function fetchData(resourceId: string): Promise<ResourceData> {
 
 // Bad: Promise chains
 function fetchData(resourceId: string): Promise<ResourceData> {
-  return axios
-    .get(`${API_URL}/resource/${resourceId}`)
-    .then((response) => response.data); // Harder to read and maintain
+  return axios.get(`${API_URL}/resource/${resourceId}`).then((response) => response.data); // Harder to read and maintain
 }
 ```
 
@@ -617,19 +583,19 @@ async function getUser(id: string): Promise<any> {
  * project management, and data export capabilities.
  */
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
-import axios, { AxiosError } from "axios";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
+import axios, { AxiosError } from 'axios';
 
 // Constants
-const API_BASE_URL = "https://api.example.com/v1";
+const API_BASE_URL = 'https://api.example.com/v1';
 const CHARACTER_LIMIT = 25000;
 
 // Enums
 enum ResponseFormat {
-  MARKDOWN = "markdown",
-  JSON = "json",
+  MARKDOWN = 'markdown',
+  JSON = 'json',
 }
 
 // Zod schemas
@@ -637,28 +603,15 @@ const UserSearchInputSchema = z
   .object({
     query: z
       .string()
-      .min(2, "Query must be at least 2 characters")
-      .max(200, "Query must not exceed 200 characters")
-      .describe("Search string to match against names/emails"),
-    limit: z
-      .number()
-      .int()
-      .min(1)
-      .max(100)
-      .default(20)
-      .describe("Maximum results to return"),
-    offset: z
-      .number()
-      .int()
-      .min(0)
-      .default(0)
-      .describe("Number of results to skip for pagination"),
+      .min(2, 'Query must be at least 2 characters')
+      .max(200, 'Query must not exceed 200 characters')
+      .describe('Search string to match against names/emails'),
+    limit: z.number().int().min(1).max(100).default(20).describe('Maximum results to return'),
+    offset: z.number().int().min(0).default(0).describe('Number of results to skip for pagination'),
     response_format: z
       .nativeEnum(ResponseFormat)
       .default(ResponseFormat.MARKDOWN)
-      .describe(
-        "Output format: 'markdown' for human-readable or 'json' for machine-readable",
-      ),
+      .describe("Output format: 'markdown' for human-readable or 'json' for machine-readable"),
   })
   .strict();
 
@@ -667,9 +620,9 @@ type UserSearchInput = z.infer<typeof UserSearchInputSchema>;
 // Shared utility functions
 async function makeApiRequest<T>(
   endpoint: string,
-  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
   data?: any,
-  params?: any,
+  params?: any
 ): Promise<T> {
   try {
     const response = await axios({
@@ -679,8 +632,8 @@ async function makeApiRequest<T>(
       params,
       timeout: 30000,
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
     });
     return response.data;
@@ -694,16 +647,16 @@ function handleApiError(error: unknown): string {
     if (error.response) {
       switch (error.response.status) {
         case 404:
-          return "Error: Resource not found. Please check the ID is correct.";
+          return 'Error: Resource not found. Please check the ID is correct.';
         case 403:
           return "Error: Permission denied. You don't have access to this resource.";
         case 429:
-          return "Error: Rate limit exceeded. Please wait before making more requests.";
+          return 'Error: Rate limit exceeded. Please wait before making more requests.';
         default:
           return `Error: API request failed with status ${error.response.status}`;
       }
-    } else if (error.code === "ECONNABORTED") {
-      return "Error: Request timed out. Please try again.";
+    } else if (error.code === 'ECONNABORTED') {
+      return 'Error: Request timed out. Please try again.';
     }
   }
   return `Error: Unexpected error occurred: ${error instanceof Error ? error.message : String(error)}`;
@@ -711,15 +664,15 @@ function handleApiError(error: unknown): string {
 
 // Create MCP server instance
 const server = new McpServer({
-  name: "example-mcp",
-  version: "1.0.0",
+  name: 'example-mcp',
+  version: '1.0.0',
 });
 
 // Register tools
 server.registerTool(
-  "example_search_users",
+  'example_search_users',
   {
-    title: "Search Example Users",
+    title: 'Search Example Users',
     description: `[Full description as shown above]`,
     inputSchema: UserSearchInputSchema,
     annotations: {
@@ -731,14 +684,14 @@ server.registerTool(
   },
   async (params: UserSearchInput) => {
     // Implementation as shown above
-  },
+  }
 );
 
 // Main function
 async function main() {
   // Verify environment variables if needed
   if (!process.env.EXAMPLE_API_KEY) {
-    console.error("ERROR: EXAMPLE_API_KEY environment variable is required");
+    console.error('ERROR: EXAMPLE_API_KEY environment variable is required');
     process.exit(1);
   }
 
@@ -748,12 +701,12 @@ async function main() {
   // Connect server to transport
   await server.connect(transport);
 
-  console.error("Example MCP server running via stdio");
+  console.error('Example MCP server running via stdio');
 }
 
 // Run the server
 main().catch((error) => {
-  console.error("Server error:", error);
+  console.error('Server error:', error);
   process.exit(1);
 });
 ```
@@ -767,21 +720,21 @@ main().catch((error) => {
 Expose data as resources for efficient, URI-based access:
 
 ```typescript
-import { ResourceTemplate } from "@modelcontextprotocol/sdk/types.js";
+import { ResourceTemplate } from '@modelcontextprotocol/sdk/types.js';
 
 // Register a resource with URI template
 server.registerResource(
   {
-    uri: "file://documents/{name}",
-    name: "Document Resource",
-    description: "Access documents by name",
-    mimeType: "text/plain",
+    uri: 'file://documents/{name}',
+    name: 'Document Resource',
+    description: 'Access documents by name',
+    mimeType: 'text/plain',
   },
   async (uri: string) => {
     // Extract parameter from URI
     const match = uri.match(/^file:\/\/documents\/(.+)$/);
     if (!match) {
-      throw new Error("Invalid URI format");
+      throw new Error('Invalid URI format');
     }
 
     const documentName = match[1];
@@ -791,12 +744,12 @@ server.registerResource(
       contents: [
         {
           uri,
-          mimeType: "text/plain",
+          mimeType: 'text/plain',
           text: content,
         },
       ],
     };
-  },
+  }
 );
 
 // List available resources dynamically
@@ -806,7 +759,7 @@ server.registerResourceList(async () => {
     resources: documents.map((doc) => ({
       uri: `file://documents/${doc.name}`,
       name: doc.name,
-      mimeType: "text/plain",
+      mimeType: 'text/plain',
       description: doc.description,
     })),
   };
@@ -825,15 +778,15 @@ server.registerResourceList(async () => {
 The TypeScript SDK supports different transport mechanisms:
 
 ```typescript
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 
 // Stdio transport (default - for CLI tools)
 const stdioTransport = new StdioServerTransport();
 await server.connect(stdioTransport);
 
 // SSE transport (for real-time web updates)
-const sseTransport = new SSEServerTransport("/message", response);
+const sseTransport = new SSEServerTransport('/message', response);
 await server.connect(sseTransport);
 
 // HTTP transport (for web services)
@@ -853,12 +806,12 @@ Notify clients when server state changes:
 ```typescript
 // Notify when tools list changes
 server.notification({
-  method: "notifications/tools/list_changed",
+  method: 'notifications/tools/list_changed',
 });
 
 // Notify when resources change
 server.notification({
-  method: "notifications/resources/list_changed",
+  method: 'notifications/resources/list_changed',
 });
 ```
 

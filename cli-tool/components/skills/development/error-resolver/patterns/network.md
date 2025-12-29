@@ -35,16 +35,16 @@ curl -v -X POST https://api.example.com/endpoint \
 ```javascript
 // Check Content-Type
 fetch(url, {
-  method: "POST",
+  method: 'POST',
   headers: {
-    "Content-Type": "application/json", // Not 'text/plain'
+    'Content-Type': 'application/json', // Not 'text/plain'
   },
   body: JSON.stringify(data), // Not just data
 });
 
 // Validate before sending
 if (!data.required_field) {
-  throw new Error("Missing required_field");
+  throw new Error('Missing required_field');
 }
 ```
 
@@ -202,20 +202,20 @@ async function fetchWithRetry(url, maxRetries = 3) {
     const response = await fetch(url);
 
     if (response.status === 429) {
-      const retryAfter = response.headers.get("Retry-After") || 60;
+      const retryAfter = response.headers.get('Retry-After') || 60;
       await sleep(retryAfter * 1000 * (i + 1));
       continue;
     }
 
     return response;
   }
-  throw new Error("Max retries exceeded");
+  throw new Error('Max retries exceeded');
 }
 
 // Rate limiting in client
 const limiter = new RateLimiter({
   tokensPerInterval: 10,
-  interval: "second",
+  interval: 'second',
 });
 
 async function limitedFetch(url) {
@@ -302,7 +302,7 @@ async function fetchWithBackoff(url) {
       await sleep(Math.pow(2, i) * 1000);
     }
   }
-  throw new Error("Max retries exceeded");
+  throw new Error('Max retries exceeded');
 }
 ```
 
@@ -413,8 +413,8 @@ try {
   clearTimeout(timeoutId);
   return response;
 } catch (error) {
-  if (error.name === "AbortError") {
-    throw new Error("Request timed out");
+  if (error.name === 'AbortError') {
+    throw new Error('Request timed out');
   }
   throw error;
 }
@@ -443,7 +443,7 @@ async function fetchWithRetry(url, retries = 3) {
     try {
       return await fetch(url);
     } catch (error) {
-      if (error.code === "ECONNRESET" && i < retries - 1) {
+      if (error.code === 'ECONNRESET' && i < retries - 1) {
         await sleep(1000 * (i + 1));
         continue;
       }
@@ -473,12 +473,12 @@ Error: unable to verify the first certificate
 
 ```javascript
 // Development only - disable verification (NOT FOR PRODUCTION)
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // Better - add CA certificate
-const https = require("https");
+const https = require('https');
 const agent = new https.Agent({
-  ca: fs.readFileSync("ca-cert.pem"),
+  ca: fs.readFileSync('ca-cert.pem'),
 });
 fetch(url, { agent });
 ```
@@ -516,20 +516,20 @@ has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is pres
 
 ```javascript
 // Express.js
-const cors = require("cors");
+const cors = require('cors');
 app.use(
   cors({
-    origin: "https://myapp.com", // Or '*' for all (not recommended)
+    origin: 'https://myapp.com', // Or '*' for all (not recommended)
     credentials: true,
-  }),
+  })
 );
 
 // Manual headers
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://myapp.com");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
+  res.header('Access-Control-Allow-Origin', 'https://myapp.com');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
 ```
@@ -542,8 +542,8 @@ app.use((req, res, next) => {
 export default {
   server: {
     proxy: {
-      "/api": {
-        target: "https://api.example.com",
+      '/api': {
+        target: 'https://api.example.com',
         changeOrigin: true,
       },
     },
@@ -551,7 +551,7 @@ export default {
 };
 
 // Then fetch from /api instead
-fetch("/api/endpoint");
+fetch('/api/endpoint');
 ```
 
 ---
@@ -571,13 +571,13 @@ Response to preflight request doesn't pass access control check
 
 ```javascript
 // Handle OPTIONS request
-app.options("*", cors()); // Express with cors
+app.options('*', cors()); // Express with cors
 
 // Or manually
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.sendStatus(200);
 });
 ```
@@ -602,10 +602,10 @@ SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
 
 ```javascript
 const response = await fetch(url);
-console.log("Status:", response.status);
-console.log("Content-Type:", response.headers.get("content-type"));
+console.log('Status:', response.status);
+console.log('Content-Type:', response.headers.get('content-type'));
 const text = await response.text();
-console.log("Body:", text.substring(0, 200));
+console.log('Body:', text.substring(0, 200));
 ```
 
 **Solutions**:
@@ -619,8 +619,8 @@ if (!response.ok) {
   throw new Error(`HTTP ${response.status}: ${text}`);
 }
 
-const contentType = response.headers.get("content-type");
-if (!contentType?.includes("application/json")) {
+const contentType = response.headers.get('content-type');
+if (!contentType?.includes('application/json')) {
   throw new Error(`Expected JSON, got ${contentType}`);
 }
 

@@ -56,33 +56,33 @@ Extract meaningful information from comments:
 class CommentParser {
   parseComment(file, lineNumber, comment) {
     const parsed = {
-      type: "todo",
-      priority: "medium",
-      title: "",
-      description: "",
+      type: 'todo',
+      priority: 'medium',
+      title: '',
+      description: '',
       author: null,
       date: null,
       tags: [],
-      code_context: "",
+      code_context: '',
       file_path: file,
       line_number: lineNumber,
     };
 
     // Detect comment type
     if (comment.match(/FIXME/i)) {
-      parsed.type = "fixme";
-      parsed.priority = "high";
+      parsed.type = 'fixme';
+      parsed.priority = 'high';
     } else if (comment.match(/HACK|XXX/i)) {
-      parsed.type = "hack";
-      parsed.priority = "high";
+      parsed.type = 'hack';
+      parsed.priority = 'high';
     } else if (comment.match(/OPTIMIZE|PERFORMANCE/i)) {
-      parsed.type = "optimization";
+      parsed.type = 'optimization';
     } else if (comment.match(/DEPRECATED/i)) {
-      parsed.type = "deprecation";
-      parsed.priority = "high";
+      parsed.type = 'deprecation';
+      parsed.priority = 'high';
     } else if (comment.match(/SECURITY/i)) {
-      parsed.type = "security";
-      parsed.priority = "urgent";
+      parsed.type = 'security';
+      parsed.priority = 'urgent';
     }
 
     // Extract author and date
@@ -91,23 +91,21 @@ class CommentParser {
       parsed.author = authorMatch[1] || authorMatch[2];
     }
 
-    const dateMatch = comment.match(
-      /(\d{4}-\d{2}-\d{2})|(\d{1,2}\/\d{1,2}\/\d{2,4})/,
-    );
+    const dateMatch = comment.match(/(\d{4}-\d{2}-\d{2})|(\d{1,2}\/\d{1,2}\/\d{2,4})/);
     if (dateMatch) {
       parsed.date = dateMatch[0];
     }
 
     // Extract title and description
     const cleanComment = comment
-      .replace(/^\/\/\s*|^\/\*\s*|\*\/\s*$|^#\s*/g, "")
-      .replace(/TODO|FIXME|HACK|XXX/i, "")
+      .replace(/^\/\/\s*|^\/\*\s*|\*\/\s*$|^#\s*/g, '')
+      .replace(/TODO|FIXME|HACK|XXX/i, '')
       .trim();
 
     const parts = cleanComment.split(/[:\-–—]/);
     if (parts.length > 1) {
       parsed.title = parts[0].trim();
-      parsed.description = parts.slice(1).join(":").trim();
+      parsed.description = parts.slice(1).join(':').trim();
     } else {
       parsed.title = cleanComment;
     }
@@ -181,9 +179,7 @@ class TaskGrouper {
       if (seen.has(task)) continue;
 
       // Find similar tasks
-      const similar = tasks.filter(
-        (t) => t !== task && !seen.has(t) && this.areSimilar(task, t),
-      );
+      const similar = tasks.filter((t) => t !== task && !seen.has(t) && this.areSimilar(task, t));
 
       if (similar.length > 0) {
         // Merge into one task
@@ -219,12 +215,10 @@ class TechnicalDebtAnalyzer {
   async analyzeFile(filePath) {
     const issues = [];
     const content = await readFile(filePath);
-    const lines = content.split("\n");
+    const lines = content.split('\n');
 
     // Check for long functions
-    const functionMatches = content.matchAll(
-      /function\s+(\w+)|(\w+)\s*=\s*\(.*?\)\s*=>/g,
-    );
+    const functionMatches = content.matchAll(/function\s+(\w+)|(\w+)\s*=\s*\(.*?\)\s*=>/g);
     for (const match of functionMatches) {
       const functionName = match[1] || match[2];
       const startLine = getLineNumber(content, match.index);
@@ -232,8 +226,8 @@ class TechnicalDebtAnalyzer {
 
       if (functionLength > 50) {
         issues.push({
-          type: "long_function",
-          severity: functionLength > 100 ? "high" : "medium",
+          type: 'long_function',
+          severity: functionLength > 100 ? 'high' : 'medium',
           title: `Refactor long function: ${functionName}`,
           description: `Function ${functionName} is ${functionLength} lines long. Consider breaking it into smaller functions.`,
           file_path: filePath,
@@ -246,9 +240,9 @@ class TechnicalDebtAnalyzer {
     const duplicates = await this.findDuplicateCode(filePath);
     for (const dup of duplicates) {
       issues.push({
-        type: "duplicate_code",
-        severity: "medium",
-        title: "Remove duplicate code",
+        type: 'duplicate_code',
+        severity: 'medium',
+        title: 'Remove duplicate code',
         description: `Similar code found in ${dup.otherFile}:${dup.otherLine}`,
         file_path: filePath,
         line_number: dup.line,
@@ -259,27 +253,24 @@ class TechnicalDebtAnalyzer {
     const complexConditions = content.matchAll(/if\s*\([^)]{50,}\)/g);
     for (const match of complexConditions) {
       issues.push({
-        type: "complex_condition",
-        severity: "low",
-        title: "Simplify complex conditional",
-        description:
-          "Consider extracting conditional logic into named variables or functions",
+        type: 'complex_condition',
+        severity: 'low',
+        title: 'Simplify complex conditional',
+        description: 'Consider extracting conditional logic into named variables or functions',
         file_path: filePath,
         line_number: getLineNumber(content, match.index),
       });
     }
 
     // Check for outdated dependencies
-    if (filePath.endsWith("package.json")) {
+    if (filePath.endsWith('package.json')) {
       const outdated = await this.checkOutdatedDependencies(filePath);
       for (const dep of outdated) {
         issues.push({
-          type: "outdated_dependency",
-          severity: dep.major ? "high" : "low",
+          type: 'outdated_dependency',
+          severity: dep.major ? 'high' : 'low',
           title: `Update ${dep.name} from ${dep.current} to ${dep.latest}`,
-          description: dep.major
-            ? "Major version update available"
-            : "Minor update available",
+          description: dep.major ? 'Major version update available' : 'Minor update available',
           file_path: filePath,
         });
       }
@@ -300,16 +291,16 @@ async function createLinearTasks(groupedTasks, options = {}) {
   const skipped = [];
 
   // Check for existing tasks to avoid duplicates
-  const existingTasks = await linear.searchTasks("TODO OR FIXME");
+  const existingTasks = await linear.searchTasks('TODO OR FIXME');
   const existingTitles = new Set(existingTasks.map((t) => t.title));
 
   // Create parent task for large groups
   if (options.createEpic && groupedTasks.length > 10) {
     const epic = await linear.createTask({
-      title: `Technical Debt: ${options.module || "Codebase"} Cleanup`,
+      title: `Technical Debt: ${options.module || 'Codebase'} Cleanup`,
       description: `Parent task for ${groupedTasks.length} code improvements`,
       priority: 2,
-      labels: ["technical-debt", "code-quality"],
+      labels: ['technical-debt', 'code-quality'],
     });
     options.parentId = epic.id;
   }
@@ -317,7 +308,7 @@ async function createLinearTasks(groupedTasks, options = {}) {
   for (const task of groupedTasks) {
     // Skip if similar task exists
     if (existingTitles.has(task.title)) {
-      skipped.push({ task, reason: "duplicate" });
+      skipped.push({ task, reason: 'duplicate' });
       continue;
     }
 
@@ -361,20 +352,20 @@ async function createLinearTasks(groupedTasks, options = {}) {
 }
 
 function buildTaskDescription(task) {
-  let description = task.description || "";
+  let description = task.description || '';
 
   // Add code context
   if (task.code_context) {
-    description += "\n\n### Code Context\n```\n";
+    description += '\n\n### Code Context\n```\n';
     task.code_context.forEach((line) => {
-      const prefix = line.isTarget ? ">>> " : "    ";
+      const prefix = line.isTarget ? '>>> ' : '    ';
       description += `${prefix}${line.number}: ${line.content}\n`;
     });
-    description += "```\n";
+    description += '```\n';
   }
 
   // Add metadata
-  description += "\n\n### Details\n";
+  description += '\n\n### Details\n';
   description += `- **Type**: ${task.type}\n`;
   description += `- **File**: \`${task.file_path}\`\n`;
   description += `- **Line**: ${task.line_number}\n`;
@@ -386,16 +377,16 @@ function buildTaskDescription(task) {
     description += `- **Date**: ${task.date}\n`;
   }
   if (task.tags.length > 0) {
-    description += `- **Tags**: ${task.tags.join(", ")}\n`;
+    description += `- **Tags**: ${task.tags.join(', ')}\n`;
   }
 
   // Add suggestions
-  if (task.type === "deprecated") {
-    description += "\n### Suggested Actions\n";
-    description += "1. Identify all usages of this deprecated code\n";
-    description += "2. Update to use the recommended alternative\n";
-    description += "3. Add deprecation warnings if not present\n";
-    description += "4. Schedule for removal in next major version\n";
+  if (task.type === 'deprecated') {
+    description += '\n### Suggested Actions\n';
+    description += '1. Identify all usages of this deprecated code\n';
+    description += '2. Update to use the recommended alternative\n';
+    description += '3. Add deprecation warnings if not present\n';
+    description += '4. Schedule for removal in next major version\n';
   }
 
   return description;
@@ -423,8 +414,7 @@ function generateReport(scanResults, createdTasks) {
 
   // Analyze distribution
   for (const result of scanResults) {
-    report.summary.byType[result.type] =
-      (report.summary.byType[result.type] || 0) + 1;
+    report.summary.byType[result.type] = (report.summary.byType[result.type] || 0) + 1;
     report.summary.byPriority[result.priority] =
       (report.summary.byPriority[result.priority] || 0) + 1;
   }
@@ -432,16 +422,16 @@ function generateReport(scanResults, createdTasks) {
   // Generate recommendations
   if (report.summary.byType.security > 0) {
     report.recommendations.push({
-      priority: "urgent",
-      action: "Address security-related TODOs immediately",
-      tasks: scanResults.filter((r) => r.type === "security").length,
+      priority: 'urgent',
+      action: 'Address security-related TODOs immediately',
+      tasks: scanResults.filter((r) => r.type === 'security').length,
     });
   }
 
   if (report.summary.byType.deprecated > 5) {
     report.recommendations.push({
-      priority: "high",
-      action: "Create deprecation removal sprint",
+      priority: 'high',
+      action: 'Create deprecation removal sprint',
       tasks: report.summary.byType.deprecated,
     });
   }
@@ -457,7 +447,7 @@ function generateReport(scanResults, createdTasks) {
 try {
   await scanDirectory(path);
 } catch (error) {
-  if (error.code === "EACCES") {
+  if (error.code === 'EACCES') {
     console.warn(`Skipping ${path} - permission denied`);
   }
 }
@@ -469,7 +459,7 @@ const rateLimiter = {
 
   async createTask(taskData) {
     if (this.tasksCreated >= 50) {
-      console.log("Rate limit approaching, batching remaining tasks...");
+      console.log('Rate limit approaching, batching remaining tasks...');
       // Create single task with list of TODOs
       return this.createBatchTask(remainingTasks);
     }
@@ -485,9 +475,9 @@ const safeParser = {
       return this.parseComment(comment);
     } catch (error) {
       return {
-        type: "todo",
-        title: comment.substring(0, 50) + "...",
-        priority: "low",
+        type: 'todo',
+        title: comment.substring(0, 50) + '...',
+        priority: 'low',
         parseError: true,
       };
     }

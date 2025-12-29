@@ -2,65 +2,68 @@
 
 // Show component modal
 function showComponentModal(component) {
-    const modalHTML = createComponentModalHTML(component);
-    
-    // Remove existing modal if present
-    const existingModal = document.querySelector('.modal-overlay');
-    if (existingModal) {
-        existingModal.remove();
-    }
-    
-    // Add modal to body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Render code preview
-    renderCodePreview(component);
+  const modalHTML = createComponentModalHTML(component);
 
-    // Add event listener for ESC key
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            closeComponentModal();
-            document.removeEventListener('keydown', handleEscape);
-        }
-    };
-    document.addEventListener('keydown', handleEscape);
+  // Remove existing modal if present
+  const existingModal = document.querySelector('.modal-overlay');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Render code preview
+  renderCodePreview(component);
+
+  // Add event listener for ESC key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      closeComponentModal();
+      document.removeEventListener('keydown', handleEscape);
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
 }
 
 // Create component modal HTML
 function createComponentModalHTML(component) {
-    const typeConfig = {
-        agent: { icon: '🤖', color: '#ff6b6b', badge: 'AGENT' },
-        command: { icon: '⚡', color: '#4ecdc4', badge: 'COMMAND' },
-        mcp: { icon: '🔌', color: '#45b7d1', badge: 'MCP' },
-        template: { icon: '📦', color: '#f9a825', badge: 'TEMPLATE' }
-    };
-    
-    const config = typeConfig[component.type] || typeConfig['template'];
-    
-    // Generate install command - remove .md extension from path
-    let componentPath = component.path || component.name;
-    if (componentPath.endsWith('.md')) {
-        componentPath = componentPath.replace(/\.md$/, '');
-    }
-    if (componentPath.endsWith('.json')) {
-        componentPath = componentPath.replace(/\.json$/, '');
-    }
-    const installCommand = `npx claude-code-templates@latest --${component.type}=${componentPath} --yes`;
-    
-    // Generate global agent command for agents only
-    const globalAgentCommand = component.type === 'agent' ? `npx claude-code-templates@latest --create-agent ${componentPath}` : null;
-    
-    const description = getComponentDescription(component); // Full description
+  const typeConfig = {
+    agent: { icon: '🤖', color: '#ff6b6b', badge: 'AGENT' },
+    command: { icon: '⚡', color: '#4ecdc4', badge: 'COMMAND' },
+    mcp: { icon: '🔌', color: '#45b7d1', badge: 'MCP' },
+    template: { icon: '📦', color: '#f9a825', badge: 'TEMPLATE' },
+  };
 
-    // Construct GitHub URL
-    let githubUrl = 'https://github.com/davila7/claude-code-templates/';
-    if (component.type === 'template') {
-        githubUrl += `tree/main/cli-tool/templates/${component.folderPath}`;
-    } else {
-        githubUrl += `blob/main/cli-tool/components/${component.type}s/${component.path}`;
-    }
+  const config = typeConfig[component.type] || typeConfig['template'];
 
-    return `
+  // Generate install command - remove .md extension from path
+  let componentPath = component.path || component.name;
+  if (componentPath.endsWith('.md')) {
+    componentPath = componentPath.replace(/\.md$/, '');
+  }
+  if (componentPath.endsWith('.json')) {
+    componentPath = componentPath.replace(/\.json$/, '');
+  }
+  const installCommand = `npx claude-code-templates@latest --${component.type}=${componentPath} --yes`;
+
+  // Generate global agent command for agents only
+  const globalAgentCommand =
+    component.type === 'agent'
+      ? `npx claude-code-templates@latest --create-agent ${componentPath}`
+      : null;
+
+  const description = getComponentDescription(component); // Full description
+
+  // Construct GitHub URL
+  let githubUrl = 'https://github.com/davila7/claude-code-templates/';
+  if (component.type === 'template') {
+    githubUrl += `tree/main/cli-tool/templates/${component.folderPath}`;
+  } else {
+    githubUrl += `blob/main/cli-tool/components/${component.type}s/${component.path}`;
+  }
+
+  return `
         <div class="modal-overlay" onclick="closeComponentModal()">
             <div class="modal-content" onclick="event.stopPropagation()">
                 <div class="modal-header">
@@ -73,7 +76,7 @@ function createComponentModalHTML(component) {
                 </div>
                 <div class="modal-body">
                     <div class="component-details">
-                        <div class="component-description">${component.type === 'mcp' ? (component.description || description) : description}</div>
+                        <div class="component-description">${component.type === 'mcp' ? component.description || description : description}</div>
                         
                         <div class="installation-section">
                             <!-- Basic Installation -->
@@ -86,7 +89,9 @@ function createComponentModalHTML(component) {
                                 </div>
                             </div>
                             
-                            ${globalAgentCommand ? `
+                            ${
+                              globalAgentCommand
+                                ? `
                             <!-- Global Agent (Claude Code SDK) -->
                             <div class="global-agent-section">
                                 <h4>🌍 Global Agent (Claude Code SDK)</h4>
@@ -111,9 +116,13 @@ function createComponentModalHTML(component) {
                                         <div class="feature">✅ Powered by Claude Code SDK</div>
                                     </div>
                                 </div>
-                            </div>` : ''}
+                            </div>`
+                                : ''
+                            }
                             
-                            ${component.type === 'agent' ? `
+                            ${
+                              component.type === 'agent'
+                                ? `
                             <!-- Run in E2B Sandbox (Cloud Execution) -->
                             <div class="e2b-sandbox-section">
                                 <h4>☁️ Run in E2B Sandbox (Cloud Execution) <span class="new-badge">NEW</span></h4>
@@ -153,7 +162,9 @@ function createComponentModalHTML(component) {
                                         </a>
                                     </div>
                                 </div>
-                            </div>` : ''}
+                            </div>`
+                                : ''
+                            }
                         </div>
 
                         <div class="component-content">
@@ -191,166 +202,183 @@ function createComponentModalHTML(component) {
 
 // Render code preview in the modal
 function renderCodePreview(component) {
-    const viewer = document.getElementById('code-viewer');
-    const lineNumbers = document.getElementById('line-numbers');
-    if (!viewer) return;
+  const viewer = document.getElementById('code-viewer');
+  const lineNumbers = document.getElementById('line-numbers');
+  if (!viewer) return;
 
-    let content = component.content || "No content available.";
-    let language = 'plaintext';
+  let content = component.content || 'No content available.';
+  let language = 'plaintext';
 
-    if (component.path) {
-        const extension = component.path.split('.').pop();
-        switch (extension) {
-            case 'md':
-                language = 'markdown';
-                break;
-            case 'json':
-                language = 'json';
-                // Pretty print JSON
-                try {
-                    content = JSON.stringify(JSON.parse(content), null, 2);
-                } catch (e) { /* Ignore parsing errors */ }
-                break;
-            case 'js':
-                language = 'javascript';
-                break;
-            case 'yml':
-            case 'yaml':
-                language = 'yaml';
-                break;
+  if (component.path) {
+    const extension = component.path.split('.').pop();
+    switch (extension) {
+      case 'md':
+        language = 'markdown';
+        break;
+      case 'json':
+        language = 'json';
+        // Pretty print JSON
+        try {
+          content = JSON.stringify(JSON.parse(content), null, 2);
+        } catch (e) {
+          /* Ignore parsing errors */
         }
+        break;
+      case 'js':
+        language = 'javascript';
+        break;
+      case 'yml':
+      case 'yaml':
+        language = 'yaml';
+        break;
     }
+  }
 
-    // Show only a preview (first 15 lines) instead of full content
-    const lines = content.split('\n');
-    const previewLines = lines.slice(0, 15);
-    const previewContent = previewLines.join('\n');
-    
-    // Add truncation indicator if content is longer
-    const truncatedContent = lines.length > 15 ? previewContent + '\n...' : previewContent;
+  // Show only a preview (first 15 lines) instead of full content
+  const lines = content.split('\n');
+  const previewLines = lines.slice(0, 15);
+  const previewContent = previewLines.join('\n');
 
-    const codeElement = viewer.querySelector('code');
-    codeElement.innerHTML = highlightCode(truncatedContent, language);
-    codeElement.className = `language-${language}`;
+  // Add truncation indicator if content is longer
+  const truncatedContent = lines.length > 15 ? previewContent + '\n...' : previewContent;
 
-    // Generate line numbers for preview
-    if (lineNumbers) {
-        const previewLineNumbers = previewLines.map((_, index) => `<span>${index + 1}</span>`).join('');
-        lineNumbers.innerHTML = previewLineNumbers;
-    }
+  const codeElement = viewer.querySelector('code');
+  codeElement.innerHTML = highlightCode(truncatedContent, language);
+  codeElement.className = `language-${language}`;
+
+  // Generate line numbers for preview
+  if (lineNumbers) {
+    const previewLineNumbers = previewLines.map((_, index) => `<span>${index + 1}</span>`).join('');
+    lineNumbers.innerHTML = previewLineNumbers;
+  }
 }
 
 // Basic syntax highlighting
 function highlightCode(content, language) {
-    // First escape HTML entities
-    let highlighted = content
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    
-    if (language === 'markdown' || language === 'yaml') {
-        // Highlight YAML/Markdown frontmatter keys (blue)
-        highlighted = highlighted.replace(/^([a-zA-Z_-]+):/gm, '<span style="color: #569cd6;">$1</span>:');
-        
-        // Highlight strings in quotes (orange)
-        highlighted = highlighted.replace(/&quot;([^&]+?)&quot;/g, '<span style="color: #ce9178;">&quot;$1&quot;</span>');
-        
-        // Highlight important keywords (light blue - like in the image)
-        highlighted = highlighted.replace(/\b(hackathon|strategy|AI|solution|ideation|evaluation|projects|feedback|concepts|feasibility|guidance|agent|specialist|brainstorming|winning|judge|feedback|Context|User|Examples)\b/gi, '<span style="color: #4fc1ff;">$1</span>');
-        
-        // Highlight markdown headers (blue)
-        highlighted = highlighted.replace(/^(#+)\s*(.+)$/gm, '<span style="color: #569cd6;">$1</span> <span style="color: #dcdcaa;">$2</span>');
-        
-        // Highlight code in backticks
-        highlighted = highlighted.replace(/`([^`]+)`/g, '<span style="color: #ce9178;">$1</span>');
-        
-        // Highlight YAML separators
-        highlighted = highlighted.replace(/^---$/gm, '<span style="color: #808080;">---</span>');
-    }
-    
-    return highlighted;
+  // First escape HTML entities
+  let highlighted = content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  if (language === 'markdown' || language === 'yaml') {
+    // Highlight YAML/Markdown frontmatter keys (blue)
+    highlighted = highlighted.replace(
+      /^([a-zA-Z_-]+):/gm,
+      '<span style="color: #569cd6;">$1</span>:'
+    );
+
+    // Highlight strings in quotes (orange)
+    highlighted = highlighted.replace(
+      /&quot;([^&]+?)&quot;/g,
+      '<span style="color: #ce9178;">&quot;$1&quot;</span>'
+    );
+
+    // Highlight important keywords (light blue - like in the image)
+    highlighted = highlighted.replace(
+      /\b(hackathon|strategy|AI|solution|ideation|evaluation|projects|feedback|concepts|feasibility|guidance|agent|specialist|brainstorming|winning|judge|feedback|Context|User|Examples)\b/gi,
+      '<span style="color: #4fc1ff;">$1</span>'
+    );
+
+    // Highlight markdown headers (blue)
+    highlighted = highlighted.replace(
+      /^(#+)\s*(.+)$/gm,
+      '<span style="color: #569cd6;">$1</span> <span style="color: #dcdcaa;">$2</span>'
+    );
+
+    // Highlight code in backticks
+    highlighted = highlighted.replace(/`([^`]+)`/g, '<span style="color: #ce9178;">$1</span>');
+
+    // Highlight YAML separators
+    highlighted = highlighted.replace(/^---$/gm, '<span style="color: #808080;">---</span>');
+  }
+
+  return highlighted;
 }
 
 // Close component modal
 function closeComponentModal() {
-    const modalOverlay = document.querySelector('.modal-overlay');
-    if (modalOverlay) {
-        modalOverlay.remove();
-    }
+  const modalOverlay = document.querySelector('.modal-overlay');
+  if (modalOverlay) {
+    modalOverlay.remove();
+  }
 }
 
 // Utility to get component description
 function getComponentDescription(component, maxLength = 0) {
-    let description = component.description || '';
-    if (!description && component.content) {
-        const descMatch = component.content.match(/description:\s*(.+?)(?:\n|$)/);
-        if (descMatch) {
-            description = descMatch[1].trim().replace(/^["']|["']$/g, '');
-        } else {
-            const lines = component.content.split('\n');
-            const firstParagraph = lines.find(line => line.trim() && !line.startsWith('---') && !line.startsWith('#'));
-            if (firstParagraph) {
-                description = firstParagraph.trim();
-            }
-        }
+  let description = component.description || '';
+  if (!description && component.content) {
+    const descMatch = component.content.match(/description:\s*(.+?)(?:\n|$)/);
+    if (descMatch) {
+      description = descMatch[1].trim().replace(/^["']|["']$/g, '');
+    } else {
+      const lines = component.content.split('\n');
+      const firstParagraph = lines.find(
+        (line) => line.trim() && !line.startsWith('---') && !line.startsWith('#')
+      );
+      if (firstParagraph) {
+        description = firstParagraph.trim();
+      }
     }
-    if (!description) {
-        description = `A ${component.type} component.`;
-    }
-    if (maxLength && description.length > maxLength) {
-        description = description.substring(0, maxLength - 3) + '...';
-    }
-    return description;
+  }
+  if (!description) {
+    description = `A ${component.type} component.`;
+  }
+  if (maxLength && description.length > maxLength) {
+    description = description.substring(0, maxLength - 3) + '...';
+  }
+  return description;
 }
 
 // Utility to format component name
 function formatComponentName(name) {
-    return name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return name
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 // Global function for component details (called from onclick)
 function showComponentDetails(type, name, path, category) {
-    // Instead of showing modal, redirect to component page
-    const componentURL = createComponentURL(type, name, path);
-    window.location.href = componentURL;
+  // Instead of showing modal, redirect to component page
+  const componentURL = createComponentURL(type, name, path);
+  window.location.href = componentURL;
 }
 
 // Function to create component URL
 function createComponentURL(type, name, path) {
-    // Detect if we're in local development
-    const isLocal = window.location.hostname === 'localhost' || 
-                   window.location.hostname === '127.0.0.1' ||
-                   window.location.hostname.includes('5500');
-    
-    // Get the base path for GitHub Pages deployment
-    const getBasePath = () => {
-        const path = window.location.pathname;
-        if (path.startsWith('/claude-code-templates')) {
-            return '/claude-code-templates';
-        }
-        return '';
-    };
-    
-    if (!isLocal && type && name) {
-        // Use SEO-friendly URL structure for production: /component/type/name
-        let cleanName = name;
-        if (cleanName.endsWith('.md')) {
-            cleanName = cleanName.slice(0, -3);
-        }
-        if (cleanName.endsWith('.json')) {
-            cleanName = cleanName.slice(0, -5);
-        }
-        
-        const basePath = getBasePath();
-        return `${basePath}/component/${encodeURIComponent(type)}/${encodeURIComponent(cleanName)}`;
+  // Detect if we're in local development
+  const isLocal =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname.includes('5500');
+
+  // Get the base path for GitHub Pages deployment
+  const getBasePath = () => {
+    const path = window.location.pathname;
+    if (path.startsWith('/claude-code-templates')) {
+      return '/claude-code-templates';
     }
-    
-    // Use query parameters for local development or fallback
-    const params = new URLSearchParams();
-    params.set('type', type);
-    if (name) params.set('name', name);
-    if (path) params.set('path', path);
-    
+    return '';
+  };
+
+  if (!isLocal && type && name) {
+    // Use SEO-friendly URL structure for production: /component/type/name
+    let cleanName = name;
+    if (cleanName.endsWith('.md')) {
+      cleanName = cleanName.slice(0, -3);
+    }
+    if (cleanName.endsWith('.json')) {
+      cleanName = cleanName.slice(0, -5);
+    }
+
     const basePath = getBasePath();
-    return `${basePath}/component.html?${params.toString()}`;
+    return `${basePath}/component/${encodeURIComponent(type)}/${encodeURIComponent(cleanName)}`;
+  }
+
+  // Use query parameters for local development or fallback
+  const params = new URLSearchParams();
+  params.set('type', type);
+  if (name) params.set('name', name);
+  if (path) params.set('path', path);
+
+  const basePath = getBasePath();
+  return `${basePath}/component.html?${params.toString()}`;
 }

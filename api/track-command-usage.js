@@ -34,7 +34,7 @@ function validateCommandData(data) {
     'studio',
     'command-stats',
     'hook-stats',
-    'mcp-stats'
+    'mcp-stats',
   ];
 
   if (!validCommands.includes(command)) {
@@ -51,9 +51,7 @@ function validateCommandData(data) {
 // Get client information from request
 function getClientInfo(req) {
   const userAgent = req.headers['user-agent'] || '';
-  const ip = req.headers['x-forwarded-for']?.split(',')[0] ||
-             req.headers['x-real-ip'] ||
-             'unknown';
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.headers['x-real-ip'] || 'unknown';
 
   return { userAgent, ip };
 }
@@ -74,21 +72,13 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({
       error: 'Method not allowed',
-      allowed: ['POST']
+      allowed: ['POST'],
     });
   }
 
   try {
     // Extract and validate request body
-    const {
-      command,
-      cliVersion,
-      nodeVersion,
-      platform,
-      arch,
-      sessionId,
-      metadata
-    } = req.body;
+    const { command, cliVersion, nodeVersion, platform, arch, sessionId, metadata } = req.body;
 
     const validation = validateCommandData({ command, cliVersion, nodeVersion, platform });
 
@@ -129,10 +119,9 @@ export default async function handler(req, res) {
       message: 'Command execution tracked successfully',
       data: {
         command,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     });
-
   } catch (error) {
     console.error('Command tracking error:', error);
 
@@ -140,7 +129,7 @@ export default async function handler(req, res) {
     res.status(500).json({
       error: 'Internal server error',
       message: 'Failed to track command execution',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 }

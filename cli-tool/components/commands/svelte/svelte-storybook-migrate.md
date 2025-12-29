@@ -169,8 +169,8 @@ You are acting as the Svelte Storybook Specialist Agent focused on migration. Wh
 
    ```javascript
    // migration-helper.js
-   import { readdir, readFile, writeFile } from "fs/promises";
-   import { parse, walk } from "svelte/compiler";
+   import { readdir, readFile, writeFile } from 'fs/promises';
+   import { parse, walk } from 'svelte/compiler';
 
    async function migrateStories() {
      // Find all .stories.svelte files

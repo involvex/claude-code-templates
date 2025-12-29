@@ -31,14 +31,14 @@ You are a test engineer specializing in comprehensive testing strategies, test a
 
 ```javascript
 // test-framework/test-suite-manager.js
-const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
 class TestSuiteManager {
   constructor(config = {}) {
     this.config = {
-      testDirectory: "./tests",
+      testDirectory: './tests',
       coverageThreshold: {
         global: {
           branches: 80,
@@ -48,9 +48,9 @@ class TestSuiteManager {
         },
       },
       testPatterns: {
-        unit: "**/*.test.js",
-        integration: "**/*.integration.test.js",
-        e2e: "**/*.e2e.test.js",
+        unit: '**/*.test.js',
+        integration: '**/*.integration.test.js',
+        e2e: '**/*.e2e.test.js',
       },
       ...config,
     };
@@ -64,7 +64,7 @@ class TestSuiteManager {
   }
 
   async runFullTestSuite() {
-    console.log("🧪 Starting comprehensive test suite...");
+    console.log('🧪 Starting comprehensive test suite...');
 
     try {
       // Run tests in sequence for better resource management
@@ -78,46 +78,46 @@ class TestSuiteManager {
 
       return summary;
     } catch (error) {
-      console.error("❌ Test suite failed:", error.message);
+      console.error('❌ Test suite failed:', error.message);
       throw error;
     }
   }
 
   async runUnitTests() {
-    console.log("🔬 Running unit tests...");
+    console.log('🔬 Running unit tests...');
 
     const jestConfig = {
       testMatch: [this.config.testPatterns.unit],
       collectCoverage: true,
       collectCoverageFrom: [
-        "src/**/*.{js,ts}",
-        "!src/**/*.test.{js,ts}",
-        "!src/**/*.spec.{js,ts}",
-        "!src/test/**/*",
+        'src/**/*.{js,ts}',
+        '!src/**/*.test.{js,ts}',
+        '!src/**/*.spec.{js,ts}',
+        '!src/test/**/*',
       ],
-      coverageReporters: ["text", "lcov", "html", "json"],
+      coverageReporters: ['text', 'lcov', 'html', 'json'],
       coverageThreshold: this.config.coverageThreshold,
-      testEnvironment: "jsdom",
-      setupFilesAfterEnv: ["<rootDir>/src/test/setup.js"],
+      testEnvironment: 'jsdom',
+      setupFilesAfterEnv: ['<rootDir>/src/test/setup.js'],
       moduleNameMapping: {
-        "^@/(.*)$": "<rootDir>/src/$1",
+        '^@/(.*)$': '<rootDir>/src/$1',
       },
     };
 
     try {
       const command = `npx jest --config='${JSON.stringify(jestConfig)}' --passWithNoTests`;
-      const result = execSync(command, { encoding: "utf8", stdio: "pipe" });
+      const result = execSync(command, { encoding: 'utf8', stdio: 'pipe' });
 
       this.testResults.unit = {
-        status: "passed",
+        status: 'passed',
         output: result,
         timestamp: new Date().toISOString(),
       };
 
-      console.log("✅ Unit tests passed");
+      console.log('✅ Unit tests passed');
     } catch (error) {
       this.testResults.unit = {
-        status: "failed",
+        status: 'failed',
         output: error.stdout || error.message,
         error: error.stderr || error.message,
         timestamp: new Date().toISOString(),
@@ -128,25 +128,25 @@ class TestSuiteManager {
   }
 
   async runIntegrationTests() {
-    console.log("🔗 Running integration tests...");
+    console.log('🔗 Running integration tests...');
 
     // Start test database and services
     await this.setupTestEnvironment();
 
     try {
       const command = `npx jest --testMatch="${this.config.testPatterns.integration}" --runInBand`;
-      const result = execSync(command, { encoding: "utf8", stdio: "pipe" });
+      const result = execSync(command, { encoding: 'utf8', stdio: 'pipe' });
 
       this.testResults.integration = {
-        status: "passed",
+        status: 'passed',
         output: result,
         timestamp: new Date().toISOString(),
       };
 
-      console.log("✅ Integration tests passed");
+      console.log('✅ Integration tests passed');
     } catch (error) {
       this.testResults.integration = {
-        status: "failed",
+        status: 'failed',
         output: error.stdout || error.message,
         error: error.stderr || error.message,
         timestamp: new Date().toISOString(),
@@ -159,23 +159,23 @@ class TestSuiteManager {
   }
 
   async runE2ETests() {
-    console.log("🌐 Running E2E tests...");
+    console.log('🌐 Running E2E tests...');
 
     try {
       // Use Playwright for E2E testing
       const command = `npx playwright test --config=playwright.config.js`;
-      const result = execSync(command, { encoding: "utf8", stdio: "pipe" });
+      const result = execSync(command, { encoding: 'utf8', stdio: 'pipe' });
 
       this.testResults.e2e = {
-        status: "passed",
+        status: 'passed',
         output: result,
         timestamp: new Date().toISOString(),
       };
 
-      console.log("✅ E2E tests passed");
+      console.log('✅ E2E tests passed');
     } catch (error) {
       this.testResults.e2e = {
-        status: "failed",
+        status: 'failed',
         output: error.stdout || error.message,
         error: error.stderr || error.message,
         timestamp: new Date().toISOString(),
@@ -186,40 +186,34 @@ class TestSuiteManager {
   }
 
   async setupTestEnvironment() {
-    console.log("⚙️ Setting up test environment...");
+    console.log('⚙️ Setting up test environment...');
 
     // Start test database
     try {
-      execSync(
-        "docker-compose -f docker-compose.test.yml up -d postgres redis",
-        { stdio: "pipe" },
-      );
+      execSync('docker-compose -f docker-compose.test.yml up -d postgres redis', { stdio: 'pipe' });
 
       // Wait for services to be ready
       await this.waitForServices();
 
       // Run database migrations
-      execSync("npm run db:migrate:test", { stdio: "pipe" });
+      execSync('npm run db:migrate:test', { stdio: 'pipe' });
 
       // Seed test data
-      execSync("npm run db:seed:test", { stdio: "pipe" });
+      execSync('npm run db:seed:test', { stdio: 'pipe' });
     } catch (error) {
       throw new Error(`Failed to setup test environment: ${error.message}`);
     }
   }
 
   async teardownTestEnvironment() {
-    console.log("🧹 Cleaning up test environment...");
+    console.log('🧹 Cleaning up test environment...');
 
     try {
-      execSync("docker-compose -f docker-compose.test.yml down", {
-        stdio: "pipe",
+      execSync('docker-compose -f docker-compose.test.yml down', {
+        stdio: 'pipe',
       });
     } catch (error) {
-      console.warn(
-        "Warning: Failed to cleanup test environment:",
-        error.message,
-      );
+      console.warn('Warning: Failed to cleanup test environment:', error.message);
     }
   }
 
@@ -228,15 +222,15 @@ class TestSuiteManager {
 
     while (Date.now() - startTime < timeout) {
       try {
-        execSync("pg_isready -h localhost -p 5433", { stdio: "pipe" });
-        execSync("redis-cli -p 6380 ping", { stdio: "pipe" });
+        execSync('pg_isready -h localhost -p 5433', { stdio: 'pipe' });
+        execSync('redis-cli -p 6380 ping', { stdio: 'pipe' });
         return; // Services are ready
       } catch (error) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
 
-    throw new Error("Test services failed to start within timeout");
+    throw new Error('Test services failed to start within timeout');
   }
 
   generateTestSummary() {
@@ -252,7 +246,7 @@ class TestSuiteManager {
       recommendations: this.generateRecommendations(),
     };
 
-    console.log("\n📊 Test Summary:");
+    console.log('\n📊 Test Summary:');
     console.log(`Overall Status: ${summary.overall.status}`);
     console.log(`Total Duration: ${summary.overall.duration}ms`);
     console.log(`Tests Run: ${summary.overall.testsRun}`);
@@ -262,10 +256,8 @@ class TestSuiteManager {
 
   determineOverallStatus() {
     const results = Object.values(this.testResults);
-    const failures = results.filter(
-      (result) => result && result.status === "failed",
-    );
-    return failures.length === 0 ? "PASSED" : "FAILED";
+    const failures = results.filter((result) => result && result.status === 'failed');
+    return failures.length === 0 ? 'PASSED' : 'FAILED';
   }
 
   generateRecommendations() {
@@ -275,19 +267,19 @@ class TestSuiteManager {
     const coverage = this.parseCoverageReport();
     if (coverage && coverage.total.lines.pct < 80) {
       recommendations.push({
-        category: "coverage",
-        severity: "medium",
-        issue: "Low test coverage",
+        category: 'coverage',
+        severity: 'medium',
+        issue: 'Low test coverage',
         recommendation: `Increase line coverage from ${coverage.total.lines.pct}% to at least 80%`,
       });
     }
 
     // Failed test recommendations
     Object.entries(this.testResults).forEach(([type, result]) => {
-      if (result && result.status === "failed") {
+      if (result && result.status === 'failed') {
         recommendations.push({
-          category: "test-failure",
-          severity: "high",
+          category: 'test-failure',
+          severity: 'high',
           issue: `${type} tests failing`,
           recommendation: `Review and fix failing ${type} tests before deployment`,
         });
@@ -299,15 +291,12 @@ class TestSuiteManager {
 
   parseCoverageReport() {
     try {
-      const coveragePath = path.join(
-        process.cwd(),
-        "coverage/coverage-summary.json",
-      );
+      const coveragePath = path.join(process.cwd(), 'coverage/coverage-summary.json');
       if (fs.existsSync(coveragePath)) {
-        return JSON.parse(fs.readFileSync(coveragePath, "utf8"));
+        return JSON.parse(fs.readFileSync(coveragePath, 'utf8'));
       }
     } catch (error) {
-      console.warn("Could not parse coverage report:", error.message);
+      console.warn('Could not parse coverage report:', error.message);
     }
     return null;
   }
@@ -349,7 +338,7 @@ class TestPatterns {
         Object.entries(schema).forEach(([key, generator]) => {
           if (overrides[key] !== undefined) {
             data[key] = overrides[key];
-          } else if (typeof generator === "function") {
+          } else if (typeof generator === 'function') {
             data[key] = generator();
           } else {
             data[key] = generator;
@@ -361,7 +350,7 @@ class TestPatterns {
 
       buildList: (count, overrides = {}) => {
         return Array.from({ length: count }, (_, index) =>
-          this.build({ ...overrides, id: index + 1 }),
+          this.build({ ...overrides, id: index + 1 })
         );
       },
     };
@@ -395,9 +384,7 @@ class TestPatterns {
     return {
       async cleanTables(tableNames) {
         for (const tableName of tableNames) {
-          await db.query(
-            `TRUNCATE TABLE ${tableName} RESTART IDENTITY CASCADE`,
-          );
+          await db.query(`TRUNCATE TABLE ${tableName} RESTART IDENTITY CASCADE`);
         }
       },
 
@@ -405,30 +392,24 @@ class TestPatterns {
         if (Array.isArray(data)) {
           for (const row of data) {
             await db.query(
-              `INSERT INTO ${tableName} (${Object.keys(row).join(", ")}) VALUES (${Object.keys(
-                row,
-              )
+              `INSERT INTO ${tableName} (${Object.keys(row).join(', ')}) VALUES (${Object.keys(row)
                 .map((_, i) => `$${i + 1}`)
-                .join(", ")})`,
-              Object.values(row),
+                .join(', ')})`,
+              Object.values(row)
             );
           }
         } else {
           await db.query(
-            `INSERT INTO ${tableName} (${Object.keys(data).join(", ")}) VALUES (${Object.keys(
-              data,
-            )
+            `INSERT INTO ${tableName} (${Object.keys(data).join(', ')}) VALUES (${Object.keys(data)
               .map((_, i) => `$${i + 1}`)
-              .join(", ")})`,
-            Object.values(data),
+              .join(', ')})`,
+            Object.values(data)
           );
         }
       },
 
       async getLastInserted(tableName) {
-        const result = await db.query(
-          `SELECT * FROM ${tableName} ORDER BY id DESC LIMIT 1`,
-        );
+        const result = await db.query(`SELECT * FROM ${tableName} ORDER BY id DESC LIMIT 1`);
         return result.rows[0];
       },
     };
@@ -436,7 +417,7 @@ class TestPatterns {
 
   // API test helpers
   static createAPITestHelpers(baseURL) {
-    const axios = require("axios");
+    const axios = require('axios');
 
     const client = axios.create({
       baseURL,
@@ -462,12 +443,12 @@ class TestPatterns {
       },
 
       withAuth(token) {
-        client.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        client.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         return this;
       },
 
       clearAuth() {
-        delete client.defaults.headers.common["Authorization"];
+        delete client.defaults.headers.common['Authorization'];
         return this;
       },
     };
@@ -481,49 +462,49 @@ module.exports = { TestPatterns };
 
 ```javascript
 // playwright.config.js - E2E Test Configuration
-const { defineConfig, devices } = require("@playwright/test");
+const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
-  testDir: "./tests/e2e",
+  testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [
-    ["html"],
-    ["json", { outputFile: "test-results/e2e-results.json" }],
-    ["junit", { outputFile: "test-results/e2e-results.xml" }],
+    ['html'],
+    ['json', { outputFile: 'test-results/e2e-results.json' }],
+    ['junit', { outputFile: 'test-results/e2e-results.xml' }],
   ],
   use: {
-    baseURL: process.env.BASE_URL || "http://localhost:3000",
-    trace: "on-first-retry",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
   projects: [
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
     },
     {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
     {
-      name: "Mobile Chrome",
-      use: { ...devices["Pixel 5"] },
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
     },
     {
-      name: "Mobile Safari",
-      use: { ...devices["iPhone 12"] },
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] },
     },
   ],
   webServer: {
-    command: "npm run start:test",
+    command: 'npm run start:test',
     port: 3000,
     reuseExistingServer: !process.env.CI,
   },
@@ -531,24 +512,21 @@ module.exports = defineConfig({
 
 // jest.config.js - Unit/Integration Test Configuration
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "jsdom",
-  roots: ["<rootDir>/src"],
-  testMatch: [
-    "**/__tests__/**/*.+(ts|tsx|js)",
-    "**/*.(test|spec).+(ts|tsx|js)",
-  ],
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
+  roots: ['<rootDir>/src'],
+  testMatch: ['**/__tests__/**/*.+(ts|tsx|js)', '**/*.(test|spec).+(ts|tsx|js)'],
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+    '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   collectCoverageFrom: [
-    "src/**/*.{js,jsx,ts,tsx}",
-    "!src/**/*.d.ts",
-    "!src/test/**/*",
-    "!src/**/*.stories.*",
-    "!src/**/*.test.*",
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/test/**/*',
+    '!src/**/*.stories.*',
+    '!src/**/*.test.*',
   ],
-  coverageReporters: ["text", "lcov", "html", "json-summary"],
+  coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
   coverageThreshold: {
     global: {
       branches: 80,
@@ -557,13 +535,13 @@ module.exports = {
       statements: 80,
     },
   },
-  setupFilesAfterEnv: ["<rootDir>/src/test/setup.ts"],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
   moduleNameMapping: {
-    "^@/(.*)$": "<rootDir>/src/$1",
-    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   testTimeout: 10000,
-  maxWorkers: "50%",
+  maxWorkers: '50%',
 };
 ```
 
@@ -571,7 +549,7 @@ module.exports = {
 
 ```javascript
 // test-framework/performance-testing.js
-const { performance } = require("perf_hooks");
+const { performance } = require('perf_hooks');
 
 class PerformanceTestFramework {
   constructor() {
@@ -586,7 +564,7 @@ class PerformanceTestFramework {
   async runLoadTest(config) {
     const {
       endpoint,
-      method = "GET",
+      method = 'GET',
       payload,
       concurrent = 10,
       duration = 60000,
@@ -607,14 +585,7 @@ class PerformanceTestFramework {
     for (let i = 0; i < concurrent; i++) {
       const delay = (rampUp / concurrent) * i;
       userPromises.push(
-        this.simulateUser(
-          endpoint,
-          method,
-          payload,
-          duration - delay,
-          delay,
-          results,
-        ),
+        this.simulateUser(endpoint, method, payload, duration - delay, delay, results)
       );
     }
 
@@ -647,7 +618,7 @@ class PerformanceTestFramework {
         results.errors.push({
           timestamp: Date.now(),
           error: error.message,
-          type: error.code || "unknown",
+          type: error.code || 'unknown',
         });
       }
 
@@ -657,7 +628,7 @@ class PerformanceTestFramework {
   }
 
   async makeRequest(endpoint, method, payload) {
-    const axios = require("axios");
+    const axios = require('axios');
 
     const config = {
       method,
@@ -666,7 +637,7 @@ class PerformanceTestFramework {
       validateStatus: () => true,
     };
 
-    if (payload && ["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
+    if (payload && ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase())) {
       config.data = payload;
     }
 
@@ -702,7 +673,7 @@ class PerformanceTestFramework {
       },
       errors: {
         total: errors.length,
-        byType: this.groupBy(errors, "type"),
+        byType: this.groupBy(errors, 'type'),
         timeline: errors.map((e) => ({ timestamp: e.timestamp, type: e.type })),
       },
       recommendations: this.generatePerformanceRecommendations(results),
@@ -733,32 +704,31 @@ class PerformanceTestFramework {
 
     if (responseTime.mean > this.thresholds.responseTime) {
       recommendations.push({
-        category: "performance",
-        severity: "high",
-        issue: "High average response time",
+        category: 'performance',
+        severity: 'high',
+        issue: 'High average response time',
         value: `${responseTime.mean.toFixed(2)}ms`,
-        recommendation: "Optimize database queries and add caching layers",
+        recommendation: 'Optimize database queries and add caching layers',
       });
     }
 
     if (summary.throughput < this.thresholds.throughput) {
       recommendations.push({
-        category: "scalability",
-        severity: "medium",
-        issue: "Low throughput",
+        category: 'scalability',
+        severity: 'medium',
+        issue: 'Low throughput',
         value: `${summary.throughput.toFixed(2)} req/s`,
-        recommendation: "Consider horizontal scaling or connection pooling",
+        recommendation: 'Consider horizontal scaling or connection pooling',
       });
     }
 
     if (summary.errorRate > this.thresholds.errorRate) {
       recommendations.push({
-        category: "reliability",
-        severity: "high",
-        issue: "High error rate",
+        category: 'reliability',
+        severity: 'high',
+        issue: 'High error rate',
         value: `${(summary.errorRate * 100).toFixed(2)}%`,
-        recommendation:
-          "Investigate error causes and implement proper error handling",
+        recommendation: 'Investigate error causes and implement proper error handling',
       });
     }
 
@@ -766,19 +736,17 @@ class PerformanceTestFramework {
   }
 
   logResults(analysis) {
-    console.log("\n📈 Performance Test Results:");
+    console.log('\n📈 Performance Test Results:');
     console.log(`Total Requests: ${analysis.summary.totalRequests}`);
     console.log(
-      `Success Rate: ${((analysis.summary.successfulRequests / analysis.summary.totalRequests) * 100).toFixed(2)}%`,
+      `Success Rate: ${((analysis.summary.successfulRequests / analysis.summary.totalRequests) * 100).toFixed(2)}%`
     );
     console.log(`Throughput: ${analysis.summary.throughput.toFixed(2)} req/s`);
-    console.log(
-      `Average Response Time: ${analysis.responseTime.mean.toFixed(2)}ms`,
-    );
+    console.log(`Average Response Time: ${analysis.responseTime.mean.toFixed(2)}ms`);
     console.log(`95th Percentile: ${analysis.responseTime.p95.toFixed(2)}ms`);
 
     if (analysis.recommendations.length > 0) {
-      console.log("\n⚠️ Recommendations:");
+      console.log('\n⚠️ Recommendations:');
       analysis.recommendations.forEach((rec) => {
         console.log(`- ${rec.issue}: ${rec.recommendation}`);
       });
@@ -810,8 +778,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -858,8 +826,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -883,8 +851,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -915,8 +883,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -950,28 +918,26 @@ jobs:
 
 ```javascript
 // Example test structure
-describe("UserService", () => {
-  describe("createUser", () => {
-    it("should create user with valid data", async () => {
+describe('UserService', () => {
+  describe('createUser', () => {
+    it('should create user with valid data', async () => {
       // Arrange
-      const userData = { email: "test@example.com", name: "Test User" };
+      const userData = { email: 'test@example.com', name: 'Test User' };
 
       // Act
       const result = await userService.createUser(userData);
 
       // Assert
-      expect(result).toHaveProperty("id");
+      expect(result).toHaveProperty('id');
       expect(result.email).toBe(userData.email);
     });
 
-    it("should throw error with invalid email", async () => {
+    it('should throw error with invalid email', async () => {
       // Arrange
-      const userData = { email: "invalid-email", name: "Test User" };
+      const userData = { email: 'invalid-email', name: 'Test User' };
 
       // Act & Assert
-      await expect(userService.createUser(userData)).rejects.toThrow(
-        "Invalid email",
-      );
+      await expect(userService.createUser(userData)).rejects.toThrow('Invalid email');
     });
   });
 });

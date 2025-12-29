@@ -1,9 +1,9 @@
-const StructuralValidator = require("./validators/StructuralValidator");
-const IntegrityValidator = require("./validators/IntegrityValidator");
-const SemanticValidator = require("./validators/SemanticValidator");
-const ReferenceValidator = require("./validators/ReferenceValidator");
-const ProvenanceValidator = require("./validators/ProvenanceValidator");
-const chalk = require("chalk");
+const StructuralValidator = require('./validators/StructuralValidator');
+const IntegrityValidator = require('./validators/IntegrityValidator');
+const SemanticValidator = require('./validators/SemanticValidator');
+const ReferenceValidator = require('./validators/ReferenceValidator');
+const ProvenanceValidator = require('./validators/ProvenanceValidator');
+const chalk = require('chalk');
 
 /**
  * ValidationOrchestrator - Coordinates all validators and generates comprehensive reports
@@ -32,13 +32,7 @@ class ValidationOrchestrator {
    */
   async validateComponent(component, options = {}) {
     const {
-      validators = [
-        "structural",
-        "integrity",
-        "semantic",
-        "reference",
-        "provenance",
-      ],
+      validators = ['structural', 'integrity', 'semantic', 'reference', 'provenance'],
       strict = false,
       updateRegistry = false,
     } = options;
@@ -70,9 +64,9 @@ class ValidationOrchestrator {
         let validatorOptions = {};
 
         // Validator-specific options
-        if (validatorName === "semantic") {
+        if (validatorName === 'semantic') {
           validatorOptions.strict = strict;
-        } else if (validatorName === "integrity") {
+        } else if (validatorName === 'integrity') {
           validatorOptions.updateRegistry = updateRegistry;
         }
 
@@ -121,7 +115,7 @@ class ValidationOrchestrator {
 
     if (scores.length > 0) {
       results.overall.score = Math.round(
-        scores.reduce((sum, score) => sum + score, 0) / scores.length,
+        scores.reduce((sum, score) => sum + score, 0) / scores.length
       );
     }
 
@@ -187,23 +181,17 @@ class ValidationOrchestrator {
 
     if (isBatch) {
       // Batch report
-      lines.push("");
-      lines.push(info("🔒 Security Audit Report"));
-      lines.push(dim("━".repeat(60)));
-      lines.push("");
+      lines.push('');
+      lines.push(info('🔒 Security Audit Report'));
+      lines.push(dim('━'.repeat(60)));
+      lines.push('');
 
       lines.push(`📊 Summary:`);
       lines.push(`   Total components: ${validationResults.summary.total}`);
-      lines.push(
-        `   ${success("✅ Passed")}: ${validationResults.summary.passed}`,
-      );
-      lines.push(
-        `   ${error("❌ Failed")}: ${validationResults.summary.failed}`,
-      );
-      lines.push(
-        `   ${warning("⚠️  Warnings")}: ${validationResults.summary.warnings}`,
-      );
-      lines.push("");
+      lines.push(`   ${success('✅ Passed')}: ${validationResults.summary.passed}`);
+      lines.push(`   ${error('❌ Failed')}: ${validationResults.summary.failed}`);
+      lines.push(`   ${warning('⚠️  Warnings')}: ${validationResults.summary.warnings}`);
+      lines.push('');
 
       // Component details
       for (const component of validationResults.components) {
@@ -214,7 +202,7 @@ class ValidationOrchestrator {
             warning,
             info,
             dim,
-          }),
+          })
         );
       }
     } else {
@@ -226,14 +214,14 @@ class ValidationOrchestrator {
           warning,
           info,
           dim,
-        }),
+        })
       );
     }
 
-    lines.push(dim("━".repeat(60)));
-    lines.push("");
+    lines.push(dim('━'.repeat(60)));
+    lines.push('');
 
-    return lines.join("\n");
+    return lines.join('\n');
   }
 
   /**
@@ -244,58 +232,43 @@ class ValidationOrchestrator {
     const { success, error, warning, info, dim } = colors;
     const lines = [];
 
-    const status = componentResult.overall.valid
-      ? success("✅ PASS")
-      : error("❌ FAIL");
-    const scoreBadge = this._getScoreBadge(
-      componentResult.overall.score,
-      colors,
-    );
+    const status = componentResult.overall.valid ? success('✅ PASS') : error('❌ FAIL');
+    const scoreBadge = this._getScoreBadge(componentResult.overall.score, colors);
 
     lines.push(`${status} ${componentResult.component.path} ${scoreBadge}`);
 
     // Validator breakdown
-    for (const [validatorName, result] of Object.entries(
-      componentResult.validators,
-    )) {
-      const validatorStatus = result.valid ? success("✅") : error("❌");
-      const validatorScore = result.score ? dim(`(${result.score}/100)`) : "";
+    for (const [validatorName, result] of Object.entries(componentResult.validators)) {
+      const validatorStatus = result.valid ? success('✅') : error('❌');
+      const validatorScore = result.score ? dim(`(${result.score}/100)`) : '';
 
       lines.push(
-        `   ├─ ${validatorStatus} ${validatorName}: ${result.errorCount === 0 ? "PASS" : `${result.errorCount} errors`} ${validatorScore}`,
+        `   ├─ ${validatorStatus} ${validatorName}: ${result.errorCount === 0 ? 'PASS' : `${result.errorCount} errors`} ${validatorScore}`
       );
 
       // Show errors
       if (result.errors && result.errors.length > 0 && verbose) {
         for (const err of result.errors.slice(0, 3)) {
-          lines.push(
-            `   │  ${error("ERROR")}: ${err.message} ${dim(`[${err.code}]`)}`,
-          );
+          lines.push(`   │  ${error('ERROR')}: ${err.message} ${dim(`[${err.code}]`)}`);
         }
         if (result.errors.length > 3) {
-          lines.push(
-            `   │  ${dim(`... and ${result.errors.length - 3} more errors`)}`,
-          );
+          lines.push(`   │  ${dim(`... and ${result.errors.length - 3} more errors`)}`);
         }
       }
 
       // Show warnings
       if (result.warnings && result.warnings.length > 0 && verbose) {
         for (const warn of result.warnings.slice(0, 2)) {
-          lines.push(
-            `   │  ${warning("WARNING")}: ${warn.message} ${dim(`[${warn.code}]`)}`,
-          );
+          lines.push(`   │  ${warning('WARNING')}: ${warn.message} ${dim(`[${warn.code}]`)}`);
         }
         if (result.warnings.length > 2) {
-          lines.push(
-            `   │  ${dim(`... and ${result.warnings.length - 2} more warnings`)}`,
-          );
+          lines.push(`   │  ${dim(`... and ${result.warnings.length - 2} more warnings`)}`);
         }
       }
     }
 
-    lines.push("");
-    return lines.join("\n");
+    lines.push('');
+    return lines.join('\n');
   }
 
   /**

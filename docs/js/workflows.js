@@ -2,155 +2,240 @@
 
 // Global state
 let workflowState = {
-    steps: [],
-    properties: {
-        name: '',
-        description: '',
-        tags: []
-    },
-    components: {
-        agents: [],
-        commands: [],
-        mcps: []
-    }
+  steps: [],
+  properties: {
+    name: '',
+    description: '',
+    tags: [],
+  },
+  components: {
+    agents: [],
+    commands: [],
+    mcps: [],
+  },
 };
 
 // GitHub API configuration
 const GITHUB_CONFIG = {
-    owner: 'davila7',
-    repo: 'claude-code-templates',
-    branch: 'main'
+  owner: 'davila7',
+  repo: 'claude-code-templates',
+  branch: 'main',
 };
 
 // Initialize the workflow builder
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('Initializing Workflow Builder...');
-    showLoadingSpinner();
-    
-    try {
-        await loadAllComponents();
-        initializeDragAndDrop();
-        initializeEventListeners();
-        initializeModalEventListeners();
-        initializeSortableSteps();
-        console.log('Workflow Builder initialized successfully');
-    } catch (error) {
-        console.error('Error initializing Workflow Builder:', error);
-        showError('Failed to load components. Please refresh the page.');
-    } finally {
-        hideLoadingSpinner();
-    }
+document.addEventListener('DOMContentLoaded', async function () {
+  console.log('Initializing Workflow Builder...');
+  showLoadingSpinner();
+
+  try {
+    await loadAllComponents();
+    initializeDragAndDrop();
+    initializeEventListeners();
+    initializeModalEventListeners();
+    initializeSortableSteps();
+    console.log('Workflow Builder initialized successfully');
+  } catch (error) {
+    console.error('Error initializing Workflow Builder:', error);
+    showError('Failed to load components. Please refresh the page.');
+  } finally {
+    hideLoadingSpinner();
+  }
 });
 
 // Load all components from GitHub using the Git Trees API
 async function loadAllComponents() {
-    console.log('Loading components from components.json...');
-    try {
-        const response = await fetch('components.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const allComponents = await response.json();
-
-        workflowState.components = {
-            agents: allComponents.agents.sort((a, b) => a.path.localeCompare(b.path)),
-            commands: allComponents.commands.sort((a, b) => a.path.localeCompare(b.path)),
-            mcps: allComponents.mcps.sort((a, b) => a.path.localeCompare(b.path))
-        };
-
-        renderComponentsList('agents', workflowState.components.agents);
-        renderComponentsList('commands', workflowState.components.commands);
-        renderComponentsList('mcps', workflowState.components.mcps);
-
-        console.log(`Loaded ${workflowState.components.agents.length} agents, ${workflowState.components.commands.length} commands, ${workflowState.components.mcps.length} MCPs`);
-
-    } catch (error) {
-        console.error('Error loading components:', error);
-        loadComponentsWithFallback();
+  console.log('Loading components from components.json...');
+  try {
+    const response = await fetch('components.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    const allComponents = await response.json();
+
+    workflowState.components = {
+      agents: allComponents.agents.sort((a, b) => a.path.localeCompare(b.path)),
+      commands: allComponents.commands.sort((a, b) => a.path.localeCompare(b.path)),
+      mcps: allComponents.mcps.sort((a, b) => a.path.localeCompare(b.path)),
+    };
+
+    renderComponentsList('agents', workflowState.components.agents);
+    renderComponentsList('commands', workflowState.components.commands);
+    renderComponentsList('mcps', workflowState.components.mcps);
+
+    console.log(
+      `Loaded ${workflowState.components.agents.length} agents, ${workflowState.components.commands.length} commands, ${workflowState.components.mcps.length} MCPs`
+    );
+  } catch (error) {
+    console.error('Error loading components:', error);
+    loadComponentsWithFallback();
+  }
 }
 
 async function loadComponentsWithFallback() {
-    console.log("Using fallback data due to API error.");
-    const [agents, commands, mcps] = [
-        getFallbackComponentData('agents'),
-        getFallbackComponentData('commands'),
-        getFallbackComponentData('mcps')
-    ];
-    workflowState.components = { agents, commands, mcps };
-    renderComponentsList('agents', agents);
-    renderComponentsList('commands', commands);
-    renderComponentsList('mcps', mcps);
+  console.log('Using fallback data due to API error.');
+  const [agents, commands, mcps] = [
+    getFallbackComponentData('agents'),
+    getFallbackComponentData('commands'),
+    getFallbackComponentData('mcps'),
+  ];
+  workflowState.components = { agents, commands, mcps };
+  renderComponentsList('agents', agents);
+  renderComponentsList('commands', commands);
+  renderComponentsList('mcps', mcps);
 }
 
 // Get fallback component data
 function getFallbackComponentData(type) {
-    const fallbackData = {
-        agents: [
-            { name: 'code-reviewer', path: 'development/code-reviewer', category: 'development', type: 'agent', icon: '🤖' },
-            { name: 'documentation-writer', path: 'development/documentation-writer', category: 'development', type: 'agent', icon: '🤖' },
-            { name: 'bug-hunter', path: 'development/bug-hunter', category: 'development', type: 'agent', icon: '🤖' },
-            { name: 'security-auditor', path: 'security/security-auditor', category: 'security', type: 'agent', icon: '🤖' },
-            { name: 'performance-optimizer', path: 'optimization/performance-optimizer', category: 'optimization', type: 'agent', icon: '🤖' }
-        ],
-        commands: [
-            { name: 'git-setup', path: 'development/git-setup', category: 'development', type: 'command', icon: '⚡' },
-            { name: 'project-init', path: 'development/project-init', category: 'development', type: 'command', icon: '⚡' },
-            { name: 'docker-setup', path: 'devops/docker-setup', category: 'devops', type: 'command', icon: '⚡' },
-            { name: 'test-runner', path: 'testing/test-runner', category: 'testing', type: 'command', icon: '⚡' },
-            { name: 'build-pipeline', path: 'devops/build-pipeline', category: 'devops', type: 'command', icon: '⚡' }
-        ],
-        mcps: [
-            { name: 'database-connector', path: 'database/database-connector', category: 'database', type: 'mcp', icon: '🔌' },
-            { name: 'api-client', path: 'api/api-client', category: 'api', type: 'mcp', icon: '🔌' },
-            { name: 'file-manager', path: 'system/file-manager', category: 'system', type: 'mcp', icon: '🔌' },
-            { name: 'redis-cache', path: 'database/redis-cache', category: 'database', type: 'mcp', icon: '🔌' },
-            { name: 'email-service', path: 'communication/email-service', category: 'communication', type: 'mcp', icon: '🔌' }
-        ]
-    };
-    
-    const typeKey = type;
-    const data = fallbackData[typeKey] || [];
-    console.log(`Loaded ${data.length} fallback ${type} components`);
-    return data;
+  const fallbackData = {
+    agents: [
+      {
+        name: 'code-reviewer',
+        path: 'development/code-reviewer',
+        category: 'development',
+        type: 'agent',
+        icon: '🤖',
+      },
+      {
+        name: 'documentation-writer',
+        path: 'development/documentation-writer',
+        category: 'development',
+        type: 'agent',
+        icon: '🤖',
+      },
+      {
+        name: 'bug-hunter',
+        path: 'development/bug-hunter',
+        category: 'development',
+        type: 'agent',
+        icon: '🤖',
+      },
+      {
+        name: 'security-auditor',
+        path: 'security/security-auditor',
+        category: 'security',
+        type: 'agent',
+        icon: '🤖',
+      },
+      {
+        name: 'performance-optimizer',
+        path: 'optimization/performance-optimizer',
+        category: 'optimization',
+        type: 'agent',
+        icon: '🤖',
+      },
+    ],
+    commands: [
+      {
+        name: 'git-setup',
+        path: 'development/git-setup',
+        category: 'development',
+        type: 'command',
+        icon: '⚡',
+      },
+      {
+        name: 'project-init',
+        path: 'development/project-init',
+        category: 'development',
+        type: 'command',
+        icon: '⚡',
+      },
+      {
+        name: 'docker-setup',
+        path: 'devops/docker-setup',
+        category: 'devops',
+        type: 'command',
+        icon: '⚡',
+      },
+      {
+        name: 'test-runner',
+        path: 'testing/test-runner',
+        category: 'testing',
+        type: 'command',
+        icon: '⚡',
+      },
+      {
+        name: 'build-pipeline',
+        path: 'devops/build-pipeline',
+        category: 'devops',
+        type: 'command',
+        icon: '⚡',
+      },
+    ],
+    mcps: [
+      {
+        name: 'database-connector',
+        path: 'database/database-connector',
+        category: 'database',
+        type: 'mcp',
+        icon: '🔌',
+      },
+      { name: 'api-client', path: 'api/api-client', category: 'api', type: 'mcp', icon: '🔌' },
+      {
+        name: 'file-manager',
+        path: 'system/file-manager',
+        category: 'system',
+        type: 'mcp',
+        icon: '🔌',
+      },
+      {
+        name: 'redis-cache',
+        path: 'database/redis-cache',
+        category: 'database',
+        type: 'mcp',
+        icon: '🔌',
+      },
+      {
+        name: 'email-service',
+        path: 'communication/email-service',
+        category: 'communication',
+        type: 'mcp',
+        icon: '🔌',
+      },
+    ],
+  };
+
+  const typeKey = type;
+  const data = fallbackData[typeKey] || [];
+  console.log(`Loaded ${data.length} fallback ${type} components`);
+  return data;
 }
 
 // Get icon for component type
 function getComponentIcon(type) {
-    const icons = { 'agent': '🤖', 'command': '⚡', 'mcp': '🔌' };
-    return icons[type] || '📦';
+  const icons = { agent: '🤖', command: '⚡', mcp: '🔌' };
+  return icons[type] || '📦';
 }
 
 // Render components list in the UI
 function renderComponentsList(type, components) {
-    const container = document.getElementById(`${type}-tree`);
-    const countElement = document.getElementById(`${type}-count`);
-    
-    if (!container || !countElement) return;
-    
-    countElement.textContent = components.length;
-    container.innerHTML = '';
-    
-    const groupedComponents = components.reduce((acc, component) => {
-        const category = component.category === 'root' ? 'general' : component.category;
-        if (!acc[category]) acc[category] = [];
-        acc[category].push(component);
-        return acc;
-    }, {});
-    
-    Object.entries(groupedComponents).forEach(([category, categoryComponents]) => {
-        const folderElement = createTreeFolder(category, categoryComponents, type);
-        container.appendChild(folderElement);
-    });
+  const container = document.getElementById(`${type}-tree`);
+  const countElement = document.getElementById(`${type}-count`);
+
+  if (!container || !countElement) return;
+
+  countElement.textContent = components.length;
+  container.innerHTML = '';
+
+  const groupedComponents = components.reduce((acc, component) => {
+    const category = component.category === 'root' ? 'general' : component.category;
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(component);
+    return acc;
+  }, {});
+
+  Object.entries(groupedComponents).forEach(([category, categoryComponents]) => {
+    const folderElement = createTreeFolder(category, categoryComponents, type);
+    container.appendChild(folderElement);
+  });
 }
 
 // Create tree folder element
 function createTreeFolder(category, components, type) {
-    const folderElement = document.createElement('div');
-    folderElement.className = 'tree-node';
-    const folderId = `${type}-${category.replace(/[^a-z0-9]/gi, '_').toLowerCase()}`;
-    
-    folderElement.innerHTML = `
+  const folderElement = document.createElement('div');
+  folderElement.className = 'tree-node';
+  const folderId = `${type}-${category.replace(/[^a-z0-9]/gi, '_').toLowerCase()}`;
+
+  folderElement.innerHTML = `
         <div class="tree-node-header" data-folder="${folderId}">
             <span class="tree-icon folder-icon">📁</span>
             <span class="tree-label">${category}</span>
@@ -159,27 +244,27 @@ function createTreeFolder(category, components, type) {
         </div>
         <div class="tree-children" id="${folderId}"></div>
     `;
-    
-    const childrenContainer = folderElement.querySelector('.tree-children');
-    components.forEach(component => {
-        const fileElement = createTreeFile(component);
-        childrenContainer.appendChild(fileElement);
-    });
-    
-    return folderElement;
+
+  const childrenContainer = folderElement.querySelector('.tree-children');
+  components.forEach((component) => {
+    const fileElement = createTreeFile(component);
+    childrenContainer.appendChild(fileElement);
+  });
+
+  return folderElement;
 }
 
 // Create tree file element
 function createTreeFile(component) {
-    const element = document.createElement('div');
-    element.className = 'tree-file';
-    element.draggable = true;
-    element.dataset.componentType = component.type;
-    element.dataset.componentName = component.name;
-    element.dataset.componentPath = component.path;
-    element.dataset.componentCategory = component.category;
-    
-    element.innerHTML = `
+  const element = document.createElement('div');
+  element.className = 'tree-file';
+  element.draggable = true;
+  element.dataset.componentType = component.type;
+  element.dataset.componentName = component.name;
+  element.dataset.componentPath = component.path;
+  element.dataset.componentCategory = component.category;
+
+  element.innerHTML = `
         <div class="tree-file-header">
             <span class="tree-icon file-icon">${getFileIcon(component.type)}</span>
             <span class="tree-file-name">${component.name}</span>
@@ -189,86 +274,90 @@ function createTreeFile(component) {
             </div>
         </div>
     `;
-    return element;
+  return element;
 }
 
 // Get file icon based on type
 function getFileIcon(type) {
-    const icons = { 'agent': '📄', 'command': '⚡', 'mcp': '⚙️' };
-    return icons[type] || '📄';
+  const icons = { agent: '📄', command: '⚡', mcp: '⚙️' };
+  return icons[type] || '📄';
 }
 
 // Initialize drag and drop
 function initializeDragAndDrop() {
-    const workflowSteps = document.getElementById('workflowSteps');
-    document.addEventListener('dragstart', (event) => {
-        if (event.target.closest('.tree-file')) {
-            handleDragStart(event);
-        }
-    });
-    workflowSteps.addEventListener('dragover', handleDragOver);
-    workflowSteps.addEventListener('drop', handleDrop);
-    workflowSteps.addEventListener('dragenter', (e) => e.target.closest('.drop-zone')?.classList.add('drag-over'));
-    workflowSteps.addEventListener('dragleave', (e) => e.target.closest('.drop-zone')?.classList.remove('drag-over'));
+  const workflowSteps = document.getElementById('workflowSteps');
+  document.addEventListener('dragstart', (event) => {
+    if (event.target.closest('.tree-file')) {
+      handleDragStart(event);
+    }
+  });
+  workflowSteps.addEventListener('dragover', handleDragOver);
+  workflowSteps.addEventListener('drop', handleDrop);
+  workflowSteps.addEventListener('dragenter', (e) =>
+    e.target.closest('.drop-zone')?.classList.add('drag-over')
+  );
+  workflowSteps.addEventListener('dragleave', (e) =>
+    e.target.closest('.drop-zone')?.classList.remove('drag-over')
+  );
 }
 
 function handleDragStart(event) {
-    const treeFile = event.target.closest('.tree-file');
-    const componentData = { ...treeFile.dataset };
-    event.dataTransfer.setData('application/json', JSON.stringify(componentData));
-    event.dataTransfer.effectAllowed = 'copy';
+  const treeFile = event.target.closest('.tree-file');
+  const componentData = { ...treeFile.dataset };
+  event.dataTransfer.setData('application/json', JSON.stringify(componentData));
+  event.dataTransfer.effectAllowed = 'copy';
 }
 
 function handleDragOver(event) {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'copy';
 }
 
 function handleDrop(event) {
-    event.preventDefault();
-    event.target.closest('.drop-zone')?.classList.remove('drag-over');
-    try {
-        const componentData = JSON.parse(event.dataTransfer.getData('application/json'));
-        addWorkflowStep(componentData);
-    } catch (error) {
-        console.error('Error handling drop:', error);
-    }
+  event.preventDefault();
+  event.target.closest('.drop-zone')?.classList.remove('drag-over');
+  try {
+    const componentData = JSON.parse(event.dataTransfer.getData('application/json'));
+    addWorkflowStep(componentData);
+  } catch (error) {
+    console.error('Error handling drop:', error);
+  }
 }
 
 function addComponentFromButton(event) {
-    const treeFile = event.target.closest('.tree-file');
-    const componentData = { ...treeFile.dataset };
-    addWorkflowStep(componentData);
+  const treeFile = event.target.closest('.tree-file');
+  const componentData = { ...treeFile.dataset };
+  addWorkflowStep(componentData);
 }
 
 function addWorkflowStep(componentData) {
-    const step = {
-        id: `step_${Date.now()}`,
-        type: componentData.componentType,
-        name: componentData.componentName,
-        path: componentData.componentPath,
-        category: componentData.componentCategory,
-        description: `Execute ${componentData.componentName}`,
-        icon: getComponentIcon(componentData.componentType)
-    };
-    workflowState.steps.push(step);
-    renderWorkflowSteps();
-    updateWorkflowStats();
+  const step = {
+    id: `step_${Date.now()}`,
+    type: componentData.componentType,
+    name: componentData.componentName,
+    path: componentData.componentPath,
+    category: componentData.componentCategory,
+    description: `Execute ${componentData.componentName}`,
+    icon: getComponentIcon(componentData.componentType),
+  };
+  workflowState.steps.push(step);
+  renderWorkflowSteps();
+  updateWorkflowStats();
 }
 
 function renderWorkflowSteps() {
-    const container = document.getElementById('workflowSteps');
-    const dropZone = container.querySelector('.drop-zone');
-    const existingSteps = container.querySelectorAll('.workflow-step');
-    existingSteps.forEach(step => step.remove());
+  const container = document.getElementById('workflowSteps');
+  const dropZone = container.querySelector('.drop-zone');
+  const existingSteps = container.querySelectorAll('.workflow-step');
+  existingSteps.forEach((step) => step.remove());
 
-    if (workflowState.steps.length > 0) {
-        dropZone.style.display = 'none';
-        workflowState.steps.forEach((step, index) => {
-            const stepElement = document.createElement('div');
-            stepElement.className = 'workflow-step';
-            stepElement.dataset.stepId = step.id;
-            stepElement.innerHTML = `
+  if (workflowState.steps.length > 0) {
+    dropZone.style.display = 'none';
+    workflowState.steps.forEach((step, index) => {
+      const stepElement = document.createElement('div');
+      stepElement.className = 'workflow-step';
+      stepElement.dataset.stepId = step.id;
+      stepElement.innerHTML = `
                 <div class="step-number">${index + 1}</div>
                 <div class="step-icon">${step.icon}</div>
                 <div class="step-content">
@@ -280,170 +369,186 @@ function renderWorkflowSteps() {
                     <button class="step-action remove" onclick="removeStep('${step.id}')">🗑️</button>
                 </div>
             `;
-            container.appendChild(stepElement);
-        });
-    } else {
-        dropZone.style.display = 'flex';
-    }
-    initializeSortableSteps();
+      container.appendChild(stepElement);
+    });
+  } else {
+    dropZone.style.display = 'flex';
+  }
+  initializeSortableSteps();
 }
 
 function initializeSortableSteps() {
-    const workflowSteps = document.getElementById('workflowSteps');
-    if (workflowState.steps.length > 0) {
-        new Sortable(workflowSteps, {
-            animation: 150,
-            onEnd: (evt) => {
-                const movedStep = workflowState.steps.splice(evt.oldIndex, 1)[0];
-                workflowState.steps.splice(evt.newIndex, 0, movedStep);
-                renderWorkflowSteps();
-            }
-        });
-    }
+  const workflowSteps = document.getElementById('workflowSteps');
+  if (workflowState.steps.length > 0) {
+    new Sortable(workflowSteps, {
+      animation: 150,
+      onEnd: (evt) => {
+        const movedStep = workflowState.steps.splice(evt.oldIndex, 1)[0];
+        workflowState.steps.splice(evt.newIndex, 0, movedStep);
+        renderWorkflowSteps();
+      },
+    });
+  }
 }
 
 function removeStep(stepId) {
-    workflowState.steps = workflowState.steps.filter(step => step.id !== stepId);
-    renderWorkflowSteps();
-    updateWorkflowStats();
+  workflowState.steps = workflowState.steps.filter((step) => step.id !== stepId);
+  renderWorkflowSteps();
+  updateWorkflowStats();
 }
 
 function updateWorkflowStats() {
-    const stats = { agents: 0, commands: 0, mcps: 0 };
-    workflowState.steps.forEach(step => stats[step.type + 's']++);
-    document.getElementById('agentCount').textContent = stats.agents;
-    document.getElementById('commandCount').textContent = stats.commands;
-    document.getElementById('mcpCount').textContent = stats.mcps;
-    document.getElementById('totalSteps').textContent = workflowState.steps.length;
+  const stats = { agents: 0, commands: 0, mcps: 0 };
+  workflowState.steps.forEach((step) => stats[step.type + 's']++);
+  document.getElementById('agentCount').textContent = stats.agents;
+  document.getElementById('commandCount').textContent = stats.commands;
+  document.getElementById('mcpCount').textContent = stats.mcps;
+  document.getElementById('totalSteps').textContent = workflowState.steps.length;
 }
 
 function initializeEventListeners() {
-    document.getElementById('componentSearch').addEventListener('input', handleComponentSearch);
-    document.getElementById('clearCanvas').addEventListener('click', clearWorkflow);
-    document.getElementById('generateWorkflow').addEventListener('click', openPropertiesModal);
-    document.getElementById('closePropertiesModal').addEventListener('click', closePropertiesModal);
-    document.getElementById('saveWorkflowProperties').addEventListener('click', saveAndGenerateWorkflow);
-    
-    // Category accordion toggle
-    document.querySelectorAll('.category-card-header').forEach(header => {
-        header.addEventListener('click', () => {
-            header.parentElement.classList.toggle('expanded');
-        });
-    });
+  document.getElementById('componentSearch').addEventListener('input', handleComponentSearch);
+  document.getElementById('clearCanvas').addEventListener('click', clearWorkflow);
+  document.getElementById('generateWorkflow').addEventListener('click', openPropertiesModal);
+  document.getElementById('closePropertiesModal').addEventListener('click', closePropertiesModal);
+  document
+    .getElementById('saveWorkflowProperties')
+    .addEventListener('click', saveAndGenerateWorkflow);
 
-    // Add event listener for sub-folders
-    document.addEventListener('click', function(event) {
-        const header = event.target.closest('.tree-node-header');
-        if (header) {
-            const children = header.nextElementSibling;
-            if (children && children.classList.contains('tree-children')) {
-                header.classList.toggle('expanded');
-                children.classList.toggle('expanded');
-            }
-        }
+  // Category accordion toggle
+  document.querySelectorAll('.category-card-header').forEach((header) => {
+    header.addEventListener('click', () => {
+      header.parentElement.classList.toggle('expanded');
     });
+  });
+
+  // Add event listener for sub-folders
+  document.addEventListener('click', function (event) {
+    const header = event.target.closest('.tree-node-header');
+    if (header) {
+      const children = header.nextElementSibling;
+      if (children && children.classList.contains('tree-children')) {
+        header.classList.toggle('expanded');
+        children.classList.toggle('expanded');
+      }
+    }
+  });
 }
 
 function handleComponentSearch(event) {
-    const searchTerm = event.target.value.toLowerCase();
-    document.querySelectorAll('.tree-file').forEach(file => {
-        const match = file.dataset.componentName.toLowerCase().includes(searchTerm);
-        file.style.display = match ? '' : 'none';
-    });
+  const searchTerm = event.target.value.toLowerCase();
+  document.querySelectorAll('.tree-file').forEach((file) => {
+    const match = file.dataset.componentName.toLowerCase().includes(searchTerm);
+    file.style.display = match ? '' : 'none';
+  });
 }
 
 function clearWorkflow() {
-    if (confirm('Are you sure you want to clear the workflow?')) {
-        workflowState.steps = [];
-        renderWorkflowSteps();
-        updateWorkflowStats();
-    }
+  if (confirm('Are you sure you want to clear the workflow?')) {
+    workflowState.steps = [];
+    renderWorkflowSteps();
+    updateWorkflowStats();
+  }
 }
 
 function openPropertiesModal() {
-    if (workflowState.steps.length === 0) {
-        showError('Add at least one component to the workflow.');
-        return;
-    }
-    document.getElementById('propertiesModal').style.display = 'block';
+  if (workflowState.steps.length === 0) {
+    showError('Add at least one component to the workflow.');
+    return;
+  }
+  document.getElementById('propertiesModal').style.display = 'block';
 }
 
 function closePropertiesModal() {
-    document.getElementById('propertiesModal').style.display = 'none';
+  document.getElementById('propertiesModal').style.display = 'none';
 }
 
 function saveAndGenerateWorkflow() {
-    workflowState.properties.name = document.getElementById('workflowName').value;
-    workflowState.properties.description = document.getElementById('workflowDescription').value;
-    workflowState.properties.tags = document.getElementById('workflowTags').value.split(',').map(t => t.trim());
-    
-    if (!workflowState.properties.name) {
-        showError('Workflow name is required.');
-        return;
-    }
-    
-    closePropertiesModal();
-    generateWorkflow();
+  workflowState.properties.name = document.getElementById('workflowName').value;
+  workflowState.properties.description = document.getElementById('workflowDescription').value;
+  workflowState.properties.tags = document
+    .getElementById('workflowTags')
+    .value.split(',')
+    .map((t) => t.trim());
+
+  if (!workflowState.properties.name) {
+    showError('Workflow name is required.');
+    return;
+  }
+
+  closePropertiesModal();
+  generateWorkflow();
 }
 
 async function generateWorkflow() {
-    showLoadingSpinner();
-    try {
-        const workflowHash = await generateWorkflowHash();
-        const yamlContent = generateWorkflowYAML();
-        showGenerateModal(workflowHash, yamlContent);
-    } catch (error) {
-        console.error('Error generating workflow:', error);
-    } finally {
-        hideLoadingSpinner();
-    }
+  showLoadingSpinner();
+  try {
+    const workflowHash = await generateWorkflowHash();
+    const yamlContent = generateWorkflowYAML();
+    showGenerateModal(workflowHash, yamlContent);
+  } catch (error) {
+    console.error('Error generating workflow:', error);
+  } finally {
+    hideLoadingSpinner();
+  }
 }
 
 async function generateWorkflowHash() {
-    const dataString = JSON.stringify(workflowState);
-    const hash = CryptoJS.SHA256(dataString).toString(CryptoJS.enc.Hex).substring(0, 12);
-    localStorage.setItem(`workflow_${hash}`, dataString);
-    return hash;
+  const dataString = JSON.stringify(workflowState);
+  const hash = CryptoJS.SHA256(dataString).toString(CryptoJS.enc.Hex).substring(0, 12);
+  localStorage.setItem(`workflow_${hash}`, dataString);
+  return hash;
 }
 
 function generateWorkflowYAML() {
-    return `# Workflow: ${workflowState.properties.name}\n` +
-           `steps:\n` +
-           workflowState.steps.map((step, i) => `  - step: ${i+1}\n    type: ${step.type}\n    name: "${step.name}"`).join('\n');
+  return (
+    `# Workflow: ${workflowState.properties.name}\n` +
+    `steps:\n` +
+    workflowState.steps
+      .map((step, i) => `  - step: ${i + 1}\n    type: ${step.type}\n    name: "${step.name}"`)
+      .join('\n')
+  );
 }
 
 function showGenerateModal(hash, yaml) {
-    document.getElementById('workflowCommand').textContent = `npx claude-code-templates@latest --workflow:#${hash}`;
-    document.getElementById('yamlContent').textContent = yaml;
-    document.getElementById('generateModal').style.display = 'block';
+  document.getElementById('workflowCommand').textContent =
+    `npx claude-code-templates@latest --workflow:#${hash}`;
+  document.getElementById('yamlContent').textContent = yaml;
+  document.getElementById('generateModal').style.display = 'block';
 }
 
-function showLoadingSpinner() { document.getElementById('loadingSpinner').style.display = 'flex'; }
-function hideLoadingSpinner() { document.getElementById('loadingSpinner').style.display = 'none'; }
-function showError(msg) { alert(msg); }
+function showLoadingSpinner() {
+  document.getElementById('loadingSpinner').style.display = 'flex';
+}
+function hideLoadingSpinner() {
+  document.getElementById('loadingSpinner').style.display = 'none';
+}
+function showError(msg) {
+  alert(msg);
+}
 
 async function showComponentDetails(type, name, path, category) {
-    const component = workflowState.components[type + 's'].find(c => c.name === name);
-    if (!component) {
-        console.warn('Component not found:', type, name);
-        return;
-    }
+  const component = workflowState.components[type + 's'].find((c) => c.name === name);
+  if (!component) {
+    console.warn('Component not found:', type, name);
+    return;
+  }
 
-    showComponentModal(component);
+  showComponentModal(component);
 }
 
 // Show detailed component modal (recreated from original version)
 function showComponentModal(component) {
-    const typeConfig = {
-        agent: { icon: '🤖', color: '#ff6b6b', label: 'AGENT' },
-        command: { icon: '⚡', color: '#4ecdc4', label: 'COMMAND' },
-        mcp: { icon: '🔌', color: '#45b7d1', label: 'MCP' }
-    };
-    
-    const config = typeConfig[component.type];
-    const installCommand = generateInstallCommand(component);
-    
-    const modalHTML = `
+  const typeConfig = {
+    agent: { icon: '🤖', color: '#ff6b6b', label: 'AGENT' },
+    command: { icon: '⚡', color: '#4ecdc4', label: 'COMMAND' },
+    mcp: { icon: '🔌', color: '#45b7d1', label: 'MCP' },
+  };
+
+  const config = typeConfig[component.type];
+  const installCommand = generateInstallCommand(component);
+
+  const modalHTML = `
         <div class="modal-overlay" onclick="closeComponentModal()">
             <div class="modal-content component-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
@@ -488,123 +593,133 @@ function showComponentModal(component) {
             </div>
         </div>
     `;
-    
-    // Remove existing modal if present
-    const existingModal = document.querySelector('.modal-overlay');
-    if (existingModal) {
-        existingModal.remove();
-    }
-    
-    // Add modal to body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Remove existing modal if present
+  const existingModal = document.querySelector('.modal-overlay');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
 // Helper functions for the modal
 function formatComponentName(name) {
-    return name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return name
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 function generateInstallCommand(component) {
-    return `npx claude-code-templates@latest --${component.type} "${component.path}"`;
+  return `npx claude-code-templates@latest --${component.type} "${component.path}"`;
 }
 
 function getComponentDescription(component) {
-    if (!component.content) {
-        return 'No description available.';
-    }
-    
-    // Try to extract description from frontmatter
-    const descMatch = component.content.match(/description:\s*(.+?)(?:\n|$)/);
-    if (descMatch) {
-        return descMatch[1].trim().replace(/^["']|["']$/g, '');
-    }
-    
-    // Use first paragraph if no frontmatter description
-    const lines = component.content.split('\n');
-    const firstParagraph = lines.find(line => line.trim() && !line.startsWith('---') && !line.startsWith('#'));
-    if (firstParagraph) {
-        return firstParagraph.trim();
-    }
-    
+  if (!component.content) {
     return 'No description available.';
+  }
+
+  // Try to extract description from frontmatter
+  const descMatch = component.content.match(/description:\s*(.+?)(?:\n|$)/);
+  if (descMatch) {
+    return descMatch[1].trim().replace(/^["']|["']$/g, '');
+  }
+
+  // Use first paragraph if no frontmatter description
+  const lines = component.content.split('\n');
+  const firstParagraph = lines.find(
+    (line) => line.trim() && !line.startsWith('---') && !line.startsWith('#')
+  );
+  if (firstParagraph) {
+    return firstParagraph.trim();
+  }
+
+  return 'No description available.';
 }
 
 function viewOnGitHub(path) {
-    const url = `https://github.com/davila7/claude-code-templates/tree/main/${path}`;
-    window.open(url, '_blank');
+  const url = `https://github.com/davila7/claude-code-templates/tree/main/${path}`;
+  window.open(url, '_blank');
 }
 
 function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        showSuccess('Command copied to clipboard!');
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      showSuccess('Command copied to clipboard!');
+    })
+    .catch((err) => {
+      console.error('Failed to copy: ', err);
     });
 }
 
 function closeComponentModal() {
-    const modalOverlay = document.querySelector('.modal-overlay');
-    if (modalOverlay) {
-        modalOverlay.remove();
-    }
+  const modalOverlay = document.querySelector('.modal-overlay');
+  if (modalOverlay) {
+    modalOverlay.remove();
+  }
 }
 
 function initializeModalEventListeners() {
-    // Component modal event listeners
-    document.getElementById('closeComponentModal').addEventListener('click', closeComponentModal);
-    document.getElementById('closeComponentModalBtn').addEventListener('click', closeComponentModal);
-    document.getElementById('addComponentToWorkflow').addEventListener('click', () => {
-        const componentData = JSON.parse(document.getElementById('componentModal').dataset.currentComponent);
-        addWorkflowStep({
-            componentType: componentData.type,
-            componentName: componentData.name,
-            componentPath: componentData.path,
-            componentCategory: componentData.category
-        });
-        closeComponentModal();
+  // Component modal event listeners
+  document.getElementById('closeComponentModal').addEventListener('click', closeComponentModal);
+  document.getElementById('closeComponentModalBtn').addEventListener('click', closeComponentModal);
+  document.getElementById('addComponentToWorkflow').addEventListener('click', () => {
+    const componentData = JSON.parse(
+      document.getElementById('componentModal').dataset.currentComponent
+    );
+    addWorkflowStep({
+      componentType: componentData.type,
+      componentName: componentData.name,
+      componentPath: componentData.path,
+      componentCategory: componentData.category,
     });
-    document.getElementById('copyUsageCommand').addEventListener('click', () => {
-        const command = document.getElementById('componentModalUsage').textContent;
-        navigator.clipboard.writeText(command).then(() => showSuccess('Command copied!'));
+    closeComponentModal();
+  });
+  document.getElementById('copyUsageCommand').addEventListener('click', () => {
+    const command = document.getElementById('componentModalUsage').textContent;
+    navigator.clipboard.writeText(command).then(() => showSuccess('Command copied!'));
+  });
+
+  // Generate modal event listeners
+  const closeModal = document.getElementById('closeModal');
+  if (closeModal) {
+    closeModal.addEventListener('click', () => {
+      document.getElementById('generateModal').style.display = 'none';
     });
+  }
 
-    // Generate modal event listeners
-    const closeModal = document.getElementById('closeModal');
-    if (closeModal) {
-        closeModal.addEventListener('click', () => {
-            document.getElementById('generateModal').style.display = 'none';
-        });
-    }
-
-    const copyCommand = document.getElementById('copyCommand');
-    if (copyCommand) {
-        copyCommand.addEventListener('click', () => {
-            const command = document.getElementById('workflowCommand').textContent;
-            navigator.clipboard.writeText(command).then(() => showSuccess('Command copied!'));
-        });
-    }
-
-    const copyYaml = document.getElementById('copyYaml');
-    if (copyYaml) {
-        copyYaml.addEventListener('click', () => {
-            const yaml = document.getElementById('yamlContent').textContent;
-            navigator.clipboard.writeText(yaml).then(() => showSuccess('YAML copied!'));
-        });
-    }
-
-    // Close modals when clicking outside
-    window.addEventListener('click', (event) => {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
-        }
+  const copyCommand = document.getElementById('copyCommand');
+  if (copyCommand) {
+    copyCommand.addEventListener('click', () => {
+      const command = document.getElementById('workflowCommand').textContent;
+      navigator.clipboard.writeText(command).then(() => showSuccess('Command copied!'));
     });
+  }
+
+  const copyYaml = document.getElementById('copyYaml');
+  if (copyYaml) {
+    copyYaml.addEventListener('click', () => {
+      const yaml = document.getElementById('yamlContent').textContent;
+      navigator.clipboard.writeText(yaml).then(() => showSuccess('YAML copied!'));
+    });
+  }
+
+  // Close modals when clicking outside
+  window.addEventListener('click', (event) => {
+    if (event.target.classList.contains('modal')) {
+      event.target.style.display = 'none';
+    }
+  });
 }
 
 function showSuccess(message) {
-    // Simple success notification
-    const notification = document.createElement('div');
-    notification.textContent = message;
-    notification.style.cssText = `
+  // Simple success notification
+  const notification = document.createElement('div');
+  notification.textContent = message;
+  notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
@@ -615,10 +730,10 @@ function showSuccess(message) {
         z-index: 10000;
         font-family: system-ui, -apple-system, sans-serif;
     `;
-    document.body.appendChild(notification);
-    setTimeout(() => {
-        document.body.removeChild(notification);
-    }, 2000);
+  document.body.appendChild(notification);
+  setTimeout(() => {
+    document.body.removeChild(notification);
+  }, 2000);
 }
 
 // Add functions to window object for inline event handlers

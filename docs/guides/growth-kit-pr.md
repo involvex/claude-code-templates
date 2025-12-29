@@ -54,21 +54,25 @@ Built by [Kanaeru Labs](https://www.kanaeru.ai) while building Kanaeru AI, these
 ## Key Features
 
 ✅ **Universal Input Support**
+
 - Blog post slugs (e.g., `2025-10-06-my-post`)
 - File paths (markdown, PDF, HTML, text)
 - URLs (fetches and converts)
 
 ✅ **Zero Dependencies**
+
 - Works in ANY repo type (Python, Rust, Go, JavaScript, etc.)
 - Uses only Claude's built-in tools (Read, Write, Bash, Glob, WebFetch)
 - No Node.js/npm required (except for Vercel Analytics)
 
 ✅ **Multi-Language Support**
+
 - English and Japanese (EN/JA)
 - Auto-detects language from content/path
 - Platform-specific tone and formatting
 
 ✅ **Production-Ready**
+
 - Tested at Kanaeru Labs in production
 - Handles LinkedIn API authentication
 - Proper character counting for X/Twitter
@@ -77,6 +81,7 @@ Built by [Kanaeru Labs](https://www.kanaeru.ai) while building Kanaeru AI, these
 ## Use Cases
 
 **For Blog Authors:**
+
 ```bash
 # Distribute a blog post across all platforms
 /publisher-all my-latest-post
@@ -89,6 +94,7 @@ Built by [Kanaeru Labs](https://www.kanaeru.ai) while building Kanaeru AI, these
 ```
 
 **For Content Marketers:**
+
 ```bash
 # Convert any URL to X thread
 /publisher-x https://competitor.com/article
@@ -101,6 +107,7 @@ Built by [Kanaeru Labs](https://www.kanaeru.ai) while building Kanaeru AI, these
 ```
 
 **For Developers:**
+
 ```bash
 # Add analytics to React app
 /vercel-analytics
@@ -109,6 +116,7 @@ Built by [Kanaeru Labs](https://www.kanaeru.ai) while building Kanaeru AI, these
 ## Testing
 
 All commands have been:
+
 - ✅ Tested in production at Kanaeru Labs
 - ✅ Validated across multiple blog structures
 - ✅ Verified to work in Python, Rust, Go, and JavaScript repos
@@ -117,16 +125,19 @@ All commands have been:
 ## Benefits to the Community
 
 **Time Savings:**
+
 - X thread generation: ~30 minutes → 2 minutes
 - All platforms: ~2 hours → 5 minutes
 - One-time Dev.to setup enables automatic future syndication
 
 **Developer-Friendly:**
+
 - No configuration required (auto-detects blog structure)
 - Works universally (any repo type, any framework)
 - Clear error messages and helpful prompts
 
 **Production Quality:**
+
 - Proper API authentication handling
 - Character limit validation
 - Multi-language support
@@ -135,11 +146,13 @@ All commands have been:
 ## Integration Notes
 
 **File Locations:**
+
 - Marketing commands: `cli-tool/components/commands/marketing/`
 - Analytics command: `cli-tool/components/commands/setup/`
 
 **Frontmatter Format:**
 All commands include proper frontmatter:
+
 ```yaml
 ---
 allowed-tools: Read, Write, Bash, Glob, WebFetch
@@ -156,6 +169,7 @@ Commands will be automatically discovered by the `scripts/generate_components_js
 Available at: https://github.com/kanaerulabs/growth-kit
 
 See the Growth Kit README for visual examples of:
+
 - X thread preview with 3 format tabs
 - LinkedIn post with PDF attachment
 - Medium article preview

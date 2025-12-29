@@ -29,7 +29,7 @@ export async function sendDiscordNotification(versionData) {
     changes: formatted,
     summary,
     npmUrl,
-    githubUrl
+    githubUrl,
   });
 
   // Enviar a Discord
@@ -42,7 +42,7 @@ export async function sendDiscordNotification(versionData) {
   const payload = {
     username: 'Claude Code Monitor',
     avatar_url: 'https://raw.githubusercontent.com/anthropics/claude-code/main/assets/icon.png',
-    embeds: [embed]
+    embeds: [embed],
   };
 
   try {
@@ -52,7 +52,7 @@ export async function sendDiscordNotification(versionData) {
       success: true,
       status: response.status,
       webhookUrl,
-      payload
+      payload,
     };
   } catch (error) {
     console.error('Discord webhook error:', error.response?.data || error.message);
@@ -68,13 +68,13 @@ function buildDiscordEmbed({ version, changes, summary, npmUrl, githubUrl }) {
     title: `🚀 Claude Code ${version} Released`,
     description: `A new version of Claude Code is available with **${summary.total} changes**!`,
     url: githubUrl,
-    color: 0x8B5CF6, // Purple (Claude color)
+    color: 0x8b5cf6, // Purple (Claude color)
     fields: [],
     footer: {
       text: 'Claude Code Changelog Monitor',
-      icon_url: 'https://avatars.githubusercontent.com/u/100788936?s=200&v=4'
+      icon_url: 'https://avatars.githubusercontent.com/u/100788936?s=200&v=4',
     },
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   // Breaking changes (prioritario)
@@ -82,7 +82,7 @@ function buildDiscordEmbed({ version, changes, summary, npmUrl, githubUrl }) {
     embed.fields.push({
       name: '⚠️ Breaking Changes',
       value: changes.breaking || 'None',
-      inline: false
+      inline: false,
     });
   }
 
@@ -91,7 +91,7 @@ function buildDiscordEmbed({ version, changes, summary, npmUrl, githubUrl }) {
     embed.fields.push({
       name: '✨ New Features',
       value: changes.features || 'None',
-      inline: false
+      inline: false,
     });
   }
 
@@ -100,7 +100,7 @@ function buildDiscordEmbed({ version, changes, summary, npmUrl, githubUrl }) {
     embed.fields.push({
       name: '⚡ Improvements',
       value: changes.improvements || 'None',
-      inline: false
+      inline: false,
     });
   }
 
@@ -109,7 +109,7 @@ function buildDiscordEmbed({ version, changes, summary, npmUrl, githubUrl }) {
     embed.fields.push({
       name: '🐛 Bug Fixes',
       value: changes.fixes || 'None',
-      inline: false
+      inline: false,
     });
   }
 
@@ -117,13 +117,13 @@ function buildDiscordEmbed({ version, changes, summary, npmUrl, githubUrl }) {
   embed.fields.push({
     name: '📦 Installation',
     value: `\`\`\`bash\nnpm install -g @anthropic-ai/claude-code@${version}\n\`\`\``,
-    inline: false
+    inline: false,
   });
 
   embed.fields.push({
     name: '🔗 Links',
     value: `[NPM Package](${npmUrl}) • [Full Changelog](${githubUrl})`,
-    inline: false
+    inline: false,
   });
 
   return embed;
@@ -192,7 +192,7 @@ export async function processAndNotify(versionId) {
     return {
       status: 'already_notified',
       version: versionData.version,
-      message: 'Version already notified to Discord'
+      message: 'Version already notified to Discord',
     };
   }
 
@@ -201,7 +201,7 @@ export async function processAndNotify(versionId) {
     version: versionData.version,
     changelog: versionData.changelog_content,
     npmUrl: versionData.npm_url,
-    githubUrl: versionData.github_url
+    githubUrl: versionData.github_url,
   });
 
   // Guardar log
@@ -213,7 +213,7 @@ export async function processAndNotify(versionId) {
   return {
     status: 'notified',
     version: versionData.version,
-    notificationResult
+    notificationResult,
   };
 }
 
@@ -248,14 +248,13 @@ export default async function handler(req, res) {
     console.log(`✅ Notification processed: ${result.status}`);
 
     return res.status(200).json(result);
-
   } catch (error) {
     console.error('❌ Discord notification error:', error);
 
     return res.status(500).json({
       error: 'Failed to send Discord notification',
       message: error.message,
-      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined,
     });
   }
 }

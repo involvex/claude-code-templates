@@ -157,6 +157,7 @@ vercel logs aitmpl.com --follow
 ### Database Queries
 
 **Supabase**:
+
 ```sql
 SELECT type, name, COUNT(*) as downloads
 FROM component_downloads
@@ -166,6 +167,7 @@ ORDER BY downloads DESC;
 ```
 
 **Neon**:
+
 ```sql
 SELECT version, published_at, discord_notified
 FROM claude_code_versions

@@ -96,8 +96,8 @@ const resolvers = {
   Subscription: {
     messageAdded: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator(["MESSAGE_ADDED"]),
-        (payload, variables) => payload.channelId === variables.channelId,
+        () => pubsub.asyncIterator(['MESSAGE_ADDED']),
+        (payload, variables) => payload.channelId === variables.channelId
       ),
     },
   },
@@ -125,7 +125,7 @@ class GraphQLError extends Error {
 
 // Usage in resolvers
 if (!user) {
-  throw new GraphQLError("User not found", "USER_NOT_FOUND", {
+  throw new GraphQLError('User not found', 'USER_NOT_FOUND', {
     userId: id,
   });
 }

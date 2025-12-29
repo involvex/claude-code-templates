@@ -177,7 +177,7 @@ name: Component Security Validation
 on:
   pull_request:
     paths:
-      - "cli-tool/components/**/*.md"
+      - 'cli-tool/components/**/*.md'
   push:
     branches:
       - main
@@ -191,7 +191,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: Install dependencies
         run: |

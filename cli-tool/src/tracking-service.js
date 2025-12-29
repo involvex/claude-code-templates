@@ -15,9 +15,9 @@ class TrackingService {
   shouldEnableTracking() {
     // Allow users to opt-out
     if (
-      process.env.CCT_NO_TRACKING === "true" ||
-      process.env.CCT_NO_ANALYTICS === "true" ||
-      process.env.CI === "true"
+      process.env.CCT_NO_TRACKING === 'true' ||
+      process.env.CCT_NO_ANALYTICS === 'true' ||
+      process.env.CI === 'true'
     ) {
       return false;
     }
@@ -39,25 +39,21 @@ class TrackingService {
 
     try {
       // Create tracking payload
-      const trackingData = this.createTrackingPayload(
-        componentType,
-        componentName,
-        metadata,
-      );
+      const trackingData = this.createTrackingPayload(componentType, componentName, metadata);
 
       // Fire-and-forget tracking (don't block user experience)
       this.sendTrackingData(trackingData).catch((error) => {
         // Silent failure - tracking should never impact functionality
         // Only show debug info when explicitly enabled
-        if (process.env.CCT_DEBUG === "true") {
-          console.debug("📊 Tracking info (non-critical):", error.message);
+        if (process.env.CCT_DEBUG === 'true') {
+          console.debug('📊 Tracking info (non-critical):', error.message);
         }
       });
     } catch (error) {
       // Silently handle any tracking errors
       // Only show debug info when explicitly enabled
-      if (process.env.CCT_DEBUG === "true") {
-        console.debug("📊 Analytics error (non-critical):", error.message);
+      if (process.env.CCT_DEBUG === 'true') {
+        console.debug('📊 Analytics error (non-critical):', error.message);
       }
     }
   }
@@ -69,7 +65,7 @@ class TrackingService {
     const timestamp = new Date().toISOString();
 
     return {
-      event: "component_download",
+      event: 'component_download',
       component_type: componentType,
       component_name: componentName,
       timestamp: timestamp,
@@ -97,14 +93,14 @@ class TrackingService {
 
       clearTimeout(timeoutId);
 
-      if (process.env.CCT_DEBUG === "true") {
-        console.debug("📊 Download tracked successfully");
+      if (process.env.CCT_DEBUG === 'true') {
+        console.debug('📊 Download tracked successfully');
       }
     } catch (error) {
       clearTimeout(timeoutId);
       // Silent fail - tracking should never break user experience
-      if (process.env.CCT_DEBUG === "true") {
-        console.debug("📊 Tracking failed (non-critical):", error.message);
+      if (process.env.CCT_DEBUG === 'true') {
+        console.debug('📊 Tracking failed (non-critical):', error.message);
       }
     }
   }
@@ -123,50 +119,45 @@ class TrackingService {
       // Extract category from metadata or component name
       const category =
         trackingData.metadata?.category ||
-        (trackingData.component_name.includes("/")
-          ? trackingData.component_name.split("/")[0]
-          : "general");
+        (trackingData.component_name.includes('/')
+          ? trackingData.component_name.split('/')[0]
+          : 'general');
 
       const payload = {
         type: trackingData.component_type,
         name: trackingData.component_name,
         path: componentPath,
         category: category,
-        cliVersion: trackingData.environment?.cli_version || "unknown",
+        cliVersion: trackingData.environment?.cli_version || 'unknown',
       };
 
-      const response = await fetch(
-        "https://www.aitmpl.com/api/track-download-supabase",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "User-Agent": `claude-code-templates/${trackingData.environment?.cli_version || "unknown"}`,
-          },
-          body: JSON.stringify(payload),
-          signal: signal,
+      const response = await fetch('https://www.aitmpl.com/api/track-download-supabase', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': `claude-code-templates/${trackingData.environment?.cli_version || 'unknown'}`,
         },
-      );
+        body: JSON.stringify(payload),
+        signal: signal,
+      });
 
-      if (process.env.CCT_DEBUG === "true") {
-        console.debug("📊 Payload sent:", JSON.stringify(payload, null, 2));
+      if (process.env.CCT_DEBUG === 'true') {
+        console.debug('📊 Payload sent:', JSON.stringify(payload, null, 2));
         if (response.ok) {
-          console.debug("📊 Successfully saved to database");
+          console.debug('📊 Successfully saved to database');
         } else {
-          console.debug(
-            `📊 Database save failed with status: ${response.status}`,
-          );
+          console.debug(`📊 Database save failed with status: ${response.status}`);
           try {
             const errorText = await response.text();
-            console.debug("📊 Error response:", errorText);
+            console.debug('📊 Error response:', errorText);
           } catch (e) {
-            console.debug("📊 Could not read error response");
+            console.debug('📊 Could not read error response');
           }
         }
       }
     } catch (error) {
-      if (process.env.CCT_DEBUG === "true") {
-        console.debug("📊 Database tracking failed:", error.message);
+      if (process.env.CCT_DEBUG === 'true') {
+        console.debug('📊 Database tracking failed:', error.message);
       }
       // Don't throw - tracking should be non-blocking
     }
@@ -177,8 +168,7 @@ class TrackingService {
    */
   generateSessionId() {
     return (
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15)
+      Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
     );
   }
 
@@ -187,13 +177,13 @@ class TrackingService {
    */
   getCliVersion() {
     try {
-      const path = require("path");
-      const fs = require("fs");
-      const packagePath = path.join(__dirname, "..", "package.json");
-      const packageData = JSON.parse(fs.readFileSync(packagePath, "utf8"));
-      return packageData.version || "unknown";
+      const path = require('path');
+      const fs = require('fs');
+      const packagePath = path.join(__dirname, '..', 'package.json');
+      const packageData = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+      return packageData.version || 'unknown';
     } catch (error) {
-      return "unknown";
+      return 'unknown';
     }
   }
 
@@ -201,9 +191,9 @@ class TrackingService {
    * Track template installation (full project setup)
    */
   async trackTemplateInstallation(language, framework, metadata = {}) {
-    return this.trackDownload("template", `${language}/${framework}`, {
+    return this.trackDownload('template', `${language}/${framework}`, {
       ...metadata,
-      installation_type: "full_template",
+      installation_type: 'full_template',
     });
   }
 
@@ -211,8 +201,8 @@ class TrackingService {
    * Track health check usage
    */
   async trackHealthCheck(results = {}) {
-    return this.trackDownload("health-check", "system-validation", {
-      installation_type: "health_check",
+    return this.trackDownload('health-check', 'system-validation', {
+      installation_type: 'health_check',
       results_summary: results,
     });
   }
@@ -221,8 +211,8 @@ class TrackingService {
    * Track analytics dashboard usage
    */
   async trackAnalyticsDashboard(metadata = {}) {
-    return this.trackDownload("analytics", "dashboard-launch", {
-      installation_type: "analytics_dashboard",
+    return this.trackDownload('analytics', 'dashboard-launch', {
+      installation_type: 'analytics_dashboard',
       ...metadata,
     });
   }
@@ -250,19 +240,13 @@ class TrackingService {
 
       // Fire-and-forget to Neon Database
       this.sendCommandTracking(payload).catch((error) => {
-        if (process.env.CCT_DEBUG === "true") {
-          console.debug(
-            "📊 Command tracking info (non-critical):",
-            error.message,
-          );
+        if (process.env.CCT_DEBUG === 'true') {
+          console.debug('📊 Command tracking info (non-critical):', error.message);
         }
       });
     } catch (error) {
-      if (process.env.CCT_DEBUG === "true") {
-        console.debug(
-          "📊 Command tracking error (non-critical):",
-          error.message,
-        );
+      if (process.env.CCT_DEBUG === 'true') {
+        console.debug('📊 Command tracking error (non-critical):', error.message);
       }
     }
   }
@@ -275,37 +259,29 @@ class TrackingService {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      const response = await fetch(
-        "https://www.aitmpl.com/api/track-command-usage",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "User-Agent": `claude-code-templates/${payload.cliVersion}`,
-          },
-          body: JSON.stringify(payload),
-          signal: controller.signal,
+      const response = await fetch('https://www.aitmpl.com/api/track-command-usage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': `claude-code-templates/${payload.cliVersion}`,
         },
-      );
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
 
       clearTimeout(timeoutId);
 
-      if (process.env.CCT_DEBUG === "true") {
+      if (process.env.CCT_DEBUG === 'true') {
         if (response.ok) {
-          console.debug("📊 Command execution tracked successfully");
+          console.debug('📊 Command execution tracked successfully');
         } else {
-          console.debug(
-            `📊 Command tracking failed with status: ${response.status}`,
-          );
+          console.debug(`📊 Command tracking failed with status: ${response.status}`);
         }
       }
     } catch (error) {
       clearTimeout(timeoutId);
-      if (process.env.CCT_DEBUG === "true") {
-        console.debug(
-          "📊 Command tracking failed (non-critical):",
-          error.message,
-        );
+      if (process.env.CCT_DEBUG === 'true') {
+        console.debug('📊 Command tracking failed (non-critical):', error.message);
       }
     }
   }

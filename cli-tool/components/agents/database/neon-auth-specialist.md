@@ -63,14 +63,10 @@ DATABASE_URL=your_neon_connection_string
 
 ```tsx
 // app/layout.tsx
-import { StackProvider, StackTheme } from "@stackframe/stack";
-import { stackServerApp } from "@/stack";
+import { StackProvider, StackTheme } from '@stackframe/stack';
+import { stackServerApp } from '@/stack';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html>
       <body>
@@ -106,11 +102,11 @@ CREATE INDEX users_sync_deleted_at_idx ON neon_auth.users_sync (deleted_at);
 
 ```tsx
 // Client Component
-"use client";
-import { useUser } from "@stackframe/stack";
+'use client';
+import { useUser } from '@stackframe/stack';
 
 export function UserProfile() {
-  const user = useUser({ or: "redirect" });
+  const user = useUser({ or: 'redirect' });
 
   return (
     <div>
@@ -124,10 +120,10 @@ export function UserProfile() {
 
 ```tsx
 // Server Component
-import { stackServerApp } from "@/stack";
+import { stackServerApp } from '@/stack';
 
 export default async function ProtectedPage() {
-  const user = await stackServerApp.getUser({ or: "redirect" });
+  const user = await stackServerApp.getUser({ or: 'redirect' });
 
   return <div>Hello, {user.displayName}</div>;
 }
@@ -162,20 +158,20 @@ WHERE
 
 ```tsx
 // middleware.ts
-import { stackServerApp } from "@/stack";
-import { NextRequest, NextResponse } from "next/server";
+import { stackServerApp } from '@/stack';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   const user = await stackServerApp.getUser();
 
-  if (!user && request.nextUrl.pathname.startsWith("/protected")) {
-    return NextResponse.redirect(new URL("/handler/sign-in", request.url));
+  if (!user && request.nextUrl.pathname.startsWith('/protected')) {
+    return NextResponse.redirect(new URL('/handler/sign-in', request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/protected/:path*", "/dashboard/:path*"],
+  matcher: ['/protected/:path*', '/dashboard/:path*'],
 };
 ```

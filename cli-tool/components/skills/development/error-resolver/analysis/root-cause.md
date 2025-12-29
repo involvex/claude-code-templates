@@ -183,7 +183,7 @@ Create smallest code that reproduces error:
 // Add code piece by piece until error appears
 
 // Step 1 - Basic setup
-const express = require("express");
+const express = require('express');
 const app = express();
 // No error yet
 
@@ -192,7 +192,7 @@ app.use(express.json());
 // No error yet
 
 // Step 3 - Add route
-app.get("/user", async (req, res) => {
+app.get('/user', async (req, res) => {
   const user = await getUser(req.query.id);
   res.json({ name: user.name }); // ERROR HERE!
 });
@@ -265,16 +265,16 @@ Error!
 
 ```javascript
 async function processOrder(orderId) {
-  console.log("[1] Input:", orderId);
+  console.log('[1] Input:', orderId);
 
   const order = await getOrder(orderId);
-  console.log("[2] Order:", JSON.stringify(order));
+  console.log('[2] Order:', JSON.stringify(order));
 
   const user = await getUser(order.userId);
-  console.log("[3] User:", JSON.stringify(user));
+  console.log('[3] User:', JSON.stringify(user));
 
   const result = calculateTotal(order, user);
-  console.log("[4] Result:", result);
+  console.log('[4] Result:', result);
 
   return result;
 }

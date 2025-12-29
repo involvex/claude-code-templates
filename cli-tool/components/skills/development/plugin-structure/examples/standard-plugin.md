@@ -50,13 +50,7 @@ code-quality/
   "homepage": "https://docs.example.com/plugins/code-quality",
   "repository": "https://github.com/example/code-quality-plugin",
   "license": "MIT",
-  "keywords": [
-    "code-quality",
-    "linting",
-    "testing",
-    "code-review",
-    "automation"
-  ]
+  "keywords": ["code-quality", "linting", "testing", "code-review", "automation"]
 }
 ```
 

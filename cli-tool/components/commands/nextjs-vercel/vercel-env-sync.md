@@ -39,12 +39,12 @@ interface EnvironmentConfig {
 }
 
 const environmentFiles = {
-  ".env.local": "Local development overrides",
-  ".env.development": "Development environment",
-  ".env.staging": "Staging/preview environment",
-  ".env.production": "Production environment",
-  ".env": "Default environment (committed to git)",
-  ".env.example": "Environment template (safe to commit)",
+  '.env.local': 'Local development overrides',
+  '.env.development': 'Development environment',
+  '.env.staging': 'Staging/preview environment',
+  '.env.production': 'Production environment',
+  '.env': 'Default environment (committed to git)',
+  '.env.example': 'Environment template (safe to commit)',
 };
 ```
 
@@ -184,28 +184,28 @@ interface ValidationRule {
 
 const validationRules: ValidationRule[] = [
   {
-    name: "DATABASE_URL",
+    name: 'DATABASE_URL',
     required: true,
     pattern: /^(postgresql|mysql|sqlite):\/\/.+/,
-    description: "Database connection string",
+    description: 'Database connection string',
   },
   {
-    name: "NEXTAUTH_SECRET",
+    name: 'NEXTAUTH_SECRET',
     required: true,
     pattern: /.{32,}/,
-    description: "NextAuth.js secret key (min 32 characters)",
+    description: 'NextAuth.js secret key (min 32 characters)',
   },
   {
-    name: "NEXTAUTH_URL",
+    name: 'NEXTAUTH_URL',
     required: true,
     pattern: /^https?:\/\/.+/,
-    description: "NextAuth.js canonical URL",
+    description: 'NextAuth.js canonical URL',
   },
   {
-    name: "API_KEY",
+    name: 'API_KEY',
     required: false,
     pattern: /^[A-Za-z0-9_-]+$/,
-    description: "API key for external services",
+    description: 'API key for external services',
   },
 ];
 
@@ -231,12 +231,12 @@ function validateEnvironment(envFile: string): ValidationResult {
   // Check for common issues
   Object.entries(env).forEach(([key, value]) => {
     // Check for placeholder values
-    if (value === "your-secret-here" || value === "change-me") {
+    if (value === 'your-secret-here' || value === 'change-me') {
       warnings.push(`Placeholder value detected for ${key}`);
     }
 
     // Check for potentially committed secrets
-    if (key.includes("SECRET") || key.includes("PRIVATE")) {
+    if (key.includes('SECRET') || key.includes('PRIVATE')) {
       if (value.length < 16) {
         warnings.push(`${key} appears to be too short for a secret`);
       }
@@ -354,7 +354,7 @@ interface EnvironmentDiff {
 
 function compareEnvironments(
   local: Record<string, string>,
-  remote: Record<string, string>,
+  remote: Record<string, string>
 ): EnvironmentDiff {
   const diff: EnvironmentDiff = {
     added: [],
@@ -386,26 +386,26 @@ function compareEnvironments(
 
 // Generate diff report
 function generateDiffReport(diff: EnvironmentDiff): string {
-  let report = "# Environment Variables Comparison\n\n";
+  let report = '# Environment Variables Comparison\n\n';
 
   if (diff.added.length > 0) {
-    report += "## ➕ Variables in Remote (not in Local)\n";
+    report += '## ➕ Variables in Remote (not in Local)\n';
     diff.added.forEach((key) => {
       report += `- \`${key}\`\n`;
     });
-    report += "\n";
+    report += '\n';
   }
 
   if (diff.removed.length > 0) {
-    report += "## ➖ Variables in Local (not in Remote)\n";
+    report += '## ➖ Variables in Local (not in Remote)\n';
     diff.removed.forEach((key) => {
       report += `- \`${key}\`\n`;
     });
-    report += "\n";
+    report += '\n';
   }
 
   if (diff.modified.length > 0) {
-    report += "## 🔄 Modified Variables\n";
+    report += '## 🔄 Modified Variables\n';
     diff.modified.forEach(({ key, local, remote }) => {
       report += `### \`${key}\`\n`;
       report += `- **Local**: \`${maskSensitive(local)}\`\n`;
@@ -415,7 +415,7 @@ function generateDiffReport(diff: EnvironmentDiff): string {
 
   if (diff.unchanged.length > 0) {
     report += `## ✅ Unchanged Variables (${diff.unchanged.length})\n`;
-    report += `${diff.unchanged.map((key) => `- \`${key}\``).join("\n")}\n\n`;
+    report += `${diff.unchanged.map((key) => `- \`${key}\``).join('\n')}\n\n`;
   }
 
   return report;
@@ -424,9 +424,9 @@ function generateDiffReport(diff: EnvironmentDiff): string {
 function maskSensitive(value: string): string {
   // Mask sensitive values for security
   if (value.length <= 8) {
-    return "*".repeat(value.length);
+    return '*'.repeat(value.length);
   }
-  return `${value.substring(0, 4)}${"*".repeat(value.length - 8)}${value.substring(value.length - 4)}`;
+  return `${value.substring(0, 4)}${'*'.repeat(value.length - 8)}${value.substring(value.length - 4)}`;
 }
 ```
 
@@ -436,8 +436,8 @@ function maskSensitive(value: string): string {
 // Generate .env.example from existing environment
 function generateEnvExample(envFile: string): string {
   const env = readEnvironmentFile(envFile);
-  let template = "# Environment Variables Template\n";
-  template += "# Copy this file to .env.local and fill in the values\n\n";
+  let template = '# Environment Variables Template\n';
+  template += '# Copy this file to .env.local and fill in the values\n\n';
 
   const categories = categorizeVariables(env);
 
@@ -447,7 +447,7 @@ function generateEnvExample(envFile: string): string {
       if (description) {
         template += `# ${description}\n`;
       }
-      template += `${key}=${example || "your-value-here"}\n\n`;
+      template += `${key}=${example || 'your-value-here'}\n\n`;
     });
   });
 
@@ -470,17 +470,17 @@ function categorizeVariables(env: Record<string, string>) {
   };
 
   Object.keys(env).forEach((key) => {
-    if (key.includes("DATABASE") || key.includes("DB_")) {
+    if (key.includes('DATABASE') || key.includes('DB_')) {
       categories.database.push({
         key,
         description: getDatabaseDescription(key),
       });
-    } else if (key.includes("AUTH") || key.includes("SECRET")) {
+    } else if (key.includes('AUTH') || key.includes('SECRET')) {
       categories.authentication.push({
         key,
         description: getAuthDescription(key),
       });
-    } else if (key.includes("API_KEY") || key.includes("_TOKEN")) {
+    } else if (key.includes('API_KEY') || key.includes('_TOKEN')) {
       categories.external_apis.push({
         key,
         description: getApiDescription(key),
@@ -497,26 +497,26 @@ function categorizeVariables(env: Record<string, string>) {
 }
 
 function getDatabaseDescription(key: string): string {
-  if (key === "DATABASE_URL") return "Database connection string";
-  if (key === "DB_HOST") return "Database host";
-  if (key === "DB_PORT") return "Database port";
-  if (key === "DB_NAME") return "Database name";
-  return "Database configuration";
+  if (key === 'DATABASE_URL') return 'Database connection string';
+  if (key === 'DB_HOST') return 'Database host';
+  if (key === 'DB_PORT') return 'Database port';
+  if (key === 'DB_NAME') return 'Database name';
+  return 'Database configuration';
 }
 
 function getAuthDescription(key: string): string {
-  if (key === "NEXTAUTH_SECRET") return "NextAuth.js secret key";
-  if (key === "NEXTAUTH_URL") return "NextAuth.js canonical URL";
-  if (key === "JWT_SECRET") return "JWT secret key";
-  return "Authentication configuration";
+  if (key === 'NEXTAUTH_SECRET') return 'NextAuth.js secret key';
+  if (key === 'NEXTAUTH_URL') return 'NextAuth.js canonical URL';
+  if (key === 'JWT_SECRET') return 'JWT secret key';
+  return 'Authentication configuration';
 }
 
 function getApiDescription(key: string): string {
-  return `API key for ${key.toLowerCase().replace(/_/g, " ")}`;
+  return `API key for ${key.toLowerCase().replace(/_/g, ' ')}`;
 }
 
 function getConfigDescription(key: string): string {
-  return `Configuration for ${key.toLowerCase().replace(/_/g, " ")}`;
+  return `Configuration for ${key.toLowerCase().replace(/_/g, ' ')}`;
 }
 ```
 
@@ -609,14 +609,14 @@ name: Environment Sync
 on:
   push:
     branches: [main, develop]
-    paths: [".env.example", ".env.*"]
+    paths: ['.env.example', '.env.*']
 
   workflow_dispatch:
     inputs:
       action:
-        description: "Sync action"
+        description: 'Sync action'
         required: true
-        default: "validate"
+        default: 'validate'
         type: choice
         options:
           - validate

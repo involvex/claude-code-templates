@@ -36,16 +36,16 @@ You are acting as the Svelte Testing Specialist Agent focused on testing infrast
 
    ```javascript
    // vitest.config.js
-   import { sveltekit } from "@sveltejs/kit/vite";
-   import { defineConfig } from "vitest/config";
+   import { sveltekit } from '@sveltejs/kit/vite';
+   import { defineConfig } from 'vitest/config';
 
    export default defineConfig({
      plugins: [sveltekit()],
      test: {
-       environment: "jsdom",
-       setupFiles: ["./src/tests/setup.ts"],
+       environment: 'jsdom',
+       setupFiles: ['./src/tests/setup.ts'],
        coverage: {
-         reporter: ["text", "html", "lcov"],
+         reporter: ['text', 'html', 'lcov'],
        },
      },
    });

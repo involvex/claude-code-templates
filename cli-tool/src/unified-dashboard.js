@@ -1,7 +1,7 @@
-const express = require("express");
-const path = require("path");
-const chalk = require("chalk");
-const open = require("open");
+const express = require('express');
+const path = require('path');
+const chalk = require('chalk');
+const open = require('open');
 
 /**
  * Unified Dashboard Server
@@ -13,48 +13,45 @@ class UnifiedDashboard {
     this.options = options;
     this.app = express();
     this.port = options.port || 3339;
-    this.host = options.host || "localhost";
+    this.host = options.host || 'localhost';
     this.httpServer = null;
 
     // Dashboard configurations
     this.dashboards = {
       analytics: {
         port: 3333,
-        name: "Analytics",
-        icon: "📊",
-        path: "/analytics",
+        name: 'Analytics',
+        icon: '📊',
+        path: '/analytics',
       },
-      chats: { port: 3335, name: "Chats", icon: "💬", path: "/chats" },
-      plugins: { port: 3336, name: "Plugins", icon: "🔌", path: "/plugins" },
-      skills: { port: 3337, name: "Skills", icon: "🎯", path: "/skills" },
-      hooks: { port: 3338, name: "Hooks", icon: "🪝", path: "/hooks" },
+      chats: { port: 3335, name: 'Chats', icon: '💬', path: '/chats' },
+      plugins: { port: 3336, name: 'Plugins', icon: '🔌', path: '/plugins' },
+      skills: { port: 3337, name: 'Skills', icon: '🎯', path: '/skills' },
+      hooks: { port: 3338, name: 'Hooks', icon: '🪝', path: '/hooks' },
     };
 
-    this.defaultDashboard = options.defaultDashboard || "analytics";
+    this.defaultDashboard = options.defaultDashboard || 'analytics';
   }
 
   setupRoutes() {
     // CORS middleware
     this.app.use((req, res, next) => {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, OPTIONS",
-      );
-      res.header("Access-Control-Allow-Headers", "Content-Type");
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type');
       next();
     });
 
     // Serve shared navigation files
-    const sharedDir = path.join(__dirname, "shared");
-    this.app.use("/shared", express.static(sharedDir));
+    const sharedDir = path.join(__dirname, 'shared');
+    this.app.use('/shared', express.static(sharedDir));
 
     // Serve unified dashboard web files
-    const webDir = path.join(__dirname, "unified-dashboard-web");
+    const webDir = path.join(__dirname, 'unified-dashboard-web');
     this.app.use(express.static(webDir));
 
     // API: Get dashboard configuration
-    this.app.get("/api/dashboards", (req, res) => {
+    this.app.get('/api/dashboards', (req, res) => {
       res.json({
         dashboards: this.dashboards,
         defaultDashboard: this.defaultDashboard,
@@ -64,14 +61,14 @@ class UnifiedDashboard {
     });
 
     // API: Check dashboard status
-    this.app.get("/api/status/:dashboard", async (req, res) => {
+    this.app.get('/api/status/:dashboard', async (req, res) => {
       const dashboard = this.dashboards[req.params.dashboard];
       if (!dashboard) {
-        return res.status(404).json({ error: "Dashboard not found" });
+        return res.status(404).json({ error: 'Dashboard not found' });
       }
 
       try {
-        const fetch = require("node-fetch");
+        const fetch = require('node-fetch');
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 2000);
 
@@ -90,14 +87,14 @@ class UnifiedDashboard {
     Object.entries(this.dashboards).forEach(([key, config]) => {
       this.app.get(config.path, (req, res) => {
         res.redirect(
-          `http://localhost:${config.port}${req.query.scope ? "?scope=" + req.query.scope : ""}`,
+          `http://localhost:${config.port}${req.query.scope ? '?scope=' + req.query.scope : ''}`
         );
       });
     });
 
     // Main route - serve unified dashboard
-    this.app.get("/", (req, res) => {
-      res.sendFile(path.join(webDir, "index.html"));
+    this.app.get('/', (req, res) => {
+      res.sendFile(path.join(webDir, 'index.html'));
     });
   }
 
@@ -112,23 +109,17 @@ class UnifiedDashboard {
         .listen(port, this.host, () => {
           this.port = port;
           console.log(
-            chalk.green(
-              `\n🎛️  Unified Dashboard running at http://${this.host}:${port}`,
-            ),
+            chalk.green(`\n🎛️  Unified Dashboard running at http://${this.host}:${port}`)
           );
           console.log(chalk.gray(`   Default view: ${this.defaultDashboard}`));
           console.log(
-            chalk.gray(
-              `   Available dashboards: ${Object.keys(this.dashboards).length}\n`,
-            ),
+            chalk.gray(`   Available dashboards: ${Object.keys(this.dashboards).length}\n`)
           );
           resolve();
         })
-        .on("error", (err) => {
-          if (err.code === "EADDRINUSE") {
-            console.log(
-              chalk.yellow(`Port ${port} in use, trying ${port + 1}...`),
-            );
+        .on('error', (err) => {
+          if (err.code === 'EADDRINUSE') {
+            console.log(chalk.yellow(`Port ${port} in use, trying ${port + 1}...`));
             this.tryPort(port + 1)
               .then(resolve)
               .catch(reject);
@@ -145,16 +136,14 @@ class UnifiedDashboard {
       await open(url);
       console.log(chalk.blue(`📱 Opened unified dashboard in browser: ${url}`));
     } catch (error) {
-      console.log(
-        chalk.yellow(`Could not open browser automatically. Visit: ${url}`),
-      );
+      console.log(chalk.yellow(`Could not open browser automatically. Visit: ${url}`));
     }
   }
 
   stop() {
     if (this.httpServer) {
       this.httpServer.close();
-      console.log(chalk.gray("Unified dashboard server stopped"));
+      console.log(chalk.gray('Unified dashboard server stopped'));
     }
   }
 }
@@ -163,19 +152,19 @@ async function runUnifiedDashboard(options = {}) {
   const dashboard = new UnifiedDashboard(options);
 
   try {
-    console.log(chalk.blue("🔄 Initializing unified dashboard..."));
+    console.log(chalk.blue('🔄 Initializing unified dashboard...'));
     await dashboard.startServer();
     await dashboard.openBrowser();
 
     // Keep process alive
-    process.on("SIGINT", () => {
-      console.log(chalk.yellow("\n👋 Shutting down unified dashboard..."));
+    process.on('SIGINT', () => {
+      console.log(chalk.yellow('\n👋 Shutting down unified dashboard...'));
       dashboard.stop();
       process.exit(0);
     });
 
-    process.on("SIGTERM", () => {
-      console.log(chalk.yellow("\n👋 Shutting down unified dashboard..."));
+    process.on('SIGTERM', () => {
+      console.log(chalk.yellow('\n👋 Shutting down unified dashboard...'));
       dashboard.stop();
       process.exit(0);
     });
@@ -183,10 +172,7 @@ async function runUnifiedDashboard(options = {}) {
     // Keep the process running
     await new Promise(() => {});
   } catch (error) {
-    console.error(
-      chalk.red("❌ Error starting unified dashboard:"),
-      error.message,
-    );
+    console.error(chalk.red('❌ Error starting unified dashboard:'), error.message);
     if (options.verbose) {
       console.error(error.stack);
     }

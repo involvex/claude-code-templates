@@ -51,12 +51,12 @@ Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'x' imported from y
 
 ```javascript
 // Add file extension for local imports
-import { foo } from "./utils.js"; // Not './utils'
+import { foo } from './utils.js'; // Not './utils'
 
 // For CommonJS packages, use createRequire
-import { createRequire } from "module";
+import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const pkg = require("commonjs-package");
+const pkg = require('commonjs-package');
 ```
 
 ---
@@ -143,7 +143,7 @@ Error: connect ETIMEDOUT
 
 ```javascript
 // Increase timeout
-const axios = require("axios");
+const axios = require('axios');
 axios.get(url, { timeout: 30000 });
 
 // With fetch
@@ -185,14 +185,14 @@ ls -la path/to/
 
 ```javascript
 // Check before accessing
-const fs = require("fs");
+const fs = require('fs');
 if (fs.existsSync(filePath)) {
   // proceed
 }
 
 // Use path.join for cross-platform
-const path = require("path");
-const filePath = path.join(__dirname, "data", "file.json");
+const path = require('path');
+const filePath = path.join(__dirname, 'data', 'file.json');
 ```
 
 ---
@@ -264,12 +264,12 @@ ulimit -n 10000
 ```javascript
 // Use streams for large files
 const stream = fs.createReadStream(file);
-stream.on("close", () => {
+stream.on('close', () => {
   // file handle released
 });
 
 // Use graceful-fs
-const fs = require("graceful-fs");
+const fs = require('graceful-fs');
 ```
 
 ---
@@ -335,9 +335,9 @@ Option 3: Convert to CommonJS
 
 ```javascript
 // Change
-import express from "express";
+import express from 'express';
 // To
-const express = require("express");
+const express = require('express');
 ```
 
 ---
@@ -363,7 +363,7 @@ TypeError: Cannot read properties of undefined (reading 'name')
 const name = user?.profile?.name;
 
 // Nullish coalescing
-const name = user?.name ?? "default";
+const name = user?.name ?? 'default';
 
 // Guard clause
 if (!user || !user.profile) {
@@ -371,7 +371,7 @@ if (!user || !user.profile) {
 }
 
 // Destructuring with defaults
-const { name = "default" } = user || {};
+const { name = 'default' } = user || {};
 ```
 
 ---
@@ -399,21 +399,21 @@ console.log(callback); // See what it actually is
 
 ```javascript
 // Check before calling
-if (typeof callback === "function") {
+if (typeof callback === 'function') {
   callback();
 }
 
 // Fix import - named vs default
 // Wrong:
-import myFunc from "./module"; // when it's named export
+import myFunc from './module'; // when it's named export
 // Correct:
-import { myFunc } from "./module";
+import { myFunc } from './module';
 
 // Or vice versa
 // Wrong:
-import { myFunc } from "./module"; // when it's default export
+import { myFunc } from './module'; // when it's default export
 // Correct:
-import myFunc from "./module";
+import myFunc from './module';
 ```
 
 ---
@@ -443,13 +443,13 @@ async function main() {
   try {
     const result = await someAsyncOperation();
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
   }
 }
 
 // Global handler (last resort)
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("Unhandled Rejection:", reason);
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection:', reason);
 });
 ```
 
@@ -471,17 +471,17 @@ TypeError [ERR_INVALID_CALLBACK]: Callback must be a function
 
 ```javascript
 // Wrong - mixing styles
-fs.readFile("file.txt", "utf8"); // Missing callback
+fs.readFile('file.txt', 'utf8'); // Missing callback
 
 // Correct - callback style
-fs.readFile("file.txt", "utf8", (err, data) => {
+fs.readFile('file.txt', 'utf8', (err, data) => {
   if (err) throw err;
   console.log(data);
 });
 
 // Correct - promise style
-const fs = require("fs").promises;
-const data = await fs.readFile("file.txt", "utf8");
+const fs = require('fs').promises;
+const data = await fs.readFile('file.txt', 'utf8');
 ```
 
 ---
@@ -512,8 +512,8 @@ NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 ```javascript
 // Use streams for large files
-const stream = fs.createReadStream("large-file.json");
-stream.on("data", (chunk) => {
+const stream = fs.createReadStream('large-file.json');
+stream.on('data', (chunk) => {
   // Process chunk by chunk
 });
 
@@ -553,16 +553,16 @@ Process exited with SIGTERM
 
 ```javascript
 // Graceful shutdown
-process.on("SIGTERM", () => {
-  console.log("SIGTERM received, shutting down gracefully");
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
   server.close(() => {
-    console.log("Server closed");
+    console.log('Server closed');
     process.exit(0);
   });
 });
 
-process.on("SIGINT", () => {
-  console.log("SIGINT received (Ctrl+C)");
+process.on('SIGINT', () => {
+  console.log('SIGINT received (Ctrl+C)');
   process.exit(0);
 });
 ```

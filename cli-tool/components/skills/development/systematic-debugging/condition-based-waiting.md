@@ -65,7 +65,7 @@ Generic polling function:
 async function waitFor<T>(
   condition: () => T | undefined | null | false,
   description: string,
-  timeoutMs = 5000,
+  timeoutMs = 5000
 ): Promise<T> {
   const startTime = Date.now();
 
@@ -74,9 +74,7 @@ async function waitFor<T>(
     if (result) return result;
 
     if (Date.now() - startTime > timeoutMs) {
-      throw new Error(
-        `Timeout waiting for ${description} after ${timeoutMs}ms`,
-      );
+      throw new Error(`Timeout waiting for ${description} after ${timeoutMs}ms`);
     }
 
     await new Promise((r) => setTimeout(r, 10)); // Poll every 10ms
@@ -101,7 +99,7 @@ See `condition-based-waiting-example.ts` in this directory for complete implemen
 
 ```typescript
 // Tool ticks every 100ms - need 2 ticks to verify partial output
-await waitForEvent(manager, "TOOL_STARTED"); // First: wait for condition
+await waitForEvent(manager, 'TOOL_STARTED'); // First: wait for condition
 await new Promise((r) => setTimeout(r, 200)); // Then: wait for timed behavior
 // 200ms = 2 ticks at 100ms intervals - documented and justified
 ```

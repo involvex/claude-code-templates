@@ -97,8 +97,8 @@ const server = new ApolloServer({
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: process.env.NODE_ENV !== "production",
-  playground: process.env.NODE_ENV !== "production",
+  introspection: process.env.NODE_ENV !== 'production',
+  playground: process.env.NODE_ENV !== 'production',
 });
 ```
 
@@ -134,12 +134,12 @@ class AuthDirective extends SchemaDirectiveVisitor {
       const user = await getUser(context.token);
 
       if (!user) {
-        throw new AuthenticationError("Authentication required");
+        throw new AuthenticationError('Authentication required');
       }
 
-      if (requiredRole === "OWNER") {
-        if (source.userId !== user.id && user.role !== "ADMIN") {
-          throw new ForbiddenError("Access denied");
+      if (requiredRole === 'OWNER') {
+        if (source.userId !== user.id && user.role !== 'ADMIN') {
+          throw new ForbiddenError('Access denied');
         }
       } else if (requiredRole && !hasRole(user, requiredRole)) {
         throw new ForbiddenError(`Required role: ${requiredRole}`);
@@ -159,7 +159,7 @@ const resolvers = {
   Query: {
     sensitiveUsers: async (parent, args, context) => {
       // Verify admin access
-      requireRole(context.user, "ADMIN");
+      requireRole(context.user, 'ADMIN');
 
       return User.findMany({
         where: args.filter,
@@ -172,7 +172,7 @@ const resolvers = {
   User: {
     email: (user, args, context) => {
       // Field-level authorization
-      if (user.id !== context.user.id && context.user.role !== "ADMIN") {
+      if (user.id !== context.user.id && context.user.role !== 'ADMIN') {
         return null; // Hide sensitive field
       }
       return user.email;
@@ -183,7 +183,7 @@ const resolvers = {
 // Helper function for role checking
 function requireRole(user, requiredRole) {
   if (!user) {
-    throw new AuthenticationError("Authentication required");
+    throw new AuthenticationError('Authentication required');
   }
 
   if (!hasRole(user, requiredRole)) {
@@ -200,14 +200,14 @@ const applyRowLevelSecurity = (user) => {
   const filters = {};
 
   switch (user.role) {
-    case "ADMIN":
+    case 'ADMIN':
       // Admins see everything
       break;
-    case "MANAGER":
+    case 'MANAGER':
       // Managers see their department
       filters.departmentId = user.departmentId;
       break;
-    case "USER":
+    case 'USER':
       // Users see only their own data
       filters.userId = user.id;
       break;
@@ -241,17 +241,17 @@ input CreateUserInput {
 ```javascript
 // Custom scalar validation
 const EmailAddressType = new GraphQLScalarType({
-  name: "EmailAddress",
+  name: 'EmailAddress',
   serialize: (value) => value,
   parseValue: (value) => {
     if (!isValidEmail(value)) {
-      throw new GraphQLError("Invalid email address format");
+      throw new GraphQLError('Invalid email address format');
     }
     return value;
   },
   parseLiteral: (ast) => {
     if (ast.kind !== Kind.STRING || !isValidEmail(ast.value)) {
-      throw new GraphQLError("Invalid email address format");
+      throw new GraphQLError('Invalid email address format');
     }
     return ast.value;
   },
@@ -263,7 +263,7 @@ const EmailAddressType = new GraphQLScalarType({
 ```javascript
 // Sanitize inputs to prevent injection attacks
 const sanitizeInput = (input) => {
-  if (typeof input === "string") {
+  if (typeof input === 'string') {
     return DOMPurify.sanitize(input, { ALLOWED_TAGS: [] });
   }
 
@@ -271,7 +271,7 @@ const sanitizeInput = (input) => {
     return input.map(sanitizeInput);
   }
 
-  if (typeof input === "object" && input !== null) {
+  if (typeof input === 'object' && input !== null) {
     const sanitized = {};
     for (const [key, value] of Object.entries(input)) {
       sanitized[key] = sanitizeInput(value);
@@ -299,30 +299,30 @@ const resolvers = {
 
 ```javascript
 // Implement sophisticated rate limiting
-const rateLimit = require("express-rate-limit");
-const slowDown = require("express-slow-down");
+const rateLimit = require('express-rate-limit');
+const slowDown = require('express-slow-down');
 
 // General API rate limiting
 app.use(
-  "/graphql",
+  '/graphql',
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // Requests per window per IP
-    message: "Too many requests from this IP",
+    message: 'Too many requests from this IP',
     standardHeaders: true,
     legacyHeaders: false,
-  }),
+  })
 );
 
 // Slow down expensive operations
 app.use(
-  "/graphql",
+  '/graphql',
   slowDown({
     windowMs: 15 * 60 * 1000,
     delayAfter: 50,
     delayMs: 500,
     maxDelayMs: 20000,
-  }),
+  })
 );
 ```
 
@@ -332,8 +332,8 @@ app.use(
 // Implement query allowlisting for production
 const allowedQueries = new Set([
   // Hash of allowed queries
-  "a1b2c3d4e5f6...", // GET_USER_PROFILE
-  "f6e5d4c3b2a1...", // GET_USER_POSTS
+  'a1b2c3d4e5f6...', // GET_USER_PROFILE
+  'f6e5d4c3b2a1...', // GET_USER_POSTS
   // Add other allowed query hashes
 ]);
 
@@ -345,11 +345,11 @@ const server = new ApolloServer({
       requestDidStart() {
         return {
           didResolveOperation(requestContext) {
-            if (process.env.NODE_ENV === "production") {
+            if (process.env.NODE_ENV === 'production') {
               const queryHash = hash(requestContext.request.query);
 
               if (!allowedQueries.has(queryHash)) {
-                throw new ForbiddenError("Query not allowed");
+                throw new ForbiddenError('Query not allowed');
               }
             }
           },
@@ -374,10 +374,10 @@ const server = new ApolloServer({
           willSendResponse(requestContext) {
             const timeout = setTimeout(() => {
               requestContext.response.http.statusCode = 408;
-              throw new Error("Query timeout exceeded");
+              throw new Error('Query timeout exceeded');
             }, 30000); // 30 second timeout
 
-            requestContext.response.http.on("finish", () => {
+            requestContext.response.http.on('finish', () => {
               clearTimeout(timeout);
             });
           },
@@ -396,31 +396,31 @@ const server = new ApolloServer({
 // Comprehensive security logging
 const securityLogger = {
   logAuthFailure: (ip, query, error) => {
-    console.error("AUTH_FAILURE", {
+    console.error('AUTH_FAILURE', {
       timestamp: new Date().toISOString(),
       ip,
       query: query.substring(0, 200),
       error: error.message,
-      severity: "HIGH",
+      severity: 'HIGH',
     });
   },
 
   logSuspiciousQuery: (ip, query, reason) => {
-    console.warn("SUSPICIOUS_QUERY", {
+    console.warn('SUSPICIOUS_QUERY', {
       timestamp: new Date().toISOString(),
       ip,
       query,
       reason,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
   },
 
   logRateLimitExceeded: (ip, endpoint) => {
-    console.warn("RATE_LIMIT_EXCEEDED", {
+    console.warn('RATE_LIMIT_EXCEEDED', {
       timestamp: new Date().toISOString(),
       ip,
       endpoint,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
   },
 };
@@ -441,19 +441,11 @@ const queryAnalyzer = {
 
     // Flag suspicious patterns
     if (metrics.depth > 10) {
-      securityLogger.logSuspiciousQuery(
-        context.ip,
-        query,
-        "Excessive query depth",
-      );
+      securityLogger.logSuspiciousQuery(context.ip, query, 'Excessive query depth');
     }
 
     if (metrics.listFields > 5) {
-      securityLogger.logSuspiciousQuery(
-        context.ip,
-        query,
-        "Multiple list fields (potential DoS)",
-      );
+      securityLogger.logSuspiciousQuery(context.ip, query, 'Multiple list fields (potential DoS)');
     }
 
     return metrics;
@@ -504,18 +496,18 @@ const queryAnalyzer = {
 // Automated security testing
 const securityTests = [
   {
-    name: "Depth Bomb Attack",
+    name: 'Depth Bomb Attack',
     query: generateDeepQuery(20),
     expectError: true,
   },
   {
-    name: "Complexity Attack",
+    name: 'Complexity Attack',
     query: generateComplexQuery(2000),
     expectError: true,
   },
   {
-    name: "Unauthorized Field Access",
-    query: "query { users { email } }",
+    name: 'Unauthorized Field Access',
+    query: 'query { users { email } }',
     context: { user: null },
     expectError: true,
   },

@@ -1,158 +1,157 @@
-const path = require("path");
-const { getCommandsForLanguageAndFramework } = require("./command-scanner");
+const path = require('path');
+const { getCommandsForLanguageAndFramework } = require('./command-scanner');
 
 const TEMPLATES_CONFIG = {
   common: {
-    name: "Common (Language-agnostic)",
-    description: "Universal configuration for any project",
-    files: [{ source: "common/CLAUDE.md", destination: "CLAUDE.md" }],
+    name: 'Common (Language-agnostic)',
+    description: 'Universal configuration for any project',
+    files: [{ source: 'common/CLAUDE.md', destination: 'CLAUDE.md' }],
   },
-  "javascript-typescript": {
-    name: "JavaScript/TypeScript",
-    description: "Optimized for modern JS/TS development",
+  'javascript-typescript': {
+    name: 'JavaScript/TypeScript',
+    description: 'Optimized for modern JS/TS development',
     files: [
-      { source: "javascript-typescript/CLAUDE.md", destination: "CLAUDE.md" },
-      { source: "javascript-typescript/.claude", destination: ".claude" },
+      { source: 'javascript-typescript/CLAUDE.md', destination: 'CLAUDE.md' },
+      { source: 'javascript-typescript/.claude', destination: '.claude' },
       {
-        source: "javascript-typescript/.claude/settings.json",
-        destination: ".claude/settings.json",
+        source: 'javascript-typescript/.claude/settings.json',
+        destination: '.claude/settings.json',
       },
-      { source: "javascript-typescript/.mcp.json", destination: ".mcp.json" },
+      { source: 'javascript-typescript/.mcp.json', destination: '.mcp.json' },
     ],
     frameworks: {
       react: {
-        name: "React",
+        name: 'React',
         additionalFiles: [
           {
-            source: "javascript-typescript/examples/react-app/.claude/commands",
-            destination: ".claude/commands",
+            source: 'javascript-typescript/examples/react-app/.claude/commands',
+            destination: '.claude/commands',
           },
         ],
       },
       vue: {
-        name: "Vue.js",
+        name: 'Vue.js',
         additionalFiles: [
           {
-            source: "javascript-typescript/examples/vue-app/.claude/commands",
-            destination: ".claude/commands",
+            source: 'javascript-typescript/examples/vue-app/.claude/commands',
+            destination: '.claude/commands',
           },
         ],
       },
       angular: {
-        name: "Angular",
+        name: 'Angular',
         additionalFiles: [
           {
-            source:
-              "javascript-typescript/examples/angular-app/.claude/commands",
-            destination: ".claude/commands",
+            source: 'javascript-typescript/examples/angular-app/.claude/commands',
+            destination: '.claude/commands',
           },
         ],
       },
       node: {
-        name: "Node.js",
+        name: 'Node.js',
         additionalFiles: [
           {
-            source: "javascript-typescript/examples/node-api/.claude/commands",
-            destination: ".claude/commands",
+            source: 'javascript-typescript/examples/node-api/.claude/commands',
+            destination: '.claude/commands',
           },
         ],
       },
     },
   },
   python: {
-    name: "Python",
-    description: "Optimized for Python development",
+    name: 'Python',
+    description: 'Optimized for Python development',
     files: [
-      { source: "python/CLAUDE.md", destination: "CLAUDE.md" },
-      { source: "python/.claude", destination: ".claude" },
+      { source: 'python/CLAUDE.md', destination: 'CLAUDE.md' },
+      { source: 'python/.claude', destination: '.claude' },
       {
-        source: "python/.claude/settings.json",
-        destination: ".claude/settings.json",
+        source: 'python/.claude/settings.json',
+        destination: '.claude/settings.json',
       },
-      { source: "python/.mcp.json", destination: ".mcp.json" },
+      { source: 'python/.mcp.json', destination: '.mcp.json' },
     ],
     frameworks: {
       django: {
-        name: "Django",
+        name: 'Django',
         additionalFiles: [
           {
-            source: "python/examples/django-app/.claude/commands",
-            destination: ".claude/commands",
+            source: 'python/examples/django-app/.claude/commands',
+            destination: '.claude/commands',
           },
           {
-            source: "python/examples/django-app/CLAUDE.md",
-            destination: "CLAUDE.md",
+            source: 'python/examples/django-app/CLAUDE.md',
+            destination: 'CLAUDE.md',
           },
         ],
       },
       flask: {
-        name: "Flask",
+        name: 'Flask',
         additionalFiles: [
           {
-            source: "python/examples/flask-app/.claude/commands",
-            destination: ".claude/commands",
+            source: 'python/examples/flask-app/.claude/commands',
+            destination: '.claude/commands',
           },
         ],
       },
       fastapi: {
-        name: "FastAPI",
+        name: 'FastAPI',
         additionalFiles: [
           {
-            source: "python/examples/fastapi-app/.claude/commands",
-            destination: ".claude/commands",
+            source: 'python/examples/fastapi-app/.claude/commands',
+            destination: '.claude/commands',
           },
         ],
       },
     },
   },
   ruby: {
-    name: "Ruby",
-    description: "Optimized for Ruby development with modern tools",
+    name: 'Ruby',
+    description: 'Optimized for Ruby development with modern tools',
     files: [
-      { source: "ruby/CLAUDE.md", destination: "CLAUDE.md" },
-      { source: "ruby/.claude", destination: ".claude" },
+      { source: 'ruby/CLAUDE.md', destination: 'CLAUDE.md' },
+      { source: 'ruby/.claude', destination: '.claude' },
       {
-        source: "ruby/.claude/settings.json",
-        destination: ".claude/settings.json",
+        source: 'ruby/.claude/settings.json',
+        destination: '.claude/settings.json',
       },
-      { source: "ruby/.mcp.json", destination: ".mcp.json" },
+      { source: 'ruby/.mcp.json', destination: '.mcp.json' },
     ],
     frameworks: {
       rails: {
-        name: "Ruby on Rails 8",
+        name: 'Ruby on Rails 8',
         additionalFiles: [
           {
-            source: "ruby/examples/rails-app/.claude/commands",
-            destination: ".claude/commands",
+            source: 'ruby/examples/rails-app/.claude/commands',
+            destination: '.claude/commands',
           },
           {
-            source: "ruby/examples/rails-app/CLAUDE.md",
-            destination: "CLAUDE.md",
+            source: 'ruby/examples/rails-app/CLAUDE.md',
+            destination: 'CLAUDE.md',
           },
         ],
       },
       sinatra: {
-        name: "Sinatra",
+        name: 'Sinatra',
         additionalFiles: [
           {
-            source: "ruby/examples/sinatra-app/.claude/commands",
-            destination: ".claude/commands",
+            source: 'ruby/examples/sinatra-app/.claude/commands',
+            destination: '.claude/commands',
           },
         ],
       },
     },
   },
   rust: {
-    name: "Rust",
-    description: "Optimized for Rust development",
+    name: 'Rust',
+    description: 'Optimized for Rust development',
     comingSoon: true,
-    files: [{ source: "rust/.mcp.json", destination: ".mcp.json" }],
+    files: [{ source: 'rust/.mcp.json', destination: '.mcp.json' }],
   },
   go: {
-    name: "Go",
-    description: "Optimized for Go development",
+    name: 'Go',
+    description: 'Optimized for Go development',
     comingSoon: true,
-    files: [{ source: "go/.mcp.json", destination: ".mcp.json" }],
+    files: [{ source: 'go/.mcp.json', destination: '.mcp.json' }],
   },
 };
 
@@ -161,7 +160,7 @@ function getAvailableLanguages() {
     value: key,
     name: TEMPLATES_CONFIG[key].name,
     description: TEMPLATES_CONFIG[key].description,
-    disabled: TEMPLATES_CONFIG[key].comingSoon ? "Coming Soon" : false,
+    disabled: TEMPLATES_CONFIG[key].comingSoon ? 'Coming Soon' : false,
   }));
 }
 
@@ -188,7 +187,7 @@ function getTemplateConfig(selections) {
   // Add framework-specific files
   if (
     framework &&
-    framework !== "none" &&
+    framework !== 'none' &&
     baseConfig.frameworks &&
     baseConfig.frameworks[framework]
   ) {
@@ -201,13 +200,8 @@ function getTemplateConfig(selections) {
   // Handle command selection
   let selectedCommands = [];
   if (commands && commands.length > 0) {
-    const availableCommands = getCommandsForLanguageAndFramework(
-      language,
-      framework,
-    );
-    selectedCommands = availableCommands.filter((cmd) =>
-      commands.includes(cmd.name),
-    );
+    const availableCommands = getCommandsForLanguageAndFramework(language, framework);
+    selectedCommands = availableCommands.filter((cmd) => commands.includes(cmd.name));
   }
 
   return {

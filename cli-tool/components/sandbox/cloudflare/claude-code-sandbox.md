@@ -183,10 +183,10 @@ curl -X POST https://your-worker.your-subdomain.workers.dev/execute \
 
 ```typescript
 // Use built-in code interpreter instead of exec
-import { getCodeInterpreter } from "@cloudflare/sandbox";
+import { getCodeInterpreter } from '@cloudflare/sandbox';
 
-const interpreter = getCodeInterpreter(env.Sandbox, "user-id");
-const result = await interpreter.notebook.execCell("print(2**10)");
+const interpreter = getCodeInterpreter(env.Sandbox, 'user-id');
+const result = await interpreter.notebook.execCell('print(2**10)');
 ```
 
 ### Streaming Output
@@ -196,13 +196,13 @@ const result = await interpreter.notebook.execCell("print(2**10)");
 return new Response(
   new ReadableStream({
     async start(controller) {
-      const result = await sandbox.exec("python script.py", {
+      const result = await sandbox.exec('python script.py', {
         onStdout: (data) => controller.enqueue(data),
         onStderr: (data) => controller.enqueue(data),
       });
       controller.close();
     },
-  }),
+  })
 );
 ```
 
@@ -211,9 +211,9 @@ return new Response(
 ```typescript
 // Maintain sandbox state across requests
 const sandbox = getSandbox(env.Sandbox, userId);
-await sandbox.writeFile("/data/state.json", JSON.stringify(state));
+await sandbox.writeFile('/data/state.json', JSON.stringify(state));
 // Later...
-const state = await sandbox.readFile("/data/state.json");
+const state = await sandbox.readFile('/data/state.json');
 ```
 
 ## Examples

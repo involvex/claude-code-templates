@@ -76,19 +76,19 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
        const linearTask = await findLinearTask(issue);
        if (!linearTask) {
          issues.push({
-           type: "MISSING_IN_LINEAR",
+           type: 'MISSING_IN_LINEAR',
            github: issue.number,
-           severity: "high",
+           severity: 'high',
          });
        } else {
          const diffs = compareFields(issue, linearTask);
          if (diffs.length > 0) {
            issues.push({
-             type: "FIELD_MISMATCH",
+             type: 'FIELD_MISMATCH',
              github: issue.number,
              linear: linearTask.identifier,
              differences: diffs,
-             severity: "medium",
+             severity: 'medium',
            });
          }
        }
@@ -106,9 +106,9 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
 
      return {
        totalSyncs: history.length,
-       byType: groupBy(history, "type"),
-       byDirection: groupBy(history, "direction"),
-       successRate: calculateRate(history, "success"),
+       byType: groupBy(history, 'type'),
+       byDirection: groupBy(history, 'direction'),
+       successRate: calculateRate(history, 'success'),
 
        patterns: {
          peakHours: findPeakSyncHours(history),
@@ -117,9 +117,9 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
        },
 
        trends: {
-         syncVolume: calculateTrend(history, "volume"),
-         errorRate: calculateTrend(history, "errors"),
-         performance: calculateTrend(history, "duration"),
+         syncVolume: calculateTrend(history, 'volume'),
+         errorRate: calculateTrend(history, 'errors'),
+         performance: calculateTrend(history, 'duration'),
        },
      };
    }
@@ -150,10 +150,10 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
 
            // Check for alerts
            if (duration > SLOW_SYNC_THRESHOLD) {
-             this.alert("SLOW_SYNC", operation);
+             this.alert('SLOW_SYNC', operation);
            }
            if (!success) {
-             this.alert("SYNC_FAILURE", operation);
+             this.alert('SYNC_FAILURE', operation);
            }
          },
        };
@@ -180,12 +180,12 @@ Analyze synchronization status between GitHub and Linear. When checking synchron
      return {
        size: queue.length,
        oldest: queue[0]?.createdAt,
-       byPriority: groupBy(queue, "priority"),
+       byPriority: groupBy(queue, 'priority'),
        estimatedTime: estimateProcessingTime(queue),
 
        blocked: queue.filter((item) => item.retries >= MAX_RETRIES),
-       processing: queue.filter((item) => item.status === "processing"),
-       pending: queue.filter((item) => item.status === "pending"),
+       processing: queue.filter((item) => item.status === 'processing'),
+       pending: queue.filter((item) => item.status === 'pending'),
      };
    }
    ```

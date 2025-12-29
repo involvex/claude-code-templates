@@ -55,11 +55,11 @@ global.Notification = class MockNotification {
   }
 
   static requestPermission() {
-    return Promise.resolve("granted");
+    return Promise.resolve('granted');
   }
 
   static get permission() {
-    return "granted";
+    return 'granted';
   }
 };
 
@@ -89,8 +89,8 @@ global.document = {
     removeEventListener: jest.fn(),
     setAttribute: jest.fn(),
     style: {},
-    href: "",
-    download: "",
+    href: '',
+    download: '',
   })),
   getElementById: jest.fn(),
   querySelector: jest.fn(),
@@ -102,13 +102,13 @@ global.document = {
     removeChild: jest.fn(),
   },
   location: {
-    protocol: "http:",
-    host: "localhost:3333",
-    hostname: "localhost",
-    port: "3333",
+    protocol: 'http:',
+    host: 'localhost:3333',
+    hostname: 'localhost',
+    port: '3333',
   },
   hidden: false,
-  visibilityState: "visible",
+  visibilityState: 'visible',
 };
 
 // Mock window for frontend tests
@@ -128,14 +128,14 @@ global.testUtils = {
    * Create a mock conversation object
    */
   createMockConversation: (overrides = {}) => ({
-    id: "conv_123",
-    filename: "conversation.jsonl",
-    project: "test-project",
-    status: "active",
+    id: 'conv_123',
+    filename: 'conversation.jsonl',
+    project: 'test-project',
+    status: 'active',
     tokens: 1500,
     messages: 5,
     lastModified: new Date().toISOString(),
-    filePath: "/path/to/conversation.jsonl",
+    filePath: '/path/to/conversation.jsonl',
     fileSize: 2048,
     ...overrides,
   }),
@@ -150,8 +150,8 @@ global.testUtils = {
         global.testUtils.createMockConversation({
           id: `conv_${i + 1}`,
           filename: `conversation_${i + 1}.jsonl`,
-          status: i === 0 ? "active" : "idle",
-        }),
+          status: i === 0 ? 'active' : 'idle',
+        })
       );
     }
     return {
@@ -172,7 +172,7 @@ global.testUtils = {
     type,
     data,
     timestamp: Date.now(),
-    server: "Claude Code Analytics",
+    server: 'Claude Code Analytics',
   }),
 
   /**

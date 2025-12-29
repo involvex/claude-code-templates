@@ -35,7 +35,7 @@ class AgentAnalytics {
       this.setupEventListeners();
       this.isInitialized = true;
     } catch (error) {
-      console.error("Error initializing agent analytics:", error);
+      console.error('Error initializing agent analytics:', error);
       this.stateService.setError(error);
     } finally {
       this.stateService.setLoading(false);
@@ -161,13 +161,13 @@ class AgentAnalytics {
     try {
       const params = new URLSearchParams();
       if (this.dateFilters.startDate) {
-        params.append("startDate", this.dateFilters.startDate);
+        params.append('startDate', this.dateFilters.startDate);
       }
       if (this.dateFilters.endDate) {
-        params.append("endDate", this.dateFilters.endDate);
+        params.append('endDate', this.dateFilters.endDate);
       }
 
-      const url = `/api/agents${params.toString() ? "?" + params.toString() : ""}`;
+      const url = `/api/agents${params.toString() ? '?' + params.toString() : ''}`;
       this.agentData = await this.dataService.cachedFetch(url);
 
       if (this.agentData) {
@@ -179,7 +179,7 @@ class AgentAnalytics {
         this.renderNoData();
       }
     } catch (error) {
-      console.error("Error loading agent data:", error);
+      console.error('Error loading agent data:', error);
       this.renderError(error);
     }
   }
@@ -188,11 +188,10 @@ class AgentAnalytics {
    * Update summary metrics
    */
   updateMetrics() {
-    const metricsGrid = this.container.querySelector("#metrics-grid");
+    const metricsGrid = this.container.querySelector('#metrics-grid');
     if (!metricsGrid || !this.agentData) return;
 
-    const { summary, totalAgentInvocations, totalAgentTypes, efficiency } =
-      this.agentData;
+    const { summary, totalAgentInvocations, totalAgentTypes, efficiency } = this.agentData;
 
     metricsGrid.innerHTML = `
       <div class="metric-card primary">
@@ -245,7 +244,7 @@ class AgentAnalytics {
    * Render agent usage distribution chart
    */
   renderAgentUsageChart() {
-    const canvas = this.container.querySelector("#agent-usage-chart");
+    const canvas = this.container.querySelector('#agent-usage-chart');
     if (!canvas || !this.agentData.agentStats) return;
 
     // Destroy existing chart
@@ -253,18 +252,18 @@ class AgentAnalytics {
       this.charts.usage.destroy();
     }
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     const agentStats = this.agentData.agentStats;
 
     this.charts.usage = new Chart(ctx, {
-      type: "doughnut",
+      type: 'doughnut',
       data: {
         labels: agentStats.map((agent) => agent.name),
         datasets: [
           {
             data: agentStats.map((agent) => agent.totalInvocations),
             backgroundColor: agentStats.map((agent) => agent.color),
-            borderColor: "var(--bg-primary)",
+            borderColor: 'var(--bg-primary)',
             borderWidth: 2,
             hoverBorderWidth: 3,
           },
@@ -275,9 +274,9 @@ class AgentAnalytics {
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            position: "bottom",
+            position: 'bottom',
             labels: {
-              color: "var(--text-primary)",
+              color: 'var(--text-primary)',
               padding: 20,
               usePointStyle: true,
               font: {
@@ -308,7 +307,7 @@ class AgentAnalytics {
    * Render agent usage timeline chart
    */
   renderTimelineChart() {
-    const canvas = this.container.querySelector("#agent-timeline-chart");
+    const canvas = this.container.querySelector('#agent-timeline-chart');
     if (!canvas || !this.agentData.usageByDay) return;
 
     // Destroy existing chart
@@ -316,24 +315,24 @@ class AgentAnalytics {
       this.charts.timeline.destroy();
     }
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     const timelineData = this.agentData.usageByDay;
 
     this.charts.timeline = new Chart(ctx, {
-      type: "line",
+      type: 'line',
       data: {
         labels: timelineData.map((d) => new Date(d.date).toLocaleDateString()),
         datasets: [
           {
-            label: "Agent Invocations",
+            label: 'Agent Invocations',
             data: timelineData.map((d) => d.count),
-            borderColor: "#3fb950",
-            backgroundColor: "rgba(63, 185, 80, 0.1)",
+            borderColor: '#3fb950',
+            backgroundColor: 'rgba(63, 185, 80, 0.1)',
             borderWidth: 2,
             fill: true,
             tension: 0.3,
-            pointBackgroundColor: "#3fb950",
-            pointBorderColor: "#ffffff",
+            pointBackgroundColor: '#3fb950',
+            pointBorderColor: '#ffffff',
             pointBorderWidth: 2,
             pointRadius: 4,
             pointHoverRadius: 6,
@@ -346,7 +345,7 @@ class AgentAnalytics {
         plugins: {
           legend: {
             labels: {
-              color: "var(--text-primary)",
+              color: 'var(--text-primary)',
               font: {
                 family: "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
               },
@@ -364,25 +363,25 @@ class AgentAnalytics {
         scales: {
           x: {
             ticks: {
-              color: "var(--text-secondary)",
+              color: 'var(--text-secondary)',
               font: {
                 family: "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
               },
             },
             grid: {
-              color: "var(--border-primary)",
+              color: 'var(--border-primary)',
             },
           },
           y: {
             beginAtZero: true,
             ticks: {
-              color: "var(--text-secondary)",
+              color: 'var(--text-secondary)',
               font: {
                 family: "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
               },
             },
             grid: {
-              color: "var(--border-primary)",
+              color: 'var(--border-primary)',
             },
           },
         },
@@ -394,7 +393,7 @@ class AgentAnalytics {
    * Render hourly usage pattern chart
    */
   renderHourlyUsageChart() {
-    const canvas = this.container.querySelector("#hourly-usage-chart");
+    const canvas = this.container.querySelector('#hourly-usage-chart');
     if (!canvas || !this.agentData.popularHours) return;
 
     // Destroy existing chart
@@ -402,19 +401,19 @@ class AgentAnalytics {
       this.charts.hourly.destroy();
     }
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     const hourlyData = this.agentData.popularHours;
 
     this.charts.hourly = new Chart(ctx, {
-      type: "bar",
+      type: 'bar',
       data: {
         labels: hourlyData.map((h) => h.label),
         datasets: [
           {
-            label: "Agent Invocations",
+            label: 'Agent Invocations',
             data: hourlyData.map((h) => h.count),
-            backgroundColor: "rgba(217, 116, 85, 0.6)",
-            borderColor: "#d57455",
+            backgroundColor: 'rgba(217, 116, 85, 0.6)',
+            borderColor: '#d57455',
             borderWidth: 1,
             borderRadius: 4,
           },
@@ -426,7 +425,7 @@ class AgentAnalytics {
         plugins: {
           legend: {
             labels: {
-              color: "var(--text-primary)",
+              color: 'var(--text-primary)',
               font: {
                 family: "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
               },
@@ -444,25 +443,25 @@ class AgentAnalytics {
         scales: {
           x: {
             ticks: {
-              color: "var(--text-secondary)",
+              color: 'var(--text-secondary)',
               font: {
                 family: "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
               },
             },
             grid: {
-              color: "var(--border-primary)",
+              color: 'var(--border-primary)',
             },
           },
           y: {
             beginAtZero: true,
             ticks: {
-              color: "var(--text-secondary)",
+              color: 'var(--text-secondary)',
               font: {
                 family: "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
               },
             },
             grid: {
-              color: "var(--border-primary)",
+              color: 'var(--border-primary)',
             },
           },
         },
@@ -474,7 +473,7 @@ class AgentAnalytics {
    * Render efficiency metrics
    */
   renderEfficiencyMetrics() {
-    const container = this.container.querySelector("#efficiency-metrics");
+    const container = this.container.querySelector('#efficiency-metrics');
     if (!container || !this.agentData.efficiency) return;
 
     const { efficiency, agentStats } = this.agentData;
@@ -499,9 +498,9 @@ class AgentAnalytics {
         </div>
         
         <div class="efficiency-card">
-          <div class="efficiency-icon">${mostUsedAgent ? mostUsedAgent.icon : "🤖"}</div>
+          <div class="efficiency-icon">${mostUsedAgent ? mostUsedAgent.icon : '🤖'}</div>
           <div class="efficiency-content">
-            <div class="efficiency-value">${mostUsedAgent ? mostUsedAgent.name : "None"}</div>
+            <div class="efficiency-value">${mostUsedAgent ? mostUsedAgent.name : 'None'}</div>
             <div class="efficiency-label">Most Used Agent</div>
           </div>
         </div>
@@ -521,7 +520,7 @@ class AgentAnalytics {
    * Render detailed agent statistics
    */
   renderAgentStats() {
-    const container = this.container.querySelector("#agent-stats-grid");
+    const container = this.container.querySelector('#agent-stats-grid');
     if (!container || !this.agentData.agentStats) return;
 
     container.innerHTML = this.agentData.agentStats
@@ -558,26 +557,26 @@ class AgentAnalytics {
           </div>
         </div>
       </div>
-    `,
+    `
       )
-      .join("");
+      .join('');
   }
 
   /**
    * Render workflow patterns
    */
   renderWorkflowPatterns() {
-    const section = this.container.querySelector("#workflow-patterns-section");
-    const container = this.container.querySelector("#workflow-patterns");
+    const section = this.container.querySelector('#workflow-patterns-section');
+    const container = this.container.querySelector('#workflow-patterns');
 
     if (!container || !this.agentData.workflowPatterns) return;
 
     if (this.agentData.workflowPatterns.length === 0) {
-      section.style.display = "none";
+      section.style.display = 'none';
       return;
     }
 
-    section.style.display = "block";
+    section.style.display = 'block';
     container.innerHTML = this.agentData.workflowPatterns
       .map(
         (pattern) => `
@@ -585,9 +584,9 @@ class AgentAnalytics {
         <div class="pattern-flow">${pattern.pattern}</div>
         <div class="pattern-count">${pattern.count} times</div>
       </div>
-    `,
+    `
       )
-      .join("");
+      .join('');
   }
 
   /**
@@ -626,7 +625,7 @@ class AgentAnalytics {
         <div class="error-content">
           <div class="error-icon">⚠️</div>
           <h3>Error Loading Agent Data</h3>
-          <p>${error.message || "Failed to load agent analytics data"}</p>
+          <p>${error.message || 'Failed to load agent analytics data'}</p>
           <button class="refresh-btn" onclick="this.loadAgentData()">
             <span class="btn-icon">🔄</span>
             Try Again
@@ -641,24 +640,24 @@ class AgentAnalytics {
    */
   setupEventListeners() {
     // Date filter change handlers
-    const startDateInput = this.container.querySelector("#start-date");
-    const endDateInput = this.container.querySelector("#end-date");
-    const refreshBtn = this.container.querySelector("#refresh-analytics");
+    const startDateInput = this.container.querySelector('#start-date');
+    const endDateInput = this.container.querySelector('#end-date');
+    const refreshBtn = this.container.querySelector('#refresh-analytics');
 
     if (startDateInput) {
-      startDateInput.addEventListener("change", (e) => {
+      startDateInput.addEventListener('change', (e) => {
         this.dateFilters.startDate = e.target.value;
       });
     }
 
     if (endDateInput) {
-      endDateInput.addEventListener("change", (e) => {
+      endDateInput.addEventListener('change', (e) => {
         this.dateFilters.endDate = e.target.value;
       });
     }
 
     if (refreshBtn) {
-      refreshBtn.addEventListener("click", () => {
+      refreshBtn.addEventListener('click', () => {
         this.refreshData();
       });
     }
@@ -669,22 +668,22 @@ class AgentAnalytics {
    */
   async refreshData() {
     try {
-      const refreshBtn = this.container.querySelector("#refresh-analytics");
+      const refreshBtn = this.container.querySelector('#refresh-analytics');
       if (refreshBtn) {
         refreshBtn.disabled = true;
-        const icon = refreshBtn.querySelector(".btn-icon");
-        if (icon) icon.style.animation = "spin 1s linear infinite";
+        const icon = refreshBtn.querySelector('.btn-icon');
+        if (icon) icon.style.animation = 'spin 1s linear infinite';
       }
 
       await this.loadAgentData();
     } catch (error) {
-      console.error("Error refreshing agent data:", error);
+      console.error('Error refreshing agent data:', error);
     } finally {
-      const refreshBtn = this.container.querySelector("#refresh-analytics");
+      const refreshBtn = this.container.querySelector('#refresh-analytics');
       if (refreshBtn) {
         refreshBtn.disabled = false;
-        const icon = refreshBtn.querySelector(".btn-icon");
-        if (icon) icon.style.animation = "";
+        const icon = refreshBtn.querySelector('.btn-icon');
+        if (icon) icon.style.animation = '';
       }
     }
   }
@@ -693,7 +692,7 @@ class AgentAnalytics {
    * Handle data refresh events
    */
   handleDataRefresh(data, source) {
-    if (source === "agents" || source === "all") {
+    if (source === 'agents' || source === 'all') {
       this.loadAgentData();
     }
   }
@@ -704,7 +703,7 @@ class AgentAnalytics {
   destroy() {
     // Destroy charts
     Object.values(this.charts).forEach((chart) => {
-      if (chart && typeof chart.destroy === "function") {
+      if (chart && typeof chart.destroy === 'function') {
         chart.destroy();
       }
     });
@@ -712,7 +711,7 @@ class AgentAnalytics {
 
     // Clear container
     if (this.container) {
-      this.container.innerHTML = "";
+      this.container.innerHTML = '';
     }
 
     this.isInitialized = false;
@@ -720,6 +719,6 @@ class AgentAnalytics {
 }
 
 // Export for use in other modules
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = AgentAnalytics;
 }

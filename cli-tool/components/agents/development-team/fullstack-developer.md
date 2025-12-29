@@ -42,7 +42,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: "admin" | "user";
+  role: 'admin' | 'user';
   createdAt: string;
   updatedAt: string;
 }
@@ -109,17 +109,17 @@ export interface Post {
 
 ```typescript
 // server/app.ts - Express application setup
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import rateLimit from "express-rate-limit";
-import compression from "compression";
-import { authRouter } from "./routes/auth";
-import { userRouter } from "./routes/users";
-import { postRouter } from "./routes/posts";
-import { errorHandler } from "./middleware/errorHandler";
-import { authMiddleware } from "./middleware/auth";
-import { logger } from "./utils/logger";
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import compression from 'compression';
+import { authRouter } from './routes/auth';
+import { userRouter } from './routes/users';
+import { postRouter } from './routes/posts';
+import { errorHandler } from './middleware/errorHandler';
+import { authMiddleware } from './middleware/auth';
+import { logger } from './utils/logger';
 
 const app = express();
 
@@ -129,19 +129,19 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
-  }),
+  })
 );
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP",
+  message: 'Too many requests from this IP',
 });
-app.use("/api/", limiter);
+app.use('/api/', limiter);
 
 // Parsing middleware
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 
@@ -149,51 +149,47 @@ app.use(compression());
 app.use((req, res, next) => {
   logger.info(`${req.method} ${req.path}`, {
     ip: req.ip,
-    userAgent: req.get("User-Agent"),
+    userAgent: req.get('User-Agent'),
   });
   next();
 });
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get('/health', (req, res) => {
   res.json({
-    status: "healthy",
+    status: 'healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
 });
 
 // API routes
-app.use("/api/auth", authRouter);
-app.use("/api/users", authMiddleware, userRouter);
-app.use("/api/posts", postRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', authMiddleware, userRouter);
+app.use('/api/posts', postRouter);
 
 // Error handling middleware
 app.use(errorHandler);
 
 // 404 handler
-app.use("*", (req, res) => {
+app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
-    error: "Route not found",
+    error: 'Route not found',
   });
 });
 
 export { app };
 
 // server/routes/auth.ts - Authentication routes
-import { Router } from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { z } from "zod";
-import { User } from "../models/User";
-import { validateRequest } from "../middleware/validation";
-import { logger } from "../utils/logger";
-import type {
-  LoginRequest,
-  CreateUserRequest,
-  AuthResponse,
-} from "../../types/api";
+import { Router } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { z } from 'zod';
+import { User } from '../models/User';
+import { validateRequest } from '../middleware/validation';
+import { logger } from '../utils/logger';
+import type { LoginRequest, CreateUserRequest, AuthResponse } from '../../types/api';
 
 const router = Router();
 
@@ -211,76 +207,70 @@ const registerSchema = z.object({
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/),
 });
 
-router.post(
-  "/register",
-  validateRequest(registerSchema),
-  async (req, res, next) => {
-    try {
-      const { email, name, password }: CreateUserRequest = req.body;
+router.post('/register', validateRequest(registerSchema), async (req, res, next) => {
+  try {
+    const { email, name, password }: CreateUserRequest = req.body;
 
-      // Check if user already exists
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        return res.status(400).json({
-          success: false,
-          error: "User already exists with this email",
-        });
-      }
-
-      // Hash password
-      const saltRounds = 12;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-      // Create user
-      const user = new User({
-        email,
-        name,
-        password: hashedPassword,
-        role: "user",
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        error: 'User already exists with this email',
       });
-
-      await user.save();
-
-      // Generate tokens
-      const token = jwt.sign(
-        { userId: user._id, email: user.email, role: user.role },
-        process.env.JWT_SECRET!,
-        { expiresIn: "1h" },
-      );
-
-      const refreshToken = jwt.sign(
-        { userId: user._id },
-        process.env.JWT_REFRESH_SECRET!,
-        { expiresIn: "7d" },
-      );
-
-      logger.info("User registered successfully", { userId: user._id, email });
-
-      const response: AuthResponse = {
-        user: {
-          id: user._id.toString(),
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          createdAt: user.createdAt.toISOString(),
-          updatedAt: user.updatedAt.toISOString(),
-        },
-        token,
-        refreshToken,
-      };
-
-      res.status(201).json({
-        success: true,
-        data: response,
-        message: "User registered successfully",
-      });
-    } catch (error) {
-      next(error);
     }
-  },
-);
 
-router.post("/login", validateRequest(loginSchema), async (req, res, next) => {
+    // Hash password
+    const saltRounds = 12;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create user
+    const user = new User({
+      email,
+      name,
+      password: hashedPassword,
+      role: 'user',
+    });
+
+    await user.save();
+
+    // Generate tokens
+    const token = jwt.sign(
+      { userId: user._id, email: user.email, role: user.role },
+      process.env.JWT_SECRET!,
+      { expiresIn: '1h' }
+    );
+
+    const refreshToken = jwt.sign({ userId: user._id }, process.env.JWT_REFRESH_SECRET!, {
+      expiresIn: '7d',
+    });
+
+    logger.info('User registered successfully', { userId: user._id, email });
+
+    const response: AuthResponse = {
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
+      },
+      token,
+      refreshToken,
+    };
+
+    res.status(201).json({
+      success: true,
+      data: response,
+      message: 'User registered successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/login', validateRequest(loginSchema), async (req, res, next) => {
   try {
     const { email, password }: LoginRequest = req.body;
 
@@ -289,7 +279,7 @@ router.post("/login", validateRequest(loginSchema), async (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        error: "Invalid credentials",
+        error: 'Invalid credentials',
       });
     }
 
@@ -298,7 +288,7 @@ router.post("/login", validateRequest(loginSchema), async (req, res, next) => {
     if (!isValidPassword) {
       return res.status(401).json({
         success: false,
-        error: "Invalid credentials",
+        error: 'Invalid credentials',
       });
     }
 
@@ -306,16 +296,14 @@ router.post("/login", validateRequest(loginSchema), async (req, res, next) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET!,
-      { expiresIn: "1h" },
+      { expiresIn: '1h' }
     );
 
-    const refreshToken = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_REFRESH_SECRET!,
-      { expiresIn: "7d" },
-    );
+    const refreshToken = jwt.sign({ userId: user._id }, process.env.JWT_REFRESH_SECRET!, {
+      expiresIn: '7d',
+    });
 
-    logger.info("User logged in successfully", { userId: user._id, email });
+    logger.info('User logged in successfully', { userId: user._id, email });
 
     const response: AuthResponse = {
       user: {
@@ -333,47 +321,44 @@ router.post("/login", validateRequest(loginSchema), async (req, res, next) => {
     res.json({
       success: true,
       data: response,
-      message: "Login successful",
+      message: 'Login successful',
     });
   } catch (error) {
     next(error);
   }
 });
 
-router.post("/refresh", async (req, res, next) => {
+router.post('/refresh', async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
       return res.status(401).json({
         success: false,
-        error: "Refresh token required",
+        error: 'Refresh token required',
       });
     }
 
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.JWT_REFRESH_SECRET!,
-    ) as { userId: string };
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET!) as { userId: string };
     const user = await User.findById(decoded.userId);
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        error: "Invalid refresh token",
+        error: 'Invalid refresh token',
       });
     }
 
     const newToken = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET!,
-      { expiresIn: "1h" },
+      { expiresIn: '1h' }
     );
 
     res.json({
       success: true,
       data: { token: newToken },
-      message: "Token refreshed successfully",
+      message: 'Token refreshed successfully',
     });
   } catch (error) {
     next(error);
@@ -387,13 +372,13 @@ export { router as authRouter };
 
 ```typescript
 // server/models/User.ts
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IUser extends Document {
   email: string;
   name: string;
   password: string;
-  role: "admin" | "user";
+  role: 'admin' | 'user';
   emailVerified: boolean;
   lastLogin: Date;
   createdAt: Date;
@@ -423,8 +408,8 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ["admin", "user"],
-      default: "user",
+      enum: ['admin', 'user'],
+      default: 'user',
     },
     emailVerified: {
       type: Boolean,
@@ -443,7 +428,7 @@ const userSchema = new Schema<IUser>(
         return ret;
       },
     },
-  },
+  }
 );
 
 // Indexes for performance
@@ -451,10 +436,10 @@ userSchema.index({ email: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ createdAt: -1 });
 
-export const User = mongoose.model<IUser>("User", userSchema);
+export const User = mongoose.model<IUser>('User', userSchema);
 
 // server/models/Post.ts
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IPost extends Document {
   title: string;
@@ -501,7 +486,7 @@ const postSchema = new Schema<IPost>(
     },
     authorId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       index: true,
     },
@@ -516,46 +501,46 @@ const postSchema = new Schema<IPost>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 // Compound indexes for complex queries
 postSchema.index({ published: 1, createdAt: -1 });
 postSchema.index({ authorId: 1, published: 1 });
 postSchema.index({ tags: 1, published: 1 });
-postSchema.index({ title: "text", content: "text" });
+postSchema.index({ title: 'text', content: 'text' });
 
 // Virtual populate for author
-postSchema.virtual("author", {
-  ref: "User",
-  localField: "authorId",
-  foreignField: "_id",
+postSchema.virtual('author', {
+  ref: 'User',
+  localField: 'authorId',
+  foreignField: '_id',
   justOne: true,
 });
 
-export const Post = mongoose.model<IPost>("Post", postSchema);
+export const Post = mongoose.model<IPost>('Post', postSchema);
 ```
 
 ### 4. Frontend React Application
 
 ```tsx
 // frontend/src/App.tsx - Main application component
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Toaster } from "react-hot-toast";
-import { AuthProvider } from "./contexts/AuthContext";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import { Layout } from "./components/Layout";
-import { HomePage } from "./pages/HomePage";
-import { LoginPage } from "./pages/LoginPage";
-import { RegisterPage } from "./pages/RegisterPage";
-import { DashboardPage } from "./pages/DashboardPage";
-import { PostsPage } from "./pages/PostsPage";
-import { CreatePostPage } from "./pages/CreatePostPage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { ErrorBoundary } from "./components/ErrorBoundary";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { Layout } from './components/Layout';
+import { HomePage } from './pages/HomePage';
+import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { PostsPage } from './pages/PostsPage';
+import { CreatePostPage } from './pages/CreatePostPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -627,9 +612,9 @@ function App() {
 export default App;
 
 // frontend/src/contexts/AuthContext.tsx - Authentication context
-import React, { createContext, useContext, useReducer, useEffect } from "react";
-import { User, AuthResponse } from "../types/api";
-import { authAPI } from "../services/api";
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { User, AuthResponse } from '../types/api';
+import { authAPI } from '../services/api';
 
 interface AuthState {
   user: User | null;
@@ -639,27 +624,27 @@ interface AuthState {
 }
 
 type AuthAction =
-  | { type: "LOGIN_START" }
-  | { type: "LOGIN_SUCCESS"; payload: AuthResponse }
-  | { type: "LOGIN_FAILURE" }
-  | { type: "LOGOUT" }
-  | { type: "SET_LOADING"; payload: boolean };
+  | { type: 'LOGIN_START' }
+  | { type: 'LOGIN_SUCCESS'; payload: AuthResponse }
+  | { type: 'LOGIN_FAILURE' }
+  | { type: 'LOGOUT' }
+  | { type: 'SET_LOADING'; payload: boolean };
 
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem("auth_token"),
+  token: localStorage.getItem('auth_token'),
   isLoading: true,
   isAuthenticated: false,
 };
 
 function authReducer(state: AuthState, action: AuthAction): AuthState {
   switch (action.type) {
-    case "LOGIN_START":
+    case 'LOGIN_START':
       return { ...state, isLoading: true };
 
-    case "LOGIN_SUCCESS":
-      localStorage.setItem("auth_token", action.payload.token);
-      localStorage.setItem("refresh_token", action.payload.refreshToken);
+    case 'LOGIN_SUCCESS':
+      localStorage.setItem('auth_token', action.payload.token);
+      localStorage.setItem('refresh_token', action.payload.refreshToken);
       return {
         ...state,
         user: action.payload.user,
@@ -668,9 +653,9 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
         isAuthenticated: true,
       };
 
-    case "LOGIN_FAILURE":
-      localStorage.removeItem("auth_token");
-      localStorage.removeItem("refresh_token");
+    case 'LOGIN_FAILURE':
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('refresh_token');
       return {
         ...state,
         user: null,
@@ -679,9 +664,9 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
         isAuthenticated: false,
       };
 
-    case "LOGOUT":
-      localStorage.removeItem("auth_token");
-      localStorage.removeItem("refresh_token");
+    case 'LOGOUT':
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('refresh_token');
       return {
         ...state,
         user: null,
@@ -689,7 +674,7 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
         isAuthenticated: false,
       };
 
-    case "SET_LOADING":
+    case 'SET_LOADING':
       return { ...state, isLoading: action.payload };
 
     default:
@@ -709,53 +694,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   useEffect(() => {
-    const token = localStorage.getItem("auth_token");
+    const token = localStorage.getItem('auth_token');
     if (token) {
       // Verify token with backend
       authAPI
         .verifyToken(token)
         .then((user) => {
           dispatch({
-            type: "LOGIN_SUCCESS",
+            type: 'LOGIN_SUCCESS',
             payload: {
               user,
               token,
-              refreshToken: localStorage.getItem("refresh_token") || "",
+              refreshToken: localStorage.getItem('refresh_token') || '',
             },
           });
         })
         .catch(() => {
-          dispatch({ type: "LOGIN_FAILURE" });
+          dispatch({ type: 'LOGIN_FAILURE' });
         });
     } else {
-      dispatch({ type: "SET_LOADING", payload: false });
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   }, []);
 
   const login = async (email: string, password: string) => {
-    dispatch({ type: "LOGIN_START" });
+    dispatch({ type: 'LOGIN_START' });
     try {
       const response = await authAPI.login({ email, password });
-      dispatch({ type: "LOGIN_SUCCESS", payload: response });
+      dispatch({ type: 'LOGIN_SUCCESS', payload: response });
     } catch (error) {
-      dispatch({ type: "LOGIN_FAILURE" });
+      dispatch({ type: 'LOGIN_FAILURE' });
       throw error;
     }
   };
 
   const register = async (email: string, name: string, password: string) => {
-    dispatch({ type: "LOGIN_START" });
+    dispatch({ type: 'LOGIN_START' });
     try {
       const response = await authAPI.register({ email, name, password });
-      dispatch({ type: "LOGIN_SUCCESS", payload: response });
+      dispatch({ type: 'LOGIN_SUCCESS', payload: response });
     } catch (error) {
-      dispatch({ type: "LOGIN_FAILURE" });
+      dispatch({ type: 'LOGIN_FAILURE' });
       throw error;
     }
   };
 
   const logout = () => {
-    dispatch({ type: "LOGOUT" });
+    dispatch({ type: 'LOGOUT' });
   };
 
   return (
@@ -775,7 +760,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }
@@ -785,8 +770,8 @@ export function useAuth() {
 
 ```typescript
 // frontend/src/services/api.ts - API client
-import axios, { AxiosError } from "axios";
-import toast from "react-hot-toast";
+import axios, { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
 import {
   User,
   Post,
@@ -796,30 +781,29 @@ import {
   CreatePostRequest,
   PaginatedResponse,
   ApiResponse,
-} from "../types/api";
+} from '../types/api';
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:3001/api";
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("auth_token");
+    const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
 
 // Response interceptor for token refresh and error handling
@@ -832,14 +816,14 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refresh_token");
+        const refreshToken = localStorage.getItem('refresh_token');
         if (refreshToken) {
           const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
             refreshToken,
           });
 
           const newToken = response.data.data.token;
-          localStorage.setItem("auth_token", newToken);
+          localStorage.setItem('auth_token', newToken);
 
           // Retry original request with new token
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
@@ -847,9 +831,9 @@ api.interceptors.response.use(
         }
       } catch (refreshError) {
         // Refresh failed, redirect to login
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("refresh_token");
-        window.location.href = "/login";
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
@@ -858,33 +842,27 @@ api.interceptors.response.use(
     if (error.response?.data?.error) {
       toast.error(error.response.data.error);
     } else {
-      toast.error("An unexpected error occurred");
+      toast.error('An unexpected error occurred');
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 // Authentication API
 export const authAPI = {
   login: async (credentials: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post<ApiResponse<AuthResponse>>(
-      "/auth/login",
-      credentials,
-    );
+    const response = await api.post<ApiResponse<AuthResponse>>('/auth/login', credentials);
     return response.data.data!;
   },
 
   register: async (userData: CreateUserRequest): Promise<AuthResponse> => {
-    const response = await api.post<ApiResponse<AuthResponse>>(
-      "/auth/register",
-      userData,
-    );
+    const response = await api.post<ApiResponse<AuthResponse>>('/auth/register', userData);
     return response.data.data!;
   },
 
   verifyToken: async (token: string): Promise<User> => {
-    const response = await api.get<ApiResponse<User>>("/auth/verify", {
+    const response = await api.get<ApiResponse<User>>('/auth/verify', {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data.data!;
@@ -895,7 +873,7 @@ export const authAPI = {
 export const postsAPI = {
   getPosts: async (page = 1, limit = 10): Promise<PaginatedResponse<Post>> => {
     const response = await api.get<ApiResponse<PaginatedResponse<Post>>>(
-      `/posts?page=${page}&limit=${limit}`,
+      `/posts?page=${page}&limit=${limit}`
     );
     return response.data.data!;
   },
@@ -906,14 +884,11 @@ export const postsAPI = {
   },
 
   createPost: async (postData: CreatePostRequest): Promise<Post> => {
-    const response = await api.post<ApiResponse<Post>>("/posts", postData);
+    const response = await api.post<ApiResponse<Post>>('/posts', postData);
     return response.data.data!;
   },
 
-  updatePost: async (
-    id: string,
-    postData: Partial<CreatePostRequest>,
-  ): Promise<Post> => {
+  updatePost: async (id: string, postData: Partial<CreatePostRequest>): Promise<Post> => {
     const response = await api.put<ApiResponse<Post>>(`/posts/${id}`, postData);
     return response.data.data!;
   },
@@ -931,15 +906,12 @@ export const postsAPI = {
 // Users API
 export const usersAPI = {
   getProfile: async (): Promise<User> => {
-    const response = await api.get<ApiResponse<User>>("/users/profile");
+    const response = await api.get<ApiResponse<User>>('/users/profile');
     return response.data.data!;
   },
 
   updateProfile: async (userData: Partial<User>): Promise<User> => {
-    const response = await api.put<ApiResponse<User>>(
-      "/users/profile",
-      userData,
-    );
+    const response = await api.put<ApiResponse<User>>('/users/profile', userData);
     return response.data.data!;
   },
 };
@@ -951,15 +923,15 @@ export default api;
 
 ```tsx
 // frontend/src/components/PostCard.tsx - Reusable post component
-import React from "react";
-import { Link } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Heart, Eye, Calendar, User } from "lucide-react";
-import { Post } from "../types/api";
-import { postsAPI } from "../services/api";
-import { useAuth } from "../contexts/AuthContext";
-import { formatDate } from "../utils/dateUtils";
-import toast from "react-hot-toast";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Heart, Eye, Calendar, User } from 'lucide-react';
+import { Post } from '../types/api';
+import { postsAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
+import { formatDate } from '../utils/dateUtils';
+import toast from 'react-hot-toast';
 
 interface PostCardProps {
   post: Post;
@@ -967,11 +939,7 @@ interface PostCardProps {
   className?: string;
 }
 
-export function PostCard({
-  post,
-  showActions = true,
-  className = "",
-}: PostCardProps) {
+export function PostCard({ post, showActions = true, className = '' }: PostCardProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -979,25 +947,23 @@ export function PostCard({
     mutationFn: postsAPI.likePost,
     onSuccess: (updatedPost) => {
       // Update the post in the cache
-      queryClient.setQueryData(["posts"], (oldData: any) => {
+      queryClient.setQueryData(['posts'], (oldData: any) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
-          data: oldData.data.map((p: Post) =>
-            p.id === updatedPost.id ? updatedPost : p,
-          ),
+          data: oldData.data.map((p: Post) => (p.id === updatedPost.id ? updatedPost : p)),
         };
       });
-      toast.success("Post liked!");
+      toast.success('Post liked!');
     },
     onError: () => {
-      toast.error("Failed to like post");
+      toast.error('Failed to like post');
     },
   });
 
   const handleLike = () => {
     if (!user) {
-      toast.error("Please login to like posts");
+      toast.error('Please login to like posts');
       return;
     }
     likeMutation.mutate(post.id);
@@ -1023,24 +989,16 @@ export function PostCard({
         </div>
 
         <h3 className="text-xl font-semibold text-gray-900 mb-3">
-          <Link
-            to={`/posts/${post.id}`}
-            className="hover:text-blue-600 transition-colors"
-          >
+          <Link to={`/posts/${post.id}`} className="hover:text-blue-600 transition-colors">
             {post.title}
           </Link>
         </h3>
 
-        <p className="text-gray-600 mb-4 line-clamp-3">
-          {post.content.substring(0, 200)}...
-        </p>
+        <p className="text-gray-600 mb-4 line-clamp-3">{post.content.substring(0, 200)}...</p>
 
         <div className="flex flex-wrap gap-2 mb-4">
           {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full"
-            >
+            <span key={tag} className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
               #{tag}
             </span>
           ))}
@@ -1064,9 +1022,7 @@ export function PostCard({
               disabled={likeMutation.isLoading}
               className="flex items-center space-x-2 px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50"
             >
-              <Heart
-                className={`w-4 h-4 ${likeMutation.isLoading ? "animate-pulse" : ""}`}
-              />
+              <Heart className={`w-4 h-4 ${likeMutation.isLoading ? 'animate-pulse' : ''}`} />
               <span>Like</span>
             </button>
           </div>
@@ -1077,21 +1033,18 @@ export function PostCard({
 }
 
 // frontend/src/components/LoadingSpinner.tsx - Loading component
-import React from "react";
+import React from 'react';
 
 interface LoadingSpinnerProps {
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-export function LoadingSpinner({
-  size = "md",
-  className = "",
-}: LoadingSpinnerProps) {
+export function LoadingSpinner({ size = 'md', className = '' }: LoadingSpinnerProps) {
   const sizeClasses = {
-    sm: "w-4 h-4",
-    md: "w-8 h-8",
-    lg: "w-12 h-12",
+    sm: 'w-4 h-4',
+    md: 'w-8 h-8',
+    lg: 'w-12 h-12',
   };
 
   return (
@@ -1104,7 +1057,7 @@ export function LoadingSpinner({
 }
 
 // frontend/src/components/ErrorBoundary.tsx - Error boundary component
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -1125,7 +1078,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   public render() {
@@ -1133,12 +1086,9 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Something went wrong
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Something went wrong</h2>
             <p className="text-gray-600 mb-6">
-              We're sorry, but something unexpected happened. Please try
-              refreshing the page.
+              We're sorry, but something unexpected happened. Please try refreshing the page.
             </p>
             <button
               onClick={() => window.location.reload()}
@@ -1215,27 +1165,21 @@ describe('PostCard', () => {
 
 ```typescript
 // frontend/src/hooks/useInfiniteScroll.ts - Custom hook for pagination
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { postsAPI } from "../services/api";
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { postsAPI } from '../services/api';
 
 export function useInfiniteScroll() {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    error,
-  } = useInfiniteQuery({
-    queryKey: ["posts"],
-    queryFn: ({ pageParam = 1 }) => postsAPI.getPosts(pageParam),
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.pagination.page < lastPage.pagination.totalPages
-        ? lastPage.pagination.page + 1
-        : undefined;
-    },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
+    useInfiniteQuery({
+      queryKey: ['posts'],
+      queryFn: ({ pageParam = 1 }) => postsAPI.getPosts(pageParam),
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.pagination.page < lastPage.pagination.totalPages
+          ? lastPage.pagination.page + 1
+          : undefined;
+      },
+    });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1249,8 +1193,8 @@ export function useInfiniteScroll() {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const posts = data?.pages.flatMap((page) => page.data) ?? [];

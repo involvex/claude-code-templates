@@ -548,11 +548,7 @@ Request special permissions:
     "distribution": "Ubuntu",
     "release": "24.04",
 
-    "execDepends": [
-      { "name": "python3-pip" },
-      { "name": "samtools" },
-      { "name": "subread" }
-    ],
+    "execDepends": [{ "name": "python3-pip" }, { "name": "samtools" }, { "name": "subread" }],
 
     "assetDepends": [
       {

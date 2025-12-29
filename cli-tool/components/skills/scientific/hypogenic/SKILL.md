@@ -225,12 +225,12 @@ prompt_templates:
 
   # Required templates
   batched_generation:
-    system: "Your system prompt here"
-    user: "Your user prompt with ${num_hypotheses} placeholder"
+    system: 'Your system prompt here'
+    user: 'Your user prompt with ${num_hypotheses} placeholder'
 
   inference:
-    system: "Your inference system prompt"
-    user: "Your inference user prompt"
+    system: 'Your inference system prompt'
+    user: 'Your inference user prompt'
 
   # Optional templates for advanced features
   few_shot_baseline: { ... }

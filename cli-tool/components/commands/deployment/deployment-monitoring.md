@@ -115,13 +115,13 @@ spec:
         - name: prometheus
           image: prom/prometheus:v2.40.0
           args:
-            - "--config.file=/etc/prometheus/prometheus.yml"
-            - "--storage.tsdb.path=/prometheus"
-            - "--web.console.libraries=/etc/prometheus/console_libraries"
-            - "--web.console.templates=/etc/prometheus/consoles"
-            - "--storage.tsdb.retention.time=30d"
-            - "--web.enable-lifecycle"
-            - "--web.enable-admin-api"
+            - '--config.file=/etc/prometheus/prometheus.yml'
+            - '--storage.tsdb.path=/prometheus'
+            - '--web.console.libraries=/etc/prometheus/console_libraries'
+            - '--web.console.templates=/etc/prometheus/consoles'
+            - '--storage.tsdb.retention.time=30d'
+            - '--web.enable-lifecycle'
+            - '--web.enable-admin-api'
           ports:
             - containerPort: 9090
           volumeMounts:
@@ -131,11 +131,11 @@ spec:
               mountPath: /prometheus
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "250m"
+              memory: '512Mi'
+              cpu: '250m'
             limits:
-              memory: "2Gi"
-              cpu: "1000m"
+              memory: '2Gi'
+              cpu: '1000m'
       volumes:
         - name: prometheus-config
           configMap:
@@ -263,13 +263,13 @@ data:
 
 ```javascript
 // health-check.js - Application health endpoint
-const express = require("express");
-const { promisify } = require("util");
+const express = require('express');
+const { promisify } = require('util');
 
 class HealthMonitor {
   constructor() {
     this.checks = new Map();
-    this.status = "healthy";
+    this.status = 'healthy';
     this.lastCheck = new Date();
   }
 
@@ -294,32 +294,29 @@ class HealthMonitor {
         const result = await Promise.race([
           config.check(),
           new Promise((_, reject) =>
-            setTimeout(
-              () => reject(new Error("Health check timeout")),
-              config.timeout,
-            ),
+            setTimeout(() => reject(new Error('Health check timeout')), config.timeout)
           ),
         ]);
 
         const duration = Date.now() - startTime;
 
         results[name] = {
-          status: "healthy",
+          status: 'healthy',
           duration,
           details: result,
           lastCheck: new Date().toISOString(),
         };
 
-        config.lastStatus = "healthy";
+        config.lastStatus = 'healthy';
         config.errorCount = 0;
       } catch (error) {
         results[name] = {
-          status: "unhealthy",
+          status: 'unhealthy',
           error: error.message,
           lastCheck: new Date().toISOString(),
         };
 
-        config.lastStatus = "unhealthy";
+        config.lastStatus = 'unhealthy';
         config.errorCount++;
 
         if (config.critical) {
@@ -330,7 +327,7 @@ class HealthMonitor {
       config.lastCheck = new Date();
     }
 
-    this.status = overallHealthy ? "healthy" : "unhealthy";
+    this.status = overallHealthy ? 'healthy' : 'unhealthy';
     this.lastCheck = new Date();
 
     return {
@@ -338,33 +335,30 @@ class HealthMonitor {
       timestamp: this.lastCheck.toISOString(),
       checks: results,
       uptime: process.uptime(),
-      version: process.env.APP_VERSION || "unknown",
+      version: process.env.APP_VERSION || 'unknown',
     };
   }
 
   setupEndpoints(app) {
     // Liveness probe - basic application health
-    app.get("/health", async (req, res) => {
+    app.get('/health', async (req, res) => {
       const health = await this.runHealthChecks();
-      const statusCode = health.status === "healthy" ? 200 : 503;
+      const statusCode = health.status === 'healthy' ? 200 : 503;
       res.status(statusCode).json(health);
     });
 
     // Readiness probe - ready to receive traffic
-    app.get("/ready", async (req, res) => {
+    app.get('/ready', async (req, res) => {
       const health = await this.runHealthChecks();
 
       // Additional readiness checks
       const readinessChecks = {
-        memoryUsage:
-          process.memoryUsage().heapUsed / process.memoryUsage().heapTotal <
-          0.9,
+        memoryUsage: process.memoryUsage().heapUsed / process.memoryUsage().heapTotal < 0.9,
         activeConnections: true, // Check active connections if applicable
       };
 
       const isReady =
-        health.status === "healthy" &&
-        Object.values(readinessChecks).every((check) => check);
+        health.status === 'healthy' && Object.values(readinessChecks).every((check) => check);
 
       res.status(isReady ? 200 : 503).json({
         ...health,
@@ -374,9 +368,9 @@ class HealthMonitor {
     });
 
     // Startup probe - application has started
-    app.get("/startup", (req, res) => {
+    app.get('/startup', (req, res) => {
       res.status(200).json({
-        status: "started",
+        status: 'started',
         timestamp: new Date().toISOString(),
         pid: process.pid,
         uptime: process.uptime(),
@@ -390,33 +384,33 @@ const healthMonitor = new HealthMonitor();
 
 // Register health checks
 healthMonitor.registerCheck(
-  "database",
+  'database',
   async () => {
     // Database connectivity check
-    await db.query("SELECT 1");
+    await db.query('SELECT 1');
     return { connected: true };
   },
-  { critical: true, timeout: 3000 },
+  { critical: true, timeout: 3000 }
 );
 
 healthMonitor.registerCheck(
-  "redis",
+  'redis',
   async () => {
     // Redis connectivity check
     await redis.ping();
     return { connected: true };
   },
-  { critical: false, timeout: 2000 },
+  { critical: false, timeout: 2000 }
 );
 
 healthMonitor.registerCheck(
-  "external-api",
+  'external-api',
   async () => {
     // External service check
-    const response = await fetch("https://api.external-service.com/health");
+    const response = await fetch('https://api.external-service.com/health');
     return { status: response.status, healthy: response.ok };
   },
-  { critical: false, timeout: 5000 },
+  { critical: false, timeout: 5000 }
 );
 
 module.exports = healthMonitor;
@@ -428,69 +422,69 @@ module.exports = healthMonitor;
 
 ```javascript
 // metrics.js - Application metrics collection
-const promClient = require("prom-client");
+const promClient = require('prom-client');
 
 class DeploymentMetrics {
   constructor() {
     // Default metrics
     promClient.collectDefaultMetrics({
-      prefix: "myapp_",
+      prefix: 'myapp_',
       timeout: 5000,
     });
 
     // Custom deployment metrics
     this.deploymentInfo = new promClient.Gauge({
-      name: "myapp_deployment_info",
-      help: "Deployment information",
-      labelNames: ["version", "environment", "commit_sha"],
+      name: 'myapp_deployment_info',
+      help: 'Deployment information',
+      labelNames: ['version', 'environment', 'commit_sha'],
     });
 
     this.httpRequestsTotal = new promClient.Counter({
-      name: "myapp_http_requests_total",
-      help: "Total HTTP requests",
-      labelNames: ["method", "status_code", "route"],
+      name: 'myapp_http_requests_total',
+      help: 'Total HTTP requests',
+      labelNames: ['method', 'status_code', 'route'],
     });
 
     this.httpRequestDuration = new promClient.Histogram({
-      name: "myapp_http_request_duration_seconds",
-      help: "HTTP request duration in seconds",
-      labelNames: ["method", "status_code", "route"],
+      name: 'myapp_http_request_duration_seconds',
+      help: 'HTTP request duration in seconds',
+      labelNames: ['method', 'status_code', 'route'],
       buckets: [0.1, 0.5, 1, 2, 5],
     });
 
     this.activeConnections = new promClient.Gauge({
-      name: "myapp_active_connections",
-      help: "Number of active connections",
+      name: 'myapp_active_connections',
+      help: 'Number of active connections',
     });
 
     this.deploymentEvents = new promClient.Counter({
-      name: "myapp_deployment_events_total",
-      help: "Deployment events",
-      labelNames: ["event_type", "status"],
+      name: 'myapp_deployment_events_total',
+      help: 'Deployment events',
+      labelNames: ['event_type', 'status'],
     });
 
     this.healthCheckStatus = new promClient.Gauge({
-      name: "myapp_health_check_status",
-      help: "Health check status (1 = healthy, 0 = unhealthy)",
-      labelNames: ["check_name"],
+      name: 'myapp_health_check_status',
+      help: 'Health check status (1 = healthy, 0 = unhealthy)',
+      labelNames: ['check_name'],
     });
 
     // Business metrics
     this.businessMetrics = {
       activeUsers: new promClient.Gauge({
-        name: "myapp_active_users",
-        help: "Number of active users",
+        name: 'myapp_active_users',
+        help: 'Number of active users',
       }),
 
       transactionsTotal: new promClient.Counter({
-        name: "myapp_transactions_total",
-        help: "Total transactions processed",
-        labelNames: ["type", "status"],
+        name: 'myapp_transactions_total',
+        help: 'Total transactions processed',
+        labelNames: ['type', 'status'],
       }),
 
       errorRate: new promClient.Gauge({
-        name: "myapp_error_rate",
-        help: "Application error rate percentage",
+        name: 'myapp_error_rate',
+        help: 'Application error rate percentage',
       }),
     };
 
@@ -501,11 +495,11 @@ class DeploymentMetrics {
     // Set deployment information
     this.deploymentInfo.set(
       {
-        version: process.env.APP_VERSION || "unknown",
-        environment: process.env.NODE_ENV || "development",
-        commit_sha: process.env.GIT_COMMIT_SHA || "unknown",
+        version: process.env.APP_VERSION || 'unknown',
+        environment: process.env.NODE_ENV || 'development',
+        commit_sha: process.env.GIT_COMMIT_SHA || 'unknown',
       },
-      1,
+      1
     );
   }
 
@@ -540,7 +534,7 @@ class DeploymentMetrics {
     return (req, res, next) => {
       const start = Date.now();
 
-      res.on("finish", () => {
+      res.on('finish', () => {
         const duration = (Date.now() - start) / 1000;
         this.recordHttpRequest(req, res, duration);
       });
@@ -552,7 +546,7 @@ class DeploymentMetrics {
   // Get metrics endpoint
   getMetricsHandler() {
     return async (req, res) => {
-      res.set("Content-Type", promClient.register.contentType);
+      res.set('Content-Type', promClient.register.contentType);
       const metrics = await promClient.register.metrics();
       res.end(metrics);
     };
@@ -666,9 +660,9 @@ spec:
             severity: critical
             service: myapp
           annotations:
-            summary: "Application instance is down"
-            description: "{{ $labels.instance }} has been down for more than 1 minute"
-            runbook_url: "https://wiki.example.com/runbooks/app-down"
+            summary: 'Application instance is down'
+            description: '{{ $labels.instance }} has been down for more than 1 minute'
+            runbook_url: 'https://wiki.example.com/runbooks/app-down'
 
         # High error rate
         - alert: HighErrorRate
@@ -678,8 +672,8 @@ spec:
             severity: critical
             service: myapp
           annotations:
-            summary: "High error rate detected"
-            description: "Error rate is {{ $value }}% for the last 5 minutes"
+            summary: 'High error rate detected'
+            description: 'Error rate is {{ $value }}% for the last 5 minutes'
 
         # Slow response times
         - alert: SlowResponseTime
@@ -689,8 +683,8 @@ spec:
             severity: warning
             service: myapp
           annotations:
-            summary: "Slow response times detected"
-            description: "95th percentile response time is {{ $value }}s"
+            summary: 'Slow response times detected'
+            description: '95th percentile response time is {{ $value }}s'
 
         # Memory usage
         - alert: HighMemoryUsage
@@ -700,8 +694,8 @@ spec:
             severity: warning
             service: myapp
           annotations:
-            summary: "High memory usage"
-            description: "Pod {{ $labels.pod }} memory usage is {{ $value }}%"
+            summary: 'High memory usage'
+            description: 'Pod {{ $labels.pod }} memory usage is {{ $value }}%'
 
         # CPU usage
         - alert: HighCPUUsage
@@ -711,8 +705,8 @@ spec:
             severity: warning
             service: myapp
           annotations:
-            summary: "High CPU usage"
-            description: "Pod {{ $labels.pod }} CPU usage is {{ $value }}%"
+            summary: 'High CPU usage'
+            description: 'Pod {{ $labels.pod }} CPU usage is {{ $value }}%'
 
     - name: deployment-events
       rules:
@@ -724,8 +718,8 @@ spec:
             severity: critical
             service: myapp
           annotations:
-            summary: "Deployment has failed pods"
-            description: "Deployment {{ $labels.deployment }} has {{ $value }} unavailable replicas"
+            summary: 'Deployment has failed pods'
+            description: 'Deployment {{ $labels.deployment }} has {{ $value }} unavailable replicas'
 
         # Deployment stuck
         - alert: DeploymentStuck
@@ -735,8 +729,8 @@ spec:
             severity: warning
             service: myapp
           annotations:
-            summary: "Deployment appears stuck"
-            description: "Deployment {{ $labels.deployment }} has been in progress for more than 10 minutes"
+            summary: 'Deployment appears stuck'
+            description: 'Deployment {{ $labels.deployment }} has been in progress for more than 10 minutes'
 
         # Pod crash looping
         - alert: PodCrashLooping
@@ -746,8 +740,8 @@ spec:
             severity: critical
             service: myapp
           annotations:
-            summary: "Pod is crash looping"
-            description: "Pod {{ $labels.pod }} is restarting frequently"
+            summary: 'Pod is crash looping'
+            description: 'Pod {{ $labels.pod }} is restarting frequently'
 
     - name: business-metrics
       rules:
@@ -759,8 +753,8 @@ spec:
             severity: warning
             service: myapp
           annotations:
-            summary: "High transaction failure rate"
-            description: "Transaction failure rate is {{ $value }}%"
+            summary: 'High transaction failure rate'
+            description: 'Transaction failure rate is {{ $value }}%'
 
         # Low active users (potential issue indicator)
         - alert: LowActiveUsers
@@ -770,8 +764,8 @@ spec:
             severity: warning
             service: myapp
           annotations:
-            summary: "Unusually low active user count"
-            description: "Only {{ $value }} active users during business hours"
+            summary: 'Unusually low active user count'
+            description: 'Only {{ $value }} active users during business hours'
 ```
 
 ### 5. **Log Aggregation and Analysis**
@@ -872,37 +866,30 @@ data:
 
 ```javascript
 // tracing.js - Distributed tracing setup
-const { NodeSDK } = require("@opentelemetry/sdk-node");
-const {
-  getNodeAutoInstrumentations,
-} = require("@opentelemetry/auto-instrumentations-node");
-const { JaegerExporter } = require("@opentelemetry/exporter-jaeger");
-const { Resource } = require("@opentelemetry/resources");
-const {
-  SemanticResourceAttributes,
-} = require("@opentelemetry/semantic-conventions");
+const { NodeSDK } = require('@opentelemetry/sdk-node');
+const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
+const { JaegerExporter } = require('@opentelemetry/exporter-jaeger');
+const { Resource } = require('@opentelemetry/resources');
+const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
 
 const jaegerExporter = new JaegerExporter({
-  endpoint:
-    process.env.JAEGER_ENDPOINT || "http://jaeger-collector:14268/api/traces",
+  endpoint: process.env.JAEGER_ENDPOINT || 'http://jaeger-collector:14268/api/traces',
 });
 
 const sdk = new NodeSDK({
   resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: "myapp",
-    [SemanticResourceAttributes.SERVICE_VERSION]:
-      process.env.APP_VERSION || "unknown",
-    [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]:
-      process.env.NODE_ENV || "development",
+    [SemanticResourceAttributes.SERVICE_NAME]: 'myapp',
+    [SemanticResourceAttributes.SERVICE_VERSION]: process.env.APP_VERSION || 'unknown',
+    [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: process.env.NODE_ENV || 'development',
   }),
   traceExporter: jaegerExporter,
   instrumentations: [
     getNodeAutoInstrumentations({
       // Customize instrumentation
-      "@opentelemetry/instrumentation-http": {
+      '@opentelemetry/instrumentation-http': {
         requestHook: (span, request) => {
-          span.setAttribute("deployment.version", process.env.APP_VERSION);
-          span.setAttribute("deployment.environment", process.env.NODE_ENV);
+          span.setAttribute('deployment.version', process.env.APP_VERSION);
+          span.setAttribute('deployment.environment', process.env.NODE_ENV);
         },
       },
     }),
@@ -912,20 +899,20 @@ const sdk = new NodeSDK({
 sdk.start();
 
 // Custom deployment tracing
-const { trace, context } = require("@opentelemetry/api");
+const { trace, context } = require('@opentelemetry/api');
 
 class DeploymentTracer {
   constructor() {
-    this.tracer = trace.getTracer("deployment-monitor", "1.0.0");
+    this.tracer = trace.getTracer('deployment-monitor', '1.0.0');
   }
 
   traceDeploymentEvent(eventName, metadata, callback) {
     const span = this.tracer.startSpan(`deployment.${eventName}`, {
       attributes: {
-        "deployment.event": eventName,
-        "deployment.version": metadata.version,
-        "deployment.environment": metadata.environment,
-        "deployment.timestamp": new Date().toISOString(),
+        'deployment.event': eventName,
+        'deployment.version': metadata.version,
+        'deployment.environment': metadata.environment,
+        'deployment.timestamp': new Date().toISOString(),
       },
     });
 
@@ -933,15 +920,15 @@ class DeploymentTracer {
       try {
         const result = await callback();
         span.setStatus({ code: trace.SpanStatusCode.OK });
-        span.setAttribute("deployment.result", "success");
+        span.setAttribute('deployment.result', 'success');
         return result;
       } catch (error) {
         span.setStatus({
           code: trace.SpanStatusCode.ERROR,
           message: error.message,
         });
-        span.setAttribute("deployment.result", "failure");
-        span.setAttribute("deployment.error", error.message);
+        span.setAttribute('deployment.result', 'failure');
+        span.setAttribute('deployment.error', error.message);
         throw error;
       } finally {
         span.end();

@@ -223,12 +223,7 @@ lamin init --storage s3://my-bucket/project-data \
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:DeleteObject",
-        "s3:ListBucket"
-      ],
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
       "Resource": ["arn:aws:s3:::my-bucket/*", "arn:aws:s3:::my-bucket"]
     }
   ]

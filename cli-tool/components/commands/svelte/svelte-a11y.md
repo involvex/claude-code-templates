@@ -62,7 +62,7 @@ You are acting as the Svelte Development Agent focused on accessibility. When im
 
    // Keyboard navigation
    function handleKeydown(event) {
-     if (event.key === "Escape") {
+     if (event.key === 'Escape') {
        closeModal();
      }
    }

@@ -191,29 +191,28 @@ export function App() {
 
 ```javascript
 // webpack.config.js
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   plugins: [
     new BundleAnalyzerPlugin({
-      analyzerMode: "static",
+      analyzerMode: 'static',
       openAnalyzer: false,
-      reportFilename: "bundle-report.html",
+      reportFilename: 'bundle-report.html',
     }),
   ],
   optimization: {
     splitChunks: {
-      chunks: "all",
+      chunks: 'all',
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
+          name: 'vendors',
           priority: 10,
           reuseExistingChunk: true,
         },
         common: {
-          name: "common",
+          name: 'common',
           minChunks: 2,
           priority: 5,
           reuseExistingChunk: true,
@@ -261,10 +260,10 @@ export function Head() {
 
 ```typescript
 // Code splitting to reduce main thread blocking
-const heavyLibrary = lazy(() => import("heavy-library"));
+const heavyLibrary = lazy(() => import('heavy-library'));
 
 // Use scheduler for non-urgent updates
-import { unstable_scheduleCallback, unstable_NormalPriority } from "scheduler";
+import { unstable_scheduleCallback, unstable_NormalPriority } from 'scheduler';
 
 const deferNonCriticalWork = (callback: () => void) => {
   unstable_scheduleCallback(unstable_NormalPriority, callback);
@@ -341,20 +340,20 @@ const observePerformance = () => {
   // Core Web Vitals tracking
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
-      if (entry.name === "largest-contentful-paint") {
-        trackMetric("LCP", entry.startTime);
+      if (entry.name === 'largest-contentful-paint') {
+        trackMetric('LCP', entry.startTime);
       }
-      if (entry.name === "first-input") {
-        trackMetric("FID", entry.processingStart - entry.startTime);
+      if (entry.name === 'first-input') {
+        trackMetric('FID', entry.processingStart - entry.startTime);
       }
-      if (entry.name === "layout-shift") {
-        trackMetric("CLS", entry.value);
+      if (entry.name === 'layout-shift') {
+        trackMetric('CLS', entry.value);
       }
     }
   });
 
   observer.observe({
-    entryTypes: ["largest-contentful-paint", "first-input", "layout-shift"],
+    entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'],
   });
 };
 
@@ -365,7 +364,7 @@ const usePerformanceMonitor = () => {
 
     return () => {
       const duration = performance.now() - startTime;
-      trackMetric("component-mount-time", duration);
+      trackMetric('component-mount-time', duration);
     };
   }, []);
 };
@@ -381,7 +380,7 @@ const useCleanup = (effect: () => () => void, deps: any[]) => {
     return () => {
       cleanup();
       // Clear any remaining references
-      if (typeof cleanup === "function") {
+      if (typeof cleanup === 'function') {
         cleanup();
       }
     };
@@ -389,10 +388,7 @@ const useCleanup = (effect: () => () => void, deps: any[]) => {
 };
 
 // Proper event listener cleanup
-const useEventListener = (
-  eventName: string,
-  handler: (event: Event) => void,
-) => {
+const useEventListener = (eventName: string, handler: (event: Event) => void) => {
   const savedHandler = useRef(handler);
 
   useEffect(() => {

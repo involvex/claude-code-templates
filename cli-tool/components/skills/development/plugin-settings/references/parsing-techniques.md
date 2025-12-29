@@ -9,10 +9,10 @@ Settings files use markdown with YAML frontmatter:
 ```markdown
 ---
 field1: value1
-field2: "value with spaces"
+field2: 'value with spaces'
 numeric_field: 42
 boolean_field: true
-list_field: ["item1", "item2", "item3"]
+list_field: ['item1', 'item2', 'item3']
 ---
 
 # Markdown Content
@@ -313,8 +313,8 @@ YAML allows both quoted and unquoted strings:
 ```yaml
 # These are equivalent:
 field1: value
-field2: "value"
-field3: "value"
+field2: 'value'
+field3: 'value'
 ```
 
 **Handle both:**
@@ -348,7 +348,7 @@ Handle missing or empty fields:
 
 ```yaml
 field1:
-field2: ""
+field2: ''
 field3: null
 ```
 
@@ -369,9 +369,9 @@ fi
 Values with special characters need careful handling:
 
 ```yaml
-message: "Error: Something went wrong!"
-path: "/path/with spaces/file.txt"
-regex: "^[a-zA-Z0-9_]+$"
+message: 'Error: Something went wrong!'
+path: '/path/with spaces/file.txt'
+regex: '^[a-zA-Z0-9_]+$'
 ```
 
 **Safe parsing:**

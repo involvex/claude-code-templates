@@ -58,6 +58,7 @@ npm version 1.5.0
 ```
 
 **This automatically**:
+
 - Updates `package.json` version
 - Creates git commit: "1.5.0"
 - Creates git tag: "v1.5.0"
@@ -291,6 +292,7 @@ npm token create --read-only
 ### Two-Factor Authentication
 
 Enable 2FA on npm account:
+
 - Settings → Account → Two-Factor Authentication
 - Use for auth and publishing
 

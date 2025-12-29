@@ -113,7 +113,7 @@ allowed-tools: Bash(docker:*)        # Only docker commands
 **All tools (not recommended):**
 
 ```yaml
-allowed-tools: "*"
+allowed-tools: '*'
 ```
 
 **When to use:**

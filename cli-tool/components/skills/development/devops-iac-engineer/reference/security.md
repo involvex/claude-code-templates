@@ -35,9 +35,9 @@ spec:
     - name: app
       env:
         - name: DATABASE_PASSWORD
-          value: "SuperSecret123!" # 🚨 NEVER DO THIS
+          value: 'SuperSecret123!' # 🚨 NEVER DO THIS
         - name: API_KEY
-          value: "sk-abc123def456" # 🚨 NEVER DO THIS
+          value: 'sk-abc123def456' # 🚨 NEVER DO THIS
 ```
 
 ### ✅ Use External Secrets Operator
@@ -238,11 +238,11 @@ spec:
 
       resources:
         limits:
-          memory: "512Mi"
-          cpu: "500m"
+          memory: '512Mi'
+          cpu: '500m'
         requests:
-          memory: "256Mi"
-          cpu: "250m"
+          memory: '256Mi'
+          cpu: '250m'
 
       volumeMounts:
         - name: tmp
@@ -390,15 +390,15 @@ metadata:
   namespace: production
 rules:
   # Only read ConfigMaps and Secrets
-  - apiGroups: [""]
-    resources: ["configmaps", "secrets"]
-    verbs: ["get", "list"]
-    resourceNames: ["myapp-config", "myapp-secrets"]
+  - apiGroups: ['']
+    resources: ['configmaps', 'secrets']
+    verbs: ['get', 'list']
+    resourceNames: ['myapp-config', 'myapp-secrets']
 
   # Read own pod information
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get"]
+  - apiGroups: ['']
+    resources: ['pods']
+    verbs: ['get']
 
 ---
 # Bind role to service account
@@ -567,14 +567,14 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: myapp:${{ github.sha }}
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH"
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
 
       - name: Upload to GitHub Security
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: "trivy-results.sarif"
+          sarif_file: 'trivy-results.sarif'
 
   terraform-scan:
     runs-on: ubuntu-latest
@@ -641,9 +641,9 @@ kind: Ingress
 metadata:
   name: app
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/backend-protocol: 'HTTPS'
 spec:
   tls:
     - hosts:

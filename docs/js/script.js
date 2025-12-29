@@ -1,157 +1,156 @@
 // GitHub repository configuration
 const GITHUB_CONFIG = {
-    owner: 'davila7',
-    repo: 'claude-code-templates',
-    branch: 'main',
-    templatesPath: 'cli-tool/src/templates.js'
+  owner: 'davila7',
+  repo: 'claude-code-templates',
+  branch: 'main',
+  templatesPath: 'cli-tool/src/templates.js',
 };
 
 // Framework logos using Devicon CDN (https://devicon.dev/)
 const FRAMEWORK_ICONS = {
-    // Languages
-    'common': 'devicon-gear-plain', // Generic gear icon
-    'javascript-typescript': 'devicon-javascript-plain',
-    'python': 'devicon-python-plain',
-    'ruby': 'devicon-ruby-plain',
-    'rust': 'devicon-rust-plain',
-    'go': 'devicon-go-plain',
-    
-    // JavaScript/TypeScript frameworks
-    'react': 'devicon-react-original',
-    'vue': 'devicon-vuejs-plain',
-    'angular': 'devicon-angularjs-plain',
-    'node': 'devicon-nodejs-plain',
-    
-    // Python frameworks
-    'django': 'devicon-django-plain',
-    'flask': 'devicon-flask-original',
-    'fastapi': 'devicon-fastapi-plain',
-    
-    // Ruby frameworks
-    'rails': 'devicon-rails-plain',
-    'sinatra': 'devicon-ruby-plain', // Use Ruby icon for Sinatra
-    
-    // Default fallback
-    'default': 'devicon-devicon-plain'
+  // Languages
+  common: 'devicon-gear-plain', // Generic gear icon
+  'javascript-typescript': 'devicon-javascript-plain',
+  python: 'devicon-python-plain',
+  ruby: 'devicon-ruby-plain',
+  rust: 'devicon-rust-plain',
+  go: 'devicon-go-plain',
+
+  // JavaScript/TypeScript frameworks
+  react: 'devicon-react-original',
+  vue: 'devicon-vuejs-plain',
+  angular: 'devicon-angularjs-plain',
+  node: 'devicon-nodejs-plain',
+
+  // Python frameworks
+  django: 'devicon-django-plain',
+  flask: 'devicon-flask-original',
+  fastapi: 'devicon-fastapi-plain',
+
+  // Ruby frameworks
+  rails: 'devicon-rails-plain',
+  sinatra: 'devicon-ruby-plain', // Use Ruby icon for Sinatra
+
+  // Default fallback
+  default: 'devicon-devicon-plain',
 };
 
 let templatesData = null;
 
 // Fetch templates configuration from GitHub
 async function fetchTemplatesConfig() {
-    const grid = document.getElementById('unifiedGrid') || document.getElementById('templatesGrid');
-    grid.innerHTML = '<div class="loading">Loading templates from GitHub...</div>';
-    
-    try {
-        // Add cache-busting parameter to ensure we get the latest version
-        const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.templatesPath}?t=${Date.now()}`;
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const templateFileContent = await response.text();
-        
-        // Parse the JavaScript file to extract TEMPLATES_CONFIG
-        templatesData = parseTemplatesConfig(templateFileContent);
-        
-        if (templatesData) {
-            generateTemplateCards();
-        } else {
-            throw new Error('Failed to parse templates configuration');
-        }
-        
-    } catch (error) {
-        console.error('Error fetching templates:', error);
-        grid.innerHTML = `
+  const grid = document.getElementById('unifiedGrid') || document.getElementById('templatesGrid');
+  grid.innerHTML = '<div class="loading">Loading templates from GitHub...</div>';
+
+  try {
+    // Add cache-busting parameter to ensure we get the latest version
+    const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.templatesPath}?t=${Date.now()}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const templateFileContent = await response.text();
+
+    // Parse the JavaScript file to extract TEMPLATES_CONFIG
+    templatesData = parseTemplatesConfig(templateFileContent);
+
+    if (templatesData) {
+      generateTemplateCards();
+    } else {
+      throw new Error('Failed to parse templates configuration');
+    }
+  } catch (error) {
+    console.error('Error fetching templates:', error);
+    grid.innerHTML = `
             <div class="error-message">
                 <h3>Error loading templates</h3>
                 <p>Could not fetch templates from GitHub. Please try again later.</p>
                 <button onclick="displayTemplates()" class="retry-btn">Retry</button>
             </div>
         `;
-    }
+  }
 }
 
 // Parse the templates.js file content to extract TEMPLATES_CONFIG
 function parseTemplatesConfig(fileContent) {
-    try {
-        // Extract TEMPLATES_CONFIG object from the file
-        const configMatch = fileContent.match(/const TEMPLATES_CONFIG = ({[\s\S]*?});/);
-        if (!configMatch) {
-            throw new Error('TEMPLATES_CONFIG not found in file');
-        }
-        
-        // Clean up the extracted object string and make it valid JSON
-        let configString = configMatch[1];
-        
-        // Replace single quotes with double quotes
-        configString = configString.replace(/'/g, '"');
-        
-        // Handle object property names without quotes
-        configString = configString.replace(/(\w+):/g, '"$1":');
-        
-        // Remove trailing commas
-        configString = configString.replace(/,(\s*[}\]])/g, '$1');
-        
-        // Parse the JSON
-        const config = JSON.parse(configString);
-        
-        return config;
-    } catch (error) {
-        console.error('Error parsing templates config:', error);
-        return null;
+  try {
+    // Extract TEMPLATES_CONFIG object from the file
+    const configMatch = fileContent.match(/const TEMPLATES_CONFIG = ({[\s\S]*?});/);
+    if (!configMatch) {
+      throw new Error('TEMPLATES_CONFIG not found in file');
     }
+
+    // Clean up the extracted object string and make it valid JSON
+    let configString = configMatch[1];
+
+    // Replace single quotes with double quotes
+    configString = configString.replace(/'/g, '"');
+
+    // Handle object property names without quotes
+    configString = configString.replace(/(\w+):/g, '"$1":');
+
+    // Remove trailing commas
+    configString = configString.replace(/,(\s*[}\]])/g, '$1');
+
+    // Parse the JSON
+    const config = JSON.parse(configString);
+
+    return config;
+  } catch (error) {
+    console.error('Error parsing templates config:', error);
+    return null;
+  }
 }
 
 // Generate template cards from fetched data
 function generateTemplateCards() {
-    const grid = document.getElementById('unifiedGrid');
-    grid.innerHTML = '';
-    
-    if (!templatesData) {
-        grid.innerHTML = '<div class="error-message">No templates data available</div>';
-        return;
+  const grid = document.getElementById('unifiedGrid');
+  grid.innerHTML = '';
+
+  if (!templatesData) {
+    grid.innerHTML = '<div class="error-message">No templates data available</div>';
+    return;
+  }
+
+  // Add the "Add New Template" card first
+  const addTemplateCard = createAddTemplateCard();
+  grid.appendChild(addTemplateCard);
+
+  Object.entries(templatesData).forEach(([languageKey, languageData]) => {
+    // Skip the 'common' template as we're replacing it with the Add Template card
+    if (languageKey === 'common') {
+      return;
     }
-    
-    // Add the "Add New Template" card first
-    const addTemplateCard = createAddTemplateCard();
-    grid.appendChild(addTemplateCard);
-    
-    Object.entries(templatesData).forEach(([languageKey, languageData]) => {
-        // Skip the 'common' template as we're replacing it with the Add Template card
-        if (languageKey === 'common') {
-            return;
-        }
-        
-        // Create base language card (no framework)
-        const baseCard = createTemplateCard(languageKey, languageData, 'none', {
-            name: languageData.name,
-            icon: getFrameworkIcon(languageKey),
-            command: `npx claude-code-templates@latest --template=${languageKey} --yes`
-        });
-        grid.appendChild(baseCard);
-        
-        // Create framework-specific cards
-        if (languageData.frameworks) {
-            Object.entries(languageData.frameworks).forEach(([frameworkKey, frameworkData]) => {
-                const frameworkCard = createTemplateCard(languageKey, languageData, frameworkKey, {
-                    name: frameworkData.name,
-                    icon: getFrameworkIcon(frameworkKey),
-                    command: `npx claude-code-templates@latest --template=${languageKey} --yes`
-                });
-                grid.appendChild(frameworkCard);
-            });
-        }
+
+    // Create base language card (no framework)
+    const baseCard = createTemplateCard(languageKey, languageData, 'none', {
+      name: languageData.name,
+      icon: getFrameworkIcon(languageKey),
+      command: `npx claude-code-templates@latest --template=${languageKey} --yes`,
     });
+    grid.appendChild(baseCard);
+
+    // Create framework-specific cards
+    if (languageData.frameworks) {
+      Object.entries(languageData.frameworks).forEach(([frameworkKey, frameworkData]) => {
+        const frameworkCard = createTemplateCard(languageKey, languageData, frameworkKey, {
+          name: frameworkData.name,
+          icon: getFrameworkIcon(frameworkKey),
+          command: `npx claude-code-templates@latest --template=${languageKey} --yes`,
+        });
+        grid.appendChild(frameworkCard);
+      });
+    }
+  });
 }
 
 function createAddTemplateCard() {
-    const card = document.createElement('div');
-    card.className = 'template-card add-template-card';
-    
-    card.innerHTML = `
+  const card = document.createElement('div');
+  card.className = 'template-card add-template-card';
+
+  card.innerHTML = `
         <div class="card-inner">
             <div class="card-front">
                 <div class="framework-logo">
@@ -164,29 +163,30 @@ function createAddTemplateCard() {
             </div>
         </div>
     `;
-    
-    // Add click handler to open contribution modal directly (no flip)
-    card.addEventListener('click', () => {
-        showContributeModal();
-    });
-    
-    return card;
+
+  // Add click handler to open contribution modal directly (no flip)
+  card.addEventListener('click', () => {
+    showContributeModal();
+  });
+
+  return card;
 }
 
 function createTemplateCard(languageKey, languageData, frameworkKey, frameworkData) {
-    const card = document.createElement('div');
-    card.className = `template-card ${languageData.comingSoon ? 'coming-soon' : ''}`;
-    
-    const displayName = frameworkKey === 'none' ? 
-        frameworkData.name : 
-        `${languageData.name.split('/')[0]}/${frameworkData.name}`;
-    
-    // Get download count for this template
-    const templateKey = frameworkKey === 'none' ? languageKey : `${languageKey}/${frameworkKey}`;
-    const downloadCount = getDownloadCount(templateKey, 'template');
-    const downloadBadge = createDownloadBadge(downloadCount);
-    
-    card.innerHTML = `
+  const card = document.createElement('div');
+  card.className = `template-card ${languageData.comingSoon ? 'coming-soon' : ''}`;
+
+  const displayName =
+    frameworkKey === 'none'
+      ? frameworkData.name
+      : `${languageData.name.split('/')[0]}/${frameworkData.name}`;
+
+  // Get download count for this template
+  const templateKey = frameworkKey === 'none' ? languageKey : `${languageKey}/${frameworkKey}`;
+  const downloadCount = getDownloadCount(templateKey, 'template');
+  const downloadBadge = createDownloadBadge(downloadCount);
+
+  card.innerHTML = `
         <div class="card-inner">
             <div class="card-front">
                 ${languageData.comingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : ''}
@@ -213,59 +213,59 @@ function createTemplateCard(languageKey, languageData, frameworkKey, frameworkDa
             </div>
         </div>
     `;
-    
-    // Add click handler for card flip (only if not coming soon)
-    if (!languageData.comingSoon) {
-        card.addEventListener('click', (e) => {
-            // Don't flip if clicking on buttons
-            if (!e.target.closest('button')) {
-                card.classList.toggle('flipped');
-            }
-        });
-    }
-    
-    return card;
+
+  // Add click handler for card flip (only if not coming soon)
+  if (!languageData.comingSoon) {
+    card.addEventListener('click', (e) => {
+      // Don't flip if clicking on buttons
+      if (!e.target.closest('button')) {
+        card.classList.toggle('flipped');
+      }
+    });
+  }
+
+  return card;
 }
 
 // Get framework icon from mapping
 function getFrameworkIcon(framework) {
-    return FRAMEWORK_ICONS[framework] || FRAMEWORK_ICONS['default'];
+  return FRAMEWORK_ICONS[framework] || FRAMEWORK_ICONS['default'];
 }
 
 // Get installation files for a specific template
 function getInstallationFiles(languageKey, frameworkKey) {
-    if (!templatesData || !templatesData[languageKey]) {
-        return [];
+  if (!templatesData || !templatesData[languageKey]) {
+    return [];
+  }
+
+  const languageData = templatesData[languageKey];
+  let files = [...(languageData.files || [])];
+
+  // Add framework-specific files if applicable
+  if (frameworkKey !== 'none' && languageData.frameworks && languageData.frameworks[frameworkKey]) {
+    const frameworkData = languageData.frameworks[frameworkKey];
+    if (frameworkData.additionalFiles) {
+      files = files.concat(frameworkData.additionalFiles);
     }
-    
-    const languageData = templatesData[languageKey];
-    let files = [...(languageData.files || [])];
-    
-    // Add framework-specific files if applicable
-    if (frameworkKey !== 'none' && languageData.frameworks && languageData.frameworks[frameworkKey]) {
-        const frameworkData = languageData.frameworks[frameworkKey];
-        if (frameworkData.additionalFiles) {
-            files = files.concat(frameworkData.additionalFiles);
-        }
-    }
-    
-    return files;
+  }
+
+  return files;
 }
 
 // Show installation files popup
 function showInstallationFiles(languageKey, frameworkKey, displayName) {
-    const files = getInstallationFiles(languageKey, frameworkKey);
-    
-    if (files.length === 0) {
-        showCopyFeedback('No files to display');
-        return;
-    }
-    
-    // Generate GitHub folder URL
-    const githubFolderUrl = getGithubFolderUrl(languageKey, frameworkKey);
-    
-    // Create modal HTML
-    const modalHTML = `
+  const files = getInstallationFiles(languageKey, frameworkKey);
+
+  if (files.length === 0) {
+    showCopyFeedback('No files to display');
+    return;
+  }
+
+  // Generate GitHub folder URL
+  const githubFolderUrl = getGithubFolderUrl(languageKey, frameworkKey);
+
+  // Create modal HTML
+  const modalHTML = `
         <div class="modal-overlay" onclick="closeModal()">
             <div class="modal-content" onclick="event.stopPropagation()">
                 <div class="modal-header">
@@ -280,7 +280,9 @@ function showInstallationFiles(languageKey, frameworkKey, displayName) {
                             <div class="column-header">Destination</div>
                             <div class="column-header">Type</div>
                         </div>
-                        ${files.map(file => `
+                        ${files
+                          .map(
+                            (file) => `
                             <div class="table-row">
                                 <div class="file-source">
                                     <a href="${getGithubFileUrl(languageKey, frameworkKey, file.source)}" target="_blank" class="file-link">
@@ -290,7 +292,9 @@ function showInstallationFiles(languageKey, frameworkKey, displayName) {
                                 <div class="file-destination">${file.destination}</div>
                                 <div class="file-type">${getFileType(file.destination)}</div>
                             </div>
-                        `).join('')}
+                        `
+                          )
+                          .join('')}
                     </div>
                     <div class="modal-footer">
                         <p class="file-count">Total: ${files.length} file${files.length > 1 ? 's' : ''}</p>
@@ -307,24 +311,24 @@ function showInstallationFiles(languageKey, frameworkKey, displayName) {
             </div>
         </div>
     `;
-    
-    // Remove existing modal if present
-    const existingModal = document.querySelector('.modal-overlay');
-    if (existingModal) {
-        existingModal.remove();
+
+  // Remove existing modal if present
+  const existingModal = document.querySelector('.modal-overlay');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Add event listener for ESC key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      closeComponentModal();
+      document.removeEventListener('keydown', handleEscape);
     }
-    
-    // Add modal to body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Add event listener for ESC key
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            closeComponentModal();
-            document.removeEventListener('keydown', handleEscape);
-        }
-    };
-    document.addEventListener('keydown', handleEscape);
+  };
+  document.addEventListener('keydown', handleEscape);
 }
 
 // ===== ANALYTICS AND STATISTICS FUNCTIONALITY =====
@@ -333,85 +337,84 @@ function showInstallationFiles(languageKey, frameworkKey, displayName) {
  * Load and display download statistics from GitHub-generated analytics
  */
 async function loadDownloadStatistics() {
-    try {
-        // Fetch analytics data generated by GitHub Actions
-        const response = await fetch('analytics/download-stats.json?t=' + Date.now());
-        
-        if (!response.ok) {
-            console.log('Analytics data not available yet');
-            hideStatisticsSection();
-            return;
-        }
-        
-        const analyticsData = await response.json();
-        displayDownloadStatistics(analyticsData);
-        
-    } catch (error) {
-        console.log('Analytics data not available:', error.message);
-        hideStatisticsSection();
+  try {
+    // Fetch analytics data generated by GitHub Actions
+    const response = await fetch('analytics/download-stats.json?t=' + Date.now());
+
+    if (!response.ok) {
+      console.log('Analytics data not available yet');
+      hideStatisticsSection();
+      return;
     }
+
+    const analyticsData = await response.json();
+    displayDownloadStatistics(analyticsData);
+  } catch (error) {
+    console.log('Analytics data not available:', error.message);
+    hideStatisticsSection();
+  }
 }
 
 /**
  * Display download statistics in the UI
  */
 function displayDownloadStatistics(data) {
-    // Update total downloads
-    const totalElement = document.getElementById('totalDownloads');
-    if (totalElement) {
-        totalElement.textContent = formatNumber(data.total_downloads || 0);
+  // Update total downloads
+  const totalElement = document.getElementById('totalDownloads');
+  if (totalElement) {
+    totalElement.textContent = formatNumber(data.total_downloads || 0);
+  }
+
+  // Update individual component type counts
+  const typeElements = {
+    agentDownloads: data.downloads_by_type?.agent || 0,
+    commandDownloads: data.downloads_by_type?.command || 0,
+    mcpDownloads: data.downloads_by_type?.mcp || 0,
+    templateDownloads: data.downloads_by_type?.template || 0,
+  };
+
+  Object.entries(typeElements).forEach(([elementId, count]) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = formatNumber(count);
     }
-    
-    // Update individual component type counts
-    const typeElements = {
-        agentDownloads: data.downloads_by_type?.agent || 0,
-        commandDownloads: data.downloads_by_type?.command || 0,
-        mcpDownloads: data.downloads_by_type?.mcp || 0,
-        templateDownloads: data.downloads_by_type?.template || 0
-    };
-    
-    Object.entries(typeElements).forEach(([elementId, count]) => {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.textContent = formatNumber(count);
-        }
-    });
-    
-    // Find and display most popular component
-    const popularElement = document.getElementById('popularComponent');
-    if (popularElement && data.downloads_by_component) {
-        const topComponent = Object.entries(data.downloads_by_component)[0];
-        if (topComponent) {
-            const [componentName, downloadCount] = topComponent;
-            popularElement.textContent = formatComponentNameForDisplay(componentName);
-            popularElement.setAttribute('title', `${formatNumber(downloadCount)} downloads`);
-        } else {
-            popularElement.textContent = '-';
-        }
+  });
+
+  // Find and display most popular component
+  const popularElement = document.getElementById('popularComponent');
+  if (popularElement && data.downloads_by_component) {
+    const topComponent = Object.entries(data.downloads_by_component)[0];
+    if (topComponent) {
+      const [componentName, downloadCount] = topComponent;
+      popularElement.textContent = formatComponentNameForDisplay(componentName);
+      popularElement.setAttribute('title', `${formatNumber(downloadCount)} downloads`);
+    } else {
+      popularElement.textContent = '-';
     }
-    
-    // Update last updated timestamp
-    const lastUpdatedElement = document.getElementById('statsLastUpdated');
-    if (lastUpdatedElement && data.last_updated) {
-        const lastUpdated = new Date(data.last_updated);
-        lastUpdatedElement.textContent = formatRelativeTime(lastUpdated);
-    }
-    
-    // Show the statistics section
-    showStatisticsSection();
-    
-    console.log('📊 Download statistics loaded successfully');
+  }
+
+  // Update last updated timestamp
+  const lastUpdatedElement = document.getElementById('statsLastUpdated');
+  if (lastUpdatedElement && data.last_updated) {
+    const lastUpdated = new Date(data.last_updated);
+    lastUpdatedElement.textContent = formatRelativeTime(lastUpdated);
+  }
+
+  // Show the statistics section
+  showStatisticsSection();
+
+  console.log('📊 Download statistics loaded successfully');
 }
 
 /**
  * Hide statistics section when data is not available
  */
 function hideStatisticsSection() {
-    // Keep statistics section visible even when data is not available
-    // const statsSection = document.getElementById('downloadStatsSection');
-    // if (statsSection) {
-    //     statsSection.style.display = 'none';
-    // }
+  // Keep statistics section visible even when data is not available
+  // const statsSection = document.getElementById('downloadStatsSection');
+  // if (statsSection) {
+  //     statsSection.style.display = 'none';
+  // }
 }
 
 /**
@@ -419,82 +422,79 @@ function hideStatisticsSection() {
  * Note: Stats section has been moved to dedicated page at /download-stats.html
  */
 function showStatisticsSection() {
-    // Stats section removed from main page - no action needed
-    console.log('Stats available at /download-stats.html');
+  // Stats section removed from main page - no action needed
+  console.log('Stats available at /download-stats.html');
 }
 
 /**
  * Format numbers with thousands separators
  */
 function formatNumber(num) {
-    if (num === 0) return '0';
-    if (num < 1000) return num.toString();
-    if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
-    return (num / 1000000).toFixed(1) + 'M';
+  if (num === 0) return '0';
+  if (num < 1000) return num.toString();
+  if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
+  return (num / 1000000).toFixed(1) + 'M';
 }
 
 /**
  * Format component name for display (remove prefixes, capitalize)
  */
 function formatComponentNameForDisplay(componentName) {
-    if (!componentName || componentName === 'unknown') return '-';
-    
-    // Handle template format (language/framework)
-    if (componentName.includes('/')) {
-        const parts = componentName.split('/');
-        return parts.map(part => 
-            part.replace(/-/g, ' ')
-                .replace(/\b\w/g, l => l.toUpperCase())
-        ).join('/');
-    }
-    
-    // Handle individual components
-    return componentName
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, l => l.toUpperCase());
+  if (!componentName || componentName === 'unknown') return '-';
+
+  // Handle template format (language/framework)
+  if (componentName.includes('/')) {
+    const parts = componentName.split('/');
+    return parts
+      .map((part) => part.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()))
+      .join('/');
+  }
+
+  // Handle individual components
+  return componentName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 /**
  * Format relative time (e.g., "2 hours ago")
  */
 function formatRelativeTime(date) {
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
-    if (diffMins < 60) {
-        return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
-    } else if (diffHours < 24) {
-        return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
-    } else if (diffDays < 7) {
-        return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
-    } else {
-        return date.toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric',
-            year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-        });
-    }
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 60) {
+    return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
+  } else if (diffHours < 24) {
+    return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+  } else if (diffDays < 7) {
+    return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
+  } else {
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+    });
+  }
 }
 
 /**
  * Refresh statistics data
  */
 async function refreshStatistics() {
-    const refreshButton = document.querySelector('.stats-refresh-btn');
-    if (refreshButton) {
-        refreshButton.textContent = 'Refreshing...';
-        refreshButton.disabled = true;
-    }
-    
-    await loadDownloadStatistics();
-    
-    if (refreshButton) {
-        refreshButton.textContent = 'Refresh';
-        refreshButton.disabled = false;
-    }
+  const refreshButton = document.querySelector('.stats-refresh-btn');
+  if (refreshButton) {
+    refreshButton.textContent = 'Refreshing...';
+    refreshButton.disabled = true;
+  }
+
+  await loadDownloadStatistics();
+
+  if (refreshButton) {
+    refreshButton.textContent = 'Refresh';
+    refreshButton.disabled = false;
+  }
 }
 
 // Auto-refresh statistics every 10 minutes
@@ -502,15 +502,15 @@ setInterval(loadDownloadStatistics, 10 * 60 * 1000);
 
 // Close modal
 function closeModal() {
-    const modal = document.querySelector('.modal');
-    if (modal) {
-        modal.remove();
-    }
+  const modal = document.querySelector('.modal');
+  if (modal) {
+    modal.remove();
+  }
 }
 
 // Show contribute modal
 function showContributeModal() {
-    const modalHTML = `
+  const modalHTML = `
         <div class="modal-overlay" onclick="closeModal()">
             <div class="modal-content contribute-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
@@ -632,24 +632,24 @@ Please analyze the existing templates in the repository first to understand the 
             </div>
         </div>
     `;
-    
-    // Remove existing modal if present
-    const existingModal = document.querySelector('.modal-overlay');
-    if (existingModal) {
-        existingModal.remove();
+
+  // Remove existing modal if present
+  const existingModal = document.querySelector('.modal-overlay');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Add event listener for ESC key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      closeComponentModal();
+      document.removeEventListener('keydown', handleEscape);
     }
-    
-    // Add modal to body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Add event listener for ESC key
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            closeComponentModal();
-            document.removeEventListener('keydown', handleEscape);
-        }
-    };
-    document.addEventListener('keydown', handleEscape);
+  };
+  document.addEventListener('keydown', handleEscape);
 }
 
 // ===== ANALYTICS AND STATISTICS FUNCTIONALITY =====
@@ -658,85 +658,84 @@ Please analyze the existing templates in the repository first to understand the 
  * Load and display download statistics from GitHub-generated analytics
  */
 async function loadDownloadStatistics() {
-    try {
-        // Fetch analytics data generated by GitHub Actions
-        const response = await fetch('analytics/download-stats.json?t=' + Date.now());
-        
-        if (!response.ok) {
-            console.log('Analytics data not available yet');
-            hideStatisticsSection();
-            return;
-        }
-        
-        const analyticsData = await response.json();
-        displayDownloadStatistics(analyticsData);
-        
-    } catch (error) {
-        console.log('Analytics data not available:', error.message);
-        hideStatisticsSection();
+  try {
+    // Fetch analytics data generated by GitHub Actions
+    const response = await fetch('analytics/download-stats.json?t=' + Date.now());
+
+    if (!response.ok) {
+      console.log('Analytics data not available yet');
+      hideStatisticsSection();
+      return;
     }
+
+    const analyticsData = await response.json();
+    displayDownloadStatistics(analyticsData);
+  } catch (error) {
+    console.log('Analytics data not available:', error.message);
+    hideStatisticsSection();
+  }
 }
 
 /**
  * Display download statistics in the UI
  */
 function displayDownloadStatistics(data) {
-    // Update total downloads
-    const totalElement = document.getElementById('totalDownloads');
-    if (totalElement) {
-        totalElement.textContent = formatNumber(data.total_downloads || 0);
+  // Update total downloads
+  const totalElement = document.getElementById('totalDownloads');
+  if (totalElement) {
+    totalElement.textContent = formatNumber(data.total_downloads || 0);
+  }
+
+  // Update individual component type counts
+  const typeElements = {
+    agentDownloads: data.downloads_by_type?.agent || 0,
+    commandDownloads: data.downloads_by_type?.command || 0,
+    mcpDownloads: data.downloads_by_type?.mcp || 0,
+    templateDownloads: data.downloads_by_type?.template || 0,
+  };
+
+  Object.entries(typeElements).forEach(([elementId, count]) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = formatNumber(count);
     }
-    
-    // Update individual component type counts
-    const typeElements = {
-        agentDownloads: data.downloads_by_type?.agent || 0,
-        commandDownloads: data.downloads_by_type?.command || 0,
-        mcpDownloads: data.downloads_by_type?.mcp || 0,
-        templateDownloads: data.downloads_by_type?.template || 0
-    };
-    
-    Object.entries(typeElements).forEach(([elementId, count]) => {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.textContent = formatNumber(count);
-        }
-    });
-    
-    // Find and display most popular component
-    const popularElement = document.getElementById('popularComponent');
-    if (popularElement && data.downloads_by_component) {
-        const topComponent = Object.entries(data.downloads_by_component)[0];
-        if (topComponent) {
-            const [componentName, downloadCount] = topComponent;
-            popularElement.textContent = formatComponentNameForDisplay(componentName);
-            popularElement.setAttribute('title', `${formatNumber(downloadCount)} downloads`);
-        } else {
-            popularElement.textContent = '-';
-        }
+  });
+
+  // Find and display most popular component
+  const popularElement = document.getElementById('popularComponent');
+  if (popularElement && data.downloads_by_component) {
+    const topComponent = Object.entries(data.downloads_by_component)[0];
+    if (topComponent) {
+      const [componentName, downloadCount] = topComponent;
+      popularElement.textContent = formatComponentNameForDisplay(componentName);
+      popularElement.setAttribute('title', `${formatNumber(downloadCount)} downloads`);
+    } else {
+      popularElement.textContent = '-';
     }
-    
-    // Update last updated timestamp
-    const lastUpdatedElement = document.getElementById('statsLastUpdated');
-    if (lastUpdatedElement && data.last_updated) {
-        const lastUpdated = new Date(data.last_updated);
-        lastUpdatedElement.textContent = formatRelativeTime(lastUpdated);
-    }
-    
-    // Show the statistics section
-    showStatisticsSection();
-    
-    console.log('📊 Download statistics loaded successfully');
+  }
+
+  // Update last updated timestamp
+  const lastUpdatedElement = document.getElementById('statsLastUpdated');
+  if (lastUpdatedElement && data.last_updated) {
+    const lastUpdated = new Date(data.last_updated);
+    lastUpdatedElement.textContent = formatRelativeTime(lastUpdated);
+  }
+
+  // Show the statistics section
+  showStatisticsSection();
+
+  console.log('📊 Download statistics loaded successfully');
 }
 
 /**
  * Hide statistics section when data is not available
  */
 function hideStatisticsSection() {
-    // Keep statistics section visible even when data is not available
-    // const statsSection = document.getElementById('downloadStatsSection');
-    // if (statsSection) {
-    //     statsSection.style.display = 'none';
-    // }
+  // Keep statistics section visible even when data is not available
+  // const statsSection = document.getElementById('downloadStatsSection');
+  // if (statsSection) {
+  //     statsSection.style.display = 'none';
+  // }
 }
 
 /**
@@ -744,82 +743,79 @@ function hideStatisticsSection() {
  * Note: Stats section has been moved to dedicated page at /download-stats.html
  */
 function showStatisticsSection() {
-    // Stats section removed from main page - no action needed
-    console.log('Stats available at /download-stats.html');
+  // Stats section removed from main page - no action needed
+  console.log('Stats available at /download-stats.html');
 }
 
 /**
  * Format numbers with thousands separators
  */
 function formatNumber(num) {
-    if (num === 0) return '0';
-    if (num < 1000) return num.toString();
-    if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
-    return (num / 1000000).toFixed(1) + 'M';
+  if (num === 0) return '0';
+  if (num < 1000) return num.toString();
+  if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
+  return (num / 1000000).toFixed(1) + 'M';
 }
 
 /**
  * Format component name for display (remove prefixes, capitalize)
  */
 function formatComponentNameForDisplay(componentName) {
-    if (!componentName || componentName === 'unknown') return '-';
-    
-    // Handle template format (language/framework)
-    if (componentName.includes('/')) {
-        const parts = componentName.split('/');
-        return parts.map(part => 
-            part.replace(/-/g, ' ')
-                .replace(/\b\w/g, l => l.toUpperCase())
-        ).join('/');
-    }
-    
-    // Handle individual components
-    return componentName
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, l => l.toUpperCase());
+  if (!componentName || componentName === 'unknown') return '-';
+
+  // Handle template format (language/framework)
+  if (componentName.includes('/')) {
+    const parts = componentName.split('/');
+    return parts
+      .map((part) => part.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()))
+      .join('/');
+  }
+
+  // Handle individual components
+  return componentName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 /**
  * Format relative time (e.g., "2 hours ago")
  */
 function formatRelativeTime(date) {
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
-    if (diffMins < 60) {
-        return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
-    } else if (diffHours < 24) {
-        return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
-    } else if (diffDays < 7) {
-        return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
-    } else {
-        return date.toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric',
-            year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-        });
-    }
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 60) {
+    return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
+  } else if (diffHours < 24) {
+    return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+  } else if (diffDays < 7) {
+    return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
+  } else {
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+    });
+  }
 }
 
 /**
  * Refresh statistics data
  */
 async function refreshStatistics() {
-    const refreshButton = document.querySelector('.stats-refresh-btn');
-    if (refreshButton) {
-        refreshButton.textContent = 'Refreshing...';
-        refreshButton.disabled = true;
-    }
-    
-    await loadDownloadStatistics();
-    
-    if (refreshButton) {
-        refreshButton.textContent = 'Refresh';
-        refreshButton.disabled = false;
-    }
+  const refreshButton = document.querySelector('.stats-refresh-btn');
+  if (refreshButton) {
+    refreshButton.textContent = 'Refreshing...';
+    refreshButton.disabled = true;
+  }
+
+  await loadDownloadStatistics();
+
+  if (refreshButton) {
+    refreshButton.textContent = 'Refresh';
+    refreshButton.disabled = false;
+  }
 }
 
 // Auto-refresh statistics every 10 minutes
@@ -827,59 +823,62 @@ setInterval(loadDownloadStatistics, 10 * 60 * 1000);
 
 // Get file type based on extension/name
 function getFileType(filename) {
-    if (filename.endsWith('.md')) return 'Documentation';
-    if (filename.endsWith('.json')) return 'Configuration';
-    if (filename.includes('.claude')) return 'Commands';
-    if (filename.includes('commands')) return 'Commands';
-    return 'Configuration';
+  if (filename.endsWith('.md')) return 'Documentation';
+  if (filename.endsWith('.json')) return 'Configuration';
+  if (filename.includes('.claude')) return 'Commands';
+  if (filename.includes('commands')) return 'Commands';
+  return 'Configuration';
 }
 
 // Generate GitHub folder URL for templates
 function getGithubFolderUrl(languageKey, frameworkKey) {
-    const baseUrl = 'https://github.com/davila7/claude-code-templates/tree/main/cli-tool/templates';
-    
-    if (frameworkKey === 'none' || !frameworkKey) {
-        // Base language template
-        return `${baseUrl}/${languageKey}`;
-    } else {
-        // Framework-specific template
-        return `${baseUrl}/${languageKey}/examples/${frameworkKey}-app`;
-    }
+  const baseUrl = 'https://github.com/davila7/claude-code-templates/tree/main/cli-tool/templates';
+
+  if (frameworkKey === 'none' || !frameworkKey) {
+    // Base language template
+    return `${baseUrl}/${languageKey}`;
+  } else {
+    // Framework-specific template
+    return `${baseUrl}/${languageKey}/examples/${frameworkKey}-app`;
+  }
 }
 
 // Generate GitHub file URL for individual files
 function getGithubFileUrl(languageKey, frameworkKey, filePath) {
-    const baseUrl = 'https://github.com/davila7/claude-code-templates/blob/main/cli-tool/templates';
-    return `${baseUrl}/${filePath}`;
+  const baseUrl = 'https://github.com/davila7/claude-code-templates/blob/main/cli-tool/templates';
+  return `${baseUrl}/${filePath}`;
 }
 
 // Copy to clipboard function
 function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      showCopyFeedback();
+    })
+    .catch((err) => {
+      console.error('Failed to copy: ', err);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
         showCopyFeedback();
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            showCopyFeedback();
-        } catch (err) {
-            console.error('Fallback copy failed: ', err);
-        }
-        document.body.removeChild(textArea);
+      } catch (err) {
+        console.error('Fallback copy failed: ', err);
+      }
+      document.body.removeChild(textArea);
     });
 }
 
 function showCopyFeedback() {
-    // Create temporary feedback element
-    const feedback = document.createElement('div');
-    feedback.textContent = 'Copied to clipboard!';
-    feedback.style.cssText = `
+  // Create temporary feedback element
+  const feedback = document.createElement('div');
+  feedback.textContent = 'Copied to clipboard!';
+  feedback.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
@@ -891,16 +890,16 @@ function showCopyFeedback() {
         z-index: 1000;
         animation: slideInRight 0.3s ease;
     `;
-    
-    document.body.appendChild(feedback);
-    
-    // Remove feedback after 2 seconds
+
+  document.body.appendChild(feedback);
+
+  // Remove feedback after 2 seconds
+  setTimeout(() => {
+    feedback.style.animation = 'slideOutRight 0.3s ease';
     setTimeout(() => {
-        feedback.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-            document.body.removeChild(feedback);
-        }, 300);
-    }, 2000);
+      document.body.removeChild(feedback);
+    }, 300);
+  }, 2000);
 }
 
 // Add CSS animations for feedback and error states
@@ -963,20 +962,20 @@ document.head.appendChild(style);
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
-    // Start with agents view (new default)
-    setUnifiedFilter('agents');
-    // Load download statistics
-    loadDownloadStatistics();
+  // Start with agents view (new default)
+  setUnifiedFilter('agents');
+  // Load download statistics
+  loadDownloadStatistics();
 });
 
 // Add keyboard navigation
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        // Close all flipped cards
-        document.querySelectorAll('.template-card.flipped').forEach(card => {
-            card.classList.remove('flipped');
-        });
-    }
+  if (e.key === 'Escape') {
+    // Close all flipped cards
+    document.querySelectorAll('.template-card.flipped').forEach((card) => {
+      card.classList.remove('flipped');
+    });
+  }
 });
 
 // Auto-refresh templates every 5 minutes to pick up changes
@@ -985,9 +984,9 @@ setInterval(fetchTemplatesConfig, 5 * 60 * 1000);
 // ===== UNIFIED COMPONENTS FUNCTIONALITY =====
 
 let componentsData = {
-    agents: [],
-    commands: [],
-    mcps: []
+  agents: [],
+  commands: [],
+  mcps: [],
 };
 
 let currentFilter = 'agents';
@@ -995,48 +994,48 @@ let currentCategoryFilter = 'all';
 let allDataLoaded = false;
 let downloadStats = null;
 let availableCategories = {
-    agents: new Set(),
-    commands: new Set(),
-    mcps: new Set()
+  agents: new Set(),
+  commands: new Set(),
+  mcps: new Set(),
 };
 
 // Unified filter functionality
 function setUnifiedFilter(filter) {
-    currentFilter = filter;
-    currentCategoryFilter = 'all'; // Reset category filter when changing main filter
-    
-    // Update filter buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    const targetFilterBtn = document.querySelector(`[data-filter="${filter}"]`);
-    if (targetFilterBtn) {
-        targetFilterBtn.classList.add('active');
-    }
-    
-    // Load and display content
-    if (filter === 'templates') {
-        displayTemplates();
-    } else {
-        loadAndDisplayComponents();
-    }
+  currentFilter = filter;
+  currentCategoryFilter = 'all'; // Reset category filter when changing main filter
+
+  // Update filter buttons
+  document.querySelectorAll('.filter-btn').forEach((btn) => {
+    btn.classList.remove('active');
+  });
+  const targetFilterBtn = document.querySelector(`[data-filter="${filter}"]`);
+  if (targetFilterBtn) {
+    targetFilterBtn.classList.add('active');
+  }
+
+  // Load and display content
+  if (filter === 'templates') {
+    displayTemplates();
+  } else {
+    loadAndDisplayComponents();
+  }
 }
 
 // Set category filter
 function setCategoryFilter(category) {
-    currentCategoryFilter = category;
-    
-    // Update category filter buttons
-    document.querySelectorAll('.category-filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    const targetBtn = document.querySelector(`[data-category="${category}"]`);
-    if (targetBtn) {
-        targetBtn.classList.add('active');
-    }
-    
-    // Regenerate the component display
-    generateUnifiedComponentCards();
+  currentCategoryFilter = category;
+
+  // Update category filter buttons
+  document.querySelectorAll('.category-filter-btn').forEach((btn) => {
+    btn.classList.remove('active');
+  });
+  const targetBtn = document.querySelector(`[data-category="${category}"]`);
+  if (targetBtn) {
+    targetBtn.classList.add('active');
+  }
+
+  // Regenerate the component display
+  generateUnifiedComponentCards();
 }
 
 // Make setCategoryFilter available globally
@@ -1044,321 +1043,326 @@ window.setCategoryFilter = setCategoryFilter;
 
 // Display templates (existing functionality)
 function displayTemplates() {
-    const unifiedGrid = document.getElementById('unifiedGrid');
-    unifiedGrid.className = 'unified-grid templates-mode';
-    
-    if (templatesData) {
-        generateTemplateCards();
-    } else {
-        unifiedGrid.innerHTML = '<div class="loading">Loading templates from GitHub...</div>';
-        fetchTemplatesConfig();
-    }
+  const unifiedGrid = document.getElementById('unifiedGrid');
+  unifiedGrid.className = 'unified-grid templates-mode';
+
+  if (templatesData) {
+    generateTemplateCards();
+  } else {
+    unifiedGrid.innerHTML = '<div class="loading">Loading templates from GitHub...</div>';
+    fetchTemplatesConfig();
+  }
 }
 
 // Load and display components
 async function loadAndDisplayComponents() {
-    const unifiedGrid = document.getElementById('unifiedGrid');
-    unifiedGrid.className = 'unified-grid components-mode';
-    
-    if (!allDataLoaded) {
-        unifiedGrid.innerHTML = '<div class="loading">Loading components from GitHub...</div>';
-        await loadAllComponentsData();
-    }
-    
-    generateUnifiedComponentCards();
+  const unifiedGrid = document.getElementById('unifiedGrid');
+  unifiedGrid.className = 'unified-grid components-mode';
+
+  if (!allDataLoaded) {
+    unifiedGrid.innerHTML = '<div class="loading">Loading components from GitHub...</div>';
+    await loadAllComponentsData();
+  }
+
+  generateUnifiedComponentCards();
 }
 
 // Load all components data
 async function loadAllComponentsData() {
-    try {
-        const response = await fetch('components.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        componentsData = data;
-        collectAvailableCategories();
-        allDataLoaded = true;
-    } catch (error) {
-        console.error('Error loading components:', error);
-        const unifiedGrid = document.getElementById('unifiedGrid');
-        unifiedGrid.innerHTML = `
+  try {
+    const response = await fetch('components.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    componentsData = data;
+    collectAvailableCategories();
+    allDataLoaded = true;
+  } catch (error) {
+    console.error('Error loading components:', error);
+    const unifiedGrid = document.getElementById('unifiedGrid');
+    unifiedGrid.innerHTML = `
             <div class="error-message">
                 <h3>Error loading components</h3>
                 <p>Could not fetch components from local data. Please try again later.</p>
                 <button onclick="loadAndDisplayComponents()" class="retry-btn">Retry</button>
             </div>
         `;
-    }
+  }
 }
 
 // Update category sub-filters in the unified-filter-bar
 function updateCategorySubFilters() {
-    const unifiedFilterBar = document.querySelector('.unified-filter-bar');
-    
-    // Remove existing category filters
-    const existingCategoryFilters = unifiedFilterBar.querySelector('.category-filter-row');
-    if (existingCategoryFilters) {
-        existingCategoryFilters.remove();
-    }
-    
-    // Get categories for current filter type
-    const currentCategories = Array.from(availableCategories[currentFilter] || []).sort();
-    
-    if (currentCategories.length <= 1 || currentFilter === 'templates') {
-        // Don't show sub-filters if there's only one category, none, or templates
-        return;
-    }
-    
-    // Create category filter row
-    const categoryFilterRow = document.createElement('div');
-    categoryFilterRow.className = 'category-filter-row';
-    categoryFilterRow.innerHTML = `
+  const unifiedFilterBar = document.querySelector('.unified-filter-bar');
+
+  // Remove existing category filters
+  const existingCategoryFilters = unifiedFilterBar.querySelector('.category-filter-row');
+  if (existingCategoryFilters) {
+    existingCategoryFilters.remove();
+  }
+
+  // Get categories for current filter type
+  const currentCategories = Array.from(availableCategories[currentFilter] || []).sort();
+
+  if (currentCategories.length <= 1 || currentFilter === 'templates') {
+    // Don't show sub-filters if there's only one category, none, or templates
+    return;
+  }
+
+  // Create category filter row
+  const categoryFilterRow = document.createElement('div');
+  categoryFilterRow.className = 'category-filter-row';
+  categoryFilterRow.innerHTML = `
         <div class="category-filter-label">Categories:</div>
         <div class="category-filter-buttons">
             <button class="category-filter-btn ${currentCategoryFilter === 'all' ? 'active' : ''}" 
                     data-category="all">
                 All
             </button>
-            ${currentCategories.map(category => `
+            ${currentCategories
+              .map(
+                (category) => `
                 <button class="category-filter-btn ${currentCategoryFilter === category ? 'active' : ''}" 
                         data-category="${category}">
                     ${formatComponentName(category)}
                 </button>
-            `).join('')}
+            `
+              )
+              .join('')}
         </div>
     `;
-    
-    // Add click event listeners
-    categoryFilterRow.querySelectorAll('.category-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            setCategoryFilter(btn.getAttribute('data-category'));
-        });
+
+  // Add click event listeners
+  categoryFilterRow.querySelectorAll('.category-filter-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setCategoryFilter(btn.getAttribute('data-category'));
     });
-    
-    // Append to unified filter bar
-    unifiedFilterBar.appendChild(categoryFilterRow);
+  });
+
+  // Append to unified filter bar
+  unifiedFilterBar.appendChild(categoryFilterRow);
 }
 
 // Generate unified component cards
 function generateUnifiedComponentCards() {
-    const unifiedGrid = document.getElementById('unifiedGrid');
-    unifiedGrid.innerHTML = '';
-    
-    // Update category sub-filters in the unified-filter-bar
-    updateCategorySubFilters();
-    
-    // Get filtered components
-    const filteredComponents = getFilteredComponents();
-    
-    // Add "Add New" card based on current filter
-    if (currentFilter !== 'templates') {
-        const addCard = createAddComponentCard(currentFilter);
-        unifiedGrid.appendChild(addCard);
-    }
-    
-    // Add component cards
-    filteredComponents.forEach(component => {
-        const card = createComponentCard(component);
-        unifiedGrid.appendChild(card);
-    });
-    
-    // Update filter button with count
-    updateFilterCount();
+  const unifiedGrid = document.getElementById('unifiedGrid');
+  unifiedGrid.innerHTML = '';
+
+  // Update category sub-filters in the unified-filter-bar
+  updateCategorySubFilters();
+
+  // Get filtered components
+  const filteredComponents = getFilteredComponents();
+
+  // Add "Add New" card based on current filter
+  if (currentFilter !== 'templates') {
+    const addCard = createAddComponentCard(currentFilter);
+    unifiedGrid.appendChild(addCard);
+  }
+
+  // Add component cards
+  filteredComponents.forEach((component) => {
+    const card = createComponentCard(component);
+    unifiedGrid.appendChild(card);
+  });
+
+  // Update filter button with count
+  updateFilterCount();
 }
 
 // Update filter button count
 function updateFilterCount() {
-    const filterBtn = document.querySelector(`[data-filter="${currentFilter}"]`);
-    if (filterBtn && currentFilter !== 'templates') {
-        const components = componentsData[currentFilter];
-        if (components && Array.isArray(components)) {
-            const count = components.length;
-            const originalText = filterBtn.textContent.split('(')[0].trim();
-            filterBtn.textContent = `${originalText} (${count})`;
-        }
+  const filterBtn = document.querySelector(`[data-filter="${currentFilter}"]`);
+  if (filterBtn && currentFilter !== 'templates') {
+    const components = componentsData[currentFilter];
+    if (components && Array.isArray(components)) {
+      const count = components.length;
+      const originalText = filterBtn.textContent.split('(')[0].trim();
+      filterBtn.textContent = `${originalText} (${count})`;
     }
+  }
 }
 
 // Get filtered components based on current filter and category filter
 function getFilteredComponents() {
-    if (currentFilter === 'templates') {
-        return [];
-    }
-    
-    let components = componentsData[currentFilter] || [];
-    
-    // Apply category filter if not 'all'
-    if (currentCategoryFilter !== 'all') {
-        components = components.filter(component => {
-            const category = component.category || 'general';
-            return category === currentCategoryFilter;
-        });
-    }
-    
-    return components;
+  if (currentFilter === 'templates') {
+    return [];
+  }
+
+  let components = componentsData[currentFilter] || [];
+
+  // Apply category filter if not 'all'
+  if (currentCategoryFilter !== 'all') {
+    components = components.filter((component) => {
+      const category = component.category || 'general';
+      return category === currentCategoryFilter;
+    });
+  }
+
+  return components;
 }
 
 // Collect available categories from loaded components
 function collectAvailableCategories() {
-    // Reset categories
-    availableCategories.agents.clear();
-    availableCategories.commands.clear();
-    availableCategories.mcps.clear();
-    
-    // Collect categories from each component type
-    if (componentsData.agents && Array.isArray(componentsData.agents)) {
-        componentsData.agents.forEach(component => {
-            const category = component.category || 'general';
-            availableCategories.agents.add(category);
-        });
-    }
-    
-    if (componentsData.commands && Array.isArray(componentsData.commands)) {
-        componentsData.commands.forEach(component => {
-            const category = component.category || 'general';  
-            availableCategories.commands.add(category);
-        });
-    }
-    
-    if (componentsData.mcps && Array.isArray(componentsData.mcps)) {
-        componentsData.mcps.forEach(component => {
-            const category = component.category || 'general';
-            availableCategories.mcps.add(category);
-        });
-    }
+  // Reset categories
+  availableCategories.agents.clear();
+  availableCategories.commands.clear();
+  availableCategories.mcps.clear();
+
+  // Collect categories from each component type
+  if (componentsData.agents && Array.isArray(componentsData.agents)) {
+    componentsData.agents.forEach((component) => {
+      const category = component.category || 'general';
+      availableCategories.agents.add(category);
+    });
+  }
+
+  if (componentsData.commands && Array.isArray(componentsData.commands)) {
+    componentsData.commands.forEach((component) => {
+      const category = component.category || 'general';
+      availableCategories.commands.add(category);
+    });
+  }
+
+  if (componentsData.mcps && Array.isArray(componentsData.mcps)) {
+    componentsData.mcps.forEach((component) => {
+      const category = component.category || 'general';
+      availableCategories.mcps.add(category);
+    });
+  }
 }
 
 // Load components data from GitHub (legacy function for compatibility)
 async function loadComponentsData() {
-    // Redirect to unified loading function
-    await loadAndDisplayComponents();
+  // Redirect to unified loading function
+  await loadAndDisplayComponents();
 }
 
 // Load specific component type from GitHub
 async function loadComponentType(type) {
-    const baseUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/cli-tool/components/${type}`;
-    
-    try {
-        const response = await fetch(baseUrl);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        const files = await response.json();
-        const componentPromises = files.map(async (file) => {
-            if (file.name.endsWith('.md') || file.name.endsWith('.json')) {
-                // Direct file in root level
-                const contentResponse = await fetch(file.download_url);
+  const baseUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/cli-tool/components/${type}`;
+
+  try {
+    const response = await fetch(baseUrl);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const files = await response.json();
+    const componentPromises = files.map(async (file) => {
+      if (file.name.endsWith('.md') || file.name.endsWith('.json')) {
+        // Direct file in root level
+        const contentResponse = await fetch(file.download_url);
+        const content = await contentResponse.text();
+
+        return {
+          name: file.name.replace(/\.(md|json)$/, ''),
+          type: type,
+          filename: file.name,
+          content: content,
+          url: file.html_url,
+          category: null, // No category for root level components
+        };
+      } else if (file.type === 'dir') {
+        // Handle subdirectories for all component types (categories)
+        try {
+          const categoryResponse = await fetch(
+            `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/cli-tool/components/${type}/${file.name}`
+          );
+          if (categoryResponse.ok) {
+            const categoryFiles = await categoryResponse.json();
+            const categoryComponentPromises = categoryFiles.map(async (categoryFile) => {
+              if (categoryFile.name.endsWith('.md') || categoryFile.name.endsWith('.json')) {
+                const contentResponse = await fetch(categoryFile.download_url);
                 const content = await contentResponse.text();
-                
+
                 return {
-                    name: file.name.replace(/\.(md|json)$/, ''),
-                    type: type,
-                    filename: file.name,
-                    content: content,
-                    url: file.html_url,
-                    category: null // No category for root level components
+                  name: `${file.name}/${categoryFile.name.replace(/\.(md|json)$/, '')}`,
+                  type: type,
+                  filename: categoryFile.name,
+                  content: content,
+                  url: categoryFile.html_url,
+                  category: file.name,
                 };
-            } else if (file.type === 'dir') {
-                // Handle subdirectories for all component types (categories)
-                try {
-                    const categoryResponse = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/cli-tool/components/${type}/${file.name}`);
-                    if (categoryResponse.ok) {
-                        const categoryFiles = await categoryResponse.json();
-                        const categoryComponentPromises = categoryFiles.map(async (categoryFile) => {
-                            if (categoryFile.name.endsWith('.md') || categoryFile.name.endsWith('.json')) {
-                                const contentResponse = await fetch(categoryFile.download_url);
-                                const content = await contentResponse.text();
-                                
-                                return {
-                                    name: `${file.name}/${categoryFile.name.replace(/\.(md|json)$/, '')}`,
-                                    type: type,
-                                    filename: categoryFile.name,
-                                    content: content,
-                                    url: categoryFile.html_url,
-                                    category: file.name
-                                };
-                            }
-                            return null;
-                        });
-                        
-                        const categoryComponents = await Promise.all(categoryComponentPromises);
-                        return categoryComponents.filter(c => c !== null);
-                    }
-                } catch (error) {
-                    console.warn(`Warning: Could not load category ${file.name}:`, error);
-                    return [];
-                }
-            }
-            return null;
-        });
-        
-        const componentsNested = await Promise.all(componentPromises);
-        // Flatten the array since subdirectories return arrays
-        const components = componentsNested.flat().filter(c => c !== null);
-        return components;
-        
-    } catch (error) {
-        console.error(`Error loading ${type}:`, error);
-        return [];
-    }
+              }
+              return null;
+            });
+
+            const categoryComponents = await Promise.all(categoryComponentPromises);
+            return categoryComponents.filter((c) => c !== null);
+          }
+        } catch (error) {
+          console.warn(`Warning: Could not load category ${file.name}:`, error);
+          return [];
+        }
+      }
+      return null;
+    });
+
+    const componentsNested = await Promise.all(componentPromises);
+    // Flatten the array since subdirectories return arrays
+    const components = componentsNested.flat().filter((c) => c !== null);
+    return components;
+  } catch (error) {
+    console.error(`Error loading ${type}:`, error);
+    return [];
+  }
 }
 
 // Generate component cards with filter functionality
 function generateComponentCards() {
-    const componentsGrid = document.getElementById('componentsGrid');
-    
-    // Create filter bar
-    const filterBar = createComponentFilterBar();
-    
-    // Create components container
-    const componentsContainer = document.createElement('div');
-    componentsContainer.className = 'components-container';
-    
-    // Create Add New cards for each category
-    const addAgentCard = createAddComponentCard('agents');
-    const addCommandCard = createAddComponentCard('commands');
-    const addMcpCard = createAddComponentCard('mcps');
-    
-    // Filter and display components
-    const filteredComponents = getFilteredComponents();
-    
-    componentsContainer.innerHTML = '';
-    
-    // Add "Add New" cards based on filter
-    if (currentFilter === 'all' || currentFilter === 'agents') {
-        componentsContainer.appendChild(addAgentCard);
-    }
-    if (currentFilter === 'all' || currentFilter === 'commands') {
-        componentsContainer.appendChild(addCommandCard);
-    }
-    if (currentFilter === 'all' || currentFilter === 'mcps') {
-        componentsContainer.appendChild(addMcpCard);
-    }
-    
-    // Add component cards
-    filteredComponents.forEach(component => {
-        const card = createComponentCard(component);
-        componentsContainer.appendChild(card);
-    });
-    
-    componentsGrid.innerHTML = '';
-    componentsGrid.appendChild(filterBar);
-    componentsGrid.appendChild(componentsContainer);
+  const componentsGrid = document.getElementById('componentsGrid');
+
+  // Create filter bar
+  const filterBar = createComponentFilterBar();
+
+  // Create components container
+  const componentsContainer = document.createElement('div');
+  componentsContainer.className = 'components-container';
+
+  // Create Add New cards for each category
+  const addAgentCard = createAddComponentCard('agents');
+  const addCommandCard = createAddComponentCard('commands');
+  const addMcpCard = createAddComponentCard('mcps');
+
+  // Filter and display components
+  const filteredComponents = getFilteredComponents();
+
+  componentsContainer.innerHTML = '';
+
+  // Add "Add New" cards based on filter
+  if (currentFilter === 'all' || currentFilter === 'agents') {
+    componentsContainer.appendChild(addAgentCard);
+  }
+  if (currentFilter === 'all' || currentFilter === 'commands') {
+    componentsContainer.appendChild(addCommandCard);
+  }
+  if (currentFilter === 'all' || currentFilter === 'mcps') {
+    componentsContainer.appendChild(addMcpCard);
+  }
+
+  // Add component cards
+  filteredComponents.forEach((component) => {
+    const card = createComponentCard(component);
+    componentsContainer.appendChild(card);
+  });
+
+  componentsGrid.innerHTML = '';
+  componentsGrid.appendChild(filterBar);
+  componentsGrid.appendChild(componentsContainer);
 }
 
 // Create filter bar for components
 function createComponentFilterBar() {
-    const filterBar = document.createElement('div');
-    filterBar.className = 'component-filter-bar';
-    
-    const totalCounts = {
-        all: componentsData.agents.length + componentsData.commands.length + componentsData.mcps.length,
-        agents: componentsData.agents.length,
-        commands: componentsData.commands.length,
-        mcps: componentsData.mcps.length
-    };
-    
-    filterBar.innerHTML = `
+  const filterBar = document.createElement('div');
+  filterBar.className = 'component-filter-bar';
+
+  const totalCounts = {
+    all: componentsData.agents.length + componentsData.commands.length + componentsData.mcps.length,
+    agents: componentsData.agents.length,
+    commands: componentsData.commands.length,
+    mcps: componentsData.mcps.length,
+  };
+
+  filterBar.innerHTML = `
         <div class="filter-label">$ Filter Components</div>
         <div class="filter-buttons">
             <button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setComponentFilter('all')">
@@ -1375,49 +1379,48 @@ function createComponentFilterBar() {
             </button>
         </div>
     `;
-    
-    return filterBar;
+
+  return filterBar;
 }
 
 // Set component filter
 function setComponentFilter(filter) {
-    currentFilter = filter;
-    generateComponentCards();
+  currentFilter = filter;
+  generateComponentCards();
 }
-
 
 // Create Add Component card
 function createAddComponentCard(type) {
-    const card = document.createElement('div');
-    card.className = 'template-card add-template-card add-component-card';
-    
-    const typeConfig = {
-        agents: { 
-            icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+  const card = document.createElement('div');
+  card.className = 'template-card add-template-card add-component-card';
+
+  const typeConfig = {
+    agents: {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
-            </svg>`, 
-            name: 'Agent', 
-            description: 'Create a new AI specialist agent' 
-        },
-        commands: { 
-            icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            </svg>`,
+      name: 'Agent',
+      description: 'Create a new AI specialist agent',
+    },
+    commands: {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
-            </svg>`, 
-            name: 'Command', 
-            description: 'Add a custom slash command' 
-        },
-        mcps: { 
-            icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            </svg>`,
+      name: 'Command',
+      description: 'Add a custom slash command',
+    },
+    mcps: {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
-            </svg>`, 
-            name: 'MCP', 
-            description: 'Build a Model Context Protocol integration' 
-        }
-    };
-    
-    const config = typeConfig[type];
-    
-    card.innerHTML = `
+            </svg>`,
+      name: 'MCP',
+      description: 'Build a Model Context Protocol integration',
+    },
+  };
+
+  const config = typeConfig[type];
+
+  card.innerHTML = `
         <div class="card-inner">
             <div class="card-front">
                 <div class="framework-logo">
@@ -1428,41 +1431,41 @@ function createAddComponentCard(type) {
             </div>
         </div>
     `;
-    
-    // Add click handler to open contribution modal directly (no flip)
-    card.addEventListener('click', () => {
-        showComponentContributeModal(type);
-    });
-    
-    return card;
+
+  // Add click handler to open contribution modal directly (no flip)
+  card.addEventListener('click', () => {
+    showComponentContributeModal(type);
+  });
+
+  return card;
 }
 
 // Create individual component card
 function createComponentCard(component) {
-    const card = document.createElement('div');
-    card.className = 'template-card';
-    
-    const typeConfig = {
-        agent: { icon: '🤖', color: '#ff6b6b' },
-        command: { icon: '⚡', color: '#4ecdc4' },
-        mcp: { icon: '🔌', color: '#45b7d1' }
-    };
-    
-    const config = typeConfig[component.type];
-    const installCommand = generateInstallCommand(component);
-    
-    // Get download count for this component
-    const downloadCount = getDownloadCount(component.name, component.type);
-    const downloadBadge = createDownloadBadge(downloadCount);
+  const card = document.createElement('div');
+  card.className = 'template-card';
 
-    // Get validation badge
-    const validationBadge = createValidationBadge(component.security);
+  const typeConfig = {
+    agent: { icon: '🤖', color: '#ff6b6b' },
+    command: { icon: '⚡', color: '#4ecdc4' },
+    mcp: { icon: '🔌', color: '#45b7d1' },
+  };
 
-    // Create category label for all components (use "General" if no category)
-    const categoryName = component.category || 'general';
-    const categoryLabel = `<div class="category-label">${formatComponentName(categoryName)}</div>`;
+  const config = typeConfig[component.type];
+  const installCommand = generateInstallCommand(component);
 
-    card.innerHTML = `
+  // Get download count for this component
+  const downloadCount = getDownloadCount(component.name, component.type);
+  const downloadBadge = createDownloadBadge(downloadCount);
+
+  // Get validation badge
+  const validationBadge = createValidationBadge(component.security);
+
+  // Create category label for all components (use "General" if no category)
+  const categoryName = component.category || 'general';
+  const categoryLabel = `<div class="category-label">${formatComponentName(categoryName)}</div>`;
+
+  card.innerHTML = `
         <div class="card-inner">
             <div class="card-front">
                 ${downloadBadge}
@@ -1490,101 +1493,99 @@ function createComponentCard(component) {
             </div>
         </div>
     `;
-    
-    // Add click handler for card flip
-    card.addEventListener('click', (e) => {
-        if (!e.target.closest('button')) {
-            card.classList.toggle('flipped');
-        }
-    });
-    
-    return card;
+
+  // Add click handler for card flip
+  card.addEventListener('click', (e) => {
+    if (!e.target.closest('button')) {
+      card.classList.toggle('flipped');
+    }
+  });
+
+  return card;
 }
 
 // Generate install command for component
 function generateInstallCommand(component) {
-    if (component.type === 'agent') {
-        return `npx claude-code-templates@latest --agent=${component.name} --yes`;
-    } else if (component.type === 'command') {
-        return `npx claude-code-templates@latest --command=${component.name} --yes`;
-    } else if (component.type === 'mcp') {
-        // Remove .json extension from MCP names for the command
-        const mcpName = component.name.replace(/\.json$/, '');
-        return `npx claude-code-templates@latest --mcp=${mcpName} --yes`;
-    }
-    return `npx claude-code-templates@latest`;
+  if (component.type === 'agent') {
+    return `npx claude-code-templates@latest --agent=${component.name} --yes`;
+  } else if (component.type === 'command') {
+    return `npx claude-code-templates@latest --command=${component.name} --yes`;
+  } else if (component.type === 'mcp') {
+    // Remove .json extension from MCP names for the command
+    const mcpName = component.name.replace(/\.json$/, '');
+    return `npx claude-code-templates@latest --mcp=${mcpName} --yes`;
+  }
+  return `npx claude-code-templates@latest`;
 }
-
 
 // Get installation notes (removed to match template cards design)
 function getInstallationNotes() {
-    return '';
+  return '';
 }
 
 // Format component name for display
 function formatComponentName(name) {
-    // Handle subcategorized agents (e.g., "deep-research-team/academic-researcher")
-    if (name.includes('/')) {
-        const parts = name.split('/');
-        const actualName = parts[parts.length - 1]; // Get the last part after the slash
-        return actualName
-            .replace(/-/g, ' ')
-            .replace(/\b\w/g, l => l.toUpperCase());
-    }
-    
-    return name
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, l => l.toUpperCase());
+  // Handle subcategorized agents (e.g., "deep-research-team/academic-researcher")
+  if (name.includes('/')) {
+    const parts = name.split('/');
+    const actualName = parts[parts.length - 1]; // Get the last part after the slash
+    return actualName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+  }
+
+  return name.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 // Get component description
 function getComponentDescription(component) {
-    return `A component of type '${component.type}' for Claude Code.`;
+  return `A component of type '${component.type}' for Claude Code.`;
 }
 
 // Show component details modal
 async function showComponentDetails(type, name) {
-    const component = componentsData[type + 's'].find(c => c.name === name);
-    if (!component) return;
+  const component = componentsData[type + 's'].find((c) => c.name === name);
+  if (!component) return;
 
-    const modal = document.getElementById('componentModal');
-    document.getElementById('componentModalTitle').textContent = name;
-    document.getElementById('componentModalType').textContent = type;
-    document.getElementById('componentModalCategory').textContent = component.category;
-    document.getElementById('componentModalPath').textContent = component.path;
-    document.getElementById('componentModalUsage').textContent = `cct --${type} "${component.path}"`;
+  const modal = document.getElementById('componentModal');
+  document.getElementById('componentModalTitle').textContent = name;
+  document.getElementById('componentModalType').textContent = type;
+  document.getElementById('componentModalCategory').textContent = component.category;
+  document.getElementById('componentModalPath').textContent = component.path;
+  document.getElementById('componentModalUsage').textContent = `cct --${type} "${component.path}"`;
 
-    const descriptionElement = document.getElementById('componentModalDescription');
-    descriptionElement.textContent = component.content || 'No content available.';
-    modal.style.display = 'block';
+  const descriptionElement = document.getElementById('componentModalDescription');
+  descriptionElement.textContent = component.content || 'No content available.';
+  modal.style.display = 'block';
 }
 
 // Show component contribute modal
 function showComponentContributeModal(type) {
-    const typeConfig = {
-        agents: { 
-            name: 'Agent', 
-            description: 'AI specialist that handles specific development tasks',
-            example: 'python-testing-specialist',
-            structure: '- Agent metadata (name, description, color)\n- Core expertise areas\n- When to use guidelines\n- Code examples and patterns'
-        },
-        commands: { 
-            name: 'Command', 
-            description: 'Custom slash command for Claude Code',
-            example: 'optimize-bundle',
-            structure: '- Command description and usage\n- Task breakdown\n- Process steps\n- Best practices and examples'
-        },
-        mcps: { 
-            name: 'MCP', 
-            description: 'Model Context Protocol integration',
-            example: 'redis-integration',
-            structure: '- MCP server configuration\n- Connection parameters\n- Environment variables\n- Usage examples'
-        }
-    };
-    
-    const config = typeConfig[type];
-    
-    const modalHTML = `
+  const typeConfig = {
+    agents: {
+      name: 'Agent',
+      description: 'AI specialist that handles specific development tasks',
+      example: 'python-testing-specialist',
+      structure:
+        '- Agent metadata (name, description, color)\n- Core expertise areas\n- When to use guidelines\n- Code examples and patterns',
+    },
+    commands: {
+      name: 'Command',
+      description: 'Custom slash command for Claude Code',
+      example: 'optimize-bundle',
+      structure:
+        '- Command description and usage\n- Task breakdown\n- Process steps\n- Best practices and examples',
+    },
+    mcps: {
+      name: 'MCP',
+      description: 'Model Context Protocol integration',
+      example: 'redis-integration',
+      structure:
+        '- MCP server configuration\n- Connection parameters\n- Environment variables\n- Usage examples',
+    },
+  };
+
+  const config = typeConfig[type];
+
+  const modalHTML = `
         <div class="modal-overlay" onclick="closeModal()">
             <div class="modal-content contribute-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
@@ -1664,21 +1665,21 @@ function showComponentContributeModal(type) {
             </div>
         </div>
     `;
-    
-    // Add modal to page
-    const modal = document.createElement('div');
-    modal.innerHTML = modalHTML;
-    modal.className = 'modal contribute-component-modal';
-    document.body.appendChild(modal);
-    
-    // Add event listener for ESC key
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            closeComponentModal();
-            document.removeEventListener('keydown', handleEscape);
-        }
-    };
-    document.addEventListener('keydown', handleEscape);
+
+  // Add modal to page
+  const modal = document.createElement('div');
+  modal.innerHTML = modalHTML;
+  modal.className = 'modal contribute-component-modal';
+  document.body.appendChild(modal);
+
+  // Add event listener for ESC key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      closeComponentModal();
+      document.removeEventListener('keydown', handleEscape);
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
 }
 
 // ===== ANALYTICS AND STATISTICS FUNCTIONALITY =====
@@ -1687,85 +1688,84 @@ function showComponentContributeModal(type) {
  * Load and display download statistics from GitHub-generated analytics
  */
 async function loadDownloadStatistics() {
-    try {
-        // Fetch analytics data generated by GitHub Actions
-        const response = await fetch('analytics/download-stats.json?t=' + Date.now());
-        
-        if (!response.ok) {
-            console.log('Analytics data not available yet');
-            hideStatisticsSection();
-            return;
-        }
-        
-        const analyticsData = await response.json();
-        displayDownloadStatistics(analyticsData);
-        
-    } catch (error) {
-        console.log('Analytics data not available:', error.message);
-        hideStatisticsSection();
+  try {
+    // Fetch analytics data generated by GitHub Actions
+    const response = await fetch('analytics/download-stats.json?t=' + Date.now());
+
+    if (!response.ok) {
+      console.log('Analytics data not available yet');
+      hideStatisticsSection();
+      return;
     }
+
+    const analyticsData = await response.json();
+    displayDownloadStatistics(analyticsData);
+  } catch (error) {
+    console.log('Analytics data not available:', error.message);
+    hideStatisticsSection();
+  }
 }
 
 /**
  * Display download statistics in the UI
  */
 function displayDownloadStatistics(data) {
-    // Update total downloads
-    const totalElement = document.getElementById('totalDownloads');
-    if (totalElement) {
-        totalElement.textContent = formatNumber(data.total_downloads || 0);
+  // Update total downloads
+  const totalElement = document.getElementById('totalDownloads');
+  if (totalElement) {
+    totalElement.textContent = formatNumber(data.total_downloads || 0);
+  }
+
+  // Update individual component type counts
+  const typeElements = {
+    agentDownloads: data.downloads_by_type?.agent || 0,
+    commandDownloads: data.downloads_by_type?.command || 0,
+    mcpDownloads: data.downloads_by_type?.mcp || 0,
+    templateDownloads: data.downloads_by_type?.template || 0,
+  };
+
+  Object.entries(typeElements).forEach(([elementId, count]) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = formatNumber(count);
     }
-    
-    // Update individual component type counts
-    const typeElements = {
-        agentDownloads: data.downloads_by_type?.agent || 0,
-        commandDownloads: data.downloads_by_type?.command || 0,
-        mcpDownloads: data.downloads_by_type?.mcp || 0,
-        templateDownloads: data.downloads_by_type?.template || 0
-    };
-    
-    Object.entries(typeElements).forEach(([elementId, count]) => {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.textContent = formatNumber(count);
-        }
-    });
-    
-    // Find and display most popular component
-    const popularElement = document.getElementById('popularComponent');
-    if (popularElement && data.downloads_by_component) {
-        const topComponent = Object.entries(data.downloads_by_component)[0];
-        if (topComponent) {
-            const [componentName, downloadCount] = topComponent;
-            popularElement.textContent = formatComponentNameForDisplay(componentName);
-            popularElement.setAttribute('title', `${formatNumber(downloadCount)} downloads`);
-        } else {
-            popularElement.textContent = '-';
-        }
+  });
+
+  // Find and display most popular component
+  const popularElement = document.getElementById('popularComponent');
+  if (popularElement && data.downloads_by_component) {
+    const topComponent = Object.entries(data.downloads_by_component)[0];
+    if (topComponent) {
+      const [componentName, downloadCount] = topComponent;
+      popularElement.textContent = formatComponentNameForDisplay(componentName);
+      popularElement.setAttribute('title', `${formatNumber(downloadCount)} downloads`);
+    } else {
+      popularElement.textContent = '-';
     }
-    
-    // Update last updated timestamp
-    const lastUpdatedElement = document.getElementById('statsLastUpdated');
-    if (lastUpdatedElement && data.last_updated) {
-        const lastUpdated = new Date(data.last_updated);
-        lastUpdatedElement.textContent = formatRelativeTime(lastUpdated);
-    }
-    
-    // Show the statistics section
-    showStatisticsSection();
-    
-    console.log('📊 Download statistics loaded successfully');
+  }
+
+  // Update last updated timestamp
+  const lastUpdatedElement = document.getElementById('statsLastUpdated');
+  if (lastUpdatedElement && data.last_updated) {
+    const lastUpdated = new Date(data.last_updated);
+    lastUpdatedElement.textContent = formatRelativeTime(lastUpdated);
+  }
+
+  // Show the statistics section
+  showStatisticsSection();
+
+  console.log('📊 Download statistics loaded successfully');
 }
 
 /**
  * Hide statistics section when data is not available
  */
 function hideStatisticsSection() {
-    // Keep statistics section visible even when data is not available
-    // const statsSection = document.getElementById('downloadStatsSection');
-    // if (statsSection) {
-    //     statsSection.style.display = 'none';
-    // }
+  // Keep statistics section visible even when data is not available
+  // const statsSection = document.getElementById('downloadStatsSection');
+  // if (statsSection) {
+  //     statsSection.style.display = 'none';
+  // }
 }
 
 /**
@@ -1773,82 +1773,79 @@ function hideStatisticsSection() {
  * Note: Stats section has been moved to dedicated page at /download-stats.html
  */
 function showStatisticsSection() {
-    // Stats section removed from main page - no action needed
-    console.log('Stats available at /download-stats.html');
+  // Stats section removed from main page - no action needed
+  console.log('Stats available at /download-stats.html');
 }
 
 /**
  * Format numbers with thousands separators
  */
 function formatNumber(num) {
-    if (num === 0) return '0';
-    if (num < 1000) return num.toString();
-    if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
-    return (num / 1000000).toFixed(1) + 'M';
+  if (num === 0) return '0';
+  if (num < 1000) return num.toString();
+  if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
+  return (num / 1000000).toFixed(1) + 'M';
 }
 
 /**
  * Format component name for display (remove prefixes, capitalize)
  */
 function formatComponentNameForDisplay(componentName) {
-    if (!componentName || componentName === 'unknown') return '-';
-    
-    // Handle template format (language/framework)
-    if (componentName.includes('/')) {
-        const parts = componentName.split('/');
-        return parts.map(part => 
-            part.replace(/-/g, ' ')
-                .replace(/\b\w/g, l => l.toUpperCase())
-        ).join('/');
-    }
-    
-    // Handle individual components
-    return componentName
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, l => l.toUpperCase());
+  if (!componentName || componentName === 'unknown') return '-';
+
+  // Handle template format (language/framework)
+  if (componentName.includes('/')) {
+    const parts = componentName.split('/');
+    return parts
+      .map((part) => part.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()))
+      .join('/');
+  }
+
+  // Handle individual components
+  return componentName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 /**
  * Format relative time (e.g., "2 hours ago")
  */
 function formatRelativeTime(date) {
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
-    if (diffMins < 60) {
-        return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
-    } else if (diffHours < 24) {
-        return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
-    } else if (diffDays < 7) {
-        return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
-    } else {
-        return date.toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric',
-            year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-        });
-    }
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 60) {
+    return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
+  } else if (diffHours < 24) {
+    return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+  } else if (diffDays < 7) {
+    return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
+  } else {
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+    });
+  }
 }
 
 /**
  * Refresh statistics data
  */
 async function refreshStatistics() {
-    const refreshButton = document.querySelector('.stats-refresh-btn');
-    if (refreshButton) {
-        refreshButton.textContent = 'Refreshing...';
-        refreshButton.disabled = true;
-    }
-    
-    await loadDownloadStatistics();
-    
-    if (refreshButton) {
-        refreshButton.textContent = 'Refresh';
-        refreshButton.disabled = false;
-    }
+  const refreshButton = document.querySelector('.stats-refresh-btn');
+  if (refreshButton) {
+    refreshButton.textContent = 'Refreshing...';
+    refreshButton.disabled = true;
+  }
+
+  await loadDownloadStatistics();
+
+  if (refreshButton) {
+    refreshButton.textContent = 'Refresh';
+    refreshButton.disabled = false;
+  }
 }
 
 // Auto-refresh statistics every 10 minutes
@@ -1856,16 +1853,16 @@ setInterval(loadDownloadStatistics, 10 * 60 * 1000);
 
 // Show detailed component modal
 function showComponentModal(component) {
-    const typeConfig = {
-        agent: { icon: '🤖', color: '#ff6b6b', label: 'AGENT' },
-        command: { icon: '⚡', color: '#4ecdc4', label: 'COMMAND' },
-        mcp: { icon: '🔌', color: '#45b7d1', label: 'MCP' }
-    };
-    
-    const config = typeConfig[component.type];
-    const installCommand = generateInstallCommand(component);
-    
-    const modalHTML = `
+  const typeConfig = {
+    agent: { icon: '🤖', color: '#ff6b6b', label: 'AGENT' },
+    command: { icon: '⚡', color: '#4ecdc4', label: 'COMMAND' },
+    mcp: { icon: '🔌', color: '#45b7d1', label: 'MCP' },
+  };
+
+  const config = typeConfig[component.type];
+  const installCommand = generateInstallCommand(component);
+
+  const modalHTML = `
         <div class="modal-overlay" onclick="closeComponentModal()">
             <div class="modal-content component-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
@@ -1910,24 +1907,24 @@ function showComponentModal(component) {
             </div>
         </div>
     `;
-    
-    // Remove existing modal if present
-    const existingModal = document.querySelector('.modal-overlay');
-    if (existingModal) {
-        existingModal.remove();
+
+  // Remove existing modal if present
+  const existingModal = document.querySelector('.modal-overlay');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Add event listener for ESC key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      closeComponentModal();
+      document.removeEventListener('keydown', handleEscape);
     }
-    
-    // Add modal to body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Add event listener for ESC key
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            closeComponentModal();
-            document.removeEventListener('keydown', handleEscape);
-        }
-    };
-    document.addEventListener('keydown', handleEscape);
+  };
+  document.addEventListener('keydown', handleEscape);
 }
 
 // ===== ANALYTICS AND STATISTICS FUNCTIONALITY =====
@@ -1936,94 +1933,93 @@ function showComponentModal(component) {
  * Load and display download statistics from GitHub-generated analytics
  */
 async function loadDownloadStatistics() {
-    try {
-        // Fetch analytics data generated by GitHub Actions
-        const response = await fetch('analytics/download-stats.json?t=' + Date.now());
-        
-        if (!response.ok) {
-            console.log('Analytics data not available yet');
-            hideStatisticsSection();
-            return;
-        }
-        
-        const analyticsData = await response.json();
-        displayDownloadStatistics(analyticsData);
-        
-    } catch (error) {
-        console.log('Analytics data not available:', error.message);
-        hideStatisticsSection();
+  try {
+    // Fetch analytics data generated by GitHub Actions
+    const response = await fetch('analytics/download-stats.json?t=' + Date.now());
+
+    if (!response.ok) {
+      console.log('Analytics data not available yet');
+      hideStatisticsSection();
+      return;
     }
+
+    const analyticsData = await response.json();
+    displayDownloadStatistics(analyticsData);
+  } catch (error) {
+    console.log('Analytics data not available:', error.message);
+    hideStatisticsSection();
+  }
 }
 
 /**
  * Display download statistics in the UI
  */
 function displayDownloadStatistics(data) {
-    // Update total downloads
-    // Store download stats globally for use in cards
-    downloadStats = data;
-    const totalElement = document.getElementById('totalDownloads');
-    if (totalElement) {
-        totalElement.textContent = formatNumber(data.total_downloads || 0);
+  // Update total downloads
+  // Store download stats globally for use in cards
+  downloadStats = data;
+  const totalElement = document.getElementById('totalDownloads');
+  if (totalElement) {
+    totalElement.textContent = formatNumber(data.total_downloads || 0);
+  }
+
+  // Update individual component type counts
+  const typeElements = {
+    agentDownloads: data.downloads_by_type?.agent || 0,
+    commandDownloads: data.downloads_by_type?.command || 0,
+    mcpDownloads: data.downloads_by_type?.mcp || 0,
+    templateDownloads: data.downloads_by_type?.template || 0,
+  };
+
+  Object.entries(typeElements).forEach(([elementId, count]) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = formatNumber(count);
     }
-    
-    // Update individual component type counts
-    const typeElements = {
-        agentDownloads: data.downloads_by_type?.agent || 0,
-        commandDownloads: data.downloads_by_type?.command || 0,
-        mcpDownloads: data.downloads_by_type?.mcp || 0,
-        templateDownloads: data.downloads_by_type?.template || 0
-    };
-    
-    Object.entries(typeElements).forEach(([elementId, count]) => {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.textContent = formatNumber(count);
-        }
-    });
-    
-    // Find and display most popular component
-    const popularElement = document.getElementById('popularComponent');
-    if (popularElement && data.downloads_by_component) {
-        const topComponent = Object.entries(data.downloads_by_component)[0];
-        if (topComponent) {
-            const [componentName, downloadCount] = topComponent;
-            popularElement.textContent = formatComponentNameForDisplay(componentName);
-            popularElement.setAttribute('title', `${formatNumber(downloadCount)} downloads`);
-        } else {
-            popularElement.textContent = '-';
-        }
+  });
+
+  // Find and display most popular component
+  const popularElement = document.getElementById('popularComponent');
+  if (popularElement && data.downloads_by_component) {
+    const topComponent = Object.entries(data.downloads_by_component)[0];
+    if (topComponent) {
+      const [componentName, downloadCount] = topComponent;
+      popularElement.textContent = formatComponentNameForDisplay(componentName);
+      popularElement.setAttribute('title', `${formatNumber(downloadCount)} downloads`);
+    } else {
+      popularElement.textContent = '-';
     }
-    
-    // Update last updated timestamp
-    const lastUpdatedElement = document.getElementById('statsLastUpdated');
-    if (lastUpdatedElement && data.last_updated) {
-        const lastUpdated = new Date(data.last_updated);
-        lastUpdatedElement.textContent = formatRelativeTime(lastUpdated);
-    }
-    
-    // Show the statistics section
-    showStatisticsSection();
-    
-    // Regenerate cards with download counts
-    if (currentFilter === 'templates' && templatesData) {
-        generateTemplateCards();
-    } else if (allDataLoaded) {
-        generateUnifiedComponentCards();
-    }
-    
-    console.log('📊 Download statistics loaded successfully');
+  }
+
+  // Update last updated timestamp
+  const lastUpdatedElement = document.getElementById('statsLastUpdated');
+  if (lastUpdatedElement && data.last_updated) {
+    const lastUpdated = new Date(data.last_updated);
+    lastUpdatedElement.textContent = formatRelativeTime(lastUpdated);
+  }
+
+  // Show the statistics section
+  showStatisticsSection();
+
+  // Regenerate cards with download counts
+  if (currentFilter === 'templates' && templatesData) {
+    generateTemplateCards();
+  } else if (allDataLoaded) {
+    generateUnifiedComponentCards();
+  }
+
+  console.log('📊 Download statistics loaded successfully');
 }
 
 /**
  * Hide statistics section when data is not available
  */
 function hideStatisticsSection() {
-    // Keep statistics section visible even when data is not available
-    // const statsSection = document.getElementById('downloadStatsSection');
-    // if (statsSection) {
-    //     statsSection.style.display = 'none';
-    // }
+  // Keep statistics section visible even when data is not available
+  // const statsSection = document.getElementById('downloadStatsSection');
+  // if (statsSection) {
+  //     statsSection.style.display = 'none';
+  // }
 }
 
 /**
@@ -2031,138 +2027,135 @@ function hideStatisticsSection() {
  * Note: Stats section has been moved to dedicated page at /download-stats.html
  */
 function showStatisticsSection() {
-    // Stats section removed from main page - no action needed
-    console.log('Stats available at /download-stats.html');
+  // Stats section removed from main page - no action needed
+  console.log('Stats available at /download-stats.html');
 }
 
 /**
  * Format numbers with thousands separators
  */
 function formatNumber(num) {
-    if (num === 0) return '0';
-    if (num < 1000) return num.toString();
-    if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
-    return (num / 1000000).toFixed(1) + 'M';
+  if (num === 0) return '0';
+  if (num < 1000) return num.toString();
+  if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
+  return (num / 1000000).toFixed(1) + 'M';
 }
 
 /**
  * Format component name for display (remove prefixes, capitalize)
  */
 function formatComponentNameForDisplay(componentName) {
-    if (!componentName || componentName === 'unknown') return '-';
-    
-    // Handle template format (language/framework)
-    if (componentName.includes('/')) {
-        const parts = componentName.split('/');
-        return parts.map(part => 
-            part.replace(/-/g, ' ')
-                .replace(/\b\w/g, l => l.toUpperCase())
-        ).join('/');
-    }
-    
-    // Handle individual components
-    return componentName
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, l => l.toUpperCase());
+  if (!componentName || componentName === 'unknown') return '-';
+
+  // Handle template format (language/framework)
+  if (componentName.includes('/')) {
+    const parts = componentName.split('/');
+    return parts
+      .map((part) => part.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()))
+      .join('/');
+  }
+
+  // Handle individual components
+  return componentName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 /**
  * Format relative time (e.g., "2 hours ago")
  */
 function formatRelativeTime(date) {
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
-    if (diffMins < 60) {
-        return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
-    } else if (diffHours < 24) {
-        return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
-    } else if (diffDays < 7) {
-        return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
-    } else {
-        return date.toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric',
-            year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-        });
-    }
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 60) {
+    return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
+  } else if (diffHours < 24) {
+    return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+  } else if (diffDays < 7) {
+    return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
+  } else {
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+    });
+  }
 }
 
 /**
  * Refresh statistics data
  */
 async function refreshStatistics() {
-    const refreshButton = document.querySelector('.stats-refresh-btn');
-    if (refreshButton) {
-        refreshButton.textContent = 'Refreshing...';
-        refreshButton.disabled = true;
-    }
-    
-    await loadDownloadStatistics();
-    
-    if (refreshButton) {
-        refreshButton.textContent = 'Refresh';
-        refreshButton.disabled = false;
-    }
+  const refreshButton = document.querySelector('.stats-refresh-btn');
+  if (refreshButton) {
+    refreshButton.textContent = 'Refreshing...';
+    refreshButton.disabled = true;
+  }
+
+  await loadDownloadStatistics();
+
+  if (refreshButton) {
+    refreshButton.textContent = 'Refresh';
+    refreshButton.disabled = false;
+  }
 }
 
 // Auto-refresh statistics every 10 minutes
 setInterval(loadDownloadStatistics, 10 * 60 * 1000);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('componentModal');
-    const closeBtn = document.getElementById('closeComponentModal');
-    const closeBtnFooter = document.getElementById('closeComponentModalBtn');
+  const modal = document.getElementById('componentModal');
+  const closeBtn = document.getElementById('closeComponentModal');
+  const closeBtnFooter = document.getElementById('closeComponentModalBtn');
 
-    if (modal && closeBtn && closeBtnFooter) {
-        const closeModal = () => {
-            modal.style.display = 'none';
-        };
+  if (modal && closeBtn && closeBtnFooter) {
+    const closeModal = () => {
+      modal.style.display = 'none';
+    };
 
-        closeBtn.addEventListener('click', closeModal);
-        closeBtnFooter.addEventListener('click', closeModal);
+    closeBtn.addEventListener('click', closeModal);
+    closeBtnFooter.addEventListener('click', closeModal);
 
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                closeComponentModal();
-            }
-        });
+    window.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeComponentModal();
+      }
+    });
 
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                closeComponentModal();
-            }
-        });
-    }
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeComponentModal();
+      }
+    });
+  }
 });
 
 /**
  * Get download count for a specific component
  */
 function getDownloadCount(componentName, componentType) {
-    if (!downloadStats || !downloadStats.downloads_by_component) {
-        return 0;
-    }
-    
-    // For templates, the name format is "language/framework"
-    if (componentType === 'template') {
-        return downloadStats.downloads_by_component[componentName] || 0;
-    }
-    
-    // For individual components (agents, commands, mcps)
+  if (!downloadStats || !downloadStats.downloads_by_component) {
+    return 0;
+  }
+
+  // For templates, the name format is "language/framework"
+  if (componentType === 'template') {
     return downloadStats.downloads_by_component[componentName] || 0;
+  }
+
+  // For individual components (agents, commands, mcps)
+  return downloadStats.downloads_by_component[componentName] || 0;
 }
 
 /**
  * Create download count badge HTML
  */
 function createDownloadBadge(count) {
-    if (count === 0) return '';
+  if (count === 0) return '';
 
-    return `<div class="download-badge" title="${count} downloads">
+  return `<div class="download-badge" title="${count} downloads">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
             <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/>
         </svg>
@@ -2174,38 +2167,38 @@ function createDownloadBadge(count) {
  * Create validation badge HTML
  */
 function createValidationBadge(validation) {
-    if (!validation || !validation.validated) return '';
+  if (!validation || !validation.validated) return '';
 
-    const score = validation.score || 0;
-    const isValid = validation.valid;
+  const score = validation.score || 0;
+  const isValid = validation.valid;
 
-    // Debug logging
-    console.log('Validation badge:', { score, isValid, validation });
+  // Debug logging
+  console.log('Validation badge:', { score, isValid, validation });
 
-    // Perfect score (100%) - Show Twitter-style verified badge
-    if (score === 100 && isValid) {
-        console.log('✓ Showing verified badge for score 100');
-        return `<div class="validation-badge verified-badge" title="100% Validated - Perfect Security Score">
+  // Perfect score (100%) - Show Twitter-style verified badge
+  if (score === 100 && isValid) {
+    console.log('✓ Showing verified badge for score 100');
+    return `<div class="validation-badge verified-badge" title="100% Validated - Perfect Security Score">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DA1F2">
                 <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484zm-6.616-3.334l-4.334 6.5c-.145.217-.382.334-.625.334-.143 0-.288-.04-.416-.126l-.115-.094-2.415-2.415c-.293-.293-.293-.768 0-1.06s.768-.294 1.06 0l1.77 1.767 3.825-5.74c.23-.345.696-.436 1.04-.207.346.23.44.696.21 1.04z"/>
             </svg>
             <span class="verified-text">Verified</span>
         </div>`;
-    }
+  }
 
-    // Determine color based on score
-    let badgeColor = '#48bb78'; // Green
-    let statusIcon = '✓';
+  // Determine color based on score
+  let badgeColor = '#48bb78'; // Green
+  let statusIcon = '✓';
 
-    if (!isValid || score < 70) {
-        badgeColor = '#f56565'; // Red
-        statusIcon = '✗';
-    } else if (score < 85) {
-        badgeColor = '#ed8936'; // Orange
-        statusIcon = '⚠';
-    }
+  if (!isValid || score < 70) {
+    badgeColor = '#f56565'; // Red
+    statusIcon = '✗';
+  } else if (score < 85) {
+    badgeColor = '#ed8936'; // Orange
+    statusIcon = '⚠';
+  }
 
-    return `<div class="validation-badge" style="background-color: ${badgeColor}" title="Quality Score: ${score}/100 - Validated">
+  return `<div class="validation-badge" style="background-color: ${badgeColor}" title="Quality Score: ${score}/100 - Validated">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
         </svg>

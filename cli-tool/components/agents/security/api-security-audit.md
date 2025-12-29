@@ -33,8 +33,8 @@ Use this agent for:
 
 ```javascript
 // Secure JWT implementation
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 class AuthService {
   generateToken(user) {
@@ -46,21 +46,21 @@ class AuthService {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "15m",
-        issuer: "your-api",
-        audience: "your-app",
-      },
+        expiresIn: '15m',
+        issuer: 'your-api',
+        audience: 'your-app',
+      }
     );
   }
 
   verifyToken(token) {
     try {
       return jwt.verify(token, process.env.JWT_SECRET, {
-        issuer: "your-api",
-        audience: "your-app",
+        issuer: 'your-api',
+        audience: 'your-app',
       });
     } catch (error) {
-      throw new Error("Invalid token");
+      throw new Error('Invalid token');
     }
   }
 
@@ -74,20 +74,20 @@ class AuthService {
 ### Input Validation & Sanitization
 
 ```javascript
-const { body, validationResult } = require("express-validator");
+const { body, validationResult } = require('express-validator');
 
 const validateUserInput = [
-  body("email").isEmail().normalizeEmail(),
-  body("password")
+  body('email').isEmail().normalizeEmail(),
+  body('password')
     .isLength({ min: 8 })
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/),
-  body("name").trim().escape().isLength({ min: 1, max: 100 }),
+  body('name').trim().escape().isLength({ min: 1, max: 100 }),
 
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
-        error: "Validation failed",
+        error: 'Validation failed',
         details: errors.array(),
       });
     }

@@ -77,8 +77,8 @@ npm install -D drizzle-kit
 
 ```typescript
 // src/db.ts
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 
 const sql = neon(process.env.DATABASE_URL!);
 export const db = drizzle({ client: sql });
@@ -87,14 +87,14 @@ export const db = drizzle({ client: sql });
 ## Schema Design
 
 ```typescript
-import { pgTable, serial, text, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, jsonb } from 'drizzle-orm/pg-core';
 
-export const usersTable = pgTable("users", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  metadata: jsonb("metadata"),
-  createdAt: timestamp("created_at").defaultNow(),
+export const usersTable = pgTable('users', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  metadata: jsonb('metadata'),
+  createdAt: timestamp('created_at').defaultNow(),
 });
 ```
 
@@ -110,17 +110,14 @@ export async function batchInsertUsers(users: NewUser[]) {
 export const getUserByEmail = db
   .select()
   .from(usersTable)
-  .where(eq(usersTable.email, placeholder("email")))
+  .where(eq(usersTable.email, placeholder('email')))
   .prepare();
 ```
 
 ## Transaction Handling
 
 ```typescript
-export async function createUserWithProfile(
-  user: NewUser,
-  profile: NewProfile,
-) {
+export async function createUserWithProfile(user: NewUser, profile: NewProfile) {
   return await db.transaction(async (tx) => {
     const [newUser] = await tx.insert(usersTable).values(user).returning();
     await tx.insert(profilesTable).values({
@@ -139,8 +136,8 @@ export async function safeQuery<T>(operation: () => Promise<T>): Promise<T> {
   try {
     return await operation();
   } catch (error: any) {
-    if (error.message?.includes("connection pool timeout")) {
-      console.error("Neon connection timeout");
+    if (error.message?.includes('connection pool timeout')) {
+      console.error('Neon connection timeout');
     }
     throw error;
   }

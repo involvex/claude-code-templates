@@ -1,15 +1,15 @@
-const express = require("express");
-const fs = require("fs-extra");
-const path = require("path");
-const os = require("os");
-const { v4: uuidv4 } = require("uuid");
-const chalk = require("chalk");
+const express = require('express');
+const fs = require('fs-extra');
+const path = require('path');
+const os = require('os');
+const { v4: uuidv4 } = require('uuid');
+const chalk = require('chalk');
 
 class ClaudeAPIProxy {
   constructor() {
     this.app = express();
     this.port = 3335;
-    this.claudeDir = path.join(os.homedir(), ".claude");
+    this.claudeDir = path.join(os.homedir(), '.claude');
 
     // Store active sessions and conversation contexts
     this.activeSessions = new Map();
@@ -22,16 +22,13 @@ class ClaudeAPIProxy {
   setupMiddleware() {
     this.app.use(express.json());
     this.app.use((req, res, next) => {
-      res.header("Access-Control-Allow-Origin", "*");
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
       res.header(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, OPTIONS",
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
       );
-      res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-      );
-      if (req.method === "OPTIONS") {
+      if (req.method === 'OPTIONS') {
         res.sendStatus(200);
       } else {
         next();
@@ -41,54 +38,48 @@ class ClaudeAPIProxy {
 
   setupRoutes() {
     // Get active conversations/sessions
-    this.app.get("/api/sessions", async (req, res) => {
+    this.app.get('/api/sessions', async (req, res) => {
       try {
         const sessions = await this.getActiveSessions();
         res.json({ sessions });
       } catch (error) {
-        console.error("Error getting sessions:", error);
+        console.error('Error getting sessions:', error);
         res.status(500).json({ error: error.message });
       }
     });
 
     // Send message to Claude (main endpoint)
-    this.app.post("/api/send-message", async (req, res) => {
+    this.app.post('/api/send-message', async (req, res) => {
       try {
         const { sessionId, message, projectPath } = req.body;
 
         if (!sessionId || !message) {
-          return res
-            .status(400)
-            .json({ error: "sessionId and message are required" });
+          return res.status(400).json({ error: 'sessionId and message are required' });
         }
 
-        const result = await this.sendMessageToClaude(
-          sessionId,
-          message,
-          projectPath,
-        );
+        const result = await this.sendMessageToClaude(sessionId, message, projectPath);
         res.json(result);
       } catch (error) {
-        console.error("Error sending message:", error);
+        console.error('Error sending message:', error);
         res.status(500).json({ error: error.message });
       }
     });
 
     // Get conversation history
-    this.app.get("/api/conversation/:sessionId", async (req, res) => {
+    this.app.get('/api/conversation/:sessionId', async (req, res) => {
       try {
         const { sessionId } = req.params;
         const conversation = await this.getConversationHistory(sessionId);
         res.json({ conversation });
       } catch (error) {
-        console.error("Error getting conversation:", error);
+        console.error('Error getting conversation:', error);
         res.status(500).json({ error: error.message });
       }
     });
   }
 
   async getActiveSessions() {
-    const projectsDir = path.join(this.claudeDir, "projects");
+    const projectsDir = path.join(this.claudeDir, 'projects');
 
     if (!(await fs.pathExists(projectsDir))) {
       return [];
@@ -102,8 +93,8 @@ class ClaudeAPIProxy {
       const files = await fs.readdir(projectPath);
 
       for (const file of files) {
-        if (file.endsWith(".jsonl")) {
-          const sessionId = path.basename(file, ".jsonl");
+        if (file.endsWith('.jsonl')) {
+          const sessionId = path.basename(file, '.jsonl');
           const filePath = path.join(projectPath, file);
           const stats = await fs.stat(filePath);
 
@@ -115,7 +106,7 @@ class ClaudeAPIProxy {
             projectPath: this.decodeProjectPath(projectDir),
             filePath,
             lastModified: stats.mtime,
-            lastMessage: lastMessage?.content || "No messages",
+            lastMessage: lastMessage?.content || 'No messages',
             messageCount: await this.getMessageCount(filePath),
           });
         }
@@ -123,21 +114,19 @@ class ClaudeAPIProxy {
     }
 
     // Sort by most recent activity
-    return sessions.sort(
-      (a, b) => new Date(b.lastModified) - new Date(a.lastModified),
-    );
+    return sessions.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
   }
 
   decodeProjectPath(encodedPath) {
-    return encodedPath.replace(/-/g, "/").replace(/^Users/, "/Users");
+    return encodedPath.replace(/-/g, '/').replace(/^Users/, '/Users');
   }
 
   async getLastMessage(filePath) {
     try {
-      const content = await fs.readFile(filePath, "utf8");
+      const content = await fs.readFile(filePath, 'utf8');
       const lines = content
         .trim()
-        .split("\n")
+        .split('\n')
         .filter((line) => line.trim());
 
       if (lines.length === 0) return null;
@@ -151,17 +140,17 @@ class ClaudeAPIProxy {
         role: lastMessage.message?.role || lastMessage.type,
       };
     } catch (error) {
-      console.error("Error reading last message:", error);
+      console.error('Error reading last message:', error);
       return null;
     }
   }
 
   async getMessageCount(filePath) {
     try {
-      const content = await fs.readFile(filePath, "utf8");
+      const content = await fs.readFile(filePath, 'utf8');
       const lines = content
         .trim()
-        .split("\n")
+        .split('\n')
         .filter((line) => line.trim());
       return lines.length;
     } catch (error) {
@@ -171,28 +160,25 @@ class ClaudeAPIProxy {
 
   extractMessageContent(messageObj) {
     if (messageObj.message?.content) {
-      if (typeof messageObj.message.content === "string") {
+      if (typeof messageObj.message.content === 'string') {
         return messageObj.message.content;
       }
       if (Array.isArray(messageObj.message.content)) {
         const textContent = messageObj.message.content
-          .filter((item) => item.type === "text")
+          .filter((item) => item.type === 'text')
           .map((item) => item.text)
-          .join(" ");
-        return textContent || "[Tool use or other content]";
+          .join(' ');
+        return textContent || '[Tool use or other content]';
       }
     }
-    return "[No content]";
+    return '[No content]';
   }
 
   async sendMessageToClaude(sessionId, messageContent, projectPath) {
     console.log(chalk.blue(`📤 Sending message to session ${sessionId}`));
 
     // Find the conversation file
-    const conversationFile = await this.findConversationFile(
-      sessionId,
-      projectPath,
-    );
+    const conversationFile = await this.findConversationFile(sessionId, projectPath);
 
     if (!conversationFile) {
       throw new Error(`Conversation file not found for session ${sessionId}`);
@@ -202,11 +188,7 @@ class ClaudeAPIProxy {
     const context = await this.getConversationContext(conversationFile);
 
     // Create user message in Claude Code format
-    const userMessage = this.createUserMessage(
-      messageContent,
-      context,
-      sessionId,
-    );
+    const userMessage = this.createUserMessage(messageContent, context, sessionId);
 
     // Append to JSONL file
     await this.appendToConversation(conversationFile, userMessage);
@@ -222,12 +204,12 @@ class ClaudeAPIProxy {
       success: true,
       messageId: userMessage.uuid,
       sessionId,
-      message: "Message sent to Claude Code conversation",
+      message: 'Message sent to Claude Code conversation',
     };
   }
 
   async findConversationFile(sessionId, projectPath) {
-    const projectsDir = path.join(this.claudeDir, "projects");
+    const projectsDir = path.join(this.claudeDir, 'projects');
 
     // If projectPath provided, look there first
     if (projectPath) {
@@ -244,11 +226,7 @@ class ClaudeAPIProxy {
     const projectDirs = await fs.readdir(projectsDir);
 
     for (const projectDir of projectDirs) {
-      const conversationFile = path.join(
-        projectsDir,
-        projectDir,
-        `${sessionId}.jsonl`,
-      );
+      const conversationFile = path.join(projectsDir, projectDir, `${sessionId}.jsonl`);
 
       if (await fs.pathExists(conversationFile)) {
         return conversationFile;
@@ -259,19 +237,19 @@ class ClaudeAPIProxy {
   }
 
   encodeProjectPath(projectPath) {
-    return projectPath.replace(/\\/ / g, "-").replace(/^-/, "");
+    return projectPath.replace(/\\/ / g, '-').replace(/^-/, '');
   }
 
   async getConversationContext(conversationFile) {
     try {
-      const content = await fs.readFile(conversationFile, "utf8");
+      const content = await fs.readFile(conversationFile, 'utf8');
       const lines = content
         .trim()
-        .split("\n")
+        .split('\n')
         .filter((line) => line.trim());
 
       if (lines.length === 0) {
-        return { lastMessage: null, cwd: process.cwd(), version: "1.0.44" };
+        return { lastMessage: null, cwd: process.cwd(), version: '1.0.44' };
       }
 
       // Find the last valid JSON line (iterate backwards)
@@ -283,27 +261,25 @@ class ClaudeAPIProxy {
           break; // Found valid JSON, break out of loop
         } catch (jsonError) {
           // Skip invalid JSON lines
-          console.warn(
-            `Skipping invalid JSON line ${i + 1}: ${line.substring(0, 50)}...`,
-          );
+          console.warn(`Skipping invalid JSON line ${i + 1}: ${line.substring(0, 50)}...`);
           continue;
         }
       }
 
       if (!lastMessage) {
-        console.warn("No valid JSON message found in conversation file");
-        return { lastMessage: null, cwd: process.cwd(), version: "1.0.44" };
+        console.warn('No valid JSON message found in conversation file');
+        return { lastMessage: null, cwd: process.cwd(), version: '1.0.44' };
       }
 
       return {
         lastMessage,
         cwd: lastMessage.cwd || process.cwd(),
-        version: lastMessage.version || "1.0.44",
+        version: lastMessage.version || '1.0.44',
         sessionId: lastMessage.sessionId,
       };
     } catch (error) {
-      console.error("Error getting conversation context:", error);
-      return { lastMessage: null, cwd: process.cwd(), version: "1.0.44" };
+      console.error('Error getting conversation context:', error);
+      return { lastMessage: null, cwd: process.cwd(), version: '1.0.44' };
     }
   }
 
@@ -314,13 +290,13 @@ class ClaudeAPIProxy {
     return {
       parentUuid: context.lastMessage?.uuid || null,
       isSidechain: false,
-      userType: "external",
+      userType: 'external',
       cwd: context.cwd,
       sessionId: sessionId,
       version: context.version,
-      type: "user",
+      type: 'user',
       message: {
-        role: "user",
+        role: 'user',
         content: content,
       },
       uuid: uuid,
@@ -330,15 +306,13 @@ class ClaudeAPIProxy {
 
   async appendToConversation(conversationFile, messageObj) {
     const messageJson = JSON.stringify(messageObj);
-    await fs.appendFile(conversationFile, messageJson + "\n");
+    await fs.appendFile(conversationFile, messageJson + '\n');
 
     // Force file system change notification by touching the file
     const now = new Date();
     await fs.utimes(conversationFile, now, now);
 
-    console.log(
-      chalk.green(`📝 Message appended to ${path.basename(conversationFile)}`),
-    );
+    console.log(chalk.green(`📝 Message appended to ${path.basename(conversationFile)}`));
   }
 
   async getConversationHistory(sessionId) {
@@ -348,10 +322,10 @@ class ClaudeAPIProxy {
       throw new Error(`Conversation not found for session ${sessionId}`);
     }
 
-    const content = await fs.readFile(conversationFile, "utf8");
+    const content = await fs.readFile(conversationFile, 'utf8');
     const lines = content
       .trim()
-      .split("\n")
+      .split('\n')
       .filter((line) => line.trim());
 
     const messages = lines
@@ -370,14 +344,8 @@ class ClaudeAPIProxy {
   start() {
     return new Promise((resolve) => {
       this.server = this.app.listen(this.port, () => {
-        console.log(
-          chalk.green(
-            `🌉 Claude API Proxy running on http://localhost:${this.port}`,
-          ),
-        );
-        console.log(
-          chalk.blue(`📡 Ready to intercept and send messages to Claude Code`),
-        );
+        console.log(chalk.green(`🌉 Claude API Proxy running on http://localhost:${this.port}`));
+        console.log(chalk.blue(`📡 Ready to intercept and send messages to Claude Code`));
         resolve();
       });
     });
@@ -396,52 +364,48 @@ module.exports = ClaudeAPIProxy;
 // Method to notify Claude Code process
 ClaudeAPIProxy.prototype.notifyClaudeProcess = async function () {
   try {
-    console.log(chalk.blue("🔔 Attempting to activate Claude Code process..."));
+    console.log(chalk.blue('🔔 Attempting to activate Claude Code process...'));
 
     // Method 1: Find Claude Code process and try to send input
-    const { exec, spawn } = require("child_process");
+    const { exec, spawn } = require('child_process');
 
     // First, find Claude Code processes
     exec('ps aux | grep "claude"', (error, stdout, stderr) => {
       if (stdout) {
         const claudeProcesses = stdout
-          .split("\n")
-          .filter((line) => line.includes("claude") && !line.includes("grep"))
-          .filter((line) => !line.includes("claude-code-templates")); // Exclude our dashboard
+          .split('\n')
+          .filter((line) => line.includes('claude') && !line.includes('grep'))
+          .filter((line) => !line.includes('claude-code-templates')); // Exclude our dashboard
 
-        console.log(
-          chalk.blue(`🔍 Found ${claudeProcesses.length} Claude process(es)`),
-        );
+        console.log(chalk.blue(`🔍 Found ${claudeProcesses.length} Claude process(es)`));
 
         claudeProcesses.forEach((processLine) => {
           const pid = processLine.trim().split(/\s+/)[1];
-          console.log(
-            chalk.gray(`  - PID ${pid}: ${processLine.substring(0, 100)}...`),
-          );
+          console.log(chalk.gray(`  - PID ${pid}: ${processLine.substring(0, 100)}...`));
         });
       }
     });
 
     // Method 2: Try to write to the Claude Code terminal using applescript (macOS)
-    if (process.platform === "darwin") {
+    if (process.platform === 'darwin') {
       this.tryAppleScriptNotification();
     }
 
     // Method 3: Try sending wake-up signal
     try {
-      exec("pkill -SIGUSR1 claude", () => {});
+      exec('pkill -SIGUSR1 claude', () => {});
     } catch (e) {
       /* ignore */
     }
   } catch (error) {
-    console.log(chalk.gray("🔕 Could not notify Claude Code process"));
+    console.log(chalk.gray('🔕 Could not notify Claude Code process'));
   }
 };
 
 // Try to use AppleScript to send input to Claude Code terminal
 ClaudeAPIProxy.prototype.tryAppleScriptNotification = function () {
   try {
-    const { exec } = require("child_process");
+    const { exec } = require('child_process');
 
     // This AppleScript tries to find Terminal/iTerm with Claude Code and send a key
     const appleScript = `
@@ -489,9 +453,9 @@ ClaudeAPIProxy.prototype.tryAppleScriptNotification = function () {
 
     exec(`osascript -e '${appleScript.replace(/'/g, "\\'")}'`, (error) => {
       if (error) {
-        console.log(chalk.gray("🔕 AppleScript notification failed"));
+        console.log(chalk.gray('🔕 AppleScript notification failed'));
       } else {
-        console.log(chalk.green("✅ AppleScript notification sent"));
+        console.log(chalk.green('✅ AppleScript notification sent'));
       }
     });
   } catch (error) {
@@ -504,7 +468,7 @@ if (require.main === module) {
   const proxy = new ClaudeAPIProxy();
   proxy.start();
 
-  process.on("SIGINT", () => {
+  process.on('SIGINT', () => {
     proxy.stop();
     process.exit(0);
   });

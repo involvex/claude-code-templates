@@ -222,10 +222,7 @@ Pre-allow specific MCP tools in command frontmatter:
 ```markdown
 ---
 allowed-tools:
-  [
-    "mcp__plugin_asana_asana__asana_create_task",
-    "mcp__plugin_asana_asana__asana_search_tasks",
-  ]
+  ['mcp__plugin_asana_asana__asana_create_task', 'mcp__plugin_asana_asana__asana_search_tasks']
 ---
 ```
 
@@ -233,7 +230,7 @@ allowed-tools:
 
 ```markdown
 ---
-allowed-tools: ["mcp__plugin_asana_asana__*"]
+allowed-tools: ['mcp__plugin_asana_asana__*']
 ---
 ```
 

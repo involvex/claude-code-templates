@@ -592,7 +592,7 @@ name: Terraform CI
 on:
   pull_request:
     paths:
-      - "terraform/**"
+      - 'terraform/**'
 
 jobs:
   validate:

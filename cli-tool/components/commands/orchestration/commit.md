@@ -243,9 +243,9 @@ Updates TASK-STATUS-TRACKER.yaml with commit info:
 ```yaml
 git_tracking:
   TASK-003:
-    commits: ["abc123def"]
-    commit_message: "feat(auth): implement JWT validation"
-    committed_at: "2024-03-15T14:30:00Z"
+    commits: ['abc123def']
+    commit_message: 'feat(auth): implement JWT validation'
+    committed_at: '2024-03-15T14:30:00Z'
 ```
 
 ## Examples

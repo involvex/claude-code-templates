@@ -25,7 +25,7 @@ async function getLatestNPMVersion() {
     return {
       version: response.data.version,
       publishedAt: response.data.time?.modified || new Date().toISOString(),
-      npmUrl: `https://www.npmjs.com/package/${NPM_PACKAGE}/v/${response.data.version}`
+      npmUrl: `https://www.npmjs.com/package/${NPM_PACKAGE}/v/${response.data.version}`,
     };
   } catch (error) {
     console.error('Error fetching NPM version:', error);
@@ -125,7 +125,7 @@ export default async function handler(req, res) {
           status: 'pending_notification',
           version: latestVersion.version,
           message: 'Version exists, Discord notification pending',
-          versionId: existingVersion.id
+          versionId: existingVersion.id,
         });
       }
 
@@ -135,7 +135,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         status: 'already_processed',
         version: latestVersion.version,
-        message: 'Version already processed and notified'
+        message: 'Version already processed and notified',
       });
     }
 
@@ -154,7 +154,7 @@ export default async function handler(req, res) {
       publishedAt: latestVersion.publishedAt,
       npmUrl: latestVersion.npmUrl,
       githubUrl,
-      changelogContent: fullChangelog.substring(0, 50000) // Limitar a 50KB
+      changelogContent: fullChangelog.substring(0, 50000), // Limitar a 50KB
     });
 
     console.log(`✅ Version ${savedVersion.version} saved to database (ID: ${savedVersion.id})`);
@@ -172,10 +172,9 @@ export default async function handler(req, res) {
         version: latestVersion.version,
         publishedAt: latestVersion.publishedAt,
         npmUrl: latestVersion.npmUrl,
-        githubUrl
-      }
+        githubUrl,
+      },
     });
-
   } catch (error) {
     console.error('❌ Error in webhook handler:', error);
 
@@ -190,7 +189,7 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error: 'Internal server error',
       message: error.message,
-      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined,
     });
   }
 }
